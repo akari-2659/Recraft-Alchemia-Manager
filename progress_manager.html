@@ -27,7 +27,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.8 / クエスト・エリア進行、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.9 / クエスト・エリア進行、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -60,20 +60,17 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
       <div id="questDetail" class="card muted">DB読込後、クエストを選択してください。</div>
       <h3>進行度</h3>
       <div class="progress-wrap"><div id="questBar" class="progress-bar"></div><div id="questLabel" class="progress-label">0%</div></div>
+      <div id="questStepInfo" class="card muted">進行上昇値と次イベントがここに表示されます。</div>
       <div class="buttons">
-        <button class="secondary" data-q-add="step">進行度+既定値</button>
-        <button class="secondary" data-q-add="10">+10%</button>
-        <button class="secondary" data-q-add="25">+25%</button>
-        <button class="ghost" data-q-add="-10">-10%</button>
-        <button class="ghost" id="questResetBtn">リセット</button>
-        <button id="questCopyBtn">進行メモコピー</button>
+        <button id="questAdvanceBtn">進行度を進める</button>
+        <button class="ghost" id="questResetBtn">進行度をリセット</button>
+        <button class="secondary" id="questCopyBtn">進行メモコピー</button>
       </div>
       <h3>クエストイベント</h3>
-      <div id="questEventDetail" class="result">クエスト固有イベントや、クエスト対象エリアのランダムイベント結果がここに表示されます。</div>
+      <div id="questEventDetail" class="result">クエスト固有イベントと、クエスト対象エリアのランダムイベント結果がここに表示されます。</div>
       <div class="buttons">
         <button id="rollQuestEventBtn">クエストランダムイベント</button>
         <button class="secondary" id="copyQuestEventBtn">イベント結果コピー</button>
-        <button class="ghost" id="applyQuestEventProgressBtn">イベント進行度反映</button>
       </div>
       <label style="margin-top:10px">クエストメモ</label>
       <textarea id="questNote" placeholder="セッション中のメモ"></textarea>
@@ -137,7 +134,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.8';
+const VERSION='v90.8.9';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -215,6 +212,24 @@ function questRandomEvents(q){
   if(!tableId)return [];
   return state.events.filter(e=>String(e.tableId||'').trim()===tableId && !isPercentEvent(e));
 }
+function questStepAmount(q){
+  const n=getNumFromText(q&&q.progressStep,10);
+  return Math.max(1, Math.min(100, Number.isFinite(n)?n:10));
+}
+function nextQuestEvent(q,current){
+  return questSpecificEvents(q).find(e=>(eventThreshold(e)??101)>clamp(current));
+}
+function renderQuestStepInfo(q,p){
+  const box=$('questStepInfo');
+  if(!box)return;
+  if(!q){box.textContent='クエストを選択してください。'; return;}
+  const step=questStepAmount(q);
+  const current=clamp(p&&p.value);
+  const nextValue=clamp(current+step);
+  const next=nextQuestEvent(q,current);
+  const nextText=next ? `${eventThreshold(next)}%：${next.eventName||'名称未設定'}` : 'なし';
+  box.innerHTML=`<div class="kv"><b>現在</b><span>${current}%</span><b>1回の進行</b><span>+${step}%</span><b>進行後</b><span>${nextValue}%</span><b>次イベント</b><span>${esc(nextText)}</span></div><p class="muted small">クエスト進行は固定値上昇のみです。「進行度を進める」を押すたびに、DBに設定された進行上昇値ぶんだけ進みます。</p>`;
+}
 function eventDetailText(e){
   return [
     e.eventType?`種別：${e.eventType}`:'',
@@ -262,7 +277,7 @@ function rollQuestEvent(){
   let picked, rollText=''; const max=maxRoll(rows);
   if(rows.some(r=>String(r.roll||'').trim())){const n=1+Math.floor(Math.random()*max); rollText=`1D${max}=${n}`; picked=rows.find(r=>rollSpecMatches(r.roll,n))||rows[Math.floor(Math.random()*rows.length)];}
   else{const i=Math.floor(Math.random()*rows.length); picked=rows[i]; rollText=`choice=${i+1}/${rows.length}`;}
-  const prog=getNumFromText(picked.progressEffect,0); state.lastQuestEventProgress=prog;
+  state.lastQuestEventProgress=0;
   const lines=[
     `【クエストランダムイベント】${q.name||q.id}`,
     area?`エリア：${area.name||area.id}`:'',
@@ -271,24 +286,27 @@ function rollQuestEvent(){
     `イベント：${picked.eventName||'名称未設定'}`,
     picked.eventType?`種別：${picked.eventType}`:'',
     picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'',
-    picked.result?`結果：${picked.result}`:'',
-    picked.progressEffect?`進行効果：${picked.progressEffect}`:''
+    picked.result?`結果：${picked.result}`:''
   ].filter(Boolean);
   state.lastQuestEventText=lines.join('\n');
   renderQuestEvents(); addLog(`クエストランダムイベント：${q.name||q.id} / ${picked.eventName||'名称未設定'} / ${rollText}`);
 }
-function applyQuestEventProgress(){
-  const q=selected($('questSelect'),state.quests);
-  if(!q)return;
-  if(!state.lastQuestEventProgress){addLog('クエストへ反映できる進行効果がありません。'); return;}
-  const p=progressObj('quests',q.id||q.name);
-  p.value=clamp((p.value||0)+state.lastQuestEventProgress);
-  saveState(false); renderQuest(); addLog(`${q.name||q.id} にイベント進行度 +${state.lastQuestEventProgress}% を反映しました。現在${p.value}%`);
-}
 function renderQuest(){
-  const q=selected($('questSelect'),state.quests); if(!q){$('questDetail').textContent='クエストデータがありません。'; return;}
-  const p=progressObj('quests',q.id||q.name); $('questNote').value=p.note||''; $('questBar').style.width=clamp(p.value)+'%'; $('questLabel').textContent=clamp(p.value)+'%';
-  $('questDetail').innerHTML=`<div class="kv"><b>種別</b><span>${esc(q.questType||'')}</span><b>ランク</b><span>${esc(q.rank||'')}</span><b>エリア</b><span>${esc(q.areaName||'')}</span><b>既定進行</b><span>${esc(q.progressStep||'')}</span><b>クリア条件</b><span>${esc(q.clearCondition||'')}</span><b>報酬</b><span>${esc([q.rewardMoney,q.rewardItems].filter(Boolean).join(' / '))}</span></div>${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
+  const q=selected($('questSelect'),state.quests);
+  if(!q){
+    $('questDetail').textContent='クエストデータがありません。';
+    $('questBar').style.width='0%';
+    $('questLabel').textContent='0%';
+    renderQuestStepInfo(null,null);
+    renderQuestEvents();
+    return;
+  }
+  const p=progressObj('quests',q.id||q.name);
+  $('questNote').value=p.note||'';
+  $('questBar').style.width=clamp(p.value)+'%';
+  $('questLabel').textContent=clamp(p.value)+'%';
+  $('questDetail').innerHTML=`<div class="kv"><b>種別</b><span>${esc(q.questType||'')}</span><b>ランク</b><span>${esc(q.rank||'')}</span><b>エリア</b><span>${esc(q.areaName||'')}</span><b>進行上昇値</b><span>+${questStepAmount(q)}%</span><b>クリア条件</b><span>${esc(q.clearCondition||'')}</span><b>報酬</b><span>${esc([q.rewardMoney,q.rewardItems].filter(Boolean).join(' / '))}</span></div>${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
+  renderQuestStepInfo(q,p);
   renderQuestEvents();
 }
 function renderArea(){
@@ -302,7 +320,7 @@ function renderMonster(){
 }
 function renderAll(){fillEventTables(); renderQuest(); renderArea(); renderMonster(); renderLog();}
 function getNumFromText(s, fallback=0){const m=String(s||'').match(/[+-]?\d+/); return m?Number(m[0]):fallback;}
-function addQuestProgress(v){const q=selected($('questSelect'),state.quests); if(!q)return; const p=progressObj('quests',q.id||q.name); const add=v==='step'?getNumFromText(q.progressStep,10):Number(v); p.value=clamp((p.value||0)+add); saveState(false); renderQuest(); addLog(`${q.name||q.id} の進行度を ${add>=0?'+':''}${add}% しました。現在${p.value}%`);}
+function advanceQuestProgress(){const q=selected($('questSelect'),state.quests); if(!q)return; const p=progressObj('quests',q.id||q.name); const add=questStepAmount(q); const before=clamp(p.value); p.value=clamp(before+add); saveState(false); renderQuest(); addLog(`${q.name||q.id} の進行度を +${add}% しました。${before}% → ${p.value}%`);}
 function addAreaProgress(v){const a=selected($('areaSelect'),state.areas); if(!a)return; const p=progressObj('areas',a.id||a.name); const add=Number(v); p.value=clamp((p.value||0)+add); saveState(false); renderArea(); addLog(`${a.name||a.id} の探索進行度を ${add>=0?'+':''}${add}% しました。現在${p.value}%`);}
 function fillEventTables(){
   const area=selected($('eventAreaSelect'),state.areas); const prefer=area&&area.eventTableId?String(area.eventTableId):'';
@@ -354,11 +372,11 @@ function areaMemo(){const a=selected($('areaSelect'),state.areas); if(!a)return 
 function bind(){
   $('fixedUrlLabel').textContent=GAS_URL; $('loadDbBtn').addEventListener('click',loadDb); $('saveStateBtn').addEventListener('click',()=>saveState(true)); $('clearStateBtn').addEventListener('click',()=>{if(confirm('進行状態を初期化しますか？')){localStorage.removeItem(STORE_KEY); state.progress={quests:{},areas:{}}; state.log=[]; renderAll(); addLog('進行状態を初期化しました。');}});
   $('questSelect').addEventListener('change',()=>{state.lastQuestEventText=''; state.lastQuestEventProgress=0; renderQuest();}); $('areaSelect').addEventListener('change',renderArea); $('monsterSelect').addEventListener('change',renderMonster); $('eventAreaSelect').addEventListener('change',fillEventTables);
-  document.querySelectorAll('[data-q-add]').forEach(b=>b.addEventListener('click',()=>addQuestProgress(b.dataset.qAdd))); document.querySelectorAll('[data-a-add]').forEach(b=>b.addEventListener('click',()=>addAreaProgress(b.dataset.aAdd)));
+  $('questAdvanceBtn').addEventListener('click',advanceQuestProgress); document.querySelectorAll('[data-a-add]').forEach(b=>b.addEventListener('click',()=>addAreaProgress(b.dataset.aAdd)));
   $('questResetBtn').addEventListener('click',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).value=0; saveState(false); renderQuest();}}); $('areaResetBtn').addEventListener('click',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).value=0; saveState(false); renderArea();}});
   $('questNote').addEventListener('input',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).note=$('questNote').value; saveState(false);}}); $('areaNote').addEventListener('input',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).note=$('areaNote').value; saveState(false);}});
   $('questCopyBtn').addEventListener('click',()=>copyText(questMemo(),'questCopyNote')); $('areaCopyBtn').addEventListener('click',()=>copyText(areaMemo(),'areaCopyNote'));
-  $('rollQuestEventBtn').addEventListener('click',rollQuestEvent); $('copyQuestEventBtn').addEventListener('click',()=>copyText(state.lastQuestEventText,'questCopyNote')); $('applyQuestEventProgressBtn').addEventListener('click',applyQuestEventProgress);
+  $('rollQuestEventBtn').addEventListener('click',rollQuestEvent); $('copyQuestEventBtn').addEventListener('click',()=>copyText(state.lastQuestEventText,'questCopyNote'));
   $('rollEventBtn').addEventListener('click',rollEvent); $('copyEventBtn').addEventListener('click',()=>copyText(state.lastEventText,'eventCopyNote')); $('applyEventProgressBtn').addEventListener('click',()=>{if(!state.lastEventProgress){addLog('反映できる進行効果がありません。'); return;} addAreaProgress(state.lastEventProgress);});
   $('rollDropBtn').addEventListener('click',rollDrops); $('copyDropBtn').addEventListener('click',()=>copyText(state.lastDropText,'dropCopyNote')); $('copyDropSuccessBtn').addEventListener('click',()=>copyText(state.lastDropSuccessText,'dropCopyNote'));
   $('copyLogBtn').addEventListener('click',()=>copyText(state.log.slice().reverse().join('\n'))); $('clearLogBtn').addEventListener('click',()=>{state.log=[]; renderLog(); saveState(false);});
