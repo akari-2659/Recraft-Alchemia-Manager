@@ -27,7 +27,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.12 / クエスト・エリア進行、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.13 / クエスト・エリア進行、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -84,13 +84,11 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
       <div id="areaDetail" class="card muted">DB読込後、エリアを選択してください。</div>
       <h3>探索進行度</h3>
       <div class="progress-wrap"><div id="areaBar" class="progress-bar"></div><div id="areaLabel" class="progress-label">0%</div></div>
+      <div id="areaStepInfo" class="card muted">探索進行上昇値がここに表示されます。</div>
       <div class="buttons">
-        <button class="secondary" data-a-add="10">+10%</button>
-        <button class="secondary" data-a-add="25">+25%</button>
-        <button class="secondary" data-a-add="50">+50%</button>
-        <button class="ghost" data-a-add="-10">-10%</button>
-        <button class="ghost" id="areaResetBtn">リセット</button>
-        <button id="areaCopyBtn">エリアメモコピー</button>
+        <button id="areaAdvanceBtn">探索進行度を進める</button>
+        <button class="ghost" id="areaResetBtn">探索進行度をリセット</button>
+        <button class="secondary" id="areaCopyBtn">エリアメモコピー</button>
       </div>
       <label style="margin-top:10px">エリアメモ</label>
       <textarea id="areaNote" placeholder="探索中のメモ"></textarea>
@@ -100,12 +98,12 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
       <h2>ランダムイベント <span class="copy-note" id="eventCopyNote">コピーしました</span></h2>
       <div class="row">
         <div><label>対象エリア</label><select id="eventAreaSelect"></select></div>
-        <div><label>イベント表</label><select id="eventTableSelect"></select></div>
+        <div class="hidden"><label>イベント表</label><select id="eventTableSelect"></select></div>
       </div>
+      <p class="muted small">選択したエリアに登録されたイベント候補からランダムに抽選します。直前と同じイベントは、候補が2件以上ある場合は除外します。</p>
       <div class="buttons">
         <button id="rollEventBtn">イベント抽選</button>
         <button class="secondary" id="copyEventBtn">結果コピー</button>
-        <button class="ghost" id="applyEventProgressBtn">進行度反映</button>
       </div>
       <div id="eventResult" class="result">イベント結果がここに表示されます。</div>
     </section>
@@ -135,11 +133,11 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.12';
+const VERSION='v90.8.13';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
-const state={quests:[],areas:[],events:[],monsters:[],progress:{quests:{},areas:{}},lastEventText:'',lastEventProgress:0,lastQuestEventText:'',lastQuestEventProgress:0,lastDropText:'',lastDropSuccessText:'',log:[]};
+const state={quests:[],areas:[],events:[],monsters:[],progress:{quests:{},areas:{}},lastEventText:'',lastEventKey:'',lastQuestEventText:'',lastQuestEventKey:'',lastDropText:'',lastDropSuccessText:'',log:[]};
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function clamp(n){return Math.max(0,Math.min(100,Number(n)||0));}
 function now(){return new Date().toLocaleString('ja-JP',{hour12:false});}
@@ -189,7 +187,7 @@ async function loadDb(){
     const [quests,areas,events,monsters]=await Promise.all(['quests','exploration_areas','event_tables','monsters'].map(loadSheet));
     state.quests=quests; state.areas=areas; state.events=events; state.monsters=monsters;
     state.progress={quests:{},areas:{}};
-    state.lastEventText=''; state.lastEventProgress=0; state.lastQuestEventText=''; state.lastQuestEventProgress=0; state.lastDropText=''; state.lastDropSuccessText='';
+    state.lastEventText=''; state.lastEventKey=''; state.lastQuestEventText=''; state.lastQuestEventKey=''; state.lastDropText=''; state.lastDropSuccessText='';
     fillSelect($('questSelect'),quests,r=>`${r.name||r.id} / ${r.rank||''}`);
     fillSelect($('areaSelect'),areas,r=>`${r.name||r.id} / ${r.areaType||''}`);
     fillSelect($('eventAreaSelect'),areas,r=>`${r.name||r.id} / 表:${r.eventTableId||'未設定'}`);
@@ -212,7 +210,6 @@ function tableIdForQuest(q){
   const area=areaForQuest(q);
   return String((q&&q.eventTableId)|| (area&&area.eventTableId) || '').trim();
 }
-function isPercentEvent(row){return /%/.test(String(row&&row.roll||''));}
 function eventThreshold(row){
   if(row && row.fixedThreshold!==undefined && row.fixedThreshold!==null) return Number(row.fixedThreshold);
   const src=String(row&&row.roll||row&&row.progressEffect||row&&row.progress||'');
@@ -237,11 +234,15 @@ function questSpecificEvents(q){
 function questRandomEvents(q){
   const tableId=tableIdForQuest(q);
   if(!tableId)return [];
-  return state.events.filter(e=>String(e.tableId||'').trim()===tableId && !isPercentEvent(e));
+  return state.events.filter(e=>String(e.tableId||'').trim()===tableId);
 }
 function questStepAmount(q){
   const n=getNumFromText(q&&q.progressStep,10);
   return Math.max(1, Math.min(100, Number.isFinite(n)?n:10));
+}
+function areaStepAmount(a){
+  const n=getNumFromText(a&&a.progressStep,25);
+  return Math.max(1, Math.min(100, Number.isFinite(n)?n:25));
 }
 function nextQuestEvent(q,current){
   return questSpecificEvents(q).find(e=>(eventThreshold(e)??101)>clamp(current));
@@ -302,29 +303,36 @@ function renderQuestEvents(){
   parts.push('</div>');
   box.innerHTML=parts.join('');
 }
+function eventUniqueKey(row){return String(row && (row.id || `${row.tableId || ''}:${row.areaName || ''}:${row.eventName || ''}:${row.eventType || ''}`) || '');}
+function pickRandomEvent(rows, lastKey=''){
+  const list = Array.isArray(rows) ? rows.filter(Boolean) : [];
+  if(!list.length) return null;
+  const filtered = list.length > 1 ? list.filter(r=>eventUniqueKey(r)!==lastKey) : list;
+  const pool = filtered.length ? filtered : list;
+  return pool[Math.floor(Math.random()*pool.length)];
+}
 function rollQuestEvent(){
   const q=selected($('questSelect'),state.quests);
   if(!q){state.lastQuestEventText='クエストが選択されていません。'; renderQuestEvents(); return;}
   const tableId=tableIdForQuest(q);
   const area=areaForQuest(q);
   let rows=questRandomEvents(q);
-  if(!rows.length){state.lastQuestEventText=`【クエストランダムイベント】${q.name||q.id}\n該当エリアのランダムイベントがありません。`; state.lastQuestEventProgress=0; renderQuestEvents(); return;}
-  let picked, rollText=''; const max=maxRoll(rows);
-  if(rows.some(r=>String(r.roll||'').trim())){const n=1+Math.floor(Math.random()*max); rollText=`1D${max}=${n}`; picked=rows.find(r=>rollSpecMatches(r.roll,n))||rows[Math.floor(Math.random()*rows.length)];}
-  else{const i=Math.floor(Math.random()*rows.length); picked=rows[i]; rollText=`choice=${i+1}/${rows.length}`;}
-  state.lastQuestEventProgress=0;
+  if(!rows.length){state.lastQuestEventText=`【クエストランダムイベント】${q.name||q.id}
+該当エリアのランダムイベントがありません。`; renderQuestEvents(); return;}
+  const picked=pickRandomEvent(rows, state.lastQuestEventKey);
+  state.lastQuestEventKey=eventUniqueKey(picked);
   const lines=[
     `【ランダムイベント】${q.name||q.id}`,
     area?`エリア：${area.name||area.id}`:'',
     `表：${tableId}`,
-    `出目：${rollText}`,
     `イベント：${picked.eventName||'名称未設定'}`,
     picked.eventType?`種別：${picked.eventType}`:'',
     picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'',
-    picked.result?`結果：${picked.result}`:''
+    picked.result?`結果：${picked.result}`:'',
+    picked.progressEffect?`補足：${picked.progressEffect}`:''
   ].filter(Boolean);
   state.lastQuestEventText=lines.join('\n');
-  renderQuestEvents(); addLog(`クエストランダムイベント：${q.name||q.id} / ${picked.eventName||'名称未設定'} / ${rollText}`);
+  renderQuestEvents(); addLog(`クエストランダムイベント：${q.name||q.id} / ${picked.eventName||'名称未設定'}`);
 }
 function renderQuest(){
   const q=selected($('questSelect'),state.quests);
@@ -347,7 +355,8 @@ function renderQuest(){
 function renderArea(){
   const a=selected($('areaSelect'),state.areas); if(!a){$('areaDetail').textContent='エリアデータがありません。'; return;}
   const p=progressObj('areas',a.id||a.name); $('areaNote').value=p.note||''; $('areaBar').style.width=clamp(p.value)+'%'; $('areaLabel').textContent=clamp(p.value)+'%';
-  $('areaDetail').innerHTML=`<div class="kv"><b>種別</b><span>${esc(a.areaType||'')}</span><b>難度</b><span>${esc(a.difficulty||'')}</span><b>イベント表</b><span>${esc(a.eventTableId||'')}</span><b>主な素材</b><span>${esc(a.mainMaterials||'')}</span><b>主な魔物</b><span>${esc(a.mainMonsters||'')}</span></div>${a.description?`<p class="muted">${esc(a.description)}</p>`:''}`;
+  $('areaDetail').innerHTML=`<div class="kv"><b>種別</b><span>${esc(a.areaType||'')}</span><b>難度</b><span>${esc(a.difficulty||'')}</span><b>イベント表</b><span>${esc(a.eventTableId||'')}</span><b>探索進行上昇</b><span>+${areaStepAmount(a)}%</span><b>主な素材</b><span>${esc(a.mainMaterials||'')}</span><b>主な魔物</b><span>${esc(a.mainMonsters||'')}</span></div>${a.description?`<p class="muted">${esc(a.description)}</p>`:''}`;
+  const step=areaStepAmount(a); const current=clamp(p.value); $('areaStepInfo').innerHTML=`<div class="kv"><b>現在</b><span>${current}%</span><b>1回の進行</b><span>+${step}%</span><b>進行後</b><span>${clamp(current+step)}%</span></div><p class="muted small">探索進行はエリア登録側の固定値で上昇します。ランダムイベント結果では進行度を自動変更しません。</p>`;
 }
 function renderMonster(){
   const m=selected($('monsterSelect'),state.monsters); if(!m){$('monsterDetail').textContent='魔物データがありません。'; return;}
@@ -356,7 +365,7 @@ function renderMonster(){
 function renderAll(){fillEventTables(); renderQuest(); renderArea(); renderMonster(); renderLog();}
 function getNumFromText(s, fallback=0){const m=String(s||'').match(/[+-]?\d+/); return m?Number(m[0]):fallback;}
 function advanceQuestProgress(){const q=selected($('questSelect'),state.quests); if(!q)return; const p=progressObj('quests',q.id||q.name); const add=questStepAmount(q); const before=clamp(p.value); p.value=clamp(before+add); saveState(false); renderQuest(); addLog(`${q.name||q.id} の進行度を +${add}% しました。${before}% → ${p.value}%`);}
-function addAreaProgress(v){const a=selected($('areaSelect'),state.areas); if(!a)return; const p=progressObj('areas',a.id||a.name); const add=Number(v); p.value=clamp((p.value||0)+add); saveState(false); renderArea(); addLog(`${a.name||a.id} の探索進行度を ${add>=0?'+':''}${add}% しました。現在${p.value}%`);}
+function advanceAreaProgress(){const a=selected($('areaSelect'),state.areas); if(!a)return; const p=progressObj('areas',a.id||a.name); const add=areaStepAmount(a); const before=clamp(p.value); p.value=clamp(before+add); saveState(false); renderArea(); addLog(`${a.name||a.id} の探索進行度を +${add}% しました。${before}% → ${p.value}%`);}
 function fillEventTables(){
   const area=selected($('eventAreaSelect'),state.areas); const prefer=area&&area.eventTableId?String(area.eventTableId):'';
   const ids=[...new Set(state.events.map(e=>String(e.tableId||'').trim()).filter(Boolean))];
@@ -364,21 +373,15 @@ function fillEventTables(){
   const sel=$('eventTableSelect'); sel.innerHTML=''; rows.forEach((r,i)=>{const o=document.createElement('option'); o.value=r.id; o.textContent=`${r.id}（${r.count}件）`; sel.appendChild(o);});
   if(!rows.length){const o=document.createElement('option'); o.value=''; o.textContent='イベント表なし'; sel.appendChild(o);} else if(prefer){sel.value=prefer;}
 }
-function rollSpecMatches(spec, n){
-  const s=String(spec||'').trim(); if(!s)return false;
-  const range=s.match(/^(\d+)\s*[-～〜]\s*(\d+)$/); if(range){return n>=Number(range[1])&&n<=Number(range[2]);}
-  const nums=s.split(/[、,\/\s]+/).map(x=>Number(x)).filter(x=>Number.isFinite(x)); return nums.includes(n);
-}
-function maxRoll(rows){let max=0; rows.forEach(r=>{String(r.roll||'').replace(/\d+/g,m=>{max=Math.max(max,Number(m)); return m;});}); return max||rows.length||1;}
 function rollEvent(){
-  const tableId=$('eventTableSelect').value; let rows=state.events.filter(e=>String(e.tableId||'').trim()===tableId);
-  if(!rows.length){$('eventResult').textContent='イベント表がありません。'; return;}
-  let picked, rollText=''; const max=maxRoll(rows);
-  if(rows.some(r=>String(r.roll||'').trim())){const n=1+Math.floor(Math.random()*max); rollText=`1D${max}=${n}`; picked=rows.find(r=>rollSpecMatches(r.roll,n))||rows[Math.floor(Math.random()*rows.length)];}
-  else{const i=Math.floor(Math.random()*rows.length); picked=rows[i]; rollText=`choice=${i+1}/${rows.length}`;}
-  const prog=getNumFromText(picked.progressEffect,0); state.lastEventProgress=prog;
-  const lines=[`【ランダムイベント】${picked.eventName||'名称未設定'}`,`表：${tableId}`,`出目：${rollText}`,picked.eventType?`種別：${picked.eventType}`:'',picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'',picked.result?`結果：${picked.result}`:'',picked.progressEffect?`進行効果：${picked.progressEffect}`:''].filter(Boolean);
-  state.lastEventText=lines.join('\n'); $('eventResult').textContent=state.lastEventText; addLog(`イベント抽選：${picked.eventName||'名称未設定'} / ${rollText}`);
+  const area=selected($('eventAreaSelect'),state.areas);
+  const tableId=String((area&&area.eventTableId)||$('eventTableSelect').value||'').trim();
+  let rows=state.events.filter(e=>String(e.tableId||'').trim()===tableId);
+  if(!rows.length){$('eventResult').textContent='このエリアに登録されたランダムイベントがありません。'; return;}
+  const picked=pickRandomEvent(rows, state.lastEventKey);
+  state.lastEventKey=eventUniqueKey(picked);
+  const lines=[`【ランダムイベント】${picked.eventName||'名称未設定'}`, area?`エリア：${area.name||area.id}`:'', `表：${tableId}`, picked.eventType?`種別：${picked.eventType}`:'', picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'', picked.result?`結果：${picked.result}`:'', picked.progressEffect?`補足：${picked.progressEffect}`:''].filter(Boolean);
+  state.lastEventText=lines.join('\n'); $('eventResult').textContent=state.lastEventText; addLog(`イベント抽選：${picked.eventName||'名称未設定'}`);
 }
 function parseDrops(text){
   return String(text||'').split(/\r?\n/).map(line=>line.trim()).filter(Boolean).map(line=>{
@@ -406,13 +409,13 @@ function questMemo(){const q=selected($('questSelect'),state.quests); if(!q)retu
 function areaMemo(){const a=selected($('areaSelect'),state.areas); if(!a)return ''; const p=progressObj('areas',a.id||a.name); return [`【エリア進行】${a.name||a.id}`,`探索進行度：${clamp(p.value)}%`,a.eventTableId?`イベント表：${a.eventTableId}`:'',a.mainMaterials?`主な素材：${a.mainMaterials}`:'',a.mainMonsters?`主な魔物：${a.mainMonsters}`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
 function bind(){
   $('fixedUrlLabel').textContent=GAS_URL; $('loadDbBtn').addEventListener('click',loadDb); $('saveStateBtn').addEventListener('click',()=>saveState(true)); $('restoreStateBtn').addEventListener('click',restoreSavedState); $('clearStateBtn').addEventListener('click',()=>{if(confirm('進行状態を初期化しますか？')){localStorage.removeItem(STORE_KEY); state.progress={quests:{},areas:{}}; state.log=[]; renderAll(); addLog('進行状態を初期化しました。');}});
-  $('questSelect').addEventListener('change',()=>{state.lastQuestEventText=''; state.lastQuestEventProgress=0; renderQuest();}); $('areaSelect').addEventListener('change',renderArea); $('monsterSelect').addEventListener('change',renderMonster); $('eventAreaSelect').addEventListener('change',fillEventTables);
-  $('questAdvanceBtn').addEventListener('click',advanceQuestProgress); document.querySelectorAll('[data-a-add]').forEach(b=>b.addEventListener('click',()=>addAreaProgress(b.dataset.aAdd)));
+  $('questSelect').addEventListener('change',()=>{state.lastQuestEventText=''; state.lastQuestEventKey=''; renderQuest();}); $('areaSelect').addEventListener('change',renderArea); $('monsterSelect').addEventListener('change',renderMonster); $('eventAreaSelect').addEventListener('change',fillEventTables);
+  $('questAdvanceBtn').addEventListener('click',advanceQuestProgress); $('areaAdvanceBtn').addEventListener('click',advanceAreaProgress);
   $('questResetBtn').addEventListener('click',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).value=0; saveState(false); renderQuest();}}); $('areaResetBtn').addEventListener('click',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).value=0; saveState(false); renderArea();}});
   $('questNote').addEventListener('input',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).note=$('questNote').value; saveState(false);}}); $('areaNote').addEventListener('input',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).note=$('areaNote').value; saveState(false);}});
   $('questCopyBtn').addEventListener('click',()=>copyText(questMemo(),'questCopyNote')); $('areaCopyBtn').addEventListener('click',()=>copyText(areaMemo(),'areaCopyNote'));
   $('rollQuestEventBtn').addEventListener('click',rollQuestEvent); $('copyQuestEventBtn').addEventListener('click',()=>copyText(state.lastQuestEventText,'questCopyNote'));
-  $('rollEventBtn').addEventListener('click',rollEvent); $('copyEventBtn').addEventListener('click',()=>copyText(state.lastEventText,'eventCopyNote')); $('applyEventProgressBtn').addEventListener('click',()=>{if(!state.lastEventProgress){addLog('反映できる進行効果がありません。'); return;} addAreaProgress(state.lastEventProgress);});
+  $('rollEventBtn').addEventListener('click',rollEvent); $('copyEventBtn').addEventListener('click',()=>copyText(state.lastEventText,'eventCopyNote'));
   $('rollDropBtn').addEventListener('click',rollDrops); $('copyDropBtn').addEventListener('click',()=>copyText(state.lastDropText,'dropCopyNote')); $('copyDropSuccessBtn').addEventListener('click',()=>copyText(state.lastDropSuccessText,'dropCopyNote'));
   $('copyLogBtn').addEventListener('click',()=>copyText(state.log.slice().reverse().join('\n'))); $('clearLogBtn').addEventListener('click',()=>{state.log=[]; renderLog(); saveState(false);});
 }
