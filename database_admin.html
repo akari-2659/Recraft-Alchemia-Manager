@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.13</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.14</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -310,7 +310,7 @@
   .monster-action-card,.monster-drop-card{border:1px solid #ead9c4;background:#fff;border-radius:12px;padding:9px 10px;display:grid;gap:5px}
   .monster-action-main,.monster-drop-main{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;font-weight:800;color:var(--ink)}
   .monster-action-sub,.monster-drop-sub,.monster-text-block{font-size:12px;color:#67523d;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
-  .monster-empty-note{font-size:12px;color:var(--muted);background:#fff;border:1px dashed #e3cdb4;border-radius:12px;padding:8px 10px}
+  .view-mode-chip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:999px;padding:3px 8px;font-size:11px;font-weight:700;color:var(--muted);background:rgba(255,255,255,.55);margin-left:6px}.monster-empty-note{font-size:12px;color:var(--muted);background:#fff;border:1px dashed #e3cdb4;border-radius:12px;padding:8px 10px}
   @media(max-width:760px){.monster-card-head{grid-template-columns:1fr}.monster-card-actions{justify-content:flex-start}.monster-card summary{padding:12px}.monster-card-body{padding:12px}.monster-title b{white-space:normal}.monster-id{max-width:100%}}
   .monster-output-panel{margin-top:14px;border:1px solid #ead9c4;background:#fffaf3;border-radius:16px;padding:14px;display:grid;gap:10px}
   .monster-output-head{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
@@ -586,7 +586,7 @@
       <button data-save="quests">この表だけDB登録</button>
       <button class="danger" data-replace="quests">この表だけDB置換</button>
     </div>
-    <p class="table-toolbar-note">依頼として受けるクエストデータ。指定エリア、固定進行度、固定イベント、報酬、解放内容を管理します。</p>
+    <p class="table-toolbar-note">依頼として受けるクエストデータ。指定エリア、固定進行度、固定イベント、報酬、解放内容を管理します。<span class="view-mode-chip">カード/折りたたみ表示</span></p>
     <div class="table-wrap"><table id="table-quests"></table></div>
   </section>
 
@@ -599,7 +599,7 @@
       <button data-save="exploration_areas">この表だけDB登録</button>
       <button class="danger" data-replace="exploration_areas">この表だけDB置換</button>
     </div>
-    <p class="table-toolbar-note">自由探索やクエストで使うエリア。主な素材・魔物・参照するイベント表IDを管理します。</p>
+    <p class="table-toolbar-note">自由探索やクエストで使うエリア。主な素材・魔物・参照するイベント表ID、探索進行度上昇を管理します。</p>
     <div class="table-wrap"><table id="table-exploration_areas"></table></div>
   </section>
 
@@ -612,7 +612,7 @@
       <button data-save="event_tables">この表だけDB登録</button>
       <button class="danger" data-replace="event_tables">この表だけDB置換</button>
     </div>
-    <p class="table-toolbar-note">エリアごとのランダムイベント表。表ID・エリア・イベント種別・判定・結果を管理します。出目は使わず、登録された候補からランダム抽選します。</p>
+    <p class="table-toolbar-note">エリアごとのランダムイベント表。出目は使わず、該当エリアに登録された候補からランダム抽選します。<span class="view-mode-chip">エリア別折りたたみ表示</span></p>
     <div class="table-wrap"><table id="table-event_tables"></table></div>
   </section>
 
@@ -687,7 +687,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.13';
+const RECRAFT_DB_VERSION = 'v90.8.14';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
 const PAGE_TABLE_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','materials','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
