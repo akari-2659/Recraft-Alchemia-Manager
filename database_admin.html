@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.11</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.12</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -320,6 +320,7 @@
   .monster-card-actions .secondary{background:#6d7e68;color:white;border-color:transparent}
 
 .monster-line-editor{display:grid;gap:8px}.monster-line-head,.monster-line-row{display:grid;gap:6px;align-items:center}.monster-line-head{font-size:11px;color:var(--muted);font-weight:900}.monster-line-head.action-head,.monster-line-row[data-monster-action-row]{grid-template-columns:1.1fr 1.1fr 1fr .7fr .8fr 1.4fr auto}.monster-line-head.drop-head,.monster-line-row[data-monster-drop-row]{grid-template-columns:1fr 1fr 1.45fr .75fr .65fr auto}.monster-line-row input,.monster-line-row select{min-width:0}.hidden-monster-raw{display:none!important}
+.quest-event-editor{display:grid;gap:10px}.hidden-quest-fixed-raw{display:none!important}.quest-event-list{display:grid;gap:8px}.quest-event-row{border:1px solid var(--line);border-radius:14px;background:#fffaf3;overflow:hidden}.quest-event-row>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;font-weight:900;color:#5b3821}.quest-event-row>summary::-webkit-details-marker{display:none}.quest-event-row>summary:after{content:'開閉';font-size:11px;color:var(--muted);font-weight:800}.quest-event-row[open]>summary{border-bottom:1px solid var(--line)}.quest-event-body{display:grid;gap:8px;padding:12px}.quest-event-grid{display:grid;grid-template-columns:.75fr 1fr;gap:8px}.quest-event-grid textarea{min-height:76px}.quest-event-grid .wide{grid-column:1/-1}.quest-event-mini{display:flex;flex-wrap:wrap;gap:6px;align-items:center;color:var(--muted);font-size:12px}.quest-event-mini b{color:#6a3f25}.quest-event-actions{display:flex;justify-content:flex-end}.quest-progress-select{max-width:220px}@media(max-width:780px){.quest-event-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -585,7 +586,7 @@
       <button data-save="quests">この表だけDB登録</button>
       <button class="danger" data-replace="quests">この表だけDB置換</button>
     </div>
-    <p class="table-toolbar-note">依頼として受けるクエストデータ。指定エリア、進行度、強制イベント、報酬、解放内容を管理します。</p>
+    <p class="table-toolbar-note">依頼として受けるクエストデータ。指定エリア、固定進行度、固定イベント、報酬、解放内容を管理します。</p>
     <div class="table-wrap"><table id="table-quests"></table></div>
   </section>
 
@@ -686,7 +687,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.11';
+const RECRAFT_DB_VERSION = 'v90.8.12';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
 const PAGE_TABLE_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','materials','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
@@ -731,7 +732,7 @@ const FORM_PRIMARY_FIELDS = {
 };
 const FORM_LONG_FIELDS = new Set(['description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','rewardItems','unlockResult','mainMaterials','mainMonsters','result','progressEffect','actions','drops']);
 const FIELD_PLACEHOLDERS = {
-  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'例：低級 / 初級', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街外れの草むら', progressStep:'例：+25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', roll:'例：1 / 1-2', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', result:'成功時の結果', progressEffect:'例：クエスト進行度+25%', monsterType:'例：スライム / 獣', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）'
+  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'例：低級 / 初級', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街外れの草むら', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', roll:'例：1 / 1-2', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', result:'成功時の結果', progressEffect:'例：クエスト進行度+25%', monsterType:'例：スライム / 獣', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）'
 };
 const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','equipSlot','skill','checkType','type','role','setItem','unlockFacility','enabled','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','tableId','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity']);
 let formState = { key:null, idx:null, mode:'new', defaultDataKind:'' };
@@ -4928,6 +4929,134 @@ function syncAllMonsterEditors(){
   document.querySelectorAll('[data-monster-drops-editor]').forEach(syncMonsterDropEditor);
 }
 
+
+function getNumFromText(text, fallback=0){
+  const m = String(text ?? '').match(/-?\d+(?:\.\d+)?/);
+  const n = m ? Number(m[0]) : NaN;
+  return Number.isFinite(n) ? n : fallback;
+}
+const QUEST_PROGRESS_STEPS = ['1%','5%','10%','20%','25%','50%','100%'];
+function normalizeQuestProgressStep(value){
+  const n = getNumFromText(value, 25);
+  const allowed = [1,5,10,20,25,50,100];
+  return allowed.includes(n) ? n : 25;
+}
+function questProgressStepSelect(value){
+  const current = `${normalizeQuestProgressStep(value)}%`;
+  return `<select class="quest-progress-select" data-form-field="progressStep">${QUEST_PROGRESS_STEPS.map(v=>`<option value="${escapeHtml(v)}" ${v===current?'selected':''}>${escapeHtml(v)}ずつ上昇</option>`).join('')}</select>`;
+}
+function questFixedEventPercentOptions(stepValue, currentValue=''){
+  const step = normalizeQuestProgressStep(stepValue);
+  const nums = [];
+  for(let n=step; n<=100; n+=step) nums.push(n);
+  if(!nums.includes(100)) nums.push(100);
+  const cur = getNumFromText(currentValue, NaN);
+  if(Number.isFinite(cur) && cur >= 0 && cur <= 100 && !nums.includes(cur)) nums.unshift(cur);
+  return [...new Set(nums)].sort((a,b)=>a-b);
+}
+function parseQuestFixedEventsEditor(value){
+  const raw = String(value || '').trim();
+  if(!raw) return [];
+  try{
+    const arr = JSON.parse(raw);
+    if(Array.isArray(arr)) return arr.map((r,i)=>({
+      progress: String(r.progress ?? r.percent ?? r.fixedThreshold ?? '').replace(/%$/,'') + (String(r.progress ?? r.percent ?? r.fixedThreshold ?? '').trim().endsWith('%')?'':'%'),
+      title: String(r.title ?? r.eventName ?? r.name ?? `固定イベント${i+1}`).trim(),
+      detail: String(r.detail ?? r.result ?? r.description ?? '').trim()
+    }));
+  }catch(e){}
+  return raw.split(/\r?\n/).map(line=>line.trim()).filter(Boolean).map((line,idx)=>{
+    let parts=line.split('\t');
+    if(parts.length<3) parts=line.split(/[｜|]/);
+    if(parts.length<3) parts=line.split(/\s*,\s*/);
+    const progress = String(parts[0] || '').trim();
+    return {
+      progress: progress.endsWith('%') ? progress : `${getNumFromText(progress, 0)}%`,
+      title: String(parts[1] || `固定イベント${idx+1}`).trim(),
+      detail: String(parts.slice(2).join(' / ') || '').trim()
+    };
+  });
+}
+function serializeQuestFixedEvents(rows){
+  return (rows || []).map(r=>{
+    const n = getNumFromText(r.progress, NaN);
+    const progress = Number.isFinite(n) ? `${Math.max(0, Math.min(100, n))}%` : String(r.progress||'').trim();
+    return {progress, title:String(r.title||'').trim(), detail:String(r.detail||'').trim()};
+  }).filter(r=>r.progress || r.title || r.detail)
+    .sort((a,b)=>getNumFromText(a.progress,999)-getNumFromText(b.progress,999))
+    .map(r=>`${r.progress}\t${r.title || '固定イベント'}\t${r.detail}`)
+    .join('\n');
+}
+function questFixedEventSummary(row, idx){
+  const p = String(row.progress || '').trim() || '未設定%';
+  const t = String(row.title || '').trim() || `固定イベント${idx+1}`;
+  const d = String(row.detail || '').trim();
+  const short = d ? d.slice(0,42) + (d.length>42 ? '…' : '') : '内容未入力';
+  return `<span>${escapeHtml(p)}　${escapeHtml(t)}</span><span class="quest-event-mini"><b>内容</b>${escapeHtml(short)}</span>`;
+}
+function questFixedEventRowHtml(row={}, stepValue='25%', idx=0){
+  const progress = String(row.progress || '').trim() || `${normalizeQuestProgressStep(stepValue)}%`;
+  const opts = questFixedEventPercentOptions(stepValue, progress).map(n=>`${n}%`);
+  const current = progress.endsWith('%') ? progress : `${getNumFromText(progress, normalizeQuestProgressStep(stepValue))}%`;
+  const optionHtmls = opts.map(v=>`<option value="${escapeHtml(v)}" ${v===current?'selected':''}>${escapeHtml(v)}</option>`).join('');
+  const openAttr = (!String(row.title||'').trim() && !String(row.detail||'').trim()) ? ' open' : '';
+  return `<details class="quest-event-row" data-quest-fixed-event-row${openAttr}>
+    <summary data-quest-fixed-event-summary>${questFixedEventSummary({progress:current,title:row.title,detail:row.detail}, idx)}</summary>
+    <div class="quest-event-body">
+      <div class="quest-event-grid">
+        <div class="field"><label>発生進行度</label><select data-quest-fixed-field="progress">${optionHtmls}</select></div>
+        <div class="field"><label>イベント名</label><input data-quest-fixed-field="title" value="${escapeHtml(row.title||'')}" placeholder="採取確認地点"></div>
+        <div class="field wide"><label>内容</label><textarea data-quest-fixed-field="detail" placeholder="発生内容・処理・戦闘内容など">${escapeHtml(row.detail||'')}</textarea></div>
+      </div>
+      <div class="quest-event-actions"><button type="button" class="ghost" data-quest-fixed-event-remove>削除</button></div>
+    </div>
+  </details>`;
+}
+function nextQuestFixedEventPercent(rows, stepValue){
+  const step = normalizeQuestProgressStep(stepValue);
+  const used = new Set((rows||[]).map(r=>getNumFromText(r.progress, NaN)).filter(Number.isFinite));
+  for(let n=step;n<=100;n+=step){ if(!used.has(n)) return `${n}%`; }
+  return '100%';
+}
+function questFixedEventsEditor(value, rowContext={}){
+  const step = rowContext.progressStep || currentFormValue('progressStep') || '25%';
+  const rows = parseQuestFixedEventsEditor(value);
+  const body = rows.map((r,i)=>questFixedEventRowHtml(r, step, i)).join('');
+  return `<div class="quest-event-editor" data-quest-fixed-events-editor>
+    <textarea data-form-field="fixedEvents" class="hidden-quest-fixed-raw">${escapeHtml(serializeQuestFixedEvents(rows))}</textarea>
+    <div class="form-help">固定イベントは必要な分だけ追加します。発生進行度は「進行度上昇」の区切りに合わせて選択できます。</div>
+    <div class="quest-event-list" data-quest-fixed-event-list>${body || '<div class="muted small" data-quest-fixed-empty>固定イベントはまだありません。</div>'}</div>
+    <button type="button" class="secondary" data-quest-fixed-event-add>固定イベントを追加</button>
+  </div>`;
+}
+function readQuestFixedEventRows(editor){
+  return Array.from(editor.querySelectorAll('[data-quest-fixed-event-row]')).map(row=>{
+    const get=f=>row.querySelector(`[data-quest-fixed-field="${f}"]`)?.value || '';
+    return {progress:get('progress'), title:get('title'), detail:get('detail')};
+  });
+}
+function syncQuestFixedEventSummaries(editor){
+  Array.from(editor.querySelectorAll('[data-quest-fixed-event-row]')).forEach((row,idx)=>{
+    const get=f=>row.querySelector(`[data-quest-fixed-field="${f}"]`)?.value || '';
+    const summary=row.querySelector('[data-quest-fixed-event-summary]');
+    if(summary) summary.innerHTML=questFixedEventSummary({progress:get('progress'), title:get('title'), detail:get('detail')}, idx);
+  });
+}
+function syncQuestFixedEventsEditor(editor){
+  const hidden = editor.querySelector('[data-form-field="fixedEvents"]');
+  if(hidden) hidden.value = serializeQuestFixedEvents(readQuestFixedEventRows(editor));
+  syncQuestFixedEventSummaries(editor);
+}
+function refreshQuestFixedEventPercentOptions(editor){
+  const rows = readQuestFixedEventRows(editor);
+  const step = currentFormValue('progressStep') || '25%';
+  const list = editor.querySelector('[data-quest-fixed-event-list]');
+  if(list) list.innerHTML = rows.length ? rows.map((r,i)=>questFixedEventRowHtml(r, step, i)).join('') : '<div class="muted small" data-quest-fixed-empty>固定イベントはまだありません。</div>';
+  syncQuestFixedEventsEditor(editor);
+}
+function syncAllQuestFixedEventEditors(){
+  document.querySelectorAll('[data-quest-fixed-events-editor]').forEach(syncQuestFixedEventsEditor);
+}
 function buildFieldInput(key, field, value, rowContext={}){
   const label = LABELS[field] || field;
   const ph = FIELD_PLACEHOLDERS[field] || '';
@@ -4939,6 +5068,10 @@ function buildFieldInput(key, field, value, rowContext={}){
     input = monsterActionsEditor(value);
   }else if(key==='monsters' && field==='drops'){
     input = monsterDropsEditor(value);
+  }else if(key==='quests' && field==='progressStep'){
+    input = questProgressStepSelect(value);
+  }else if(key==='quests' && field==='fixedEvents'){
+    input = questFixedEventsEditor(value, rowContext);
   }else if(field==='checkType'){
     input = checkBuilderHtml(value, `id="${id}" data-form-field="${field}"`, {key, row: rowContext});
   }else if(FORM_LONG_FIELDS.has(field)){
@@ -4967,7 +5100,7 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='rank') help += '<div class="form-help">素材のランクは「素材ランク」タブで管理します。候補にない場合は横のボタンから追加できます。</div>';
   if(field==='offhandBonus') help += '<div class="form-help">二刀攻撃で副手にした時に追加する固定値。短剣/片手剣/槌/片手槍は2、片手斧は3、杖は1が目安です。</div>';
   if(field==='checkType') help += '<div class="form-help">左側は対応技能、右側は目標値です。右側は候補から選ぶほか、数値や任意の名称を直接入力できます。</div>';
-  if(field==='fixedEvents') help += '<div class="form-help">固定イベントは1行につき1件です。形式：進行度%［タブ］イベント名［タブ］内容。例：50%　採取確認地点　薬草または丈夫な枝を入手。</div>';
+  if(field==='fixedEvents') help += '<div class="form-help">固定イベント欄の「追加」から、発生%・イベント名・内容を1件ずつ登録します。</div>';
   if(shouldShowQuickCategoryButton(key, field)) help += '<div class="field-inline-help">候補にない場合は横のボタンから作成できます。</div>';
   return `<div class="field ${isWide?'wide':''} ${shouldShowQuickCategoryButton(key, field)?'with-action':''}"><label>${escapeHtml(label)}</label>${input}${help}</div>`;
 }
@@ -5017,6 +5150,7 @@ function quickCreateCategory(field){
 function currentFormRowSnapshot(){
   syncAllCheckBuilders($('editModal'));
   if(formState.key==='monsters') syncAllMonsterEditors();
+  if(formState.key==='quests') syncAllQuestFixedEventEditors();
   const row = formState.key ? (formState.idx===null ? newBlankRow(formState.key) : {...state[formState.key][formState.idx]}) : {};
   if(formState.key==='items' && !row.dataKind) row.dataKind = formState.defaultDataKind || 'アイテム';
   $('editModal')?.querySelectorAll('[data-form-field]').forEach(el=>{ row[el.dataset.formField]=el.value ?? ''; });
@@ -5071,6 +5205,7 @@ function collectFormRow(){
   const {key,idx}=formState; if(!key) throw new Error('編集中のデータがありません');
   syncAllCheckBuilders($('editModal'));
   if(key==='monsters') syncAllMonsterEditors();
+  if(key==='quests') syncAllQuestFixedEventEditors();
   const base = idx===null ? newBlankRow(key) : {...state[key][idx]};
   if(key==='items' && !base.dataKind) base.dataKind = formState.defaultDataKind || 'アイテム';
   if(key==='items' && base.dataKind !== '素材' && !String(base.csVisible || '').trim()) base.csVisible = 'TRUE';
@@ -5705,6 +5840,8 @@ document.addEventListener('click',e=>{
   const remAction=e.target.closest('[data-monster-action-remove]'); if(remAction){ const editor=remAction.closest('[data-monster-actions-editor]'); remAction.closest('[data-monster-action-row]')?.remove(); syncMonsterActionEditor(editor); return; }
   const addDrop=e.target.closest('[data-monster-drop-add]'); if(addDrop){ const editor=addDrop.closest('[data-monster-drops-editor]'); editor.querySelector('[data-monster-drop-list]').insertAdjacentHTML('beforeend', monsterDropRowHtml({})); syncMonsterDropEditor(editor); return; }
   const remDrop=e.target.closest('[data-monster-drop-remove]'); if(remDrop){ const editor=remDrop.closest('[data-monster-drops-editor]'); remDrop.closest('[data-monster-drop-row]')?.remove(); syncMonsterDropEditor(editor); return; }
+  const addFixed=e.target.closest('[data-quest-fixed-event-add]'); if(addFixed){ const editor=addFixed.closest('[data-quest-fixed-events-editor]'); const list=editor.querySelector('[data-quest-fixed-event-list]'); list.querySelector('[data-quest-fixed-empty]')?.remove(); const rows=readQuestFixedEventRows(editor); const step=currentFormValue('progressStep')||'25%'; list.insertAdjacentHTML('beforeend', questFixedEventRowHtml({progress:nextQuestFixedEventPercent(rows, step)}, step, rows.length)); syncQuestFixedEventsEditor(editor); return; }
+  const remFixed=e.target.closest('[data-quest-fixed-event-remove]'); if(remFixed){ const editor=remFixed.closest('[data-quest-fixed-events-editor]'); remFixed.closest('[data-quest-fixed-event-row]')?.remove(); const list=editor.querySelector('[data-quest-fixed-event-list]'); if(!list.querySelector('[data-quest-fixed-event-row]')) list.innerHTML='<div class="muted small" data-quest-fixed-empty>固定イベントはまだありません。</div>'; syncQuestFixedEventsEditor(editor); return; }
   const quickCat=e.target.closest('[data-quick-category-field]'); if(quickCat){ quickCreateCategory(quickCat.dataset.quickCategoryField); return; }
   const groupTab=e.target.closest('[data-tab-group]');
   if(groupTab){
@@ -5764,9 +5901,11 @@ document.addEventListener('input',e=>{
   if(e.target.closest('[data-check-builder]')) syncCheckBuilder(e.target.closest('[data-check-builder]'));
   if(e.target.closest('[data-monster-actions-editor]')) syncMonsterActionEditor(e.target.closest('[data-monster-actions-editor]'));
   if(e.target.closest('[data-monster-drops-editor]')) syncMonsterDropEditor(e.target.closest('[data-monster-drops-editor]'));
+  if(e.target.closest('[data-quest-fixed-events-editor]')) syncQuestFixedEventsEditor(e.target.closest('[data-quest-fixed-events-editor]'));
 });
 document.addEventListener('change',e=>{
   if(e.target.dataset.formField==='dataKind'){ rerenderCurrentForm(); return; }
+  if(e.target.dataset.formField==='progressStep'){ document.querySelectorAll('[data-quest-fixed-events-editor]').forEach(refreshQuestFixedEventPercentOptions); return; }
   if(['itemType','materialType','itemCategory','equipSlot','skill','type','eventType'].includes(e.target.dataset.formField)){ rerenderCurrentForm(); return; }
   if(e.target.closest('[data-check-builder]')) syncCheckBuilder(e.target.closest('[data-check-builder]'));
   const dropRow=e.target.closest('[data-monster-drop-row]');
@@ -5783,6 +5922,7 @@ document.addEventListener('change',e=>{
   }
   if(e.target.closest('[data-monster-actions-editor]')) syncMonsterActionEditor(e.target.closest('[data-monster-actions-editor]'));
   if(e.target.closest('[data-monster-drops-editor]')) syncMonsterDropEditor(e.target.closest('[data-monster-drops-editor]'));
+  if(e.target.closest('[data-quest-fixed-events-editor]')) syncQuestFixedEventsEditor(e.target.closest('[data-quest-fixed-events-editor]'));
   const adv=e.target.dataset.advFilter;
   if(adv){
     const [key,field]=adv.split(':');
