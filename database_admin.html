@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.10</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.11</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -686,7 +686,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.10';
+const RECRAFT_DB_VERSION = 'v90.8.11';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
 const PAGE_TABLE_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','materials','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
@@ -703,13 +703,13 @@ const SCHEMA = {
   recipes: ['id','name','rank','category','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   spells: ['id','type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   quest_rewards: ['id','rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards','notes','updatedAt','ownerKey','createdBy'],
-  quests: ['id','name','questType','rank','areaName','progressStep','forcedProgress','clearCondition','bossMonster','rewardMoney','rewardItems','unlockResult','description','notes','updatedAt','ownerKey','createdBy'],
+  quests: ['id','name','questType','rank','areaName','progressStep','fixedEvents','clearCondition','bossMonster','rewardMoney','rewardItems','unlockResult','description','notes','updatedAt','ownerKey','createdBy'],
   exploration_areas: ['id','name','areaType','difficulty','unlockCondition','mainMaterials','mainMonsters','eventTableId','description','notes','updatedAt','ownerKey','createdBy'],
   event_tables: ['id','tableId','areaName','roll','eventName','eventType','checkType','targetValue','result','progressEffect','notes','updatedAt','ownerKey','createdBy'],
   monsters: ['id','name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'1枠数', offhandBonus:'副手追撃値', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具/設備', difficulty:'難度', usageTags:'用途タグ', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', forcedProgress:'強制イベント進行度', clearCondition:'クリア条件', bossMonster:'ボス/達成イベント', rewardMoney:'報酬金', rewardItems:'報酬アイテム', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', roll:'出目', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', actions:'行動', drops:'ドロップ'
+  id:'ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'1枠数', offhandBonus:'副手追撃値', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具/設備', difficulty:'難度', usageTags:'用途タグ', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'ボス/達成イベント', rewardMoney:'報酬金', rewardItems:'報酬アイテム', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', roll:'出目', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', actions:'行動', drops:'ドロップ'
 };
 
 const FORM_PRIMARY_FIELDS = {
@@ -724,14 +724,14 @@ const FORM_PRIMARY_FIELDS = {
   materials: ['name','materialType','materialCategory','rank','price','source','usageTags','description','effect','notes'],
   spells: ['type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags'],
   quest_rewards: ['rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards'],
-  quests: ['name','questType','rank','areaName','progressStep','forcedProgress','clearCondition','bossMonster','rewardMoney','rewardItems','unlockResult','description','notes'],
+  quests: ['name','questType','rank','areaName','progressStep','fixedEvents','clearCondition','bossMonster','rewardMoney','rewardItems','unlockResult','description','notes'],
   exploration_areas: ['name','areaType','difficulty','unlockCondition','mainMaterials','mainMonsters','eventTableId','description','notes'],
   event_tables: ['tableId','areaName','roll','eventName','eventType','checkType','targetValue','result','progressEffect','notes'],
   monsters: ['name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','description','notes']
 };
-const FORM_LONG_FIELDS = new Set(['description','description','effect','notes','extraRewards','tags','usageTags','clearCondition','rewardItems','unlockResult','mainMaterials','mainMonsters','result','progressEffect','actions','drops']);
+const FORM_LONG_FIELDS = new Set(['description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','rewardItems','unlockResult','mainMaterials','mainMonsters','result','progressEffect','actions','drops']);
 const FIELD_PLACEHOLDERS = {
-  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'例：低級 / 初級', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街外れの草むら', progressStep:'例：+25%', forcedProgress:'例：50%', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', roll:'例：1 / 1-2', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', result:'成功時の結果', progressEffect:'例：クエスト進行度+25%', monsterType:'例：スライム / 獣', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）'
+  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'例：低級 / 初級', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街外れの草むら', progressStep:'例：+25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', roll:'例：1 / 1-2', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', result:'成功時の結果', progressEffect:'例：クエスト進行度+25%', monsterType:'例：スライム / 獣', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）'
 };
 const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','equipSlot','skill','checkType','type','role','setItem','unlockFacility','enabled','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','tableId','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity']);
 let formState = { key:null, idx:null, mode:'new', defaultDataKind:'' };
@@ -3859,7 +3859,7 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "街外れの草むら",
       "progressStep": "+25%",
-      "forcedProgress": "50%",
+      "fixedEvents": "50%\t採取確認地点\t失敗でも薬草または丈夫な枝×1。成功で薬草、清め草、丈夫な枝から2個。目標値+3以上で好きな低級採取素材+1。\n100%\t試験用の魔物遭遇\tプチスライム1体と荒れ森ネズミ1体と戦闘。勝利でクエストクリア。",
       "clearCondition": "採取素材を合計3個以上入手し、エリアイベントを2回以上解決し、小型魔物を1体撃退する。",
       "bossMonster": "プチスライム / 荒れ森ネズミ",
       "rewardMoney": "80G",
@@ -3894,7 +3894,7 @@ const DEFAULTS = {
       "checkType": "採取",
       "targetValue": "8",
       "result": "成功で薬草1D3個。目標値+3以上で追加+1。失敗でも薬草1個。",
-      "progressEffect": "クエスト時は進行度+25%。探索時は探索度+1D6×10%。",
+      "progressEffect": "探索時は探索度+1D6×10%。",
       "notes": "回復薬の基本素材を入手する。"
     },
     {
@@ -3907,7 +3907,7 @@ const DEFAULTS = {
       "checkType": "採取",
       "targetValue": "8",
       "result": "成功で丈夫な枝またはしなやかな蔓を1D3個。目標値+3以上で追加+1。",
-      "progressEffect": "クエスト時は進行度+25%。探索時は探索度+1D6×10%。",
+      "progressEffect": "探索時は探索度+1D6×10%。",
       "notes": "木材系素材の導入。"
     },
     {
@@ -3920,7 +3920,7 @@ const DEFAULTS = {
       "checkType": "採取",
       "targetValue": "8",
       "result": "成功で澄んだ水1D3個。目標値+6以上で小さな水晶片×1も入手。",
-      "progressEffect": "クエスト時は進行度+25%。探索時は探索度+1D6×10%。",
+      "progressEffect": "探索時は探索度+1D6×10%。",
       "notes": "水・液体系素材の導入。"
     },
     {
@@ -3933,7 +3933,7 @@ const DEFAULTS = {
       "checkType": "感知",
       "targetValue": "8",
       "result": "成功で魔物の気配に気づく。次の戦闘の先制判定+2、または魔物遭遇を回避。",
-      "progressEffect": "クエスト時は進行度+25%。探索時は探索度+1D6×10%。",
+      "progressEffect": "探索時は探索度+1D6×10%。",
       "notes": "感知判定のチュートリアル。"
     },
     {
@@ -3946,7 +3946,7 @@ const DEFAULTS = {
       "checkType": "戦闘",
       "targetValue": "",
       "result": "荒れ森ネズミ1体と遭遇。勝利でドロップ判定。",
-      "progressEffect": "クエスト時は進行度+25%。探索時は探索度+1D6×10%。",
+      "progressEffect": "探索時は探索度+1D6×10%。",
       "notes": "獣系魔物素材の導入。"
     },
     {
@@ -3959,34 +3959,8 @@ const DEFAULTS = {
       "checkType": "戦闘",
       "targetValue": "",
       "result": "プチスライム1体と遭遇。勝利でドロップ判定。",
-      "progressEffect": "クエスト時は進行度+25%。探索時は探索度+1D6×10%。",
+      "progressEffect": "探索時は探索度+1D6×10%。",
       "notes": "スライム素材の導入。"
-    },
-    {
-      "id": "evt_grass_forced_50",
-      "tableId": "evt_outskirts_grass_trial",
-      "areaName": "街外れの草むら",
-      "roll": "50%",
-      "eventName": "採取確認地点",
-      "eventType": "強制イベント",
-      "checkType": "採取",
-      "targetValue": "8",
-      "result": "失敗でも薬草または丈夫な枝×1。成功で薬草、清め草、丈夫な枝から2個。目標値+3以上で好きな低級採取素材+1。",
-      "progressEffect": "冒険者の腕試しで進行度50%到達時に発生。",
-      "notes": "ランダム運が悪くても必要素材が確保できる救済イベント。"
-    },
-    {
-      "id": "evt_grass_clear_100",
-      "tableId": "evt_outskirts_grass_trial",
-      "areaName": "街外れの草むら",
-      "roll": "100%",
-      "eventName": "試験用の魔物遭遇",
-      "eventType": "ボス",
-      "checkType": "戦闘",
-      "targetValue": "",
-      "result": "プチスライム1体と荒れ森ネズミ1体と戦闘。勝利でクエストクリア。",
-      "progressEffect": "冒険者の腕試しで進行度100%到達時に発生。",
-      "notes": "基本は2体構成。人数や初期装備に応じてHPを少し増減して調整。"
     }
   ],
   "monsters": [
@@ -4993,6 +4967,7 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='rank') help += '<div class="form-help">素材のランクは「素材ランク」タブで管理します。候補にない場合は横のボタンから追加できます。</div>';
   if(field==='offhandBonus') help += '<div class="form-help">二刀攻撃で副手にした時に追加する固定値。短剣/片手剣/槌/片手槍は2、片手斧は3、杖は1が目安です。</div>';
   if(field==='checkType') help += '<div class="form-help">左側は対応技能、右側は目標値です。右側は候補から選ぶほか、数値や任意の名称を直接入力できます。</div>';
+  if(field==='fixedEvents') help += '<div class="form-help">固定イベントは1行につき1件です。形式：進行度%［タブ］イベント名［タブ］内容。例：50%　採取確認地点　薬草または丈夫な枝を入手。</div>';
   if(shouldShowQuickCategoryButton(key, field)) help += '<div class="field-inline-help">候補にない場合は横のボタンから作成できます。</div>';
   return `<div class="field ${isWide?'wide':''} ${shouldShowQuickCategoryButton(key, field)?'with-action':''}"><label>${escapeHtml(label)}</label>${input}${help}</div>`;
 }

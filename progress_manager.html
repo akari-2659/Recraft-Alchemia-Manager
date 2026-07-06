@@ -27,7 +27,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.10 / クエスト・エリア進行、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.11 / クエスト・エリア進行、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -67,11 +67,11 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
         <button class="ghost" id="questResetBtn">進行度をリセット</button>
         <button class="secondary" id="questCopyBtn">進行メモコピー</button>
       </div>
-      <h3>クエストイベント確認</h3>
-      <div id="questEventDetail" class="result">進行度固定イベントと、クエスト対象エリアのランダムイベント結果がここに表示されます。</div>
+      <h3>固定イベント確認</h3>
+      <div id="questEventDetail" class="result">クエストに登録された固定イベントと、ランダムイベント結果がここに表示されます。</div>
       <div class="buttons">
-        <button id="rollQuestEventBtn">ランダムイベント抽選</button>
-        <button class="secondary" id="copyQuestEventBtn">イベント結果コピー</button>
+        <button id="rollQuestEventBtn">クエストランダムイベント抽選</button>
+        <button class="secondary" id="copyQuestEventBtn">クエストイベント結果コピー</button>
       </div>
       <label style="margin-top:10px">クエストメモ</label>
       <textarea id="questNote" placeholder="セッション中のメモ"></textarea>
@@ -135,7 +135,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.10';
+const VERSION='v90.8.11';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -214,15 +214,25 @@ function tableIdForQuest(q){
 }
 function isPercentEvent(row){return /%/.test(String(row&&row.roll||''));}
 function eventThreshold(row){
-  const src=String(row&&row.roll||row&&row.progressEffect||'');
+  if(row && row.fixedThreshold!==undefined && row.fixedThreshold!==null) return Number(row.fixedThreshold);
+  const src=String(row&&row.roll||row&&row.progressEffect||row&&row.progress||'');
   const m=src.match(/(\d+)\s*%/);
   return m?Number(m[1]):null;
 }
+function parseQuestFixedEvents(text){
+  return String(text||'').split(/\r?\n/).map(line=>line.trim()).filter(Boolean).map((line,idx)=>{
+    let parts=line.split('	');
+    if(parts.length<3) parts=line.split(/[｜|]/);
+    if(parts.length<3) parts=line.split(/\s*,\s*/);
+    const progress=String(parts[0]||'').trim();
+    const fixedThreshold=eventThreshold({progress}) ?? getNumFromText(progress, 0);
+    const eventName=String(parts[1]||`固定イベント${idx+1}`).trim();
+    const result=String(parts.slice(2).join(' / ')||'').trim();
+    return {fixedThreshold, eventName, eventType:'固定イベント', result, raw:line};
+  }).filter(e=>Number.isFinite(e.fixedThreshold));
+}
 function questSpecificEvents(q){
-  const tableId=tableIdForQuest(q);
-  if(!tableId)return [];
-  return state.events.filter(e=>String(e.tableId||'').trim()===tableId && isPercentEvent(e))
-    .sort((a,b)=>(eventThreshold(a)??999)-(eventThreshold(b)??999));
+  return parseQuestFixedEvents(q && q.fixedEvents).sort((a,b)=>(eventThreshold(a)??999)-(eventThreshold(b)??999));
 }
 function questRandomEvents(q){
   const tableId=tableIdForQuest(q);
@@ -245,7 +255,7 @@ function renderQuestStepInfo(q,p){
   const nextValue=clamp(current+step);
   const next=nextQuestEvent(q,current);
   const nextText=next ? `${eventThreshold(next)}%：${next.eventName||'名称未設定'}` : 'なし';
-  box.innerHTML=`<div class="kv"><b>現在</b><span>${current}%</span><b>1回の進行</b><span>+${step}%</span><b>進行後</b><span>${nextValue}%</span><b>次の固定イベント</b><span>${esc(nextText)}</span></div><p class="muted small">DB読込直後の進行度は0%です。保存済みの続きから遊ぶ場合だけ「保存済み進行を復元」を押してください。クエスト進行は固定値上昇のみです。</p>`;
+  box.innerHTML=`<div class="kv"><b>現在</b><span>${current}%</span><b>1回の進行</b><span>+${step}%</span><b>進行後</b><span>${nextValue}%</span><b>次の固定イベント</b><span>${esc(nextText)}</span></div><p class="muted small">DB読込直後の進行度は0%です。固定イベントはクエスト登録欄の内容を表示します。発生処理は自動では行わず、GMが確認して手動で扱います。</p>`;
 }
 function eventDetailText(e){
   return [
@@ -270,19 +280,20 @@ function renderQuestEvents(){
   const fixedRows=questSpecificEvents(q);
   const randomRows=questRandomEvents(q);
   const current=clamp(p.value);
-  const triggered=fixedRows.filter(e=>(eventThreshold(e)??101)<=current);
-  const next=fixedRows.find(e=>(eventThreshold(e)??101)>current);
   const parts=[];
-  parts.push('<div class="event-section"><div class="event-section-title"><span class="badge fixed">固定</span> 進行度固定イベント</div><div class="muted small">進行度が指定値に到達した時に発生するイベントです。ランダム抽選ではありません。</div>');
+  parts.push('<div class="event-section"><div class="event-section-title"><span class="badge fixed">固定</span> クエスト固定イベント</div><div class="muted small">クエスト登録時に入力した固定イベントです。進行度が指定値に到達したら、GMが内容を確認して発生させます。ランダム抽選ではありません。</div>');
   if(fixedRows.length){
-    if(triggered.length) parts.push(triggered.map(e=>eventDetailHtml(e,'active','発生済み：','fixed')).join(''));
-    if(next) parts.push(eventDetailHtml(next,'next','次：','fixed'));
-    if(!triggered.length && !next) parts.push('<div class="muted small">固定イベントはすべて発生済みです。</div>');
+    parts.push(fixedRows.map(e=>{
+      const th=eventThreshold(e)??0;
+      const cls = th<=current ? 'active' : 'next';
+      const prefix = th<=current ? '到達済み：' : '未到達：';
+      return eventDetailHtml(e,cls,prefix,'fixed');
+    }).join(''));
   }else{
-    parts.push('<div class="muted small">このクエストに紐づく進行度固定イベントはありません。</div>');
+    parts.push('<div class="muted small">このクエストには固定イベントが登録されていません。</div>');
   }
   parts.push('</div>');
-  parts.push(`<div class="event-section"><div class="event-section-title"><span class="badge random">ランダム</span> クエストランダムイベント</div><div class="muted small">選択中クエストの対象エリアに設定されたランダムイベントです。下の「ランダムイベント抽選」を押した時だけ結果が出ます。候補数：${randomRows.length}件</div>`);
+  parts.push(`<div class="event-section"><div class="event-section-title"><span class="badge random">ランダム</span> クエストランダムイベント</div><div class="muted small">選択中クエストの対象エリアに設定されたランダムイベントです。下の「クエストランダムイベント抽選」を押した時だけ結果が出ます。候補数：${randomRows.length}件</div>`);
   if(state.lastQuestEventText){
     parts.push(`<div class="event-card random"><div class="event-title"><span class="badge random">ランダム</span> 直近の抽選結果</div><div class="muted small">${esc(state.lastQuestEventText).replace(/\n/g,'<br>')}</div></div>`);
   }else{
@@ -329,7 +340,7 @@ function renderQuest(){
   $('questNote').value=p.note||'';
   $('questBar').style.width=clamp(p.value)+'%';
   $('questLabel').textContent=clamp(p.value)+'%';
-  $('questDetail').innerHTML=`<div class="kv"><b>種別</b><span>${esc(q.questType||'')}</span><b>ランク</b><span>${esc(q.rank||'')}</span><b>エリア</b><span>${esc(q.areaName||'')}</span><b>進行上昇値</b><span>+${questStepAmount(q)}%</span><b>クリア条件</b><span>${esc(q.clearCondition||'')}</span><b>報酬</b><span>${esc([q.rewardMoney,q.rewardItems].filter(Boolean).join(' / '))}</span></div>${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
+  $('questDetail').innerHTML=`<div class="kv"><b>種別</b><span>${esc(q.questType||'')}</span><b>ランク</b><span>${esc(q.rank||'')}</span><b>エリア</b><span>${esc(q.areaName||'')}</span><b>進行上昇値</b><span>+${questStepAmount(q)}%</span><b>固定イベント数</b><span>${questSpecificEvents(q).length}件</span><b>クリア条件</b><span>${esc(q.clearCondition||'')}</span><b>報酬</b><span>${esc([q.rewardMoney,q.rewardItems].filter(Boolean).join(' / '))}</span></div>${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
   renderQuestStepInfo(q,p);
   renderQuestEvents();
 }
