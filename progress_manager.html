@@ -27,7 +27,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.18 / クエスト・エリア進行、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.50 / クエスト・エリア進行、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -133,11 +133,11 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.18';
+const VERSION='v90.8.50';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
-const state={quests:[],areas:[],events:[],monsters:[],progress:{quests:{},areas:{}},lastEventText:'',lastEventKey:'',lastQuestEventText:'',lastQuestEventKey:'',lastDropText:'',lastDropSuccessText:'',log:[]};
+const state={quests:[],areas:[],events:[],monsters:[],items:[],progress:{quests:{},areas:{}},lastEventText:'',lastEventKey:'',lastQuestEventText:'',lastQuestEventKey:'',lastDropText:'',lastDropSuccessText:'',log:[]};
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function clamp(n){return Math.max(0,Math.min(100,Number(n)||0));}
 function now(){return new Date().toLocaleString('ja-JP',{hour12:false});}
@@ -184,8 +184,8 @@ async function loadDb(){
   setStatus('warn','DB読込を開始します。');
   $('loadDbBtn').disabled=true;
   try{
-    const [quests,areas,events,monsters]=await Promise.all(['quests','exploration_areas','event_tables','monsters'].map(loadSheet));
-    state.quests=quests; state.areas=areas; state.events=events; state.monsters=monsters;
+    const [quests,areas,events,monsters,items]=await Promise.all(['quests','exploration_areas','event_tables','monsters','items'].map(loadSheet));
+    state.quests=quests; state.areas=areas; state.events=events; state.monsters=monsters; state.items=items;
     state.progress={quests:{},areas:{}};
     state.lastEventText=''; state.lastEventKey=''; state.lastQuestEventText=''; state.lastQuestEventKey=''; state.lastDropText=''; state.lastDropSuccessText='';
     fillSelect($('questSelect'),quests,r=>`${r.name||r.id} / ${r.rank||''}`);
@@ -193,7 +193,7 @@ async function loadDb(){
     fillSelect($('eventAreaSelect'),areas,r=>`${r.name||r.id} / 表:${r.eventTableId||'未設定'}`);
     fillEventTables();
     fillSelect($('monsterSelect'),monsters,r=>`${r.name||r.id} / ${r.rank||''}`);
-    setStatus('good',`DB読込完了：クエスト${quests.length}件 / エリア${areas.length}件 / イベント${events.length}件 / 魔物${monsters.length}件`);
+    setStatus('good',`DB読込完了：クエスト${quests.length}件 / エリア${areas.length}件 / イベント${events.length}件 / 魔物${monsters.length}件 / アイテム・素材${items.length}件`);
     addLog('DBを読み込みました。');
     renderAll();
   }catch(e){setStatus('bad','DB読込に失敗しました：'+e.message); addLog('DB読込失敗：'+e.message);} finally{$('loadDbBtn').disabled=false;}
@@ -390,12 +390,90 @@ function parseDrops(text){
   });
 }
 function rateNum(s){const m=String(s||'').match(/\d+(?:\.\d+)?/); return m?Number(m[0]):100;}
+
+function materialRows(){
+  return (state.items || []).filter(r=>String(r.dataKind || '').trim()==='素材');
+}
+function findDropMaterial(d={}){
+  const id = String(d.id || d.itemId || '').trim();
+  const name = String(d.name || d.itemName || '').trim();
+  const large = String(d.large || d.materialType || '').trim();
+  const small = String(d.small || d.materialCategory || '').trim();
+  const rows = materialRows().filter(r=>{
+    if(large && String(r.materialType || '').trim() !== large) return false;
+    if(small && String(r.materialCategory || '').trim() !== small) return false;
+    return true;
+  });
+  return rows.find(r=>id && String(r.id || r.name || '').trim() === id)
+    || rows.find(r=>name && String(r.name || '').trim() === name)
+    || materialRows().find(r=>id && String(r.id || r.name || '').trim() === id)
+    || materialRows().find(r=>name && String(r.name || '').trim() === name)
+    || null;
+}
+function dropDetailLines(material){
+  if(!material) return [];
+  const lines = [];
+  const rank = String(material.rank || '').trim();
+  const cat = String(material.materialCategory || material.itemCategory || '').trim();
+  const price = String(material.price ?? '').trim();
+  const desc = String(material.description || '').trim();
+  const effect = String(material.effect || '').trim();
+  if(rank) lines.push('ランク：' + rank);
+  if(cat) lines.push('分類：' + cat + '素材');
+  if(price) lines.push('売値：' + price + 'G');
+  if(desc) lines.push('説明：' + desc);
+  if(effect) lines.push('効果：' + effect);
+  return lines;
+}
+
+function dropDetailHtml(material){
+  const lines = dropDetailLines(material);
+  if(!lines.length) return '';
+  return `<div class="muted small">${lines.map(esc).join('<br>')}</div>`;
+}
+function dropPublicId(material, d={}){
+  return String(material?.publicId || d.publicId || '').trim();
+}
+function dropCountText(d={}){
+  const raw = String(d.count || '1').trim();
+  const m = raw.match(/\d+/);
+  return m ? m[0] : '1';
+}
+function dropPlayerInfoBlock(d={}){
+  const material = findDropMaterial(d);
+  const name = d.name || d.id || material?.name || '名称未設定';
+  const publicId = dropPublicId(material, d);
+  const count = dropCountText(d);
+  const lines = [];
+  lines.push(`【${name}】`);
+  lines.push(`登録ID：${publicId || '公開ID未設定'}`);
+  lines.push(`個数：${count}`);
+  const details = dropDetailLines(material);
+  if(details.length) lines.push(...details);
+  return lines.join('\n');
+}
+function dropOutputBlock(d={}){
+  return dropPlayerInfoBlock(d);
+}
+
 function rollDrops(){
   const m=selected($('monsterSelect'),state.monsters); if(!m)return;
   const drops=parseDrops(m.drops); if(!drops.length){$('dropResult').textContent='ドロップ設定がありません。'; return;}
   const all=[`【ドロップ判定】${m.name||m.id}`]; const got=[`【ドロップ入手】${m.name||m.id}`];
   const html=[];
-  drops.forEach(d=>{const r=1+Math.floor(Math.random()*100); const rate=rateNum(d.rate); const ok=r<=rate; const line=`${ok?'○':'×'} ${d.name||d.id||'名称未設定'} ${d.count||''}（${d.rate||rate+'%'} / 出目${r}）`; all.push(line); if(ok) got.push(`${d.name||d.id||'名称未設定'} ${d.count||''}`); html.push(`<div class="drop-row ${ok?'success':'fail'}"><div><b>${esc(d.name||d.id||'名称未設定')}</b><br><span class="muted small">${esc([d.large,d.small,d.id].filter(Boolean).join(' / '))}</span></div><span class="pill">${esc(d.rate||rate+'%')}</span><span class="pill">${ok?'入手':'なし'} ${r}</span></div>`);});
+  drops.forEach(d=>{
+    const material=findDropMaterial(d);
+    const r=1+Math.floor(Math.random()*100);
+    const rate=rateNum(d.rate);
+    const ok=r<=rate;
+    const name=d.name||d.id||material?.name||'名称未設定';
+    const line=`${ok?'○':'×'} ${name} ${d.count||''}（${d.rate||rate+'%'} / 出目${r}）`;
+    all.push(line);
+    if(ok) got.push(dropOutputBlock(d));
+    const detail=dropDetailHtml(material);
+    const chips=[d.large||material?.materialType,d.small||material?.materialCategory,material?.rank?`ランク:${material.rank}`:'',material?.price?`売値:${material.price}G`:''].filter(Boolean);
+    html.push(`<div class="drop-row ${ok?'success':'fail'}"><div><b>${esc(name)}</b><br><span class="muted small">${esc([d.large,d.small,d.id].filter(Boolean).join(' / '))}</span>${detail}</div><span class="pill">${esc(d.rate||rate+'%')}</span><span class="pill">${ok?'入手':'なし'} ${r}</span></div>`);
+  });
   if(got.length===1) got.push('入手なし');
   state.lastDropText=all.join('\n'); state.lastDropSuccessText=got.join('\n');
   $('dropResult').innerHTML=`<div class="drop-list">${html.join('')}</div>`; addLog(`ドロップ判定：${m.name||m.id}`);

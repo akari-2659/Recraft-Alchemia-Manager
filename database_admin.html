@@ -176,6 +176,30 @@
   .filter-head{
     display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px;
   }
+    .advanced-filters summary{
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    font-weight:800;
+    color:var(--accent);
+    list-style:none;
+  }
+  .advanced-filters summary::-webkit-details-marker{display:none}
+  .advanced-filters summary::after{
+    content:'開く';
+    font-size:11px;
+    color:var(--muted);
+    border:1px solid #d8c6ad;
+    border-radius:999px;
+    padding:2px 8px;
+    background:#fffaf3;
+  }
+  .advanced-filters[open] summary::after{content:'閉じる'}
+  .advanced-filter-body{margin-top:10px}
+  .card-copy-button{margin-top:8px;justify-self:start}
+  .copy-card-text{white-space:pre-wrap}
   .filter-head b{font-size:14px}
   .filter-grid{
     display:grid;
@@ -302,6 +326,11 @@
   .facility-product-meta{display:flex;gap:6px;flex-wrap:wrap}
   .facility-chip{display:inline-flex;align-items:center;border-radius:999px;background:#efe4d4;color:#60472e;padding:3px 8px;font-size:12px;font-weight:700}
   .facility-service-list{margin:10px 0 0;padding-left:18px;color:var(--ink);line-height:1.7}
+  .facility-upgrade-box{border:1px solid #dcc7ad;border-radius:18px;background:#fffdf9;padding:14px;box-shadow:0 6px 16px rgba(94,66,35,.06)}
+  .facility-upgrade-result{margin-top:10px;border:1px solid #ead9c2;border-radius:12px;background:#fffaf3;padding:12px;line-height:1.7;color:var(--ink)}
+  .facility-upgrade-result .muted{color:var(--muted)}
+  .monster-drop-desc{margin-top:6px;color:var(--muted);font-size:12px;line-height:1.6}
+  .monster-drop-detail{margin-top:6px;display:grid;gap:3px;color:var(--ink);font-size:12px;line-height:1.6}
   .facility-output{margin-top:14px;display:grid;gap:8px}
   .facility-output textarea{width:100%;min-height:180px}
   @media (max-width:760px){.facility-summary{grid-template-columns:1fr}.facility-card-head{display:grid}.facility-actions{justify-content:stretch}.facility-actions button{width:100%}.facility-product summary{grid-template-columns:1fr}.facility-product-price{justify-self:start}}
@@ -551,7 +580,7 @@
 
   <section class="panel hidden" id="panel-equipment_categories">
     <div class="toolbar">
-      <div class="field"><label>検索</label><input id="filter-equipment_categories" placeholder="右手・鎧・所持品・短剣などで絞り込み"></div>
+      <div class="field"><label>名前検索</label><input id="filter-equipment_categories" placeholder="右手・鎧・所持品・短剣などで絞り込み"></div>
       <button class="secondary" data-add="equipment_categories">新規登録</button>
       <button class="ghost" data-reset="equipment_categories">初期データに戻す</button>
       <button class="ghost" data-load="equipment_categories">この表だけDB読込</button>
@@ -564,7 +593,7 @@
 
   <section class="panel hidden" id="panel-items">
     <div class="toolbar">
-      <div class="field"><label>検索</label><input id="filter-items" placeholder="武器・防具・調合品・効果などで絞り込み"></div>
+      <div class="field"><label>名前検索</label><input id="filter-items" placeholder="武器・防具・調合品・効果などで絞り込み"></div>
       <button class="secondary" data-add-kind="アイテム">アイテム新規登録</button>
       <button class="ghost" data-reset="items">初期データに戻す</button>
       <button class="ghost" data-load="items">この表だけDB読込</button>
@@ -577,7 +606,7 @@
 
   <section class="panel hidden" id="panel-materials">
     <div class="toolbar">
-      <div class="field"><label>検索</label><input id="filter-materials" placeholder="薬草・鉱石・魔物素材・用途タグなどで絞り込み"></div>
+      <div class="field"><label>名前検索</label><input id="filter-materials" placeholder="薬草・鉱石・魔物素材・用途タグなどで絞り込み"></div>
       <button class="secondary" data-add-kind="素材">素材新規登録</button>
       <button class="ghost" data-reset="items">初期データに戻す</button>
       <button class="ghost" data-load="materials">この表だけDB読込</button>
@@ -696,6 +725,19 @@
     <div class="facility-layout">
       <div class="facility-summary" id="facilitySummary"></div>
       <div id="facilityCards"></div>
+      <section class="facility-upgrade-box">
+        <h3>強化</h3>
+        <p class="notice">素材名を入力すると、装備強化内容と装備強化値を確認できます。ドロップ出力側にはこの強化情報は表示しません。</p>
+        <div class="input-action-row">
+          <div>
+            <label for="facilityUpgradeMaterialInput">素材名</label>
+            <input id="facilityUpgradeMaterialInput" list="facilityUpgradeMaterialList" placeholder="例：ぷるぷる膜 / 小獣の牙">
+            <datalist id="facilityUpgradeMaterialList"></datalist>
+          </div>
+          <button class="secondary" type="button" data-facility-upgrade-check>強化内容を確認</button>
+        </div>
+        <div id="facilityUpgradeResult" class="facility-upgrade-result muted">素材名を入力してください。</div>
+      </section>
       <div class="facility-output">
         <label for="facilitySalesText">販売商品リスト出力</label>
         <textarea id="facilitySalesText" rows="14" readonly placeholder="販売商品リストをコピーすると、ここにも一覧が表示されます。"></textarea>
@@ -773,7 +815,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.37';
+const RECRAFT_DB_VERSION = 'v90.8.50';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
 const PAGE_TABLE_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','materials','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
@@ -786,7 +828,7 @@ const SCHEMA = {
   material_categories: ['id','name','materialType','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   material_ranks: ['id','name','price','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   equipment_categories: ['id','name','itemCategory','equipSlot','skill','element','power','hitMod','alwaysDefense','guardValue','evasionMod','maxStack','offhandBonus','description','effect','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
-  items: ['id','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','equipSlot','skill','power','hitMod','alwaysDefense','guardValue','evasionMod','maxStack','ammoUse','ammoKind','quiverCapacity','bagCapacity','offhandBonus','mpCost','target','checkType','element','description','effect','source','usageTags','weaponUpgradeEffect','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
+  items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','equipSlot','skill','power','hitMod','alwaysDefense','guardValue','evasionMod','maxStack','ammoUse','ammoKind','quiverCapacity','bagCapacity','offhandBonus','mpCost','target','checkType','element','description','effect','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   recipes: ['id','name','rank','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   spells: ['id','type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   quest_rewards: ['id','rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards','notes','updatedAt','ownerKey','createdBy'],
@@ -796,7 +838,7 @@ const SCHEMA = {
   monsters: ['id','name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具/設備', difficulty:'難度', usageTags:'用途タグ', weaponUpgradeEffect:'武器強化内容', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'ボス/達成イベント', rewardMoney:'報酬金', rewardItems:'報酬アイテム', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', actions:'行動', drops:'ドロップ'
+  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具/設備', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'ボス/達成イベント', rewardMoney:'報酬金', rewardItems:'報酬アイテム', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', actions:'行動', drops:'ドロップ'
 };
 
 const FORM_PRIMARY_FIELDS = {
@@ -806,9 +848,9 @@ const FORM_PRIMARY_FIELDS = {
   material_categories: ['name','materialType','description','sortOrder','enabled'],
   material_ranks: ['id','name','price','description','sortOrder','enabled'],
   equipment_categories: ['name','itemCategory','equipSlot','skill','element','power','hitMod','alwaysDefense','guardValue','evasionMod','maxStack','offhandBonus','description','effect','sortOrder','enabled'],
-  items: ['name','csVisible','itemType','itemCategory','price','rank','equipSlot','skill','power','mpCost','target','checkType','element','description','effect','unlockFacility','tags'],
-  recipes: ['name','rank','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockFacility','tags'],
-  materials: ['name','materialType','materialCategory','rank','price','source','usageTags','weaponUpgradeEffect','description','effect','notes'],
+  items: ['name','publicId','csVisible','itemType','itemCategory','price','rank','equipSlot','skill','power','mpCost','target','checkType','element','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags'],
+  recipes: ['name','rank','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags'],
+  materials: ['name','publicId','materialType','materialCategory','rank','price','source','usageTags','equipmentUpgradeEffect','description','effect','notes'],
   spells: ['type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags'],
   quest_rewards: ['rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards'],
   quests: ['name','questType','rank','areaName','progressStep','fixedEvents','clearCondition','bossMonster','rewardMoney','rewardItems','unlockResult','description','notes'],
@@ -818,9 +860,9 @@ const FORM_PRIMARY_FIELDS = {
 };
 const FORM_LONG_FIELDS = new Set(['description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','rewardItems','unlockResult','mainMaterials','mainMonsters','result','progressEffect','actions','drops']);
 const FIELD_PLACEHOLDERS = {
-  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'例：低級 / 初級', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：獣牙系。モンハン式の素材派生ラインを管理します。', weaponUpgradeEffect:'例：威力+1。魔物素材を武器強化に使った時の強化内容を選択します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街外れの草むら', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）'
+  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'例：低級 / 初級', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：獣牙系。モンハン式の素材派生ラインを管理します。', equipmentUpgradeEffect:'例：威力+1。魔物素材を武器強化に使った時の強化内容を選択します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街外れの草むら', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）'
 };
-const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','equipSlot','skill','checkType','type','role','setItem','unlockFacility','weaponUpgradeEffect','ammoUse','ammoKind','craftType','baseItem','branchType','enabled','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','tableId','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity']);
+const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','equipSlot','skill','checkType','type','role','setItem','unlockFacility','equipmentUpgradeEffect','ammoUse','ammoKind','craftType','baseItem','branchType','enabled','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','tableId','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity']);
 let formState = { key:null, idx:null, mode:'new', defaultDataKind:'' };
 let quickCategoryDirty = false;
 let currentMainTab = 'categories';
@@ -843,7 +885,7 @@ const ADVANCED_FILTERS = {
   material_ranks: [{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   equipment_categories: [{field:'itemCategory', label:'分類'},{field:'equipSlot', label:'装備/使用枠'},{field:'skill', label:'使用技能'},{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   items: [{field:'itemType', label:'アイテム種別'},{field:'csVisible', label:'キャラシ表示'},{field:'itemCategory', label:'アイテムカテゴリ'},{field:'rank', label:'ランク'},{field:'equipSlot', label:'装備/使用枠'},{field:'skill', label:'使用技能'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  materials: [{field:'materialType', label:'素材種別'},{field:'materialCategory', label:'素材カテゴリ'},{field:'rank', label:'ランク'},{field:'source', label:'入手先'},{field:'weaponUpgradeEffect', label:'武器強化内容'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
+  materials: [{field:'materialType', label:'素材種別'},{field:'materialCategory', label:'素材カテゴリ'},{field:'rank', label:'ランク'},{field:'source', label:'入手先'},{field:'equipmentUpgradeEffect', label:'装備強化内容'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   recipes: [{field:'rank', label:'ランク'},{field:'craftType', label:'製作区分'},{field:'category', label:'分類'},{field:'baseItem', label:'派生元'},{field:'branchType', label:'派生系統'},{field:'resultKind', label:'完成品種別'},{field:'difficulty', label:'難度'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   spells: [{field:'type', label:'種別'},{field:'rank', label:'ランク'},{field:'role', label:'役割'},{field:'target', label:'対象'},{field:'setItem', label:'必要装備'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   quest_rewards: [{field:'rank', label:'ランク'},{field:'scale', label:'規模'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
@@ -2054,7 +2096,8 @@ const DEFAULTS = {
       "usageTags": "装飾品,器用",
       "tags": "装飾品,器用",
       "notes": "",
-      "description": "指先の動きを澄ませる細工指輪。細かな作業や正確さを求める技に向く。"
+      "description": "指先の動きを澄ませる細工指輪。細かな作業や正確さを求める技に向く。",
+      "publicId": "RCA-V2HQ-YHTY"
     },
     {
       "id": "tool_alchemy_low_mortar",
@@ -2074,7 +2117,8 @@ const DEFAULTS = {
       "usageTags": "道具,調合,低級素材対応",
       "tags": "道具,調合,低級素材対応",
       "notes": "調合道具。素材ランク「低級」までに対応。細かな器具管理は行わず、セット単位で扱う。",
-      "description": "携行しやすい乳鉢、小瓶、簡易秤、混ぜ棒を革巻きの箱に収めた旅用の調合具。"
+      "description": "携行しやすい乳鉢、小瓶、簡易秤、混ぜ棒を革巻きの箱に収めた旅用の調合具。",
+      "publicId": "RCA-HX8H-KJK7"
     },
     {
       "id": "tool_alchemy_normal_scale",
@@ -2094,7 +2138,8 @@ const DEFAULTS = {
       "usageTags": "道具,調合,普通素材対応",
       "tags": "道具,調合,普通素材対応",
       "notes": "調合道具。素材ランク「普通」までに対応。細かな器具管理は行わず、セット単位で扱う。",
-      "description": "硝子製の小秤と耐熱小瓶を中心にまとめた調合具。薬草や液体素材の量を安定して測れる。"
+      "description": "硝子製の小秤と耐熱小瓶を中心にまとめた調合具。薬草や液体素材の量を安定して測れる。",
+      "publicId": "RCA-WG7W-A27S"
     },
     {
       "id": "tool_alchemy_good_vial",
@@ -2114,7 +2159,8 @@ const DEFAULTS = {
       "usageTags": "道具,調合,良質素材対応",
       "tags": "道具,調合,良質素材対応",
       "notes": "調合道具。素材ランク「良質」までに対応。細かな器具管理は行わず、セット単位で扱う。",
-      "description": "晶石を削り出した小瓶と精密な混合器具を収めた調合具。素材の質を崩しにくい。"
+      "description": "晶石を削り出した小瓶と精密な混合器具を収めた調合具。素材の質を崩しにくい。",
+      "publicId": "RCA-9HQ2-8G2L"
     },
     {
       "id": "tool_alchemy_rare_retort",
@@ -2134,7 +2180,8 @@ const DEFAULTS = {
       "usageTags": "道具,調合,希少素材対応",
       "tags": "道具,調合,希少素材対応",
       "notes": "調合道具。素材ランク「希少」までに対応。細かな器具管理は行わず、セット単位で扱う。",
-      "description": "星晶片をはめ込んだ小型蒸留器と精密な硝子器具を収めた調合具。繊細な薬液を扱いやすい。"
+      "description": "星晶片をはめ込んだ小型蒸留器と精密な硝子器具を収めた調合具。繊細な薬液を扱いやすい。",
+      "publicId": "RCA-7APJ-T6ZE"
     },
     {
       "id": "tool_alchemy_premium_alembic",
@@ -2154,7 +2201,8 @@ const DEFAULTS = {
       "usageTags": "道具,調合,高級素材対応",
       "tags": "道具,調合,高級素材対応",
       "notes": "調合道具。素材ランク「高級」までに対応。細かな器具管理は行わず、セット単位で扱う。",
-      "description": "月環石の留め具を備えた錬成器と高精度の蒸留管を組み合わせた、上質素材向けの調合具。"
+      "description": "月環石の留め具を備えた錬成器と高精度の蒸留管を組み合わせた、上質素材向けの調合具。",
+      "publicId": "RCA-H9FV-DK4B"
     },
     {
       "id": "tool_smith_low_hammer",
@@ -2174,7 +2222,8 @@ const DEFAULTS = {
       "usageTags": "道具,鍛冶,低級素材対応",
       "tags": "道具,鍛冶,低級素材対応",
       "notes": "鍛冶道具。素材ランク「低級」までに対応。細かな器具管理は行わず、セット単位で扱う。",
-      "description": "小型金槌、火ばさみ、簡易台、砥石を木箱に収めた携行用の鍛冶具。"
+      "description": "小型金槌、火ばさみ、簡易台、砥石を木箱に収めた携行用の鍛冶具。",
+      "publicId": "RCA-QZKP-Y9FK"
     },
     {
       "id": "tool_smith_normal_anvil",
@@ -2194,7 +2243,8 @@ const DEFAULTS = {
       "usageTags": "道具,鍛冶,普通素材対応",
       "tags": "道具,鍛冶,普通素材対応",
       "notes": "鍛冶道具。素材ランク「普通」までに対応。細かな器具管理は行わず、セット単位で扱う。",
-      "description": "熱に強い小型金床と焼入れ用の火ばさみを揃えた鍛冶具。刃物や金具の成形に向く。"
+      "description": "熱に強い小型金床と焼入れ用の火ばさみを揃えた鍛冶具。刃物や金具の成形に向く。",
+      "publicId": "RCA-62F2-7QTM"
     },
     {
       "id": "tool_smith_good_tongs",
@@ -2214,7 +2264,8 @@ const DEFAULTS = {
       "usageTags": "道具,鍛冶,良質素材対応",
       "tags": "道具,鍛冶,良質素材対応",
       "notes": "鍛冶道具。素材ランク「良質」までに対応。細かな器具管理は行わず、セット単位で扱う。",
-      "description": "硬い素材を逃がさず挟む火ばさみと打面の整った槌をまとめた鍛冶具。"
+      "description": "硬い素材を逃がさず挟む火ばさみと打面の整った槌をまとめた鍛冶具。",
+      "publicId": "RCA-WPVT-EE3B"
     },
     {
       "id": "tool_smith_rare_stariron",
@@ -2234,7 +2285,8 @@ const DEFAULTS = {
       "usageTags": "道具,鍛冶,希少素材対応",
       "tags": "道具,鍛冶,希少素材対応",
       "notes": "鍛冶道具。素材ランク「希少」までに対応。細かな器具管理は行わず、セット単位で扱う。",
-      "description": "星鉄を混ぜた火ばさみと精密槌を中心にした鍛冶具。魔物素材や特殊金属を扱う作業に向く。"
+      "description": "星鉄を混ぜた火ばさみと精密槌を中心にした鍛冶具。魔物素材や特殊金属を扱う作業に向く。",
+      "publicId": "RCA-YJE6-RP3V"
     },
     {
       "id": "tool_smith_premium_dragonforge",
@@ -2254,9 +2306,9 @@ const DEFAULTS = {
       "usageTags": "道具,鍛冶,高級素材対応",
       "tags": "道具,鍛冶,高級素材対応",
       "notes": "鍛冶道具。素材ランク「高級」までに対応。細かな器具管理は行わず、セット単位で扱う。",
-      "description": "竜炉石を組み込んだ小型金床と耐熱工具を揃えた、上質素材向けの鍛冶具。"
+      "description": "竜炉石を組み込んだ小型金床と耐熱工具を揃えた、上質素材向けの鍛冶具。",
+      "publicId": "RCA-UZLK-W7LQ"
     },
-
     {
       "id": "ammo_arrow_normal",
       "dataKind": "アイテム",
@@ -2277,7 +2329,8 @@ const DEFAULTS = {
       "usageTags": "消耗品,射撃,矢弾,通常弾,初期倉庫",
       "tags": "消耗品,射撃,矢弾,通常弾,初期倉庫",
       "notes": "ショートボウなど、弓系の初期武器を選んだ場合は最大スタック数分を初期支給する。",
-      "description": "もっとも一般的な矢。特殊な効果はないが、弓で攻撃するために必要。"
+      "description": "もっとも一般的な矢。特殊な効果はないが、弓で攻撃するために必要。",
+      "publicId": "RCA-FQJ8-WLNQ"
     },
     {
       "id": "ammo_bolt_normal",
@@ -2299,7 +2352,8 @@ const DEFAULTS = {
       "usageTags": "消耗品,射撃,矢弾,通常弾,初期倉庫",
       "tags": "消耗品,射撃,矢弾,通常弾,初期倉庫",
       "notes": "クロスボウを初期武器として選んだ場合は最大スタック数分を初期支給する。",
-      "description": "弩に装填して放つ標準的なボルト。安定して扱いやすい通常弾。"
+      "description": "弩に装填して放つ標準的なボルト。安定して扱いやすい通常弾。",
+      "publicId": "RCA-JRM7-SQFE"
     },
     {
       "id": "ammo_heavy_bolt_normal",
@@ -2321,7 +2375,8 @@ const DEFAULTS = {
       "usageTags": "消耗品,射撃,矢弾,通常弾,初期倉庫",
       "tags": "消耗品,射撃,矢弾,通常弾,初期倉庫",
       "notes": "ヘヴィクロスボウを初期武器として選んだ場合は最大スタック数分を初期支給する。",
-      "description": "大型弩に使う太いボルト。重いため持ち運べる数は少ない。"
+      "description": "大型弩に使う太いボルト。重いため持ち運べる数は少ない。",
+      "publicId": "RCA-DQSS-9Y6U"
     },
     {
       "id": "quiver_simple",
@@ -2341,7 +2396,8 @@ const DEFAULTS = {
       "usageTags": "矢筒,射撃,収納",
       "tags": "矢筒,射撃,収納",
       "notes": "初期配布はしない。鍛冶屋で購入する。",
-      "description": "最低限の矢弾をまとめる簡素な矢筒。収納できる矢弾種類数は2種類。"
+      "description": "最低限の矢弾をまとめる簡素な矢筒。収納できる矢弾種類数は2種類。",
+      "publicId": "RCA-DEZK-RYPK"
     },
     {
       "id": "quiver_traveler",
@@ -2361,7 +2417,8 @@ const DEFAULTS = {
       "usageTags": "矢筒,射撃,収納",
       "tags": "矢筒,射撃,収納",
       "notes": "通常矢と特殊矢をまとめて持ち出しやすい。",
-      "description": "仕切りを増やした旅用の矢筒。3種類の矢弾を整理して収納できる。"
+      "description": "仕切りを増やした旅用の矢筒。3種類の矢弾を整理して収納できる。",
+      "publicId": "RCA-RE3A-5A5F"
     },
     {
       "id": "quiver_hunter",
@@ -2381,7 +2438,8 @@ const DEFAULTS = {
       "usageTags": "矢筒,射撃,収納",
       "tags": "矢筒,射撃,収納",
       "notes": "複数の特殊矢弾を使い分ける射撃役向け。",
-      "description": "狩人が好んで使う多仕切りの矢筒。4種類の矢弾を素早く取り出せる。"
+      "description": "狩人が好んで使う多仕切りの矢筒。4種類の矢弾を素早く取り出せる。",
+      "publicId": "RCA-VRTG-ZYFE"
     },
     {
       "id": "bag_simple",
@@ -2403,7 +2461,8 @@ const DEFAULTS = {
       "tags": "バッグ,初期倉庫",
       "notes": "",
       "description": "冒険に必要な最低限の荷物を入れられる簡素なバッグ。倉庫から選択すると所持品枠を8枠にします。",
-      "unlockFacility": "鍛冶屋"
+      "unlockFacility": "鍛冶屋",
+      "publicId": "RCA-S8RN-BAEQ"
     },
     {
       "id": "acc_guard_charm",
@@ -2422,7 +2481,8 @@ const DEFAULTS = {
       "usageTags": "装飾品,防御",
       "tags": "装飾品,防御",
       "notes": "",
-      "description": "守りの祈りを込めた小さなお守り。身につけた者を危険から遠ざける。"
+      "description": "守りの祈りを込めた小さなお守り。身につけた者を危険から遠ざける。",
+      "publicId": "RCA-SF2E-PCFK"
     },
     {
       "id": "acc_holy_symbol",
@@ -2447,7 +2507,8 @@ const DEFAULTS = {
       "offhandBonus": "",
       "evasionMod": "0",
       "notes": "",
-      "description": "清らかな祈りを込める小さな聖印。身につけた者の祈祷を静かに支える。"
+      "description": "清らかな祈りを込める小さな聖印。身につけた者の祈祷を静かに支える。",
+      "publicId": "RCA-AWN4-27W8"
     },
     {
       "id": "acc_magic_seal_basic",
@@ -2472,7 +2533,8 @@ const DEFAULTS = {
       "guardValue": "",
       "offhandBonus": "",
       "notes": "",
-      "description": "淡い魔力を留める小さな魔印。身につけた者の魔法を発動しやすく整える。"
+      "description": "淡い魔力を留める小さな魔印。身につけた者の魔法を発動しやすく整える。",
+      "publicId": "RCA-BSSG-2PDN"
     },
     {
       "id": "acc_mana_ring",
@@ -2490,7 +2552,8 @@ const DEFAULTS = {
       "usageTags": "装飾品,MP",
       "tags": "装飾品,MP",
       "notes": "",
-      "description": "内側に魔力の流れを刻んだ指輪。身につけると魔力を保ちやすくなる。"
+      "description": "内側に魔力の流れを刻んだ指輪。身につけると魔力を保ちやすくなる。",
+      "publicId": "RCA-3KMM-ZWZZ"
     },
     {
       "id": "acc_power_bracelet",
@@ -2508,7 +2571,8 @@ const DEFAULTS = {
       "usageTags": "装飾品,体力",
       "tags": "装飾品,体力",
       "notes": "",
-      "description": "腕に力を集める重みのある腕輪。踏み込みや持ち上げる動きを支える。"
+      "description": "腕に力を集める重みのある腕輪。踏み込みや持ち上げる動きを支える。",
+      "publicId": "RCA-79RT-NEA3"
     },
     {
       "id": "acc_small_mana_stone",
@@ -2526,7 +2590,8 @@ const DEFAULTS = {
       "usageTags": "装飾品,魔法,MP",
       "tags": "装飾品,魔法,MP",
       "notes": "",
-      "description": "小さな魔導石を留めた装飾品。魔法を使う瞬間、わずかに魔力の消耗を和らげる。"
+      "description": "小さな魔導石を留めた装飾品。魔法を使う瞬間、わずかに魔力の消耗を和らげる。",
+      "publicId": "RCA-8YBV-ZLH4"
     },
     {
       "id": "acc_wind_earring",
@@ -2544,7 +2609,8 @@ const DEFAULTS = {
       "usageTags": "装飾品,感覚,回避",
       "tags": "装飾品,感覚,回避",
       "notes": "",
-      "description": "風の流れを読む耳飾り。かすかな気配や迫る攻撃を感じ取りやすくする。"
+      "description": "風の流れを読む耳飾り。かすかな気配や迫る攻撃を感じ取りやすくする。",
+      "publicId": "RCA-TWXE-2KVY"
     },
     {
       "id": "ammo_bind_arrow",
@@ -2564,7 +2630,8 @@ const DEFAULTS = {
       "tags": "消耗品,射撃,拘束",
       "notes": "",
       "description": "絡みつく紐と術式を仕込んだ矢。命中した相手の足取りを乱す。",
-      "power": "武器依存"
+      "power": "武器依存",
+      "publicId": "RCA-67R7-RT5L"
     },
     {
       "id": "ammo_fire_arrow",
@@ -2584,7 +2651,8 @@ const DEFAULTS = {
       "tags": "消耗品,射撃,火",
       "notes": "",
       "description": "火種を封じた矢。着弾と同時に炎が弾け、傷口を焼く。",
-      "power": "武器依存"
+      "power": "武器依存",
+      "publicId": "RCA-8RKU-LU9S"
     },
     {
       "id": "ammo_flash",
@@ -2604,7 +2672,8 @@ const DEFAULTS = {
       "tags": "消耗品,射撃,妨害",
       "notes": "",
       "description": "強い光を放つ弾。破裂した瞬間に視界を奪い、相手の動きを鈍らせる。",
-      "power": "武器依存"
+      "power": "武器依存",
+      "publicId": "RCA-NJ7Q-P9KJ"
     },
     {
       "id": "ammo_piercing",
@@ -2624,7 +2693,8 @@ const DEFAULTS = {
       "tags": "消耗品,射撃,貫通",
       "notes": "",
       "description": "硬い装甲を割るために作られた弾。鋭い芯が守りの隙間へ食い込む。",
-      "power": "武器依存"
+      "power": "武器依存",
+      "publicId": "RCA-43EG-XABF"
     },
     {
       "id": "ammo_poison_arrow",
@@ -2644,7 +2714,8 @@ const DEFAULTS = {
       "tags": "消耗品,射撃,毒",
       "notes": "",
       "description": "毒を塗り込めた矢。傷口から毒が巡り、相手の体力を蝕む。",
-      "power": "武器依存"
+      "power": "武器依存",
+      "publicId": "RCA-8ZEV-2SN3"
     },
     {
       "id": "ammo_purify",
@@ -2664,7 +2735,8 @@ const DEFAULTS = {
       "tags": "消耗品,射撃,浄化,異界",
       "notes": "",
       "description": "清めの力を込めた弾。穢れや異界の気配を帯びたものを強く焼く。",
-      "power": "武器依存"
+      "power": "武器依存",
+      "publicId": "RCA-VKBB-5USP"
     },
     {
       "id": "arm_clothes",
@@ -2685,7 +2757,8 @@ const DEFAULTS = {
       "usageTags": "防具,初期装備",
       "tags": "防具,初期装備",
       "description": "素朴な日常着。薄手だが動きやすく、街中や軽い探索で身を軽く保てる。",
-      "notes": ""
+      "notes": "",
+      "publicId": "RCA-NA95-LL9W"
     },
     {
       "id": "arm_heavy",
@@ -2706,7 +2779,8 @@ const DEFAULTS = {
       "usageTags": "防具,重装,防御",
       "tags": "防具,重装,防御",
       "description": "厚手の胴衣に金属鋲を打ち込んだ防具。動きは重くなるが、正面からの衝撃を受け止めやすい。",
-      "notes": ""
+      "notes": "",
+      "publicId": "RCA-456K-857L"
     },
     {
       "id": "arm_light",
@@ -2727,7 +2801,8 @@ const DEFAULTS = {
       "usageTags": "防具,軽装,回避",
       "tags": "防具,軽装,回避",
       "description": "風をはらむように軽い旅装の上着。防護布と薄革を合わせ、身軽な立ち回りを妨げにくい。",
-      "notes": ""
+      "notes": "",
+      "publicId": "RCA-7RCD-RZFQ"
     },
     {
       "id": "arm_mage_robe",
@@ -2748,7 +2823,8 @@ const DEFAULTS = {
       "usageTags": "防具,魔導衣,魔法",
       "tags": "防具,魔導衣,魔法",
       "description": "淡く光る糸を織り込んだ術者用のケープ。肩口に刻まれた紋様が魔力の流れを整える。",
-      "notes": ""
+      "notes": "",
+      "publicId": "RCA-JHBG-H8KA"
     },
     {
       "id": "arm_medium",
@@ -2769,7 +2845,8 @@ const DEFAULTS = {
       "usageTags": "防具,中装",
       "tags": "防具,中装",
       "description": "革地に細い鉄紐を編み込んだ実用的なベスト。重すぎず、急所をほどよく守れる。",
-      "notes": ""
+      "notes": "",
+      "publicId": "RCA-Z2R6-3CSM"
     },
     {
       "id": "arm_prayer_robe",
@@ -2790,7 +2867,8 @@ const DEFAULTS = {
       "usageTags": "防具,祈祷衣,祈祷",
       "tags": "防具,祈祷衣,祈祷",
       "description": "祈りの言葉を細く刺繍した清楚なストール。身につけた者の呼吸と所作を静かに整える。",
-      "notes": ""
+      "notes": "",
+      "publicId": "RCA-GZTB-SMM2"
     },
     {
       "id": "bomb_acid",
@@ -2812,7 +2890,8 @@ const DEFAULTS = {
       "usageTags": "消耗品,攻撃,弱体,投擲",
       "tags": "消耗品,攻撃,弱体,投擲",
       "description": "濁った酸液を封じた小瓶。割れると刺激臭のある液が飛び散り、装甲や外皮を蝕む。",
-      "notes": ""
+      "notes": "",
+      "publicId": "RCA-6TMD-WY8P"
     },
     {
       "id": "bomb_flam",
@@ -2834,7 +2913,8 @@ const DEFAULTS = {
       "usageTags": "消耗品,攻撃,火,投擲",
       "tags": "消耗品,攻撃,火,投擲",
       "description": "火の素材を詰めた投擲瓶。砕けた瞬間に赤い炎が広がり、周囲を焼く。",
-      "notes": ""
+      "notes": "",
+      "publicId": "RCA-D6DJ-A8A9"
     },
     {
       "id": "bomb_ice",
@@ -2856,7 +2936,8 @@ const DEFAULTS = {
       "usageTags": "消耗品,攻撃,氷,投擲",
       "tags": "消耗品,攻撃,氷,投擲",
       "description": "冷気を封じた青白い瓶。割れると鋭い霜が走り、対象の動きを鈍らせる。",
-      "notes": ""
+      "notes": "",
+      "publicId": "RCA-QCQN-DL4C"
     },
     {
       "id": "bomb_small",
@@ -2878,7 +2959,8 @@ const DEFAULTS = {
       "usageTags": "消耗品,攻撃,投擲",
       "tags": "消耗品,攻撃,投擲",
       "description": "小型の爆薬を詰めた瓶。扱いやすく、着弾点で乾いた破裂音を響かせる。",
-      "notes": ""
+      "notes": "",
+      "publicId": "RCA-3D29-3HWW"
     },
     {
       "id": "bomb_thunder",
@@ -2900,7 +2982,8 @@ const DEFAULTS = {
       "usageTags": "消耗品,攻撃,雷,投擲",
       "tags": "消耗品,攻撃,雷,投擲",
       "description": "雷の力を帯びた瓶。砕けた瞬間、紫電が弾けて硬い守りの隙間へ走る。",
-      "notes": ""
+      "notes": "",
+      "publicId": "RCA-8ZBG-PN4F"
     },
     {
       "id": "book_magic",
@@ -2924,7 +3007,8 @@ const DEFAULTS = {
       "evasionMod": "",
       "offhandBonus": "",
       "notes": "",
-      "description": "魔法の術式を記すための書物。頁に刻んだ魔力の線が、術者の詠唱を導く。"
+      "description": "魔法の術式を記すための書物。頁に刻んだ魔力の線が、術者の詠唱を導く。",
+      "publicId": "RCA-W2J4-TSN9"
     },
     {
       "id": "book_prayer",
@@ -2948,7 +3032,8 @@ const DEFAULTS = {
       "evasionMod": "",
       "offhandBonus": "",
       "notes": "",
-      "description": "祈祷の詞と儀礼を記した書物。祈りを形にするための導きとなる。"
+      "description": "祈祷の詞と儀礼を記した書物。祈りを形にするための導きとなる。",
+      "publicId": "RCA-ZZ88-3GAD"
     },
     {
       "id": "con_antidote",
@@ -2970,7 +3055,8 @@ const DEFAULTS = {
       "description": "苦みの強い解毒薬。毒気を薄め、体内の巡りを整えるために用いられる。",
       "notes": "",
       "power": "なし",
-      "unlockFacility": "薬屋"
+      "unlockFacility": "薬屋",
+      "publicId": "RCA-QMBM-CWXQ"
     },
     {
       "id": "con_focus_incense",
@@ -2992,7 +3078,8 @@ const DEFAULTS = {
       "description": "澄んだ香りを放つ小さな香。吸い込むと意識が冴え、指先の迷いが減る。",
       "notes": "",
       "power": "判定+2",
-      "unlockFacility": "薬屋"
+      "unlockFacility": "薬屋",
+      "publicId": "RCA-9D6V-PG8P"
     },
     {
       "id": "con_hardening_draught",
@@ -3014,7 +3101,8 @@ const DEFAULTS = {
       "description": "鉱物めいた苦味を持つ薬液。飲むと一時的に身体の表面が重く締まる。",
       "notes": "",
       "power": "軽減3",
-      "unlockFacility": "薬屋"
+      "unlockFacility": "薬屋",
+      "publicId": "RCA-UZ2S-RZUQ"
     },
     {
       "id": "con_high_mana_potion",
@@ -3036,7 +3124,8 @@ const DEFAULTS = {
       "description": "濃い魔力を宿した薬液。飲むと喉の奥から温かな光が広がる。",
       "notes": "",
       "power": "1D6+3",
-      "unlockFacility": "薬屋"
+      "unlockFacility": "薬屋",
+      "publicId": "RCA-PECJ-82L4"
     },
     {
       "id": "con_high_potion",
@@ -3058,7 +3147,8 @@ const DEFAULTS = {
       "description": "上質な薬草を煮詰めた回復薬。深い傷にも染み込むように効いていく。",
       "notes": "",
       "power": "2D6+3",
-      "unlockFacility": "薬屋"
+      "unlockFacility": "薬屋",
+      "publicId": "RCA-6SVE-XEGZ"
     },
     {
       "id": "con_mana_potion",
@@ -3080,7 +3170,8 @@ const DEFAULTS = {
       "description": "淡い光を帯びた魔力薬。消耗した魔力の流れをゆっくり満たす。",
       "notes": "",
       "power": "1D6",
-      "unlockFacility": "薬屋"
+      "unlockFacility": "薬屋",
+      "publicId": "RCA-3ZZF-QQU3"
     },
     {
       "id": "con_potion",
@@ -3102,7 +3193,8 @@ const DEFAULTS = {
       "description": "赤みを帯びた基本の回復薬。旅先の擦り傷から戦闘の負傷まで広く使われる。",
       "notes": "",
       "power": "1D6+2",
-      "unlockFacility": "薬屋"
+      "unlockFacility": "薬屋",
+      "publicId": "RCA-FQG6-HL2Q"
     },
     {
       "id": "con_purified_water",
@@ -3124,7 +3216,8 @@ const DEFAULTS = {
       "description": "清められた水を小瓶に封じたもの。毒や穢れに触れると水面がかすかに濁る。",
       "notes": "",
       "power": "なし",
-      "unlockFacility": "薬屋"
+      "unlockFacility": "薬屋",
+      "publicId": "RCA-WTBV-BVJ9"
     },
     {
       "id": "con_swift_incense",
@@ -3146,7 +3239,8 @@ const DEFAULTS = {
       "description": "軽い香りを残す香。焚くと身体がふっと軽くなり、次の動作に移りやすくなる。",
       "notes": "",
       "power": "判定+2",
-      "unlockFacility": "薬屋"
+      "unlockFacility": "薬屋",
+      "publicId": "RCA-MN5J-VVBU"
     },
     {
       "id": "mat_magic_ink",
@@ -3163,7 +3257,10 @@ const DEFAULTS = {
       "usageTags": "素材,魔法",
       "tags": "素材,魔法",
       "description": "魔力に反応して色を変えるインク。術式の写本や研究記録に使われる。",
-      "notes": ""
+      "notes": "",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "publicId": "RCA-D3UQ-2ZND"
     },
     {
       "id": "mat_prayer_paper",
@@ -3180,7 +3277,10 @@ const DEFAULTS = {
       "usageTags": "素材,祈祷",
       "tags": "素材,祈祷",
       "description": "祈りを留めやすい薄紙。祈祷の言葉を書き写すと、繊維がほのかに光る。",
-      "notes": ""
+      "notes": "",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "publicId": "RCA-S8YG-AQ7M"
     },
     {
       "id": "scroll_high",
@@ -3199,7 +3299,8 @@ const DEFAULTS = {
       "usageTags": "術式,スクロール,消耗品",
       "tags": "術式,スクロール,消耗品",
       "notes": "",
-      "description": "複雑な術式を封じた希少な巻物。開けば一時的に高度な力を呼び起こす。"
+      "description": "複雑な術式を封じた希少な巻物。開けば一時的に高度な力を呼び起こす。",
+      "publicId": "RCA-HJE9-N8XC"
     },
     {
       "id": "scroll_magic_basic",
@@ -3218,7 +3319,8 @@ const DEFAULTS = {
       "usageTags": "魔法,スクロール,消耗品",
       "tags": "魔法,スクロール,消耗品",
       "notes": "",
-      "description": "基礎的な魔法を封じた巻物。読み解くことで術式の形を学べる。"
+      "description": "基礎的な魔法を封じた巻物。読み解くことで術式の形を学べる。",
+      "publicId": "RCA-758R-VXLJ"
     },
     {
       "id": "scroll_mid",
@@ -3237,7 +3339,8 @@ const DEFAULTS = {
       "usageTags": "術式,スクロール,消耗品",
       "tags": "術式,スクロール,消耗品",
       "notes": "",
-      "description": "中級の術式を封じた巻物。扱うには相応の知識と準備が求められる。"
+      "description": "中級の術式を封じた巻物。扱うには相応の知識と準備が求められる。",
+      "publicId": "RCA-HTQS-JGAJ"
     },
     {
       "id": "scroll_prayer_basic",
@@ -3256,7 +3359,8 @@ const DEFAULTS = {
       "usageTags": "祈祷,スクロール,消耗品",
       "tags": "祈祷,スクロール,消耗品",
       "notes": "",
-      "description": "基礎的な祈祷を記した巻物。祈りの言葉と作法を学ぶ手がかりになる。"
+      "description": "基礎的な祈祷を記した巻物。祈りの言葉と作法を学ぶ手がかりになる。",
+      "publicId": "RCA-QWBS-J8NK"
     },
     {
       "id": "shd_large",
@@ -3277,7 +3381,8 @@ const DEFAULTS = {
       "usageTags": "盾,防御,かばう",
       "tags": "盾,防御,かばう",
       "description": "大きな面で攻撃を遮る重盾。構えるだけで味方の背を隠すほどの安心感がある。",
-      "notes": ""
+      "notes": "",
+      "publicId": "RCA-DAYG-4XZF"
     },
     {
       "id": "shd_magic",
@@ -3298,7 +3403,8 @@ const DEFAULTS = {
       "usageTags": "盾,魔法,異界",
       "tags": "盾,魔法,異界",
       "description": "魔力を受け流す紋様を刻んだ盾。異質な力を受けた時、表面の紋が淡く光る。",
-      "notes": ""
+      "notes": "",
+      "publicId": "RCA-5RLQ-NKQ9"
     },
     {
       "id": "shd_small",
@@ -3319,7 +3425,8 @@ const DEFAULTS = {
       "usageTags": "盾,防御",
       "tags": "盾,防御",
       "description": "片腕で扱いやすい小盾。身を捌きながら攻撃を受け流すのに向いている。",
-      "notes": ""
+      "notes": "",
+      "publicId": "RCA-SZE5-D5ST"
     },
     {
       "id": "tool_flash",
@@ -3341,7 +3448,8 @@ const DEFAULTS = {
       "tags": "消耗品,妨害,投擲",
       "description": "強い光を封じた小玉。割れると眩い閃光が広がり、相手の動きを乱す。",
       "notes": "",
-      "power": "判定-2"
+      "power": "判定-2",
+      "publicId": "RCA-ZVBW-6U9L"
     },
     {
       "id": "tool_smoke",
@@ -3363,7 +3471,8 @@ const DEFAULTS = {
       "tags": "消耗品,妨害,投擲",
       "description": "濃い煙を噴き出す小玉。視界を遮り、狙いを定めにくくする。",
       "notes": "",
-      "power": "判定-2"
+      "power": "判定-2",
+      "publicId": "RCA-WH4U-VAGQ"
     },
     {
       "id": "wpn_axe_1h",
@@ -3385,7 +3494,8 @@ const DEFAULTS = {
       "usageTags": "近接,片手,初期倉庫",
       "tags": "近接,片手,初期倉庫",
       "notes": "",
-      "description": "片手で扱える戦斧。刃の重みを乗せた一撃で、硬い装甲にも食い込みやすい。"
+      "description": "片手で扱える戦斧。刃の重みを乗せた一撃で、硬い装甲にも食い込みやすい。",
+      "publicId": "RCA-NSXE-377E"
     },
     {
       "id": "wpn_bow",
@@ -3406,7 +3516,8 @@ const DEFAULTS = {
       "usageTags": "射撃,両手,初期倉庫",
       "tags": "射撃,両手,初期倉庫",
       "notes": "",
-      "description": "扱いやすい短弓。軽く引けるため、移動しながらでも狙いをつけやすい。"
+      "description": "扱いやすい短弓。軽く引けるため、移動しながらでも狙いをつけやすい。",
+      "publicId": "RCA-FZMV-JHZG"
     },
     {
       "id": "wpn_crossbow",
@@ -3427,7 +3538,8 @@ const DEFAULTS = {
       "usageTags": "射撃,両手,初期倉庫",
       "tags": "射撃,両手,初期倉庫",
       "notes": "",
-      "description": "機構で矢を放つ弩。腕力に頼りすぎず、狙った場所へ重い一撃を届ける。"
+      "description": "機構で矢を放つ弩。腕力に頼りすぎず、狙った場所へ重い一撃を届ける。",
+      "publicId": "RCA-JUZ9-CWQ5"
     },
     {
       "id": "wpn_dagger",
@@ -3449,7 +3561,8 @@ const DEFAULTS = {
       "usageTags": "近接,片手,初期倉庫",
       "tags": "近接,片手,初期倉庫",
       "notes": "",
-      "description": "小型で取り回しやすい短剣。近い間合いで素早く差し込み、細かな作業にも使える。"
+      "description": "小型で取り回しやすい短剣。近い間合いで素早く差し込み、細かな作業にも使える。",
+      "publicId": "RCA-PLHW-SUTX"
     },
     {
       "id": "wpn_gauntlet",
@@ -3482,7 +3595,8 @@ const DEFAULTS = {
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
-      "description": "両腕に装着する格闘武器。拳の打撃を強めながら、身軽な立ち回りを保てる。"
+      "description": "両腕に装着する格闘武器。拳の打撃を強めながら、身軽な立ち回りを保てる。",
+      "publicId": "RCA-G48T-EBKD"
     },
     {
       "id": "wpn_great_hammer",
@@ -3503,7 +3617,8 @@ const DEFAULTS = {
       "usageTags": "近接,両手,対防御,初期倉庫",
       "tags": "近接,両手,対防御,初期倉庫",
       "notes": "",
-      "description": "両手で振るう大型槌。大きな打撃で硬い外殻や障害物を叩き砕く。"
+      "description": "両手で振るう大型槌。大きな打撃で硬い外殻や障害物を叩き砕く。",
+      "publicId": "RCA-EVRW-VZEN"
     },
     {
       "id": "wpn_great_sword",
@@ -3524,7 +3639,8 @@ const DEFAULTS = {
       "usageTags": "近接,両手,初期倉庫",
       "tags": "近接,両手,初期倉庫",
       "notes": "",
-      "description": "両手で扱う大剣。重い刃を振り下ろし、正面から敵を押し切る。"
+      "description": "両手で扱う大剣。重い刃を振り下ろし、正面から敵を押し切る。",
+      "publicId": "RCA-FRNL-FUV3"
     },
     {
       "id": "wpn_hammer_1h",
@@ -3546,7 +3662,8 @@ const DEFAULTS = {
       "usageTags": "近接,片手,対防御,初期倉庫",
       "tags": "近接,片手,対防御,初期倉庫",
       "notes": "",
-      "description": "片手で扱える戦槌。刃では通りにくい相手にも、鈍い衝撃を深く響かせる。"
+      "description": "片手で扱える戦槌。刃では通りにくい相手にも、鈍い衝撃を深く響かせる。",
+      "publicId": "RCA-PHSD-LE7K"
     },
     {
       "id": "wpn_heavy_crossbow",
@@ -3567,7 +3684,8 @@ const DEFAULTS = {
       "usageTags": "射撃,両手,初期倉庫",
       "tags": "射撃,両手,初期倉庫",
       "notes": "",
-      "description": "大型の弩。構えには力がいるが、遠くの強敵にも深い傷を与えられる。"
+      "description": "大型の弩。構えには力がいるが、遠くの強敵にも深い傷を与えられる。",
+      "publicId": "RCA-YS8E-R7ZH"
     },
     {
       "id": "wpn_long_spear",
@@ -3588,7 +3706,8 @@ const DEFAULTS = {
       "usageTags": "近接,両手,初期倉庫",
       "tags": "近接,両手,初期倉庫",
       "notes": "",
-      "description": "両手で扱う長槍。長い柄で敵を近づけず、前線の足並みを乱す。"
+      "description": "両手で扱う長槍。長い柄で敵を近づけず、前線の足並みを乱す。",
+      "publicId": "RCA-XVFM-D7G3"
     },
     {
       "id": "wpn_scythe",
@@ -3621,7 +3740,8 @@ const DEFAULTS = {
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
-      "description": "大きく弧を描いて薙ぎ払う大鎌。広い刃筋で複数の敵を威圧する。"
+      "description": "大きく弧を描いて薙ぎ払う大鎌。広い刃筋で複数の敵を威圧する。",
+      "publicId": "RCA-MT5S-KQX5"
     },
     {
       "id": "wpn_spear_1h",
@@ -3643,7 +3763,8 @@ const DEFAULTS = {
       "usageTags": "近接,片手,初期倉庫",
       "tags": "近接,片手,初期倉庫",
       "notes": "",
-      "description": "片手で扱える短槍。間合いを保ちながら突き込み、守る相手の背後にも届かせやすい。"
+      "description": "片手で扱える短槍。間合いを保ちながら突き込み、守る相手の背後にも届かせやすい。",
+      "publicId": "RCA-G4SX-Q3PL"
     },
     {
       "id": "wpn_staff",
@@ -3665,7 +3786,8 @@ const DEFAULTS = {
       "usageTags": "近接,魔法,片手,初期倉庫",
       "tags": "近接,魔法,片手,初期倉庫",
       "notes": "",
-      "description": "木製の杖。魔力を通しやすく、術者の集中を助けるほか、近接武器としても扱える。"
+      "description": "木製の杖。魔力を通しやすく、術者の集中を助けるほか、近接武器としても扱える。",
+      "publicId": "RCA-A66Q-E9H7"
     },
     {
       "id": "wpn_sword_1h",
@@ -3687,7 +3809,8 @@ const DEFAULTS = {
       "usageTags": "近接,片手,初期倉庫",
       "tags": "近接,片手,初期倉庫",
       "notes": "",
-      "description": "標準的な片手剣。癖が少なく、盾や書物を持ちながらでも扱いやすい。"
+      "description": "標準的な片手剣。癖が少なく、盾や書物を持ちながらでも扱いやすい。",
+      "publicId": "RCA-LJ5F-A8CU"
     },
     {
       "id": "wpn_unarmed",
@@ -3708,7 +3831,8 @@ const DEFAULTS = {
       "usageTags": "近接",
       "tags": "近接",
       "notes": "",
-      "description": "武器を持たずに行う素手の攻撃。とっさの抵抗や簡単な打撃に使う。"
+      "description": "武器を持たずに行う素手の攻撃。とっさの抵抗や簡単な打撃に使う。",
+      "publicId": "RCA-TA2A-9LQZ"
     },
     {
       "id": "mat_herb",
@@ -3738,7 +3862,10 @@ const DEFAULTS = {
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
-      "description": "傷薬の材料になる柔らかな薬草。摘むと青い香りが指先に残る。"
+      "description": "傷薬の材料になる柔らかな薬草。摘むと青い香りが指先に残る。",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "publicId": "RCA-RPJ7-G72R"
     },
     {
       "id": "mat_purifying_grass",
@@ -3768,7 +3895,10 @@ const DEFAULTS = {
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
-      "description": "清めの力を宿す草。葉の縁が淡く光り、穢れに触れると色を変える。"
+      "description": "清めの力を宿す草。葉の縁が淡く光り、穢れに触れると色を変える。",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "publicId": "RCA-QBRA-XVYH"
     },
     {
       "id": "mat_round_mushroom",
@@ -3798,7 +3928,10 @@ const DEFAULTS = {
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
-      "description": "丸く膨らんだ食用茸。乾かすと香りが強くなり、調合のつなぎにも使える。"
+      "description": "丸く膨らんだ食用茸。乾かすと香りが強くなり、調合のつなぎにも使える。",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "publicId": "RCA-45MQ-G9FP"
     },
     {
       "id": "mat_clear_water",
@@ -3828,7 +3961,10 @@ const DEFAULTS = {
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
-      "description": "濁りの少ない澄んだ水。薬液や清めの品を作る時の基礎になる。"
+      "description": "濁りの少ない澄んだ水。薬液や清めの品を作る時の基礎になる。",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "publicId": "RCA-2SMT-E8LN"
     },
     {
       "id": "mat_small_crystal",
@@ -3858,7 +3994,10 @@ const DEFAULTS = {
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
-      "description": "透明感のある小さな水晶片。弱い魔力を留めやすく、術式素材に向く。"
+      "description": "透明感のある小さな水晶片。弱い魔力を留めやすく、術式素材に向く。",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "publicId": "RCA-UMZS-7QN5"
     },
     {
       "id": "mat_sturdy_branch",
@@ -3888,7 +4027,10 @@ const DEFAULTS = {
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
-      "description": "折れにくい丈夫な枝。柄や簡易道具の芯材として扱いやすい。"
+      "description": "折れにくい丈夫な枝。柄や簡易道具の芯材として扱いやすい。",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "publicId": "RCA-LP4N-2FGU"
     },
     {
       "id": "mat_flexible_vine",
@@ -3918,7 +4060,10 @@ const DEFAULTS = {
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
-      "description": "しなやかに曲がる蔓。縛る、編む、つなぐといった加工に向く。"
+      "description": "しなやかに曲がる蔓。縛る、編む、つなぐといった加工に向く。",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "publicId": "RCA-KT9D-4D8R"
     },
     {
       "id": "mat_gelatin_liquid",
@@ -3948,7 +4093,10 @@ const DEFAULTS = {
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
-      "description": "ぷるぷると揺れる粘液。冷やすと固まり、薬や接着材の素材になる。"
+      "description": "ぷるぷると揺れる粘液。冷やすと固まり、薬や接着材の素材になる。",
+      "equipmentUpgradeEffect": "特殊効果付与(武器)",
+      "equipmentUpgradeValue": "命中時、対象の次の行動判定-1",
+      "publicId": "RCA-64X3-USPY"
     },
     {
       "id": "mat_puru_membrane",
@@ -3978,7 +4126,10 @@ const DEFAULTS = {
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
-      "description": "薄く弾力のある膜。衝撃を吸収しやすく、防具や容器の加工に使える。"
+      "description": "薄く弾力のある膜。衝撃を吸収しやすく、防具や容器の加工に使える。",
+      "equipmentUpgradeEffect": "防御行動値(防具)",
+      "equipmentUpgradeValue": "+1",
+      "publicId": "RCA-C9BK-8MA8"
     },
     {
       "id": "mat_small_slime_core",
@@ -4008,7 +4159,10 @@ const DEFAULTS = {
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
-      "description": "小さなスライムの核。淡い魔力を帯び、調合素材として扱われる。"
+      "description": "小さなスライムの核。淡い魔力を帯び、調合素材として扱われる。",
+      "equipmentUpgradeEffect": "水属性付与(武器)",
+      "equipmentUpgradeValue": "水",
+      "publicId": "RCA-6XEB-ZZGV"
     },
     {
       "id": "mat_small_beast_pelt",
@@ -4038,7 +4192,10 @@ const DEFAULTS = {
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
-      "description": "小獣から取れる柔らかな毛皮。防寒具や軽い防具の素材になる。"
+      "description": "小獣から取れる柔らかな毛皮。防寒具や軽い防具の素材になる。",
+      "equipmentUpgradeEffect": "回避補正(防具)",
+      "equipmentUpgradeValue": "+1",
+      "publicId": "RCA-VNQE-XG6J"
     },
     {
       "id": "mat_small_beast_fang",
@@ -4068,7 +4225,10 @@ const DEFAULTS = {
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
-      "description": "小獣の鋭い牙。削れば刃物や装飾品の素材として使える。"
+      "description": "小獣の鋭い牙。削れば刃物や装飾品の素材として使える。",
+      "equipmentUpgradeEffect": "威力(武器)",
+      "equipmentUpgradeValue": "+1",
+      "publicId": "RCA-Y66C-ZEJR"
     },
     {
       "id": "mat_small_claw",
@@ -4098,7 +4258,10 @@ const DEFAULTS = {
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
-      "description": "小さな獣の爪。硬く軽いため、細工や武器の補強に使われる。"
+      "description": "小さな獣の爪。硬く軽いため、細工や武器の補強に使われる。",
+      "equipmentUpgradeEffect": "防御貫通(武器)",
+      "equipmentUpgradeValue": "+1",
+      "publicId": "RCA-HMBK-QF4A"
     }
   ],
   "recipes": [
@@ -4927,21 +5090,49 @@ const SYSTEM_HELP = [
       "武器派生のためのレシピ解放は基本的に使用しない。",
       "素材と派生元武器が揃っていれば鍛冶屋で作成可能。",
       "属性派生を全属性分作る方針にはしない。",
-      "属性付与や属性強化は魔物素材の武器強化内容で表現する。"
+      "属性付与や属性強化は魔物素材の装備強化内容で表現する。"
     ]
   },
   {
-    "title": "魔物素材・武器強化",
+    "title": "魔物素材・装備強化",
     "tags": [
       "魔物素材",
-      "武器強化",
-      "属性"
+      "装備強化",
+      "武器",
+      "防具",
+      "equipmentUpgradeEffect"
     ],
     "body": [
-      "魔物素材には、武器強化に使用した際の強化内容を設定できる。",
-      "武器強化内容は、威力上昇、命中上昇、防御貫通、属性付与、属性強化、特殊効果など。",
-      "属性は物、火、水、風、雷、光、闇、無。",
-      "魔物素材の特色を武器性能や属性、特殊効果に反映する。"
+      "魔物素材には、装備強化に使用した際の強化内容と強化値を設定する。",
+      "魔物素材はすべて何かしらの装備強化内容を持つ。",
+      "効果が複数の素材で重複しても問題ない。",
+      "装備強化内容は選択式の項目『equipmentUpgradeEffect / 装備強化内容』で管理する。",
+      "装備強化値は自由入力の項目『equipmentUpgradeValue / 装備強化値』で管理する。",
+      "装備強化内容の選択肢には、強化分類と対象装備を含める。",
+      "武器用の例：威力(武器)、命中(武器)、防御貫通(武器)、火属性付与(武器)、火属性強化(武器)、特殊効果付与(武器)。",
+      "防具用の例：常時防御値(防具)、防御行動値(防具)、回避補正(防具)、火耐性付与(防具)、水耐性付与(防具)、特殊効果付与(防具)。",
+      "防具の防御系強化は、キャラシのステータス名に準拠して常時防御値と防御行動値を分ける。",
+      "常時防御値(防具)は、通常時から適用されるダメージ軽減値を上げる。",
+      "防御行動値(防具)は、行動として防御した時の追加軽減値を上げる。",
+      "回避補正(防具)は、装備による回避値の補正を上げる。",
+      "常時防御値(防具)は強力な強化として扱い、低ランク素材では原則付与しない。",
+      "低ランク素材の防具強化は、防御行動値、回避補正、属性耐性付与、特殊効果付与を基本とする。",
+      "硬い甲殻や金属殻など、常時の硬さを明確に表す素材だけ常時防御値(防具)を持たせる。",
+      "強化内容は、何が上がるのか、何が付与されるのかを表す。",
+      "強化値は、具体的な数値、属性名、耐性名、または特殊効果の内容を表す。",
+      "例：装備強化内容『威力(武器)』、装備強化値『+1』。",
+      "例：装備強化内容『火属性付与(武器)』、装備強化値『火』。",
+      "例：装備強化内容『防御行動値(防具)』、装備強化値『+1』。",
+      "例：装備強化内容『回避補正(防具)』、装備強化値『+1』。",
+      "例：装備強化内容『水耐性付与(防具)』、装備強化値『水』。",
+      "武器は素材による派生や強化に反映する。",
+      "防具は派生式ではなく、購入または作成した防具を後から強化する方式。",
+      "属性として扱う値は、物、火、水、風、雷、光、闇、無。",
+      "採取素材など、魔物素材ではない素材は装備強化内容と装備強化値を空欄にしてよい。",
+      "魔物素材の特徴が装備性能に出るように、素材ごとに装備強化内容と装備強化値を設定する。",
+      "ドロップ判定やドロップ入手の出力では、素材の説明、効果、売値などを表示してよい。",
+      "ドロップ出力では、装備強化内容と装備強化値は表示しない。",
+      "装備強化内容と装備強化値は、施設タブの強化項目で素材名を入力して確認する。"
     ]
   },
   {
@@ -5144,6 +5335,53 @@ const SYSTEM_HELP = [
       "チャットパレットは『choice[技名1,技名2,…]』から始める。",
       "ダイスのない効果も技能セクションに入れる。"
     ]
+  },
+  {
+    "title": "管理HTML",
+    "tags": [
+      "管理",
+      "検索",
+      "コピー"
+    ],
+    "body": [
+      "アイテム、素材、装備カテゴリなどの一覧では名前検索を常時表示する。",
+      "詳細フィルターとソート情報は折り畳み式の『絞り込み・ソート』にまとめる。",
+      "各行の情報コピーから、プレイヤーに渡すアイテム情報と登録IDをコピーできる。",
+      "情報コピーには、内部ID、管理キー、登録者、解放施設、装備強化内容、装備強化値を含めない。",
+      "情報コピーは、プレイヤーが読んで分かる範囲のアイテム情報と登録IDを出す。",
+      "素材は、名称、登録ID、個数、ランク、分類、売値、説明、効果を基本に出す。",
+      "武器、防具、術式、道具、矢弾などは、使用に必要なコスト、対象、判定、属性、威力、最大スタックなどを追加で出す。"
+    ]
+  },
+  {
+    "title": "公開ID・貼り付け登録",
+    "tags": [
+      "公開ID",
+      "倉庫",
+      "ドロップ",
+      "ネタバレ対策"
+    ],
+    "body": [
+      "公開IDは、プレイヤーに渡しても内容を推測しにくい規則性のないID。",
+      "キャラクターシートの倉庫では、貼り付けられた登録IDと個数を読み取り、DBから必要情報を自動登録する。",
+      "プレイヤーは未入手アイテム一覧を検索しない。",
+      "貼り付け登録では装備強化内容と装備強化値を表示・登録しない。",
+      "プレイヤーに渡す情報は、未入手一覧ではなく、入手したアイテムごとの情報と登録IDにする。",
+      "装備強化内容、装備強化値、内部ID、管理キー、登録者、解放施設などの内部管理情報は表示しない。"
+    ]
+  },
+  {
+    "title": "初期矢弾",
+    "tags": [
+      "初期所持品",
+      "矢弾",
+      "所持品"
+    ],
+    "body": [
+      "初期武器の選択に関係なく、通常矢、通常ボルト、大型ボルトをそれぞれ1スタック分、初期所持品に入れる。",
+      "通常矢と通常ボルトは20個、大型ボルトは10個を1スタックとする。",
+      "矢筒は初期支給しない。矢弾は所持品枠を使用する。"
+    ]
   }
 ];
 function buildSystemHelpText(){
@@ -5242,6 +5480,8 @@ function renderFacilitiesPanel(){
   }).join('');
   const out=$('facilitySalesText');
   if(out && !String(out.value||'').trim()) out.value=buildFacilitySalesText();
+  renderFacilityUpgradeLookupList();
+  renderFacilityUpgradeResult($('facilityUpgradeMaterialInput')?.value || '');
 }
 async function copyFacilitySalesList(facilityName=''){
   const text=buildFacilitySalesText(facilityName);
@@ -5295,12 +5535,92 @@ function uniqueOptions(key, field){
   });
   return [...set].sort((a,b)=>compareValues(a,b));
 }
+
+
+
+function fieldText(row={}, field){
+  return String(row[field] ?? '').trim();
+}
+function warehouseKindForRow(row={}, key=''){
+  const dataKind = fieldText(row,'dataKind');
+  const itemType = fieldText(row,'itemType');
+  const materialType = fieldText(row,'materialType');
+  if(key === 'materials' || dataKind === '素材' || materialType) return '素材';
+  if(itemType === '武器') return '武器';
+  if(['防具','盾','装飾品'].includes(itemType)) return itemType;
+  if(itemType === 'バッグ') return 'バッグ';
+  if(itemType === '矢筒') return '矢筒';
+  if(itemType === '術式装備') return '術式';
+  if(itemType === '調合品' || itemType === '道具' || itemType === '特殊矢弾') return 'アイテム';
+  return dataKind || itemType || 'アイテム';
+}
+function warehouseCategoryForRow(row={}, key=''){
+  return fieldText(row,'itemCategory') || fieldText(row,'materialCategory') || fieldText(row,'category');
+}
+function warehouseCopyLine(label, value){
+  const v = String(value ?? '').trim();
+  return v ? `${label}：${v}` : '';
+}
+function buildPlayerItemInfoText(row={}, key='', count='1'){
+  const name = fieldText(row,'name') || fieldText(row,'id') || '名称未設定';
+  const kind = warehouseKindForRow(row, key);
+  const category = warehouseCategoryForRow(row, key);
+  const publicId = fieldText(row,'publicId');
+  const lines = [];
+  lines.push(`【${name}】`);
+  lines.push(warehouseCopyLine('登録ID', publicId));
+  lines.push(warehouseCopyLine('個数', count || '1'));
+  lines.push(warehouseCopyLine('ランク', fieldText(row,'rank')));
+  const categoryLabel = kind === '素材' ? (category ? `${category}素材` : '素材') : [kind, category].filter(Boolean).join(' / ');
+  lines.push(warehouseCopyLine('分類', categoryLabel));
+  lines.push(warehouseCopyLine('売値', fieldText(row,'price') ? fieldText(row,'price') + 'G' : ''));
+
+  const useInfo = [];
+  if(['武器','防具','盾','装飾品','バッグ','矢筒','術式'].includes(kind)){
+    if(fieldText(row,'equipSlot')) useInfo.push(`装備枠 ${fieldText(row,'equipSlot')}`);
+  }
+  if(fieldText(row,'power')) useInfo.push(`威力 ${fieldText(row,'power')}`);
+  if(fieldText(row,'hitMod') || fieldText(row,'hit')) useInfo.push(`命中 ${fieldText(row,'hitMod') || fieldText(row,'hit')}`);
+  if(fieldText(row,'alwaysDefense') || fieldText(row,'defense')) useInfo.push(`常時防御 ${fieldText(row,'alwaysDefense') || fieldText(row,'defense')}`);
+  if(fieldText(row,'guardValue') || fieldText(row,'guard')) useInfo.push(`防御行動 ${fieldText(row,'guardValue') || fieldText(row,'guard')}`);
+  if(fieldText(row,'evasionMod') || fieldText(row,'evade')) useInfo.push(`回避 ${fieldText(row,'evasionMod') || fieldText(row,'evade')}`);
+  if(fieldText(row,'offhandBonus') || fieldText(row,'offhand')) useInfo.push(`副手追撃 ${fieldText(row,'offhandBonus') || fieldText(row,'offhand')}`);
+  if(fieldText(row,'mpCost') || fieldText(row,'cost')) useInfo.push(`コスト ${fieldText(row,'mpCost') || fieldText(row,'cost')}`);
+  if(fieldText(row,'target')) useInfo.push(`対象 ${fieldText(row,'target')}`);
+  if(fieldText(row,'checkType')) useInfo.push(`判定 ${fieldText(row,'checkType')}`);
+  if(fieldText(row,'element')) useInfo.push(`属性 ${fieldText(row,'element')}`);
+  if(fieldText(row,'role')) useInfo.push(`役割 ${fieldText(row,'role')}`);
+  if(fieldText(row,'setItem')) useInfo.push(`必要装備 ${fieldText(row,'setItem')}`);
+  if(fieldText(row,'ammoKind')) useInfo.push(`矢弾種別 ${fieldText(row,'ammoKind')}`);
+  if(fieldText(row,'maxStack')) useInfo.push(`最大スタック ${fieldText(row,'maxStack')}`);
+  if(fieldText(row,'quiverCapacity')) useInfo.push(`矢筒収納 ${fieldText(row,'quiverCapacity')}種類`);
+  if(fieldText(row,'bagCapacity')) useInfo.push(`バッグ容量 ${fieldText(row,'bagCapacity')}`);
+  if(useInfo.length) lines.push('性能：' + useInfo.join(' / '));
+
+  lines.push(warehouseCopyLine('説明', fieldText(row,'description')));
+  lines.push(warehouseCopyLine('効果', fieldText(row,'effect')));
+  return lines.filter(Boolean).join('\n');
+}
+
+function buildCopyCardText(row={}, key=''){
+  return buildPlayerItemInfoText(row, key, '1');
+}
+async function copyRowCard(key, idx){
+  const base = baseKeyForTable(key);
+  const row = (state[base] || [])[idx];
+  if(!row){ toast('コピー対象が見つかりません', 'error'); return; }
+  const text = buildCopyCardText(row, key);
+  if(await copyAdminTextDirect(text)) toast(`${row.name || 'データ'}のプレイヤー向け情報をコピーしました`);
+}
+
+
+
 function renderFilterControls(key){
   const panel=$('panel-'+key);
   if(!panel) return;
   let bar=$('advanced-filter-'+key);
   if(!bar){
-    bar=document.createElement('div');
+    bar=document.createElement('details');
     bar.id='advanced-filter-'+key;
     bar.className='advanced-filters';
     const toolbar=panel.querySelector('.toolbar');
@@ -5313,20 +5633,26 @@ function renderFilterControls(key){
     const opts=uniqueOptions(key, f.field);
     return `<div><label>${escapeHtml(f.label || LABELS[f.field] || f.field)}</label><select data-adv-filter="${key}:${f.field}"><option value="">すべて</option>${opts.map(v=>`<option value="${escapeHtml(v)}" ${v===current?'selected':''}>${escapeHtml(v)}</option>`).join('')}</select></div>`;
   }).join('');
+  const activeFilterCount=Object.values(ui.filters || {}).filter(Boolean).length;
   const sortLabel=ui.sortField ? `${LABELS[ui.sortField]||ui.sortField} ${ui.sortDir==='asc'?'昇順':'降順'}` : '未指定';
+  const shouldOpen = activeFilterCount > 0 || !!ui.sortField || bar.open;
+  bar.open = !!shouldOpen;
   bar.innerHTML = `
-    <div class="filter-head">
-      <b>絞り込み・ソート</b>
-      <div class="filter-status">
+    <summary>
+      <span>絞り込み・ソート</span>
+      <span class="filter-status">
         <span class="pill" id="filtered-count-${key}">表示 0 / 0</span>
-        <span class="pill">ソート: ${escapeHtml(sortLabel)}</span>
+        <span class="pill">絞り込み:${activeFilterCount}件</span>
+        <span class="pill">ソート:${escapeHtml(sortLabel)}</span>
+      </span>
+    </summary>
+    <div class="advanced-filter-body">
+      <div class="filter-grid">${controls || '<span class="notice">この表には追加フィルターはありません。</span>'}</div>
+      <div class="filter-actions">
+        <button class="ghost" data-clear-filters="${key}">絞り込み解除</button>
+        <button class="ghost" data-clear-sort="${key}">ソート解除</button>
+        <span class="notice">名前検索は常時表示。詳細フィルターは必要な時だけ開く。</span>
       </div>
-    </div>
-    <div class="filter-grid">${controls || '<span class="notice">この表には追加フィルターはありません。</span>'}</div>
-    <div class="filter-actions">
-      <button class="ghost" data-clear-filters="${key}">絞り込み解除</button>
-      <button class="ghost" data-clear-sort="${key}">ソート解除</button>
-      <span class="notice">列見出しクリックで並び替え。</span>
     </div>`;
 }
 function rowMatchesAdvancedFilters(key, row){
@@ -5387,14 +5713,89 @@ function renderMonsterActionCards(value){
     return `<div class="monster-action-card"><div class="monster-action-main"><span>${escapeHtml(title)}</span>${chips.map(c=>`<span class="monster-badge">${escapeHtml(c)}</span>`).join('')}</div>${r.effect ? `<div class="monster-action-sub">${escapeHtml(r.effect)}</div>` : ''}</div>`;
   }).join('')}</div>`;
 }
+
+function materialDetailForDrop(row={}){
+  return findMaterialForDrop(row);
+}
+function productPriceNumberText(row={}){
+  const p = String(row.price ?? '').trim();
+  if(!p) return '';
+  return `${p}G`;
+}
+function dropMaterialDetailText(material){
+  if(!material) return [];
+  const lines = [];
+  const rank = String(material.rank || '').trim();
+  const type = String(material.materialType || '').trim();
+  const category = String(material.materialCategory || '').trim();
+  const price = productPriceNumberText(material);
+  const desc = String(material.description || '').trim();
+  const effect = String(material.effect || '').trim();
+  if(rank || type || category || price) lines.push(['ランク:' + rank, type, category, price ? '売値:' + price : ''].filter(v=>v && !v.endsWith(':')).join(' / '));
+  if(desc) lines.push('説明：' + desc);
+  if(effect) lines.push('効果：' + effect);
+  return lines;
+}
+function dropMaterialDetailHtml(material){
+  const lines = dropMaterialDetailText(material);
+  if(!lines.length) return '';
+  return `<div class="monster-drop-detail">${lines.map(line=>`<div>${escapeHtml(line)}</div>`).join('')}</div>`;
+}
+function dropMaterialOutputBlock(row={}){
+  const material = materialDetailForDrop(row);
+  const name = row.itemName || row.itemId || material?.name || '名称未設定';
+  const count = row.count ? ` ${row.count}` : '';
+  const base = `- ${name}${count}`;
+  const detail = dropMaterialDetailText(material);
+  return [base, ...detail.map(line=>'  ' + line)].join('\n');
+}
+function facilityUpgradeMaterials(){
+  return (state.items || []).filter(r=>String(r.dataKind || '').trim()==='素材' && String(r.materialType || '').trim()==='魔物素材');
+}
+function findUpgradeMaterialByName(name=''){
+  const q = String(name || '').trim();
+  if(!q) return null;
+  const rows = facilityUpgradeMaterials();
+  return rows.find(r=>String(r.name || '').trim() === q)
+    || rows.find(r=>String(r.id || '').trim() === q)
+    || rows.find(r=>String(r.name || '').includes(q))
+    || null;
+}
+function renderFacilityUpgradeLookupList(){
+  const list = $('facilityUpgradeMaterialList');
+  if(!list) return;
+  list.innerHTML = facilityUpgradeMaterials().map(m=>`<option value="${escapeHtml(m.name || m.id || '')}"></option>`).join('');
+}
+function renderFacilityUpgradeResult(materialName=''){
+  const result = $('facilityUpgradeResult');
+  if(!result) return;
+  const mat = findUpgradeMaterialByName(materialName || $('facilityUpgradeMaterialInput')?.value || '');
+  if(!mat){
+    result.classList.add('muted');
+    result.innerHTML = '素材名を入力してください。';
+    return;
+  }
+  const effect = String(mat.equipmentUpgradeEffect || '').trim();
+  const value = String(mat.equipmentUpgradeValue || '').trim();
+  result.classList.remove('muted');
+  result.innerHTML = `<div><b>${escapeHtml(mat.name || mat.id || '素材名未設定')}</b></div>
+    <div class="facility-product-meta">
+      ${[mat.rank ? 'ランク:' + mat.rank : '', mat.materialType, mat.materialCategory, mat.price ? '売値:' + mat.price + 'G' : ''].filter(Boolean).map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}
+    </div>
+    <div><b>装備強化内容：</b>${escapeHtml(effect || '未設定')}</div>
+    <div><b>装備強化値：</b>${escapeHtml(value || '未設定')}</div>`;
+}
+
 function renderMonsterDropCards(value){
   const rows = parseMonsterDrops(value);
   if(!rows.length) return '<div class="monster-empty-note">ドロップは未登録です。</div>';
   return `<div class="monster-mini-table">${rows.map(r=>{
-    const name = r.itemName || r.itemId || '素材名未設定';
-    const chips = [r.materialType, r.materialCategory, r.rate ? `確率:${r.rate}` : '', r.count ? `個数:${r.count}` : ''].filter(Boolean);
+    const material = materialDetailForDrop(r);
+    const name = r.itemName || r.itemId || material?.name || '素材名未設定';
+    const chips = [r.materialType || material?.materialType, r.materialCategory || material?.materialCategory, material?.rank ? `ランク:${material.rank}` : '', material?.price ? `売値:${material.price}G` : '', r.rate ? `確率:${r.rate}` : '', r.count ? `個数:${r.count}` : ''].filter(Boolean);
     const idText = r.itemId && r.itemId !== r.itemName ? `<div class="monster-drop-sub">ID: ${escapeHtml(r.itemId)}</div>` : '';
-    return `<div class="monster-drop-card"><div class="monster-drop-main"><span>${escapeHtml(name)}</span>${chips.map(c=>`<span class="monster-badge">${escapeHtml(c)}</span>`).join('')}</div>${idText}</div>`;
+    const detailHtml = dropMaterialDetailHtml(material);
+    return `<div class="monster-drop-card"><div class="monster-drop-main"><span>${escapeHtml(name)}</span>${chips.map(c=>`<span class="monster-badge">${escapeHtml(c)}</span>`).join('')}</div>${idText}${detailHtml}</div>`;
   }).join('')}</div>`;
 }
 
@@ -5753,7 +6154,7 @@ function renderTable(key){
   }
   rows.forEach(({row,idx})=>{
     const editKey=baseKeyForTable(key);
-    html+=`<tr><td class="controls"><div class="row-actions"><button class="ghost" data-edit-row="${editKey}:${idx}">編集</button><button class="ghost" data-dup="${editKey}:${idx}">複製</button><button class="danger" data-del="${editKey}:${idx}">削除</button></div></td>`;
+    html+=`<tr><td class="controls"><div class="row-actions"><button class="secondary" data-copy-card="${key}:${idx}">情報コピー</button><button class="ghost" data-edit-row="${editKey}:${idx}">編集</button><button class="ghost" data-dup="${editKey}:${idx}">複製</button><button class="danger" data-del="${editKey}:${idx}">削除</button></div></td>`;
     headers.forEach(h=>{
       const cls = FORM_LONG_FIELDS.has(h) ? 'readonly-cell long' : 'readonly-cell';
       html+=`<td class="${cls}">${escapeHtml(row[h] ?? '')}</td>`;
@@ -5939,7 +6340,7 @@ function formOptionValues(key, field){
   if(field==='enabled') ['TRUE','FALSE'].forEach(v=>values.add(v));
   if(field==='checkType') ['近接>=回避値','射撃>=回避値','魔法>=回避値','祈祷>=10','祈祷>=抵抗値','調合>=回避値','採取','なし'].forEach(v=>values.add(v));
   if(field==='element') ['物','火','水','風','雷','光','闇','無'].forEach(v=>values.add(v));
-  if(field==='weaponUpgradeEffect') ['なし','威力+1','命中+1','防御貫通+1','物属性付与/強化','火属性付与/強化','水属性付与/強化','風属性付与/強化','雷属性付与/強化','光属性付与/強化','闇属性付与/強化','無属性付与/強化','特殊効果'].forEach(v=>values.add(v));
+  if(field==='equipmentUpgradeEffect') ['なし','威力','命中','防御貫通','物属性付与','火属性付与','水属性付与','風属性付与','雷属性付与','光属性付与','闇属性付与','無属性付与','特殊効果付与'].forEach(v=>values.add(v));
   if(field==='craftType') ['調合','鍛冶','武器派生','防具製作','バッグ製作','素材加工'].forEach(v=>values.add(v));
   if(field==='baseItem') (state.items || []).forEach(r=>{ if(String(r.dataKind || '').trim() !== '素材' && String(r.itemType || '').trim() === '武器' && r.name) values.add(String(r.name)); });
   if(field==='branchType') ['基礎強化系','鉱石系','獣牙系','甲殻系','羽鱗系','結晶・魔導系','聖祈系','特殊用途系'].forEach(v=>values.add(v));
@@ -6327,7 +6728,7 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='materialCategory') help += '<div class="form-help">選んだ素材種別に紐づくカテゴリだけ表示します。</div>';
   if(field==='rank') help += '<div class="form-help">素材のランクは「素材ランク」タブで管理します。候補にない場合は横のボタンから追加できます。</div>';
   if(field==='bagCapacity') help += '<div class="form-help">バッグ専用の所持品枠数です。倉庫のスタック数や1枠数とは別項目です。</div>';
-  if(field==='weaponUpgradeEffect') help += '<div class="form-help">魔物素材を武器強化に使用した時の強化内容です。主に素材種別が「魔物素材」の行で使います。</div>';
+  if(field==='equipmentUpgradeEffect') help += '<div class="form-help">魔物素材を武器強化に使用した時の強化内容です。主に素材種別が「魔物素材」の行で使います。</div>';
   if(field==='craftType') help += '<div class="form-help">調合・鍛冶・武器派生など、製作データの用途を選びます。管理画面ではこの区分ごとに分割表示します。</div>';
   if(field==='baseItem') help += '<div class="form-help">武器派生の派生元です。候補にはアイテム種別が「武器」の名称を表示します。</div>';
   if(field==='branchType') help += '<div class="form-help">モンハン式の素材派生ラインです。属性の全派生ではなく、素材系統・用途別の派生として使います。</div>';
@@ -6392,7 +6793,7 @@ function currentFormRowSnapshot(){
 function itemFormFields(row){
   const kind = String(row.dataKind || 'アイテム').trim() || 'アイテム';
   if(kind==='素材'){
-    return ['materialType','materialCategory','name','rank','price','source','usageTags','weaponUpgradeEffect','description','effect','notes'];
+    return ['materialType','materialCategory','name','rank','price','source','usageTags','equipmentUpgradeEffect','description','effect','notes'];
   }
   const itemType = String(row.itemType || '').trim();
   if(itemType === 'バッグ'){
@@ -7094,6 +7495,7 @@ document.addEventListener('click',e=>{
   if(monsterCardActionButton) e.preventDefault();
   const monsterToken=e.target.closest('[data-monster-token]'); if(monsterToken){ outputMonsterToken(+monsterToken.dataset.monsterToken); return; }
   const monsterPalette=e.target.closest('[data-monster-palette]'); if(monsterPalette){ outputMonsterPalette(+monsterPalette.dataset.monsterPalette); return; }
+  const copyCard=e.target.closest('[data-copy-card]'); if(copyCard){ const [k,i]=copyCard.dataset.copyCard.split(':'); copyRowCard(k,+i); return; }
   const addAction=e.target.closest('[data-monster-action-add]'); if(addAction){ const editor=addAction.closest('[data-monster-actions-editor]'); editor.querySelector('[data-monster-action-list]').insertAdjacentHTML('beforeend', monsterActionRowHtml({element:'物'})); syncMonsterActionEditor(editor); return; }
   const remAction=e.target.closest('[data-monster-action-remove]'); if(remAction){ const editor=remAction.closest('[data-monster-actions-editor]'); remAction.closest('[data-monster-action-row]')?.remove(); syncMonsterActionEditor(editor); return; }
   const addDrop=e.target.closest('[data-monster-drop-add]'); if(addDrop){ const editor=addDrop.closest('[data-monster-drops-editor]'); editor.querySelector('[data-monster-drop-list]').insertAdjacentHTML('beforeend', monsterDropRowHtml({})); syncMonsterDropEditor(editor); return; }
@@ -7104,6 +7506,7 @@ document.addEventListener('click',e=>{
   const facilityRefresh=e.target.closest('[data-facility-refresh]'); if(facilityRefresh){ renderFacilitiesPanel(); toast('販売商品リストを更新しました'); return; }
   const facilityCopyAll=e.target.closest('[data-facility-copy-all]'); if(facilityCopyAll){ copyFacilitySalesList(); return; }
   const facilityCopy=e.target.closest('[data-facility-copy]'); if(facilityCopy){ copyFacilitySalesList(facilityCopy.dataset.facilityCopy); return; }
+  const facilityUpgradeCheck=e.target.closest('[data-facility-upgrade-check]'); if(facilityUpgradeCheck){ renderFacilityUpgradeResult(); return; }
   const helpCopy=e.target.closest('[data-help-copy]'); if(helpCopy){ copySystemHelp(); return; }
   const helpExpand=e.target.closest('[data-help-expand]'); if(helpExpand){ document.querySelectorAll('#helpCards details').forEach(d=>d.open=true); return; }
   const helpCollapse=e.target.closest('[data-help-collapse]'); if(helpCollapse){ document.querySelectorAll('#helpCards details').forEach(d=>d.open=false); return; }
@@ -7165,6 +7568,7 @@ document.addEventListener('input',e=>{
   const edit=e.target.dataset.edit;
   if(edit){ const [key,idx,field]=edit.split(':'); state[key][+idx][field]=e.target.textContent; if(baseKeyForTable(key)==='items') renderFacilitiesPanel(); renderHelpPanel(); updateCounts(); updateJsonBox(); }
   if(e.target.id && e.target.id.startsWith('filter-')) renderTable(e.target.id.replace('filter-',''));
+  if(e.target.id==='facilityUpgradeMaterialInput') renderFacilityUpgradeResult(e.target.value);
   if(e.target.closest('[data-check-builder]')) syncCheckBuilder(e.target.closest('[data-check-builder]'));
   if(e.target.closest('[data-monster-actions-editor]')) syncMonsterActionEditor(e.target.closest('[data-monster-actions-editor]'));
   if(e.target.closest('[data-monster-drops-editor]')) syncMonsterDropEditor(e.target.closest('[data-monster-drops-editor]'));
