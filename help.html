@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>リクラフト・アルケミア ヘルプ</title>
+<style>
+:root{--bg:#f5efe4;--ink:#3d3025;--muted:#7e6d5b;--line:#dccbb4;--accent:#a96f37;--accent2:#5f7d66;--shadow:0 14px 34px rgba(76,49,25,.15);--radius:18px}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at 18% 12%,rgba(255,230,182,.75),transparent 28%),radial-gradient(circle at 82% 6%,rgba(183,213,193,.65),transparent 26%),linear-gradient(180deg,#fbf7ef 0%,var(--bg) 100%);min-height:100vh}
+header,main{max-width:1180px;margin:0 auto;padding:22px}
+.title-card,.panel{background:rgba(255,250,242,.9);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+h1{margin:0 0 8px;font-size:clamp(24px,4vw,36px)}
+.subtitle{margin:0;color:var(--muted);line-height:1.7}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+input{flex:1;min-width:220px;border:1px solid #cfbea8;border-radius:12px;background:#fffdf8;color:var(--ink);padding:10px 12px;font:inherit;outline:none}
+button{border:0;border-radius:12px;background:var(--accent);color:#fff;font-weight:800;padding:10px 14px;cursor:pointer;box-shadow:0 4px 12px rgba(94,66,35,.16)}
+button.ghost{background:#fff9f1;color:var(--ink);border:1px solid #e3cdb4;box-shadow:none}
+.help-layout{display:grid;gap:12px}
+.help-card{border:1px solid #ead9c4;background:linear-gradient(180deg,#fffdf8,#fff8ee);border-radius:16px;overflow:hidden;box-shadow:0 6px 16px rgba(94,66,35,.05)}
+.help-card[hidden]{display:none}
+.help-card summary{cursor:pointer;list-style:none;padding:13px 15px;font-weight:900;color:#5b3821;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+.help-card summary::-webkit-details-marker{display:none}
+.tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.tags span{display:inline-flex;border:1px solid #ead9c4;background:#fffaf3;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:800;color:#684c31}
+.help-body{border-top:1px solid #ead9c4;padding:12px 15px;color:#5d4935;line-height:1.75;font-size:14px}
+.help-body ul{margin:0;padding-left:1.35em}
+.help-body li{margin:3px 0}
+textarea{position:absolute;left:-9999px;width:1px;height:1px}
+.notice{color:var(--muted);font-size:13px;line-height:1.7;margin:0 0 14px}
+@media(max-width:640px){.help-card summary{grid-template-columns:1fr}.tags{justify-content:flex-start}}
+</style>
+</head>
+<body>
+<header>
+  <div class="title-card">
+    <h1>リクラフト・アルケミア ヘルプ</h1>
+    <p class="subtitle">確定済みのシステム仕様を確認するページ。未確定案、変更履歴、作業メモは含めない。</p>
+  </div>
+</header>
+<main>
+  <section class="panel">
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="防御・かばう・矢筒・武器派生などで検索">
+      <button class="ghost" id="openAll" type="button">すべて開く</button>
+      <button class="ghost" id="closeAll" type="button">すべて閉じる</button>
+      <button id="copyAll" type="button">全文コピー</button>
+    </div>
+    <p class="notice">各項目は折り畳み式。検索すると該当項目だけ表示。</p>
+    <div class="help-layout" id="helpLayout">
+      <details class="help-card">
+  <summary><span>施設</span><span class="tags"><span>鍛冶屋</span><span>薬屋</span><span>宿屋</span><span>NPC</span></span></summary>
+  <div class="help-body"><ul><li>基本施設は鍛冶屋、薬屋、宿屋。</li><li>鍛冶屋は武器、防具、バッグ、矢筒、鍛冶素材、鍛冶施設利用を扱う。</li><li>薬屋はポーション系、薬品系調合品、調合素材、調合施設利用を扱う。</li><li>宿屋は宿泊、休息、噂、クエスト情報を扱う。商品販売は主目的にしない。</li><li>雑貨屋は現時点では使用しない。</li><li>施設NPCは、リネット、ガルド・ヴェルナー、ミレイユ・オルセーヌ、ロジーナ・エルメル。</li><li>リネットは拠点と工房の案内役。</li><li>ガルド・ヴェルナーは鍛冶屋担当。</li><li>ミレイユ・オルセーヌは薬屋担当。</li><li>ロジーナ・エルメルは宿屋担当。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>倉庫・所持品・バッグ</span><span class="tags"><span>倉庫</span><span>所持品</span><span>バッグ</span></span></summary>
+  <div class="help-body"><ul><li>旧所持品は倉庫。旧携行品は所持品。</li><li>倉庫は保管上限なし。スタック数や枠数を気にせず最大限所持できる。</li><li>冒険中に使用できるのは所持品に入っているアイテムのみ。</li><li>バッグは倉庫内アイテムから選択する。</li><li>バッグに設定された容量に応じて、キャラシート側の所持品枠数が変化する。</li><li>初期バッグは簡素なバッグ。バッグ容量は8。</li><li>採取袋は使用しない。袋カテゴリも使用しない。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>道具カテゴリ</span><span class="tags"><span>道具</span><span>調合</span><span>鍛冶</span></span></summary>
+  <div class="help-body"><ul><li>道具カテゴリは戦闘、調合、鍛冶、その他。</li><li>調合道具と鍛冶道具は細かく分割しない。</li><li>調合と鍛冶は施設を借りられる前提。</li><li>採取道具セット、採掘道具セット、探索道具セットは現時点では使用しない。</li><li>武器と防具の破損、修理ルールは現時点では扱わない。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>店売り・初期販売</span><span class="tags"><span>店売り</span><span>初期武器</span><span>防具</span><span>矢筒</span></span></summary>
+  <div class="help-body"><ul><li>鍛冶屋では、DB上の初期所持品タグ付き武器を購入可能にする。</li><li>初期販売武器はショートダガー、ロングソード、ハンドアックス、ウォーハンマー、ショートスピア、ウッドスタッフ、ショートボウ、クロスボウ、ヘヴィクロスボウ、ロングスピア、グレートソード、グレートハンマー。</li><li>鍛冶屋販売枠としてバトルサイズ、アイアンガントレットも扱う。</li><li>防具の商品名はカテゴリ名をそのまま使わない。</li><li>初期販売防具は、旅風のジャケット、鉄紐のベスト、鋲打ちの胴衣、星糸のケープ、祈り布のストール。</li><li>普段着は0Gの初期装備扱い。店売り防具にはしない。</li><li>矢筒は初期配布しない。鍛冶屋販売品にする。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>矢弾・矢筒</span><span class="tags"><span>遠距離武器</span><span>矢弾</span><span>矢筒</span><span>スタック</span></span></summary>
+  <div class="help-body"><ul><li>遠距離武器は通常攻撃でも矢弾を1つ消費する。</li><li>矢弾がない場合、対応する遠距離武器で攻撃できない。</li><li>矢弾は種類ごとに管理する。</li><li>矢弾は種類ごとに最大スタック数を持つ。</li><li>矢弾を矢筒に入れない場合、1種類につき所持品枠を1枠使う。</li><li>初期遠距離武器を選んだ場合、対応する通常矢弾を最大スタック数分だけ初期支給する。</li><li>通常矢は最大20。通常ボルトは最大20。大型ボルトは最大10。</li><li>特殊矢弾の最大スタック数は効果に応じて個別に設定する。</li><li>矢筒は装備枠『矢筒』に装備する。</li><li>矢筒自体は所持品枠を消費しない。</li><li>矢筒に入れた矢弾は所持品枠を消費しない。</li><li>簡素な矢筒は2種類、旅人の矢筒は3種類、狩人の矢筒は4種類の矢弾を収納できる。</li><li>キャラシート側では、矢筒を装備した場合、収納種類数ぶんの矢弾枠を入力する。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>レシピ・武器派生</span><span class="tags"><span>レシピ</span><span>武器派生</span><span>鍛冶</span></span></summary>
+  <div class="help-body"><ul><li>レシピはDB上では1表で管理する。</li><li>管理HTML上では、調合レシピ、鍛冶レシピ、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。</li><li>武器上位化は、初期武器や基礎武器から素材で派生する方式。</li><li>武器派生はモンハンに近い素材派生として扱う。</li><li>武器派生のためのレシピ解放は基本的に使用しない。</li><li>素材と派生元武器が揃っていれば鍛冶屋で作成可能。</li><li>属性派生を全属性分作る方針にはしない。</li><li>属性付与や属性強化は魔物素材の武器強化内容で表現する。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>魔物素材・武器強化</span><span class="tags"><span>魔物素材</span><span>武器強化</span><span>属性</span></span></summary>
+  <div class="help-body"><ul><li>魔物素材には、武器強化に使用した際の強化内容を設定できる。</li><li>武器強化内容は、威力上昇、命中上昇、防御貫通、属性付与、属性強化、特殊効果など。</li><li>属性は物、火、水、風、雷、光、闇、無。</li><li>魔物素材の特色を武器性能や属性、特殊効果に反映する。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>魔物データ</span><span class="tags"><span>魔物</span><span>属性耐性</span><span>ドロップ</span><span>行動</span></span></summary>
+  <div class="help-body"><ul><li>魔物は物、火、水、風、雷、光、闇、無の8属性に対する相性を持つ。</li><li>属性相性は、通常、耐、無、反、吸、弱で管理する。</li><li>耐はダメージ半減。</li><li>無はダメージ0、属性効果なし。</li><li>反はダメージ0、受けるはずだったダメージを攻撃者へ返す。</li><li>吸はダメージ0、受けるはずだったダメージ分だけHPを回復する。</li><li>弱はダメージ2倍。</li><li>魔物の行動は1行動1行で管理する。</li><li>ドロップはメモ式ではなく行単位で管理する。</li><li>ドロップ素材は魔物素材カテゴリから選択する。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>戦闘の基本</span><span class="tags"><span>戦闘</span><span>行動</span><span>ダメージ</span></span></summary>
+  <div class="help-body"><ul><li>戦闘中の主な行動は、武器攻撃、力業攻撃、術式、祈祷、防御、かばう、妨害、道具使用、技能行動。</li><li>戦闘後処理として、採取やドロップチェックを扱う。</li><li>防御と回避は別処理。</li><li>防御は攻撃を受け止めてダメージを減らす行動。</li><li>回避は攻撃を避ける判定。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>防御</span><span class="tags"><span>防御</span><span>常時防御値</span><span>防御行動値</span><span>防御技能</span></span></summary>
+  <div class="help-body"><ul><li>常時防御値は、通常時にも適用されるダメージ軽減値。</li><li>防御行動値は、行動として防御を選んだ時にだけ使う追加軽減値。</li><li>防御行動値が1D6なら、防御行動時に1D6点ダメージを軽減する。</li><li>防御技能に振り分けたポイントは、防御行動時の追加軽減値として扱う。</li><li>防御行動時の最終ダメージは、受けるダメージ - 防御行動値 - 防御技能ポイント - 常時防御値。</li><li>防御行動そのものに判定は行わない。</li><li>防御は回避ではない。攻撃を受け止めてダメージを減らす行動。</li><li>最終ダメージは0未満にならない。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>かばう</span><span class="tags"><span>かばう</span><span>防御技能</span><span>先制値</span></span></summary>
+  <div class="help-body"><ul><li>かばうは、味方への攻撃に割り込んで自分が攻撃を引き受ける行動。</li><li>かばう判定は、防御技能 &gt;= 敵の先制値。</li><li>成功した場合、攻撃対象を自分に変更する。</li><li>成功後、自分が防御行動を取ったものとしてダメージを軽減する。</li><li>かばう成功時の最終ダメージは、受けるダメージ - 防御行動値 - 防御技能ポイント - 常時防御値。</li><li>単体攻撃はかばえる。</li><li>複数対象攻撃は、対象のうち1人分だけかばえる。</li><li>範囲攻撃は状況次第で1人だけかばえる。</li><li>全体攻撃は原則かばえない。</li><li>攻撃行動ごとにかばう難易度は変えない。成功難易度は敵の先制値で決める。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>妨害</span><span class="tags"><span>妨害</span><span>先制値</span><span>判定補正</span></span></summary>
+  <div class="help-body"><ul><li>妨害は、敵の攻撃、移動、詠唱、道具使用、逃走などを邪魔する行動。</li><li>妨害判定は、使用技能 &gt;= 敵の先制値。</li><li>使用技能は妨害内容に応じて決める。</li><li>武器で牽制する場合は近接または射撃。</li><li>押さえ込む、突き飛ばす場合は力業。</li><li>詠唱や術式を邪魔する場合は魔法、知識、状況に合う技能。</li><li>注意を引く、挑発する場合は交渉、社交、鼓舞など。</li><li>妨害成功時、攻撃、術式、祈祷などの判定に-2を与える。</li><li>移動、逃走、準備行動、道具使用など、-2しても意味が薄い行動は、GM判断で中断、停止、遅延にする。</li><li>妨害失敗時、敵は通常通り行動する。</li><li>妨害失敗時の追加ペナルティは基本なし。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>武器攻撃・力業攻撃</span><span class="tags"><span>武器攻撃</span><span>力業</span><span>近接</span><span>射撃</span></span></summary>
+  <div class="help-body"><ul><li>通常の近接武器攻撃は近接を使う。</li><li>通常の遠距離武器攻撃は射撃を使う。</li><li>力業攻撃は、近接武器攻撃の命中判定で近接の代わりに力業を使う攻撃。</li><li>力業攻撃に命中した場合、武器ダメージのダイスを+1個する。</li><li>力業攻撃のダメージ計算は、通常の武器攻撃と同じ。</li><li>ダメージに加算する技能ポイントは近接を参照する。</li><li>力業ポイントはダメージ加算には使わない。</li><li>力業攻撃を行った場合、成否に関わらず次ターン行動不可。</li><li>さらに次ターン終了まで防御-2。</li><li>このデメリットは、力任せの大振りによって体勢が崩れることを表す。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>術式・祈祷</span><span class="tags"><span>術式</span><span>祈祷</span><span>属性</span><span>防御判定</span></span></summary>
+  <div class="help-body"><ul><li>初期魔法術式は魔力弾のみ。</li><li>初期祈祷は癒しの祈りのみ。</li><li>初期魔法術式と初期祈祷は全員が取得する。</li><li>術式と祈祷には属性を設定する。</li><li>魔導書のセット術式枠は、1 + 魔法に割り振ったポイント。</li><li>祈祷書のセット祈祷枠は、1 + 祈祷に割り振ったポイント。</li><li>セット術式とセット祈祷は、所持している術式データから選択する。</li><li>火球、氷槍、雷撃、光弾、闇弾、爆発範囲などの攻撃・投射・範囲系魔法は回避で防ぐ。</li><li>毒、呪いなどの身体・精神・状態異常系効果は抵抗で防ぐ。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>技能の戦闘利用</span><span class="tags"><span>採取</span><span>知識</span><span>鼓舞</span><span>魅力</span></span></summary>
+  <div class="help-body"><ul><li>採取は、魔物撃破後の採取判定に成功するとドロップチェックに+1する。</li><li>知識カテゴリは魔物、素材、属性。</li><li>魔物知識に成功した場合、選んだ属性1つの耐性、弱点、無効、反射、吸収などを確認できる。</li><li>魔物知識で全属性を一度に開示しない。</li><li>鼓舞は、成功すると対象の次の判定に+1する。</li><li>鼓舞の対象は、戦闘中または難しい場面の味方。</li><li>魅力系技能は、交渉、共感、社交、鼓舞。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>判定式</span><span class="tags"><span>判定</span><span>対抗</span><span>カスタムチェック</span></span></summary>
+  <div class="help-body"><ul><li>対抗式の表記は『○○vs○○』ではなく『○○&gt;=○○』に統一する。</li><li>左側はカテゴリに合う技能を使う。</li><li>右側は任意入力、または選択肢から設定する。</li><li>非術式系のチェックも、必要なものは同じ形式に統一する。</li><li>カスタムチェックは保存と読込を可能にする。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>キャラクター出力</span><span class="tags"><span>チャットパレット</span><span>ココフォリア</span><span>出力</span></span></summary>
+  <div class="help-body"><ul><li>武器ダメージ出力は、片手武器の場合『【左手(右手)武器ダメージ】』形式にする。</li><li>両手武器のダメージ出力は『【両手武器ダメージ】』形式にする。</li><li>術式の出力名は『【術式名】』形式にする。</li><li>武器ダメージが設定されている武器のみ出力する。</li><li>常時防御値の出力ラベルは『防御』。</li><li>回避値の出力ラベルは『回避』。</li></ul></div>
+</details><details class="help-card">
+  <summary><span>魔物出力</span><span class="tags"><span>魔物</span><span>チャットパレット</span><span>出力</span></span></summary>
+  <div class="help-body"><ul><li>魔物出力はJSONではなく、クリップボードコピー形式にする。</li><li>魔物出力にキャラクターメモは含めない。</li><li>魔物出力にドロップは含めない。</li><li>チャットパレットは『choice[技名1,技名2,…]』から始める。</li><li>ダイスのない効果も技能セクションに入れる。</li></ul></div>
+</details>
+    </div>
+    <textarea id="allText">施設
+- 基本施設は鍛冶屋、薬屋、宿屋。
+- 鍛冶屋は武器、防具、バッグ、矢筒、鍛冶素材、鍛冶施設利用を扱う。
+- 薬屋はポーション系、薬品系調合品、調合素材、調合施設利用を扱う。
+- 宿屋は宿泊、休息、噂、クエスト情報を扱う。商品販売は主目的にしない。
+- 雑貨屋は現時点では使用しない。
+- 施設NPCは、リネット、ガルド・ヴェルナー、ミレイユ・オルセーヌ、ロジーナ・エルメル。
+- リネットは拠点と工房の案内役。
+- ガルド・ヴェルナーは鍛冶屋担当。
+- ミレイユ・オルセーヌは薬屋担当。
+- ロジーナ・エルメルは宿屋担当。
+
+倉庫・所持品・バッグ
+- 旧所持品は倉庫。旧携行品は所持品。
+- 倉庫は保管上限なし。スタック数や枠数を気にせず最大限所持できる。
+- 冒険中に使用できるのは所持品に入っているアイテムのみ。
+- バッグは倉庫内アイテムから選択する。
+- バッグに設定された容量に応じて、キャラシート側の所持品枠数が変化する。
+- 初期バッグは簡素なバッグ。バッグ容量は8。
+- 採取袋は使用しない。袋カテゴリも使用しない。
+
+道具カテゴリ
+- 道具カテゴリは戦闘、調合、鍛冶、その他。
+- 調合道具と鍛冶道具は細かく分割しない。
+- 調合と鍛冶は施設を借りられる前提。
+- 採取道具セット、採掘道具セット、探索道具セットは現時点では使用しない。
+- 武器と防具の破損、修理ルールは現時点では扱わない。
+
+店売り・初期販売
+- 鍛冶屋では、DB上の初期所持品タグ付き武器を購入可能にする。
+- 初期販売武器はショートダガー、ロングソード、ハンドアックス、ウォーハンマー、ショートスピア、ウッドスタッフ、ショートボウ、クロスボウ、ヘヴィクロスボウ、ロングスピア、グレートソード、グレートハンマー。
+- 鍛冶屋販売枠としてバトルサイズ、アイアンガントレットも扱う。
+- 防具の商品名はカテゴリ名をそのまま使わない。
+- 初期販売防具は、旅風のジャケット、鉄紐のベスト、鋲打ちの胴衣、星糸のケープ、祈り布のストール。
+- 普段着は0Gの初期装備扱い。店売り防具にはしない。
+- 矢筒は初期配布しない。鍛冶屋販売品にする。
+
+矢弾・矢筒
+- 遠距離武器は通常攻撃でも矢弾を1つ消費する。
+- 矢弾がない場合、対応する遠距離武器で攻撃できない。
+- 矢弾は種類ごとに管理する。
+- 矢弾は種類ごとに最大スタック数を持つ。
+- 矢弾を矢筒に入れない場合、1種類につき所持品枠を1枠使う。
+- 初期遠距離武器を選んだ場合、対応する通常矢弾を最大スタック数分だけ初期支給する。
+- 通常矢は最大20。通常ボルトは最大20。大型ボルトは最大10。
+- 特殊矢弾の最大スタック数は効果に応じて個別に設定する。
+- 矢筒は装備枠『矢筒』に装備する。
+- 矢筒自体は所持品枠を消費しない。
+- 矢筒に入れた矢弾は所持品枠を消費しない。
+- 簡素な矢筒は2種類、旅人の矢筒は3種類、狩人の矢筒は4種類の矢弾を収納できる。
+- キャラシート側では、矢筒を装備した場合、収納種類数ぶんの矢弾枠を入力する。
+
+レシピ・武器派生
+- レシピはDB上では1表で管理する。
+- 管理HTML上では、調合レシピ、鍛冶レシピ、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。
+- 武器上位化は、初期武器や基礎武器から素材で派生する方式。
+- 武器派生はモンハンに近い素材派生として扱う。
+- 武器派生のためのレシピ解放は基本的に使用しない。
+- 素材と派生元武器が揃っていれば鍛冶屋で作成可能。
+- 属性派生を全属性分作る方針にはしない。
+- 属性付与や属性強化は魔物素材の武器強化内容で表現する。
+
+魔物素材・武器強化
+- 魔物素材には、武器強化に使用した際の強化内容を設定できる。
+- 武器強化内容は、威力上昇、命中上昇、防御貫通、属性付与、属性強化、特殊効果など。
+- 属性は物、火、水、風、雷、光、闇、無。
+- 魔物素材の特色を武器性能や属性、特殊効果に反映する。
+
+魔物データ
+- 魔物は物、火、水、風、雷、光、闇、無の8属性に対する相性を持つ。
+- 属性相性は、通常、耐、無、反、吸、弱で管理する。
+- 耐はダメージ半減。
+- 無はダメージ0、属性効果なし。
+- 反はダメージ0、受けるはずだったダメージを攻撃者へ返す。
+- 吸はダメージ0、受けるはずだったダメージ分だけHPを回復する。
+- 弱はダメージ2倍。
+- 魔物の行動は1行動1行で管理する。
+- ドロップはメモ式ではなく行単位で管理する。
+- ドロップ素材は魔物素材カテゴリから選択する。
+
+戦闘の基本
+- 戦闘中の主な行動は、武器攻撃、力業攻撃、術式、祈祷、防御、かばう、妨害、道具使用、技能行動。
+- 戦闘後処理として、採取やドロップチェックを扱う。
+- 防御と回避は別処理。
+- 防御は攻撃を受け止めてダメージを減らす行動。
+- 回避は攻撃を避ける判定。
+
+防御
+- 常時防御値は、通常時にも適用されるダメージ軽減値。
+- 防御行動値は、行動として防御を選んだ時にだけ使う追加軽減値。
+- 防御行動値が1D6なら、防御行動時に1D6点ダメージを軽減する。
+- 防御技能に振り分けたポイントは、防御行動時の追加軽減値として扱う。
+- 防御行動時の最終ダメージは、受けるダメージ - 防御行動値 - 防御技能ポイント - 常時防御値。
+- 防御行動そのものに判定は行わない。
+- 防御は回避ではない。攻撃を受け止めてダメージを減らす行動。
+- 最終ダメージは0未満にならない。
+
+かばう
+- かばうは、味方への攻撃に割り込んで自分が攻撃を引き受ける行動。
+- かばう判定は、防御技能 &gt;= 敵の先制値。
+- 成功した場合、攻撃対象を自分に変更する。
+- 成功後、自分が防御行動を取ったものとしてダメージを軽減する。
+- かばう成功時の最終ダメージは、受けるダメージ - 防御行動値 - 防御技能ポイント - 常時防御値。
+- 単体攻撃はかばえる。
+- 複数対象攻撃は、対象のうち1人分だけかばえる。
+- 範囲攻撃は状況次第で1人だけかばえる。
+- 全体攻撃は原則かばえない。
+- 攻撃行動ごとにかばう難易度は変えない。成功難易度は敵の先制値で決める。
+
+妨害
+- 妨害は、敵の攻撃、移動、詠唱、道具使用、逃走などを邪魔する行動。
+- 妨害判定は、使用技能 &gt;= 敵の先制値。
+- 使用技能は妨害内容に応じて決める。
+- 武器で牽制する場合は近接または射撃。
+- 押さえ込む、突き飛ばす場合は力業。
+- 詠唱や術式を邪魔する場合は魔法、知識、状況に合う技能。
+- 注意を引く、挑発する場合は交渉、社交、鼓舞など。
+- 妨害成功時、攻撃、術式、祈祷などの判定に-2を与える。
+- 移動、逃走、準備行動、道具使用など、-2しても意味が薄い行動は、GM判断で中断、停止、遅延にする。
+- 妨害失敗時、敵は通常通り行動する。
+- 妨害失敗時の追加ペナルティは基本なし。
+
+武器攻撃・力業攻撃
+- 通常の近接武器攻撃は近接を使う。
+- 通常の遠距離武器攻撃は射撃を使う。
+- 力業攻撃は、近接武器攻撃の命中判定で近接の代わりに力業を使う攻撃。
+- 力業攻撃に命中した場合、武器ダメージのダイスを+1個する。
+- 力業攻撃のダメージ計算は、通常の武器攻撃と同じ。
+- ダメージに加算する技能ポイントは近接を参照する。
+- 力業ポイントはダメージ加算には使わない。
+- 力業攻撃を行った場合、成否に関わらず次ターン行動不可。
+- さらに次ターン終了まで防御-2。
+- このデメリットは、力任せの大振りによって体勢が崩れることを表す。
+
+術式・祈祷
+- 初期魔法術式は魔力弾のみ。
+- 初期祈祷は癒しの祈りのみ。
+- 初期魔法術式と初期祈祷は全員が取得する。
+- 術式と祈祷には属性を設定する。
+- 魔導書のセット術式枠は、1 + 魔法に割り振ったポイント。
+- 祈祷書のセット祈祷枠は、1 + 祈祷に割り振ったポイント。
+- セット術式とセット祈祷は、所持している術式データから選択する。
+- 火球、氷槍、雷撃、光弾、闇弾、爆発範囲などの攻撃・投射・範囲系魔法は回避で防ぐ。
+- 毒、呪いなどの身体・精神・状態異常系効果は抵抗で防ぐ。
+
+技能の戦闘利用
+- 採取は、魔物撃破後の採取判定に成功するとドロップチェックに+1する。
+- 知識カテゴリは魔物、素材、属性。
+- 魔物知識に成功した場合、選んだ属性1つの耐性、弱点、無効、反射、吸収などを確認できる。
+- 魔物知識で全属性を一度に開示しない。
+- 鼓舞は、成功すると対象の次の判定に+1する。
+- 鼓舞の対象は、戦闘中または難しい場面の味方。
+- 魅力系技能は、交渉、共感、社交、鼓舞。
+
+判定式
+- 対抗式の表記は『○○vs○○』ではなく『○○&gt;=○○』に統一する。
+- 左側はカテゴリに合う技能を使う。
+- 右側は任意入力、または選択肢から設定する。
+- 非術式系のチェックも、必要なものは同じ形式に統一する。
+- カスタムチェックは保存と読込を可能にする。
+
+キャラクター出力
+- 武器ダメージ出力は、片手武器の場合『【左手(右手)武器ダメージ】』形式にする。
+- 両手武器のダメージ出力は『【両手武器ダメージ】』形式にする。
+- 術式の出力名は『【術式名】』形式にする。
+- 武器ダメージが設定されている武器のみ出力する。
+- 常時防御値の出力ラベルは『防御』。
+- 回避値の出力ラベルは『回避』。
+
+魔物出力
+- 魔物出力はJSONではなく、クリップボードコピー形式にする。
+- 魔物出力にキャラクターメモは含めない。
+- 魔物出力にドロップは含めない。
+- チャットパレットは『choice[技名1,技名2,…]』から始める。
+- ダイスのない効果も技能セクションに入れる。</textarea>
+  </section>
+</main>
+<script>
+const search = document.getElementById('search');
+const cards = Array.from(document.querySelectorAll('.help-card'));
+function filterCards(){
+  const q = (search.value || '').trim().toLowerCase();
+  cards.forEach(card => {
+    const hit = !q || card.textContent.toLowerCase().includes(q);
+    card.hidden = !hit;
+  });
+}
+search.addEventListener('input', filterCards);
+document.getElementById('openAll').addEventListener('click', () => cards.forEach(card => { if(!card.hidden) card.open = true; }));
+document.getElementById('closeAll').addEventListener('click', () => cards.forEach(card => card.open = false));
+document.getElementById('copyAll').addEventListener('click', async () => {
+  const text = document.getElementById('allText').value;
+  try { await navigator.clipboard.writeText(text); } catch(e) {
+    const ta = document.getElementById('allText'); ta.style.position='fixed'; ta.style.left='8px'; ta.style.top='8px'; ta.style.width='90vw'; ta.style.height='60vh'; ta.select();
+  }
+});
+</script>
+</body>
+</html>

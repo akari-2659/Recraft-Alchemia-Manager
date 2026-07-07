@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>リクラフト・アルケミア 管理ハブ v90.8.18</title>
+  <title>リクラフト・アルケミア 管理ハブ v90.8.33</title>
   <style>
     :root{color-scheme:light dark;--bg:#f7f2e8;--card:#fffaf0;--ink:#2d241b;--muted:#7b6a58;--line:#d8c7aa;--accent:#8b5e34;--accent2:#c28b45;--danger:#9b3b2f}
     *{box-sizing:border-box} html,body{height:100%} body{margin:0;font-family:"Yu Gothic","Hiragino Sans",system-ui,sans-serif;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;min-height:100svh}
@@ -22,6 +22,7 @@
       <nav class="tabs" aria-label="管理ツール切替">
         <button type="button" class="active" data-target="database">アイテム・DB管理</button>
         <button type="button" data-target="progress">イベント・進行管理</button>
+        <button type="button" data-target="help">ヘルプ</button>
         
       </nav>
     </div>
@@ -29,15 +30,16 @@
   <main>
     <div class="notice" id="notice">現在：アイテム・DB管理。固定DB URLを使用します。</div>
     <div class="framewrap">
-      <iframe id="frame-database" class="toolframe active" src="database_admin.html?v=90.8.18" title="アイテム・DB管理"></iframe>
-      <iframe id="frame-progress" class="toolframe" src="progress_manager.html?v=90.8.18" title="イベント・進行管理"></iframe>
+      <iframe id="frame-database" class="toolframe active" src="database_admin.html?v=90.8.33" title="アイテム・DB管理"></iframe>
+      <iframe id="frame-progress" class="toolframe" src="progress_manager.html?v=90.8.33" title="イベント・進行管理"></iframe>
+      <iframe id="frame-help" class="toolframe" src="help.html?v=90.8.33" title="ヘルプ"></iframe>
       <div class="fallback">
-        iframeが表示できない場合は、<a href="database_admin.html?v=90.8.18">アイテム・DB管理</a> または <a href="progress_manager.html?v=90.8.18">イベント・進行管理</a> を直接開いてください。
+        iframeが表示できない場合は、<a href="database_admin.html?v=90.8.33">アイテム・DB管理</a> または <a href="progress_manager.html?v=90.8.33">イベント・進行管理</a>、<a href="help.html?v=90.8.33">ヘルプ</a> を直接開いてください。
       </div>
     </div>
   </main>
   <script>
-    const labels={database:'アイテム・DB管理',progress:'イベント・進行管理'};
+    const labels={database:'アイテム・DB管理',progress:'イベント・進行管理',help:'ヘルプ'};
     function showTool(key){
       document.querySelectorAll('.tabs button[data-target]').forEach(btn=>btn.classList.toggle('active',btn.dataset.target===key));
       document.querySelectorAll('.toolframe').forEach(frame=>frame.classList.remove('active'));

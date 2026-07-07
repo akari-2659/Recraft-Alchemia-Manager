@@ -426,7 +426,6 @@
       <button class="tab" data-tab-group="adventure">冒険</button>
       <button class="tab" data-tab-group="facilities">施設</button>
       <button class="tab" data-tab-group="tools">管理</button>
-      <button class="tab" data-tab-group="help">ヘルプ</button>
     </div>
   </div>
 
@@ -479,14 +478,6 @@
     <div class="tab-label">小カテゴリ</div>
     <div class="subtabs section-subtabs">
       <button class="subtab" data-main-tab="json">JSON/バックアップ</button>
-    </div>
-  </div>
-
-
-  <div class="tab-block subnav-block hidden" data-subnav-group="help">
-    <div class="tab-label">ヘルプ</div>
-    <div class="subtabs section-subtabs">
-      <button class="subtab" data-main-tab="help">システムヘルプ</button>
     </div>
   </div>
 
@@ -782,7 +773,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.31';
+const RECRAFT_DB_VERSION = 'v90.8.33';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
 const PAGE_TABLE_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','materials','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
@@ -7051,20 +7042,6 @@ document.addEventListener('click', (ev) => {
   }
 });
 
-
-document.addEventListener('click', (ev) => {
-  const groupBtn = ev.target?.closest?.('[data-tab-group="help"]');
-  if (groupBtn) {
-    setTimeout(() => {
-      try {
-        document.querySelector('[data-main-tab="help"]')?.click();
-        if (typeof renderHelp === 'function') renderHelp();
-        if (typeof renderHelpCards === 'function') renderHelpCards();
-        if (typeof renderSystemHelp === 'function') renderSystemHelp();
-      } catch (_) {}
-    }, 0);
-  }
-});
 
 </script>
 </body>
