@@ -774,7 +774,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.28';
+const RECRAFT_DB_VERSION = 'v90.8.29';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
 const PAGE_TABLE_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','materials','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
@@ -6967,6 +6967,37 @@ $('btnImportJson').addEventListener('click',()=>{try{fromJsonBox()}catch(e){toas
 $('btnDownloadJson').addEventListener('click',downloadJson);
 $('schemaPreview').textContent=JSON.stringify(SCHEMA,null,2);
 renderAll();
+
+function helpItemText(item) {
+  const body = Array.isArray(item.body) ? item.body.join('\n') : String(item.body || '');
+  const tags = Array.isArray(item.tags) ? item.tags.join(', ') : String(item.tags || '');
+  return `${item.title || ''}\n${tags}\n${body}`;
+}
+function renderSystemHelp() {
+  const area = document.getElementById('helpList');
+  if (!area) return;
+  const q = String(document.getElementById('filter-help')?.value || '').trim().toLowerCase();
+  const rows = (typeof SYSTEM_HELP !== 'undefined' && Array.isArray(SYSTEM_HELP)) ? SYSTEM_HELP : [];
+  const filtered = rows.filter(item => !q || helpItemText(item).toLowerCase().includes(q));
+  area.innerHTML = filtered.map(item => {
+    const body = Array.isArray(item.body) ? item.body.map(v => `<p>${esc(v)}</p>`).join('') : `<p>${esc(item.body || '')}</p>`;
+    const tags = Array.isArray(item.tags) && item.tags.length ? `<div class="small">タグ：${esc(item.tags.join(' / '))}</div>` : '';
+    return `<details class="help-card"><summary>${esc(item.title || 'ヘルプ')}</summary>${tags}<div class="help-body">${body}</div></details>`;
+  }).join('') || '<p class="hint">該当するヘルプがありません。</p>';
+}
+document.addEventListener('input', (ev) => {
+  if (ev.target && ev.target.id === 'filter-help') renderSystemHelp();
+});
+document.addEventListener('click', (ev) => {
+  if (ev.target && ev.target.id === 'openAllHelpBtn') document.querySelectorAll('#helpList details').forEach(d => d.open = true);
+  if (ev.target && ev.target.id === 'closeAllHelpBtn') document.querySelectorAll('#helpList details').forEach(d => d.open = false);
+  if (ev.target && ev.target.id === 'copyAllHelpBtn') {
+    const rows = (typeof SYSTEM_HELP !== 'undefined' && Array.isArray(SYSTEM_HELP)) ? SYSTEM_HELP : [];
+    const text = rows.map(helpItemText).join('\n\n---\n\n');
+    navigator.clipboard?.writeText(text);
+  }
+});
+
 </script>
 </body>
 </html>
