@@ -820,7 +820,8 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.56';
+const RECRAFT_DB_VERSION = 'v90.8.57';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.51';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
 const PAGE_TABLE_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','materials','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
@@ -7339,8 +7340,9 @@ async function assertServerVersion(){
   if(__serverVersionChecked) return true;
   const res = await jsonpApi(payload('ping'));
   const actual = String(res && res.version || '').trim();
-  if(!actual || compareVersions(actual, RECRAFT_DB_VERSION) < 0){
-    throw new Error(`Apps Script側のCode.gsが古い可能性があります。必要=${RECRAFT_DB_VERSION} 実際=${actual || '不明'}
+  const required = typeof RECRAFT_DB_REQUIRED_SERVER_VERSION !== 'undefined' ? RECRAFT_DB_REQUIRED_SERVER_VERSION : RECRAFT_DB_VERSION;
+  if(!actual || compareVersions(actual, required) < 0){
+    throw new Error(`Apps Script側のCode.gsが古い可能性があります。必要サーバー版=${required} 実際=${actual || '不明'}
 Code.gsを差し替えて保存し、既存デプロイを新バージョンで更新してから、管理ツールを開き直してください。`);
   }
   __serverVersionChecked = true;
