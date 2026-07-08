@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.18</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.71</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -820,7 +820,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.69';
+const RECRAFT_DB_VERSION = 'v90.8.71';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.51';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
@@ -1533,7 +1533,7 @@ const DEFAULTS = {
       "enabled": "TRUE",
       "notes": "",
       "description": "短い刃で素早く切り込む軽量武器。近い間合いで細かな動きに合わせやすい。",
-      "modifiers": "hit\t+1\t命中補正\nskill:evade\t+1\t回避補正",
+      "modifiers": "hit\t+1\nskill:evade\t+1",
       "reloadTurns": ""
     },
     {
@@ -1567,7 +1567,7 @@ const DEFAULTS = {
       "enabled": "TRUE",
       "notes": "",
       "description": "刃の重みを叩きつける片手斧。小回りよりも一撃の圧を重視する。",
-      "modifiers": "hit\t-1\t命中補正",
+      "modifiers": "hit\t-1",
       "reloadTurns": ""
     },
     {
@@ -1577,14 +1577,14 @@ const DEFAULTS = {
       "equipSlot": "右手/左手",
       "skill": "近接",
       "element": "物",
-      "power": "1D6+2",
+      "power": "1D6+1",
       "offhandBonus": "2",
       "effect": "",
       "sortOrder": 13,
       "enabled": "TRUE",
       "notes": "",
       "description": "硬い装甲や障害物を打ち砕く片手槌。重い打撃で敵の姿勢を崩す。",
-      "modifiers": "skill:evade\t-1\t回避補正",
+      "modifiers": "skill:evade\t-1",
       "reloadTurns": ""
     },
     {
@@ -1601,7 +1601,7 @@ const DEFAULTS = {
       "enabled": "TRUE",
       "notes": "",
       "description": "片手で扱える短めの槍。間合いを取りながら敵を突き止める。",
-      "modifiers": "hit\t+1\t命中補正\nskill:evade\t+1\t回避補正",
+      "modifiers": "hit\t+1",
       "reloadTurns": ""
     },
     {
@@ -1618,7 +1618,7 @@ const DEFAULTS = {
       "enabled": "TRUE",
       "notes": "",
       "description": "魔力を通しやすい杖。身体の支えにもなり、術者の集中を助ける。",
-      "modifiers": "skill:evade\t+1\t回避補正",
+      "modifiers": "skill:evade\t+1",
       "reloadTurns": ""
     },
     {
@@ -1631,7 +1631,7 @@ const DEFAULTS = {
       "enabled": "TRUE",
       "notes": "",
       "description": "腕に構えて攻撃を受け止める防具。仲間を守る時にも頼りになる。",
-      "modifiers": "combat:defense\t+1\t防御\nskill:guard\t+2\t防御行動",
+      "modifiers": "combat:defense\t+1\nskill:guard\t+2",
       "reloadTurns": ""
     },
     {
@@ -1644,7 +1644,7 @@ const DEFAULTS = {
       "enabled": "TRUE",
       "notes": "",
       "description": "大きな面で攻撃を遮る重盾。取り回しは重いが守りは厚い。",
-      "modifiers": "combat:defense\t+2\t防御\nskill:guard\t+3\t防御行動\nskill:evade\t-1\t回避補正",
+      "modifiers": "combat:defense\t+2\nskill:guard\t+3\nskill:evade\t-1",
       "reloadTurns": ""
     },
     {
@@ -1686,7 +1686,7 @@ const DEFAULTS = {
       "enabled": "TRUE",
       "notes": "",
       "description": "両手で振るう大剣。重い刃で正面から敵を押し切る。",
-      "modifiers": "skill:evade\t-1\t回避補正",
+      "modifiers": "skill:evade\t-1",
       "reloadTurns": ""
     },
     {
@@ -1702,7 +1702,7 @@ const DEFAULTS = {
       "enabled": "TRUE",
       "notes": "",
       "description": "巨大な頭部を叩きつける大槌。硬い外殻や障害物の破壊に向く。",
-      "modifiers": "hit\t-1\t命中補正\nskill:evade\t-1\t回避補正",
+      "modifiers": "hit\t-1\nskill:evade\t-1",
       "reloadTurns": ""
     },
     {
@@ -1718,7 +1718,7 @@ const DEFAULTS = {
       "enabled": "TRUE",
       "notes": "",
       "description": "長い柄で敵を遠ざける槍。前線を押し返し、足止めに使いやすい。",
-      "modifiers": "hit\t+1\t命中補正",
+      "modifiers": "hit\t+1",
       "reloadTurns": ""
     },
     {
@@ -1750,8 +1750,8 @@ const DEFAULTS = {
       "enabled": "TRUE",
       "notes": "",
       "description": "機構で矢を放つ弩。狙いを定めやすく、重い一撃を届ける。",
-      "modifiers": "hit\t-1\t命中補正\nskill:evade\t-1\t回避補正",
-      "reloadTurns": ""
+      "modifiers": "",
+      "reloadTurns": "1"
     },
     {
       "id": "eq_heavy_crossbow",
@@ -1766,8 +1766,8 @@ const DEFAULTS = {
       "enabled": "TRUE",
       "notes": "",
       "description": "大型の弩。構えに力はいるが、遠くの強敵にも深く食い込む。",
-      "modifiers": "hit\t-2\t命中補正\nskill:evade\t-2\t回避補正",
-      "reloadTurns": ""
+      "modifiers": "hit\t-1",
+      "reloadTurns": "1"
     },
     {
       "id": "eq_none_armor",
@@ -1792,7 +1792,7 @@ const DEFAULTS = {
       "enabled": "TRUE",
       "notes": "",
       "description": "日常の衣服。軽く動きやすく、探索中も身体の動きを邪魔しにくい。",
-      "modifiers": "skill:guard\t1D3\t防御行動",
+      "modifiers": "skill:guard\t1D3",
       "reloadTurns": ""
     },
     {
@@ -1805,7 +1805,7 @@ const DEFAULTS = {
       "enabled": "TRUE",
       "notes": "",
       "description": "動きやすさを重視した軽い防具。身軽に立ち回りたい者に向く。",
-      "modifiers": "combat:defense\t1\t防御\nskill:guard\t1D6\t防御行動\nskill:evade\t+1\t回避補正",
+      "modifiers": "combat:defense\t1\nskill:guard\t1D6\nskill:evade\t+1",
       "reloadTurns": ""
     },
     {
@@ -1818,7 +1818,7 @@ const DEFAULTS = {
       "enabled": "TRUE",
       "notes": "",
       "description": "守りと動きやすさを両立した標準的な防具。多くの冒険者が扱いやすい。",
-      "modifiers": "combat:defense\t2\t防御\nskill:guard\t1D6+1\t防御行動",
+      "modifiers": "combat:defense\t2\nskill:guard\t1D6+1",
       "reloadTurns": ""
     },
     {
@@ -1831,7 +1831,7 @@ const DEFAULTS = {
       "enabled": "TRUE",
       "notes": "",
       "description": "厚い装甲で身を固める重い防具。攻撃を受け止める力に優れる。",
-      "modifiers": "combat:defense\t3\t防御\nskill:guard\t1D6+2\t防御行動\nskill:evade\t-1\t回避補正",
+      "modifiers": "combat:defense\t3\nskill:guard\t1D6+2\nskill:evade\t-1",
       "reloadTurns": ""
     },
     {
@@ -1884,7 +1884,7 @@ const DEFAULTS = {
       "ownerKey": "",
       "createdBy": "",
       "description": "両腕に装着する格闘武器。拳の打撃を強めながら素早く身を捌ける。",
-      "modifiers": "hit\t+1\t命中補正\nskill:evade\t+1\t回避補正",
+      "modifiers": "hit\t+1\nskill:evade\t+1",
       "reloadTurns": ""
     },
     {
@@ -2575,7 +2575,7 @@ const DEFAULTS = {
       "description": "守りの祈りを込めた小さなお守り。身につけた者を危険から遠ざける。",
       "publicId": "RCA-SF2E-PCFK",
       "upgradeLimit": "1",
-      "modifiers": "combat:defense\t1\t防御",
+      "modifiers": "combat:defense\t1",
       "reloadTurns": ""
     },
     {
@@ -2879,7 +2879,7 @@ const DEFAULTS = {
       "notes": "",
       "publicId": "RCA-NA95-LL9W",
       "upgradeLimit": "0",
-      "modifiers": "skill:guard\t1D3\t防御行動",
+      "modifiers": "skill:guard\t1D3",
       "reloadTurns": ""
     },
     {
@@ -2901,7 +2901,7 @@ const DEFAULTS = {
       "notes": "",
       "publicId": "RCA-456K-857L",
       "upgradeLimit": "2",
-      "modifiers": "combat:defense\t3\t防御\nskill:guard\t1D6+2\t防御行動\nskill:evade\t-1\t回避補正",
+      "modifiers": "combat:defense\t3\nskill:guard\t1D6+2\nskill:evade\t-1",
       "reloadTurns": ""
     },
     {
@@ -2923,7 +2923,7 @@ const DEFAULTS = {
       "notes": "",
       "publicId": "RCA-7RCD-RZFQ",
       "upgradeLimit": "2",
-      "modifiers": "combat:defense\t1\t防御\nskill:guard\t1D6\t防御行動\nskill:evade\t1\t回避補正",
+      "modifiers": "combat:defense\t1\nskill:guard\t1D6\nskill:evade\t1",
       "reloadTurns": ""
     },
     {
@@ -2945,7 +2945,7 @@ const DEFAULTS = {
       "notes": "",
       "publicId": "RCA-JHBG-H8KA",
       "upgradeLimit": "2",
-      "modifiers": "combat:defense\t1\t防御\nskill:guard\t1D6\t防御行動",
+      "modifiers": "combat:defense\t1\nskill:guard\t1D6",
       "reloadTurns": ""
     },
     {
@@ -2967,7 +2967,7 @@ const DEFAULTS = {
       "notes": "",
       "publicId": "RCA-Z2R6-3CSM",
       "upgradeLimit": "2",
-      "modifiers": "combat:defense\t2\t防御\nskill:guard\t1D6+1\t防御行動",
+      "modifiers": "combat:defense\t2\nskill:guard\t1D6+1",
       "reloadTurns": ""
     },
     {
@@ -2989,7 +2989,7 @@ const DEFAULTS = {
       "notes": "",
       "publicId": "RCA-GZTB-SMM2",
       "upgradeLimit": "2",
-      "modifiers": "combat:defense\t1\t防御\nskill:guard\t1D6\t防御行動",
+      "modifiers": "combat:defense\t1\nskill:guard\t1D6",
       "reloadTurns": ""
     },
     {
@@ -3561,7 +3561,7 @@ const DEFAULTS = {
       "notes": "",
       "publicId": "RCA-DAYG-4XZF",
       "upgradeLimit": "2",
-      "modifiers": "combat:defense\t2\t防御\nskill:guard\t+3\t防御行動\nskill:evade\t-1\t回避補正",
+      "modifiers": "combat:defense\t2\nskill:guard\t+3\nskill:evade\t-1",
       "reloadTurns": ""
     },
     {
@@ -3583,7 +3583,7 @@ const DEFAULTS = {
       "notes": "",
       "publicId": "RCA-5RLQ-NKQ9",
       "upgradeLimit": "2",
-      "modifiers": "combat:defense\t1\t防御\nskill:guard\t+2\t防御行動",
+      "modifiers": "combat:defense\t1\nskill:guard\t+2",
       "reloadTurns": ""
     },
     {
@@ -3605,7 +3605,7 @@ const DEFAULTS = {
       "notes": "",
       "publicId": "RCA-SZE5-D5ST",
       "upgradeLimit": "2",
-      "modifiers": "combat:defense\t1\t防御\nskill:guard\t+2\t防御行動",
+      "modifiers": "combat:defense\t1\nskill:guard\t+2",
       "reloadTurns": ""
     },
     {
@@ -3682,7 +3682,7 @@ const DEFAULTS = {
       "description": "片手で扱える戦斧。刃の重みを乗せた一撃で、硬い装甲にも食い込みやすい。",
       "publicId": "RCA-NSXE-377E",
       "upgradeLimit": "2",
-      "modifiers": "hit\t-1\t命中補正",
+      "modifiers": "hit\t-1",
       "reloadTurns": ""
     },
     {
@@ -3730,7 +3730,7 @@ const DEFAULTS = {
       "description": "機構で矢を放つ弩。腕力に頼りすぎず、狙った場所へ重い一撃を届ける。",
       "publicId": "RCA-JUZ9-CWQ5",
       "upgradeLimit": "2",
-      "modifiers": "hit\t-1\t命中補正",
+      "modifiers": "",
       "reloadTurns": "1"
     },
     {
@@ -3755,7 +3755,7 @@ const DEFAULTS = {
       "description": "小型で取り回しやすい短剣。近い間合いで素早く差し込み、細かな作業にも使える。",
       "publicId": "RCA-PLHW-SUTX",
       "upgradeLimit": "2",
-      "modifiers": "hit\t1\t命中補正",
+      "modifiers": "hit\t+1\nskill:evade\t+1",
       "reloadTurns": ""
     },
     {
@@ -3788,7 +3788,7 @@ const DEFAULTS = {
       "description": "両腕に装着する格闘武器。拳の打撃を強めながら、身軽な立ち回りを保てる。",
       "publicId": "RCA-G48T-EBKD",
       "upgradeLimit": "2",
-      "modifiers": "hit\t+1\t命中補正\nskill:evade\t+1\t回避補正",
+      "modifiers": "hit\t+1",
       "reloadTurns": ""
     },
     {
@@ -3812,7 +3812,7 @@ const DEFAULTS = {
       "description": "両手で振るう大型槌。大きな打撃で硬い外殻や障害物を叩き砕く。",
       "publicId": "RCA-EVRW-VZEN",
       "upgradeLimit": "2",
-      "modifiers": "hit\t-1\t命中補正",
+      "modifiers": "hit\t-1\nskill:evade\t-1",
       "reloadTurns": ""
     },
     {
@@ -3836,7 +3836,7 @@ const DEFAULTS = {
       "description": "両手で扱う大剣。重い刃を振り下ろし、正面から敵を押し切る。",
       "publicId": "RCA-FRNL-FUV3",
       "upgradeLimit": "2",
-      "modifiers": "",
+      "modifiers": "skill:evade\t-1",
       "reloadTurns": ""
     },
     {
@@ -3861,7 +3861,7 @@ const DEFAULTS = {
       "description": "片手で扱える戦槌。刃では通りにくい相手にも、鈍い衝撃を深く響かせる。",
       "publicId": "RCA-PHSD-LE7K",
       "upgradeLimit": "2",
-      "modifiers": "",
+      "modifiers": "skill:evade\t-1",
       "reloadTurns": ""
     },
     {
@@ -3885,7 +3885,7 @@ const DEFAULTS = {
       "description": "大型の弩。構えには力がいるが、遠くの強敵にも深い傷を与えられる。",
       "publicId": "RCA-YS8E-R7ZH",
       "upgradeLimit": "2",
-      "modifiers": "hit\t-2\t命中補正",
+      "modifiers": "hit\t-1",
       "reloadTurns": "1"
     },
     {
@@ -3909,7 +3909,7 @@ const DEFAULTS = {
       "description": "両手で扱う長槍。長い柄で敵を近づけず、前線の足並みを乱す。",
       "publicId": "RCA-XVFM-D7G3",
       "upgradeLimit": "2",
-      "modifiers": "",
+      "modifiers": "hit\t+1",
       "reloadTurns": ""
     },
     {
@@ -3942,7 +3942,7 @@ const DEFAULTS = {
       "description": "大きく弧を描いて薙ぎ払う大鎌。広い刃筋で複数の敵を威圧する。",
       "publicId": "RCA-MT5S-KQX5",
       "upgradeLimit": "2",
-      "modifiers": "",
+      "modifiers": "hit\t-1",
       "reloadTurns": ""
     },
     {
@@ -3957,7 +3957,7 @@ const DEFAULTS = {
       "rank": "初級",
       "equipSlot": "右手/左手",
       "skill": "近接",
-      "power": "1D6+1",
+      "power": "1D6",
       "offhandBonus": "2",
       "effect": "",
       "source": "初期支給 / 鍛冶屋",
@@ -3967,7 +3967,7 @@ const DEFAULTS = {
       "description": "片手で扱える短槍。間合いを保ちながら突き込み、守る相手の背後にも届かせやすい。",
       "publicId": "RCA-G4SX-Q3PL",
       "upgradeLimit": "2",
-      "modifiers": "",
+      "modifiers": "hit\t+1",
       "reloadTurns": ""
     },
     {
@@ -3992,7 +3992,7 @@ const DEFAULTS = {
       "description": "木製の杖。魔力を通しやすく、術者の集中を助けるほか、近接武器としても扱える。",
       "publicId": "RCA-A66Q-E9H7",
       "upgradeLimit": "2",
-      "modifiers": "",
+      "modifiers": "skill:evade\t+1",
       "reloadTurns": ""
     },
     {
@@ -5095,7 +5095,7 @@ function normalizeStateData(data){
   });
 
   (out.equipment_categories || []).forEach((row,idx,arr)=>{ if(row){ arr[idx]=migrateLegacyModifierFields(row); ensurePhysicalElementForWeapon(arr[idx]); } });
-  (out.items || []).forEach((row,idx,arr)=>{ if(row){ arr[idx]=migrateLegacyModifierFields(row); ensurePhysicalElementForWeapon(arr[idx]); normalizeRowCheckType('items', arr[idx]); } });
+  (out.items || []).forEach((row,idx,arr)=>{ if(row){ arr[idx]=ensureItemModifierFromCategory(row, out); ensurePhysicalElementForWeapon(arr[idx]); normalizeRowCheckType('items', arr[idx]); } });
   (out.recipes || []).forEach(row=>{
     if(!row) return;
     const recipeText = [row.category, row.tags, row.requiredTools, row.unlockFacility, row.description, row.effect].map(v=>String(v||'')).join(' ');
@@ -5123,7 +5123,8 @@ function normalizeStateData(data){
 }
 function prepareRowsBeforeSave(key){
   state[key].forEach(r=>{
-    if(key === 'items' || key === 'equipment_categories') Object.assign(r, migrateLegacyModifierFields(r));
+    if(key === 'equipment_categories') Object.assign(r, migrateLegacyModifierFields(r));
+    if(key === 'items') Object.assign(r, ensureItemModifierFromCategory(r, state));
     if((key === 'items' || key === 'spells' || key === 'equipment_categories')){
       r.power = normalizePowerForDb(key, r.power);
     }
@@ -7007,8 +7008,7 @@ function adminModifierTargetOptions(selected=''){
     ]],
     ['技能', [
       ['skill:force','力業'], ['skill:melee','近接'], ['skill:guard','防御'], ['skill:shoot','射撃'], ['skill:throw','投擲'], ['skill:evade','回避'], ['skill:resist','抵抗'],
-      ['skill:magic','魔法'], ['skill:prayer','祈祷'], ['skill:alchemy','調合'], ['skill:blacksmith','鍛冶'],
-      ['skill:monsterKnowledge','知識：魔物'], ['skill:materialKnowledge','知識：素材'], ['skill:elementKnowledge','知識：属性'],
+      ['skill:magic','魔法'], ['skill:prayer','祈祷'], ['skill:alchemy','調合'], ['skill:appraise','鑑定'], ['skill:knowledge','知識'], ['skill:design','設計'], ['skill:blacksmith','鍛冶'],
       ['skill:negotiate','交渉'], ['skill:empathy','共感'], ['skill:social','社交'], ['skill:encourage','鼓舞']
     ]],
     ['戦闘', [
@@ -7028,14 +7028,13 @@ function adminModifierTargetOptions(selected=''){
 }
 
 function adminModifierTargetDisplayName(target=''){
-  const key=String(target||'').trim();
+  const key=normalizeModifierTargetAlias(target);
   const names={
     'hit':'命中','combat:defense':'防御','combat:evasion':'回避値','combat:initiative':'先制値',
     'resource:maxHp':'最大HP','resource:maxMp':'最大MP',
     'ability:body':'体力','ability:dexterity':'器用','ability:sense':'感覚','ability:intellect':'知性','ability:will':'意志','ability:charm':'魅力',
     'skill:force':'力業','skill:melee':'近接','skill:guard':'防御','skill:shoot':'射撃','skill:throw':'投擲','skill:evade':'回避','skill:resist':'抵抗',
-    'skill:magic':'魔法','skill:prayer':'祈祷','skill:alchemy':'調合','skill:blacksmith':'鍛冶',
-    'skill:monsterKnowledge':'知識：魔物','skill:materialKnowledge':'知識：素材','skill:elementKnowledge':'知識：属性',
+    'skill:magic':'魔法','skill:prayer':'祈祷','skill:alchemy':'調合','skill:appraise':'鑑定','skill:knowledge':'知識','skill:design':'設計','skill:blacksmith':'鍛冶',
     'skill:negotiate':'交渉','skill:empathy':'共感','skill:social':'社交','skill:encourage':'鼓舞'
   };
   return names[key] || key;
@@ -7068,9 +7067,13 @@ function normalizeModifierTargetAlias(target=''){
     '常時防御':'combat:defense','常時防御値':'combat:defense','防御':'combat:defense','防御値':'combat:defense','alwaysDefense':'combat:defense','defense':'combat:defense',
     '防御行動':'skill:guard','防御行動値':'skill:guard','guardValue':'skill:guard','guard':'skill:guard',
     '回避':'skill:evade','回避補正':'skill:evade','evasionMod':'skill:evade','evade':'skill:evade',
+    '知識':'skill:knowledge',
+    'monsterKnowledge':'skill:knowledge','materialKnowledge':'skill:knowledge','elementKnowledge':'skill:knowledge',
+    'skill:monsterKnowledge':'skill:knowledge','skill:materialKnowledge':'skill:knowledge','skill:elementKnowledge':'skill:knowledge',
     '体力':'ability:body','器用':'ability:dexterity','感覚':'ability:sense','知性':'ability:intellect','意志':'ability:will','魅力':'ability:charm',
     '最大HP':'resource:maxHp','HP':'resource:maxHp','最大MP':'resource:maxMp','MP':'resource:maxMp','先制':'combat:initiative','先制値':'combat:initiative'
   };
+  if(/^知識[:：]/.test(raw)) return 'skill:knowledge';
   return aliases[raw] || raw;
 }
 function isZeroModifierText(value){ return /^[+-]?0$/.test(String(value||'').trim()); }
@@ -7096,10 +7099,32 @@ function mergeModifierEditorRows(existing=[], legacy=[]){
 function migrateLegacyModifierFields(row={}){
   const out={...(row||{})};
   out.modifiers = serializeModifierEditorRows(mergeModifierEditorRows(parseModifierEditorRows(out.modifiers || out.modifierRows || out.bonuses || ''), legacyModifierRowsFromRow(out)));
-  delete out.hitMod; delete out.alwaysDefense; delete out.guardValue; delete out.evasionMod;
-  delete out.hit; delete out.defense; delete out.guard; delete out.evade;
   return out;
 }
+
+function equipmentCategoryModifierTextForItemRow(row={}, allData=state){
+  const category = String(row.itemCategory || row.category || row.type || '').trim();
+  if(!category) return '';
+  const cats = (allData && allData.equipment_categories) || [];
+  const found = cats.find(c => String(c.name || '').trim() === category || String(c.itemCategory || '').trim() === category);
+  if(!found) return '';
+  const migrated = migrateLegacyModifierFields(found);
+  return migrated.modifiers || '';
+}
+function ensureItemModifierFromCategory(row={}, allData=state){
+  const out=migrateLegacyModifierFields(row || {});
+  if(!String(out.modifiers || '').trim()){
+    const fallback = equipmentCategoryModifierTextForItemRow(out, allData);
+    if(String(fallback || '').trim()) out.modifiers = fallback;
+  }
+  return out;
+}
+function ensureItemCategoryModifiersInData(dataObj){
+  if(!dataObj || !Array.isArray(dataObj.items)) return dataObj;
+  dataObj.items = dataObj.items.map(row => ensureItemModifierFromCategory(row, dataObj));
+  return dataObj;
+}
+
 
 function modifierEditorRowHtml(row={}, idx=0){
   const r=normalizeModifierEditorRow(row)||{target:'',value:''};
