@@ -820,7 +820,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.67';
+const RECRAFT_DB_VERSION = 'v90.8.69';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.51';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
@@ -5794,11 +5794,10 @@ function buildPlayerItemInfoText(row={}, key='', count='1'){
     if(fieldText(row,'equipSlot')) useInfo.push(`装備枠 ${fieldText(row,'equipSlot')}`);
   }
   if(fieldText(row,'power')) useInfo.push(`威力 ${fieldText(row,'power')}`);
-  const modifierSummary = serializeModifierEditorRows(parseModifierEditorRows(fieldText(row,'modifiers'))).replace(/\n/g, ' / ');
+  const modifierSummary = adminModifierDisplayText(fieldText(row,'modifiers'));
   if(modifierSummary) useInfo.push(`補正 ${modifierSummary}`);
   if(fieldText(row,'offhandBonus') || fieldText(row,'offhand')) useInfo.push(`副手追撃 ${fieldText(row,'offhandBonus') || fieldText(row,'offhand')}`);
   if(fieldText(row,'reloadTurns')) useInfo.push(`装填 ${fieldText(row,'reloadTurns')}ターン`);
-  if(fieldText(row,'modifiers')) useInfo.push('補正 ' + parseModifierEditorRows(fieldText(row,'modifiers')).map(r=>`${r.target}${r.value}${r.note ? '('+r.note+')' : ''}`).join(' / '));
   if(fieldText(row,'upgradeLimit')) useInfo.push(`強化可能回数 ${fieldText(row,'upgradeLimit')}`);
   if(fieldText(row,'mpCost') || fieldText(row,'cost')) useInfo.push(`コスト ${fieldText(row,'mpCost') || fieldText(row,'cost')}`);
   if(fieldText(row,'target')) useInfo.push(`対象 ${fieldText(row,'target')}`);
@@ -7027,6 +7026,24 @@ function adminModifierTargetOptions(selected=''){
   }
   return html;
 }
+
+function adminModifierTargetDisplayName(target=''){
+  const key=String(target||'').trim();
+  const names={
+    'hit':'命中','combat:defense':'防御','combat:evasion':'回避値','combat:initiative':'先制値',
+    'resource:maxHp':'最大HP','resource:maxMp':'最大MP',
+    'ability:body':'体力','ability:dexterity':'器用','ability:sense':'感覚','ability:intellect':'知性','ability:will':'意志','ability:charm':'魅力',
+    'skill:force':'力業','skill:melee':'近接','skill:guard':'防御','skill:shoot':'射撃','skill:throw':'投擲','skill:evade':'回避','skill:resist':'抵抗',
+    'skill:magic':'魔法','skill:prayer':'祈祷','skill:alchemy':'調合','skill:blacksmith':'鍛冶',
+    'skill:monsterKnowledge':'知識：魔物','skill:materialKnowledge':'知識：素材','skill:elementKnowledge':'知識：属性',
+    'skill:negotiate':'交渉','skill:empathy':'共感','skill:social':'社交','skill:encourage':'鼓舞'
+  };
+  return names[key] || key;
+}
+function adminModifierDisplayText(value=''){
+  return parseModifierEditorRows(value).map(row=>`${adminModifierTargetDisplayName(row.target)} ${String(row.value||'')}`).filter(Boolean).join(' / ');
+}
+
 function normalizeModifierEditorRow(row={}){
   const target=normalizeModifierTargetAlias(row.target||row.key||row.name||'');
   const value=String(row.value??row.mod??row.amount??'').trim();
@@ -7087,16 +7104,16 @@ function migrateLegacyModifierFields(row={}){
 function modifierEditorRowHtml(row={}, idx=0){
   const r=normalizeModifierEditorRow(row)||{target:'',value:''};
   return `<div class="monster-action-row" data-modifier-row>
-    <div class="field"><label>補正項目</label><select data-modifier-field="target">${adminModifierTargetOptions(r.target)}</select></div>
-    <div class="field"><label>補正値</label><input data-modifier-field="value" value="${escapeHtml(r.value)}" placeholder="例：+1 / -1"></div>
-    <div class="field"><label>&nbsp;</label><button type="button" class="ghost" data-modifier-remove>削除</button></div>
+    <div class="field"><select aria-label="補正" data-modifier-field="target">${adminModifierTargetOptions(r.target)}</select></div>
+    <div class="field"><input aria-label="補正値" data-modifier-field="value" value="${escapeHtml(r.value)}" placeholder="例：+1 / -1"></div>
+    <div class="field"><button type="button" class="ghost" data-modifier-remove>削除</button></div>
   </div>`;
 }
 function modifierRowsEditor(value){
   const rows=parseModifierEditorRows(value);
   return `<div class="monster-actions-editor" data-modifier-editor>
     <textarea data-form-field="modifiers" class="hidden-monster-raw">${escapeHtml(serializeModifierEditorRows(rows))}</textarea>
-    <div class="form-help">能力・技能・戦闘ステータスへの補正値を1行ずつ登録します。</div>
+    <div class="form-help">補正値を1行ずつ登録します。</div>
     <div data-modifier-list>${rows.length ? rows.map(modifierEditorRowHtml).join('') : '<div class="muted small" data-modifier-empty>補正値はまだありません。</div>'}</div>
     <button type="button" class="secondary" data-modifier-add>補正値を追加</button>
   </div>`;
@@ -7635,7 +7652,7 @@ async function diagnoseSheets(){
     if(!res.ok) throw new Error(res.error || 'DB列診断に失敗しました');
     const lines = Object.entries(res.results || {}).map(([key,r])=>{
       if(!r.exists) return `${labelKey(key)}: シートなし`;
-      const status = r.ok ? (r.orderOk ? 'OK' : '列順補正項目') : '不足あり';
+      const status = r.ok ? (r.orderOk ? 'OK' : '列順') : '不足あり';
       const missing = (r.missing||[]).length ? ` / 不足:${r.missing.join(',')}` : '';
       const extra = (r.extra||[]).length ? ` / 旧列・余分:${r.extra.join(',')}` : '';
       return `${labelKey(key)}: ${status} / ${r.rows||0}行${missing}${extra}`;
