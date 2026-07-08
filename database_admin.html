@@ -820,7 +820,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.58';
+const RECRAFT_DB_VERSION = 'v90.8.59';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.51';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
@@ -5924,6 +5924,13 @@ function numberOrString(value, fallback=0){
   const n = Number(raw);
   return Number.isFinite(n) ? n : raw;
 }
+function monsterAffinityParamEntries(row={}){
+  const entries = [
+    ['物耐性', row.physicalAffinity], ['火耐性', row.fireAffinity], ['水耐性', row.waterAffinity], ['風耐性', row.windAffinity],
+    ['雷耐性', row.thunderAffinity], ['光耐性', row.lightAffinity], ['闇耐性', row.darkAffinity], ['無耐性', row.neutralAffinity]
+  ];
+  return entries.map(([label,value])=>({label, value: compactMonsterText(value || '-')})).filter(p=>p.value !== '');
+}
 function monsterStatusEntry(label, value, maxValue){
   const v = numberOrString(value, 0);
   const out = {label, value:v};
@@ -5989,11 +5996,7 @@ function cocofoliaMonsterToken(row={}){
   statuses.push(monsterStatusEntry('回避', row.evasionValue));
   statuses.push(monsterStatusEntry('抵抗', row.resistValue));
   statuses.push(monsterStatusEntry('防御', row.defenseValue));
-  const params = [
-    {label:'種別', value:compactMonsterText(row.monsterType)},
-    {label:'ランク', value:compactMonsterText(row.rank)},
-    {label:'先制', value:compactMonsterText(row.initiative)}
-  ].filter(p=>p.value !== '');
+  const params = monsterAffinityParamEntries(row);
   return {
     kind:'character',
     data:{
@@ -6070,6 +6073,8 @@ function monsterCardHtml(row, idx){
       <div class="monster-card-head">
         <div class="monster-title"><b>${escapeHtml(title)}</b>${id ? `<span class="monster-id">${escapeHtml(id)}</span>` : ''}</div>
         <div class="monster-card-actions">
+          <button type="button" class="secondary" data-row-save="${editKey}:${idx}">個別DB登録</button>
+          <button type="button" class="danger" data-row-replace="${editKey}:${idx}">個別DB置換</button>
           <button type="button" class="secondary" data-monster-token="${idx}">駒コピー</button>
           <button type="button" class="ghost" data-monster-palette="${idx}">パレットコピー</button>
           <button type="button" class="ghost" data-edit-row="${editKey}:${idx}">編集</button>
