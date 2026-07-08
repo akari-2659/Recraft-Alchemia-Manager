@@ -820,7 +820,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.59';
+const RECRAFT_DB_VERSION = 'v90.8.60';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.51';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
@@ -5209,7 +5209,7 @@ const SYSTEM_HELP = [
       "装備強化値は自由入力の項目『equipmentUpgradeValue / 装備強化値』で管理する。",
       "装備強化内容の選択肢には、強化分類と対象装備を含める。",
       "武器用の例：威力(武器)、命中(武器)、防御貫通(武器)、火属性付与(武器)、火属性強化(武器)、特殊効果付与(武器)。",
-      "防具用の例：常時防御値(防具)、防御行動値(防具)、回避補正(防具)、火耐性付与(防具)、水耐性付与(防具)、特殊効果付与(防具)。",
+      "防具用の例：常時防御値(防具)、防御行動値(防具)、回避補正(防具)、火付与(防具)、水付与(防具)、特殊効果付与(防具)。",
       "防具の防御系強化は、キャラシのステータス名に準拠して常時防御値と防御行動値を分ける。",
       "常時防御値(防具)は、通常時から適用されるダメージ軽減値を上げる。",
       "防御行動値(防具)は、行動として防御した時の追加軽減値を上げる。",
@@ -5223,7 +5223,7 @@ const SYSTEM_HELP = [
       "例：装備強化内容『火属性付与(武器)』、装備強化値『火』。",
       "例：装備強化内容『防御行動値(防具)』、装備強化値『+1』。",
       "例：装備強化内容『回避補正(防具)』、装備強化値『+1』。",
-      "例：装備強化内容『水耐性付与(防具)』、装備強化値『水』。",
+      "例：装備強化内容『水付与(防具)』、装備強化値『水』。",
       "武器は素材による派生や強化に反映する。",
       "防具は派生式ではなく、購入または作成した防具を後から強化する方式。",
       "属性として扱う値は、物、火、水、風、雷、光、闇、無。",
@@ -5926,8 +5926,8 @@ function numberOrString(value, fallback=0){
 }
 function monsterAffinityParamEntries(row={}){
   const entries = [
-    ['物耐性', row.physicalAffinity], ['火耐性', row.fireAffinity], ['水耐性', row.waterAffinity], ['風耐性', row.windAffinity],
-    ['雷耐性', row.thunderAffinity], ['光耐性', row.lightAffinity], ['闇耐性', row.darkAffinity], ['無耐性', row.neutralAffinity]
+    ['物', row.physicalAffinity], ['火', row.fireAffinity], ['水', row.waterAffinity], ['風', row.windAffinity],
+    ['雷', row.thunderAffinity], ['光', row.lightAffinity], ['闇', row.darkAffinity], ['無', row.neutralAffinity]
   ];
   return entries.map(([label,value])=>({label, value: compactMonsterText(value || '-')})).filter(p=>p.value !== '');
 }
