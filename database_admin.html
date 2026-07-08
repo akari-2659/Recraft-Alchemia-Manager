@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.71</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.72</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -395,6 +395,7 @@
 
 .monster-line-editor{display:grid;gap:8px}.monster-line-head,.monster-line-row{display:grid;gap:6px;align-items:center}.monster-line-head{font-size:11px;color:var(--muted);font-weight:900}.monster-line-head.action-head,.monster-line-row[data-monster-action-row]{grid-template-columns:1.1fr 1.1fr 1fr .7fr .8fr 1.4fr auto}.monster-line-head.drop-head,.monster-line-row[data-monster-drop-row]{grid-template-columns:1fr 1fr 1.45fr .75fr .65fr auto}.monster-line-row input,.monster-line-row select{min-width:0}.hidden-monster-raw{display:none!important}
 .quest-event-editor{display:grid;gap:10px}.hidden-quest-fixed-raw{display:none!important}.quest-event-list{display:grid;gap:8px}.quest-event-row{border:1px solid var(--line);border-radius:14px;background:#fffaf3;overflow:hidden}.quest-event-row>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;font-weight:900;color:#5b3821}.quest-event-row>summary::-webkit-details-marker{display:none}.quest-event-row>summary:after{content:'開閉';font-size:11px;color:var(--muted);font-weight:800}.quest-event-row[open]>summary{border-bottom:1px solid var(--line)}.quest-event-body{display:grid;gap:8px;padding:12px}.quest-event-grid{display:grid;grid-template-columns:.75fr 1fr;gap:8px}.quest-event-grid textarea{min-height:76px}.quest-event-grid .wide{grid-column:1/-1}.quest-event-mini{display:flex;flex-wrap:wrap;gap:6px;align-items:center;color:var(--muted);font-size:12px}.quest-event-mini b{color:#6a3f25}.quest-event-actions{display:flex;justify-content:flex-end}.quest-progress-select{max-width:220px}@media(max-width:780px){.quest-event-grid{grid-template-columns:1fr}}
+  .internal-raw-field, textarea.internal-raw-field { display: none !important; visibility: hidden !important; height: 0 !important; min-height: 0 !important; padding: 0 !important; margin: 0 !important; border: 0 !important; overflow: hidden !important; }
 </style>
 </head>
 <body>
@@ -820,7 +821,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.71';
+const RECRAFT_DB_VERSION = 'v90.8.72';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.51';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
@@ -6339,10 +6340,14 @@ function renderEventAreaCardsTable(key){
   table.innerHTML=`<tbody><tr><td class="monster-list-cell"><div class="monster-card-list" aria-label="エリア別イベント一覧">${html}</div></td></tr></tbody>`;
 }
 
-function recordFieldHtml(row={}, field){
+function displayFieldValue(row={}, field=''){
+  if(field === 'modifiers') return adminModifierDisplayText(row.modifiers || '');
+  return String(row[field] ?? '').trim();
+}
+function recordFieldHtml(row={}, field=''){
+  const raw = displayFieldValue(row, field);
   const label = LABELS[field] || field;
-  const raw = row && row[field] !== undefined && row[field] !== null ? String(row[field]) : '';
-  const value = raw.trim() ? raw : '—';
+  const value = raw.trim() || '未設定';
   const emptyClass = raw.trim() ? '' : ' record-field-empty';
   return `<div class="record-field${emptyClass}"><span class="record-field-label">${escapeHtml(label)}</span><div class="record-field-value">${escapeHtml(value)}</div></div>`;
 }
@@ -6371,7 +6376,7 @@ function recordCardSummary(row={}, key=''){
     spells: ['rank','mpCost','target','checkType','element','power','role','scrollPrice','setItem']
   };
   const fields = summaryFieldsByKey[key] || [];
-  return fields.filter(f=>String(row[f] ?? '').trim()).slice(0, 12).map(f=>monsterStat(LABELS[f] || f, row[f])).join('');
+  return fields.filter(f=>displayFieldValue(row, f)).slice(0, 12).map(f=>monsterStat(LABELS[f] || f, displayFieldValue(row, f))).join('');
 }
 function recordCardHtml(row={}, idx=0, key=''){
   const editKey = baseKeyForTable(key);
@@ -6466,7 +6471,7 @@ function renderTable(key){
     html+=`<tr><td class="controls"><div class="row-actions"><button class="secondary" data-copy-card="${key}:${idx}">情報コピー</button><button class="secondary" data-row-save="${key}:${idx}">個別DB登録</button><button class="danger" data-row-replace="${key}:${idx}">個別DB置換</button><button class="ghost" data-edit-row="${editKey}:${idx}">編集</button><button class="ghost" data-dup="${editKey}:${idx}">複製</button><button class="danger" data-del="${editKey}:${idx}">削除</button></div></td>`;
     headers.forEach(h=>{
       const cls = FORM_LONG_FIELDS.has(h) ? 'readonly-cell long' : 'readonly-cell';
-      html+=`<td class="${cls}">${escapeHtml(row[h] ?? '')}</td>`;
+      html+=`<td class="${cls}">${escapeHtml(displayFieldValue(row, h))}</td>`;
     });
     html+='</tr>';
   });
@@ -6828,12 +6833,12 @@ function monsterDropRowHtml(row={}, idx=0){
 function monsterActionsEditor(value){
   const rows = parseMonsterActions(value);
   const body = rows.length ? rows.map(monsterActionRowHtml).join('') : monsterActionRowHtml({element:'物'});
-  return `<div class="monster-line-editor" data-monster-actions-editor><textarea data-form-field="actions" class="hidden-monster-raw">${escapeHtml(serializeMonsterActions(rows))}</textarea><div class="form-help">行動は1行動ずつ入力します。</div><div class="monster-line-head action-head"><span>行動名</span><span>判定</span><span>対象</span><span>属性</span><span>威力</span><span>効果</span><span></span></div><div data-monster-action-list>${body}</div><button type="button" class="secondary" data-monster-action-add>行動を追加</button></div>`;
+  return `<div class="monster-line-editor" data-monster-actions-editor><textarea data-form-field="actions" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(serializeMonsterActions(rows))}</textarea><div class="form-help">行動は1行動ずつ入力します。</div><div class="monster-line-head action-head"><span>行動名</span><span>判定</span><span>対象</span><span>属性</span><span>威力</span><span>効果</span><span></span></div><div data-monster-action-list>${body}</div><button type="button" class="secondary" data-monster-action-add>行動を追加</button></div>`;
 }
 function monsterDropsEditor(value){
   const rows = parseMonsterDrops(value);
   const body = rows.length ? rows.map(monsterDropRowHtml).join('') : monsterDropRowHtml({});
-  return `<div class="monster-line-editor" data-monster-drops-editor><textarea data-form-field="drops" class="hidden-monster-raw">${escapeHtml(serializeMonsterDrops(rows))}</textarea><div class="form-help">ドロップは1行ずつ入力します。大カテゴリ・小カテゴリで絞り込み、素材名は検索入力できます。</div><div class="monster-line-head drop-head"><span>大カテゴリ</span><span>小カテゴリ</span><span>素材名</span><span>確率</span><span>個数</span><span></span></div><div data-monster-drop-list>${body}</div><button type="button" class="secondary" data-monster-drop-add>ドロップを追加</button></div>`;
+  return `<div class="monster-line-editor" data-monster-drops-editor><textarea data-form-field="drops" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(serializeMonsterDrops(rows))}</textarea><div class="form-help">ドロップは1行ずつ入力します。大カテゴリ・小カテゴリで絞り込み、素材名は検索入力できます。</div><div class="monster-line-head drop-head"><span>大カテゴリ</span><span>小カテゴリ</span><span>素材名</span><span>確率</span><span>個数</span><span></span></div><div data-monster-drop-list>${body}</div><button type="button" class="secondary" data-monster-drop-add>ドロップを追加</button></div>`;
 }
 function readMonsterActionRows(editor){
   return Array.from(editor.querySelectorAll('[data-monster-action-row]')).map(row=>{
@@ -7137,7 +7142,7 @@ function modifierEditorRowHtml(row={}, idx=0){
 function modifierRowsEditor(value){
   const rows=parseModifierEditorRows(value);
   return `<div class="monster-actions-editor" data-modifier-editor>
-    <textarea data-form-field="modifiers" class="hidden-monster-raw">${escapeHtml(serializeModifierEditorRows(rows))}</textarea>
+    <textarea data-form-field="modifiers" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(serializeModifierEditorRows(rows))}</textarea>
     <div class="form-help">補正値を1行ずつ登録します。</div>
     <div data-modifier-list>${rows.length ? rows.map(modifierEditorRowHtml).join('') : '<div class="muted small" data-modifier-empty>補正値はまだありません。</div>'}</div>
     <button type="button" class="secondary" data-modifier-add>補正値を追加</button>
