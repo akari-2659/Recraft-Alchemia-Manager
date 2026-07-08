@@ -820,7 +820,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.66';
+const RECRAFT_DB_VERSION = 'v90.8.67';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.51';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
@@ -7001,17 +7001,36 @@ const MODIFIER_TARGET_OPTIONS = [
   ['hit','命中（装備種別に応じて近接/射撃）'], ['skill:melee','技能：近接'], ['skill:shoot','技能：射撃'], ['skill:guard','技能：防御'], ['skill:evade','技能：回避'], ['skill:resist','技能：抵抗'],
   ['combat:defense','戦闘：防御'], ['combat:evasion','戦闘：回避値'], ['combat:initiative','戦闘：先制値'], ['resource:maxHp','最大HP'], ['resource:maxMp','最大MP']
 ];
-function adminModifierTargetOptions(current=''){
-  const cur=String(current||'').trim();
-  const has=MODIFIER_TARGET_OPTIONS.some(([v])=>v===cur);
-  const extra=cur&&!has ? `<option value="${escapeHtml(cur)}" selected>${escapeHtml(cur)}</option>` : '';
-  return extra + MODIFIER_TARGET_OPTIONS.map(([v,label])=>`<option value="${escapeHtml(v)}" ${v===cur?'selected':''}>${escapeHtml(label)}</option>`).join('');
+function adminModifierTargetOptions(selected=''){
+  const groups=[
+    ['能力', [
+      ['ability:body','体力'], ['ability:dexterity','器用'], ['ability:sense','感覚'], ['ability:intellect','知性'], ['ability:will','意志'], ['ability:charm','魅力']
+    ]],
+    ['技能', [
+      ['skill:force','力業'], ['skill:melee','近接'], ['skill:guard','防御'], ['skill:shoot','射撃'], ['skill:throw','投擲'], ['skill:evade','回避'], ['skill:resist','抵抗'],
+      ['skill:magic','魔法'], ['skill:prayer','祈祷'], ['skill:alchemy','調合'], ['skill:blacksmith','鍛冶'],
+      ['skill:monsterKnowledge','知識：魔物'], ['skill:materialKnowledge','知識：素材'], ['skill:elementKnowledge','知識：属性'],
+      ['skill:negotiate','交渉'], ['skill:empathy','共感'], ['skill:social','社交'], ['skill:encourage','鼓舞']
+    ]],
+    ['戦闘', [
+      ['hit','命中'], ['combat:defense','防御'], ['combat:evasion','回避値'], ['combat:initiative','先制値']
+    ]],
+    ['リソース', [
+      ['resource:maxHp','最大HP'], ['resource:maxMp','最大MP']
+    ]]
+  ];
+  let html='<option value="">選択してください</option>';
+  for(const [label, items] of groups){
+    html += `<optgroup label="${escapeHtml(label)}">`;
+    for(const [value, name] of items) html += `<option value="${escapeHtml(value)}"${value===selected?' selected':''}>${escapeHtml(name)}</option>`;
+    html += '</optgroup>';
+  }
+  return html;
 }
 function normalizeModifierEditorRow(row={}){
   const target=normalizeModifierTargetAlias(row.target||row.key||row.name||'');
   const value=String(row.value??row.mod??row.amount??'').trim();
-  const note=String(row.note||row.memo||row.description||'').trim();
-  return target||value||note ? {target,value,note} : null;
+  return target||value ? {target,value} : null;
 }
 function parseModifierEditorRows(value){
   if(Array.isArray(value)) return value.map(normalizeModifierEditorRow).filter(Boolean);
@@ -7020,10 +7039,10 @@ function parseModifierEditorRows(value){
   try{ const arr=JSON.parse(raw); if(Array.isArray(arr)) return arr.map(normalizeModifierEditorRow).filter(Boolean); }catch(e){}
   return raw.split(/\r?\n/).map(line=>line.trim()).filter(Boolean).map(line=>{
     let parts=line.split('\t'); if(parts.length<2) parts=line.split(/[｜|]/); if(parts.length<2) parts=line.split(/\s*,\s*/);
-    return normalizeModifierEditorRow({target:parts[0]||'', value:parts[1]||'', note:parts.slice(2).join(' / ')||''});
+    return normalizeModifierEditorRow({target:parts[0]||'', value:parts[1]||''});
   }).filter(Boolean);
 }
-function serializeModifierEditorRows(rows){ return (rows||[]).map(normalizeModifierEditorRow).filter(Boolean).map(r=>`${r.target}\t${r.value}\t${r.note||''}`).join('\n'); }
+function serializeModifierEditorRows(rows){ return (rows||[]).map(normalizeModifierEditorRow).filter(Boolean).map(r=>`${r.target}\t${r.value}`).join('\n'); }
 
 function normalizeModifierTargetAlias(target=''){
   const raw=String(target||'').trim();
@@ -7041,20 +7060,19 @@ function isZeroModifierText(value){ return /^[+-]?0$/.test(String(value||'').tri
 function legacyModifierRowsFromRow(row={}){
   const first=(...keys)=>{ for(const key of keys){ const v=row && row[key]; if(v!==undefined && v!==null && String(v).trim()!=='') return String(v).trim(); } return ''; };
   const rows=[];
-  const hit=first('hitMod','hit'); if(hit && !isZeroModifierText(hit)) rows.push({target:'hit', value:hit, note:'命中補正'});
-  const defense=first('alwaysDefense','defense'); if(defense && !isZeroModifierText(defense)) rows.push({target:'combat:defense', value:defense, note:'防御'});
-  const guard=first('guardValue','guard'); if(guard && !isZeroModifierText(guard)) rows.push({target:'skill:guard', value:guard, note:'防御行動'});
-  const evade=first('evasionMod','evade'); if(evade && !isZeroModifierText(evade)) rows.push({target:'skill:evade', value:evade, note:'回避補正'});
+  const hit=first('hitMod','hit'); if(hit && !isZeroModifierText(hit)) rows.push({target:'hit', value:hit});
+  const defense=first('alwaysDefense','defense'); if(defense && !isZeroModifierText(defense)) rows.push({target:'combat:defense', value:defense});
+  const guard=first('guardValue','guard'); if(guard && !isZeroModifierText(guard)) rows.push({target:'skill:guard', value:guard});
+  const evade=first('evasionMod','evade'); if(evade && !isZeroModifierText(evade)) rows.push({target:'skill:evade', value:evade});
   return rows;
 }
 function mergeModifierEditorRows(existing=[], legacy=[]){
   const out=[]; const seen=new Set();
   for(const row of [...(existing||[]), ...(legacy||[])]){
     const r=normalizeModifierEditorRow(row); if(!r) continue;
-    const key=`${r.target}\t${r.value}\t${r.note||''}`;
-    const keyNoNote=`${r.target}\t${r.value}\t`;
-    if(seen.has(key) || seen.has(keyNoNote)) continue;
-    out.push(r); seen.add(key); seen.add(keyNoNote);
+    const key=`${r.target}\t${r.value}`;
+    if(seen.has(key)) continue;
+    out.push(r); seen.add(key);
   }
   return out;
 }
@@ -7067,11 +7085,10 @@ function migrateLegacyModifierFields(row={}){
 }
 
 function modifierEditorRowHtml(row={}, idx=0){
-  const r=normalizeModifierEditorRow(row)||{target:'',value:'',note:''};
+  const r=normalizeModifierEditorRow(row)||{target:'',value:''};
   return `<div class="monster-action-row" data-modifier-row>
-    <div class="field"><label>対象 ${idx+1}</label><select data-modifier-field="target">${adminModifierTargetOptions(r.target)}</select></div>
+    <div class="field"><label>補正項目</label><select data-modifier-field="target">${adminModifierTargetOptions(r.target)}</select></div>
     <div class="field"><label>補正値</label><input data-modifier-field="value" value="${escapeHtml(r.value)}" placeholder="例：+1 / -1"></div>
-    <div class="field"><label>メモ</label><input data-modifier-field="note" value="${escapeHtml(r.note)}" placeholder="任意"></div>
     <div class="field"><label>&nbsp;</label><button type="button" class="ghost" data-modifier-remove>削除</button></div>
   </div>`;
 }
@@ -7079,14 +7096,14 @@ function modifierRowsEditor(value){
   const rows=parseModifierEditorRows(value);
   return `<div class="monster-actions-editor" data-modifier-editor>
     <textarea data-form-field="modifiers" class="hidden-monster-raw">${escapeHtml(serializeModifierEditorRows(rows))}</textarea>
-    <div class="form-help">能力・技能・戦闘ステータスへの補正値を1行ずつ登録します。命中・回避・防御などもここで管理します。</div>
+    <div class="form-help">能力・技能・戦闘ステータスへの補正値を1行ずつ登録します。</div>
     <div data-modifier-list>${rows.length ? rows.map(modifierEditorRowHtml).join('') : '<div class="muted small" data-modifier-empty>補正値はまだありません。</div>'}</div>
     <button type="button" class="secondary" data-modifier-add>補正値を追加</button>
   </div>`;
 }
 function readModifierEditorRows(editor){ return Array.from(editor.querySelectorAll('[data-modifier-row]')).map(row=>{
   const get=f=>row.querySelector(`[data-modifier-field="${f}"]`)?.value||'';
-  return normalizeModifierEditorRow({target:get('target'), value:get('value'), note:get('note')});
+  return normalizeModifierEditorRow({target:get('target'), value:get('value')});
 }).filter(Boolean); }
 function syncModifierEditor(editor){ const hidden=editor?.querySelector('[data-form-field="modifiers"]'); if(hidden) hidden.value=serializeModifierEditorRows(readModifierEditorRows(editor)); }
 function syncAllModifierEditors(){ document.querySelectorAll('[data-modifier-editor]').forEach(syncModifierEditor); }
@@ -7618,7 +7635,7 @@ async function diagnoseSheets(){
     if(!res.ok) throw new Error(res.error || 'DB列診断に失敗しました');
     const lines = Object.entries(res.results || {}).map(([key,r])=>{
       if(!r.exists) return `${labelKey(key)}: シートなし`;
-      const status = r.ok ? (r.orderOk ? 'OK' : '列順補正対象') : '不足あり';
+      const status = r.ok ? (r.orderOk ? 'OK' : '列順補正項目') : '不足あり';
       const missing = (r.missing||[]).length ? ` / 不足:${r.missing.join(',')}` : '';
       const extra = (r.extra||[]).length ? ` / 旧列・余分:${r.extra.join(',')}` : '';
       return `${labelKey(key)}: ${status} / ${r.rows||0}行${missing}${extra}`;
