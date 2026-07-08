@@ -27,7 +27,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.51 / クエスト・エリア進行、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.75 / クエスト・エリア進行、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -100,12 +100,39 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
         <div><label>対象エリア</label><select id="eventAreaSelect"></select></div>
         <div class="hidden"><label>イベント表</label><select id="eventTableSelect"></select></div>
       </div>
-      <p class="muted small">選択したエリアに登録されたイベント候補からランダムに抽選します。直前と同じイベントは、候補が2件以上ある場合は除外します。</p>
+      <label style="margin-top:10px">今日の噂</label>
+      <select id="rumorSelect"></select>
+      <div id="rumorDetail" class="card muted">DB読込後、宿屋の噂を選択できます。噂はエリア探索中のイベント候補にだけ影響します。</div>
+      <p class="muted small">選択したエリアに登録されたイベント候補からランダムに抽選します。前提条件が「なし」のイベントは常に候補に入り、「噂話」のイベントは今日の噂と一致した場合だけ候補に入ります。ヌシ遭遇は探索進行度100%到達時に処理します。</p>
       <div class="buttons">
         <button id="rollEventBtn">イベント抽選</button>
         <button class="secondary" id="copyEventBtn">結果コピー</button>
       </div>
       <div id="eventResult" class="result">イベント結果がここに表示されます。</div>
+    </section>
+
+    <section class="panel">
+      <h2>宝箱抽選 <span class="copy-note" id="treasureCopyNote">コピーしました</span></h2>
+      <label>宝箱表</label>
+      <select id="treasureTableSelect"></select>
+      <p class="muted small">発見/宝箱イベントで表示された宝箱表IDを選び、中身を抽選します。中身はDBの宝箱表から管理します。</p>
+      <div class="buttons">
+        <button id="rollTreasureBtn">宝箱の中身を決定</button>
+        <button class="secondary" id="copyTreasureBtn">結果コピー</button>
+      </div>
+      <div id="treasureResult" class="result">宝箱結果がここに表示されます。</div>
+    </section>
+
+    <section class="panel">
+      <h2>スクロール鑑定 <span class="copy-note" id="appraisalCopyNote">コピーしました</span></h2>
+      <label>鑑定ルール</label>
+      <select id="appraisalRuleSelect"></select>
+      <p class="muted small">未鑑定スクロールの鑑定に成功した後、ここでランクに応じた術式内容を決定します。キャラシへの自動登録は次段階で実装予定です。</p>
+      <div class="buttons">
+        <button id="rollAppraisalBtn">鑑定成功時の術式を決定</button>
+        <button class="secondary" id="copyAppraisalBtn">結果コピー</button>
+      </div>
+      <div id="appraisalResult" class="result">鑑定結果がここに表示されます。</div>
     </section>
 
     <section class="panel">
@@ -133,11 +160,11 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.51';
+const VERSION='v90.8.75';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
-const state={quests:[],areas:[],events:[],monsters:[],items:[],progress:{quests:{},areas:{}},lastEventText:'',lastEventKey:'',lastQuestEventText:'',lastQuestEventKey:'',lastDropText:'',lastDropSuccessText:'',log:[]};
+const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},lastEventText:'',lastEventKey:'',lastQuestEventText:'',lastQuestEventKey:'',lastTreasureText:'',lastAppraisalText:'',lastDropText:'',lastDropSuccessText:'',log:[]};
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function clamp(n){return Math.max(0,Math.min(100,Number(n)||0));}
 function now(){return new Date().toLocaleString('ja-JP',{hour12:false});}
@@ -184,19 +211,23 @@ async function loadDb(){
   setStatus('warn','DB読込を開始します。');
   $('loadDbBtn').disabled=true;
   try{
-    const [quests,areas,events,monsters,items]=await Promise.all(['quests','exploration_areas','event_tables','monsters','items'].map(loadSheet));
-    state.quests=quests; state.areas=areas; state.events=events; state.monsters=monsters; state.items=items;
+    const [quests,areas,events,monsters,items,treasures,appraisalRules,spells,recipes]=await Promise.all(['quests','exploration_areas','event_tables','monsters','items','treasure_tables','appraisal_rules','spells','recipes'].map(loadSheet));
+    state.quests=quests; state.areas=areas; state.events=events; state.monsters=monsters; state.items=items; state.treasures=treasures; state.appraisalRules=appraisalRules; state.spells=spells; state.recipes=recipes;
     state.progress={quests:{},areas:{}};
-    state.lastEventText=''; state.lastEventKey=''; state.lastQuestEventText=''; state.lastQuestEventKey=''; state.lastDropText=''; state.lastDropSuccessText='';
+    state.lastEventText=''; state.lastEventKey=''; state.lastQuestEventText=''; state.lastQuestEventKey=''; state.lastTreasureText=''; state.lastAppraisalText=''; state.lastDropText=''; state.lastDropSuccessText='';
     fillSelect($('questSelect'),quests,r=>`${r.name||r.id} / ${r.rank||''}`);
     fillSelect($('areaSelect'),areas,r=>`${r.name||r.id} / ${r.areaType||''}`);
     fillSelect($('eventAreaSelect'),areas,r=>`${r.name||r.id} / 表:${r.eventTableId||'未設定'}`);
     fillEventTables();
+    fillRumorSelect();
+    fillTreasureTables();
+    fillAppraisalRules();
     fillSelect($('monsterSelect'),monsters,r=>`${r.name||r.id} / ${r.rank||''}`);
-    setStatus('good',`DB読込完了：クエスト${quests.length}件 / エリア${areas.length}件 / イベント${events.length}件 / 魔物${monsters.length}件 / アイテム・素材${items.length}件`);
+    setStatus('good',`DB読込完了：クエスト${quests.length}件 / エリア${areas.length}件 / イベント${events.length}件 / 宝箱${treasures.length}件 / 鑑定${appraisalRules.length}件 / 魔物${monsters.length}件 / アイテム・素材${items.length}件`);
     addLog('DBを読み込みました。');
     renderAll();
-  }catch(e){setStatus('bad','DB読込に失敗しました：'+e.message); addLog('DB読込失敗：'+e.message);} finally{$('loadDbBtn').disabled=false;}
+  }catch(e){setStatus('bad',e.message||String(e));}
+  finally{$('loadDbBtn').disabled=false;}
 }
 function selected(sel, rows){const i=Number(sel.value); return rows[i]||null;}
 function progressObj(type,id){if(!id)return {value:0,note:''}; const box=state.progress[type]||(state.progress[type]={}); if(!box[id]) box[id]={value:0,note:''}; return box[id];}
@@ -234,7 +265,7 @@ function questSpecificEvents(q){
 function questRandomEvents(q){
   const tableId=tableIdForQuest(q);
   if(!tableId)return [];
-  return state.events.filter(e=>String(e.tableId||'').trim()===tableId);
+  return state.events.filter(e=>String(e.tableId||'').trim()===tableId && !isRumorEvent(e) && eventConditionType(e)==='なし');
 }
 function questStepAmount(q){
   const n=getNumFromText(q&&q.progressStep,10);
@@ -362,10 +393,91 @@ function renderMonster(){
   const m=selected($('monsterSelect'),state.monsters); if(!m){$('monsterDetail').textContent='魔物データがありません。'; return;}
   $('monsterDetail').innerHTML=`<div class="kv"><b>HP</b><span>${esc(m.hp||'')}</span><b>命中</b><span>${esc(m.hitValue||'')}</span><b>回避</b><span>${esc(m.evasionValue||'')}</span><b>抵抗</b><span>${esc(m.resistValue||'')}</span><b>防御</b><span>${esc(m.defenseValue||'')}</span><b>先制</b><span>${esc(m.initiative||'')}</span></div>`;
 }
-function renderAll(){fillEventTables(); renderQuest(); renderArea(); renderMonster(); renderLog();}
+function renderAll(){fillEventTables(); fillRumorSelect(); fillTreasureTables(); fillAppraisalRules(); renderQuest(); renderArea(); renderMonster(); renderLog();}
 function getNumFromText(s, fallback=0){const m=String(s||'').match(/[+-]?\d+/); return m?Number(m[0]):fallback;}
 function advanceQuestProgress(){const q=selected($('questSelect'),state.quests); if(!q)return; const p=progressObj('quests',q.id||q.name); const add=questStepAmount(q); const before=clamp(p.value); p.value=clamp(before+add); saveState(false); renderQuest(); addLog(`${q.name||q.id} の進行度を +${add}% しました。${before}% → ${p.value}%`);}
-function advanceAreaProgress(){const a=selected($('areaSelect'),state.areas); if(!a)return; const p=progressObj('areas',a.id||a.name); const add=areaStepAmount(a); const before=clamp(p.value); p.value=clamp(before+add); saveState(false); renderArea(); addLog(`${a.name||a.id} の探索進行度を +${add}% しました。${before}% → ${p.value}%`);}
+function advanceAreaProgress(){const a=selected($('areaSelect'),state.areas); if(!a)return; const p=progressObj('areas',a.id||a.name); const add=areaStepAmount(a); const before=clamp(p.value); p.value=clamp(before+add); saveState(false); renderArea(); addLog(`${a.name||a.id} の探索進行度を +${add}% しました。${before}% → ${p.value}%`); if(before<100 && p.value>=100) triggerAreaClearRumorEvent(a);}
+
+function isRumorEvent(row){return String(row && row.eventType || '').trim()==='宿屋の噂';}
+function eventConditionType(row){return String(row && row.conditionType || '').trim() || 'なし';}
+function selectedRumor(){
+  const sel=$('rumorSelect');
+  if(!sel)return null;
+  const rows=rumorRows();
+  const i=Number(sel.value);
+  return Number.isFinite(i) ? (rows[i] || null) : null;
+}
+function rumorRows(){return state.events.filter(isRumorEvent);}
+function fillRumorSelect(){
+  const sel=$('rumorSelect');
+  if(!sel)return;
+  const prev=sel.value;
+  const rows=rumorRows();
+  sel.innerHTML='';
+  const none=document.createElement('option');
+  none.value='';
+  none.textContent='なし';
+  sel.appendChild(none);
+  rows.forEach((r,i)=>{
+    const o=document.createElement('option');
+    o.value=String(i);
+    o.textContent=`${r.eventName||'噂'}${r.areaName?` / ${r.areaName}`:''}`;
+    sel.appendChild(o);
+  });
+  if(prev && [...sel.options].some(o=>o.value===prev)) sel.value=prev;
+  renderRumorDetail();
+}
+function renderRumorDetail(){
+  const box=$('rumorDetail');
+  if(!box)return;
+  const r=selectedRumor();
+  if(!r){
+    box.textContent='噂なし。前提条件なしの通常イベントだけが候補に入ります。';
+    return;
+  }
+  box.innerHTML=`<div class="kv"><b>噂</b><span>${esc(r.eventName||'')}</span><b>対象エリア</b><span>${esc(r.areaName||'')}</span><b>探索中効果</b><span>${esc(r.progressEffect||'')}</span></div>${r.result?`<p class="muted">${esc(r.result)}</p>`:''}<p class="muted small">この噂はエリア探索イベントの候補だけに影響します。クエスト報酬・依頼報酬は増減しません。</p>`;
+}
+function eventMatchesRumor(row, rumor){
+  const type=eventConditionType(row);
+  if(!type || type==='なし') return true;
+  if(type==='噂話'){
+    if(!rumor) return false;
+    const want=String(row.conditionValue || '').trim();
+    const gotName=String(rumor.eventName || '').trim();
+    const gotId=String(rumor.id || '').trim();
+    return !!want && (want===gotName || want===gotId);
+  }
+  return false;
+}
+function isBossEvent(row){return String(row && row.eventType || '').trim()==='ヌシ遭遇';}
+function eventRowsForArea(area, options={}){
+  const tableId=String((area&&area.eventTableId)||$('eventTableSelect')?.value||'').trim();
+  const rumor=options.rumor===undefined ? selectedRumor() : options.rumor;
+  const includeBoss=!!options.includeBoss;
+  return state.events.filter(e=>{
+    if(String(e.tableId||'').trim()!==tableId) return false;
+    if(isRumorEvent(e)) return false;
+    if(isBossEvent(e) && !includeBoss) return false;
+    return eventMatchesRumor(e, rumor);
+  });
+}
+function formatEventOutput(prefix, picked, area, tableId, extraLines=[]){
+  const condition = eventConditionType(picked)==='なし' ? '' : `前提：${eventConditionType(picked)}${picked.conditionValue?` / ${picked.conditionValue}`:''}`;
+  return [prefix, area?`エリア：${area.name||area.id}`:'', `表：${tableId}`, picked.eventName?`イベント：${picked.eventName}`:'', picked.eventType?`種別：${picked.eventType}`:'', condition, picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'', picked.treasureTableId?`宝箱表：${picked.treasureTableId}`:'', picked.result?`結果：${picked.result}`:'', picked.progressEffect?`補足：${picked.progressEffect}`:'', ...extraLines].filter(Boolean).join('\n');
+}
+function triggerAreaClearRumorEvent(area){
+  const rumor=selectedRumor();
+  if(!area || !rumor) return false;
+  const tableId=String(area.eventTableId||'').trim();
+  const rows=eventRowsForArea(area,{rumor,includeBoss:true}).filter(isBossEvent);
+  if(!rows.length) return false;
+  const picked=rows[0];
+  state.lastEventKey=eventUniqueKey(picked);
+  state.lastEventText=formatEventOutput(`【探索クリア時イベント】${picked.eventName||'名称未設定'}`, picked, area, tableId, [`噂：${rumor.eventName||''}`]);
+  $('eventResult').textContent=state.lastEventText; if(picked.treasureTableId) fillTreasureTables(String(picked.treasureTableId));
+  addLog(`探索クリア時イベント：${area.name||area.id} / ${picked.eventName||'名称未設定'}`);
+  return true;
+}
 function fillEventTables(){
   const area=selected($('eventAreaSelect'),state.areas); const prefer=area&&area.eventTableId?String(area.eventTableId):'';
   const ids=[...new Set(state.events.map(e=>String(e.tableId||'').trim()).filter(Boolean))];
@@ -376,12 +488,160 @@ function fillEventTables(){
 function rollEvent(){
   const area=selected($('eventAreaSelect'),state.areas);
   const tableId=String((area&&area.eventTableId)||$('eventTableSelect').value||'').trim();
-  let rows=state.events.filter(e=>String(e.tableId||'').trim()===tableId);
-  if(!rows.length){$('eventResult').textContent='このエリアに登録されたランダムイベントがありません。'; return;}
+  const rumor=selectedRumor();
+  let rows=eventRowsForArea(area,{rumor,includeBoss:false});
+  if(!rows.length){$('eventResult').textContent='このエリアに登録されたランダムイベント候補がありません。前提条件付きイベントは、今日の噂が一致した時だけ候補に入ります。'; return;}
   const picked=pickRandomEvent(rows, state.lastEventKey);
   state.lastEventKey=eventUniqueKey(picked);
-  const lines=[`【ランダムイベント】${picked.eventName||'名称未設定'}`, area?`エリア：${area.name||area.id}`:'', `表：${tableId}`, picked.eventType?`種別：${picked.eventType}`:'', picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'', picked.result?`結果：${picked.result}`:'', picked.progressEffect?`補足：${picked.progressEffect}`:''].filter(Boolean);
-  state.lastEventText=lines.join('\n'); $('eventResult').textContent=state.lastEventText; addLog(`イベント抽選：${picked.eventName||'名称未設定'}`);
+  const rumorLine=rumor ? [`今日の噂：${rumor.eventName||''}`] : [];
+  state.lastEventText=formatEventOutput(`【ランダムイベント】${picked.eventName||'名称未設定'}`, picked, area, tableId, rumorLine);
+  $('eventResult').textContent=state.lastEventText; if(picked.treasureTableId) fillTreasureTables(String(picked.treasureTableId)); addLog(`イベント抽選：${picked.eventName||'名称未設定'}`);
+}
+
+function enabledRow(row){return String(row && row.enabled || 'TRUE').trim().toUpperCase() !== 'FALSE';}
+function uniqueTreasureTables(){
+  const map=new Map();
+  (state.treasures||[]).filter(enabledRow).forEach(r=>{
+    const id=String(r.tableId||'').trim();
+    if(!id)return;
+    if(!map.has(id)) map.set(id,{id, area:r.areaName||'', rank:r.treasureRank||'', count:0});
+    map.get(id).count++;
+  });
+  return [...map.values()].sort((a,b)=>a.id.localeCompare(b.id,'ja'));
+}
+function fillTreasureTables(prefer=''){
+  const sel=$('treasureTableSelect');
+  if(!sel)return;
+  const rows=uniqueTreasureTables();
+  sel.innerHTML='';
+  if(!rows.length){
+    const o=document.createElement('option'); o.value=''; o.textContent='宝箱表なし'; sel.appendChild(o); return;
+  }
+  rows.forEach(r=>{
+    const o=document.createElement('option');
+    o.value=r.id;
+    o.textContent=`${r.id} / ${r.area||'エリア未設定'} / ${r.rank||'ランク未設定'}（${r.count}件）`;
+    sel.appendChild(o);
+  });
+  if(prefer && [...sel.options].some(o=>o.value===prefer)) sel.value=prefer;
+}
+function fillAppraisalRules(){
+  const sel=$('appraisalRuleSelect');
+  if(!sel)return;
+  const rows=(state.appraisalRules||[]).filter(enabledRow);
+  sel.innerHTML='';
+  if(!rows.length){
+    const o=document.createElement('option'); o.value=''; o.textContent='鑑定ルールなし'; sel.appendChild(o); return;
+  }
+  rows.forEach((r,i)=>{
+    const o=document.createElement('option');
+    o.value=String(i);
+    o.textContent=`${r.facilityName||'施設未設定'} / ${r.scrollRank||'ランク未設定'} / 難度${r.difficulty||'?'} / ${r.spellType||''}${r.spellRank?` ${r.spellRank}`:''}`;
+    sel.appendChild(o);
+  });
+}
+function treasureRows(tableId){
+  const id=String(tableId||'').trim();
+  return (state.treasures||[]).filter(r=>enabledRow(r) && String(r.tableId||'').trim()===id);
+}
+function weightedPick(rows){
+  const weights=rows.map(r=>Math.max(0, Number(String(r.weight||'1').replace(/[^\d.]/g,'')) || 1));
+  const total=weights.reduce((a,b)=>a+b,0) || rows.length;
+  let roll=Math.random()*total;
+  for(let i=0;i<rows.length;i++){roll-=weights[i]; if(roll<=0)return rows[i];}
+  return rows[rows.length-1];
+}
+function rollDiceText(raw){
+  const s=String(raw||'1').trim();
+  const m=s.match(/^(\d*)[dDＤｄ](\d+)([+-]\d+)?$/);
+  if(!m)return {text:s||'1', detail:''};
+  const n=Number(m[1]||1), d=Number(m[2]), add=Number(m[3]||0);
+  let rolls=[]; for(let i=0;i<n;i++) rolls.push(1+Math.floor(Math.random()*d));
+  const total=rolls.reduce((a,b)=>a+b,0)+add;
+  return {text:String(total), detail:`${s} → ${rolls.join(',')}${add?`${add>0?'+':''}${add}`:''} = ${total}`};
+}
+function findItemByNameOrId(name,id){
+  const n=String(name||'').trim(), pid=String(id||'').trim();
+  return (state.items||[]).find(r=>pid && String(r.publicId||'').trim()===pid)
+      || (state.items||[]).find(r=>n && String(r.name||'').trim()===n)
+      || null;
+}
+function treasureDetailBlock(row){
+  const q=rollDiceText(row.quantity||'1');
+  const item=findItemByNameOrId(row.entryName,row.entryPublicId);
+  const lines=[];
+  lines.push(`【宝箱結果】${row.tableId||''}`);
+  lines.push(`中身種別：${row.entryType||''}`);
+  lines.push(`名称：${row.entryName||row.recipeName||'名称未設定'}`);
+  if(row.entryPublicId) lines.push(`登録ID：${row.entryPublicId}`);
+  if(row.recipeName) lines.push(`レシピ：${row.recipeName}`);
+  if(row.scrollRank) lines.push(`スクロールランク：${row.scrollRank}`);
+  lines.push(`数量：${q.text}${q.detail?`（${q.detail}）`:''}`);
+  if(item?.rank) lines.push(`ランク：${item.rank}`);
+  if(item?.price) lines.push(`売値：${item.price}G`);
+  if(row.description) lines.push(`説明：${row.description}`);
+  if(row.entryType==='未鑑定スクロール') lines.push('補足：鑑定に成功したら、スクロール鑑定欄で該当ランクの術式内容を決定してください。');
+  return lines.filter(Boolean).join('\n');
+}
+function rollTreasure(){
+  const tableId=$('treasureTableSelect')?.value||'';
+  const rows=treasureRows(tableId);
+  if(!rows.length){$('treasureResult').textContent='この宝箱表に有効な中身候補がありません。'; return;}
+  const picked=weightedPick(rows);
+  state.lastTreasureText=treasureDetailBlock(picked);
+  $('treasureResult').textContent=state.lastTreasureText;
+  addLog(`宝箱抽選：${tableId} / ${picked.entryName||picked.recipeName||picked.entryType||'結果'}`);
+}
+function selectedAppraisalRule(){
+  const sel=$('appraisalRuleSelect'); if(!sel)return null;
+  const idx=Number(sel.value);
+  const rows=(state.appraisalRules||[]).filter(enabledRow);
+  return Number.isFinite(idx) ? (rows[idx] || null) : null;
+}
+function spellMatchesRule(spell, rule){
+  if(!spell || !rule)return false;
+  const type=String(spell.type||'').trim();
+  const wantType=String(rule.spellType||'').trim();
+  const typeOk=!wantType || type===wantType || (wantType==='魔法術式' && type==='魔法');
+  const rankOk=!rule.spellRank || String(spell.rank||'').trim()===String(rule.spellRank||'').trim();
+  const tags=String(rule.candidateTags||'').split(/[,\n、]/).map(s=>s.trim()).filter(Boolean);
+  const spellTags=String(spell.tags||'');
+  const tagOk=!tags.length || tags.every(t=>spellTags.includes(t));
+  return typeOk && rankOk && tagOk;
+}
+function findScrollItemForSpell(spell){
+  const name=`${spell.name}のスクロール`;
+  return (state.items||[]).find(r=>String(r.name||'').trim()===name) || null;
+}
+function rollAppraisal(){
+  const rule=selectedAppraisalRule();
+  if(!rule){$('appraisalResult').textContent='鑑定ルールがありません。'; return;}
+  const candidates=(state.spells||[]).filter(s=>spellMatchesRule(s,rule));
+  if(!candidates.length){
+    state.lastAppraisalText=[`【スクロール鑑定】${rule.facilityName||''}`,`スクロールランク：${rule.scrollRank||''}`,`鑑定難易度：${rule.difficulty||''}`,'結果：候補術式がありません。spells表のtype/rank/candidateTagsを確認してください。'].filter(Boolean).join('\n');
+    $('appraisalResult').textContent=state.lastAppraisalText;
+    return;
+  }
+  const spell=candidates[Math.floor(Math.random()*candidates.length)];
+  const scroll=findScrollItemForSpell(spell);
+  const lines=[];
+  lines.push(`【スクロール鑑定】${rule.facilityName||''}`);
+  lines.push(`スクロールランク：${rule.scrollRank||''}`);
+  lines.push(`鑑定難易度：${rule.difficulty||''}`);
+  lines.push(`判明した術式：${spell.name}`);
+  lines.push(`鑑定後アイテム：${spell.name}のスクロール`);
+  if(scroll?.publicId) lines.push(`登録ID：${scroll.publicId}`);
+  lines.push(`術式種別：${spell.type||''}`);
+  lines.push(`術式ランク：${spell.rank||''}`);
+  if(spell.element) lines.push(`属性：${spell.element}`);
+  if(spell.mpCost) lines.push(`コスト：${spell.mpCost}`);
+  if(spell.target) lines.push(`対象：${spell.target}`);
+  if(spell.power) lines.push(`威力/効果値：${spell.power}`);
+  if(spell.effect) lines.push(`効果：${spell.effect}`);
+  lines.push('補足：この結果はコピーして管理してください。キャラシへの自動登録・スクロール消費は次段階で実装します。');
+  state.lastAppraisalText=lines.filter(Boolean).join('\n');
+  $('appraisalResult').textContent=state.lastAppraisalText;
+  addLog(`スクロール鑑定：${rule.scrollRank||''} → ${spell.name}`);
 }
 function parseDrops(text){
   return String(text||'').split(/\r?\n/).map(line=>line.trim()).filter(Boolean).map(line=>{
@@ -487,13 +747,15 @@ function questMemo(){const q=selected($('questSelect'),state.quests); if(!q)retu
 function areaMemo(){const a=selected($('areaSelect'),state.areas); if(!a)return ''; const p=progressObj('areas',a.id||a.name); return [`【エリア進行】${a.name||a.id}`,`探索進行度：${clamp(p.value)}%`,a.eventTableId?`イベント表：${a.eventTableId}`:'',a.mainMaterials?`主な素材：${a.mainMaterials}`:'',a.mainMonsters?`主な魔物：${a.mainMonsters}`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
 function bind(){
   $('fixedUrlLabel').textContent=GAS_URL; $('loadDbBtn').addEventListener('click',loadDb); $('saveStateBtn').addEventListener('click',()=>saveState(true)); $('restoreStateBtn').addEventListener('click',restoreSavedState); $('clearStateBtn').addEventListener('click',()=>{if(confirm('進行状態を初期化しますか？')){localStorage.removeItem(STORE_KEY); state.progress={quests:{},areas:{}}; state.log=[]; renderAll(); addLog('進行状態を初期化しました。');}});
-  $('questSelect').addEventListener('change',()=>{state.lastQuestEventText=''; state.lastQuestEventKey=''; renderQuest();}); $('areaSelect').addEventListener('change',renderArea); $('monsterSelect').addEventListener('change',renderMonster); $('eventAreaSelect').addEventListener('change',fillEventTables);
+  $('questSelect').addEventListener('change',()=>{state.lastQuestEventText=''; state.lastQuestEventKey=''; renderQuest();}); $('areaSelect').addEventListener('change',renderArea); $('monsterSelect').addEventListener('change',renderMonster); $('eventAreaSelect').addEventListener('change',fillEventTables); $('rumorSelect').addEventListener('change',()=>{state.lastEventText=''; state.lastEventKey=''; renderRumorDetail();});
   $('questAdvanceBtn').addEventListener('click',advanceQuestProgress); $('areaAdvanceBtn').addEventListener('click',advanceAreaProgress);
   $('questResetBtn').addEventListener('click',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).value=0; saveState(false); renderQuest();}}); $('areaResetBtn').addEventListener('click',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).value=0; saveState(false); renderArea();}});
   $('questNote').addEventListener('input',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).note=$('questNote').value; saveState(false);}}); $('areaNote').addEventListener('input',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).note=$('areaNote').value; saveState(false);}});
   $('questCopyBtn').addEventListener('click',()=>copyText(questMemo(),'questCopyNote')); $('areaCopyBtn').addEventListener('click',()=>copyText(areaMemo(),'areaCopyNote'));
   $('rollQuestEventBtn').addEventListener('click',rollQuestEvent); $('copyQuestEventBtn').addEventListener('click',()=>copyText(state.lastQuestEventText,'questCopyNote'));
   $('rollEventBtn').addEventListener('click',rollEvent); $('copyEventBtn').addEventListener('click',()=>copyText(state.lastEventText,'eventCopyNote'));
+  $('rollTreasureBtn').addEventListener('click',rollTreasure); $('copyTreasureBtn').addEventListener('click',()=>copyText(state.lastTreasureText,'treasureCopyNote'));
+  $('rollAppraisalBtn').addEventListener('click',rollAppraisal); $('copyAppraisalBtn').addEventListener('click',()=>copyText(state.lastAppraisalText,'appraisalCopyNote'));
   $('rollDropBtn').addEventListener('click',rollDrops); $('copyDropBtn').addEventListener('click',()=>copyText(state.lastDropText,'dropCopyNote')); $('copyDropSuccessBtn').addEventListener('click',()=>copyText(state.lastDropSuccessText,'dropCopyNote'));
   $('copyLogBtn').addEventListener('click',()=>copyText(state.log.slice().reverse().join('\n'))); $('clearLogBtn').addEventListener('click',()=>{state.log=[]; renderLog(); saveState(false);});
 }
