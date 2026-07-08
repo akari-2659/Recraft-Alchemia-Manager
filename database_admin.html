@@ -379,6 +379,11 @@
   .monster-action-card,.monster-drop-card{border:1px solid #ead9c4;background:#fff;border-radius:12px;padding:9px 10px;display:grid;gap:5px}
   .monster-action-main,.monster-drop-main{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:13px;font-weight:800;color:var(--ink)}
   .monster-action-sub,.monster-drop-sub,.monster-text-block{font-size:12px;color:#67523d;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+  .record-field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+  .record-field{background:#fff;border:1px solid #ead9c4;border-radius:12px;padding:8px 10px;min-width:0}
+  .record-field-label{display:block;font-size:11px;font-weight:900;color:var(--muted);line-height:1.15;margin-bottom:4px}
+  .record-field-value{font-size:13px;color:var(--ink);line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+  .record-field-empty .record-field-value{color:#b29d86}
   .view-mode-chip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);border-radius:999px;padding:3px 8px;font-size:11px;font-weight:700;color:var(--muted);background:rgba(255,255,255,.55);margin-left:6px}.monster-empty-note{font-size:12px;color:var(--muted);background:#fff;border:1px dashed #e3cdb4;border-radius:12px;padding:8px 10px}
   @media(max-width:760px){.monster-card-head{grid-template-columns:1fr}.monster-card-actions{justify-content:flex-start}.monster-card summary{padding:12px}.monster-card-body{padding:12px}.monster-title b{white-space:normal}.monster-id{max-width:100%}}
   .monster-output-panel{margin-top:14px;border:1px solid #ead9c4;background:#fffaf3;border-radius:16px;padding:14px;display:grid;gap:10px}
@@ -424,8 +429,8 @@
       <button class="danger" id="btnReplacePages">全ページDB置換</button>
     </div>
     <p class="notice">
-      この管理ツールは固定のWeb App URLへ接続します。通常は、各表の <span class="kbd">この表だけDB読込</span> / <span class="kbd">この表だけDB登録</span> / <span class="kbd">この表だけDB置換</span> を使ってください。
-      全ページ操作は各表を順番に処理し、途中で失敗した場合はそこで停止します。
+      この管理ツールは固定のWeb App URLへ接続します。通常は、各表の <span class="kbd">この表だけDB読込</span> / <span class="kbd">この表だけDB登録</span> / <span class="kbd">この表だけDB置換</span>、または各行の <span class="kbd">個別DB登録</span> / <span class="kbd">個別DB置換</span> を使ってください。
+      個別DB置換は対象1件だけを上書きし、同じ表の他データは保持します。全ページ操作は各表を順番に処理し、途中で失敗した場合はそこで停止します。
     </p>
     <div class="stats">
       <div class="stat"><b id="countItemTypes">0</b><span>アイテム種別</span></div>
@@ -815,7 +820,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.50';
+const RECRAFT_DB_VERSION = 'v90.8.56';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
 const PAGE_TABLE_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','materials','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','monsters'];
@@ -828,7 +833,7 @@ const SCHEMA = {
   material_categories: ['id','name','materialType','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   material_ranks: ['id','name','price','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   equipment_categories: ['id','name','itemCategory','equipSlot','skill','element','power','hitMod','alwaysDefense','guardValue','evasionMod','maxStack','offhandBonus','description','effect','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
-  items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','equipSlot','skill','power','hitMod','alwaysDefense','guardValue','evasionMod','maxStack','ammoUse','ammoKind','quiverCapacity','bagCapacity','offhandBonus','mpCost','target','checkType','element','description','effect','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
+  items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','equipSlot','skill','power','hitMod','alwaysDefense','guardValue','evasionMod','maxStack','ammoUse','ammoKind','quiverCapacity','bagCapacity','offhandBonus','upgradeLimit','mpCost','target','checkType','element','description','effect','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   recipes: ['id','name','rank','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   spells: ['id','type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   quest_rewards: ['id','rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards','notes','updatedAt','ownerKey','createdBy'],
@@ -838,7 +843,7 @@ const SCHEMA = {
   monsters: ['id','name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具/設備', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'ボス/達成イベント', rewardMoney:'報酬金', rewardItems:'報酬アイテム', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', actions:'行動', drops:'ドロップ'
+  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', upgradeLimit:'強化可能回数', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具/設備', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'ボス/達成イベント', rewardMoney:'報酬金', rewardItems:'報酬アイテム', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', actions:'行動', drops:'ドロップ'
 };
 
 const FORM_PRIMARY_FIELDS = {
@@ -848,7 +853,7 @@ const FORM_PRIMARY_FIELDS = {
   material_categories: ['name','materialType','description','sortOrder','enabled'],
   material_ranks: ['id','name','price','description','sortOrder','enabled'],
   equipment_categories: ['name','itemCategory','equipSlot','skill','element','power','hitMod','alwaysDefense','guardValue','evasionMod','maxStack','offhandBonus','description','effect','sortOrder','enabled'],
-  items: ['name','publicId','csVisible','itemType','itemCategory','price','rank','equipSlot','skill','power','mpCost','target','checkType','element','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags'],
+  items: ['name','publicId','csVisible','itemType','itemCategory','price','rank','equipSlot','skill','power','upgradeLimit','mpCost','target','checkType','element','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags'],
   recipes: ['name','rank','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags'],
   materials: ['name','publicId','materialType','materialCategory','rank','price','source','usageTags','equipmentUpgradeEffect','description','effect','notes'],
   spells: ['type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags'],
@@ -859,6 +864,7 @@ const FORM_PRIMARY_FIELDS = {
   monsters: ['name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','description','notes']
 };
 const FORM_LONG_FIELDS = new Set(['description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','rewardItems','unlockResult','mainMaterials','mainMonsters','result','progressEffect','actions','drops']);
+const RECORD_CARD_KEYS = new Set(['items','materials','recipes','spells']);
 const FIELD_PLACEHOLDERS = {
   id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'例：低級 / 初級', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：獣牙系。モンハン式の素材派生ラインを管理します。', equipmentUpgradeEffect:'例：威力+1。魔物素材を武器強化に使った時の強化内容を選択します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街外れの草むら', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）'
 };
@@ -2097,7 +2103,8 @@ const DEFAULTS = {
       "tags": "装飾品,器用",
       "notes": "",
       "description": "指先の動きを澄ませる細工指輪。細かな作業や正確さを求める技に向く。",
-      "publicId": "RCA-V2HQ-YHTY"
+      "publicId": "RCA-V2HQ-YHTY",
+      "upgradeLimit": "1"
     },
     {
       "id": "tool_alchemy_low_mortar",
@@ -2118,7 +2125,8 @@ const DEFAULTS = {
       "tags": "道具,調合,低級素材対応",
       "notes": "調合道具。素材ランク「低級」までに対応。細かな器具管理は行わず、セット単位で扱う。",
       "description": "携行しやすい乳鉢、小瓶、簡易秤、混ぜ棒を革巻きの箱に収めた旅用の調合具。",
-      "publicId": "RCA-HX8H-KJK7"
+      "publicId": "RCA-HX8H-KJK7",
+      "upgradeLimit": "0"
     },
     {
       "id": "tool_alchemy_normal_scale",
@@ -2139,7 +2147,8 @@ const DEFAULTS = {
       "tags": "道具,調合,普通素材対応",
       "notes": "調合道具。素材ランク「普通」までに対応。細かな器具管理は行わず、セット単位で扱う。",
       "description": "硝子製の小秤と耐熱小瓶を中心にまとめた調合具。薬草や液体素材の量を安定して測れる。",
-      "publicId": "RCA-WG7W-A27S"
+      "publicId": "RCA-WG7W-A27S",
+      "upgradeLimit": "0"
     },
     {
       "id": "tool_alchemy_good_vial",
@@ -2160,7 +2169,8 @@ const DEFAULTS = {
       "tags": "道具,調合,良質素材対応",
       "notes": "調合道具。素材ランク「良質」までに対応。細かな器具管理は行わず、セット単位で扱う。",
       "description": "晶石を削り出した小瓶と精密な混合器具を収めた調合具。素材の質を崩しにくい。",
-      "publicId": "RCA-9HQ2-8G2L"
+      "publicId": "RCA-9HQ2-8G2L",
+      "upgradeLimit": "0"
     },
     {
       "id": "tool_alchemy_rare_retort",
@@ -2181,7 +2191,8 @@ const DEFAULTS = {
       "tags": "道具,調合,希少素材対応",
       "notes": "調合道具。素材ランク「希少」までに対応。細かな器具管理は行わず、セット単位で扱う。",
       "description": "星晶片をはめ込んだ小型蒸留器と精密な硝子器具を収めた調合具。繊細な薬液を扱いやすい。",
-      "publicId": "RCA-7APJ-T6ZE"
+      "publicId": "RCA-7APJ-T6ZE",
+      "upgradeLimit": "0"
     },
     {
       "id": "tool_alchemy_premium_alembic",
@@ -2202,7 +2213,8 @@ const DEFAULTS = {
       "tags": "道具,調合,高級素材対応",
       "notes": "調合道具。素材ランク「高級」までに対応。細かな器具管理は行わず、セット単位で扱う。",
       "description": "月環石の留め具を備えた錬成器と高精度の蒸留管を組み合わせた、上質素材向けの調合具。",
-      "publicId": "RCA-H9FV-DK4B"
+      "publicId": "RCA-H9FV-DK4B",
+      "upgradeLimit": "0"
     },
     {
       "id": "tool_smith_low_hammer",
@@ -2223,7 +2235,8 @@ const DEFAULTS = {
       "tags": "道具,鍛冶,低級素材対応",
       "notes": "鍛冶道具。素材ランク「低級」までに対応。細かな器具管理は行わず、セット単位で扱う。",
       "description": "小型金槌、火ばさみ、簡易台、砥石を木箱に収めた携行用の鍛冶具。",
-      "publicId": "RCA-QZKP-Y9FK"
+      "publicId": "RCA-QZKP-Y9FK",
+      "upgradeLimit": "0"
     },
     {
       "id": "tool_smith_normal_anvil",
@@ -2244,7 +2257,8 @@ const DEFAULTS = {
       "tags": "道具,鍛冶,普通素材対応",
       "notes": "鍛冶道具。素材ランク「普通」までに対応。細かな器具管理は行わず、セット単位で扱う。",
       "description": "熱に強い小型金床と焼入れ用の火ばさみを揃えた鍛冶具。刃物や金具の成形に向く。",
-      "publicId": "RCA-62F2-7QTM"
+      "publicId": "RCA-62F2-7QTM",
+      "upgradeLimit": "0"
     },
     {
       "id": "tool_smith_good_tongs",
@@ -2265,7 +2279,8 @@ const DEFAULTS = {
       "tags": "道具,鍛冶,良質素材対応",
       "notes": "鍛冶道具。素材ランク「良質」までに対応。細かな器具管理は行わず、セット単位で扱う。",
       "description": "硬い素材を逃がさず挟む火ばさみと打面の整った槌をまとめた鍛冶具。",
-      "publicId": "RCA-WPVT-EE3B"
+      "publicId": "RCA-WPVT-EE3B",
+      "upgradeLimit": "0"
     },
     {
       "id": "tool_smith_rare_stariron",
@@ -2286,7 +2301,8 @@ const DEFAULTS = {
       "tags": "道具,鍛冶,希少素材対応",
       "notes": "鍛冶道具。素材ランク「希少」までに対応。細かな器具管理は行わず、セット単位で扱う。",
       "description": "星鉄を混ぜた火ばさみと精密槌を中心にした鍛冶具。魔物素材や特殊金属を扱う作業に向く。",
-      "publicId": "RCA-YJE6-RP3V"
+      "publicId": "RCA-YJE6-RP3V",
+      "upgradeLimit": "0"
     },
     {
       "id": "tool_smith_premium_dragonforge",
@@ -2307,7 +2323,8 @@ const DEFAULTS = {
       "tags": "道具,鍛冶,高級素材対応",
       "notes": "鍛冶道具。素材ランク「高級」までに対応。細かな器具管理は行わず、セット単位で扱う。",
       "description": "竜炉石を組み込んだ小型金床と耐熱工具を揃えた、上質素材向けの鍛冶具。",
-      "publicId": "RCA-UZLK-W7LQ"
+      "publicId": "RCA-UZLK-W7LQ",
+      "upgradeLimit": "0"
     },
     {
       "id": "ammo_arrow_normal",
@@ -2330,7 +2347,8 @@ const DEFAULTS = {
       "tags": "消耗品,射撃,矢弾,通常弾,初期倉庫",
       "notes": "ショートボウなど、弓系の初期武器を選んだ場合は最大スタック数分を初期支給する。",
       "description": "もっとも一般的な矢。特殊な効果はないが、弓で攻撃するために必要。",
-      "publicId": "RCA-FQJ8-WLNQ"
+      "publicId": "RCA-FQJ8-WLNQ",
+      "upgradeLimit": "0"
     },
     {
       "id": "ammo_bolt_normal",
@@ -2353,7 +2371,8 @@ const DEFAULTS = {
       "tags": "消耗品,射撃,矢弾,通常弾,初期倉庫",
       "notes": "クロスボウを初期武器として選んだ場合は最大スタック数分を初期支給する。",
       "description": "弩に装填して放つ標準的なボルト。安定して扱いやすい通常弾。",
-      "publicId": "RCA-JRM7-SQFE"
+      "publicId": "RCA-JRM7-SQFE",
+      "upgradeLimit": "0"
     },
     {
       "id": "ammo_heavy_bolt_normal",
@@ -2376,7 +2395,8 @@ const DEFAULTS = {
       "tags": "消耗品,射撃,矢弾,通常弾,初期倉庫",
       "notes": "ヘヴィクロスボウを初期武器として選んだ場合は最大スタック数分を初期支給する。",
       "description": "大型弩に使う太いボルト。重いため持ち運べる数は少ない。",
-      "publicId": "RCA-DQSS-9Y6U"
+      "publicId": "RCA-DQSS-9Y6U",
+      "upgradeLimit": "0"
     },
     {
       "id": "quiver_simple",
@@ -2397,7 +2417,8 @@ const DEFAULTS = {
       "tags": "矢筒,射撃,収納",
       "notes": "初期配布はしない。鍛冶屋で購入する。",
       "description": "最低限の矢弾をまとめる簡素な矢筒。収納できる矢弾種類数は2種類。",
-      "publicId": "RCA-DEZK-RYPK"
+      "publicId": "RCA-DEZK-RYPK",
+      "upgradeLimit": "0"
     },
     {
       "id": "quiver_traveler",
@@ -2418,7 +2439,8 @@ const DEFAULTS = {
       "tags": "矢筒,射撃,収納",
       "notes": "通常矢と特殊矢をまとめて持ち出しやすい。",
       "description": "仕切りを増やした旅用の矢筒。3種類の矢弾を整理して収納できる。",
-      "publicId": "RCA-RE3A-5A5F"
+      "publicId": "RCA-RE3A-5A5F",
+      "upgradeLimit": "0"
     },
     {
       "id": "quiver_hunter",
@@ -2439,7 +2461,8 @@ const DEFAULTS = {
       "tags": "矢筒,射撃,収納",
       "notes": "複数の特殊矢弾を使い分ける射撃役向け。",
       "description": "狩人が好んで使う多仕切りの矢筒。4種類の矢弾を素早く取り出せる。",
-      "publicId": "RCA-VRTG-ZYFE"
+      "publicId": "RCA-VRTG-ZYFE",
+      "upgradeLimit": "0"
     },
     {
       "id": "bag_simple",
@@ -2462,7 +2485,8 @@ const DEFAULTS = {
       "notes": "",
       "description": "冒険に必要な最低限の荷物を入れられる簡素なバッグ。倉庫から選択すると所持品枠を8枠にします。",
       "unlockFacility": "鍛冶屋",
-      "publicId": "RCA-S8RN-BAEQ"
+      "publicId": "RCA-S8RN-BAEQ",
+      "upgradeLimit": "0"
     },
     {
       "id": "acc_guard_charm",
@@ -2482,7 +2506,8 @@ const DEFAULTS = {
       "tags": "装飾品,防御",
       "notes": "",
       "description": "守りの祈りを込めた小さなお守り。身につけた者を危険から遠ざける。",
-      "publicId": "RCA-SF2E-PCFK"
+      "publicId": "RCA-SF2E-PCFK",
+      "upgradeLimit": "1"
     },
     {
       "id": "acc_holy_symbol",
@@ -2508,7 +2533,8 @@ const DEFAULTS = {
       "evasionMod": "0",
       "notes": "",
       "description": "清らかな祈りを込める小さな聖印。身につけた者の祈祷を静かに支える。",
-      "publicId": "RCA-AWN4-27W8"
+      "publicId": "RCA-AWN4-27W8",
+      "upgradeLimit": "1"
     },
     {
       "id": "acc_magic_seal_basic",
@@ -2534,7 +2560,8 @@ const DEFAULTS = {
       "offhandBonus": "",
       "notes": "",
       "description": "淡い魔力を留める小さな魔印。身につけた者の魔法を発動しやすく整える。",
-      "publicId": "RCA-BSSG-2PDN"
+      "publicId": "RCA-BSSG-2PDN",
+      "upgradeLimit": "1"
     },
     {
       "id": "acc_mana_ring",
@@ -2553,7 +2580,8 @@ const DEFAULTS = {
       "tags": "装飾品,MP",
       "notes": "",
       "description": "内側に魔力の流れを刻んだ指輪。身につけると魔力を保ちやすくなる。",
-      "publicId": "RCA-3KMM-ZWZZ"
+      "publicId": "RCA-3KMM-ZWZZ",
+      "upgradeLimit": "1"
     },
     {
       "id": "acc_power_bracelet",
@@ -2572,7 +2600,8 @@ const DEFAULTS = {
       "tags": "装飾品,体力",
       "notes": "",
       "description": "腕に力を集める重みのある腕輪。踏み込みや持ち上げる動きを支える。",
-      "publicId": "RCA-79RT-NEA3"
+      "publicId": "RCA-79RT-NEA3",
+      "upgradeLimit": "1"
     },
     {
       "id": "acc_small_mana_stone",
@@ -2591,7 +2620,8 @@ const DEFAULTS = {
       "tags": "装飾品,魔法,MP",
       "notes": "",
       "description": "小さな魔導石を留めた装飾品。魔法を使う瞬間、わずかに魔力の消耗を和らげる。",
-      "publicId": "RCA-8YBV-ZLH4"
+      "publicId": "RCA-8YBV-ZLH4",
+      "upgradeLimit": "1"
     },
     {
       "id": "acc_wind_earring",
@@ -2610,7 +2640,8 @@ const DEFAULTS = {
       "tags": "装飾品,感覚,回避",
       "notes": "",
       "description": "風の流れを読む耳飾り。かすかな気配や迫る攻撃を感じ取りやすくする。",
-      "publicId": "RCA-TWXE-2KVY"
+      "publicId": "RCA-TWXE-2KVY",
+      "upgradeLimit": "1"
     },
     {
       "id": "ammo_bind_arrow",
@@ -2631,7 +2662,8 @@ const DEFAULTS = {
       "notes": "",
       "description": "絡みつく紐と術式を仕込んだ矢。命中した相手の足取りを乱す。",
       "power": "武器依存",
-      "publicId": "RCA-67R7-RT5L"
+      "publicId": "RCA-67R7-RT5L",
+      "upgradeLimit": "0"
     },
     {
       "id": "ammo_fire_arrow",
@@ -2652,7 +2684,8 @@ const DEFAULTS = {
       "notes": "",
       "description": "火種を封じた矢。着弾と同時に炎が弾け、傷口を焼く。",
       "power": "武器依存",
-      "publicId": "RCA-8RKU-LU9S"
+      "publicId": "RCA-8RKU-LU9S",
+      "upgradeLimit": "0"
     },
     {
       "id": "ammo_flash",
@@ -2673,7 +2706,8 @@ const DEFAULTS = {
       "notes": "",
       "description": "強い光を放つ弾。破裂した瞬間に視界を奪い、相手の動きを鈍らせる。",
       "power": "武器依存",
-      "publicId": "RCA-NJ7Q-P9KJ"
+      "publicId": "RCA-NJ7Q-P9KJ",
+      "upgradeLimit": "0"
     },
     {
       "id": "ammo_piercing",
@@ -2694,7 +2728,8 @@ const DEFAULTS = {
       "notes": "",
       "description": "硬い装甲を割るために作られた弾。鋭い芯が守りの隙間へ食い込む。",
       "power": "武器依存",
-      "publicId": "RCA-43EG-XABF"
+      "publicId": "RCA-43EG-XABF",
+      "upgradeLimit": "0"
     },
     {
       "id": "ammo_poison_arrow",
@@ -2715,7 +2750,8 @@ const DEFAULTS = {
       "notes": "",
       "description": "毒を塗り込めた矢。傷口から毒が巡り、相手の体力を蝕む。",
       "power": "武器依存",
-      "publicId": "RCA-8ZEV-2SN3"
+      "publicId": "RCA-8ZEV-2SN3",
+      "upgradeLimit": "0"
     },
     {
       "id": "ammo_purify",
@@ -2736,7 +2772,8 @@ const DEFAULTS = {
       "notes": "",
       "description": "清めの力を込めた弾。穢れや異界の気配を帯びたものを強く焼く。",
       "power": "武器依存",
-      "publicId": "RCA-VKBB-5USP"
+      "publicId": "RCA-VKBB-5USP",
+      "upgradeLimit": "0"
     },
     {
       "id": "arm_clothes",
@@ -2758,7 +2795,8 @@ const DEFAULTS = {
       "tags": "防具,初期装備",
       "description": "素朴な日常着。薄手だが動きやすく、街中や軽い探索で身を軽く保てる。",
       "notes": "",
-      "publicId": "RCA-NA95-LL9W"
+      "publicId": "RCA-NA95-LL9W",
+      "upgradeLimit": "0"
     },
     {
       "id": "arm_heavy",
@@ -2780,7 +2818,8 @@ const DEFAULTS = {
       "tags": "防具,重装,防御",
       "description": "厚手の胴衣に金属鋲を打ち込んだ防具。動きは重くなるが、正面からの衝撃を受け止めやすい。",
       "notes": "",
-      "publicId": "RCA-456K-857L"
+      "publicId": "RCA-456K-857L",
+      "upgradeLimit": "2"
     },
     {
       "id": "arm_light",
@@ -2802,7 +2841,8 @@ const DEFAULTS = {
       "tags": "防具,軽装,回避",
       "description": "風をはらむように軽い旅装の上着。防護布と薄革を合わせ、身軽な立ち回りを妨げにくい。",
       "notes": "",
-      "publicId": "RCA-7RCD-RZFQ"
+      "publicId": "RCA-7RCD-RZFQ",
+      "upgradeLimit": "2"
     },
     {
       "id": "arm_mage_robe",
@@ -2824,7 +2864,8 @@ const DEFAULTS = {
       "tags": "防具,魔導衣,魔法",
       "description": "淡く光る糸を織り込んだ術者用のケープ。肩口に刻まれた紋様が魔力の流れを整える。",
       "notes": "",
-      "publicId": "RCA-JHBG-H8KA"
+      "publicId": "RCA-JHBG-H8KA",
+      "upgradeLimit": "2"
     },
     {
       "id": "arm_medium",
@@ -2846,7 +2887,8 @@ const DEFAULTS = {
       "tags": "防具,中装",
       "description": "革地に細い鉄紐を編み込んだ実用的なベスト。重すぎず、急所をほどよく守れる。",
       "notes": "",
-      "publicId": "RCA-Z2R6-3CSM"
+      "publicId": "RCA-Z2R6-3CSM",
+      "upgradeLimit": "2"
     },
     {
       "id": "arm_prayer_robe",
@@ -2868,7 +2910,8 @@ const DEFAULTS = {
       "tags": "防具,祈祷衣,祈祷",
       "description": "祈りの言葉を細く刺繍した清楚なストール。身につけた者の呼吸と所作を静かに整える。",
       "notes": "",
-      "publicId": "RCA-GZTB-SMM2"
+      "publicId": "RCA-GZTB-SMM2",
+      "upgradeLimit": "2"
     },
     {
       "id": "bomb_acid",
@@ -2891,7 +2934,8 @@ const DEFAULTS = {
       "tags": "消耗品,攻撃,弱体,投擲",
       "description": "濁った酸液を封じた小瓶。割れると刺激臭のある液が飛び散り、装甲や外皮を蝕む。",
       "notes": "",
-      "publicId": "RCA-6TMD-WY8P"
+      "publicId": "RCA-6TMD-WY8P",
+      "upgradeLimit": "0"
     },
     {
       "id": "bomb_flam",
@@ -2914,7 +2958,8 @@ const DEFAULTS = {
       "tags": "消耗品,攻撃,火,投擲",
       "description": "火の素材を詰めた投擲瓶。砕けた瞬間に赤い炎が広がり、周囲を焼く。",
       "notes": "",
-      "publicId": "RCA-D6DJ-A8A9"
+      "publicId": "RCA-D6DJ-A8A9",
+      "upgradeLimit": "0"
     },
     {
       "id": "bomb_ice",
@@ -2937,7 +2982,8 @@ const DEFAULTS = {
       "tags": "消耗品,攻撃,氷,投擲",
       "description": "冷気を封じた青白い瓶。割れると鋭い霜が走り、対象の動きを鈍らせる。",
       "notes": "",
-      "publicId": "RCA-QCQN-DL4C"
+      "publicId": "RCA-QCQN-DL4C",
+      "upgradeLimit": "0"
     },
     {
       "id": "bomb_small",
@@ -2960,7 +3006,8 @@ const DEFAULTS = {
       "tags": "消耗品,攻撃,投擲",
       "description": "小型の爆薬を詰めた瓶。扱いやすく、着弾点で乾いた破裂音を響かせる。",
       "notes": "",
-      "publicId": "RCA-3D29-3HWW"
+      "publicId": "RCA-3D29-3HWW",
+      "upgradeLimit": "0"
     },
     {
       "id": "bomb_thunder",
@@ -2983,7 +3030,8 @@ const DEFAULTS = {
       "tags": "消耗品,攻撃,雷,投擲",
       "description": "雷の力を帯びた瓶。砕けた瞬間、紫電が弾けて硬い守りの隙間へ走る。",
       "notes": "",
-      "publicId": "RCA-8ZBG-PN4F"
+      "publicId": "RCA-8ZBG-PN4F",
+      "upgradeLimit": "0"
     },
     {
       "id": "book_magic",
@@ -3008,7 +3056,8 @@ const DEFAULTS = {
       "offhandBonus": "",
       "notes": "",
       "description": "魔法の術式を記すための書物。頁に刻んだ魔力の線が、術者の詠唱を導く。",
-      "publicId": "RCA-W2J4-TSN9"
+      "publicId": "RCA-W2J4-TSN9",
+      "upgradeLimit": "2"
     },
     {
       "id": "book_prayer",
@@ -3033,7 +3082,8 @@ const DEFAULTS = {
       "offhandBonus": "",
       "notes": "",
       "description": "祈祷の詞と儀礼を記した書物。祈りを形にするための導きとなる。",
-      "publicId": "RCA-ZZ88-3GAD"
+      "publicId": "RCA-ZZ88-3GAD",
+      "upgradeLimit": "2"
     },
     {
       "id": "con_antidote",
@@ -3056,7 +3106,8 @@ const DEFAULTS = {
       "notes": "",
       "power": "なし",
       "unlockFacility": "薬屋",
-      "publicId": "RCA-QMBM-CWXQ"
+      "publicId": "RCA-QMBM-CWXQ",
+      "upgradeLimit": "0"
     },
     {
       "id": "con_focus_incense",
@@ -3079,7 +3130,8 @@ const DEFAULTS = {
       "notes": "",
       "power": "判定+2",
       "unlockFacility": "薬屋",
-      "publicId": "RCA-9D6V-PG8P"
+      "publicId": "RCA-9D6V-PG8P",
+      "upgradeLimit": "0"
     },
     {
       "id": "con_hardening_draught",
@@ -3102,7 +3154,8 @@ const DEFAULTS = {
       "notes": "",
       "power": "軽減3",
       "unlockFacility": "薬屋",
-      "publicId": "RCA-UZ2S-RZUQ"
+      "publicId": "RCA-UZ2S-RZUQ",
+      "upgradeLimit": "0"
     },
     {
       "id": "con_high_mana_potion",
@@ -3125,7 +3178,8 @@ const DEFAULTS = {
       "notes": "",
       "power": "1D6+3",
       "unlockFacility": "薬屋",
-      "publicId": "RCA-PECJ-82L4"
+      "publicId": "RCA-PECJ-82L4",
+      "upgradeLimit": "0"
     },
     {
       "id": "con_high_potion",
@@ -3148,7 +3202,8 @@ const DEFAULTS = {
       "notes": "",
       "power": "2D6+3",
       "unlockFacility": "薬屋",
-      "publicId": "RCA-6SVE-XEGZ"
+      "publicId": "RCA-6SVE-XEGZ",
+      "upgradeLimit": "0"
     },
     {
       "id": "con_mana_potion",
@@ -3171,7 +3226,8 @@ const DEFAULTS = {
       "notes": "",
       "power": "1D6",
       "unlockFacility": "薬屋",
-      "publicId": "RCA-3ZZF-QQU3"
+      "publicId": "RCA-3ZZF-QQU3",
+      "upgradeLimit": "0"
     },
     {
       "id": "con_potion",
@@ -3194,7 +3250,8 @@ const DEFAULTS = {
       "notes": "",
       "power": "1D6+2",
       "unlockFacility": "薬屋",
-      "publicId": "RCA-FQG6-HL2Q"
+      "publicId": "RCA-FQG6-HL2Q",
+      "upgradeLimit": "0"
     },
     {
       "id": "con_purified_water",
@@ -3217,7 +3274,8 @@ const DEFAULTS = {
       "notes": "",
       "power": "なし",
       "unlockFacility": "薬屋",
-      "publicId": "RCA-WTBV-BVJ9"
+      "publicId": "RCA-WTBV-BVJ9",
+      "upgradeLimit": "0"
     },
     {
       "id": "con_swift_incense",
@@ -3240,7 +3298,8 @@ const DEFAULTS = {
       "notes": "",
       "power": "判定+2",
       "unlockFacility": "薬屋",
-      "publicId": "RCA-MN5J-VVBU"
+      "publicId": "RCA-MN5J-VVBU",
+      "upgradeLimit": "0"
     },
     {
       "id": "mat_magic_ink",
@@ -3260,7 +3319,8 @@ const DEFAULTS = {
       "notes": "",
       "equipmentUpgradeEffect": "",
       "equipmentUpgradeValue": "",
-      "publicId": "RCA-D3UQ-2ZND"
+      "publicId": "RCA-D3UQ-2ZND",
+      "upgradeLimit": "0"
     },
     {
       "id": "mat_prayer_paper",
@@ -3280,7 +3340,8 @@ const DEFAULTS = {
       "notes": "",
       "equipmentUpgradeEffect": "",
       "equipmentUpgradeValue": "",
-      "publicId": "RCA-S8YG-AQ7M"
+      "publicId": "RCA-S8YG-AQ7M",
+      "upgradeLimit": "0"
     },
     {
       "id": "scroll_high",
@@ -3300,7 +3361,8 @@ const DEFAULTS = {
       "tags": "術式,スクロール,消耗品",
       "notes": "",
       "description": "複雑な術式を封じた希少な巻物。開けば一時的に高度な力を呼び起こす。",
-      "publicId": "RCA-HJE9-N8XC"
+      "publicId": "RCA-HJE9-N8XC",
+      "upgradeLimit": "0"
     },
     {
       "id": "scroll_magic_basic",
@@ -3320,7 +3382,8 @@ const DEFAULTS = {
       "tags": "魔法,スクロール,消耗品",
       "notes": "",
       "description": "基礎的な魔法を封じた巻物。読み解くことで術式の形を学べる。",
-      "publicId": "RCA-758R-VXLJ"
+      "publicId": "RCA-758R-VXLJ",
+      "upgradeLimit": "0"
     },
     {
       "id": "scroll_mid",
@@ -3340,7 +3403,8 @@ const DEFAULTS = {
       "tags": "術式,スクロール,消耗品",
       "notes": "",
       "description": "中級の術式を封じた巻物。扱うには相応の知識と準備が求められる。",
-      "publicId": "RCA-HTQS-JGAJ"
+      "publicId": "RCA-HTQS-JGAJ",
+      "upgradeLimit": "0"
     },
     {
       "id": "scroll_prayer_basic",
@@ -3360,7 +3424,8 @@ const DEFAULTS = {
       "tags": "祈祷,スクロール,消耗品",
       "notes": "",
       "description": "基礎的な祈祷を記した巻物。祈りの言葉と作法を学ぶ手がかりになる。",
-      "publicId": "RCA-QWBS-J8NK"
+      "publicId": "RCA-QWBS-J8NK",
+      "upgradeLimit": "0"
     },
     {
       "id": "shd_large",
@@ -3382,7 +3447,8 @@ const DEFAULTS = {
       "tags": "盾,防御,かばう",
       "description": "大きな面で攻撃を遮る重盾。構えるだけで味方の背を隠すほどの安心感がある。",
       "notes": "",
-      "publicId": "RCA-DAYG-4XZF"
+      "publicId": "RCA-DAYG-4XZF",
+      "upgradeLimit": "2"
     },
     {
       "id": "shd_magic",
@@ -3404,7 +3470,8 @@ const DEFAULTS = {
       "tags": "盾,魔法,異界",
       "description": "魔力を受け流す紋様を刻んだ盾。異質な力を受けた時、表面の紋が淡く光る。",
       "notes": "",
-      "publicId": "RCA-5RLQ-NKQ9"
+      "publicId": "RCA-5RLQ-NKQ9",
+      "upgradeLimit": "2"
     },
     {
       "id": "shd_small",
@@ -3426,7 +3493,8 @@ const DEFAULTS = {
       "tags": "盾,防御",
       "description": "片腕で扱いやすい小盾。身を捌きながら攻撃を受け流すのに向いている。",
       "notes": "",
-      "publicId": "RCA-SZE5-D5ST"
+      "publicId": "RCA-SZE5-D5ST",
+      "upgradeLimit": "2"
     },
     {
       "id": "tool_flash",
@@ -3449,7 +3517,8 @@ const DEFAULTS = {
       "description": "強い光を封じた小玉。割れると眩い閃光が広がり、相手の動きを乱す。",
       "notes": "",
       "power": "判定-2",
-      "publicId": "RCA-ZVBW-6U9L"
+      "publicId": "RCA-ZVBW-6U9L",
+      "upgradeLimit": "0"
     },
     {
       "id": "tool_smoke",
@@ -3472,7 +3541,8 @@ const DEFAULTS = {
       "description": "濃い煙を噴き出す小玉。視界を遮り、狙いを定めにくくする。",
       "notes": "",
       "power": "判定-2",
-      "publicId": "RCA-WH4U-VAGQ"
+      "publicId": "RCA-WH4U-VAGQ",
+      "upgradeLimit": "0"
     },
     {
       "id": "wpn_axe_1h",
@@ -3495,7 +3565,8 @@ const DEFAULTS = {
       "tags": "近接,片手,初期倉庫",
       "notes": "",
       "description": "片手で扱える戦斧。刃の重みを乗せた一撃で、硬い装甲にも食い込みやすい。",
-      "publicId": "RCA-NSXE-377E"
+      "publicId": "RCA-NSXE-377E",
+      "upgradeLimit": "2"
     },
     {
       "id": "wpn_bow",
@@ -3517,7 +3588,8 @@ const DEFAULTS = {
       "tags": "射撃,両手,初期倉庫",
       "notes": "",
       "description": "扱いやすい短弓。軽く引けるため、移動しながらでも狙いをつけやすい。",
-      "publicId": "RCA-FZMV-JHZG"
+      "publicId": "RCA-FZMV-JHZG",
+      "upgradeLimit": "2"
     },
     {
       "id": "wpn_crossbow",
@@ -3539,7 +3611,8 @@ const DEFAULTS = {
       "tags": "射撃,両手,初期倉庫",
       "notes": "",
       "description": "機構で矢を放つ弩。腕力に頼りすぎず、狙った場所へ重い一撃を届ける。",
-      "publicId": "RCA-JUZ9-CWQ5"
+      "publicId": "RCA-JUZ9-CWQ5",
+      "upgradeLimit": "2"
     },
     {
       "id": "wpn_dagger",
@@ -3562,7 +3635,8 @@ const DEFAULTS = {
       "tags": "近接,片手,初期倉庫",
       "notes": "",
       "description": "小型で取り回しやすい短剣。近い間合いで素早く差し込み、細かな作業にも使える。",
-      "publicId": "RCA-PLHW-SUTX"
+      "publicId": "RCA-PLHW-SUTX",
+      "upgradeLimit": "2"
     },
     {
       "id": "wpn_gauntlet",
@@ -3596,7 +3670,8 @@ const DEFAULTS = {
       "ownerKey": "",
       "createdBy": "",
       "description": "両腕に装着する格闘武器。拳の打撃を強めながら、身軽な立ち回りを保てる。",
-      "publicId": "RCA-G48T-EBKD"
+      "publicId": "RCA-G48T-EBKD",
+      "upgradeLimit": "2"
     },
     {
       "id": "wpn_great_hammer",
@@ -3618,7 +3693,8 @@ const DEFAULTS = {
       "tags": "近接,両手,対防御,初期倉庫",
       "notes": "",
       "description": "両手で振るう大型槌。大きな打撃で硬い外殻や障害物を叩き砕く。",
-      "publicId": "RCA-EVRW-VZEN"
+      "publicId": "RCA-EVRW-VZEN",
+      "upgradeLimit": "2"
     },
     {
       "id": "wpn_great_sword",
@@ -3640,7 +3716,8 @@ const DEFAULTS = {
       "tags": "近接,両手,初期倉庫",
       "notes": "",
       "description": "両手で扱う大剣。重い刃を振り下ろし、正面から敵を押し切る。",
-      "publicId": "RCA-FRNL-FUV3"
+      "publicId": "RCA-FRNL-FUV3",
+      "upgradeLimit": "2"
     },
     {
       "id": "wpn_hammer_1h",
@@ -3663,7 +3740,8 @@ const DEFAULTS = {
       "tags": "近接,片手,対防御,初期倉庫",
       "notes": "",
       "description": "片手で扱える戦槌。刃では通りにくい相手にも、鈍い衝撃を深く響かせる。",
-      "publicId": "RCA-PHSD-LE7K"
+      "publicId": "RCA-PHSD-LE7K",
+      "upgradeLimit": "2"
     },
     {
       "id": "wpn_heavy_crossbow",
@@ -3685,7 +3763,8 @@ const DEFAULTS = {
       "tags": "射撃,両手,初期倉庫",
       "notes": "",
       "description": "大型の弩。構えには力がいるが、遠くの強敵にも深い傷を与えられる。",
-      "publicId": "RCA-YS8E-R7ZH"
+      "publicId": "RCA-YS8E-R7ZH",
+      "upgradeLimit": "2"
     },
     {
       "id": "wpn_long_spear",
@@ -3707,7 +3786,8 @@ const DEFAULTS = {
       "tags": "近接,両手,初期倉庫",
       "notes": "",
       "description": "両手で扱う長槍。長い柄で敵を近づけず、前線の足並みを乱す。",
-      "publicId": "RCA-XVFM-D7G3"
+      "publicId": "RCA-XVFM-D7G3",
+      "upgradeLimit": "2"
     },
     {
       "id": "wpn_scythe",
@@ -3741,7 +3821,8 @@ const DEFAULTS = {
       "ownerKey": "",
       "createdBy": "",
       "description": "大きく弧を描いて薙ぎ払う大鎌。広い刃筋で複数の敵を威圧する。",
-      "publicId": "RCA-MT5S-KQX5"
+      "publicId": "RCA-MT5S-KQX5",
+      "upgradeLimit": "2"
     },
     {
       "id": "wpn_spear_1h",
@@ -3764,7 +3845,8 @@ const DEFAULTS = {
       "tags": "近接,片手,初期倉庫",
       "notes": "",
       "description": "片手で扱える短槍。間合いを保ちながら突き込み、守る相手の背後にも届かせやすい。",
-      "publicId": "RCA-G4SX-Q3PL"
+      "publicId": "RCA-G4SX-Q3PL",
+      "upgradeLimit": "2"
     },
     {
       "id": "wpn_staff",
@@ -3787,7 +3869,8 @@ const DEFAULTS = {
       "tags": "近接,魔法,片手,初期倉庫",
       "notes": "",
       "description": "木製の杖。魔力を通しやすく、術者の集中を助けるほか、近接武器としても扱える。",
-      "publicId": "RCA-A66Q-E9H7"
+      "publicId": "RCA-A66Q-E9H7",
+      "upgradeLimit": "2"
     },
     {
       "id": "wpn_sword_1h",
@@ -3810,7 +3893,8 @@ const DEFAULTS = {
       "tags": "近接,片手,初期倉庫",
       "notes": "",
       "description": "標準的な片手剣。癖が少なく、盾や書物を持ちながらでも扱いやすい。",
-      "publicId": "RCA-LJ5F-A8CU"
+      "publicId": "RCA-LJ5F-A8CU",
+      "upgradeLimit": "2"
     },
     {
       "id": "wpn_unarmed",
@@ -3832,7 +3916,8 @@ const DEFAULTS = {
       "tags": "近接",
       "notes": "",
       "description": "武器を持たずに行う素手の攻撃。とっさの抵抗や簡単な打撃に使う。",
-      "publicId": "RCA-TA2A-9LQZ"
+      "publicId": "RCA-TA2A-9LQZ",
+      "upgradeLimit": "0"
     },
     {
       "id": "mat_herb",
@@ -3865,7 +3950,8 @@ const DEFAULTS = {
       "description": "傷薬の材料になる柔らかな薬草。摘むと青い香りが指先に残る。",
       "equipmentUpgradeEffect": "",
       "equipmentUpgradeValue": "",
-      "publicId": "RCA-RPJ7-G72R"
+      "publicId": "RCA-RPJ7-G72R",
+      "upgradeLimit": "0"
     },
     {
       "id": "mat_purifying_grass",
@@ -3898,7 +3984,8 @@ const DEFAULTS = {
       "description": "清めの力を宿す草。葉の縁が淡く光り、穢れに触れると色を変える。",
       "equipmentUpgradeEffect": "",
       "equipmentUpgradeValue": "",
-      "publicId": "RCA-QBRA-XVYH"
+      "publicId": "RCA-QBRA-XVYH",
+      "upgradeLimit": "0"
     },
     {
       "id": "mat_round_mushroom",
@@ -3931,7 +4018,8 @@ const DEFAULTS = {
       "description": "丸く膨らんだ食用茸。乾かすと香りが強くなり、調合のつなぎにも使える。",
       "equipmentUpgradeEffect": "",
       "equipmentUpgradeValue": "",
-      "publicId": "RCA-45MQ-G9FP"
+      "publicId": "RCA-45MQ-G9FP",
+      "upgradeLimit": "0"
     },
     {
       "id": "mat_clear_water",
@@ -3964,7 +4052,8 @@ const DEFAULTS = {
       "description": "濁りの少ない澄んだ水。薬液や清めの品を作る時の基礎になる。",
       "equipmentUpgradeEffect": "",
       "equipmentUpgradeValue": "",
-      "publicId": "RCA-2SMT-E8LN"
+      "publicId": "RCA-2SMT-E8LN",
+      "upgradeLimit": "0"
     },
     {
       "id": "mat_small_crystal",
@@ -3997,7 +4086,8 @@ const DEFAULTS = {
       "description": "透明感のある小さな水晶片。弱い魔力を留めやすく、術式素材に向く。",
       "equipmentUpgradeEffect": "",
       "equipmentUpgradeValue": "",
-      "publicId": "RCA-UMZS-7QN5"
+      "publicId": "RCA-UMZS-7QN5",
+      "upgradeLimit": "0"
     },
     {
       "id": "mat_sturdy_branch",
@@ -4030,7 +4120,8 @@ const DEFAULTS = {
       "description": "折れにくい丈夫な枝。柄や簡易道具の芯材として扱いやすい。",
       "equipmentUpgradeEffect": "",
       "equipmentUpgradeValue": "",
-      "publicId": "RCA-LP4N-2FGU"
+      "publicId": "RCA-LP4N-2FGU",
+      "upgradeLimit": "0"
     },
     {
       "id": "mat_flexible_vine",
@@ -4063,7 +4154,8 @@ const DEFAULTS = {
       "description": "しなやかに曲がる蔓。縛る、編む、つなぐといった加工に向く。",
       "equipmentUpgradeEffect": "",
       "equipmentUpgradeValue": "",
-      "publicId": "RCA-KT9D-4D8R"
+      "publicId": "RCA-KT9D-4D8R",
+      "upgradeLimit": "0"
     },
     {
       "id": "mat_gelatin_liquid",
@@ -4096,7 +4188,8 @@ const DEFAULTS = {
       "description": "ぷるぷると揺れる粘液。冷やすと固まり、薬や接着材の素材になる。",
       "equipmentUpgradeEffect": "特殊効果付与(武器)",
       "equipmentUpgradeValue": "命中時、対象の次の行動判定-1",
-      "publicId": "RCA-64X3-USPY"
+      "publicId": "RCA-64X3-USPY",
+      "upgradeLimit": "0"
     },
     {
       "id": "mat_puru_membrane",
@@ -4129,7 +4222,8 @@ const DEFAULTS = {
       "description": "薄く弾力のある膜。衝撃を吸収しやすく、防具や容器の加工に使える。",
       "equipmentUpgradeEffect": "防御行動値(防具)",
       "equipmentUpgradeValue": "+1",
-      "publicId": "RCA-C9BK-8MA8"
+      "publicId": "RCA-C9BK-8MA8",
+      "upgradeLimit": "0"
     },
     {
       "id": "mat_small_slime_core",
@@ -4162,7 +4256,8 @@ const DEFAULTS = {
       "description": "小さなスライムの核。淡い魔力を帯び、調合素材として扱われる。",
       "equipmentUpgradeEffect": "水属性付与(武器)",
       "equipmentUpgradeValue": "水",
-      "publicId": "RCA-6XEB-ZZGV"
+      "publicId": "RCA-6XEB-ZZGV",
+      "upgradeLimit": "0"
     },
     {
       "id": "mat_small_beast_pelt",
@@ -4195,7 +4290,8 @@ const DEFAULTS = {
       "description": "小獣から取れる柔らかな毛皮。防寒具や軽い防具の素材になる。",
       "equipmentUpgradeEffect": "回避補正(防具)",
       "equipmentUpgradeValue": "+1",
-      "publicId": "RCA-VNQE-XG6J"
+      "publicId": "RCA-VNQE-XG6J",
+      "upgradeLimit": "0"
     },
     {
       "id": "mat_small_beast_fang",
@@ -4228,7 +4324,8 @@ const DEFAULTS = {
       "description": "小獣の鋭い牙。削れば刃物や装飾品の素材として使える。",
       "equipmentUpgradeEffect": "威力(武器)",
       "equipmentUpgradeValue": "+1",
-      "publicId": "RCA-Y66C-ZEJR"
+      "publicId": "RCA-Y66C-ZEJR",
+      "upgradeLimit": "0"
     },
     {
       "id": "mat_small_claw",
@@ -4261,7 +4358,8 @@ const DEFAULTS = {
       "description": "小さな獣の爪。硬く軽いため、細工や武器の補強に使われる。",
       "equipmentUpgradeEffect": "防御貫通(武器)",
       "equipmentUpgradeValue": "+1",
-      "publicId": "RCA-HMBK-QF4A"
+      "publicId": "RCA-HMBK-QF4A",
+      "upgradeLimit": "0"
     }
   ],
   "recipes": [
@@ -4388,14 +4486,14 @@ const DEFAULTS = {
       "target": "敵1体",
       "checkType": "魔法>=回避値",
       "element": "無",
-      "effect": "対象の次判定-2。",
+      "effect": "重い魔力の鎖で動きを鈍らせる。対象は次の自身のターン終了時まで、すべての判定に-1。",
       "role": "妨害特化",
       "scrollPrice": 80,
       "setItem": "魔導書/魔印/スクロール",
       "tags": "魔法,妨害",
       "notes": "",
       "description": "重い魔力の鎖で敵の動きを鈍らせる妨害術式。",
-      "power": "なし"
+      "power": "判定-1"
     },
     {
       "id": "mag_magic_bolt",
@@ -4478,14 +4576,14 @@ const DEFAULTS = {
       "target": "味方1人",
       "checkType": "祈祷>=10",
       "element": "光",
-      "effect": "対象の次の能動判定+2。",
+      "effect": "迷いを払い、行動する勇気を与える。対象は次の自身のターン終了時まで、攻撃・探索・交渉などの能動判定に+1。",
       "role": "支援",
       "scrollPrice": 80,
       "setItem": "祈祷書/聖印/スクロール",
       "tags": "祈祷,支援,鼓舞",
       "notes": "",
       "description": "胸の奥に小さな灯をともす祈りで、迷いを払い行動を後押しする祈祷。",
-      "power": "判定+2"
+      "power": "能動判定+1"
     },
     {
       "id": "pr_peace",
@@ -4496,14 +4594,14 @@ const DEFAULTS = {
       "target": "味方1人",
       "checkType": "祈祷>=10",
       "element": "光",
-      "effect": "対象の次の抵抗・集中判定+2。",
+      "effect": "心身の揺らぎを鎮め、集中を取り戻させる。対象は次の自身のターン終了時まで、抵抗・集中判定に+1。",
       "role": "精神支援",
       "scrollPrice": 80,
       "setItem": "祈祷書/聖印/スクロール",
       "tags": "祈祷,支援,共感,抵抗",
       "notes": "",
       "description": "静かな祈りで心身の揺らぎを鎮め、乱れた集中を取り戻す祈祷。",
-      "power": "判定+2"
+      "power": "抵抗/集中+1"
     },
     {
       "id": "pr_calm",
@@ -4514,14 +4612,14 @@ const DEFAULTS = {
       "target": "敵1体",
       "checkType": "祈祷>=抵抗値",
       "element": "光",
-      "effect": "異界存在・不死・呪物系の敵の次判定-2。",
+      "effect": "荒ぶる魂や異質な気配を鎮め、勢いを弱める。異界存在・不死・呪物系の対象は、次の自身のターン終了時まで、すべての判定に-1。",
       "role": "対異界妨害",
       "scrollPrice": 80,
       "setItem": "祈祷書/聖印/スクロール",
       "tags": "祈祷,妨害,異界",
       "notes": "",
       "description": "荒ぶる魂や異質な気配に語りかけ、その勢いを鎮める祈祷。",
-      "power": "判定-2"
+      "power": "判定-1"
     }
   ],
   "quest_rewards": [
@@ -5382,6 +5480,22 @@ const SYSTEM_HELP = [
       "通常矢と通常ボルトは20個、大型ボルトは10個を1スタックとする。",
       "矢筒は初期支給しない。矢弾は所持品枠を使用する。"
     ]
+  },
+  {
+    "title": "装備強化",
+    "tags": [
+      "装備",
+      "強化",
+      "素材"
+    ],
+    "body": [
+      "武器、防具、盾、装飾品、魔導書、祈祷書には強化可能回数を設定する。",
+      "初級/低級の武器・防具・盾は原則2回まで強化可能。",
+      "初級/低級の装飾品は原則1回まで強化可能。",
+      "魔導書と祈祷書は原則2回まで強化可能。",
+      "素手、普段着、バッグ、矢筒、素材、調合品、道具、矢弾、スクロールは原則0回。",
+      "実際に適用した強化内容はキャラクターシートの装備欄で、1強化1行で記録する。"
+    ]
   }
 ];
 function buildSystemHelpText(){
@@ -5585,6 +5699,7 @@ function buildPlayerItemInfoText(row={}, key='', count='1'){
   if(fieldText(row,'guardValue') || fieldText(row,'guard')) useInfo.push(`防御行動 ${fieldText(row,'guardValue') || fieldText(row,'guard')}`);
   if(fieldText(row,'evasionMod') || fieldText(row,'evade')) useInfo.push(`回避 ${fieldText(row,'evasionMod') || fieldText(row,'evade')}`);
   if(fieldText(row,'offhandBonus') || fieldText(row,'offhand')) useInfo.push(`副手追撃 ${fieldText(row,'offhandBonus') || fieldText(row,'offhand')}`);
+  if(fieldText(row,'upgradeLimit')) useInfo.push(`強化可能回数 ${fieldText(row,'upgradeLimit')}`);
   if(fieldText(row,'mpCost') || fieldText(row,'cost')) useInfo.push(`コスト ${fieldText(row,'mpCost') || fieldText(row,'cost')}`);
   if(fieldText(row,'target')) useInfo.push(`対象 ${fieldText(row,'target')}`);
   if(fieldText(row,'checkType')) useInfo.push(`判定 ${fieldText(row,'checkType')}`);
@@ -6035,7 +6150,7 @@ function questCardHtml(row, idx){
       <div class="monster-card-head">
         <div class="monster-title"><b>${escapeHtml(title)}</b>${id ? `<span class="monster-id">${escapeHtml(id)}</span>` : ''}</div>
         <div class="monster-card-actions">
-          <button type="button" class="ghost" data-edit-row="quests:${idx}">編集</button>
+          <button type="button" class="secondary" data-row-save="quests:${idx}">個別DB登録</button><button type="button" class="danger" data-row-replace="quests:${idx}">個別DB置換</button><button type="button" class="ghost" data-edit-row="quests:${idx}">編集</button>
           <button type="button" class="ghost" data-dup="quests:${idx}">複製</button>
           <button type="button" class="danger" data-del="quests:${idx}">削除</button>
         </div>
@@ -6076,7 +6191,7 @@ function eventRowCardHtml(row, idx){
       <div class="monster-card-head">
         <div class="monster-title"><b>${escapeHtml(title)}</b>${row.id ? `<span class="monster-id">${escapeHtml(row.id)}</span>` : ''}</div>
         <div class="monster-card-actions">
-          <button type="button" class="ghost" data-edit-row="event_tables:${idx}">編集</button>
+          <button type="button" class="secondary" data-row-save="event_tables:${idx}">個別DB登録</button><button type="button" class="danger" data-row-replace="event_tables:${idx}">個別DB置換</button><button type="button" class="ghost" data-edit-row="event_tables:${idx}">編集</button>
           <button type="button" class="ghost" data-dup="event_tables:${idx}">複製</button>
           <button type="button" class="danger" data-del="event_tables:${idx}">削除</button>
         </div>
@@ -6119,10 +6234,99 @@ function renderEventAreaCardsTable(key){
   table.innerHTML=`<tbody><tr><td class="monster-list-cell"><div class="monster-card-list" aria-label="エリア別イベント一覧">${html}</div></td></tr></tbody>`;
 }
 
+function recordFieldHtml(row={}, field){
+  const label = LABELS[field] || field;
+  const raw = row && row[field] !== undefined && row[field] !== null ? String(row[field]) : '';
+  const value = raw.trim() ? raw : '—';
+  const emptyClass = raw.trim() ? '' : ' record-field-empty';
+  return `<div class="record-field${emptyClass}"><span class="record-field-label">${escapeHtml(label)}</span><div class="record-field-value">${escapeHtml(value)}</div></div>`;
+}
+function recordCardTitle(row={}, key=''){
+  return row.name || row.eventName || row.resultItem || row.tableId || row.id || `${labelKey(key)}未設定`;
+}
+function recordCardBadges(row={}, key=''){
+  const candidates = [
+    row.publicId ? ['公開ID', row.publicId] : null,
+    row.dataKind ? ['登録種別', row.dataKind] : null,
+    row.itemType ? ['種別', row.itemType] : null,
+    row.itemCategory ? ['カテゴリ', row.itemCategory] : null,
+    row.materialType ? ['素材種別', row.materialType] : null,
+    row.materialCategory ? ['素材カテゴリ', row.materialCategory] : null,
+    row.craftType ? ['製作', row.craftType] : null,
+    row.type ? ['種別', row.type] : null,
+    row.rank ? ['ランク', row.rank] : null
+  ].filter(Boolean);
+  return candidates.map(([label,value])=>monsterBadge(label, value)).join('');
+}
+function recordCardSummary(row={}, key=''){
+  const summaryFieldsByKey = {
+    items: ['price','equipSlot','power','hitMod','alwaysDefense','guardValue','evasionMod','offhandBonus','upgradeLimit','mpCost','target','checkType','element','maxStack'],
+    materials: ['price','rank','materialType','materialCategory','source','equipmentUpgradeEffect','equipmentUpgradeValue','maxStack'],
+    recipes: ['rank','craftType','category','resultItem','resultKind','resultCount','difficulty'],
+    spells: ['rank','mpCost','target','checkType','element','power','role','scrollPrice','setItem']
+  };
+  const fields = summaryFieldsByKey[key] || [];
+  return fields.filter(f=>String(row[f] ?? '').trim()).slice(0, 12).map(f=>monsterStat(LABELS[f] || f, row[f])).join('');
+}
+function recordCardHtml(row={}, idx=0, key=''){
+  const editKey = baseKeyForTable(key);
+  const title = recordCardTitle(row, key);
+  const id = row.id || '';
+  const fields = schemaForTable(key);
+  const body = `<div class="record-field-grid">${fields.map(f=>recordFieldHtml(row,f)).join('')}</div>`;
+  const summary = recordCardSummary(row, key);
+  const badges = recordCardBadges(row, key);
+  return `<details class="monster-card">
+    <summary>
+      <div class="monster-card-head">
+        <div class="monster-title"><b>${escapeHtml(title)}</b>${id ? `<span class="monster-id">${escapeHtml(id)}</span>` : ''}</div>
+        <div class="monster-card-actions">
+          <button type="button" class="secondary" data-copy-card="${key}:${idx}">情報コピー</button>
+          <button type="button" class="secondary" data-row-save="${key}:${idx}">個別DB登録</button>
+          <button type="button" class="danger" data-row-replace="${key}:${idx}">個別DB置換</button>
+          <button type="button" class="ghost" data-edit-row="${editKey}:${idx}">編集</button>
+          <button type="button" class="ghost" data-dup="${editKey}:${idx}">複製</button>
+          <button type="button" class="danger" data-del="${editKey}:${idx}">削除</button>
+        </div>
+      </div>
+      <div class="monster-badges">${badges || '<span class="monster-badge">登録情報</span>'}</div>
+      ${summary ? `<div class="monster-card-summary">${summary}</div>` : ''}
+    </summary>
+    <div class="monster-card-body">
+      <section class="monster-section"><h4>登録情報すべて</h4>${body}</section>
+    </div>
+  </details>`;
+}
+function renderRecordCardsTable(key){
+  if(key==='recipes') updateRecipeViewUi();
+  renderFilterControls(key);
+  const table=$('table-'+key);
+  if(!table) return;
+  const filter=($('filter-'+key)?.value||'').toLowerCase().trim();
+  const totalRows=indexedRowsForTable(key);
+  let rows=totalRows.filter(({row})=>{
+    const textOk=!filter || JSON.stringify(row).toLowerCase().includes(filter);
+    const recipeOk = key !== 'recipes' || rowMatchesRecipeView(row);
+    return textOk && recipeOk && rowMatchesAdvancedFilters(key,row);
+  });
+  const {sortField, sortDir}=tableUiState[key];
+  if(sortField){
+    rows.sort((a,b)=>{
+      const c=compareValues(a.row[sortField], b.row[sortField]);
+      return sortDir==='asc' ? c : -c;
+    });
+  }
+  const count=$('filtered-count-'+key);
+  if(count) count.textContent = `表示 ${rows.length} / ${totalRows.length}`;
+  const cards = rows.length ? rows.map(({row,idx})=>recordCardHtml(row,idx,key)).join('') : `<div class="monster-empty-note">条件に一致する${escapeHtml(labelKey(key))}がありません。</div>`;
+  table.innerHTML = `<tbody><tr><td class="monster-list-cell"><div class="monster-card-list" aria-label="${escapeHtml(labelKey(key))}一覧">${cards}</div></td></tr></tbody>`;
+}
+
 function renderTable(key){
   if(key==='monsters'){ renderMonsterCardsTable(key); return; }
   if(key==='quests'){ renderQuestCardsTable(key); return; }
   if(key==='event_tables'){ renderEventAreaCardsTable(key); return; }
+  if(RECORD_CARD_KEYS.has(key)){ renderRecordCardsTable(key); return; }
   if(key==='recipes') updateRecipeViewUi();
   renderFilterControls(key);
   const table=$('table-'+key);
@@ -6154,7 +6358,7 @@ function renderTable(key){
   }
   rows.forEach(({row,idx})=>{
     const editKey=baseKeyForTable(key);
-    html+=`<tr><td class="controls"><div class="row-actions"><button class="secondary" data-copy-card="${key}:${idx}">情報コピー</button><button class="ghost" data-edit-row="${editKey}:${idx}">編集</button><button class="ghost" data-dup="${editKey}:${idx}">複製</button><button class="danger" data-del="${editKey}:${idx}">削除</button></div></td>`;
+    html+=`<tr><td class="controls"><div class="row-actions"><button class="secondary" data-copy-card="${key}:${idx}">情報コピー</button><button class="secondary" data-row-save="${key}:${idx}">個別DB登録</button><button class="danger" data-row-replace="${key}:${idx}">個別DB置換</button><button class="ghost" data-edit-row="${editKey}:${idx}">編集</button><button class="ghost" data-dup="${editKey}:${idx}">複製</button><button class="danger" data-del="${editKey}:${idx}">削除</button></div></td>`;
     headers.forEach(h=>{
       const cls = FORM_LONG_FIELDS.has(h) ? 'readonly-cell long' : 'readonly-cell';
       html+=`<td class="${cls}">${escapeHtml(row[h] ?? '')}</td>`;
@@ -7325,9 +7529,35 @@ async function saveSheet(tableKey){
     await saveSheetInternal(tableKey);
   }catch(e){toast(e.message,'error')}
 }
+function rowForSingleDbSave(tableKey, idx){
+  const base = baseKeyForTable(tableKey);
+  const row = (state[base] || [])[idx];
+  if(!row) throw new Error(`${labelKey(tableKey)}の対象行が見つかりません`);
+  const cloned = cloneRowsForSave(base, [row])[0];
+  if(!cloned) throw new Error(`${labelKey(tableKey)}の対象行をDB送信用に変換できません`);
+  return cloned;
+}
+async function saveSingleRow(tableKey, idx, mode='upsert'){
+  const base = baseKeyForTable(tableKey);
+  const row = rowForSingleDbSave(tableKey, idx);
+  const label = mode === 'replace' ? '個別DB置換' : '個別DB登録';
+  const name = row.name || row.eventName || row.tableId || row.id || labelKey(tableKey);
+  if(mode === 'replace' && !confirm(`「${name}」だけをDB置換します。\n同じ表の他データは保持します。\nよろしいですか？`)) return;
+  try{
+    toast(`${labelKey(tableKey)}「${name}」の${label}を開始します`, 'warn');
+    const res = await upsertSheetRowsByJsonp(base, [row]);
+    if(!res || !res.ok) throw new Error((res && res.error) || `${name}の${label}に失敗しました`);
+    rerenderTableGroup(tableKey);
+    updateCounts();
+    updateJsonBox();
+    toast(`${labelKey(tableKey)}「${name}」を${label}しました`);
+  }catch(e){
+    toast(e.message, 'error');
+  }
+}
 function setAllPageButtonsDisabled(disabled){
   ['btnSavePages','btnReplacePages','btnDiagnoseSheets','btnRepairHeaders'].forEach(id=>{ const b=$(id); if(b) b.disabled = disabled; });
-  document.querySelectorAll('[data-save],[data-replace],[data-load],[data-reset]').forEach(b=>{ b.disabled = disabled; });
+  document.querySelectorAll('[data-save],[data-replace],[data-load],[data-reset],[data-row-save],[data-row-replace]').forEach(b=>{ b.disabled = disabled; });
 }
 function showTablePageForOperation(tableKey){
   if(CATEGORY_KEYS.includes(tableKey)){
@@ -7496,6 +7726,8 @@ document.addEventListener('click',e=>{
   const monsterToken=e.target.closest('[data-monster-token]'); if(monsterToken){ outputMonsterToken(+monsterToken.dataset.monsterToken); return; }
   const monsterPalette=e.target.closest('[data-monster-palette]'); if(monsterPalette){ outputMonsterPalette(+monsterPalette.dataset.monsterPalette); return; }
   const copyCard=e.target.closest('[data-copy-card]'); if(copyCard){ const [k,i]=copyCard.dataset.copyCard.split(':'); copyRowCard(k,+i); return; }
+  const rowSave=e.target.closest('[data-row-save]'); if(rowSave){ const [k,i]=rowSave.dataset.rowSave.split(':'); saveSingleRow(k,+i,'upsert'); return; }
+  const rowReplace=e.target.closest('[data-row-replace]'); if(rowReplace){ const [k,i]=rowReplace.dataset.rowReplace.split(':'); saveSingleRow(k,+i,'replace'); return; }
   const addAction=e.target.closest('[data-monster-action-add]'); if(addAction){ const editor=addAction.closest('[data-monster-actions-editor]'); editor.querySelector('[data-monster-action-list]').insertAdjacentHTML('beforeend', monsterActionRowHtml({element:'物'})); syncMonsterActionEditor(editor); return; }
   const remAction=e.target.closest('[data-monster-action-remove]'); if(remAction){ const editor=remAction.closest('[data-monster-actions-editor]'); remAction.closest('[data-monster-action-row]')?.remove(); syncMonsterActionEditor(editor); return; }
   const addDrop=e.target.closest('[data-monster-drop-add]'); if(addDrop){ const editor=addDrop.closest('[data-monster-drops-editor]'); editor.querySelector('[data-monster-drop-list]').insertAdjacentHTML('beforeend', monsterDropRowHtml({})); syncMonsterDropEditor(editor); return; }
