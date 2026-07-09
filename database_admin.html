@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.85</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.86</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -307,6 +307,7 @@
   .facility-layout{display:grid;gap:14px;margin-top:12px}
   .facility-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
   .facility-summary-card{background:#fffaf3;border:1px solid #e5d2ba;border-radius:14px;padding:12px;box-shadow:0 4px 12px rgba(94,66,35,.06)}
+  .facility-summary-card.active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(126,75,36,.12)}
   .facility-summary-card b{display:block;font-size:18px;color:var(--accent)}
   .facility-summary-card span{display:block;color:var(--muted);font-size:12px;margin-top:4px}
   .facility-card{background:#fffdf9;border:1px solid #dcc7ad;border-radius:18px;padding:14px;box-shadow:0 6px 16px rgba(94,66,35,.06)}
@@ -507,7 +508,9 @@
   <div class="tab-block subnav-block hidden" data-subnav-group="facilities">
     <div class="tab-label">小カテゴリ</div>
     <div class="subtabs section-subtabs">
-      <button class="subtab" data-main-tab="facilities">施設管理</button>
+      <button class="subtab" data-main-tab="facilities" data-facility-view="鍛冶屋">鍛冶屋</button>
+      <button class="subtab" data-main-tab="facilities" data-facility-view="薬屋">薬屋</button>
+      <button class="subtab" data-main-tab="facilities" data-facility-view="宿屋">宿屋</button>
     </div>
   </div>
 
@@ -759,18 +762,30 @@
     <div class="facility-layout">
       <div class="facility-summary" id="facilitySummary"></div>
       <div id="facilityCards"></div>
-      <section class="facility-upgrade-box">
-        <h3>強化</h3>
-        <p class="notice">素材名を入力すると、装備強化内容と装備強化値を確認できます。ドロップ出力側にはこの強化情報は表示しません。</p>
-        <div class="input-action-row">
-          <div>
-            <label for="facilityUpgradeMaterialInput">素材名</label>
-            <input id="facilityUpgradeMaterialInput" list="facilityUpgradeMaterialList" placeholder="例：ぷるぷる膜 / 小獣の牙">
-            <datalist id="facilityUpgradeMaterialList"></datalist>
+      <section class="facility-upgrade-box" id="facilityWorkPanel">
+        <h3 id="facilityWorkTitle">施設作業</h3>
+        <p class="notice" id="facilityWorkNotice">施設ごとの作業内容を確認します。</p>
+        <div id="facilitySmithyWork" class="facility-work-block">
+          <div class="input-action-row">
+            <div>
+              <label for="facilityUpgradeMaterialInput">強化素材</label>
+              <select id="facilityUpgradeMaterialInput"></select>
+            </div>
+            <button class="secondary" type="button" data-facility-upgrade-check>強化内容を確認</button>
           </div>
-          <button class="secondary" type="button" data-facility-upgrade-check>強化内容を確認</button>
+          <div id="facilityUpgradeResult" class="facility-upgrade-result muted">強化素材を選択してください。</div>
         </div>
-        <div id="facilityUpgradeResult" class="facility-upgrade-result muted">素材名を入力してください。</div>
+        <div id="facilityAlchemyWork" class="facility-work-block hidden">
+          <div class="input-action-row">
+            <div>
+              <label for="facilityAlchemyRecipeSelect">作成するアイテム</label>
+              <select id="facilityAlchemyRecipeSelect"></select>
+            </div>
+            <button class="secondary" type="button" data-facility-alchemy-check>調合難易度を確認</button>
+          </div>
+          <div id="facilityAlchemyResult" class="facility-upgrade-result muted">作成するアイテムを選択してください。</div>
+        </div>
+        <div id="facilityNoWork" class="facility-upgrade-result muted hidden">この施設には強化・調合の難易度確認項目はありません。</div>
       </section>
       <div class="facility-output">
         <label for="facilitySalesText">販売商品リスト出力</label>
@@ -849,8 +864,8 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.85';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.85';
+const RECRAFT_DB_VERSION = 'v90.8.86';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.86';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const PAGE_TABLE_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','materials','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -908,6 +923,7 @@ let quickCategoryDirty = false;
 let currentMainTab = 'categories';
 let currentCategoryTab = 'item_types';
 let currentRecipeView = '調合';
+let currentFacilityView = '鍛冶屋';
 const RECIPE_VIEW_META = {
   '調合': {title:'調合レシピ', description:'薬品・爆弾・香など、薬屋/調合施設で作るアイテムを管理します。'},
   '鍛冶': {title:'鍛冶レシピ', description:'装備や金属加工など、鍛冶屋で作る通常の鍛冶データを管理します。'},
@@ -10516,7 +10532,7 @@ function facilityServiceLine(service){
   return `- ${service.name}（${service.price || '価格未設定'}）：${service.description || ''}`;
 }
 function buildFacilitySalesText(targetFacilityName=''){
-  const defs = targetFacilityName ? FACILITY_DEFS.filter(f=>f.name===targetFacilityName) : FACILITY_DEFS;
+  const defs = targetFacilityName ? FACILITY_DEFS.filter(f=>f.name===targetFacilityName) : facilityActiveDefs();
   return defs.map(f=>{
     const products=facilityProducts(f.name);
     const productText = products.length ? products.map(facilityProductLine).join('\n') : '- 販売商品未設定';
@@ -10536,20 +10552,20 @@ function renderFacilitiesPanel(){
   const summary=$('facilitySummary');
   const cards=$('facilityCards');
   if(!summary || !cards) return;
+  const defs = facilityActiveDefs();
   summary.innerHTML = FACILITY_DEFS.map(f=>{
     const count=facilityProducts(f.name).length;
-    return `<div class="facility-summary-card"><b>${count}</b><span>${escapeHtml(f.name)}の販売商品</span></div>`;
+    return `<div class="facility-summary-card ${f.name===currentFacilityView?'active':''}"><b>${count}</b><span>${escapeHtml(f.name)}の販売商品</span></div>`;
   }).join('');
-  cards.innerHTML = FACILITY_DEFS.map(f=>{
+  cards.innerHTML = defs.map(f=>{
     const products=facilityProducts(f.name);
     const productHtml = products.length ? products.map(renderFacilityProductDetails).join('') : '<p class="notice">この施設に紐づく販売商品はまだありません。アイテム/素材の「入手先」または「解放施設」に施設名を入れると表示されます。</p>';
     const serviceHtml = (f.services||[]).map(s=>`<li><b>${escapeHtml(s.name)}</b> <span class="facility-chip">${escapeHtml(s.price||'価格未設定')}</span><br>${escapeHtml(s.description||'')}</li>`).join('');
     return `<section class="facility-card">\n      <div class="facility-card-head">\n        <div><h3>${escapeHtml(f.name)}</h3><p class="facility-role">${escapeHtml(f.role)}</p></div>\n        <div class="facility-actions"><button class="ghost" data-facility-copy="${escapeHtml(f.name)}">この施設のリストをコピー</button></div>\n      </div>\n      <p class="table-toolbar-note">販売商品 <span class="view-mode-chip">${products.length}件</span></p>\n      <div class="facility-product-list">${productHtml}</div>\n      <p class="table-toolbar-note">サービス</p>\n      <ul class="facility-service-list">${serviceHtml}</ul>\n    </section>`;
   }).join('');
   const out=$('facilitySalesText');
-  if(out && !String(out.value||'').trim()) out.value=buildFacilitySalesText();
-  renderFacilityUpgradeLookupList();
-  renderFacilityUpgradeResult($('facilityUpgradeMaterialInput')?.value || '');
+  if(out) out.value=buildFacilitySalesText();
+  renderFacilityWorkPanel();
 }
 async function copyFacilitySalesList(facilityName=''){
   const text=buildFacilitySalesText(facilityName);
@@ -10817,6 +10833,79 @@ function dropMaterialOutputBlock(row={}){
   const detail = dropMaterialDetailText(material);
   return [base, ...detail.map(line=>'  ' + line)].join('\n');
 }
+const MATERIAL_RANK_DIFFICULTY = { '低級':7, '普通':9, '良質':11, '希少':13, '高級':15 };
+function materialRankDifficulty(rank=''){
+  return MATERIAL_RANK_DIFFICULTY[String(rank || '').trim()] || '';
+}
+function facilityActiveDefs(){
+  return FACILITY_DEFS.filter(f=>!currentFacilityView || f.name === currentFacilityView);
+}
+function facilityWorkKind(){
+  if(currentFacilityView === '鍛冶屋') return 'smithy';
+  if(currentFacilityView === '薬屋') return 'alchemy';
+  return 'none';
+}
+function facilityRecipeRows(kind='調合'){
+  return (state.recipes || []).filter(r=>String(r.craftType || '').trim() === kind && String(r.resultItem || r.name || '').trim());
+}
+function findRecipeBySelectValue(value=''){
+  const key = String(value || '').trim();
+  if(!key) return null;
+  const rows = facilityRecipeRows('調合');
+  return rows.find((r,i)=>String(i)===key)
+    || rows.find(r=>String(r.resultItem || '').trim() === key)
+    || rows.find(r=>String(r.name || '').trim() === key)
+    || null;
+}
+function renderFacilityAlchemyLookupList(){
+  const sel = $('facilityAlchemyRecipeSelect');
+  if(!sel) return;
+  const rows = facilityRecipeRows('調合');
+  sel.innerHTML = rows.length
+    ? `<option value="">作成するアイテムを選択してください</option>` + rows.map((r,i)=>`<option value="${i}">${escapeHtml(r.resultItem || r.name || '名称未設定')}</option>`).join('')
+    : '<option value="">調合レシピがありません</option>';
+}
+function renderFacilityAlchemyResult(recipeKey=''){
+  const result = $('facilityAlchemyResult');
+  if(!result) return;
+  const row = findRecipeBySelectValue(recipeKey || $('facilityAlchemyRecipeSelect')?.value || '');
+  if(!row){
+    result.classList.add('muted');
+    result.innerHTML = '作成するアイテムを選択してください。';
+    return;
+  }
+  result.classList.remove('muted');
+  const chips = [row.rank ? 'ランク:' + row.rank : '', row.category ? '分類:' + row.category : '', row.resultCount ? '完成数:' + row.resultCount : '', row.requiredMaterials ? '必要素材あり' : '', row.requiredTools ? '必要道具/設備あり' : ''].filter(Boolean);
+  result.innerHTML = `<div><b>${escapeHtml(row.resultItem || row.name || '名称未設定')}</b></div>
+    <div class="facility-product-meta">${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>
+    <div><b>調合難易度：</b>${escapeHtml(row.difficulty || '未設定')}</div>
+    ${row.requiredMaterials ? `<div><b>必要素材：</b>${escapeHtml(row.requiredMaterials)}</div>` : ''}
+    ${row.description ? `<div><b>説明：</b>${escapeHtml(row.description)}</div>` : ''}`;
+}
+function renderFacilityWorkPanel(){
+  const kind = facilityWorkKind();
+  const title = $('facilityWorkTitle');
+  const notice = $('facilityWorkNotice');
+  const smithy = $('facilitySmithyWork');
+  const alchemy = $('facilityAlchemyWork');
+  const none = $('facilityNoWork');
+  if(title) title.textContent = kind === 'smithy' ? '装備強化' : kind === 'alchemy' ? '調合' : '施設作業';
+  if(notice) notice.textContent = kind === 'smithy'
+    ? '強化素材を選択すると、装備強化内容・強化値・素材ランクに応じた強化難易度を表示します。'
+    : kind === 'alchemy'
+      ? '作成するアイテムを選択すると、その調合難易度を表示します。'
+      : 'この施設で確認できる強化・調合作業はありません。';
+  if(smithy) smithy.classList.toggle('hidden', kind !== 'smithy');
+  if(alchemy) alchemy.classList.toggle('hidden', kind !== 'alchemy');
+  if(none) none.classList.toggle('hidden', kind !== 'none');
+  if(kind === 'smithy'){
+    renderFacilityUpgradeLookupList();
+    renderFacilityUpgradeResult($('facilityUpgradeMaterialInput')?.value || '');
+  } else if(kind === 'alchemy'){
+    renderFacilityAlchemyLookupList();
+    renderFacilityAlchemyResult($('facilityAlchemyRecipeSelect')?.value || '');
+  }
+}
 function facilityUpgradeMaterials(){
   return (state.items || []).filter(r=>String(r.dataKind || '').trim()==='素材' && String(r.materialType || '').trim()==='魔物素材');
 }
@@ -10830,9 +10919,12 @@ function findUpgradeMaterialByName(name=''){
     || null;
 }
 function renderFacilityUpgradeLookupList(){
-  const list = $('facilityUpgradeMaterialList');
-  if(!list) return;
-  list.innerHTML = facilityUpgradeMaterials().map(m=>`<option value="${escapeHtml(m.name || m.id || '')}"></option>`).join('');
+  const sel = $('facilityUpgradeMaterialInput');
+  if(!sel) return;
+  const rows = facilityUpgradeMaterials();
+  sel.innerHTML = rows.length
+    ? `<option value="">強化素材を選択してください</option>` + rows.map(m=>`<option value="${escapeHtml(m.name || m.id || '')}">${escapeHtml(m.name || m.id || '素材名未設定')}</option>`).join('')
+    : '<option value="">強化素材がありません</option>';
 }
 function renderFacilityUpgradeResult(materialName=''){
   const result = $('facilityUpgradeResult');
@@ -10840,16 +10932,18 @@ function renderFacilityUpgradeResult(materialName=''){
   const mat = findUpgradeMaterialByName(materialName || $('facilityUpgradeMaterialInput')?.value || '');
   if(!mat){
     result.classList.add('muted');
-    result.innerHTML = '素材名を入力してください。';
+    result.innerHTML = '強化素材を選択してください。';
     return;
   }
   const effect = String(mat.equipmentUpgradeEffect || '').trim();
   const value = String(mat.equipmentUpgradeValue || '').trim();
+  const difficulty = materialRankDifficulty(mat.rank);
   result.classList.remove('muted');
   result.innerHTML = `<div><b>${escapeHtml(mat.name || mat.id || '素材名未設定')}</b></div>
     <div class="facility-product-meta">
       ${[mat.rank ? 'ランク:' + mat.rank : '', mat.materialType, mat.materialCategory, mat.price ? '売値:' + mat.price + 'G' : ''].filter(Boolean).map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}
     </div>
+    <div><b>強化難易度：</b>${escapeHtml(difficulty || '未設定')}</div>
     <div><b>装備強化内容：</b>${escapeHtml(effect || '未設定')}</div>
     <div><b>装備強化値：</b>${escapeHtml(value || '未設定')}</div>`;
 }
@@ -12842,7 +12936,9 @@ function showPanel(key){
   document.querySelectorAll('[data-main-tab]').forEach(b=>{
     const isActive = key === 'recipes' && b.dataset.mainTab === 'recipes' && b.dataset.recipeView !== undefined
       ? b.dataset.recipeView === activeRecipeCraftType()
-      : b.dataset.mainTab === key;
+      : key === 'facilities' && b.dataset.mainTab === 'facilities' && b.dataset.facilityView !== undefined
+        ? b.dataset.facilityView === currentFacilityView
+        : b.dataset.mainTab === key;
     b.classList.toggle('active', isActive);
   });
   if (group !== 'categories') document.querySelectorAll('[data-category-subtab]').forEach(b=>b.classList.remove('active'));
@@ -12887,6 +12983,7 @@ document.addEventListener('click',e=>{
   const facilityCopyAll=e.target.closest('[data-facility-copy-all]'); if(facilityCopyAll){ copyFacilitySalesList(); return; }
   const facilityCopy=e.target.closest('[data-facility-copy]'); if(facilityCopy){ copyFacilitySalesList(facilityCopy.dataset.facilityCopy); return; }
   const facilityUpgradeCheck=e.target.closest('[data-facility-upgrade-check]'); if(facilityUpgradeCheck){ renderFacilityUpgradeResult(); return; }
+  const facilityAlchemyCheck=e.target.closest('[data-facility-alchemy-check]'); if(facilityAlchemyCheck){ renderFacilityAlchemyResult(); return; }
   const helpCopy=e.target.closest('[data-help-copy]'); if(helpCopy){ copySystemHelp(); return; }
   const helpExpand=e.target.closest('[data-help-expand]'); if(helpExpand){ document.querySelectorAll('#helpCards details').forEach(d=>d.open=true); return; }
   const helpCollapse=e.target.closest('[data-help-collapse]'); if(helpCollapse){ document.querySelectorAll('#helpCards details').forEach(d=>d.open=false); return; }
@@ -12905,9 +13002,11 @@ document.addEventListener('click',e=>{
   if(mainTab){
     const key=mainTab.dataset.mainTab;
     if(mainTab.dataset.recipeView !== undefined) currentRecipeView = mainTab.dataset.recipeView || '調合';
+    if(mainTab.dataset.facilityView !== undefined) currentFacilityView = mainTab.dataset.facilityView || '鍛冶屋';
     setGroupActive(inferGroupFromPanel(key));
     showPanel(key);
     if(key==='recipes') renderTable('recipes');
+    if(key==='facilities') renderFacilitiesPanel();
     if(key!=='categories') document.querySelectorAll('[data-category-subtab]').forEach(b=>b.classList.remove('active'));
   }
   const catTab=e.target.closest('[data-category-subtab]');
@@ -12949,6 +13048,7 @@ document.addEventListener('input',e=>{
   if(edit){ const [key,idx,field]=edit.split(':'); state[key][+idx][field]=e.target.textContent; if(baseKeyForTable(key)==='items') renderFacilitiesPanel(); renderHelpPanel(); updateCounts(); updateJsonBox(); }
   if(e.target.id && e.target.id.startsWith('filter-')) renderTable(e.target.id.replace('filter-',''));
   if(e.target.id==='facilityUpgradeMaterialInput') renderFacilityUpgradeResult(e.target.value);
+  if(e.target.id==='facilityAlchemyRecipeSelect') renderFacilityAlchemyResult(e.target.value);
   if(e.target.closest('[data-check-builder]')) syncCheckBuilder(e.target.closest('[data-check-builder]'));
   if(e.target.closest('[data-monster-actions-editor]')) syncMonsterActionEditor(e.target.closest('[data-monster-actions-editor]'));
   if(e.target.closest('[data-monster-drops-editor]')) syncMonsterDropEditor(e.target.closest('[data-monster-drops-editor]'));
@@ -12957,6 +13057,8 @@ document.addEventListener('input',e=>{
   if(e.target.closest('[data-modifier-editor]')) syncModifierEditor(e.target.closest('[data-modifier-editor]'));
 });
 document.addEventListener('change',e=>{
+  if(e.target.id==='facilityUpgradeMaterialInput'){ renderFacilityUpgradeResult(e.target.value); return; }
+  if(e.target.id==='facilityAlchemyRecipeSelect'){ renderFacilityAlchemyResult(e.target.value); return; }
   if(e.target.dataset.formField==='dataKind'){ rerenderCurrentForm(); return; }
   if(e.target.dataset.formField==='craftType'){ currentRecipeView = e.target.value || currentRecipeView; rerenderCurrentForm(); return; }
   if(e.target.dataset.formField==='progressStep'){ document.querySelectorAll('[data-quest-fixed-events-editor]').forEach(refreshQuestFixedEventPercentOptions); return; }
