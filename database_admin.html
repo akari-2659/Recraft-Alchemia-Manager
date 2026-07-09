@@ -755,10 +755,19 @@
 
   <section class="panel hidden" id="panel-facilities">
     <div class="toolbar">
+      <div class="field compact-field"><label for="facilityRankLimitSelect">販売ランク</label><select id="facilityRankLimitSelect">
+        <option value="">全ランクを表示</option>
+        <option value="0">初期以下</option>
+        <option value="1">低級/初級以下</option>
+        <option value="2">普通/中級以下</option>
+        <option value="3">良質/上級以下</option>
+        <option value="4">希少以下</option>
+        <option value="5">高級以下</option>
+      </select></div>
       <button class="ghost" data-facility-refresh>販売商品リストを更新</button>
       <button class="secondary" data-facility-copy-all>販売商品リストをコピー</button>
     </div>
-    <p class="notice">施設ごとの販売商品とサービスを確認する管理タブです。販売商品は、各アイテム/素材の「入手先」または「解放施設」に施設名が含まれるものを自動で集めます。</p>
+    <p class="notice">施設ごとの販売商品とサービスを確認する管理タブです。販売商品は、各アイテム/素材の「入手先」または「解放施設」に施設名が含まれるものを自動で集めます。販売ランクを指定すると、指定ランク以下の商品だけを表示/コピーします。</p>
     <div class="facility-layout">
       <div class="facility-summary" id="facilitySummary"></div>
       <div id="facilityCards"></div>
@@ -937,6 +946,7 @@ let currentMainTab = 'categories';
 let currentCategoryTab = 'item_types';
 let currentRecipeView = '調合';
 let currentFacilityView = '鍛冶屋';
+let currentFacilityRankLimit = '';
 const RECIPE_VIEW_META = {
   '調合': {title:'調合レシピ', description:'薬品・爆弾・香など、薬屋/調合施設で作るアイテムを管理します。'},
   '鍛冶': {title:'鍛冶レシピ', description:'装備や金属加工など、鍛冶屋で作る通常の鍛冶データを管理します。'},
@@ -10511,12 +10521,45 @@ function textHasFacility(row, facilityName){
   const hay = [row.source, row.unlockFacility, row.tags, row.usageTags].map(v=>String(v||'')).join(' / ');
   return hay.includes(facilityName);
 }
+const FACILITY_RANK_LEVELS = {
+  '初期':0, 'なし':0,
+  '低級':1, '初級':1, '1':1, 'Ⅰ':1,
+  '普通':2, '中級':2, '2':2, 'Ⅱ':2,
+  '良質':3, '上級':3, '3':3, 'Ⅲ':3,
+  '希少':4, '特級':4, '4':4, 'Ⅳ':4,
+  '高級':5, '最上級':5, '5':5, 'Ⅴ':5
+};
+const FACILITY_RANK_LIMIT_LABELS = {'':'全ランク', '0':'初期以下', '1':'低級/初級以下', '2':'普通/中級以下', '3':'良質/上級以下', '4':'希少以下', '5':'高級以下'};
+function facilityRankLevel(rank){
+  const raw=String(rank||'').trim();
+  if(!raw) return null;
+  if(Object.prototype.hasOwnProperty.call(FACILITY_RANK_LEVELS, raw)) return FACILITY_RANK_LEVELS[raw];
+  if(raw.includes('初期')) return 0;
+  if(raw.includes('低級') || raw.includes('初級')) return 1;
+  if(raw.includes('普通') || raw.includes('中級')) return 2;
+  if(raw.includes('良質') || raw.includes('上級')) return 3;
+  if(raw.includes('希少') || raw.includes('特級')) return 4;
+  if(raw.includes('高級') || raw.includes('最上級')) return 5;
+  return null;
+}
+function facilityRankLimitLabel(){
+  return FACILITY_RANK_LIMIT_LABELS[String(currentFacilityRankLimit||'')] || '全ランク';
+}
+function facilityRankVisible(row){
+  const limitRaw=String(currentFacilityRankLimit||'').trim();
+  if(limitRaw==='') return true;
+  const limit=Number(limitRaw);
+  const level=facilityRankLevel(row?.rank);
+  return level !== null && level <= limit;
+}
 function facilityProducts(facilityName){
   return (state.items||[])
-    .filter(row=>row && String(row.name||'').trim() && textHasFacility(row, facilityName))
+    .filter(row=>row && String(row.name||'').trim() && textHasFacility(row, facilityName) && facilityRankVisible(row))
     .sort((a,b)=>{
       const af=compareValues(a.itemType||a.dataKind||'', b.itemType||b.dataKind||'');
       if(af) return af;
+      const al=facilityRankLevel(a.rank), bl=facilityRankLevel(b.rank);
+      if(al !== null && bl !== null && al !== bl) return al-bl;
       const ar=compareValues(a.rank||'', b.rank||'');
       if(ar) return ar;
       return compareValues(a.name||'', b.name||'');
@@ -10551,7 +10594,7 @@ function buildFacilitySalesText(targetFacilityName=''){
     const products=facilityProducts(f.name);
     const productText = products.length ? products.map(facilityProductLine).join('\n') : '- 販売商品未設定';
     const serviceText = (f.services||[]).length ? f.services.map(facilityServiceLine).join('\n') : '- サービス未設定';
-    return `【${f.name}】\n${f.role}\n\n販売商品\n${productText}\n\nサービス\n${serviceText}`;
+    return `【${f.name}】\n${f.role}\n表示範囲：${facilityRankLimitLabel()}\n\n販売商品\n${productText}\n\nサービス\n${serviceText}`;
   }).join('\n\n');
 }
 function renderFacilityProductDetails(row){
@@ -10567,15 +10610,17 @@ function renderFacilitiesPanel(){
   const cards=$('facilityCards');
   if(!summary || !cards) return;
   const defs = facilityActiveDefs();
+  const rankSelect=$('facilityRankLimitSelect');
+  if(rankSelect && rankSelect.value !== String(currentFacilityRankLimit||'')) rankSelect.value = String(currentFacilityRankLimit||'');
   summary.innerHTML = FACILITY_DEFS.map(f=>{
     const count=facilityProducts(f.name).length;
-    return `<div class="facility-summary-card ${f.name===currentFacilityView?'active':''}"><b>${count}</b><span>${escapeHtml(f.name)}の販売商品</span></div>`;
+    return `<div class="facility-summary-card ${f.name===currentFacilityView?'active':''}"><b>${count}</b><span>${escapeHtml(f.name)}の販売商品 / ${escapeHtml(facilityRankLimitLabel())}</span></div>`;
   }).join('');
   cards.innerHTML = defs.map(f=>{
     const products=facilityProducts(f.name);
-    const productHtml = products.length ? products.map(renderFacilityProductDetails).join('') : '<p class="notice">この施設に紐づく販売商品はまだありません。アイテム/素材の「入手先」または「解放施設」に施設名を入れると表示されます。</p>';
+    const productHtml = products.length ? products.map(renderFacilityProductDetails).join('') : `<p class="notice">この条件に一致する販売商品はありません。表示ランクを上げるか、アイテム/素材のランク・入手先・解放施設を確認してください。</p>`;
     const serviceHtml = (f.services||[]).map(s=>`<li><b>${escapeHtml(s.name)}</b> <span class="facility-chip">${escapeHtml(s.price||'価格未設定')}</span><br>${escapeHtml(s.description||'')}</li>`).join('');
-    return `<section class="facility-card">\n      <div class="facility-card-head">\n        <div><h3>${escapeHtml(f.name)}</h3><p class="facility-role">${escapeHtml(f.role)}</p></div>\n        <div class="facility-actions"><button class="ghost" data-facility-copy="${escapeHtml(f.name)}">この施設のリストをコピー</button></div>\n      </div>\n      <p class="table-toolbar-note">販売商品 <span class="view-mode-chip">${products.length}件</span></p>\n      <div class="facility-product-list">${productHtml}</div>\n      <p class="table-toolbar-note">サービス</p>\n      <ul class="facility-service-list">${serviceHtml}</ul>\n    </section>`;
+    return `<section class="facility-card">\n      <div class="facility-card-head">\n        <div><h3>${escapeHtml(f.name)}</h3><p class="facility-role">${escapeHtml(f.role)}</p></div>\n        <div class="facility-actions"><button class="ghost" data-facility-copy="${escapeHtml(f.name)}">この施設のリストをコピー</button></div>\n      </div>\n      <p class="table-toolbar-note">販売商品 <span class="view-mode-chip">${products.length}件</span> <span class="view-mode-chip">${escapeHtml(facilityRankLimitLabel())}</span></p>\n      <div class="facility-product-list">${productHtml}</div>\n      <p class="table-toolbar-note">サービス</p>\n      <ul class="facility-service-list">${serviceHtml}</ul>\n    </section>`;
   }).join('');
   const out=$('facilitySalesText');
   if(out) out.value=buildFacilitySalesText();
@@ -13186,6 +13231,7 @@ document.addEventListener('input',e=>{
   const edit=e.target.dataset.edit;
   if(edit){ const [key,idx,field]=edit.split(':'); state[key][+idx][field]=e.target.textContent; if(baseKeyForTable(key)==='items') renderFacilitiesPanel(); renderHelpPanel(); updateCounts(); updateJsonBox(); }
   if(e.target.id && e.target.id.startsWith('filter-')) renderTable(e.target.id.replace('filter-',''));
+  if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
   if(['facilityUpgradeMaterialInput','facilityUpgradeStepInput','facilitySmithToolRankInput'].includes(e.target.id)) renderFacilityUpgradeResult();
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)) renderFacilityAlchemyResult();
   if(e.target.closest('[data-check-builder]')) syncCheckBuilder(e.target.closest('[data-check-builder]'));
@@ -13196,6 +13242,7 @@ document.addEventListener('input',e=>{
   if(e.target.closest('[data-modifier-editor]')) syncModifierEditor(e.target.closest('[data-modifier-editor]'));
 });
 document.addEventListener('change',e=>{
+  if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
   if(['facilityUpgradeMaterialInput','facilityUpgradeStepInput','facilitySmithToolRankInput'].includes(e.target.id)){ renderFacilityUpgradeResult(); return; }
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)){ renderFacilityAlchemyResult(); return; }
   if(e.target.dataset.formField==='dataKind'){ rerenderCurrentForm(); return; }

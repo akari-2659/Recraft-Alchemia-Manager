@@ -27,7 +27,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.91 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.93 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -80,6 +80,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
         <button id="questAdvanceBtn">進行度を進める</button>
         <button class="ghost" id="questResetBtn">進行度をリセット</button>
         <button class="secondary" id="questCopyBtn">進行メモコピー</button>
+        <button class="secondary" id="questInfoCopyBtn">クエスト情報コピー</button>
       </div>
       <h3>固定イベント確認</h3>
       <div id="questEventDetail" class="result">クエストに登録された固定イベントと、ランダムイベント結果がここに表示されます。</div>
@@ -1008,6 +1009,17 @@ async function copyText(text,noteId){
   if(noteId){const el=$(noteId); el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),1200);} addLog('結果をコピーしました。');
 }
 function questMemo(){const q=selected($('questSelect'),state.quests); if(!q)return ''; const p=progressObj('quests',q.id||q.name); return [`【クエスト進行】${q.name||q.id}`,`進行度：${clamp(p.value)}%`,q.clearCondition?`クリア条件：${q.clearCondition}`:'',q.rewardMoney||q.rewardItems?`報酬：${[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ')}`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
+function questInfoMemo(){
+  const q=selected($('questSelect'),state.quests);
+  if(!q)return '';
+  const reward=[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ');
+  return [
+    `【クエスト】${q.name||q.id}`,
+    q.areaName?`エリア：${q.areaName}`:'',
+    q.description?`内容：${q.description}`:'',
+    reward?`報酬：${reward}`:''
+  ].filter(Boolean).join('\n');
+}
 function areaMemo(){const a=selected($('areaSelect'),state.areas); if(!a)return ''; const p=progressObj('areas',a.id||a.name); return [`【エリア進行】${a.name||a.id}`,`探索進行度：${clamp(p.value)}%`,a.eventTableId?`イベント表：${a.eventTableId}`:'',a.mainMaterials?`主な素材：${a.mainMaterials}`:'',a.mainMonsters?`主な魔物：${a.mainMonsters}`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
 function switchProgressTab(tab){
   let key=String(tab || 'quest');
@@ -1027,7 +1039,7 @@ function bind(){
   $('questAdvanceBtn').addEventListener('click',advanceQuestProgress); $('areaAdvanceBtn').addEventListener('click',advanceAreaProgress);
   $('questResetBtn').addEventListener('click',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).value=0; saveState(false); renderQuest();}}); $('areaResetBtn').addEventListener('click',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).value=0; saveState(false); renderArea();}});
   $('questNote').addEventListener('input',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).note=$('questNote').value; saveState(false);}}); $('areaNote').addEventListener('input',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).note=$('areaNote').value; saveState(false);}});
-  $('questCopyBtn').addEventListener('click',()=>copyText(questMemo(),'questCopyNote')); $('areaCopyBtn').addEventListener('click',()=>copyText(areaMemo(),'areaCopyNote'));
+  $('questCopyBtn').addEventListener('click',()=>copyText(questMemo(),'questCopyNote')); $('questInfoCopyBtn').addEventListener('click',()=>copyText(questInfoMemo(),'questCopyNote')); $('areaCopyBtn').addEventListener('click',()=>copyText(areaMemo(),'areaCopyNote'));
   $('rollQuestEventBtn').addEventListener('click',rollQuestEvent); $('copyQuestEventBtn').addEventListener('click',()=>copyText(state.lastQuestEventText,'questCopyNote'));
   $('rollRumorBtn').addEventListener('click',rollRumor); $('applyRumorBtn').addEventListener('click',()=>applyRumorIndex($('rumorSelectForInn').value,true)); $('clearRumorBtn').addEventListener('click',clearRumor); $('copyRumorBtn').addEventListener('click',()=>copyText(state.lastRumorText,'rumorCopyNote'));
   $('rollEventBtn').addEventListener('click',rollEvent); $('copyEventBtn').addEventListener('click',()=>copyText(state.lastEventText,'eventCopyNote'));
