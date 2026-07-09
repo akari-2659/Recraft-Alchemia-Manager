@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.86</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.87</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -864,7 +864,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.86';
+const RECRAFT_DB_VERSION = 'v90.8.87';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.86';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -6094,7 +6094,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "2",
       "encounterCountMax": "5",
-      "encounterComposition": "前衛\tラフィンラット\t人数半数切上\n後衛\tヴェスパット\t1",
+      "encounterComposition": "前衛,ラフィンラット,人数半数切上;後衛,ヴェスパット,1",
       "encounterFormation": "前衛：ラフィンラット / 後衛：ヴェスパット"
     },
     {
@@ -6347,7 +6347,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "1",
       "encounterCountMax": "4",
-      "encounterComposition": "前衛\tラピットホーン\t人数半数切上",
+      "encounterComposition": "前衛,ラピットホーン,人数半数切上",
       "encounterFormation": "前衛：ラピットホーン"
     },
     {
@@ -6485,7 +6485,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "1",
       "encounterCountMax": "4",
-      "encounterComposition": "後衛\tヴェスパット\t人数半数切上",
+      "encounterComposition": "後衛,ヴェスパット,人数半数切上",
       "encounterFormation": "後衛：ヴェスパット"
     },
     {
@@ -6508,7 +6508,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "1",
       "encounterCountMax": "4",
-      "encounterComposition": "前衛\tグラウワーム\t人数半数切上",
+      "encounterComposition": "前衛,グラウワーム,人数半数切上",
       "encounterFormation": "前衛：グラウワーム"
     },
     {
@@ -6600,7 +6600,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "1",
       "encounterCountMax": "4",
-      "encounterComposition": "前衛\tラフィンラット\t人数半数切上",
+      "encounterComposition": "前衛,ラフィンラット,人数半数切上",
       "encounterFormation": "前衛：ラフィンラット"
     },
     {
@@ -6761,7 +6761,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "2",
       "encounterCountMax": "5",
-      "encounterComposition": "前衛\tカラパスビートル\t1\n後衛\tヴェスパット\t人数半数切上",
+      "encounterComposition": "前衛,カラパスビートル,1;後衛,ヴェスパット,人数半数切上",
       "encounterFormation": "前衛：カラパスビートル / 後衛：ヴェスパット"
     },
     {
@@ -6922,7 +6922,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "1",
       "encounterCountMax": "4",
-      "encounterComposition": "前衛\tラスクレイル\t人数半数切上",
+      "encounterComposition": "前衛,ラスクレイル,人数半数切上",
       "encounterFormation": "前衛：ラスクレイル"
     },
     {
@@ -6945,7 +6945,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "1",
       "encounterCountMax": "4",
-      "encounterComposition": "後衛\tマイコニド\t人数半数切上",
+      "encounterComposition": "後衛,マイコニド,人数半数切上",
       "encounterFormation": "後衛：マイコニド"
     },
     {
@@ -6968,7 +6968,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "1",
       "encounterCountMax": "4",
-      "encounterComposition": "前衛\tルートハウンド\t人数半数切上",
+      "encounterComposition": "前衛,ルートハウンド,人数半数切上",
       "encounterFormation": "前衛：ルートハウンド"
     },
     {
@@ -7083,7 +7083,7 @@ const DEFAULTS = {
       "encounterCountRule": "固定",
       "encounterCountMin": "2",
       "encounterCountMax": "2",
-      "encounterComposition": "前衛\tブランチリング\t1\n後衛\tマイコニド\t1",
+      "encounterComposition": "前衛,ブランチリング,1;後衛,マイコニド,1",
       "encounterFormation": "前衛：ブランチリング / 後衛：マイコニド"
     },
     {
@@ -7267,7 +7267,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "1",
       "encounterCountMax": "4",
-      "encounterComposition": "前衛\tブランチリング\t人数半数切上",
+      "encounterComposition": "前衛,ブランチリング,人数半数切上",
       "encounterFormation": "前衛：ブランチリング"
     },
     {
@@ -7405,7 +7405,7 @@ const DEFAULTS = {
       "encounterCountRule": "人数同数",
       "encounterCountMin": "2",
       "encounterCountMax": "7",
-      "encounterComposition": "前衛\tマッドホッパー\t人数半数切上\n後衛\tミストモスキート\t人数半数切上",
+      "encounterComposition": "前衛,マッドホッパー,人数半数切上;後衛,ミストモスキート,人数半数切上",
       "encounterFormation": "前衛：マッドホッパー / 後衛：ミストモスキート"
     },
     {
@@ -7428,7 +7428,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "1",
       "encounterCountMax": "4",
-      "encounterComposition": "前衛\tマッドホッパー\t人数半数切上",
+      "encounterComposition": "前衛,マッドホッパー,人数半数切上",
       "encounterFormation": "前衛：マッドホッパー"
     },
     {
@@ -7451,7 +7451,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "1",
       "encounterCountMax": "4",
-      "encounterComposition": "前衛\tドロマール\t1",
+      "encounterComposition": "前衛,ドロマール,1",
       "encounterFormation": "前衛：ドロマール"
     },
     {
@@ -7635,7 +7635,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "1",
       "encounterCountMax": "4",
-      "encounterComposition": "後衛\tバブルスライム\t人数半数切上",
+      "encounterComposition": "後衛,バブルスライム,人数半数切上",
       "encounterFormation": "後衛：バブルスライム"
     },
     {
@@ -7727,7 +7727,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "1",
       "encounterCountMax": "4",
-      "encounterComposition": "前衛\tマッドホッパー\t1",
+      "encounterComposition": "前衛,マッドホッパー,1",
       "encounterFormation": "前衛：マッドホッパー"
     },
     {
@@ -7773,7 +7773,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "1",
       "encounterCountMax": "4",
-      "encounterComposition": "後衛\tバブルスライム\t1",
+      "encounterComposition": "後衛,バブルスライム,1",
       "encounterFormation": "後衛：バブルスライム"
     },
     {
@@ -7842,7 +7842,7 @@ const DEFAULTS = {
       "encounterCountRule": "固定",
       "encounterCountMin": "1",
       "encounterCountMax": "1",
-      "encounterComposition": "前衛\t沼主グラボロス\t1",
+      "encounterComposition": "前衛,沼主グラボロス,1",
       "encounterFormation": "前衛：沼主グラボロス ×1"
     },
     {
@@ -7888,7 +7888,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "1",
       "encounterCountMax": "4",
-      "encounterComposition": "後衛\tミストモスキート\t人数半数切上",
+      "encounterComposition": "後衛,ミストモスキート,人数半数切上",
       "encounterFormation": "後衛：ミストモスキート"
     },
     {
@@ -7957,7 +7957,7 @@ const DEFAULTS = {
       "encounterCountRule": "半数切上",
       "encounterCountMin": "1",
       "encounterCountMax": "4",
-      "encounterComposition": "前衛\tドロマール\t1",
+      "encounterComposition": "前衛,ドロマール,1",
       "encounterFormation": "前衛：ドロマール"
     },
     {
@@ -12432,8 +12432,8 @@ function cleanUploadRow(row){
   });
   return out;
 }
-const UPLOAD_JSONP_URL_LIMIT = 6500;
-const UPLOAD_PART_CHAR_STEP = 900;
+const UPLOAD_JSONP_URL_LIMIT = 2200;
+const UPLOAD_PART_CHAR_STEP = 260;
 function uploadPartPayload(token, chunkIndex, partIndex, textPart){
   return payload('putUploadChunk', {
     token,
