@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.82</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.83</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -849,8 +849,8 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.82';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.82';
+const RECRAFT_DB_VERSION = 'v90.8.83';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.83';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const PAGE_TABLE_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','materials','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -8336,7 +8336,7 @@ const DEFAULTS = {
       "hp": "24",
       "mp": "0",
       "hitValue": "3",
-      "evasionValue": "5",
+      "evasionValue": "6",
       "resistValue": "7",
       "defenseValue": "2",
       "initiative": "4",
@@ -8351,7 +8351,7 @@ const DEFAULTS = {
       "actions": "甲殻突進\t近接>=回避値\t敵1体\t物\t1D6+2\t硬い甲殻を前に出して突っ込む。\n身を固める\tなし\t自身\t無\tなし\t次に受けるダメージへの防御+1。\n殻割り打撃\t近接>=防御値\t敵1体\t物\t1D6+1\t硬い角で守りの薄い場所を打つ。",
       "drops": "魔物素材\t虫・甲殻\tmat_hard_carapace\t硬い甲殻片\t75%\t1個\n魔物素材\t虫・甲殻\tmat_insect_wing\t薄虫の羽\t35%\t1個",
       "description": "丸い甲殻を持つ草原の甲虫魔物。動きは遅いが打たれ強い。",
-      "notes": "",
+      "notes": "序盤通常魔物の回避下限調整：回避値6。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
@@ -8364,7 +8364,7 @@ const DEFAULTS = {
       "hp": "28",
       "mp": "0",
       "hitValue": "4",
-      "evasionValue": "5",
+      "evasionValue": "6",
       "resistValue": "7",
       "defenseValue": "1",
       "initiative": "4",
@@ -8379,7 +8379,7 @@ const DEFAULTS = {
       "actions": "土かぶり\t近接>=回避値\t敵1体\t物\t1D6+1\t地面を跳ね上げながら体当たりする。\n潜り込み\tなし\t自身\t無\tなし\t次に受ける攻撃への防御+1。次の自身の命中-1。\n丸呑み未遂\t近接>=回避値\t敵1体\t物\t1D6+2\t大きく口を開けて捕らえようとする。命中時、対象の次の運動判定-1。",
       "drops": "魔物素材\t虫・甲殻\tmat_hard_carapace\t硬い甲殻片\t50%\t1個\n採取素材\t木材\tmat_flexible_vine\tしなやかな蔓\t35%\t1個",
       "description": "草の根や湿った土を食む太い地虫。鈍重だがしぶとい。",
-      "notes": "",
+      "notes": "序盤通常魔物の回避下限調整：回避値6。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
@@ -8476,7 +8476,7 @@ const DEFAULTS = {
       "hp": "28",
       "mp": "0",
       "hitValue": "4",
-      "evasionValue": "5",
+      "evasionValue": "6",
       "resistValue": "8",
       "defenseValue": "2",
       "initiative": "4",
@@ -8491,7 +8491,7 @@ const DEFAULTS = {
       "actions": "枝腕の振り下ろし\t近接>=回避値\t敵1体\t物\t1D6+2\tしなる枝腕を振り下ろす。\n樹皮の守り\tなし\t自身\t無\tなし\t次に受けるダメージへの防御+1。\n根張り\tなし\t自身\t無\tなし\t足元に根を張る。次の防御+1、回避値-1。",
       "drops": "魔物素材\t植物魔物\tmat_living_root\t動く根\t70%\t1個\n採取素材\t木材\tmat_sturdy_branch\t丈夫な枝\t60%\t1個",
       "description": "若木に似た小型トレント。静止しているとただの枝に見える。",
-      "notes": "",
+      "notes": "序盤通常魔物の回避下限調整：回避値6。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
@@ -8588,7 +8588,7 @@ const DEFAULTS = {
       "hp": "30",
       "mp": "0",
       "hitValue": "4",
-      "evasionValue": "5",
+      "evasionValue": "6",
       "resistValue": "8",
       "defenseValue": "2",
       "initiative": "3",
@@ -8603,7 +8603,7 @@ const DEFAULTS = {
       "actions": "泥腕\t近接>=回避値\t敵1体\t水\t1D6+2\t泥の腕を伸ばして叩きつける。\n泥の鎧\tなし\t自身\t無\tなし\t次に受けるダメージへの防御+2。ただし次の回避値-1。\n泥濁り\t魔法>=抵抗値\t敵1体\t水\tなし\t泥水を巻き上げる。対象の次の命中判定-1。",
       "drops": "魔物素材\tスライム\tmat_swamp_mucus\t湿地粘液\t80%\t1個\n魔物素材\tスライム\tmat_gelatin_liquid\tゼラチン液\t50%\t1個",
       "description": "泥と粘液が混ざって生まれた鈍重な魔物。水気を吸って体を保つ。",
-      "notes": "行動の判定欄を近接/射撃/魔法/なしで整理。",
+      "notes": "行動の判定欄を近接/射撃/魔法/なしで整理。 序盤通常魔物の回避下限調整：回避値6。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
