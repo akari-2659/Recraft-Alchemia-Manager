@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.87</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.90</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -769,11 +769,20 @@
           <div class="input-action-row">
             <div>
               <label for="facilityUpgradeMaterialInput">強化素材</label>
-              <select id="facilityUpgradeMaterialInput"></select>
+              <input id="facilityUpgradeMaterialInput" list="facilityUpgradeMaterialOptions" placeholder="素材名を検索">
+              <datalist id="facilityUpgradeMaterialOptions"></datalist>
+            </div>
+            <div>
+              <label for="facilityUpgradeStepInput">今回の強化回数</label>
+              <select id="facilityUpgradeStepInput"></select>
+            </div>
+            <div>
+              <label for="facilitySmithToolRankInput">使用道具ランク</label>
+              <select id="facilitySmithToolRankInput"></select>
             </div>
             <button class="secondary" type="button" data-facility-upgrade-check>強化内容を確認</button>
           </div>
-          <div id="facilityUpgradeResult" class="facility-upgrade-result muted">強化素材を選択してください。</div>
+          <div id="facilityUpgradeResult" class="facility-upgrade-result muted">強化素材・強化回数・道具ランクを選択してください。</div>
         </div>
         <div id="facilityAlchemyWork" class="facility-work-block hidden">
           <div class="input-action-row">
@@ -781,9 +790,13 @@
               <label for="facilityAlchemyRecipeSelect">作成するアイテム</label>
               <select id="facilityAlchemyRecipeSelect"></select>
             </div>
+            <div>
+              <label for="facilityAlchemyToolRankInput">使用道具ランク</label>
+              <select id="facilityAlchemyToolRankInput"></select>
+            </div>
             <button class="secondary" type="button" data-facility-alchemy-check>調合難易度を確認</button>
           </div>
-          <div id="facilityAlchemyResult" class="facility-upgrade-result muted">作成するアイテムを選択してください。</div>
+          <div id="facilityAlchemyResult" class="facility-upgrade-result muted">作成するアイテムと道具ランクを選択してください。</div>
         </div>
         <div id="facilityNoWork" class="facility-upgrade-result muted hidden">この施設には強化・調合の難易度確認項目はありません。</div>
       </section>
@@ -864,7 +877,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.87';
+const RECRAFT_DB_VERSION = 'v90.8.90';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.86';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -890,7 +903,7 @@ const SCHEMA = {
   monsters: ['id','name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', modifiers:'補正値', upgradeLimit:'強化可能回数', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具/設備', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'ボス/達成イベント', rewardMoney:'報酬金', rewardItems:'報酬アイテム', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', actions:'行動', drops:'ドロップ'
+  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', modifiers:'補正値', upgradeLimit:'強化可能回数', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具ランク', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'ボス/達成イベント', rewardMoney:'報酬金', rewardItems:'報酬アイテム', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', actions:'行動', drops:'ドロップ'
 };
 
 const FORM_PRIMARY_FIELDS = {
@@ -901,7 +914,7 @@ const FORM_PRIMARY_FIELDS = {
   material_ranks: ['id','name','price','description','sortOrder','enabled'],
   equipment_categories: ['name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled'],
   items: ['name','publicId','csVisible','itemType','itemCategory','price','rank','equipSlot','skill','power','upgradeLimit','mpCost','target','checkType','element','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags'],
-  recipes: ['name','rank','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags'],
+  recipes: ['name','rank','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags'],
   materials: ['name','publicId','materialType','materialCategory','rank','price','source','usageTags','equipmentUpgradeEffect','description','effect','notes'],
   spells: ['type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags'],
   quest_rewards: ['rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards'],
@@ -915,7 +928,7 @@ const FORM_PRIMARY_FIELDS = {
 const FORM_LONG_FIELDS = new Set(['description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','rewardItems','unlockResult','mainMaterials','mainMonsters','result','progressEffect','actions','drops','modifiers','encounterComposition']);
 const RECORD_CARD_KEYS = new Set(['items','materials','recipes','spells']);
 const FIELD_PLACEHOLDERS = {
-  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'例：低級 / 初級', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：獣牙系。モンハン式の素材派生ラインを管理します。', equipmentUpgradeEffect:'例：威力+1。魔物素材を武器強化に使った時の強化内容を選択します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：低級 / 普通', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定スクロール：初級', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：初級', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：初級', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
+  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'例：低級 / 初級', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', requiredTools:'例：低級。低級なら低級以上の道具が必要', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：獣牙系。モンハン式の素材派生ラインを管理します。', equipmentUpgradeEffect:'例：威力+1。魔物素材を武器強化に使った時の強化内容を選択します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：低級 / 普通', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定スクロール：初級', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：初級', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：初級', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
 };
 const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','equipSlot','skill','checkType','type','role','setItem','unlockFacility','equipmentUpgradeEffect','ammoUse','ammoKind','craftType','baseItem','branchType','enabled','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','conditionType','conditionValue','treasureTableId','tableId','treasureRank','entryType','entryName','entryPublicId','recipeName','scrollRank','facilityName','spellType','spellRank','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity']);
 let formState = { key:null, idx:null, mode:'new', defaultDataKind:'' };
@@ -2204,7 +2217,7 @@ const DEFAULTS = {
       "rank": "低級",
       "equipSlot": "所持品",
       "maxStack": 1,
-      "effect": "低級素材までを扱う簡易調合具。施設利用時は必須ではない。",
+      "effect": "低級素材までを扱う簡易調合具。必要道具ランクが低級以下の調合に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。",
       "source": "薬屋",
       "usageTags": "道具,調合,低級素材対応",
       "tags": "道具,調合,低級素材対応",
@@ -2228,7 +2241,7 @@ const DEFAULTS = {
       "rank": "普通",
       "equipSlot": "所持品",
       "maxStack": 1,
-      "effect": "普通素材までを扱う標準調合具。施設利用時は必須ではない。",
+      "effect": "普通素材までを扱う標準調合具。必要道具ランクが普通以下の調合に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。",
       "source": "薬屋",
       "usageTags": "道具,調合,普通素材対応",
       "tags": "道具,調合,普通素材対応",
@@ -2252,7 +2265,7 @@ const DEFAULTS = {
       "rank": "良質",
       "equipSlot": "所持品",
       "maxStack": 1,
-      "effect": "良質素材までを扱う精密調合具。施設利用時は必須ではない。",
+      "effect": "良質素材までを扱う精密調合具。必要道具ランクが良質以下の調合に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。",
       "source": "薬屋",
       "usageTags": "道具,調合,良質素材対応",
       "tags": "道具,調合,良質素材対応",
@@ -2276,7 +2289,7 @@ const DEFAULTS = {
       "rank": "希少",
       "equipSlot": "所持品",
       "maxStack": 1,
-      "effect": "希少素材までを扱う上位調合具。施設利用時は必須ではない。",
+      "effect": "希少素材までを扱う上位調合具。必要道具ランクが希少以下の調合に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。",
       "source": "薬屋",
       "usageTags": "道具,調合,希少素材対応",
       "tags": "道具,調合,希少素材対応",
@@ -2300,7 +2313,7 @@ const DEFAULTS = {
       "rank": "高級",
       "equipSlot": "所持品",
       "maxStack": 1,
-      "effect": "高級素材までを扱う最高級の調合具。施設利用時は必須ではない。",
+      "effect": "高級素材までを扱う最高級の調合具。必要道具ランクが高級以下の調合に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。",
       "source": "薬屋",
       "usageTags": "道具,調合,高級素材対応",
       "tags": "道具,調合,高級素材対応",
@@ -2324,7 +2337,7 @@ const DEFAULTS = {
       "rank": "低級",
       "equipSlot": "所持品",
       "maxStack": 1,
-      "effect": "低級素材までを扱う簡易鍛冶具。施設利用時は必須ではない。修理用途は現時点では扱わない。",
+      "effect": "低級素材までを扱う簡易鍛冶具。必要道具ランクが低級以下の鍛冶・装備強化に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。修理用途は現時点では扱わない。",
       "source": "鍛冶屋",
       "usageTags": "道具,鍛冶,低級素材対応",
       "tags": "道具,鍛冶,低級素材対応",
@@ -2348,7 +2361,7 @@ const DEFAULTS = {
       "rank": "普通",
       "equipSlot": "所持品",
       "maxStack": 1,
-      "effect": "普通素材までを扱う標準鍛冶具。施設利用時は必須ではない。修理用途は現時点では扱わない。",
+      "effect": "普通素材までを扱う標準鍛冶具。必要道具ランクが普通以下の鍛冶・装備強化に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。修理用途は現時点では扱わない。",
       "source": "鍛冶屋",
       "usageTags": "道具,鍛冶,普通素材対応",
       "tags": "道具,鍛冶,普通素材対応",
@@ -2372,7 +2385,7 @@ const DEFAULTS = {
       "rank": "良質",
       "equipSlot": "所持品",
       "maxStack": 1,
-      "effect": "良質素材までを扱う精密鍛冶具。施設利用時は必須ではない。修理用途は現時点では扱わない。",
+      "effect": "良質素材までを扱う精密鍛冶具。必要道具ランクが良質以下の鍛冶・装備強化に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。修理用途は現時点では扱わない。",
       "source": "鍛冶屋",
       "usageTags": "道具,鍛冶,良質素材対応",
       "tags": "道具,鍛冶,良質素材対応",
@@ -2396,7 +2409,7 @@ const DEFAULTS = {
       "rank": "希少",
       "equipSlot": "所持品",
       "maxStack": 1,
-      "effect": "希少素材までを扱う上位鍛冶具。施設利用時は必須ではない。修理用途は現時点では扱わない。",
+      "effect": "希少素材までを扱う上位鍛冶具。必要道具ランクが希少以下の鍛冶・装備強化に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。修理用途は現時点では扱わない。",
       "source": "鍛冶屋",
       "usageTags": "道具,鍛冶,希少素材対応",
       "tags": "道具,鍛冶,希少素材対応",
@@ -2420,7 +2433,7 @@ const DEFAULTS = {
       "rank": "高級",
       "equipSlot": "所持品",
       "maxStack": 1,
-      "effect": "高級素材までを扱う最高級の鍛冶具。施設利用時は必須ではない。修理用途は現時点では扱わない。",
+      "effect": "高級素材までを扱う最高級の鍛冶具。必要道具ランクが高級以下の鍛冶・装備強化に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。修理用途は現時点では扱わない。",
       "source": "鍛冶屋",
       "usageTags": "道具,鍛冶,高級素材対応",
       "tags": "道具,鍛冶,高級素材対応",
@@ -5323,7 +5336,7 @@ const DEFAULTS = {
       "resultKind": "アイテム",
       "resultCount": 1,
       "requiredMaterials": "薬草×1, 澄んだ水×1",
-      "requiredTools": "錬金釜",
+      "requiredTools": "低級",
       "difficulty": "8",
       "effect": "HPを回復する調合品を作成。",
       "unlockFacility": "工房",
@@ -5343,7 +5356,7 @@ const DEFAULTS = {
       "resultKind": "アイテム",
       "resultCount": 1,
       "requiredMaterials": "火炎石×1, 燃える粉×1",
-      "requiredTools": "錬金釜",
+      "requiredTools": "低級",
       "difficulty": "10",
       "effect": "敵1体へ火属性ダメージを与える調合品を作成。",
       "unlockFacility": "工房",
@@ -10096,8 +10109,9 @@ const SYSTEM_HELP = [
       "素材ランクは低級、普通、良質、希少、高級。",
       "調合道具は旅薬師の乳鉢具、硝子秤の調合具、晶瓶の調合具、星滴の蒸留具、月環の錬成具。",
       "鍛冶道具は野鍛冶の槌箱、焼入れ金床具、鋼噛み火ばさみ具、星鉄火ばさみ具、竜炉の鍛冶具。",
-      "各道具は同ランクまでの素材を施設外で扱うための道具。",
-      "施設利用時は道具を必須にしない。",
+      "レシピの必要道具ランクは、低級なら低級以上の調合道具を要求する。錬金釜などの設備名は記載しない。",
+      "調合道具・鍛冶道具は、必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。",
+      "装備強化は素材ランクで基本難易度を決め、強化回数が高いほど必要価格と難易度が上がる。",
       "調合道具は薬屋、鍛冶道具は鍛冶屋で扱う。"
     ]
   },
@@ -10686,7 +10700,26 @@ function buildPlayerItemInfoText(row={}, key='', count='1'){
   return lines.filter(Boolean).join('\n');
 }
 
+function buildRecipeInfoText(row={}){
+  const name = fieldText(row,'resultItem') || fieldText(row,'name') || fieldText(row,'id') || '名称未設定';
+  const resultKind = fieldText(row,'resultKind');
+  const category = fieldText(row,'category');
+  const requiredRank = requiredToolRankForRecipe(row);
+  const lines = [];
+  lines.push(`【${name}】`);
+  lines.push(warehouseCopyLine('個数', fieldText(row,'resultCount') || '1'));
+  lines.push(warehouseCopyLine('ランク', fieldText(row,'rank')));
+  lines.push(warehouseCopyLine('製作区分', fieldText(row,'craftType')));
+  lines.push(warehouseCopyLine('分類', [resultKind, category].filter(Boolean).join(' / ')));
+  lines.push(warehouseCopyLine('素材', fieldText(row,'requiredMaterials')));
+  lines.push(warehouseCopyLine('必要道具ランク', requiredRank ? `${requiredRank}以上` : ''));
+  lines.push(warehouseCopyLine('難度', fieldText(row,'difficulty')));
+  lines.push(warehouseCopyLine('説明', fieldText(row,'description')));
+  lines.push(warehouseCopyLine('効果', fieldText(row,'effect')));
+  return lines.filter(Boolean).join('\n');
+}
 function buildCopyCardText(row={}, key=''){
+  if(baseKeyForTable(key)==='recipes') return buildRecipeInfoText(row);
   return buildPlayerItemInfoText(row, key, '1');
 }
 async function copyRowCard(key, idx){
@@ -10834,8 +10867,79 @@ function dropMaterialOutputBlock(row={}){
   return [base, ...detail.map(line=>'  ' + line)].join('\n');
 }
 const MATERIAL_RANK_DIFFICULTY = { '低級':7, '普通':9, '良質':11, '希少':13, '高級':15 };
+const TOOL_RANKS = ['低級','普通','良質','希少','高級'];
+const UPGRADE_STEP_RULES = [
+  {step:1, label:'1回目', difficultyMod:0, priceRate:1},
+  {step:2, label:'2回目', difficultyMod:2, priceRate:1.5},
+  {step:3, label:'3回目', difficultyMod:4, priceRate:2},
+  {step:4, label:'4回目', difficultyMod:6, priceRate:3},
+  {step:5, label:'5回目', difficultyMod:8, priceRate:4},
+  {step:6, label:'6回目以上', difficultyMod:10, priceRate:5}
+];
 function materialRankDifficulty(rank=''){
   return MATERIAL_RANK_DIFFICULTY[String(rank || '').trim()] || '';
+}
+function rankIndex(rank=''){
+  return TOOL_RANKS.indexOf(String(rank || '').trim());
+}
+function normalizeToolRank(value='', fallback='低級'){
+  const raw = String(value || '').trim();
+  if(TOOL_RANKS.includes(raw)) return raw;
+  const found = TOOL_RANKS.find(r=>raw.includes(r));
+  return found || fallback;
+}
+function requiredToolRankForRecipe(row={}){
+  const raw = String(row.requiredTools || '').trim();
+  if(raw) return normalizeToolRank(raw, '低級');
+  return normalizeToolRank(row.rank || '', '低級');
+}
+function toolRankOptionsHtml(selected='低級'){
+  const current = normalizeToolRank(selected, '低級');
+  return TOOL_RANKS.map(r=>`<option value="${escapeHtml(r)}" ${r===current?'selected':''}>${escapeHtml(r)}</option>`).join('');
+}
+function renderToolRankSelect(id='', selected='低級'){
+  const sel = $(id);
+  if(!sel) return;
+  const prev = sel.value || selected || '低級';
+  sel.innerHTML = toolRankOptionsHtml(prev);
+}
+function toolRankDifficultyModifier(requiredRank='低級', toolRank='低級'){
+  const req = rankIndex(normalizeToolRank(requiredRank, '低級'));
+  const tool = rankIndex(normalizeToolRank(toolRank, '低級'));
+  if(req < 0 || tool < 0) return {usable:false, mod:0, rankGap:0};
+  if(tool < req) return {usable:false, mod:0, rankGap:tool-req};
+  const gap = tool - req;
+  return {usable:true, mod:-gap, rankGap:gap};
+}
+function finalDifficultyText(baseDifficulty='', ...mods){
+  const raw = String(baseDifficulty || '').trim();
+  const base = Number(raw);
+  if(raw === '') return '未設定';
+  if(!Number.isFinite(base)) return raw;
+  const total = mods.reduce((sum,m)=>sum + (Number(m)||0), base);
+  return String(Math.max(1, Math.ceil(total)));
+}
+function upgradeStepRule(stepValue='1'){
+  const n = Number(String(stepValue || '1').trim());
+  return UPGRADE_STEP_RULES.find(r=>r.step===n) || UPGRADE_STEP_RULES[0];
+}
+function renderUpgradeStepSelect(selected='1'){
+  const sel = $('facilityUpgradeStepInput');
+  if(!sel) return;
+  const current = String(selected || sel.value || '1');
+  sel.innerHTML = UPGRADE_STEP_RULES.map(r=>`<option value="${r.step}" ${String(r.step)===current?'selected':''}>${escapeHtml(r.label)}</option>`).join('');
+}
+function rankBasePrice(rank=''){
+  const r = normalizeToolRank(rank, '低級');
+  const found = (state.material_ranks || []).find(row=>String(row.name || '').trim() === r);
+  const price = Number(String(found?.price || '').trim());
+  return Number.isFinite(price) && price > 0 ? price : 0;
+}
+function upgradeWorkPrice(material={}, rule=UPGRADE_STEP_RULES[0]){
+  const materialPrice = Number(String(material.price || '').trim());
+  const base = Number.isFinite(materialPrice) && materialPrice > 0 ? materialPrice : rankBasePrice(material.rank);
+  if(!base) return {base:0, total:0};
+  return {base, total:Math.ceil(base * Number(rule.priceRate || 1))};
 }
 function facilityActiveDefs(){
   return FACILITY_DEFS.filter(f=>!currentFacilityView || f.name === currentFacilityView);
@@ -10861,24 +10965,33 @@ function renderFacilityAlchemyLookupList(){
   const sel = $('facilityAlchemyRecipeSelect');
   if(!sel) return;
   const rows = facilityRecipeRows('調合');
+  const prev = sel.value;
   sel.innerHTML = rows.length
     ? `<option value="">作成するアイテムを選択してください</option>` + rows.map((r,i)=>`<option value="${i}">${escapeHtml(r.resultItem || r.name || '名称未設定')}</option>`).join('')
     : '<option value="">調合レシピがありません</option>';
+  if(prev && [...sel.options].some(o=>o.value===prev)) sel.value = prev;
 }
 function renderFacilityAlchemyResult(recipeKey=''){
   const result = $('facilityAlchemyResult');
   if(!result) return;
   const row = findRecipeBySelectValue(recipeKey || $('facilityAlchemyRecipeSelect')?.value || '');
+  const toolRank = normalizeToolRank($('facilityAlchemyToolRankInput')?.value || '低級', '低級');
   if(!row){
     result.classList.add('muted');
     result.innerHTML = '作成するアイテムを選択してください。';
     return;
   }
+  const requiredRank = requiredToolRankForRecipe(row);
+  const tool = toolRankDifficultyModifier(requiredRank, toolRank);
+  const finalDifficulty = tool.usable ? finalDifficultyText(row.difficulty, tool.mod) : '使用不可';
   result.classList.remove('muted');
-  const chips = [row.rank ? 'ランク:' + row.rank : '', row.category ? '分類:' + row.category : '', row.resultCount ? '完成数:' + row.resultCount : '', row.requiredMaterials ? '必要素材あり' : '', row.requiredTools ? '必要道具/設備あり' : ''].filter(Boolean);
+  const chips = [row.rank ? 'ランク:' + row.rank : '', row.category ? '分類:' + row.category : '', row.resultCount ? '完成数:' + row.resultCount : '', row.requiredMaterials ? '必要素材あり' : '', '必要道具ランク:' + requiredRank + '以上'].filter(Boolean);
   result.innerHTML = `<div><b>${escapeHtml(row.resultItem || row.name || '名称未設定')}</b></div>
     <div class="facility-product-meta">${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>
-    <div><b>調合難易度：</b>${escapeHtml(row.difficulty || '未設定')}</div>
+    <div><b>基本難易度：</b>${escapeHtml(row.difficulty || '未設定')}</div>
+    <div><b>必要道具ランク：</b>${escapeHtml(requiredRank)}以上</div>
+    <div><b>使用道具ランク：</b>${escapeHtml(toolRank)}${tool.usable ? ` / 道具補正 ${escapeHtml(String(tool.mod))}` : ' / 必要ランク不足'}</div>
+    <div><b>最終調合難易度：</b>${escapeHtml(finalDifficulty)}</div>
     ${row.requiredMaterials ? `<div><b>必要素材：</b>${escapeHtml(row.requiredMaterials)}</div>` : ''}
     ${row.description ? `<div><b>説明：</b>${escapeHtml(row.description)}</div>` : ''}`;
 }
@@ -10891,18 +11004,21 @@ function renderFacilityWorkPanel(){
   const none = $('facilityNoWork');
   if(title) title.textContent = kind === 'smithy' ? '装備強化' : kind === 'alchemy' ? '調合' : '施設作業';
   if(notice) notice.textContent = kind === 'smithy'
-    ? '強化素材を選択すると、装備強化内容・強化値・素材ランクに応じた強化難易度を表示します。'
+    ? '強化素材・今回の強化回数・使用道具ランクから、必要価格と最終難易度を表示します。'
     : kind === 'alchemy'
-      ? '作成するアイテムを選択すると、その調合難易度を表示します。'
+      ? '作成するアイテムと使用道具ランクから、必要道具ランクと最終調合難易度を表示します。'
       : 'この施設で確認できる強化・調合作業はありません。';
   if(smithy) smithy.classList.toggle('hidden', kind !== 'smithy');
   if(alchemy) alchemy.classList.toggle('hidden', kind !== 'alchemy');
   if(none) none.classList.toggle('hidden', kind !== 'none');
   if(kind === 'smithy'){
     renderFacilityUpgradeLookupList();
+    renderUpgradeStepSelect($('facilityUpgradeStepInput')?.value || '1');
+    renderToolRankSelect('facilitySmithToolRankInput', $('facilitySmithToolRankInput')?.value || '低級');
     renderFacilityUpgradeResult($('facilityUpgradeMaterialInput')?.value || '');
   } else if(kind === 'alchemy'){
     renderFacilityAlchemyLookupList();
+    renderToolRankSelect('facilityAlchemyToolRankInput', $('facilityAlchemyToolRankInput')?.value || '低級');
     renderFacilityAlchemyResult($('facilityAlchemyRecipeSelect')?.value || '');
   }
 }
@@ -10913,18 +11029,29 @@ function findUpgradeMaterialByName(name=''){
   const q = String(name || '').trim();
   if(!q) return null;
   const rows = facilityUpgradeMaterials();
-  return rows.find(r=>String(r.name || '').trim() === q)
-    || rows.find(r=>String(r.id || '').trim() === q)
-    || rows.find(r=>String(r.name || '').includes(q))
+  const norm = v => String(v || '').trim().toLowerCase();
+  const nq = norm(q);
+  return rows.find(r=>norm(r.name) === nq)
+    || rows.find(r=>norm(r.id) === nq)
+    || rows.find(r=>norm(r.publicId) === nq)
+    || rows.find(r=>norm(r.name).includes(nq))
+    || rows.find(r=>norm(r.id).includes(nq))
+    || rows.find(r=>norm(r.publicId).includes(nq))
     || null;
 }
 function renderFacilityUpgradeLookupList(){
-  const sel = $('facilityUpgradeMaterialInput');
-  if(!sel) return;
+  const input = $('facilityUpgradeMaterialInput');
+  const list = $('facilityUpgradeMaterialOptions');
+  if(!input || !list) return;
+  const prev = input.value;
   const rows = facilityUpgradeMaterials();
-  sel.innerHTML = rows.length
-    ? `<option value="">強化素材を選択してください</option>` + rows.map(m=>`<option value="${escapeHtml(m.name || m.id || '')}">${escapeHtml(m.name || m.id || '素材名未設定')}</option>`).join('')
-    : '<option value="">強化素材がありません</option>';
+  list.innerHTML = rows.map(m=>{
+    const name = String(m.name || m.id || '').trim();
+    const label = [m.rank ? 'ランク:' + m.rank : '', m.materialCategory || '', m.price ? '売値:' + m.price + 'G' : ''].filter(Boolean).join(' / ');
+    return `<option value="${escapeHtml(name)}"${label ? ` label="${escapeHtml(label)}"` : ''}></option>`;
+  }).join('');
+  input.placeholder = rows.length ? '素材名を検索' : '強化素材がありません';
+  if(prev) input.value = prev;
 }
 function renderFacilityUpgradeResult(materialName=''){
   const result = $('facilityUpgradeResult');
@@ -10937,13 +11064,25 @@ function renderFacilityUpgradeResult(materialName=''){
   }
   const effect = String(mat.equipmentUpgradeEffect || '').trim();
   const value = String(mat.equipmentUpgradeValue || '').trim();
-  const difficulty = materialRankDifficulty(mat.rank);
+  const baseDifficulty = materialRankDifficulty(mat.rank);
+  const rule = upgradeStepRule($('facilityUpgradeStepInput')?.value || '1');
+  const toolRank = normalizeToolRank($('facilitySmithToolRankInput')?.value || '低級', '低級');
+  const requiredRank = normalizeToolRank(mat.rank || '低級', '低級');
+  const tool = toolRankDifficultyModifier(requiredRank, toolRank);
+  const price = upgradeWorkPrice(mat, rule);
+  const finalDifficulty = tool.usable ? finalDifficultyText(baseDifficulty, rule.difficultyMod, tool.mod) : '使用不可';
   result.classList.remove('muted');
   result.innerHTML = `<div><b>${escapeHtml(mat.name || mat.id || '素材名未設定')}</b></div>
     <div class="facility-product-meta">
-      ${[mat.rank ? 'ランク:' + mat.rank : '', mat.materialType, mat.materialCategory, mat.price ? '売値:' + mat.price + 'G' : ''].filter(Boolean).map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}
+      ${[mat.rank ? 'ランク:' + mat.rank : '', mat.materialType, mat.materialCategory, mat.price ? '素材売値:' + mat.price + 'G' : ''].filter(Boolean).map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}
     </div>
-    <div><b>強化難易度：</b>${escapeHtml(difficulty || '未設定')}</div>
+    <div><b>今回の強化回数：</b>${escapeHtml(rule.label)}</div>
+    <div><b>必要価格：</b>${price.total ? `${escapeHtml(String(price.total))}G（基準${escapeHtml(String(price.base))}G × ${escapeHtml(String(rule.priceRate))}）` : '未設定'}</div>
+    <div><b>基本強化難易度：</b>${escapeHtml(baseDifficulty || '未設定')}</div>
+    <div><b>強化回数デバフ：</b>+${escapeHtml(String(rule.difficultyMod))}</div>
+    <div><b>必要道具ランク：</b>${escapeHtml(requiredRank)}以上</div>
+    <div><b>使用道具ランク：</b>${escapeHtml(toolRank)}${tool.usable ? ` / 道具補正 ${escapeHtml(String(tool.mod))}` : ' / 必要ランク不足'}</div>
+    <div><b>最終強化難易度：</b>${escapeHtml(finalDifficulty)}</div>
     <div><b>装備強化内容：</b>${escapeHtml(effect || '未設定')}</div>
     <div><b>装備強化値：</b>${escapeHtml(value || '未設定')}</div>`;
 }
@@ -11330,7 +11469,7 @@ function recordCardSummary(row={}, key=''){
   const summaryFieldsByKey = {
     items: ['price','equipSlot','power','offhandBonus','reloadTurns','modifiers','upgradeLimit','mpCost','target','checkType','element','maxStack'],
     materials: ['price','rank','materialType','materialCategory','source','equipmentUpgradeEffect','equipmentUpgradeValue','maxStack'],
-    recipes: ['rank','craftType','category','resultItem','resultKind','resultCount','difficulty'],
+    recipes: ['rank','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty'],
     spells: ['rank','mpCost','target','checkType','element','power','role','scrollPrice','setItem']
   };
   const fields = summaryFieldsByKey[key] || [];
@@ -13047,8 +13186,8 @@ document.addEventListener('input',e=>{
   const edit=e.target.dataset.edit;
   if(edit){ const [key,idx,field]=edit.split(':'); state[key][+idx][field]=e.target.textContent; if(baseKeyForTable(key)==='items') renderFacilitiesPanel(); renderHelpPanel(); updateCounts(); updateJsonBox(); }
   if(e.target.id && e.target.id.startsWith('filter-')) renderTable(e.target.id.replace('filter-',''));
-  if(e.target.id==='facilityUpgradeMaterialInput') renderFacilityUpgradeResult(e.target.value);
-  if(e.target.id==='facilityAlchemyRecipeSelect') renderFacilityAlchemyResult(e.target.value);
+  if(['facilityUpgradeMaterialInput','facilityUpgradeStepInput','facilitySmithToolRankInput'].includes(e.target.id)) renderFacilityUpgradeResult();
+  if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)) renderFacilityAlchemyResult();
   if(e.target.closest('[data-check-builder]')) syncCheckBuilder(e.target.closest('[data-check-builder]'));
   if(e.target.closest('[data-monster-actions-editor]')) syncMonsterActionEditor(e.target.closest('[data-monster-actions-editor]'));
   if(e.target.closest('[data-monster-drops-editor]')) syncMonsterDropEditor(e.target.closest('[data-monster-drops-editor]'));
@@ -13057,8 +13196,8 @@ document.addEventListener('input',e=>{
   if(e.target.closest('[data-modifier-editor]')) syncModifierEditor(e.target.closest('[data-modifier-editor]'));
 });
 document.addEventListener('change',e=>{
-  if(e.target.id==='facilityUpgradeMaterialInput'){ renderFacilityUpgradeResult(e.target.value); return; }
-  if(e.target.id==='facilityAlchemyRecipeSelect'){ renderFacilityAlchemyResult(e.target.value); return; }
+  if(['facilityUpgradeMaterialInput','facilityUpgradeStepInput','facilitySmithToolRankInput'].includes(e.target.id)){ renderFacilityUpgradeResult(); return; }
+  if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)){ renderFacilityAlchemyResult(); return; }
   if(e.target.dataset.formField==='dataKind'){ rerenderCurrentForm(); return; }
   if(e.target.dataset.formField==='craftType'){ currentRecipeView = e.target.value || currentRecipeView; rerenderCurrentForm(); return; }
   if(e.target.dataset.formField==='progressStep'){ document.querySelectorAll('[data-quest-fixed-events-editor]').forEach(refreshQuestFixedEventPercentOptions); return; }
