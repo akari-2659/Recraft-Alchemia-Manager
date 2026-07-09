@@ -27,7 +27,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.87 / クエスト・エリア進行、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.88 / クエスト・エリア進行、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -176,7 +176,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.87';
+const VERSION='v90.8.88';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -419,15 +419,17 @@ function eventConditionType(row){return String(row && row.conditionType || '').t
 function selectedRumor(){
   const sel=$('rumorSelect');
   if(!sel)return null;
+  const raw=String(sel.value ?? '').trim();
+  if(raw==='') return null;
   const rows=rumorRows();
-  const i=Number(sel.value);
-  return Number.isFinite(i) ? (rows[i] || null) : null;
+  const i=Number(raw);
+  return Number.isInteger(i) && i>=0 ? (rows[i] || null) : null;
 }
 function rumorRows(){return state.events.filter(isRumorEvent);}
 function fillRumorSelect(){
   const sel=$('rumorSelect');
   if(!sel)return;
-  const prev=sel.value;
+  const prev=String(sel.value ?? '').trim();
   const rows=rumorRows();
   sel.innerHTML='';
   const none=document.createElement('option');
@@ -441,6 +443,7 @@ function fillRumorSelect(){
     sel.appendChild(o);
   });
   if(prev && [...sel.options].some(o=>o.value===prev)) sel.value=prev;
+  else sel.value='';
   renderRumorDetail();
 }
 function renderRumorDetail(){
