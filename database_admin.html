@@ -886,7 +886,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.90';
+const RECRAFT_DB_VERSION = 'v90.8.96';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.86';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -901,7 +901,7 @@ const SCHEMA = {
   material_ranks: ['id','name','price','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   equipment_categories: ['id','name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','equipSlot','skill','power','maxStack','ammoUse','ammoKind','quiverCapacity','bagCapacity','offhandBonus','reloadTurns','modifiers','upgradeLimit','mpCost','target','checkType','element','description','effect','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
-  recipes: ['id','name','rank','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
+  recipes: ['id','name','rank','price','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   spells: ['id','type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   quest_rewards: ['id','rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards','notes','updatedAt','ownerKey','createdBy'],
   quests: ['id','name','questType','rank','areaName','progressStep','fixedEvents','clearCondition','bossMonster','rewardMoney','rewardItems','unlockResult','description','notes','updatedAt','ownerKey','createdBy'],
@@ -923,7 +923,7 @@ const FORM_PRIMARY_FIELDS = {
   material_ranks: ['id','name','price','description','sortOrder','enabled'],
   equipment_categories: ['name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled'],
   items: ['name','publicId','csVisible','itemType','itemCategory','price','rank','equipSlot','skill','power','upgradeLimit','mpCost','target','checkType','element','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags'],
-  recipes: ['name','rank','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags'],
+  recipes: ['name','rank','price','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags'],
   materials: ['name','publicId','materialType','materialCategory','rank','price','source','usageTags','equipmentUpgradeEffect','description','effect','notes'],
   spells: ['type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags'],
   quest_rewards: ['rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards'],
@@ -5338,6 +5338,7 @@ const DEFAULTS = {
       "id": "recipe_potion",
       "name": "ポーション",
       "rank": "初級",
+      "price": "80",
       "craftType": "調合",
       "category": "回復薬",
       "baseItem": "",
@@ -5348,31 +5349,242 @@ const DEFAULTS = {
       "requiredMaterials": "薬草×1, 澄んだ水×1",
       "requiredTools": "低級",
       "difficulty": "8",
+      "description": "薬草と澄んだ水を合わせた基本の回復薬。赤みを帯びた液体が傷にじんわり染み込む。",
       "effect": "HPを回復する調合品を作成。",
-      "unlockFacility": "工房",
-      "tags": "回復,調合,初期",
-      "notes": "",
-      "description": "薬草と澄んだ水を合わせた基本の回復薬。赤みを帯びた液体が傷にじんわり染み込む。"
+      "unlockFacility": "薬屋",
+      "tags": "回復,調合,初期,販売レシピ",
+      "notes": ""
+    },
+    {
+      "id": "recipe_purified_water",
+      "name": "浄化水",
+      "rank": "初級",
+      "price": "110",
+      "craftType": "調合",
+      "category": "解除",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "浄化水",
+      "resultKind": "アイテム",
+      "resultCount": 1,
+      "requiredMaterials": "清め草×1, 澄んだ水×1",
+      "requiredTools": "低級",
+      "difficulty": "9",
+      "description": "清め草と澄んだ水を合わせ、毒や穢れを払う水薬を作る。",
+      "effect": "毒・汚染・軽度の呪いを解除する調合品を作成。",
+      "unlockFacility": "薬屋",
+      "tags": "解除,浄化,調合,販売レシピ",
+      "notes": ""
     },
     {
       "id": "recipe_bomb",
-      "name": "小型爆弾",
+      "name": "小爆弾",
       "rank": "初級",
+      "price": "120",
       "craftType": "調合",
       "category": "攻撃アイテム",
       "baseItem": "",
       "branchType": "",
-      "resultItem": "小型爆弾",
+      "resultItem": "小爆弾",
       "resultKind": "アイテム",
       "resultCount": 1,
-      "requiredMaterials": "火炎石×1, 燃える粉×1",
+      "requiredMaterials": "小さな水晶片×1, 火矢セット×1",
       "requiredTools": "低級",
       "difficulty": "10",
+      "description": "火種を含む矢弾素材と水晶片を組み合わせ、小型の投擲爆薬を作る。",
       "effect": "敵1体へ火属性ダメージを与える調合品を作成。",
-      "unlockFacility": "工房",
-      "tags": "攻撃,火,調合",
-      "notes": "",
-      "description": "火の素材を詰めて作る小型の爆弾。導火の火が走ると、乾いた破裂音を残す。"
+      "unlockFacility": "薬屋",
+      "tags": "攻撃,火,調合,販売レシピ",
+      "notes": ""
+    },
+    {
+      "id": "recipe_high_potion",
+      "name": "上級ポーション",
+      "rank": "中級",
+      "price": "220",
+      "craftType": "調合",
+      "category": "回復薬",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "上級ポーション",
+      "resultKind": "アイテム",
+      "resultCount": 1,
+      "requiredMaterials": "薬草×2, ゼラチン液×1, 澄んだ水×1",
+      "requiredTools": "普通",
+      "difficulty": "12",
+      "description": "薬草の効能を粘性素材で安定させ、より強い回復薬へ仕上げる。",
+      "effect": "HPを大きく回復する調合品を作成。",
+      "unlockFacility": "薬屋",
+      "tags": "回復,調合,販売レシピ",
+      "notes": "普通以上の道具ランクが必要。"
+    },
+    {
+      "id": "recipe_magic_ink",
+      "name": "魔導インク",
+      "rank": "普通",
+      "price": "180",
+      "craftType": "調合",
+      "category": "術式素材",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "魔導インク",
+      "resultKind": "素材",
+      "resultCount": 1,
+      "requiredMaterials": "小さな水晶片×1, 小さなスライム核×1, 澄んだ水×1",
+      "requiredTools": "普通",
+      "difficulty": "12",
+      "description": "魔力を留めやすい素材を溶かし、術式を書き留めるためのインクを作る。",
+      "effect": "術式やスクロール作成に使う素材を作成。",
+      "unlockFacility": "薬屋",
+      "tags": "素材,術式素材,調合,販売レシピ",
+      "notes": "入手経路が限られる素材系レシピ。"
+    },
+    {
+      "id": "recipe_prayer_paper",
+      "name": "祈祷紙",
+      "rank": "普通",
+      "price": "180",
+      "craftType": "調合",
+      "category": "術式素材",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "祈祷紙",
+      "resultKind": "素材",
+      "resultCount": 1,
+      "requiredMaterials": "清め草×1, しなやかな蔓×1, 澄んだ水×1",
+      "requiredTools": "普通",
+      "difficulty": "12",
+      "description": "清めた繊維を薄く伸ばし、祈祷の言葉を宿しやすい紙へ整える。",
+      "effect": "祈祷やスクロール作成に使う素材を作成。",
+      "unlockFacility": "薬屋",
+      "tags": "素材,術式素材,祈祷,調合,販売レシピ",
+      "notes": "入手経路が限られる素材系レシピ。"
+    },
+    {
+      "id": "recipe_fire_arrow",
+      "name": "火矢セット",
+      "rank": "初級",
+      "price": "100",
+      "craftType": "鍛冶",
+      "category": "矢弾",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "火矢セット",
+      "resultKind": "アイテム",
+      "resultCount": 1,
+      "requiredMaterials": "通常矢×1, 小さな水晶片×1, 丈夫な枝×1",
+      "requiredTools": "低級",
+      "difficulty": "8",
+      "description": "火種を封じた矢尻を整え、着弾時に炎が弾ける矢を作る。",
+      "effect": "火属性の特殊矢弾を作成。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "矢弾,消耗品,鍛冶,販売レシピ",
+      "notes": ""
+    },
+    {
+      "id": "recipe_poison_arrow",
+      "name": "毒矢セット",
+      "rank": "初級",
+      "price": "120",
+      "craftType": "鍛冶",
+      "category": "矢弾",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "毒矢セット",
+      "resultKind": "アイテム",
+      "resultCount": 1,
+      "requiredMaterials": "通常矢×1, 胞子粉×1, 薬草×1",
+      "requiredTools": "低級",
+      "difficulty": "9",
+      "description": "胞子粉を矢尻に塗り込み、傷口から毒を巡らせる矢を作る。",
+      "effect": "毒を付与する特殊矢弾を作成。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "矢弾,消耗品,毒,鍛冶,販売レシピ",
+      "notes": ""
+    },
+    {
+      "id": "recipe_bind_arrow",
+      "name": "拘束矢セット",
+      "rank": "初級",
+      "price": "130",
+      "craftType": "鍛冶",
+      "category": "矢弾",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "拘束矢セット",
+      "resultKind": "アイテム",
+      "resultCount": 1,
+      "requiredMaterials": "通常矢×1, しなやかな蔓×1, 動く根×1",
+      "requiredTools": "低級",
+      "difficulty": "9",
+      "description": "絡みつく蔓と根を仕込み、命中した相手の動きを乱す矢を作る。",
+      "effect": "対象の行動を妨害する特殊矢弾を作成。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "矢弾,消耗品,拘束,鍛冶,販売レシピ",
+      "notes": ""
+    },
+    {
+      "id": "recipe_flash_ammo",
+      "name": "閃光弾セット",
+      "rank": "初級",
+      "price": "140",
+      "craftType": "鍛冶",
+      "category": "矢弾",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "閃光弾セット",
+      "resultKind": "アイテム",
+      "resultCount": 1,
+      "requiredMaterials": "通常ボルト×1, 薄虫の羽×1, 小さな水晶片×1",
+      "requiredTools": "低級",
+      "difficulty": "10",
+      "description": "光を散らす素材を弾頭に仕込み、破裂時に視界を奪う弾を作る。",
+      "effect": "命中妨害を与える特殊矢弾を作成。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "矢弾,消耗品,妨害,鍛冶,販売レシピ",
+      "notes": ""
+    },
+    {
+      "id": "recipe_piercing_ammo",
+      "name": "破甲弾セット",
+      "rank": "初級",
+      "price": "150",
+      "craftType": "鍛冶",
+      "category": "矢弾",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "破甲弾セット",
+      "resultKind": "アイテム",
+      "resultCount": 1,
+      "requiredMaterials": "通常ボルト×1, 硬い甲殻片×1, 小さな爪×1",
+      "requiredTools": "低級",
+      "difficulty": "10",
+      "description": "硬い芯材を弾頭に仕込み、防御の隙間へ食い込む弾を作る。",
+      "effect": "常時防御値を一部無視する特殊矢弾を作成。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "矢弾,消耗品,貫通,鍛冶,販売レシピ",
+      "notes": ""
+    },
+    {
+      "id": "recipe_purify_ammo",
+      "name": "浄化弾セット",
+      "rank": "普通",
+      "price": "220",
+      "craftType": "鍛冶",
+      "category": "矢弾",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "浄化弾セット",
+      "resultKind": "アイテム",
+      "resultCount": 1,
+      "requiredMaterials": "通常ボルト×1, 清め草×1, 祈祷紙×1",
+      "requiredTools": "普通",
+      "difficulty": "12",
+      "description": "清めの力を宿した弾頭を作り、穢れや異界の気配に強い弾を仕上げる。",
+      "effect": "異界存在・不死・呪物に強い特殊矢弾を作成。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "矢弾,消耗品,浄化,鍛冶,販売レシピ",
+      "notes": "普通以上の道具ランクが必要。"
     }
   ],
   "spells": [
@@ -10552,17 +10764,28 @@ function facilityRankVisible(row){
   const level=facilityRankLevel(row?.rank);
   return level !== null && level <= limit;
 }
+function facilityProductType(row){
+  if(String(row?.__facilityProductType||'').trim()) return String(row.__facilityProductType).trim();
+  if(String(row?.craftType||'').trim() || String(row?.requiredMaterials||'').trim()) return 'recipe';
+  return 'item';
+}
 function facilityProducts(facilityName){
-  return (state.items||[])
+  const itemRows = (state.items||[])
     .filter(row=>row && String(row.name||'').trim() && textHasFacility(row, facilityName) && facilityRankVisible(row))
-    .sort((a,b)=>{
-      const af=compareValues(a.itemType||a.dataKind||'', b.itemType||b.dataKind||'');
+    .map(row=>({...row, __facilityProductType:'item'}));
+  const recipeRows = (state.recipes||[])
+    .filter(row=>row && String(row.name||row.resultItem||'').trim() && String(row.price ?? '').trim() && textHasFacility(row, facilityName) && facilityRankVisible(row))
+    .map(row=>({...row, __facilityProductType:'recipe'}));
+  return [...itemRows, ...recipeRows].sort((a,b)=>{
+      const at=facilityProductType(a)==='recipe' ? 'レシピ' : (a.itemType||a.dataKind||'');
+      const bt=facilityProductType(b)==='recipe' ? 'レシピ' : (b.itemType||b.dataKind||'');
+      const af=compareValues(at, bt);
       if(af) return af;
       const al=facilityRankLevel(a.rank), bl=facilityRankLevel(b.rank);
       if(al !== null && bl !== null && al !== bl) return al-bl;
       const ar=compareValues(a.rank||'', b.rank||'');
       if(ar) return ar;
-      return compareValues(a.name||'', b.name||'');
+      return compareValues((a.resultItem || a.name || ''), (b.resultItem || b.name || ''));
     });
 }
 function productPriceText(row){
@@ -10570,6 +10793,12 @@ function productPriceText(row){
   return p ? `${p}G` : '価格未設定';
 }
 function productKindText(row){
+  if(facilityProductType(row)==='recipe'){
+    const parts=['レシピ'];
+    if(row.craftType) parts.push(row.craftType);
+    if(row.category) parts.push(row.category);
+    return parts.filter(Boolean).join(' / ');
+  }
   const parts=[];
   if(String(row.dataKind||'').trim()==='素材') parts.push('素材');
   else if(row.itemType) parts.push(row.itemType);
@@ -10578,12 +10807,16 @@ function productKindText(row){
   if(row.materialCategory) parts.push(row.materialCategory);
   return parts.filter(Boolean).join(' / ') || '分類未設定';
 }
+function facilityProductDisplayName(row){
+  return facilityProductType(row)==='recipe' ? `${row.resultItem || row.name || '名称未設定'}のレシピ` : (row.name || '名称未設定');
+}
 function facilityProductLine(row){
   const bits=[productKindText(row)];
   if(String(row.rank||'').trim()) bits.push(`ランク:${row.rank}`);
   if(String(row.equipSlot||'').trim()) bits.push(`枠:${row.equipSlot}`);
   if(String(row.bagCapacity||'').trim()) bits.push(`容量:${row.bagCapacity}`);
-  return `- ${row.name}（${bits.join('・')}） ${productPriceText(row)}`;
+  if(facilityProductType(row)==='recipe' && String(row.requiredTools||'').trim()) bits.push(`必要道具:${row.requiredTools}以上`);
+  return `- ${facilityProductDisplayName(row)}（${bits.join('・')}） ${productPriceText(row)}`;
 }
 function facilityServiceLine(service){
   return `- ${service.name}（${service.price || '価格未設定'}）：${service.description || ''}`;
@@ -10754,6 +10987,7 @@ function buildRecipeInfoText(row={}){
   lines.push(`【${name}】`);
   lines.push(warehouseCopyLine('個数', fieldText(row,'resultCount') || '1'));
   lines.push(warehouseCopyLine('ランク', fieldText(row,'rank')));
+  lines.push(warehouseCopyLine('価格', productPriceText(row)));
   lines.push(warehouseCopyLine('製作区分', fieldText(row,'craftType')));
   lines.push(warehouseCopyLine('分類', [resultKind, category].filter(Boolean).join(' / ')));
   lines.push(warehouseCopyLine('素材', fieldText(row,'requiredMaterials')));
@@ -11514,7 +11748,7 @@ function recordCardSummary(row={}, key=''){
   const summaryFieldsByKey = {
     items: ['price','equipSlot','power','offhandBonus','reloadTurns','modifiers','upgradeLimit','mpCost','target','checkType','element','maxStack'],
     materials: ['price','rank','materialType','materialCategory','source','equipmentUpgradeEffect','equipmentUpgradeValue','maxStack'],
-    recipes: ['rank','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty'],
+    recipes: ['rank','price','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty'],
     spells: ['rank','mpCost','target','checkType','element','power','role','scrollPrice','setItem']
   };
   const fields = summaryFieldsByKey[key] || [];
@@ -12431,12 +12665,12 @@ function itemFormFields(row){
 function recipeFormFields(row){
   const craftType = String(row.craftType || activeRecipeCraftType() || '調合').trim();
   if(craftType === '武器派生'){
-    return ['name','rank','craftType','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','tags','notes'];
+    return ['name','rank','price','craftType','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes'];
   }
   if(craftType === '素材加工'){
-    return ['name','rank','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','tags','notes'];
+    return ['name','rank','price','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes'];
   }
-  return ['name','rank','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','tags','notes'];
+  return ['name','rank','price','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes'];
 }
 function formFieldsFor(key,row){
   if(key==='items') return [...new Set(['id','ownerKey','createdBy','updatedAt', ...itemFormFields(row)])].filter(f=>SCHEMA[key].includes(f));
