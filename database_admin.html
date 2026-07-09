@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.75</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.82</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -738,7 +738,7 @@
 
   <section class="panel hidden" id="panel-monsters">
     <div class="toolbar">
-      <div class="field"><label>検索</label><input id="filter-monsters" placeholder="プチスライム・荒れ森ネズミ・ドロップなどで絞り込み"></div>
+      <div class="field"><label>検索</label><input id="filter-monsters" placeholder="プチスライム・ラフィンラット・ドロップなどで絞り込み"></div>
       <button class="secondary" data-add="monsters">新規登録</button>
       <button class="ghost" data-reset="monsters">初期データに戻す</button>
       <button class="ghost" data-load="monsters">この表だけDB読込</button>
@@ -849,8 +849,8 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.75';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.75';
+const RECRAFT_DB_VERSION = 'v90.8.82';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.82';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const PAGE_TABLE_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','materials','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -869,13 +869,13 @@ const SCHEMA = {
   quest_rewards: ['id','rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards','notes','updatedAt','ownerKey','createdBy'],
   quests: ['id','name','questType','rank','areaName','progressStep','fixedEvents','clearCondition','bossMonster','rewardMoney','rewardItems','unlockResult','description','notes','updatedAt','ownerKey','createdBy'],
   exploration_areas: ['id','name','areaType','difficulty','unlockCondition','mainMaterials','mainMonsters','eventTableId','progressStep','description','notes','updatedAt','ownerKey','createdBy'],
-  event_tables: ['id','tableId','areaName','eventName','eventType','conditionType','conditionValue','checkType','targetValue','treasureTableId','result','progressEffect','notes','updatedAt','ownerKey','createdBy'],
+  event_tables: ['id','tableId','areaName','eventName','eventType','conditionType','conditionValue','checkType','targetValue','treasureTableId','encounterCountRule','encounterCountMin','encounterCountMax','encounterFormation','encounterComposition','result','progressEffect','notes','updatedAt','ownerKey','createdBy'],
   treasure_tables: ['id','tableId','areaName','treasureRank','entryType','entryName','entryPublicId','recipeName','scrollRank','quantity','weight','description','enabled','notes','updatedAt','ownerKey','createdBy'],
   appraisal_rules: ['id','facilityName','scrollRank','difficulty','spellType','spellRank','candidateTags','description','enabled','notes','updatedAt','ownerKey','createdBy'],
   monsters: ['id','name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', modifiers:'補正値', upgradeLimit:'強化可能回数', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具/設備', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'ボス/達成イベント', rewardMoney:'報酬金', rewardItems:'報酬アイテム', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', treasureRank:'宝箱ランク', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', actions:'行動', drops:'ドロップ'
+  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', modifiers:'補正値', upgradeLimit:'強化可能回数', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具/設備', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'ボス/達成イベント', rewardMoney:'報酬金', rewardItems:'報酬アイテム', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', actions:'行動', drops:'ドロップ'
 };
 
 const FORM_PRIMARY_FIELDS = {
@@ -892,12 +892,12 @@ const FORM_PRIMARY_FIELDS = {
   quest_rewards: ['rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards'],
   quests: ['name','questType','rank','areaName','progressStep','fixedEvents','clearCondition','bossMonster','rewardMoney','rewardItems','unlockResult','description','notes'],
   exploration_areas: ['name','areaType','difficulty','unlockCondition','mainMaterials','mainMonsters','eventTableId','description','notes'],
-  event_tables: ['tableId','areaName','eventName','eventType','conditionType','conditionValue','checkType','targetValue','treasureTableId','result','progressEffect','notes'],
+  event_tables: ['tableId','areaName','eventName','eventType','conditionType','conditionValue','checkType','targetValue','treasureTableId','encounterCountRule','encounterCountMin','encounterCountMax','encounterFormation','encounterComposition','result','progressEffect','notes'],
   treasure_tables: ['tableId','areaName','treasureRank','entryType','entryName','entryPublicId','recipeName','scrollRank','quantity','weight','description','enabled','notes'],
   appraisal_rules: ['facilityName','scrollRank','difficulty','spellType','spellRank','candidateTags','description','enabled','notes'],
   monsters: ['name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','description','notes']
 };
-const FORM_LONG_FIELDS = new Set(['description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','rewardItems','unlockResult','mainMaterials','mainMonsters','result','progressEffect','actions','drops','modifiers']);
+const FORM_LONG_FIELDS = new Set(['description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','rewardItems','unlockResult','mainMaterials','mainMonsters','result','progressEffect','actions','drops','modifiers','encounterComposition']);
 const RECORD_CARD_KEYS = new Set(['items','materials','recipes','spells']);
 const FIELD_PLACEHOLDERS = {
   id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'例：低級 / 初級', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：獣牙系。モンハン式の素材派生ラインを管理します。', equipmentUpgradeEffect:'例：威力+1。魔物素材を武器強化に使った時の強化内容を選択します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：低級 / 普通', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定スクロール：初級', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：初級', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：初級', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
@@ -931,7 +931,7 @@ const ADVANCED_FILTERS = {
   quest_rewards: [{field:'rank', label:'ランク'},{field:'scale', label:'規模'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   quests: [{field:'questType', label:'クエスト種別'},{field:'rank', label:'ランク'},{field:'areaName', label:'エリア'},{field:'bossMonster', label:'ボス/達成イベント'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   exploration_areas: [{field:'areaType', label:'エリア種別'},{field:'difficulty', label:'難度'},{field:'eventTableId', label:'イベント表ID'},{field:'progressStep', label:'進行度上昇'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  event_tables: [{field:'tableId', label:'表ID'},{field:'areaName', label:'エリア'},{field:'eventType', label:'イベント種別'},{field:'conditionType', label:'前提条件'},{field:'conditionValue', label:'条件内容'},{field:'treasureTableId', label:'宝箱表'},{field:'checkType', label:'判定'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
+  event_tables: [{field:'tableId', label:'表ID'},{field:'areaName', label:'エリア'},{field:'eventType', label:'イベント種別'},{field:'conditionType', label:'前提条件'},{field:'conditionValue', label:'条件内容'},{field:'encounterCountRule', label:'出現数'},{field:'treasureTableId', label:'宝箱表'},{field:'checkType', label:'判定'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   treasure_tables: [{field:'tableId', label:'表ID'},{field:'areaName', label:'エリア'},{field:'treasureRank', label:'ランク'},{field:'entryType', label:'中身種別'},{field:'enabled', label:'有効'}],
   appraisal_rules: [{field:'facilityName', label:'施設'},{field:'scrollRank', label:'スクロールランク'},{field:'spellType', label:'術式種別'},{field:'spellRank', label:'術式ランク'},{field:'enabled', label:'有効'}],
   monsters: [{field:'monsterType', label:'魔物種別'},{field:'rank', label:'ランク'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}]
@@ -4347,15 +4347,15 @@ const DEFAULTS = {
       "mpCost": "",
       "target": "",
       "checkType": "",
-      "effect": "",
+      "effect": "武器・防具強化に使うと、命中+1の強化素材になる。",
       "source": "プチスライム",
       "usageTags": "薬液,接着,ポーション",
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
       "description": "ぷるぷると揺れる粘液。冷やすと固まり、薬や接着材の素材になる。",
-      "equipmentUpgradeEffect": "特殊効果付与(武器)",
-      "equipmentUpgradeValue": "命中時、対象の次の行動判定-1",
+      "equipmentUpgradeEffect": "命中+1",
+      "equipmentUpgradeValue": "1",
       "publicId": "RCA-64X3-USPY",
       "upgradeLimit": "0",
       "modifiers": "",
@@ -4379,15 +4379,15 @@ const DEFAULTS = {
       "mpCost": "",
       "target": "",
       "checkType": "",
-      "effect": "",
+      "effect": "武器・防具強化に使うと、回避+1の強化素材になる。",
       "source": "プチスライム",
       "usageTags": "防具補修,硬化薬",
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
       "description": "薄く弾力のある膜。衝撃を吸収しやすく、防具や容器の加工に使える。",
-      "equipmentUpgradeEffect": "防御行動値(防具)",
-      "equipmentUpgradeValue": "+1",
+      "equipmentUpgradeEffect": "回避+1",
+      "equipmentUpgradeValue": "1",
       "publicId": "RCA-C9BK-8MA8",
       "upgradeLimit": "0",
       "modifiers": "",
@@ -4411,15 +4411,15 @@ const DEFAULTS = {
       "mpCost": "",
       "target": "",
       "checkType": "",
-      "effect": "",
+      "effect": "武器・防具強化に使うと、威力+1の強化素材になる。",
       "source": "プチスライム",
       "usageTags": "魔力薬,術式素材",
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
       "description": "小さなスライムの核。淡い魔力を帯び、調合素材として扱われる。",
-      "equipmentUpgradeEffect": "水属性付与(武器)",
-      "equipmentUpgradeValue": "水",
+      "equipmentUpgradeEffect": "威力+1",
+      "equipmentUpgradeValue": "1",
       "publicId": "RCA-6XEB-ZZGV",
       "upgradeLimit": "0",
       "modifiers": "",
@@ -4443,15 +4443,15 @@ const DEFAULTS = {
       "mpCost": "",
       "target": "",
       "checkType": "",
-      "effect": "",
-      "source": "荒れ森ネズミ",
+      "effect": "武器・防具強化に使うと、回避+1の強化素材になる。",
+      "source": "ラフィンラット",
       "usageTags": "革,軽装,補修",
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
       "description": "小獣から取れる柔らかな毛皮。防寒具や軽い防具の素材になる。",
-      "equipmentUpgradeEffect": "回避補正(防具)",
-      "equipmentUpgradeValue": "+1",
+      "equipmentUpgradeEffect": "回避+1",
+      "equipmentUpgradeValue": "1",
       "publicId": "RCA-VNQE-XG6J",
       "upgradeLimit": "0",
       "modifiers": "",
@@ -4475,15 +4475,15 @@ const DEFAULTS = {
       "mpCost": "",
       "target": "",
       "checkType": "",
-      "effect": "",
-      "source": "荒れ森ネズミ",
+      "effect": "武器・防具強化に使うと、威力+1の強化素材になる。",
+      "source": "ラフィンラット",
       "usageTags": "矢弾,短剣,装飾品",
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
       "description": "小獣の鋭い牙。削れば刃物や装飾品の素材として使える。",
-      "equipmentUpgradeEffect": "威力(武器)",
-      "equipmentUpgradeValue": "+1",
+      "equipmentUpgradeEffect": "威力+1",
+      "equipmentUpgradeValue": "1",
       "publicId": "RCA-Y66C-ZEJR",
       "upgradeLimit": "0",
       "modifiers": "",
@@ -4507,15 +4507,15 @@ const DEFAULTS = {
       "mpCost": "",
       "target": "",
       "checkType": "",
-      "effect": "",
-      "source": "荒れ森ネズミ",
+      "effect": "武器・防具強化に使うと、命中+1の強化素材になる。",
+      "source": "ラフィンラット",
       "usageTags": "武器補修,破甲弾",
       "unlockFacility": "",
       "tags": "素材,チュートリアル",
       "notes": "",
       "description": "小さな獣の爪。硬く軽いため、細工や武器の補強に使われる。",
-      "equipmentUpgradeEffect": "防御貫通(武器)",
-      "equipmentUpgradeValue": "+1",
+      "equipmentUpgradeEffect": "命中+1",
+      "equipmentUpgradeValue": "1",
       "publicId": "RCA-HMBK-QF4A",
       "upgradeLimit": "0",
       "modifiers": "",
@@ -4548,11 +4548,11 @@ const DEFAULTS = {
       "checkType": "",
       "element": "",
       "description": "甲虫型魔物から取れる硬い外殻。軽い防具や小物の補強に使える。",
-      "effect": "",
+      "effect": "武器・防具強化に使うと、防御貫通+1の強化素材になる。",
       "source": "街はずれの草原、近郊の森",
       "usageTags": "素材,調合,鍛冶",
-      "equipmentUpgradeEffect": "",
-      "equipmentUpgradeValue": "",
+      "equipmentUpgradeEffect": "防御貫通+1",
+      "equipmentUpgradeValue": "1",
       "unlockFacility": "",
       "tags": "素材",
       "notes": "",
@@ -4588,11 +4588,11 @@ const DEFAULTS = {
       "checkType": "",
       "element": "",
       "description": "薄く透ける虫の羽。軽さを活かした調合や細工に使える。",
-      "effect": "",
+      "effect": "武器・防具強化に使うと、命中+1の強化素材になる。",
       "source": "街はずれの草原、水辺の湿地",
       "usageTags": "素材,調合,鍛冶",
-      "equipmentUpgradeEffect": "",
-      "equipmentUpgradeValue": "",
+      "equipmentUpgradeEffect": "命中+1",
+      "equipmentUpgradeValue": "1",
       "unlockFacility": "",
       "tags": "素材",
       "notes": "",
@@ -4628,11 +4628,11 @@ const DEFAULTS = {
       "checkType": "",
       "element": "",
       "description": "きのこ型魔物が撒く細かな胞子。眠気や幻惑を伴う調合素材。",
-      "effect": "",
+      "effect": "武器強化に使うと、命中時に抵抗妨害を与える特殊効果の素材になる。",
       "source": "近郊の森",
       "usageTags": "素材,調合,鍛冶",
-      "equipmentUpgradeEffect": "",
-      "equipmentUpgradeValue": "",
+      "equipmentUpgradeEffect": "特殊：抵抗妨害",
+      "equipmentUpgradeValue": "1",
       "unlockFacility": "",
       "tags": "素材",
       "notes": "",
@@ -4668,11 +4668,11 @@ const DEFAULTS = {
       "checkType": "",
       "element": "",
       "description": "魔力を帯びてわずかに蠢く根。木材系素材の強化や拘束系の調合に使える。",
-      "effect": "",
+      "effect": "武器強化に使うと、命中時に回避妨害を与える特殊効果の素材になる。",
       "source": "近郊の森",
       "usageTags": "素材,調合,鍛冶",
-      "equipmentUpgradeEffect": "",
-      "equipmentUpgradeValue": "",
+      "equipmentUpgradeEffect": "特殊：回避妨害",
+      "equipmentUpgradeValue": "1",
       "unlockFacility": "",
       "tags": "素材",
       "notes": "",
@@ -4708,11 +4708,11 @@ const DEFAULTS = {
       "checkType": "",
       "element": "",
       "description": "湿地の魔物から取れる泥を含んだ皮。耐水性のある加工素材になる。",
-      "effect": "",
+      "effect": "武器・防具強化に使うと、防御+1の強化素材になる。",
       "source": "水辺の湿地",
       "usageTags": "素材,調合,鍛冶",
-      "equipmentUpgradeEffect": "",
-      "equipmentUpgradeValue": "",
+      "equipmentUpgradeEffect": "防御+1",
+      "equipmentUpgradeValue": "1",
       "unlockFacility": "",
       "tags": "素材",
       "notes": "",
@@ -4748,11 +4748,11 @@ const DEFAULTS = {
       "checkType": "",
       "element": "",
       "description": "湿地のスライムや泥状魔物から取れる粘液。接着・防水・緩衝材として使える。",
-      "effect": "",
+      "effect": "武器強化に使うと、命中時に命中妨害を与える特殊効果の素材になる。",
       "source": "水辺の湿地",
       "usageTags": "素材,調合,鍛冶",
-      "equipmentUpgradeEffect": "",
-      "equipmentUpgradeValue": "",
+      "equipmentUpgradeEffect": "特殊：命中妨害",
+      "equipmentUpgradeValue": "1",
       "unlockFacility": "",
       "tags": "素材",
       "notes": "",
@@ -4787,12 +4787,12 @@ const DEFAULTS = {
       "target": "",
       "checkType": "",
       "element": "",
-      "description": "湿地のヌシが体内に抱える濁った核。強い水気と泥の魔力を帯びる。",
-      "effect": "",
+      "description": "湿地のボスが体内に抱える濁った核。強い水気と泥の魔力を帯びる。",
+      "effect": "武器強化に使うと水属性を付与する。ボス素材。",
       "source": "沼主グラボロス",
       "usageTags": "素材,調合,鍛冶",
-      "equipmentUpgradeEffect": "",
-      "equipmentUpgradeValue": "",
+      "equipmentUpgradeEffect": "水属性付与",
+      "equipmentUpgradeValue": "1",
       "unlockFacility": "",
       "tags": "素材",
       "notes": "",
@@ -5608,9 +5608,9 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "街はずれの草原",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t採取確認地点\t失敗でも薬草または丈夫な枝×1。成功で薬草、清め草、丈夫な枝から2個。目標値+3以上で好きな低級採取素材+1。\n100%\t試験用の魔物遭遇\tプチスライム1体と荒れ森ネズミ1体と戦闘。勝利でクエストクリア。",
+      "fixedEvents": "50%\t採取確認地点\t失敗でも薬草または丈夫な枝×1。成功で薬草、清め草、丈夫な枝から2個。目標値+3以上で好きな低級採取素材+1。\n100%\t試験用の魔物遭遇\tプチスライム1体とラフィンラット1体と戦闘。勝利でクエストクリア。",
       "clearCondition": "採取素材を合計3個以上入手し、エリアイベントを2回以上解決し、小型魔物を1体撃退する。",
-      "bossMonster": "プチスライム / 荒れ森ネズミ",
+      "bossMonster": "プチスライム / ラフィンラット",
       "rewardMoney": "80G",
       "rewardItems": "ポーション×1",
       "unlockResult": "通常依頼の受注許可、解放済みエリアの自由探索許可",
@@ -5854,7 +5854,7 @@ const DEFAULTS = {
       "difficulty": "初級",
       "unlockCondition": "初期解放",
       "mainMaterials": "薬草、清め草、丸茸、丈夫な枝、しなやかな蔓、澄んだ水、小さな水晶片",
-      "mainMonsters": "プチスライム、荒れ森ネズミ、ラピットホーン、ヴェスパット、カラパスビートル、グラウワーム",
+      "mainMonsters": "プチスライム、ラフィンラット、ラピットホーン、ヴェスパット、カラパスビートル、グラウワーム",
       "eventTableId": "evt_outskirts_grass_daily",
       "progressStep": "+25%",
       "description": "街のすぐ外に広がる草原。復興前のため手入れされていないが、薬草や枝材が採れ、小型魔物も多く棲みついている。",
@@ -5890,7 +5890,7 @@ const DEFAULTS = {
       "eventTableId": "evt_waterside_wetland_daily",
       "progressStep": "+25%",
       "description": "森の先に広がる浅い湿地。水や粘液素材が豊富だが、足場の悪さと虫・スライム系魔物に注意が必要。",
-      "notes": "宿屋の噂によってヌシ遭遇イベントが解放される。",
+      "notes": "宿屋の噂によってボス遭遇イベントが解放される。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
@@ -5913,7 +5913,12 @@ const DEFAULTS = {
       "notes": "基本の採取地点。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_02",
@@ -5931,7 +5936,12 @@ const DEFAULTS = {
       "notes": "草花系素材。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_03",
@@ -5949,7 +5959,12 @@ const DEFAULTS = {
       "notes": "木材系素材。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_04",
@@ -5967,7 +5982,12 @@ const DEFAULTS = {
       "notes": "水素材。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_05",
@@ -5985,7 +6005,12 @@ const DEFAULTS = {
       "notes": "木の上にある素材を取る。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_06",
@@ -6003,7 +6028,12 @@ const DEFAULTS = {
       "notes": "根や蔓を引き抜く。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_07",
@@ -6021,7 +6051,12 @@ const DEFAULTS = {
       "notes": "感知判定の導入。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_08",
@@ -6034,12 +6069,17 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "プチスライム、荒れ森ネズミ、ラピットホーン、ヴェスパット、カラパスビートル、グラウワームから1体を選んで遭遇。",
+      "result": "草原の小型魔物が群れで現れる。前衛にラフィンラット、後衛にヴェスパットを配置する。",
       "progressEffect": "",
       "notes": "通常遭遇。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "2",
+      "encounterCountMax": "5",
+      "encounterComposition": "前衛\tラフィンラット\t人数半数切上\n後衛\tヴェスパット\t1",
+      "encounterFormation": "前衛：ラフィンラット / 後衛：ヴェスパット"
     },
     {
       "id": "evt_grass_09",
@@ -6057,7 +6097,12 @@ const DEFAULTS = {
       "notes": "探索障害。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_10",
@@ -6075,7 +6120,12 @@ const DEFAULTS = {
       "notes": "換金品・アイテム候補。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_11",
@@ -6093,7 +6143,12 @@ const DEFAULTS = {
       "notes": "宝箱表を使用。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_12",
@@ -6111,7 +6166,12 @@ const DEFAULTS = {
       "notes": "小箱イベント。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_13",
@@ -6129,7 +6189,12 @@ const DEFAULTS = {
       "notes": "情報イベント。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_14",
@@ -6147,7 +6212,12 @@ const DEFAULTS = {
       "notes": "足場の悪さ。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_15",
@@ -6165,7 +6235,12 @@ const DEFAULTS = {
       "notes": "遭遇前兆。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_16",
@@ -6183,7 +6258,12 @@ const DEFAULTS = {
       "notes": "小休止。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_17",
@@ -6201,7 +6281,12 @@ const DEFAULTS = {
       "notes": "鉱物系素材。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_18",
@@ -6219,7 +6304,12 @@ const DEFAULTS = {
       "notes": "矢弾・小物候補。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_19",
@@ -6237,7 +6327,12 @@ const DEFAULTS = {
       "notes": "獣遭遇。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "前衛\tラピットホーン\t人数半数切上",
+      "encounterFormation": "前衛：ラピットホーン"
     },
     {
       "id": "evt_grass_20",
@@ -6255,7 +6350,12 @@ const DEFAULTS = {
       "notes": "知識イベント。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_21",
@@ -6273,7 +6373,12 @@ const DEFAULTS = {
       "notes": "噂条件イベント。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_22",
@@ -6291,7 +6396,12 @@ const DEFAULTS = {
       "notes": "噂条件イベント。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_23",
@@ -6309,7 +6419,12 @@ const DEFAULTS = {
       "notes": "噂条件イベント。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_24",
@@ -6327,7 +6442,12 @@ const DEFAULTS = {
       "notes": "噂条件イベント。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_25",
@@ -6345,7 +6465,12 @@ const DEFAULTS = {
       "notes": "飛行虫系遭遇。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "後衛\tヴェスパット\t人数半数切上",
+      "encounterFormation": "後衛：ヴェスパット"
     },
     {
       "id": "evt_grass_26",
@@ -6363,7 +6488,12 @@ const DEFAULTS = {
       "notes": "地虫遭遇。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "前衛\tグラウワーム\t人数半数切上",
+      "encounterFormation": "前衛：グラウワーム"
     },
     {
       "id": "evt_grass_27",
@@ -6381,7 +6511,12 @@ const DEFAULTS = {
       "notes": "地形観察。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_28",
@@ -6399,7 +6534,12 @@ const DEFAULTS = {
       "notes": "小さな遺物。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_29",
@@ -6417,25 +6557,35 @@ const DEFAULTS = {
       "notes": "安全イベント。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_grass_30",
       "tableId": "evt_outskirts_grass_daily",
       "areaName": "街はずれの草原",
-      "eventName": "荒れ森ネズミの群れ",
+      "eventName": "ラフィンラットの群れ",
       "eventType": "魔物遭遇",
       "conditionType": "なし",
       "conditionValue": "",
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "荒れ森ネズミ1体、または2体と遭遇。人数に応じて調整。",
+      "result": "ラフィンラット1体、または2体と遭遇。人数に応じて調整。",
       "progressEffect": "",
       "notes": "既存魔物の追加遭遇。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "前衛\tラフィンラット\t人数半数切上",
+      "encounterFormation": "前衛：ラフィンラット"
     },
     {
       "id": "evt_forest_01",
@@ -6453,7 +6603,12 @@ const DEFAULTS = {
       "notes": "森の薬草。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_02",
@@ -6471,7 +6626,12 @@ const DEFAULTS = {
       "notes": "木材。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_03",
@@ -6489,7 +6649,12 @@ const DEFAULTS = {
       "notes": "茸素材。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_04",
@@ -6507,7 +6672,12 @@ const DEFAULTS = {
       "notes": "獣道調査。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_05",
@@ -6525,7 +6695,12 @@ const DEFAULTS = {
       "notes": "障害。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_06",
@@ -6543,7 +6718,12 @@ const DEFAULTS = {
       "notes": "水場。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_07",
@@ -6556,12 +6736,17 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "ヴェスパット、カラパスビートル、ミストモスキートのいずれか1体と遭遇。",
+      "result": "硬い甲虫の背後から羽音が近づく。前衛にカラパスビートル、後衛にヴェスパットを配置する。",
       "progressEffect": "",
       "notes": "虫系。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "2",
+      "encounterCountMax": "5",
+      "encounterComposition": "前衛\tカラパスビートル\t1\n後衛\tヴェスパット\t人数半数切上",
+      "encounterFormation": "前衛：カラパスビートル / 後衛：ヴェスパット"
     },
     {
       "id": "evt_forest_08",
@@ -6579,7 +6764,12 @@ const DEFAULTS = {
       "notes": "休息。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_09",
@@ -6597,7 +6787,12 @@ const DEFAULTS = {
       "notes": "蔓素材。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_10",
@@ -6615,7 +6810,12 @@ const DEFAULTS = {
       "notes": "知識。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_11",
@@ -6633,7 +6833,12 @@ const DEFAULTS = {
       "notes": "宝箱。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_12",
@@ -6651,7 +6856,12 @@ const DEFAULTS = {
       "notes": "宝箱。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_13",
@@ -6669,7 +6879,12 @@ const DEFAULTS = {
       "notes": "スクロール候補。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_14",
@@ -6687,7 +6902,12 @@ const DEFAULTS = {
       "notes": "獣。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "前衛\tラスクレイル\t人数半数切上",
+      "encounterFormation": "前衛：ラスクレイル"
     },
     {
       "id": "evt_forest_15",
@@ -6705,7 +6925,12 @@ const DEFAULTS = {
       "notes": "植物魔物。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "後衛\tマイコニド\t人数半数切上",
+      "encounterFormation": "後衛：マイコニド"
     },
     {
       "id": "evt_forest_16",
@@ -6723,7 +6948,12 @@ const DEFAULTS = {
       "notes": "植物獣。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "前衛\tルートハウンド\t人数半数切上",
+      "encounterFormation": "前衛：ルートハウンド"
     },
     {
       "id": "evt_forest_17",
@@ -6741,7 +6971,12 @@ const DEFAULTS = {
       "notes": "共感。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_18",
@@ -6759,7 +6994,12 @@ const DEFAULTS = {
       "notes": "小箱。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_19",
@@ -6777,7 +7017,12 @@ const DEFAULTS = {
       "notes": "危険察知。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_20",
@@ -6795,7 +7040,12 @@ const DEFAULTS = {
       "notes": "薬草情報。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_21",
@@ -6808,12 +7058,17 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "森の奥から歩く枝のような魔物が現れる。ブランチリング1体と遭遇。",
+      "result": "歩く枝のような魔物と、胞子を撒く茸型魔物が一緒に現れる。",
       "progressEffect": "",
       "notes": "噂条件イベント。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "固定",
+      "encounterCountMin": "2",
+      "encounterCountMax": "2",
+      "encounterComposition": "前衛\tブランチリング\t1\n後衛\tマイコニド\t1",
+      "encounterFormation": "前衛：ブランチリング / 後衛：マイコニド"
     },
     {
       "id": "evt_forest_22",
@@ -6831,7 +7086,12 @@ const DEFAULTS = {
       "notes": "噂条件イベント。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_23",
@@ -6849,7 +7109,12 @@ const DEFAULTS = {
       "notes": "噂条件イベント。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_24",
@@ -6867,7 +7132,12 @@ const DEFAULTS = {
       "notes": "噂条件イベント。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_25",
@@ -6885,7 +7155,12 @@ const DEFAULTS = {
       "notes": "木材。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_26",
@@ -6903,7 +7178,12 @@ const DEFAULTS = {
       "notes": "苔・茸。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_27",
@@ -6921,7 +7201,12 @@ const DEFAULTS = {
       "notes": "自然観察。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_28",
@@ -6939,7 +7224,12 @@ const DEFAULTS = {
       "notes": "宝箱。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_forest_29",
@@ -6957,7 +7247,12 @@ const DEFAULTS = {
       "notes": "植物魔物。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "前衛\tブランチリング\t人数半数切上",
+      "encounterFormation": "前衛：ブランチリング"
     },
     {
       "id": "evt_forest_30",
@@ -6975,7 +7270,12 @@ const DEFAULTS = {
       "notes": "休息。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_01",
@@ -6993,7 +7293,12 @@ const DEFAULTS = {
       "notes": "水素材。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_02",
@@ -7011,7 +7316,12 @@ const DEFAULTS = {
       "notes": "足場。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_03",
@@ -7029,7 +7339,12 @@ const DEFAULTS = {
       "notes": "水草。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_04",
@@ -7047,7 +7362,12 @@ const DEFAULTS = {
       "notes": "宝箱。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_05",
@@ -7060,12 +7380,17 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "ミストモスキート1体と遭遇。感知に成功していれば先制判定+1。",
+      "result": "ぬかるみから跳ねる魔物と、霧に紛れる吸血虫が同時に襲ってくる。",
       "progressEffect": "",
       "notes": "虫系。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "人数同数",
+      "encounterCountMin": "2",
+      "encounterCountMax": "7",
+      "encounterComposition": "前衛\tマッドホッパー\t人数半数切上\n後衛\tミストモスキート\t人数半数切上",
+      "encounterFormation": "前衛：マッドホッパー / 後衛：ミストモスキート"
     },
     {
       "id": "evt_wetland_06",
@@ -7083,7 +7408,12 @@ const DEFAULTS = {
       "notes": "両生系。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "前衛\tマッドホッパー\t人数半数切上",
+      "encounterFormation": "前衛：マッドホッパー"
     },
     {
       "id": "evt_wetland_07",
@@ -7101,7 +7431,12 @@ const DEFAULTS = {
       "notes": "泥状魔物。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "前衛\tドロマール\t1",
+      "encounterFormation": "前衛：ドロマール"
     },
     {
       "id": "evt_wetland_08",
@@ -7119,7 +7454,12 @@ const DEFAULTS = {
       "notes": "障害。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_09",
@@ -7137,7 +7477,12 @@ const DEFAULTS = {
       "notes": "発見。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_10",
@@ -7155,7 +7500,12 @@ const DEFAULTS = {
       "notes": "粘液素材。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_11",
@@ -7173,7 +7523,12 @@ const DEFAULTS = {
       "notes": "宝箱。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_12",
@@ -7191,7 +7546,12 @@ const DEFAULTS = {
       "notes": "足跡。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_13",
@@ -7209,7 +7569,12 @@ const DEFAULTS = {
       "notes": "休息。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_14",
@@ -7227,7 +7592,12 @@ const DEFAULTS = {
       "notes": "宝箱。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_15",
@@ -7245,7 +7615,12 @@ const DEFAULTS = {
       "notes": "スライム。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "後衛\tバブルスライム\t人数半数切上",
+      "encounterFormation": "後衛：バブルスライム"
     },
     {
       "id": "evt_wetland_16",
@@ -7263,7 +7638,12 @@ const DEFAULTS = {
       "notes": "足元。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_17",
@@ -7281,7 +7661,12 @@ const DEFAULTS = {
       "notes": "粘液。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_18",
@@ -7299,7 +7684,12 @@ const DEFAULTS = {
       "notes": "宝箱。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_19",
@@ -7317,7 +7707,12 @@ const DEFAULTS = {
       "notes": "前兆。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "前衛\tマッドホッパー\t1",
+      "encounterFormation": "前衛：マッドホッパー"
     },
     {
       "id": "evt_wetland_20",
@@ -7335,7 +7730,12 @@ const DEFAULTS = {
       "notes": "素材。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_21",
@@ -7353,7 +7753,12 @@ const DEFAULTS = {
       "notes": "噂条件イベント。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "後衛\tバブルスライム\t1",
+      "encounterFormation": "後衛：バブルスライム"
     },
     {
       "id": "evt_wetland_22",
@@ -7366,12 +7771,17 @@ const DEFAULTS = {
       "checkType": "探索>=目標値",
       "targetValue": "10",
       "treasureTableId": "",
-      "result": "ぬかるみに残る大きな足跡を発見。成功でヌシの存在を示す情報を得る。",
+      "result": "ぬかるみに残る大きな足跡を発見。成功でボスの存在を示す情報を得る。",
       "progressEffect": "",
       "notes": "噂条件イベント。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_23",
@@ -7389,25 +7799,35 @@ const DEFAULTS = {
       "notes": "噂条件イベント。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_24",
       "tableId": "evt_waterside_wetland_daily",
       "areaName": "水辺の湿地",
       "eventName": "沼主の気配",
-      "eventType": "ヌシ遭遇",
+      "eventType": "ボス遭遇",
       "conditionType": "噂話",
       "conditionValue": "沼の奥で低い唸り声がした",
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "wetland_lord_cache",
-      "result": "探索の終盤、巨大な影が現れる。水辺の湿地のヌシ「沼主グラボロス」と遭遇する。勝利後にヌシ宝箱表を抽選してよい。",
+      "result": "探索の終盤、ぬかるんだ水辺の奥から巨大な影が現れる。水辺の湿地のボス「沼主グラボロス」と遭遇する。",
       "progressEffect": "",
-      "notes": "探索進行度100%到達時に発生。",
+      "notes": "噂条件：沼の奥で低い唸り声がした。クエスト報酬には影響しない。分類はボス遭遇。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "固定",
+      "encounterCountMin": "1",
+      "encounterCountMax": "1",
+      "encounterComposition": "前衛\t沼主グラボロス\t1",
+      "encounterFormation": "前衛：沼主グラボロス ×1"
     },
     {
       "id": "evt_wetland_25",
@@ -7425,7 +7845,12 @@ const DEFAULTS = {
       "notes": "宝箱。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_26",
@@ -7443,7 +7868,12 @@ const DEFAULTS = {
       "notes": "虫。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "後衛\tミストモスキート\t人数半数切上",
+      "encounterFormation": "後衛：ミストモスキート"
     },
     {
       "id": "evt_wetland_27",
@@ -7461,7 +7891,12 @@ const DEFAULTS = {
       "notes": "茸。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_28",
@@ -7479,7 +7914,12 @@ const DEFAULTS = {
       "notes": "知識。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "evt_wetland_29",
@@ -7497,7 +7937,12 @@ const DEFAULTS = {
       "notes": "痕跡。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "前衛\tドロマール\t1",
+      "encounterFormation": "前衛：ドロマール"
     },
     {
       "id": "evt_wetland_30",
@@ -7515,7 +7960,12 @@ const DEFAULTS = {
       "notes": "休息。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "rumor_dew_grass",
@@ -7533,7 +7983,12 @@ const DEFAULTS = {
       "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "rumor_glowbug_grass",
@@ -7551,7 +8006,12 @@ const DEFAULTS = {
       "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "rumor_merchant_goods",
@@ -7569,7 +8029,12 @@ const DEFAULTS = {
       "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "rumor_grass_chest",
@@ -7587,7 +8052,12 @@ const DEFAULTS = {
       "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "rumor_walking_branch",
@@ -7605,7 +8075,12 @@ const DEFAULTS = {
       "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "rumor_old_stump",
@@ -7623,7 +8098,12 @@ const DEFAULTS = {
       "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "rumor_forest_scroll",
@@ -7641,7 +8121,12 @@ const DEFAULTS = {
       "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "rumor_bubbling_water",
@@ -7659,7 +8144,12 @@ const DEFAULTS = {
       "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "rumor_big_tracks",
@@ -7677,7 +8167,12 @@ const DEFAULTS = {
       "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "半数切上",
+      "encounterCountMin": "1",
+      "encounterCountMax": "4",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "rumor_sunken_box",
@@ -7695,7 +8190,12 @@ const DEFAULTS = {
       "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     },
     {
       "id": "rumor_swamp_lord",
@@ -7708,12 +8208,17 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "水辺の湿地の奥で、夜になると低い唸り声が聞こえるらしい。湿地に詳しい者は、沼に棲みついたヌシの気配だと話している。",
-      "progressEffect": "この噂を選択した日に水辺の湿地探索を100%まで進めると、ヌシ「沼主グラボロス」と遭遇する。",
+      "result": "水辺の湿地の奥で、夜になると低い唸り声が聞こえるらしい。湿地に詳しい者は、沼に棲みついたボスの気配だと話している。",
+      "progressEffect": "この噂を選択した日に水辺の湿地探索を100%まで進めると、ボス「沼主グラボロス」と遭遇する。",
       "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     }
   ],
   "monsters": [
@@ -7724,7 +8229,7 @@ const DEFAULTS = {
       "rank": "チュートリアル",
       "hp": "16",
       "mp": "0",
-      "hitValue": "2",
+      "hitValue": "3",
       "evasionValue": "6",
       "resistValue": "7",
       "defenseValue": "1",
@@ -7737,23 +8242,23 @@ const DEFAULTS = {
       "lightAffinity": "-",
       "darkAffinity": "-",
       "neutralAffinity": "-",
-      "actions": "体当たり\t近接>=回避値\t敵1体\t物\t1D6+1\t身体ごとぶつかって攻撃する。\nまとわりつき\t近接>=回避値\t敵1体\t物\tなし\t対象の次の回避判定-1。",
+      "actions": "体当たり\t近接>=回避値\t敵1体\t物\t1D6+1\t身体ごとぶつかって攻撃する。\nまとわりつき\t近接>=回避値\t敵1体\t物\tなし\t対象の次の回避判定-1。\nぷるぷる防御\tなし\t自身\t無\tなし\t次に受けるダメージへの防御+1。",
       "drops": "魔物素材\tスライム\tmat_slime_jelly\tゼラチン液\t100%\t1個\n魔物素材\tスライム\tmat_slime_membrane\tぷるぷる膜\t50%\t1個\n魔物素材\tスライム\tmat_small_slime_core\t小さなスライム核\t15%\t1個",
       "description": "草むらや水辺に現れる半透明の小型粘体。水分と草木の成分を取り込んで身体を保つ。",
       "notes": ""
     },
     {
-      "id": "mon_rough_forest_rat",
-      "name": "荒れ森ネズミ",
+      "id": "mon_raffin_rat",
+      "name": "ラフィンラット",
       "monsterType": "獣",
       "rank": "チュートリアル",
-      "hp": "14",
+      "hp": "15",
       "mp": "0",
-      "hitValue": "3",
-      "evasionValue": "7",
+      "hitValue": "4",
+      "evasionValue": "8",
       "resistValue": "6",
       "defenseValue": "0",
-      "initiative": "7",
+      "initiative": "8",
       "physicalAffinity": "-",
       "fireAffinity": "-",
       "waterAffinity": "-",
@@ -7762,9 +8267,9 @@ const DEFAULTS = {
       "lightAffinity": "-",
       "darkAffinity": "-",
       "neutralAffinity": "-",
-      "actions": "噛みつき\t近接>=回避値\t敵1体\t物\t1D6+1\t鋭い前歯で噛みつく。\n逃げ回る\tなし\t自身\t無\tなし\t次に受ける攻撃への回避値+1。",
+      "actions": "噛みつき\t近接>=回避値\t敵1体\t物\t1D6+1\t鋭い前歯で素早く噛みつく。\n走り抜け\t近接>=回避値\t敵1体\t物\t1D6\t足元をすり抜けるように駆け、体勢を崩す。命中時、対象の次の命中判定-1。\n威嚇鳴き\tなし\t敵1体\t無\tなし\t甲高い鳴き声で牽制する。対象の次の判定-1。",
       "drops": "魔物素材\t獣\tmat_small_fur\t小獣の毛皮\t70%\t1個\n魔物素材\t獣\tmat_small_fang\t小獣の牙\t50%\t1個\n魔物素材\t獣\tmat_small_claw\t小さな爪\t35%\t1個",
-      "description": "人の手が入らなくなった草むらや倒木の陰に棲む小型獣。素早く噛みついて距離を取る。",
+      "description": "草むらや倒木の陰に棲む小型獣。素早く飛び出して噛みつき、すぐに距離を取る。",
       "notes": ""
     },
     {
@@ -7772,7 +8277,7 @@ const DEFAULTS = {
       "name": "ラピットホーン",
       "monsterType": "獣",
       "rank": "初級",
-      "hp": "15",
+      "hp": "17",
       "mp": "0",
       "hitValue": "4",
       "evasionValue": "9",
@@ -7787,7 +8292,7 @@ const DEFAULTS = {
       "lightAffinity": "-",
       "darkAffinity": "-",
       "neutralAffinity": "-",
-      "actions": "角突き\t近接>=回避値\t敵1体\t物\t1D6+1\t跳ねるように距離を詰め、短い角で突く。\n跳躍回避\tなし\t自身\t無\tなし\t次に受ける攻撃への回避値+1。",
+      "actions": "角突き\t近接>=回避値\t敵1体\t物\t1D6+1\t跳ねるように距離を詰め、短い角で突く。\n跳躍回避\tなし\t自身\t無\tなし\t次に受ける攻撃への回避値+1。\n助走突進\t近接>=回避値\t敵1体\t物\t1D6+2\t短い助走から勢いよく突っ込む。使用後、次の自身の回避値-1。",
       "drops": "魔物素材\t獣\tmat_small_beast_pelt\t小獣の毛皮\t65%\t1個\n魔物素材\t獣\tmat_small_beast_fang\t小獣の牙\t45%\t1個",
       "description": "草原を跳ね回る角付きの小型獣。危険を感じると一気に距離を取る。",
       "notes": "",
@@ -7800,10 +8305,10 @@ const DEFAULTS = {
       "name": "ヴェスパット",
       "monsterType": "虫・甲殻",
       "rank": "初級",
-      "hp": "13",
+      "hp": "14",
       "mp": "0",
       "hitValue": "4",
-      "evasionValue": "8",
+      "evasionValue": "9",
       "resistValue": "6",
       "defenseValue": "0",
       "initiative": "10",
@@ -7815,10 +8320,10 @@ const DEFAULTS = {
       "lightAffinity": "-",
       "darkAffinity": "-",
       "neutralAffinity": "-",
-      "actions": "羽音のかく乱\t近接>=回避値\t敵1体\t風\t1D6\t耳元をかすめる羽音で体勢を崩す。命中時、対象の次の判定-1。\n吸い刺し\t近接>=回避値\t敵1体\t物\t1D6+1\t鋭い口吻で刺す。",
+      "actions": "風切り羽撃ち\t射撃>=回避値\t敵1体\t風\t1D6+1\t後衛から羽を飛ばして切りつける遠距離攻撃。\n羽音のかく乱\t魔法>=抵抗値\t敵1体\t無\tなし\t耳障りな羽音で集中を乱す。対象の次の判定-1。\n吸い刺し\t近接>=回避値\t敵1体\t物\t1D6\t接近して鋭い口吻で刺す。前衛に出た時の近接攻撃。",
       "drops": "魔物素材\t虫・甲殻\tmat_insect_wing\t薄虫の羽\t70%\t1個\n魔物素材\t虫・甲殻\tmat_small_claw\t小さな爪\t30%\t1個",
       "description": "草むらや木陰に群れる小型の飛行魔物。羽音で相手の集中を乱す。",
-      "notes": "",
+      "notes": "後衛配置時にも使用できる射撃/魔法行動を持つ。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
@@ -7828,13 +8333,13 @@ const DEFAULTS = {
       "name": "カラパスビートル",
       "monsterType": "虫・甲殻",
       "rank": "初級",
-      "hp": "22",
+      "hp": "24",
       "mp": "0",
       "hitValue": "3",
-      "evasionValue": "6",
+      "evasionValue": "5",
       "resistValue": "7",
       "defenseValue": "2",
-      "initiative": "5",
+      "initiative": "4",
       "physicalAffinity": "耐",
       "fireAffinity": "弱",
       "waterAffinity": "-",
@@ -7843,7 +8348,7 @@ const DEFAULTS = {
       "lightAffinity": "-",
       "darkAffinity": "-",
       "neutralAffinity": "-",
-      "actions": "甲殻突進\t近接>=回避値\t敵1体\t物\t1D6+2\t硬い甲殻を前に出して突っ込む。\n身を固める\tなし\t自身\t無\tなし\t次に受けるダメージへの防御+1。",
+      "actions": "甲殻突進\t近接>=回避値\t敵1体\t物\t1D6+2\t硬い甲殻を前に出して突っ込む。\n身を固める\tなし\t自身\t無\tなし\t次に受けるダメージへの防御+1。\n殻割り打撃\t近接>=防御値\t敵1体\t物\t1D6+1\t硬い角で守りの薄い場所を打つ。",
       "drops": "魔物素材\t虫・甲殻\tmat_hard_carapace\t硬い甲殻片\t75%\t1個\n魔物素材\t虫・甲殻\tmat_insect_wing\t薄虫の羽\t35%\t1個",
       "description": "丸い甲殻を持つ草原の甲虫魔物。動きは遅いが打たれ強い。",
       "notes": "",
@@ -7856,7 +8361,7 @@ const DEFAULTS = {
       "name": "グラウワーム",
       "monsterType": "虫・甲殻",
       "rank": "初級",
-      "hp": "26",
+      "hp": "28",
       "mp": "0",
       "hitValue": "4",
       "evasionValue": "5",
@@ -7871,7 +8376,7 @@ const DEFAULTS = {
       "lightAffinity": "-",
       "darkAffinity": "-",
       "neutralAffinity": "-",
-      "actions": "土かぶり\t近接>=回避値\t敵1体\t物\t1D6+1\t地面を跳ね上げながら体当たりする。\n潜り込み\tなし\t自身\t無\tなし\t次に受ける攻撃への防御+1。次の自身の命中-1。",
+      "actions": "土かぶり\t近接>=回避値\t敵1体\t物\t1D6+1\t地面を跳ね上げながら体当たりする。\n潜り込み\tなし\t自身\t無\tなし\t次に受ける攻撃への防御+1。次の自身の命中-1。\n丸呑み未遂\t近接>=回避値\t敵1体\t物\t1D6+2\t大きく口を開けて捕らえようとする。命中時、対象の次の運動判定-1。",
       "drops": "魔物素材\t虫・甲殻\tmat_hard_carapace\t硬い甲殻片\t50%\t1個\n採取素材\t木材\tmat_flexible_vine\tしなやかな蔓\t35%\t1個",
       "description": "草の根や湿った土を食む太い地虫。鈍重だがしぶとい。",
       "notes": "",
@@ -7884,10 +8389,10 @@ const DEFAULTS = {
       "name": "ラスクレイル",
       "monsterType": "獣",
       "rank": "初級",
-      "hp": "16",
+      "hp": "17",
       "mp": "0",
       "hitValue": "4",
-      "evasionValue": "8",
+      "evasionValue": "9",
       "resistValue": "6",
       "defenseValue": "0",
       "initiative": "9",
@@ -7899,7 +8404,7 @@ const DEFAULTS = {
       "lightAffinity": "-",
       "darkAffinity": "-",
       "neutralAffinity": "-",
-      "actions": "木の実投げ\t射撃>=回避値\t敵1体\t物\t1D6\t硬い木の実を投げつける。\n駆け抜け\t近接>=回避値\t敵1体\t物\t1D6+1\t枝から枝へ飛び移りながら引っかく。",
+      "actions": "木の実投げ\t射撃>=回避値\t敵1体\t物\t1D6\t硬い木の実を投げつける。\n駆け抜け\t近接>=回避値\t敵1体\t物\t1D6+1\t枝から枝へ飛び移りながら引っかく。\n木登り退避\tなし\t自身\t無\tなし\t次に受ける攻撃への回避値+1。",
       "drops": "魔物素材\t獣\tmat_small_beast_pelt\t小獣の毛皮\t60%\t1個\n採取素材\t茸・果実\tmat_round_mushroom\t丸茸\t35%\t1個",
       "description": "森に棲む木登りの得意な小型獣。木の実を武器にする。",
       "notes": "",
@@ -7912,7 +8417,7 @@ const DEFAULTS = {
       "name": "マイコニド",
       "monsterType": "植物魔物",
       "rank": "初級",
-      "hp": "18",
+      "hp": "19",
       "mp": "4",
       "hitValue": "3",
       "evasionValue": "6",
@@ -7927,10 +8432,10 @@ const DEFAULTS = {
       "lightAffinity": "-",
       "darkAffinity": "-",
       "neutralAffinity": "-",
-      "actions": "胞子散布\t魔法>=抵抗値\t敵1体\t無\tなし\t対象の次の判定-1。\n菌糸の打撃\t近接>=回避値\t敵1体\t物\t1D6+1\t伸びた菌糸で打ち据える。",
+      "actions": "胞子弾\t射撃>=回避値\t敵1体\t無\t1D6\t圧縮した胞子を飛ばす遠距離攻撃。\n胞子散布\t魔法>=抵抗値\t敵1体\t無\tなし\t対象の次の判定-1。\n胞子雲\t魔法>=抵抗値\t敵全体\t無\tなし\t薄い胞子を広げる。失敗した対象は次の集中判定-1。",
       "drops": "魔物素材\t植物魔物\tmat_spore_powder\t胞子粉\t80%\t1個\n採取素材\t茸・果実\tmat_round_mushroom\t丸茸\t45%\t1個",
       "description": "歩く茸のような魔物。驚くと胞子を撒いて相手の動きを鈍らせる。",
-      "notes": "",
+      "notes": "後衛配置時にも使用できる射撃/魔法行動を持つ。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
@@ -7955,10 +8460,10 @@ const DEFAULTS = {
       "lightAffinity": "-",
       "darkAffinity": "-",
       "neutralAffinity": "-",
-      "actions": "根牙の噛みつき\t近接>=回避値\t敵1体\t物\t1D6+2\t根のような牙で噛みつく。\n絡み根\t近接>=回避値\t敵1体\t物\tなし\t命中時、対象の次の回避判定-1。",
+      "actions": "根牙の噛みつき\t近接>=回避値\t敵1体\t物\t1D6+2\t根のような牙で噛みつく。\n絡み根\t射撃>=回避値\t敵1体\t物\tなし\t地面から根を伸ばして絡める。命中時、対象の次の回避判定-1。\n突き上げる根\t射撃>=回避値\t敵1体\t物\t1D6+1\t地面から根を跳ね上げて攻撃する。",
       "drops": "魔物素材\t植物魔物\tmat_living_root\t動く根\t75%\t1個\n魔物素材\t獣\tmat_small_beast_fang\t小獣の牙\t35%\t1個",
       "description": "根と枝をまとった獣型の魔物。森の下草に紛れて獲物を狙う。",
-      "notes": "",
+      "notes": "行動の判定欄を近接/射撃/魔法/なしで整理。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
@@ -7983,7 +8488,7 @@ const DEFAULTS = {
       "lightAffinity": "-",
       "darkAffinity": "-",
       "neutralAffinity": "-",
-      "actions": "枝腕の振り下ろし\t近接>=回避値\t敵1体\t物\t1D6+2\tしなる枝腕を振り下ろす。\n樹皮の守り\tなし\t自身\t無\tなし\t次に受けるダメージへの防御+1。",
+      "actions": "枝腕の振り下ろし\t近接>=回避値\t敵1体\t物\t1D6+2\tしなる枝腕を振り下ろす。\n樹皮の守り\tなし\t自身\t無\tなし\t次に受けるダメージへの防御+1。\n根張り\tなし\t自身\t無\tなし\t足元に根を張る。次の防御+1、回避値-1。",
       "drops": "魔物素材\t植物魔物\tmat_living_root\t動く根\t70%\t1個\n採取素材\t木材\tmat_sturdy_branch\t丈夫な枝\t60%\t1個",
       "description": "若木に似た小型トレント。静止しているとただの枝に見える。",
       "notes": "",
@@ -7996,7 +8501,7 @@ const DEFAULTS = {
       "name": "マッドホッパー",
       "monsterType": "獣",
       "rank": "初級",
-      "hp": "17",
+      "hp": "18",
       "mp": "0",
       "hitValue": "4",
       "evasionValue": "8",
@@ -8011,7 +8516,7 @@ const DEFAULTS = {
       "lightAffinity": "-",
       "darkAffinity": "-",
       "neutralAffinity": "-",
-      "actions": "泥跳ね\t近接>=回避値\t敵1体\t水\t1D6\t泥水を跳ね上げて視界を乱す。命中時、対象の次の命中判定-1。\n跳び噛み\t近接>=回避値\t敵1体\t物\t1D6+1\t跳躍して噛みつく。",
+      "actions": "泥跳ね\t近接>=回避値\t敵1体\t水\t1D6\t泥水を跳ね上げて視界を乱す。命中時、対象の次の命中判定-1。\n跳び噛み\t近接>=回避値\t敵1体\t物\t1D6+1\t跳躍して噛みつく。\n泥中跳躍\tなし\t自身\t水\tなし\t泥の中から跳ね上がる。次の自身の命中+1。",
       "drops": "魔物素材\t獣\tmat_muddy_hide\t泥まみれの皮\t65%\t1個\n採取素材\t水・液体\tmat_clear_water\t澄んだ水\t30%\t1個",
       "description": "湿地を跳ね回る両生系の魔物。泥を使って相手の視界を奪う。",
       "notes": "",
@@ -8024,7 +8529,7 @@ const DEFAULTS = {
       "name": "バブルスライム",
       "monsterType": "スライム",
       "rank": "初級",
-      "hp": "20",
+      "hp": "21",
       "mp": "0",
       "hitValue": "3",
       "evasionValue": "6",
@@ -8039,10 +8544,10 @@ const DEFAULTS = {
       "lightAffinity": "-",
       "darkAffinity": "-",
       "neutralAffinity": "-",
-      "actions": "泡弾\t射撃>=回避値\t敵1体\t水\t1D6+1\t弾ける泡を飛ばす。\n粘る泡\t近接>=回避値\t敵1体\t水\tなし\t命中時、対象の次の回避判定-1。",
+      "actions": "泡弾\t射撃>=回避値\t敵1体\t水\t1D6+1\t弾ける泡を飛ばす遠距離攻撃。\n弾ける泡\t射撃>=回避値\t敵全体\t水\t1D6\t小さな泡を周囲に弾けさせる範囲攻撃。\n粘る泡\t魔法>=抵抗値\t敵1体\t水\tなし\t粘る泡で動きを鈍らせる。対象の次の回避判定-1。",
       "drops": "魔物素材\tスライム\tmat_gelatin_liquid\tゼラチン液\t85%\t1個\n魔物素材\tスライム\tmat_swamp_mucus\t湿地粘液\t55%\t1個",
       "description": "水泡を体内に抱えた湿地のスライム。粘る泡で足を取る。",
-      "notes": "",
+      "notes": "後衛配置時にも使用できる射撃/魔法行動を持つ。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
@@ -8052,7 +8557,7 @@ const DEFAULTS = {
       "name": "ミストモスキート",
       "monsterType": "虫・甲殻",
       "rank": "初級",
-      "hp": "12",
+      "hp": "13",
       "mp": "0",
       "hitValue": "4",
       "evasionValue": "9",
@@ -8067,10 +8572,10 @@ const DEFAULTS = {
       "lightAffinity": "-",
       "darkAffinity": "-",
       "neutralAffinity": "-",
-      "actions": "吸い刺し\t近接>=回避値\t敵1体\t物\t1D6\t細い針で刺す。命中時、対象の次の抵抗判定-1。\n霧に紛れる\tなし\t自身\t無\tなし\t次に受ける攻撃への回避値+1。",
+      "actions": "霧針\t射撃>=回避値\t敵1体\t水\t1D6\t霧に紛れて細い針を飛ばす遠距離攻撃。命中時、対象の次の抵抗判定-1。\n毒霧\t魔法>=抵抗値\t敵1体\t無\tなし\t薄い毒霧を吸わせる。対象の次の判定-1。\n吸い刺し\t近接>=回避値\t敵1体\t物\t1D6\t接近して細い針で刺す。前衛に出た時の近接攻撃。",
       "drops": "魔物素材\t虫・甲殻\tmat_insect_wing\t薄虫の羽\t70%\t1個\n魔物素材\t虫・甲殻\tmat_small_claw\t小さな爪\t25%\t1個",
       "description": "湿った霧に紛れて飛ぶ吸血虫型の魔物。とても素早い。",
-      "notes": "",
+      "notes": "後衛配置時にも使用できる射撃/魔法行動を持つ。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
@@ -8095,10 +8600,10 @@ const DEFAULTS = {
       "lightAffinity": "-",
       "darkAffinity": "-",
       "neutralAffinity": "-",
-      "actions": "泥腕\t近接>=回避値\t敵1体\t水\t1D6+2\t泥の腕を伸ばして叩きつける。\n泥の鎧\tなし\t自身\t無\tなし\t次に受けるダメージへの防御+2。ただし次の回避値-1。",
+      "actions": "泥腕\t近接>=回避値\t敵1体\t水\t1D6+2\t泥の腕を伸ばして叩きつける。\n泥の鎧\tなし\t自身\t無\tなし\t次に受けるダメージへの防御+2。ただし次の回避値-1。\n泥濁り\t魔法>=抵抗値\t敵1体\t水\tなし\t泥水を巻き上げる。対象の次の命中判定-1。",
       "drops": "魔物素材\tスライム\tmat_swamp_mucus\t湿地粘液\t80%\t1個\n魔物素材\tスライム\tmat_gelatin_liquid\tゼラチン液\t50%\t1個",
       "description": "泥と粘液が混ざって生まれた鈍重な魔物。水気を吸って体を保つ。",
-      "notes": "",
+      "notes": "行動の判定欄を近接/射撃/魔法/なしで整理。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
@@ -8107,9 +8612,9 @@ const DEFAULTS = {
       "id": "mon_swamp_lord_glaboros",
       "name": "沼主グラボロス",
       "monsterType": "スライム",
-      "rank": "ヌシ",
-      "hp": "48",
-      "mp": "8",
+      "rank": "ボス",
+      "hp": "72",
+      "mp": "12",
       "hitValue": "6",
       "evasionValue": "8",
       "resistValue": "10",
@@ -8123,10 +8628,10 @@ const DEFAULTS = {
       "lightAffinity": "-",
       "darkAffinity": "耐",
       "neutralAffinity": "-",
-      "actions": "濁流の体当たり\t近接>=回避値\t敵1体\t水\t2D6+2\t泥水をまとって突進する。\n沼霧の咆哮\t魔法>=抵抗値\t敵全体\t無\tなし\t濃い霧を吐き、対象の次の判定-1。\n泥の再生\tなし\t自身\t水\tなし\t水属性の影響を受けた直後、HPを3点回復する。",
+      "actions": "濁流の体当たり\t近接>=回避値\t敵1体\t水\t2D6+2\t泥水をまとって突進する。標準的な単体攻撃。\n泥腕の薙ぎ払い\t近接>=回避値\t敵前衛2体\t物\t1D6+2\t泥の腕を横薙ぎに振る。複数人を巻き込みやすい攻撃。\n沼霧の咆哮\t魔法>=抵抗値\t敵全体\t無\tなし\t濃い霧を吐き、対象の次の判定に-1。\n泥の再生\tなし\t自身\t水\t1D6+2回復\tHPが半分以下の時に使用。泥と水を吸い上げて自身を修復する。",
       "drops": "魔物素材\tスライム\tmat_lord_swamp_core\t沼主の濁核\t100%\t1個\n魔物素材\tスライム\tmat_swamp_mucus\t湿地粘液\t80%\t2個\n採取素材\t水・液体\tmat_clear_water\t澄んだ水\t50%\t2個",
-      "description": "水辺の湿地の奥に棲みついたヌシ。泥と粘液をまとった巨体で、湿地そのものを縄張りにしている。",
-      "notes": "宿屋の噂「沼の奥で低い唸り声がした」が出た日に、水辺の湿地探索をクリアすると遭遇する。",
+      "description": "水辺の湿地の奥に棲みついたボス。泥と粘液をまとった巨体で、湿地そのものを縄張りにしている。4人程度のパーティーでギリギリ倒せる程度の難敵。",
+      "notes": "分類はボス。宿屋の噂「沼の奥で低い唸り声がした」が出た日に、水辺の湿地探索をクリアすると遭遇する。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
@@ -9180,7 +9685,7 @@ const DEFAULTS = {
       "scrollRank": "",
       "quantity": "1",
       "weight": "20",
-      "description": "ヌシの縄張りに沈んでいた貨幣。",
+      "description": "ボスの縄張りに沈んでいた貨幣。",
       "enabled": "TRUE",
       "notes": "",
       "updatedAt": "",
@@ -9218,7 +9723,7 @@ const DEFAULTS = {
       "scrollRank": "",
       "quantity": "1",
       "weight": "16",
-      "description": "ヌシ由来の希少素材。",
+      "description": "ボス由来の希少素材。",
       "enabled": "TRUE",
       "notes": "",
       "updatedAt": "",
@@ -10635,6 +11140,11 @@ function renderQuestCardsTable(key){
   const cards = rows.length ? rows.map(({row,idx})=>questCardHtml(row,idx)).join('') : '<div class="monster-empty-note">条件に一致するクエストがありません。</div>';
   table.innerHTML = `<tbody><tr><td class="monster-list-cell"><div class="monster-card-list" aria-label="クエスト一覧">${cards}</div></td></tr></tbody>`;
 }
+function adminEventEncounterText(row={}){
+  const formation = String(row.encounterFormation || '').trim();
+  const composition = String(row.encounterComposition || '').trim();
+  return formation || composition || '';
+}
 function adminEventConditionText(row={}){
   const type = String(row.conditionType || '').trim();
   const value = String(row.conditionValue || '').trim();
@@ -10644,7 +11154,7 @@ function adminEventConditionText(row={}){
 function eventRowCardHtml(row, idx){
   const title = row.eventName || '名称未設定イベント';
   const check = row.checkType ? `${row.checkType}${row.targetValue ? ` / 目標値:${row.targetValue}` : ''}` : '判定なし';
-  const badges = [monsterBadge('種別', row.eventType), monsterBadge('前提', adminEventConditionText(row)), monsterBadge('判定', check)].filter(Boolean).join('');
+  const badges = [monsterBadge('種別', row.eventType), monsterBadge('前提', adminEventConditionText(row)), monsterBadge('配置', adminEventEncounterText(row)), monsterBadge('判定', check)].filter(Boolean).join('');
   return `<details class="monster-card">
     <summary>
       <div class="monster-card-head">
@@ -11020,8 +11530,9 @@ function formOptionValues(key, field){
   if(field==='bossMonster') state.monsters.forEach(r=>{ if(r.name) values.add(String(r.name)); });
   if(field==='areaType') ['草原','森','水辺','洞窟','街道','遺跡','市街地'].forEach(v=>values.add(v));
   if(field==='difficulty') ['チュートリアル','初級','中級','上級','高難度'].forEach(v=>values.add(v));
-  if(field==='eventType') ['採取','障害/採取','発見','発見/細工','発見/宝箱','採取/魔物遭遇','発見/魔物','魔物遭遇','休息地点','レアポイント','宿屋の噂','噂イベント','ヌシ遭遇'].forEach(v=>values.add(v));
+  if(field==='eventType') ['採取','障害/採取','発見','発見/細工','発見/宝箱','採取/魔物遭遇','発見/魔物','魔物遭遇','休息地点','レアポイント','宿屋の噂','噂イベント','ボス遭遇'].forEach(v=>values.add(v));
   if(field==='conditionType') ['なし','噂話'].forEach(v=>values.add(v));
+  if(field==='encounterCountRule') ['','固定','半数切上','人数同数'].forEach(v=>values.add(v));
   if(field==='conditionValue') (state.event_tables || []).forEach(r=>{ if(String(r.eventType||'').trim()==='宿屋の噂' && r.eventName) values.add(String(r.eventName)); });
   if(field==='treasureTableId') (state.treasure_tables || []).forEach(r=>{ if(r.tableId) values.add(String(r.tableId)); });
   if(field==='entryType') ['通貨','換金品','アイテム','素材','レシピ','未鑑定スクロール'].forEach(v=>values.add(v));

@@ -27,7 +27,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.75 / クエスト・エリア進行、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.82 / クエスト・エリア進行、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -100,10 +100,26 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
         <div><label>対象エリア</label><select id="eventAreaSelect"></select></div>
         <div class="hidden"><label>イベント表</label><select id="eventTableSelect"></select></div>
       </div>
-      <label style="margin-top:10px">今日の噂</label>
-      <select id="rumorSelect"></select>
+      <div class="row" style="margin-top:10px">
+        <div>
+          <label for="partySizeSelect">パーティー人数</label>
+          <select id="partySizeSelect">
+            <option value="1">1人</option>
+            <option value="2">2人</option>
+            <option value="3">3人</option>
+            <option value="4" selected>4人</option>
+            <option value="5">5人</option>
+            <option value="6">6人</option>
+            <option value="7">7人</option>
+          </select>
+        </div>
+        <div>
+          <label style="margin-top:0">今日の噂</label>
+          <select id="rumorSelect"></select>
+        </div>
+      </div>
       <div id="rumorDetail" class="card muted">DB読込後、宿屋の噂を選択できます。噂はエリア探索中のイベント候補にだけ影響します。</div>
-      <p class="muted small">選択したエリアに登録されたイベント候補からランダムに抽選します。前提条件が「なし」のイベントは常に候補に入り、「噂話」のイベントは今日の噂と一致した場合だけ候補に入ります。ヌシ遭遇は探索進行度100%到達時に処理します。</p>
+      <p class="muted small">選択したエリアに登録されたイベント候補からランダムに抽選します。前提条件が「なし」のイベントは常に候補に入り、「噂話」のイベントは今日の噂と一致した場合だけ候補に入ります。ボス遭遇は探索進行度100%到達時に処理します。</p>
       <div class="buttons">
         <button id="rollEventBtn">イベント抽選</button>
         <button class="secondary" id="copyEventBtn">結果コピー</button>
@@ -160,7 +176,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.75';
+const VERSION='v90.8.82';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -449,7 +465,7 @@ function eventMatchesRumor(row, rumor){
   }
   return false;
 }
-function isBossEvent(row){return String(row && row.eventType || '').trim()==='ヌシ遭遇';}
+function isBossEvent(row){return String(row && row.eventType || '').trim()==='ボス遭遇';}
 function eventRowsForArea(area, options={}){
   const tableId=String((area&&area.eventTableId)||$('eventTableSelect')?.value||'').trim();
   const rumor=options.rumor===undefined ? selectedRumor() : options.rumor;
@@ -461,9 +477,68 @@ function eventRowsForArea(area, options={}){
     return eventMatchesRumor(e, rumor);
   });
 }
+
+function selectedPartySize(){
+  const n = Number($('partySizeSelect')?.value || 4);
+  return Math.min(7, Math.max(1, Number.isFinite(n) ? Math.floor(n) : 4));
+}
+function clampEncounterCount(n, min=1, max=7){
+  const lo = Math.max(1, Number(min) || 1);
+  const hi = Math.min(7, Math.max(lo, Number(max) || 7));
+  const value = Math.max(lo, Math.min(hi, Math.floor(Number(n) || lo)));
+  return value;
+}
+function encounterCountForEvent(row={}, partySize=selectedPartySize()){
+  const rule = String(row.encounterCountRule || '').trim();
+  if(!rule) return '';
+  const min = row.encounterCountMin || 1;
+  const max = row.encounterCountMax || (rule === '人数同数' ? 7 : 4);
+  if(rule === '固定') return clampEncounterCount(row.encounterCountMin || row.encounterCountMax || 1, min, max);
+  if(rule === '人数同数') return clampEncounterCount(partySize, min, max);
+  if(rule === '半数切上') return clampEncounterCount(Math.ceil(partySize / 2), min, max);
+  return '';
+}
+
+function resolveEncounterCountToken(token='', partySize=selectedPartySize()){
+  const raw = String(token || '').trim();
+  if(!raw) return '';
+  if(/^\d+$/.test(raw)) return raw;
+  if(raw === '人数同数') return String(clampEncounterCount(partySize, 1, 7));
+  if(raw === '人数半数切上') return String(clampEncounterCount(Math.ceil(partySize / 2), 1, 4));
+  if(raw === '人数半数切捨') return String(clampEncounterCount(Math.floor(partySize / 2), 1, 4));
+  return raw;
+}
+function encounterCompositionText(row={}){
+  const raw = String(row.encounterComposition || '').trim();
+  if(raw){
+    const lines = raw.split(/\n+/).map(line=>{
+      const cols = line.split(/\t|,/).map(s=>String(s||'').trim()).filter(Boolean);
+      if(cols.length >= 3){
+        return `${cols[0]}：${cols[1]} ×${resolveEncounterCountToken(cols[2])}`;
+      }
+      if(cols.length === 2){
+        return `${cols[0]}：${cols[1]}`;
+      }
+      return line.trim();
+    }).filter(Boolean);
+    if(lines.length) return ['出現構成：', ...lines].join('\n');
+  }
+  const formation = String(row.encounterFormation || '').trim();
+  if(formation) return `配置：${formation}`;
+  return '';
+}
+
+function encounterCountText(row={}){
+  const count = encounterCountForEvent(row);
+  if(!count) return '';
+  return `出現数：${count}体（パーティー${selectedPartySize()}人 / ${row.encounterCountRule || '指定なし'}）`;
+}
+
 function formatEventOutput(prefix, picked, area, tableId, extraLines=[]){
   const condition = eventConditionType(picked)==='なし' ? '' : `前提：${eventConditionType(picked)}${picked.conditionValue?` / ${picked.conditionValue}`:''}`;
-  return [prefix, area?`エリア：${area.name||area.id}`:'', `表：${tableId}`, picked.eventName?`イベント：${picked.eventName}`:'', picked.eventType?`種別：${picked.eventType}`:'', condition, picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'', picked.treasureTableId?`宝箱表：${picked.treasureTableId}`:'', picked.result?`結果：${picked.result}`:'', picked.progressEffect?`補足：${picked.progressEffect}`:'', ...extraLines].filter(Boolean).join('\n');
+  const encounter = encounterCountText(picked);
+  const composition = encounterCompositionText(picked);
+  return [prefix, area?`エリア：${area.name||area.id}`:'', `表：${tableId}`, picked.eventName?`イベント：${picked.eventName}`:'', picked.eventType?`種別：${picked.eventType}`:'', condition, encounter, composition, picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'', picked.result?`結果：${picked.result}`:'', picked.progressEffect?`補足：${picked.progressEffect}`:'', ...extraLines].filter(Boolean).join('\n');
 }
 function triggerAreaClearRumorEvent(area){
   const rumor=selectedRumor();
@@ -747,7 +822,7 @@ function questMemo(){const q=selected($('questSelect'),state.quests); if(!q)retu
 function areaMemo(){const a=selected($('areaSelect'),state.areas); if(!a)return ''; const p=progressObj('areas',a.id||a.name); return [`【エリア進行】${a.name||a.id}`,`探索進行度：${clamp(p.value)}%`,a.eventTableId?`イベント表：${a.eventTableId}`:'',a.mainMaterials?`主な素材：${a.mainMaterials}`:'',a.mainMonsters?`主な魔物：${a.mainMonsters}`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
 function bind(){
   $('fixedUrlLabel').textContent=GAS_URL; $('loadDbBtn').addEventListener('click',loadDb); $('saveStateBtn').addEventListener('click',()=>saveState(true)); $('restoreStateBtn').addEventListener('click',restoreSavedState); $('clearStateBtn').addEventListener('click',()=>{if(confirm('進行状態を初期化しますか？')){localStorage.removeItem(STORE_KEY); state.progress={quests:{},areas:{}}; state.log=[]; renderAll(); addLog('進行状態を初期化しました。');}});
-  $('questSelect').addEventListener('change',()=>{state.lastQuestEventText=''; state.lastQuestEventKey=''; renderQuest();}); $('areaSelect').addEventListener('change',renderArea); $('monsterSelect').addEventListener('change',renderMonster); $('eventAreaSelect').addEventListener('change',fillEventTables); $('rumorSelect').addEventListener('change',()=>{state.lastEventText=''; state.lastEventKey=''; renderRumorDetail();});
+  $('questSelect').addEventListener('change',()=>{state.lastQuestEventText=''; state.lastQuestEventKey=''; renderQuest();}); $('areaSelect').addEventListener('change',renderArea); $('monsterSelect').addEventListener('change',renderMonster); $('eventAreaSelect').addEventListener('change',fillEventTables); $('rumorSelect').addEventListener('change',()=>{state.lastEventText=''; state.lastEventKey=''; renderRumorDetail();}); $('partySizeSelect').addEventListener('change',()=>{state.lastEventText=''; state.lastEventKey='';});
   $('questAdvanceBtn').addEventListener('click',advanceQuestProgress); $('areaAdvanceBtn').addEventListener('click',advanceAreaProgress);
   $('questResetBtn').addEventListener('click',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).value=0; saveState(false); renderQuest();}}); $('areaResetBtn').addEventListener('click',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).value=0; saveState(false); renderArea();}});
   $('questNote').addEventListener('input',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).note=$('questNote').value; saveState(false);}}); $('areaNote').addEventListener('input',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).note=$('areaNote').value; saveState(false);}});
