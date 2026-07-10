@@ -487,12 +487,12 @@
       <button class="secondary" id="btnDiagnoseSheets">DB列診断</button>
       <button class="secondary" id="btnRepairHeaders">DB列修復</button>
       <button class="secondary" id="btnDedupeAll">DB重複整理</button>
-      <button class="secondary" id="btnSavePages">全ページDB登録</button>
-      <button class="danger" id="btnReplacePages">全ページDB置換</button>
+      <button class="secondary" id="btnSavePages">全データDB登録</button>
+      <button class="danger" id="btnReplacePages">全データDB置換</button>
     </div>
     <p class="notice">
       この管理ツールは固定のWeb App URLへ接続します。通常は、各表の <span class="kbd">この表だけDB読込</span> / <span class="kbd">この表だけDB登録</span> / <span class="kbd">この表だけDB置換</span>、または各行の <span class="kbd">個別DB登録</span> / <span class="kbd">個別DB置換</span> を使ってください。
-      個別DB置換は対象1件だけを上書きし、同じ表の他データは保持します。全ページ操作は各表を順番に処理し、途中で失敗した場合はそこで停止します。
+      個別DB置換は対象1件だけを上書きし、同じ表の他データは保持します。全データ操作はDBシート単位で一度ずつ処理し、途中で失敗した場合はそこで停止します。アイテムDBはアイテムと素材をまとめて一度だけ送信します。
     </p>
     <div id="uploadProgressPanel" class="upload-progress-panel hidden">
       <div class="upload-progress-head">
@@ -1012,11 +1012,11 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.105';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.103';
+const RECRAFT_DB_VERSION = 'v90.8.108';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.107';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
-const PAGE_TABLE_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','materials','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
+const FULL_DB_KEYS = [...DATA_KEYS];
 const CATEGORY_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks'];
 const MAIN_PANELS = ['categories','equipment_categories','items','materials','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters','facilities','json','help'];
 const SCHEMA = {
@@ -1026,7 +1026,7 @@ const SCHEMA = {
   material_categories: ['id','name','materialType','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   material_ranks: ['id','name','price','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   equipment_categories: ['id','name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
-  items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','equipSlot','skill','power','maxStack','ammoUse','ammoKind','quiverCapacity','bagCapacity','offhandBonus','reloadTurns','modifiers','upgradeLimit','mpCost','target','checkType','element','description','effect','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
+  items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','toolRank','equipSlot','skill','power','maxStack','ammoUse','ammoKind','quiverCapacity','bagCapacity','offhandBonus','reloadTurns','modifiers','upgradeLimit','mpCost','target','checkType','element','description','effect','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   recipes: ['id','name','rank','price','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   spells: ['id','type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   quest_rewards: ['id','rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards','notes','updatedAt','ownerKey','createdBy'],
@@ -1038,7 +1038,7 @@ const SCHEMA = {
   monsters: ['id','name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', modifiers:'補正値', upgradeLimit:'強化可能回数', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具ランク', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', actions:'行動', drops:'ドロップ'
+  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', toolRank:'対応素材ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', modifiers:'補正値', upgradeLimit:'強化可能回数', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具ランク', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', actions:'行動', drops:'ドロップ'
 };
 
 const FORM_PRIMARY_FIELDS = {
@@ -1048,7 +1048,7 @@ const FORM_PRIMARY_FIELDS = {
   material_categories: ['name','materialType','description','sortOrder','enabled'],
   material_ranks: ['id','name','price','description','sortOrder','enabled'],
   equipment_categories: ['name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled'],
-  items: ['name','publicId','csVisible','itemType','itemCategory','price','rank','equipSlot','skill','power','upgradeLimit','mpCost','target','checkType','element','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags'],
+  items: ['name','publicId','csVisible','itemType','itemCategory','price','rank','toolRank','equipSlot','skill','power','upgradeLimit','mpCost','target','checkType','element','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags'],
   recipes: ['name','rank','price','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags'],
   materials: ['name','publicId','materialType','materialCategory','rank','price','source','usageTags','equipmentUpgradeEffect','description','effect','notes'],
   spells: ['type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags'],
@@ -1063,9 +1063,9 @@ const FORM_PRIMARY_FIELDS = {
 const FORM_LONG_FIELDS = new Set(['description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','rewardItems','unlockResult','mainMaterials','mainMonsters','result','progressEffect','actions','drops','modifiers','encounterComposition']);
 const RECORD_CARD_KEYS = new Set(['items','materials','recipes','spells']);
 const FIELD_PLACEHOLDERS = {
-  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'例：低級 / 初級', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', requiredTools:'例：低級。低級なら低級以上の道具が必要', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：獣牙系。モンハン式の素材派生ラインを管理します。', equipmentUpgradeEffect:'例：威力+1。魔物素材を武器強化に使った時の強化内容を選択します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：低級 / 普通', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定スクロール：初級', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：初級', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：初級', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
+  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'アイテムは初期〜最上級、素材は低級〜高級', toolRank:'例：低級。調合・鍛冶道具が扱える素材ランク', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', requiredTools:'例：低級。低級なら低級以上の道具が必要', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：獣牙系。モンハン式の素材派生ラインを管理します。', equipmentUpgradeEffect:'例：威力+1。魔物素材を武器強化に使った時の強化内容を選択します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：低級 / 普通', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定スクロール：初級', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：初級', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：初級', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
 };
-const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','equipSlot','skill','checkType','type','role','setItem','unlockFacility','equipmentUpgradeEffect','ammoUse','ammoKind','craftType','baseItem','branchType','enabled','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','conditionType','conditionValue','treasureTableId','tableId','treasureRank','entryType','entryName','entryPublicId','recipeName','scrollRank','facilityName','spellType','spellRank','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity']);
+const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','toolRank','equipSlot','skill','checkType','type','role','setItem','unlockFacility','equipmentUpgradeEffect','ammoUse','ammoKind','craftType','baseItem','branchType','enabled','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','conditionType','conditionValue','treasureTableId','tableId','treasureRank','entryType','entryName','entryPublicId','recipeName','scrollRank','facilityName','spellType','spellRank','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity']);
 let formState = { key:null, idx:null, mode:'new', defaultDataKind:'' };
 let quickCategoryDirty = false;
 let currentMainTab = 'categories';
@@ -1089,7 +1089,7 @@ const ADVANCED_FILTERS = {
   material_categories: [{field:'materialType', label:'素材種別'},{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   material_ranks: [{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   equipment_categories: [{field:'itemCategory', label:'分類'},{field:'equipSlot', label:'装備/使用枠'},{field:'skill', label:'使用技能'},{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  items: [{field:'itemType', label:'アイテム種別'},{field:'csVisible', label:'キャラシ表示'},{field:'itemCategory', label:'アイテムカテゴリ'},{field:'rank', label:'ランク'},{field:'equipSlot', label:'装備/使用枠'},{field:'skill', label:'使用技能'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
+  items: [{field:'itemType', label:'アイテム種別'},{field:'csVisible', label:'キャラシ表示'},{field:'itemCategory', label:'アイテムカテゴリ'},{field:'rank', label:'ランク'},{field:'toolRank', label:'対応素材ランク'},{field:'equipSlot', label:'装備/使用枠'},{field:'skill', label:'使用技能'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   materials: [{field:'materialType', label:'素材種別'},{field:'materialCategory', label:'素材カテゴリ'},{field:'rank', label:'ランク'},{field:'source', label:'入手先'},{field:'equipmentUpgradeEffect', label:'装備強化内容'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   recipes: [{field:'rank', label:'ランク'},{field:'craftType', label:'製作区分'},{field:'category', label:'分類'},{field:'baseItem', label:'派生元'},{field:'branchType', label:'派生系統'},{field:'resultKind', label:'完成品種別'},{field:'difficulty', label:'難度'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   spells: [{field:'type', label:'種別'},{field:'rank', label:'ランク'},{field:'role', label:'役割'},{field:'target', label:'対象'},{field:'setItem', label:'必要装備'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
@@ -1654,6 +1654,24 @@ const DEFAULTS = {
       "materialType": "特殊素材",
       "description": "異界依頼用の空カテゴリ。初期素材データはまだ登録しない",
       "sortOrder": 980,
+      "enabled": "TRUE",
+      "notes": ""
+    },
+    {
+      "id": "mcat_proc_wood",
+      "name": "木材加工",
+      "materialType": "加工素材",
+      "description": "乾燥・圧着・補強を施した木材系の中間素材",
+      "sortOrder": 925,
+      "enabled": "TRUE",
+      "notes": ""
+    },
+    {
+      "id": "mcat_proc_shell",
+      "name": "甲殻加工",
+      "materialType": "加工素材",
+      "description": "甲殻や鱗を板材・部品へ整えた中間素材",
+      "sortOrder": 935,
       "enabled": "TRUE",
       "notes": ""
     }
@@ -2338,7 +2356,8 @@ const DEFAULTS = {
       "publicId": "RCA-V2HQ-YHTY",
       "upgradeLimit": "1",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "tool_alchemy_low_mortar",
@@ -2350,7 +2369,7 @@ const DEFAULTS = {
       "name": "旅薬師の乳鉢具",
       "csVisible": "TRUE",
       "price": 120,
-      "rank": "低級",
+      "rank": "初級",
       "equipSlot": "所持品",
       "maxStack": 1,
       "effect": "低級素材までを扱う簡易調合具。必要道具ランクが低級以下の調合に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。",
@@ -2362,7 +2381,8 @@ const DEFAULTS = {
       "publicId": "RCA-HX8H-KJK7",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": "低級"
     },
     {
       "id": "tool_alchemy_normal_scale",
@@ -2374,7 +2394,7 @@ const DEFAULTS = {
       "name": "硝子秤の調合具",
       "csVisible": "TRUE",
       "price": 360,
-      "rank": "普通",
+      "rank": "中級",
       "equipSlot": "所持品",
       "maxStack": 1,
       "effect": "普通素材までを扱う標準調合具。必要道具ランクが普通以下の調合に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。",
@@ -2386,7 +2406,8 @@ const DEFAULTS = {
       "publicId": "RCA-WG7W-A27S",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": "普通"
     },
     {
       "id": "tool_alchemy_good_vial",
@@ -2398,7 +2419,7 @@ const DEFAULTS = {
       "name": "晶瓶の調合具",
       "csVisible": "TRUE",
       "price": 720,
-      "rank": "良質",
+      "rank": "上級",
       "equipSlot": "所持品",
       "maxStack": 1,
       "effect": "良質素材までを扱う精密調合具。必要道具ランクが良質以下の調合に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。",
@@ -2410,7 +2431,8 @@ const DEFAULTS = {
       "publicId": "RCA-9HQ2-8G2L",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": "良質"
     },
     {
       "id": "tool_alchemy_rare_retort",
@@ -2422,7 +2444,7 @@ const DEFAULTS = {
       "name": "星滴の蒸留具",
       "csVisible": "TRUE",
       "price": 1500,
-      "rank": "希少",
+      "rank": "特級",
       "equipSlot": "所持品",
       "maxStack": 1,
       "effect": "希少素材までを扱う上位調合具。必要道具ランクが希少以下の調合に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。",
@@ -2434,7 +2456,8 @@ const DEFAULTS = {
       "publicId": "RCA-7APJ-T6ZE",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": "希少"
     },
     {
       "id": "tool_alchemy_premium_alembic",
@@ -2446,7 +2469,7 @@ const DEFAULTS = {
       "name": "月環の錬成具",
       "csVisible": "TRUE",
       "price": 3200,
-      "rank": "高級",
+      "rank": "最上級",
       "equipSlot": "所持品",
       "maxStack": 1,
       "effect": "高級素材までを扱う最高級の調合具。必要道具ランクが高級以下の調合に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。",
@@ -2458,7 +2481,8 @@ const DEFAULTS = {
       "publicId": "RCA-H9FV-DK4B",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": "高級"
     },
     {
       "id": "tool_smith_low_hammer",
@@ -2470,7 +2494,7 @@ const DEFAULTS = {
       "name": "野鍛冶の槌箱",
       "csVisible": "TRUE",
       "price": 150,
-      "rank": "低級",
+      "rank": "初級",
       "equipSlot": "所持品",
       "maxStack": 1,
       "effect": "低級素材までを扱う簡易鍛冶具。必要道具ランクが低級以下の鍛冶・装備強化に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。修理用途は現時点では扱わない。",
@@ -2482,7 +2506,8 @@ const DEFAULTS = {
       "publicId": "RCA-QZKP-Y9FK",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": "低級"
     },
     {
       "id": "tool_smith_normal_anvil",
@@ -2494,7 +2519,7 @@ const DEFAULTS = {
       "name": "焼入れ金床具",
       "csVisible": "TRUE",
       "price": 420,
-      "rank": "普通",
+      "rank": "中級",
       "equipSlot": "所持品",
       "maxStack": 1,
       "effect": "普通素材までを扱う標準鍛冶具。必要道具ランクが普通以下の鍛冶・装備強化に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。修理用途は現時点では扱わない。",
@@ -2506,7 +2531,8 @@ const DEFAULTS = {
       "publicId": "RCA-62F2-7QTM",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": "普通"
     },
     {
       "id": "tool_smith_good_tongs",
@@ -2518,7 +2544,7 @@ const DEFAULTS = {
       "name": "鋼噛み火ばさみ具",
       "csVisible": "TRUE",
       "price": 840,
-      "rank": "良質",
+      "rank": "上級",
       "equipSlot": "所持品",
       "maxStack": 1,
       "effect": "良質素材までを扱う精密鍛冶具。必要道具ランクが良質以下の鍛冶・装備強化に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。修理用途は現時点では扱わない。",
@@ -2530,7 +2556,8 @@ const DEFAULTS = {
       "publicId": "RCA-WPVT-EE3B",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": "良質"
     },
     {
       "id": "tool_smith_rare_stariron",
@@ -2542,7 +2569,7 @@ const DEFAULTS = {
       "name": "星鉄火ばさみ具",
       "csVisible": "TRUE",
       "price": 1800,
-      "rank": "希少",
+      "rank": "特級",
       "equipSlot": "所持品",
       "maxStack": 1,
       "effect": "希少素材までを扱う上位鍛冶具。必要道具ランクが希少以下の鍛冶・装備強化に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。修理用途は現時点では扱わない。",
@@ -2554,7 +2581,8 @@ const DEFAULTS = {
       "publicId": "RCA-YJE6-RP3V",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": "希少"
     },
     {
       "id": "tool_smith_premium_dragonforge",
@@ -2566,7 +2594,7 @@ const DEFAULTS = {
       "name": "竜炉の鍛冶具",
       "csVisible": "TRUE",
       "price": 3600,
-      "rank": "高級",
+      "rank": "最上級",
       "equipSlot": "所持品",
       "maxStack": 1,
       "effect": "高級素材までを扱う最高級の鍛冶具。必要道具ランクが高級以下の鍛冶・装備強化に使用できる。必要ランクを上回る道具を使う場合、1ランク上ごとに難易度-1。修理用途は現時点では扱わない。",
@@ -2578,7 +2606,8 @@ const DEFAULTS = {
       "publicId": "RCA-UZLK-W7LQ",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": "高級"
     },
     {
       "id": "ammo_arrow_normal",
@@ -2604,7 +2633,8 @@ const DEFAULTS = {
       "publicId": "RCA-FQJ8-WLNQ",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "ammo_bolt_normal",
@@ -2630,7 +2660,8 @@ const DEFAULTS = {
       "publicId": "RCA-JRM7-SQFE",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "ammo_heavy_bolt_normal",
@@ -2656,7 +2687,8 @@ const DEFAULTS = {
       "publicId": "RCA-DQSS-9Y6U",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "quiver_simple",
@@ -2680,7 +2712,8 @@ const DEFAULTS = {
       "publicId": "RCA-DEZK-RYPK",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "quiver_traveler",
@@ -2704,7 +2737,8 @@ const DEFAULTS = {
       "publicId": "RCA-RE3A-5A5F",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "quiver_hunter",
@@ -2716,7 +2750,7 @@ const DEFAULTS = {
       "name": "狩人の矢筒",
       "csVisible": "TRUE",
       "price": 360,
-      "rank": "普通",
+      "rank": "中級",
       "equipSlot": "矢筒",
       "quiverCapacity": 4,
       "effect": "矢弾4種類を矢筒内に収納できる。矢筒は装備枠「矢筒」に装備し、所持品枠を消費しない。",
@@ -2754,7 +2788,8 @@ const DEFAULTS = {
       "publicId": "RCA-S8RN-BAEQ",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "acc_guard_charm",
@@ -2776,7 +2811,8 @@ const DEFAULTS = {
       "publicId": "RCA-SF2E-PCFK",
       "upgradeLimit": "1",
       "modifiers": "combat:defense\t1",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "acc_holy_symbol",
@@ -2801,7 +2837,8 @@ const DEFAULTS = {
       "publicId": "RCA-AWN4-27W8",
       "upgradeLimit": "1",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "acc_magic_seal_basic",
@@ -2826,7 +2863,8 @@ const DEFAULTS = {
       "publicId": "RCA-BSSG-2PDN",
       "upgradeLimit": "1",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "acc_mana_ring",
@@ -2848,7 +2886,8 @@ const DEFAULTS = {
       "publicId": "RCA-3KMM-ZWZZ",
       "upgradeLimit": "1",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "acc_power_bracelet",
@@ -2870,7 +2909,8 @@ const DEFAULTS = {
       "publicId": "RCA-79RT-NEA3",
       "upgradeLimit": "1",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "acc_small_mana_stone",
@@ -2892,7 +2932,8 @@ const DEFAULTS = {
       "publicId": "RCA-8YBV-ZLH4",
       "upgradeLimit": "1",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "acc_wind_earring",
@@ -2914,7 +2955,8 @@ const DEFAULTS = {
       "publicId": "RCA-TWXE-2KVY",
       "upgradeLimit": "1",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "ammo_bind_arrow",
@@ -2938,7 +2980,8 @@ const DEFAULTS = {
       "publicId": "RCA-67R7-RT5L",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "ammo_fire_arrow",
@@ -2962,7 +3005,8 @@ const DEFAULTS = {
       "publicId": "RCA-8RKU-LU9S",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "ammo_flash",
@@ -2986,7 +3030,8 @@ const DEFAULTS = {
       "publicId": "RCA-NJ7Q-P9KJ",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "ammo_piercing",
@@ -3010,7 +3055,8 @@ const DEFAULTS = {
       "publicId": "RCA-43EG-XABF",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "ammo_poison_arrow",
@@ -3034,7 +3080,8 @@ const DEFAULTS = {
       "publicId": "RCA-8ZEV-2SN3",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "ammo_purify",
@@ -3058,7 +3105,8 @@ const DEFAULTS = {
       "publicId": "RCA-VKBB-5USP",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "arm_clothes",
@@ -3080,7 +3128,8 @@ const DEFAULTS = {
       "publicId": "RCA-NA95-LL9W",
       "upgradeLimit": "0",
       "modifiers": "skill:guard\t1D3",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "arm_heavy",
@@ -3102,7 +3151,8 @@ const DEFAULTS = {
       "publicId": "RCA-456K-857L",
       "upgradeLimit": "2",
       "modifiers": "combat:defense\t3\nskill:guard\t1D6+2\nskill:evade\t-1",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "arm_light",
@@ -3124,7 +3174,8 @@ const DEFAULTS = {
       "publicId": "RCA-7RCD-RZFQ",
       "upgradeLimit": "2",
       "modifiers": "combat:defense\t1\nskill:guard\t1D6\nskill:evade\t1",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "arm_mage_robe",
@@ -3146,7 +3197,8 @@ const DEFAULTS = {
       "publicId": "RCA-JHBG-H8KA",
       "upgradeLimit": "2",
       "modifiers": "combat:defense\t1\nskill:guard\t1D6",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "arm_medium",
@@ -3168,7 +3220,8 @@ const DEFAULTS = {
       "publicId": "RCA-Z2R6-3CSM",
       "upgradeLimit": "2",
       "modifiers": "combat:defense\t2\nskill:guard\t1D6+1",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "arm_prayer_robe",
@@ -3190,7 +3243,8 @@ const DEFAULTS = {
       "publicId": "RCA-GZTB-SMM2",
       "upgradeLimit": "2",
       "modifiers": "combat:defense\t1\nskill:guard\t1D6",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "bomb_acid",
@@ -3216,7 +3270,8 @@ const DEFAULTS = {
       "publicId": "RCA-6TMD-WY8P",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "bomb_flam",
@@ -3242,7 +3297,8 @@ const DEFAULTS = {
       "publicId": "RCA-D6DJ-A8A9",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "bomb_ice",
@@ -3268,7 +3324,8 @@ const DEFAULTS = {
       "publicId": "RCA-QCQN-DL4C",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "bomb_small",
@@ -3294,7 +3351,8 @@ const DEFAULTS = {
       "publicId": "RCA-3D29-3HWW",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "bomb_thunder",
@@ -3320,7 +3378,8 @@ const DEFAULTS = {
       "publicId": "RCA-8ZBG-PN4F",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "book_magic",
@@ -3344,7 +3403,8 @@ const DEFAULTS = {
       "publicId": "RCA-W2J4-TSN9",
       "upgradeLimit": "2",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "book_prayer",
@@ -3368,7 +3428,8 @@ const DEFAULTS = {
       "publicId": "RCA-ZZ88-3GAD",
       "upgradeLimit": "2",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "con_antidote",
@@ -3394,7 +3455,8 @@ const DEFAULTS = {
       "publicId": "RCA-QMBM-CWXQ",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "con_focus_incense",
@@ -3420,7 +3482,8 @@ const DEFAULTS = {
       "publicId": "RCA-9D6V-PG8P",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "con_hardening_draught",
@@ -3446,7 +3509,8 @@ const DEFAULTS = {
       "publicId": "RCA-UZ2S-RZUQ",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "con_high_mana_potion",
@@ -3472,7 +3536,8 @@ const DEFAULTS = {
       "publicId": "RCA-PECJ-82L4",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "con_high_potion",
@@ -3498,7 +3563,8 @@ const DEFAULTS = {
       "publicId": "RCA-6SVE-XEGZ",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "con_mana_potion",
@@ -3524,7 +3590,8 @@ const DEFAULTS = {
       "publicId": "RCA-3ZZF-QQU3",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "con_potion",
@@ -3550,7 +3617,8 @@ const DEFAULTS = {
       "publicId": "RCA-FQG6-HL2Q",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "con_purified_water",
@@ -3576,7 +3644,8 @@ const DEFAULTS = {
       "publicId": "RCA-WTBV-BVJ9",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "con_swift_incense",
@@ -3602,7 +3671,8 @@ const DEFAULTS = {
       "publicId": "RCA-MN5J-VVBU",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "mat_magic_ink",
@@ -3671,7 +3741,8 @@ const DEFAULTS = {
       "publicId": "RCA-HJE9-N8XC",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "scroll_magic_basic",
@@ -3694,7 +3765,8 @@ const DEFAULTS = {
       "publicId": "RCA-758R-VXLJ",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "scroll_mid",
@@ -3717,7 +3789,8 @@ const DEFAULTS = {
       "publicId": "RCA-HTQS-JGAJ",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "scroll_prayer_basic",
@@ -3740,7 +3813,8 @@ const DEFAULTS = {
       "publicId": "RCA-QWBS-J8NK",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "shd_large",
@@ -3762,7 +3836,8 @@ const DEFAULTS = {
       "publicId": "RCA-DAYG-4XZF",
       "upgradeLimit": "2",
       "modifiers": "combat:defense\t2\nskill:guard\t+3\nskill:evade\t-1",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "shd_magic",
@@ -3784,7 +3859,8 @@ const DEFAULTS = {
       "publicId": "RCA-5RLQ-NKQ9",
       "upgradeLimit": "2",
       "modifiers": "combat:defense\t1\nskill:guard\t+2",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "shd_small",
@@ -3806,7 +3882,8 @@ const DEFAULTS = {
       "publicId": "RCA-SZE5-D5ST",
       "upgradeLimit": "2",
       "modifiers": "combat:defense\t1\nskill:guard\t+2",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "tool_flash",
@@ -3832,7 +3909,8 @@ const DEFAULTS = {
       "publicId": "RCA-ZVBW-6U9L",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "tool_smoke",
@@ -3858,7 +3936,8 @@ const DEFAULTS = {
       "publicId": "RCA-WH4U-VAGQ",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "toolRank": ""
     },
     {
       "id": "wpn_axe_1h",
@@ -3885,7 +3964,8 @@ const DEFAULTS = {
       "modifiers": "hit\t-1",
       "reloadTurns": "",
       "target": "敵1体",
-      "checkType": "近接>=回避値"
+      "checkType": "近接>=回避値",
+      "toolRank": ""
     },
     {
       "id": "wpn_bow",
@@ -3911,7 +3991,8 @@ const DEFAULTS = {
       "modifiers": "",
       "reloadTurns": "",
       "target": "敵1体",
-      "checkType": "射撃>=回避値"
+      "checkType": "射撃>=回避値",
+      "toolRank": ""
     },
     {
       "id": "wpn_crossbow",
@@ -3937,7 +4018,8 @@ const DEFAULTS = {
       "modifiers": "",
       "reloadTurns": "1",
       "target": "敵1体",
-      "checkType": "射撃>=回避値"
+      "checkType": "射撃>=回避値",
+      "toolRank": ""
     },
     {
       "id": "wpn_dagger",
@@ -3964,7 +4046,8 @@ const DEFAULTS = {
       "modifiers": "hit\t+1\nskill:evade\t+1",
       "reloadTurns": "",
       "target": "敵1体",
-      "checkType": "近接>=回避値"
+      "checkType": "近接>=回避値",
+      "toolRank": ""
     },
     {
       "id": "wpn_gauntlet",
@@ -3975,7 +4058,7 @@ const DEFAULTS = {
       "materialCategory": "",
       "name": "アイアンガントレット",
       "price": 230,
-      "rank": "低級",
+      "rank": "初級",
       "equipSlot": "両手",
       "skill": "近接",
       "power": "1D6+2",
@@ -4023,7 +4106,8 @@ const DEFAULTS = {
       "modifiers": "hit\t-1\nskill:evade\t-1",
       "reloadTurns": "",
       "target": "敵1体",
-      "checkType": "近接>=回避値"
+      "checkType": "近接>=回避値",
+      "toolRank": ""
     },
     {
       "id": "wpn_great_sword",
@@ -4049,7 +4133,8 @@ const DEFAULTS = {
       "modifiers": "skill:evade\t-1",
       "reloadTurns": "",
       "target": "敵1体",
-      "checkType": "近接>=回避値"
+      "checkType": "近接>=回避値",
+      "toolRank": ""
     },
     {
       "id": "wpn_hammer_1h",
@@ -4076,7 +4161,8 @@ const DEFAULTS = {
       "modifiers": "skill:evade\t-1",
       "reloadTurns": "",
       "target": "敵1体",
-      "checkType": "近接>=回避値"
+      "checkType": "近接>=回避値",
+      "toolRank": ""
     },
     {
       "id": "wpn_heavy_crossbow",
@@ -4102,7 +4188,8 @@ const DEFAULTS = {
       "modifiers": "hit\t-1",
       "reloadTurns": "1",
       "target": "敵1体",
-      "checkType": "射撃>=回避値"
+      "checkType": "射撃>=回避値",
+      "toolRank": ""
     },
     {
       "id": "wpn_long_spear",
@@ -4128,7 +4215,8 @@ const DEFAULTS = {
       "modifiers": "hit\t+1",
       "reloadTurns": "",
       "target": "敵1体",
-      "checkType": "近接>=回避値"
+      "checkType": "近接>=回避値",
+      "toolRank": ""
     },
     {
       "id": "wpn_scythe",
@@ -4139,7 +4227,7 @@ const DEFAULTS = {
       "materialCategory": "",
       "name": "バトルサイズ",
       "price": 210,
-      "rank": "低級",
+      "rank": "初級",
       "equipSlot": "両手",
       "skill": "近接",
       "power": "1D6+1",
@@ -4188,7 +4276,8 @@ const DEFAULTS = {
       "modifiers": "hit\t+1",
       "reloadTurns": "",
       "target": "敵1体",
-      "checkType": "近接>=回避値"
+      "checkType": "近接>=回避値",
+      "toolRank": ""
     },
     {
       "id": "wpn_staff",
@@ -4215,7 +4304,8 @@ const DEFAULTS = {
       "modifiers": "skill:evade\t+1",
       "reloadTurns": "",
       "target": "敵1体",
-      "checkType": "近接>=回避値"
+      "checkType": "近接>=回避値",
+      "toolRank": ""
     },
     {
       "id": "wpn_sword_1h",
@@ -4242,7 +4332,8 @@ const DEFAULTS = {
       "modifiers": "",
       "reloadTurns": "",
       "target": "敵1体",
-      "checkType": "近接>=回避値"
+      "checkType": "近接>=回避値",
+      "toolRank": ""
     },
     {
       "id": "wpn_unarmed",
@@ -4268,7 +4359,8 @@ const DEFAULTS = {
       "modifiers": "",
       "reloadTurns": "",
       "target": "敵1体",
-      "checkType": "近接>=回避値"
+      "checkType": "近接>=回避値",
+      "toolRank": ""
     },
     {
       "id": "mat_herb",
@@ -4977,7 +5069,7 @@ const DEFAULTS = {
       "name": "古びた銅貨",
       "csVisible": "TRUE",
       "price": "30",
-      "rank": "低級",
+      "rank": "初級",
       "equipSlot": "",
       "skill": "",
       "power": "",
@@ -5018,7 +5110,7 @@ const DEFAULTS = {
       "name": "欠けた銀細工",
       "csVisible": "TRUE",
       "price": "60",
-      "rank": "低級",
+      "rank": "初級",
       "equipSlot": "",
       "skill": "",
       "power": "",
@@ -5059,7 +5151,7 @@ const DEFAULTS = {
       "name": "色あせた宝石片",
       "csVisible": "TRUE",
       "price": "90",
-      "rank": "普通",
+      "rank": "中級",
       "equipSlot": "",
       "skill": "",
       "power": "",
@@ -5100,7 +5192,7 @@ const DEFAULTS = {
       "name": "古い交易札",
       "csVisible": "TRUE",
       "price": "45",
-      "rank": "低級",
+      "rank": "初級",
       "equipSlot": "",
       "skill": "",
       "power": "",
@@ -5169,7 +5261,8 @@ const DEFAULTS = {
       "notes": "骨董屋ではランダム販売枠。宝箱からも入手できる。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "toolRank": ""
     },
     {
       "id": "scroll_unidentified_intermediate",
@@ -5210,7 +5303,8 @@ const DEFAULTS = {
       "notes": "骨董屋ではランダム販売枠。宝箱からも入手できる。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "toolRank": ""
     },
     {
       "id": "scroll_spell_mag_fireball",
@@ -5251,7 +5345,8 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "toolRank": ""
     },
     {
       "id": "scroll_spell_mag_ice_needle",
@@ -5292,7 +5387,8 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "toolRank": ""
     },
     {
       "id": "scroll_spell_mag_lightning",
@@ -5333,7 +5429,8 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "toolRank": ""
     },
     {
       "id": "scroll_spell_mag_wind_blade",
@@ -5374,7 +5471,8 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "toolRank": ""
     },
     {
       "id": "scroll_spell_mag_slow",
@@ -5415,7 +5513,8 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "toolRank": ""
     },
     {
       "id": "scroll_spell_mag_magic_bolt",
@@ -5456,7 +5555,8 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "toolRank": ""
     },
     {
       "id": "scroll_unidentified_advanced",
@@ -5497,7 +5597,8 @@ const DEFAULTS = {
       "notes": "骨董屋では高額なランダム販売枠。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "toolRank": ""
     },
     {
       "id": "scroll_unidentified_master",
@@ -5538,7 +5639,8 @@ const DEFAULTS = {
       "notes": "骨董屋の高額ランダム販売枠。通常の宝箱にはまだ入れない想定。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "toolRank": ""
     },
     {
       "id": "mat_grass_king_horn",
@@ -5621,6 +5723,786 @@ const DEFAULTS = {
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
+    },
+    {
+      "id": "mat_iron_ore",
+      "dataKind": "素材",
+      "itemType": "",
+      "itemCategory": "",
+      "materialType": "採取素材",
+      "materialCategory": "鉱石",
+      "name": "鉄鉱石",
+      "csVisible": "",
+      "price": 14,
+      "rank": "低級",
+      "equipSlot": "",
+      "skill": "",
+      "power": "",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "",
+      "upgradeLimit": "",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "",
+      "description": "赤錆色の筋を含む素朴な鉱石。精錬すると武器の芯材に向く鉄を得られる。",
+      "effect": "",
+      "source": "街はずれの草原・岩場",
+      "usageTags": "鍛冶,金属加工,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "",
+      "tags": "採取素材,鉱石,鍛冶",
+      "notes": "",
+      "publicId": "RCA-X57B-SSV3",
+      "toolRank": ""
+    },
+    {
+      "id": "mat_forged_iron_ingot",
+      "dataKind": "素材",
+      "itemType": "",
+      "itemCategory": "",
+      "materialType": "加工素材",
+      "materialCategory": "金属加工",
+      "name": "鍛鉄インゴット",
+      "csVisible": "",
+      "price": 45,
+      "rank": "普通",
+      "equipSlot": "",
+      "skill": "",
+      "power": "",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "",
+      "upgradeLimit": "",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "",
+      "description": "鉄鉱石を精錬し、武器の刃や金具へ加工しやすい形に整えた鉄塊。",
+      "effect": "",
+      "source": "鍛冶屋",
+      "usageTags": "鍛冶,金属加工,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "加工素材,金属加工,鍛冶",
+      "notes": "",
+      "publicId": "RCA-J6EF-3DYX",
+      "toolRank": ""
+    },
+    {
+      "id": "mat_reinforced_lumber",
+      "dataKind": "素材",
+      "itemType": "",
+      "itemCategory": "",
+      "materialType": "加工素材",
+      "materialCategory": "木材加工",
+      "name": "強化木材",
+      "csVisible": "",
+      "price": 40,
+      "rank": "普通",
+      "equipSlot": "",
+      "skill": "",
+      "power": "",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "",
+      "upgradeLimit": "",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "",
+      "description": "丈夫な枝を乾燥させ、蔓で締め上げて反りと割れを抑えた武器用の木材。",
+      "effect": "",
+      "source": "鍛冶屋",
+      "usageTags": "鍛冶,木材加工,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "加工素材,木材加工,鍛冶",
+      "notes": "",
+      "publicId": "RCA-SH89-UJ5S",
+      "toolRank": ""
+    },
+    {
+      "id": "mat_tanned_leather",
+      "dataKind": "素材",
+      "itemType": "",
+      "itemCategory": "",
+      "materialType": "加工素材",
+      "materialCategory": "布・革加工",
+      "name": "なめし革",
+      "csVisible": "",
+      "price": 40,
+      "rank": "普通",
+      "equipSlot": "",
+      "skill": "",
+      "power": "",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "",
+      "upgradeLimit": "",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "",
+      "description": "小獣の毛皮を洗浄して柔らかく仕上げた革。柄巻きや可動部の保護に使われる。",
+      "effect": "",
+      "source": "鍛冶屋",
+      "usageTags": "鍛冶,革加工,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "加工素材,布・革加工,鍛冶",
+      "notes": "",
+      "publicId": "RCA-CQ7B-NBQD",
+      "toolRank": ""
+    },
+    {
+      "id": "mat_carapace_plate",
+      "dataKind": "素材",
+      "itemType": "",
+      "itemCategory": "",
+      "materialType": "加工素材",
+      "materialCategory": "甲殻加工",
+      "name": "甲殻板",
+      "csVisible": "",
+      "price": 50,
+      "rank": "普通",
+      "equipSlot": "",
+      "skill": "",
+      "power": "",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "",
+      "upgradeLimit": "",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "",
+      "description": "硬い甲殻片を熱と圧力で重ね、刃受けや打撃面へ使える板状に整えた素材。",
+      "effect": "",
+      "source": "鍛冶屋",
+      "usageTags": "鍛冶,甲殻加工,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "加工素材,甲殻加工,鍛冶",
+      "notes": "",
+      "publicId": "RCA-6PW5-KLZY",
+      "toolRank": ""
+    },
+    {
+      "id": "mat_magic_crystal_powder",
+      "dataKind": "素材",
+      "itemType": "",
+      "itemCategory": "",
+      "materialType": "加工素材",
+      "materialCategory": "魔導加工",
+      "name": "魔晶粉",
+      "csVisible": "",
+      "price": 55,
+      "rank": "普通",
+      "equipSlot": "",
+      "skill": "",
+      "power": "",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "",
+      "upgradeLimit": "",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "",
+      "description": "水晶片と魔物核を細かく砕き、魔力を通しやすい粒度へ揃えた粉末。",
+      "effect": "",
+      "source": "鍛冶屋",
+      "usageTags": "鍛冶,魔導加工,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "加工素材,魔導加工,鍛冶",
+      "notes": "",
+      "publicId": "RCA-YGUC-Q2HD",
+      "toolRank": ""
+    },
+    {
+      "id": "wpn_branch_stiletto",
+      "publicId": "RCA-AKXX-VV67",
+      "dataKind": "アイテム",
+      "itemType": "武器",
+      "itemCategory": "短剣",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "スティレット",
+      "csVisible": "TRUE",
+      "price": 360,
+      "rank": "中級",
+      "toolRank": "",
+      "equipSlot": "右手/左手",
+      "skill": "近接",
+      "power": "1D6+1",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "2",
+      "reloadTurns": "",
+      "modifiers": "hit\t+1\nskill:evade\t+1",
+      "upgradeLimit": "3",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "物",
+      "description": "細身の鍛鉄刃を持つ刺突用短剣。軽さを保ちながら刃先の鋭さを高めている。",
+      "effect": "",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "武器,中級,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器,中級,武器派生,鉱石系",
+      "notes": ""
+    },
+    {
+      "id": "wpn_branch_broadsword",
+      "publicId": "RCA-CEWR-4HB2",
+      "dataKind": "アイテム",
+      "itemType": "武器",
+      "itemCategory": "片手剣",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "ブロードソード",
+      "csVisible": "TRUE",
+      "price": 420,
+      "rank": "中級",
+      "toolRank": "",
+      "equipSlot": "右手/左手",
+      "skill": "近接",
+      "power": "1D6+2",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "2",
+      "reloadTurns": "",
+      "modifiers": "",
+      "upgradeLimit": "3",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "物",
+      "description": "幅広の鍛鉄刃を備えた片手剣。癖の少ない扱いやすさを残したまま斬撃を重くした。",
+      "effect": "",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "武器,中級,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器,中級,武器派生,鉱石系",
+      "notes": ""
+    },
+    {
+      "id": "wpn_branch_shell_hatchet",
+      "publicId": "RCA-QRAX-JF3G",
+      "dataKind": "アイテム",
+      "itemType": "武器",
+      "itemCategory": "片手斧",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "バトルアックス",
+      "csVisible": "TRUE",
+      "price": 460,
+      "rank": "中級",
+      "toolRank": "",
+      "equipSlot": "右手/左手",
+      "skill": "近接",
+      "power": "1D6+3",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "3",
+      "reloadTurns": "",
+      "modifiers": "hit\t-1",
+      "upgradeLimit": "3",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "物",
+      "description": "甲殻板を刃の背に重ね、打ち込みの力を逃がしにくくした片手斧。",
+      "effect": "攻撃時、対象の常時防御値を1点無視する。",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "武器,中級,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器,中級,武器派生,甲殻系",
+      "notes": ""
+    },
+    {
+      "id": "wpn_branch_shell_mace",
+      "publicId": "RCA-ASEU-TXW5",
+      "dataKind": "アイテム",
+      "itemType": "武器",
+      "itemCategory": "片手槌",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "フランジドメイス",
+      "csVisible": "TRUE",
+      "price": 440,
+      "rank": "中級",
+      "toolRank": "",
+      "equipSlot": "右手/左手",
+      "skill": "近接",
+      "power": "1D6+2",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "2",
+      "reloadTurns": "",
+      "modifiers": "skill:evade\t-1",
+      "upgradeLimit": "3",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "物",
+      "description": "硬い甲殻板を打撃面へ組み込み、衝撃を一点へ集める戦槌。",
+      "effect": "攻撃時、対象の常時防御値を1点無視する。",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "武器,中級,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器,中級,武器派生,甲殻系",
+      "notes": ""
+    },
+    {
+      "id": "wpn_branch_fang_spear",
+      "publicId": "RCA-2CUM-587U",
+      "dataKind": "アイテム",
+      "itemType": "武器",
+      "itemCategory": "片手槍",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "パルチザン",
+      "csVisible": "TRUE",
+      "price": 400,
+      "rank": "中級",
+      "toolRank": "",
+      "equipSlot": "右手/左手",
+      "skill": "近接",
+      "power": "1D6+1",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "2",
+      "reloadTurns": "",
+      "modifiers": "hit\t+1",
+      "upgradeLimit": "3",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "物",
+      "description": "獣牙を添えた鋭い穂先を持つ短槍。軽快な突きを崩さず貫通力を高めた。",
+      "effect": "",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "武器,中級,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器,中級,武器派生,獣牙系",
+      "notes": ""
+    },
+    {
+      "id": "wpn_branch_crystal_staff",
+      "publicId": "RCA-LMNG-B26J",
+      "dataKind": "アイテム",
+      "itemType": "武器",
+      "itemCategory": "杖",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "クォータースタッフ",
+      "csVisible": "TRUE",
+      "price": 480,
+      "rank": "中級",
+      "toolRank": "",
+      "equipSlot": "右手/左手",
+      "skill": "近接/魔法",
+      "power": "1D6",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "1",
+      "reloadTurns": "",
+      "modifiers": "skill:evade\t+1",
+      "upgradeLimit": "3",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "物",
+      "description": "強化木材へ魔晶粉を染み込ませた術者用の杖。淡い光が魔力の流れを整える。",
+      "effect": "装備中、魔法術式の威力+1。",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "武器,中級,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器,中級,武器派生,結晶・魔導系",
+      "notes": ""
+    },
+    {
+      "id": "wpn_branch_hunter_bow",
+      "publicId": "RCA-B35B-SVUH",
+      "dataKind": "アイテム",
+      "itemType": "武器",
+      "itemCategory": "弓",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "コンポジットボウ",
+      "csVisible": "TRUE",
+      "price": 470,
+      "rank": "中級",
+      "toolRank": "",
+      "equipSlot": "両手",
+      "skill": "射撃",
+      "power": "1D6+2",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "",
+      "upgradeLimit": "3",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "物",
+      "description": "枝角のように反った強化木材を使い、引き絞る力と射出の安定を高めた弓。",
+      "effect": "",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "武器,中級,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器,中級,武器派生,木材・植物系",
+      "notes": ""
+    },
+    {
+      "id": "wpn_branch_crank_crossbow",
+      "publicId": "RCA-R4FZ-LJ7A",
+      "dataKind": "アイテム",
+      "itemType": "武器",
+      "itemCategory": "弩",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "アーバレスト",
+      "csVisible": "TRUE",
+      "price": 620,
+      "rank": "中級",
+      "toolRank": "",
+      "equipSlot": "両手",
+      "skill": "射撃",
+      "power": "2D6+1",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "1",
+      "modifiers": "",
+      "upgradeLimit": "3",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "物",
+      "description": "鍛鉄の巻き上げ機構を備えた弩。弦の張力を増し、重いボルトを安定して射出する。",
+      "effect": "攻撃後、次の自分のターンは装填に使用する。",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "武器,中級,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器,中級,武器派生,鉱石系",
+      "notes": ""
+    },
+    {
+      "id": "wpn_branch_siege_crossbow",
+      "publicId": "RCA-JHR6-YB2R",
+      "dataKind": "アイテム",
+      "itemType": "武器",
+      "itemCategory": "大型弩",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "ウィンドラス・クロスボウ",
+      "csVisible": "TRUE",
+      "price": 820,
+      "rank": "中級",
+      "toolRank": "",
+      "equipSlot": "両手",
+      "skill": "射撃",
+      "power": "2D6+3",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "1",
+      "modifiers": "hit\t-1",
+      "upgradeLimit": "3",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "物",
+      "description": "甲殻板で機構を補強した大型弩。強い反動と引き換えに厚い守りを穿つ。",
+      "effect": "攻撃後、次の自分のターンは装填に使用する。攻撃時、対象の常時防御値を1点無視する。",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "武器,中級,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器,中級,武器派生,甲殻系",
+      "notes": ""
+    },
+    {
+      "id": "wpn_branch_iron_pike",
+      "publicId": "RCA-8BNQ-AGCW",
+      "dataKind": "アイテム",
+      "itemType": "武器",
+      "itemCategory": "長槍",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "パイク",
+      "csVisible": "TRUE",
+      "price": 560,
+      "rank": "中級",
+      "toolRank": "",
+      "equipSlot": "両手",
+      "skill": "近接",
+      "power": "1D6+3",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "hit\t+1",
+      "upgradeLimit": "3",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "物",
+      "description": "長い強化柄と鍛鉄の穂先を組み合わせた長槍。間合いと押し込みの強さを両立する。",
+      "effect": "",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "武器,中級,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器,中級,武器派生,鉱石系",
+      "notes": ""
+    },
+    {
+      "id": "wpn_branch_claymore",
+      "publicId": "RCA-FMHG-S5CC",
+      "dataKind": "アイテム",
+      "itemType": "武器",
+      "itemCategory": "両手剣",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "クレイモア",
+      "csVisible": "TRUE",
+      "price": 680,
+      "rank": "中級",
+      "toolRank": "",
+      "equipSlot": "両手",
+      "skill": "近接",
+      "power": "2D6+1",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "skill:evade\t-1",
+      "upgradeLimit": "3",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "物",
+      "description": "厚い鍛鉄刃を両手で振るう大剣。刃の重さを保ちながら芯を整え、威力を増している。",
+      "effect": "",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "武器,中級,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器,中級,武器派生,鉱石系",
+      "notes": ""
+    },
+    {
+      "id": "wpn_branch_war_maul",
+      "publicId": "RCA-J8NV-685D",
+      "dataKind": "アイテム",
+      "itemType": "武器",
+      "itemCategory": "大槌",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "ウォーモール",
+      "csVisible": "TRUE",
+      "price": 760,
+      "rank": "中級",
+      "toolRank": "",
+      "equipSlot": "両手",
+      "skill": "近接",
+      "power": "2D6+3",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "hit\t-1\nskill:evade\t-1",
+      "upgradeLimit": "3",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "物",
+      "description": "甲殻板と鍛鉄を重ねた巨大な槌。硬い外殻や防具ごと叩き潰すための重量を持つ。",
+      "effect": "攻撃時、対象の常時防御値を1点無視する。",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "武器,中級,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器,中級,武器派生,甲殻系",
+      "notes": ""
+    },
+    {
+      "id": "wpn_branch_thorn_scythe",
+      "publicId": "RCA-9KYA-R9S2",
+      "dataKind": "アイテム",
+      "itemType": "武器",
+      "itemCategory": "大鎌",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "ウォーサイス",
+      "csVisible": "TRUE",
+      "price": 580,
+      "rank": "中級",
+      "toolRank": "",
+      "equipSlot": "両手",
+      "skill": "近接",
+      "power": "1D6+2",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "hit\t-1",
+      "upgradeLimit": "3",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "物",
+      "description": "しなる強化柄へ動く根を巻き込み、薙ぎ払いの軌道を安定させた大鎌。",
+      "effect": "",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "武器,中級,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器,中級,武器派生,木材・植物系",
+      "notes": ""
+    },
+    {
+      "id": "wpn_branch_beast_claw",
+      "publicId": "RCA-TLCC-LQGS",
+      "dataKind": "アイテム",
+      "itemType": "武器",
+      "itemCategory": "両手武器",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "バグ・ナク",
+      "csVisible": "TRUE",
+      "price": 540,
+      "rank": "中級",
+      "toolRank": "",
+      "equipSlot": "両手",
+      "skill": "近接",
+      "power": "1D6+3",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "hit\t+1",
+      "upgradeLimit": "3",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "物",
+      "description": "鍛鉄の拳甲へ獣爪を組み込んだ格闘武器。連続した打撃へ鋭い傷を重ねる。",
+      "effect": "",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "武器,中級,武器派生",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器,中級,武器派生,獣牙系",
+      "notes": ""
     }
   ],
   "recipes": [
@@ -5711,7 +6593,7 @@ const DEFAULTS = {
     {
       "id": "recipe_magic_ink",
       "name": "魔導インク",
-      "rank": "普通",
+      "rank": "中級",
       "price": "180",
       "craftType": "調合",
       "category": "術式素材",
@@ -5732,7 +6614,7 @@ const DEFAULTS = {
     {
       "id": "recipe_prayer_paper",
       "name": "祈祷紙",
-      "rank": "普通",
+      "rank": "中級",
       "price": "180",
       "craftType": "調合",
       "category": "術式素材",
@@ -5858,7 +6740,7 @@ const DEFAULTS = {
     {
       "id": "recipe_purify_ammo",
       "name": "浄化弾セット",
-      "rank": "普通",
+      "rank": "初級",
       "price": "220",
       "craftType": "鍛冶",
       "category": "矢弾",
@@ -5875,6 +6757,462 @@ const DEFAULTS = {
       "unlockFacility": "鍛冶屋",
       "tags": "矢弾,消耗品,浄化,鍛冶,販売レシピ",
       "notes": "普通以上の道具ランクが必要。"
+    },
+    {
+      "id": "recipe_process_forged_iron",
+      "name": "鍛鉄インゴット",
+      "rank": "中級",
+      "price": 45,
+      "craftType": "素材加工",
+      "category": "金属加工",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "鍛鉄インゴット",
+      "resultKind": "素材",
+      "resultCount": 1,
+      "requiredMaterials": "鉄鉱石×3, 澄んだ水×1",
+      "requiredTools": "普通",
+      "difficulty": 9,
+      "description": "鉄鉱石を熱して不純物を除き、武器加工に使える鉄塊へ精錬する。",
+      "effect": "鍛鉄インゴットを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "素材加工,鍛冶,中級",
+      "notes": "普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_process_reinforced_lumber",
+      "name": "強化木材",
+      "rank": "中級",
+      "price": 45,
+      "craftType": "素材加工",
+      "category": "木材加工",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "強化木材",
+      "resultKind": "素材",
+      "resultCount": 1,
+      "requiredMaterials": "丈夫な枝×2, しなやかな蔓×1",
+      "requiredTools": "普通",
+      "difficulty": 9,
+      "description": "乾燥させた木材を蔓で締め、武器の柄や弓身に耐える強度へ整える。",
+      "effect": "強化木材を1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "素材加工,鍛冶,中級",
+      "notes": "普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_process_tanned_leather",
+      "name": "なめし革",
+      "rank": "中級",
+      "price": 45,
+      "craftType": "素材加工",
+      "category": "布・革加工",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "なめし革",
+      "resultKind": "素材",
+      "resultCount": 1,
+      "requiredMaterials": "小獣の毛皮×2, 澄んだ水×1",
+      "requiredTools": "普通",
+      "difficulty": 9,
+      "description": "毛皮を洗浄して柔らかくし、柄巻きや防具部品へ使える革へ仕上げる。",
+      "effect": "なめし革を1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "素材加工,鍛冶,中級",
+      "notes": "普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_process_carapace_plate",
+      "name": "甲殻板",
+      "rank": "中級",
+      "price": 45,
+      "craftType": "素材加工",
+      "category": "甲殻加工",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "甲殻板",
+      "resultKind": "素材",
+      "resultCount": 1,
+      "requiredMaterials": "硬い甲殻片×2, 鍛鉄インゴット×1",
+      "requiredTools": "普通",
+      "difficulty": 10,
+      "description": "甲殻片を重ねて固定し、刃受けや打撃面へ使える板材に加工する。",
+      "effect": "甲殻板を1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "素材加工,鍛冶,中級",
+      "notes": "普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_process_magic_powder",
+      "name": "魔晶粉",
+      "rank": "中級",
+      "price": 45,
+      "craftType": "素材加工",
+      "category": "魔導加工",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "魔晶粉",
+      "resultKind": "素材",
+      "resultCount": 1,
+      "requiredMaterials": "小さな水晶片×2, 小さなスライム核×1",
+      "requiredTools": "普通",
+      "difficulty": 10,
+      "description": "水晶片と魔物核を砕き、魔力を通しやすい粉末へ調整する。",
+      "effect": "魔晶粉を1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "素材加工,鍛冶,中級",
+      "notes": "普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_branch_stiletto",
+      "name": "スティレットへの派生",
+      "rank": "中級",
+      "price": 72,
+      "craftType": "武器派生",
+      "category": "短剣",
+      "baseItem": "ショートダガー",
+      "branchType": "鉱石系",
+      "resultItem": "スティレット",
+      "resultKind": "武器",
+      "resultCount": 1,
+      "requiredMaterials": "鍛鉄インゴット×1, 小さな水晶片×1",
+      "requiredTools": "普通",
+      "difficulty": 10,
+      "description": "ショートダガーを素材加工し、スティレットへ派生させる。",
+      "effect": "ショートダガーを消費し、スティレットを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器派生,鉱石系,中級",
+      "notes": "完成武器と同じ中級ランク。普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_branch_broadsword",
+      "name": "ブロードソードへの派生",
+      "rank": "中級",
+      "price": 84,
+      "craftType": "武器派生",
+      "category": "片手剣",
+      "baseItem": "ロングソード",
+      "branchType": "鉱石系",
+      "resultItem": "ブロードソード",
+      "resultKind": "武器",
+      "resultCount": 1,
+      "requiredMaterials": "鍛鉄インゴット×2, なめし革×1",
+      "requiredTools": "普通",
+      "difficulty": 10,
+      "description": "ロングソードを素材加工し、ブロードソードへ派生させる。",
+      "effect": "ロングソードを消費し、ブロードソードを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器派生,鉱石系,中級",
+      "notes": "完成武器と同じ中級ランク。普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_branch_shell_hatchet",
+      "name": "バトルアックスへの派生",
+      "rank": "中級",
+      "price": 92,
+      "craftType": "武器派生",
+      "category": "片手斧",
+      "baseItem": "ハンドアックス",
+      "branchType": "甲殻系",
+      "resultItem": "バトルアックス",
+      "resultKind": "武器",
+      "resultCount": 1,
+      "requiredMaterials": "鍛鉄インゴット×1, 甲殻板×1",
+      "requiredTools": "普通",
+      "difficulty": 10,
+      "description": "ハンドアックスを素材加工し、バトルアックスへ派生させる。",
+      "effect": "ハンドアックスを消費し、バトルアックスを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器派生,甲殻系,中級",
+      "notes": "完成武器と同じ中級ランク。普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_branch_shell_mace",
+      "name": "フランジドメイスへの派生",
+      "rank": "中級",
+      "price": 88,
+      "craftType": "武器派生",
+      "category": "片手槌",
+      "baseItem": "ウォーハンマー",
+      "branchType": "甲殻系",
+      "resultItem": "フランジドメイス",
+      "resultKind": "武器",
+      "resultCount": 1,
+      "requiredMaterials": "鍛鉄インゴット×1, 甲殻板×1",
+      "requiredTools": "普通",
+      "difficulty": 10,
+      "description": "ウォーハンマーを素材加工し、フランジドメイスへ派生させる。",
+      "effect": "ウォーハンマーを消費し、フランジドメイスを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器派生,甲殻系,中級",
+      "notes": "完成武器と同じ中級ランク。普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_branch_fang_spear",
+      "name": "パルチザンへの派生",
+      "rank": "中級",
+      "price": 80,
+      "craftType": "武器派生",
+      "category": "片手槍",
+      "baseItem": "ショートスピア",
+      "branchType": "獣牙系",
+      "resultItem": "パルチザン",
+      "resultKind": "武器",
+      "resultCount": 1,
+      "requiredMaterials": "鍛鉄インゴット×1, 小獣の牙×2",
+      "requiredTools": "普通",
+      "difficulty": 10,
+      "description": "ショートスピアを素材加工し、パルチザンへ派生させる。",
+      "effect": "ショートスピアを消費し、パルチザンを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器派生,獣牙系,中級",
+      "notes": "完成武器と同じ中級ランク。普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_branch_crystal_staff",
+      "name": "クォータースタッフへの派生",
+      "rank": "中級",
+      "price": 96,
+      "craftType": "武器派生",
+      "category": "杖",
+      "baseItem": "ウッドスタッフ",
+      "branchType": "結晶・魔導系",
+      "resultItem": "クォータースタッフ",
+      "resultKind": "武器",
+      "resultCount": 1,
+      "requiredMaterials": "強化木材×1, 魔晶粉×1",
+      "requiredTools": "普通",
+      "difficulty": 10,
+      "description": "ウッドスタッフを素材加工し、クォータースタッフへ派生させる。",
+      "effect": "ウッドスタッフを消費し、クォータースタッフを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器派生,結晶・魔導系,中級",
+      "notes": "完成武器と同じ中級ランク。普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_branch_hunter_bow",
+      "name": "コンポジットボウへの派生",
+      "rank": "中級",
+      "price": 94,
+      "craftType": "武器派生",
+      "category": "弓",
+      "baseItem": "ショートボウ",
+      "branchType": "木材・植物系",
+      "resultItem": "コンポジットボウ",
+      "resultKind": "武器",
+      "resultCount": 1,
+      "requiredMaterials": "強化木材×2, しなやかな蔓×1",
+      "requiredTools": "普通",
+      "difficulty": 10,
+      "description": "ショートボウを素材加工し、コンポジットボウへ派生させる。",
+      "effect": "ショートボウを消費し、コンポジットボウを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器派生,木材・植物系,中級",
+      "notes": "完成武器と同じ中級ランク。普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_branch_crank_crossbow",
+      "name": "アーバレストへの派生",
+      "rank": "中級",
+      "price": 124,
+      "craftType": "武器派生",
+      "category": "弩",
+      "baseItem": "クロスボウ",
+      "branchType": "鉱石系",
+      "resultItem": "アーバレスト",
+      "resultKind": "武器",
+      "resultCount": 1,
+      "requiredMaterials": "鍛鉄インゴット×1, 強化木材×1",
+      "requiredTools": "普通",
+      "difficulty": 10,
+      "description": "クロスボウを素材加工し、アーバレストへ派生させる。",
+      "effect": "クロスボウを消費し、アーバレストを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器派生,鉱石系,中級",
+      "notes": "完成武器と同じ中級ランク。普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_branch_siege_crossbow",
+      "name": "ウィンドラス・クロスボウへの派生",
+      "rank": "中級",
+      "price": 164,
+      "craftType": "武器派生",
+      "category": "大型弩",
+      "baseItem": "ヘヴィクロスボウ",
+      "branchType": "甲殻系",
+      "resultItem": "ウィンドラス・クロスボウ",
+      "resultKind": "武器",
+      "resultCount": 1,
+      "requiredMaterials": "鍛鉄インゴット×2, 甲殻板×1",
+      "requiredTools": "普通",
+      "difficulty": 11,
+      "description": "ヘヴィクロスボウを素材加工し、ウィンドラス・クロスボウへ派生させる。",
+      "effect": "ヘヴィクロスボウを消費し、ウィンドラス・クロスボウを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器派生,甲殻系,中級",
+      "notes": "完成武器と同じ中級ランク。普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_branch_iron_pike",
+      "name": "パイクへの派生",
+      "rank": "中級",
+      "price": 112,
+      "craftType": "武器派生",
+      "category": "長槍",
+      "baseItem": "ロングスピア",
+      "branchType": "鉱石系",
+      "resultItem": "パイク",
+      "resultKind": "武器",
+      "resultCount": 1,
+      "requiredMaterials": "鍛鉄インゴット×2, 強化木材×1",
+      "requiredTools": "普通",
+      "difficulty": 10,
+      "description": "ロングスピアを素材加工し、パイクへ派生させる。",
+      "effect": "ロングスピアを消費し、パイクを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器派生,鉱石系,中級",
+      "notes": "完成武器と同じ中級ランク。普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_branch_claymore",
+      "name": "クレイモアへの派生",
+      "rank": "中級",
+      "price": 136,
+      "craftType": "武器派生",
+      "category": "両手剣",
+      "baseItem": "グレートソード",
+      "branchType": "鉱石系",
+      "resultItem": "クレイモア",
+      "resultKind": "武器",
+      "resultCount": 1,
+      "requiredMaterials": "鍛鉄インゴット×3, なめし革×1",
+      "requiredTools": "普通",
+      "difficulty": 11,
+      "description": "グレートソードを素材加工し、クレイモアへ派生させる。",
+      "effect": "グレートソードを消費し、クレイモアを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器派生,鉱石系,中級",
+      "notes": "完成武器と同じ中級ランク。普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_branch_war_maul",
+      "name": "ウォーモールへの派生",
+      "rank": "中級",
+      "price": 152,
+      "craftType": "武器派生",
+      "category": "大槌",
+      "baseItem": "グレートハンマー",
+      "branchType": "甲殻系",
+      "resultItem": "ウォーモール",
+      "resultKind": "武器",
+      "resultCount": 1,
+      "requiredMaterials": "鍛鉄インゴット×2, 甲殻板×2",
+      "requiredTools": "普通",
+      "difficulty": 11,
+      "description": "グレートハンマーを素材加工し、ウォーモールへ派生させる。",
+      "effect": "グレートハンマーを消費し、ウォーモールを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器派生,甲殻系,中級",
+      "notes": "完成武器と同じ中級ランク。普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_branch_thorn_scythe",
+      "name": "ウォーサイスへの派生",
+      "rank": "中級",
+      "price": 116,
+      "craftType": "武器派生",
+      "category": "大鎌",
+      "baseItem": "バトルサイズ",
+      "branchType": "木材・植物系",
+      "resultItem": "ウォーサイス",
+      "resultKind": "武器",
+      "resultCount": 1,
+      "requiredMaterials": "鍛鉄インゴット×2, 強化木材×1, 動く根×1",
+      "requiredTools": "普通",
+      "difficulty": 10,
+      "description": "バトルサイズを素材加工し、ウォーサイスへ派生させる。",
+      "effect": "バトルサイズを消費し、ウォーサイスを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器派生,木材・植物系,中級",
+      "notes": "完成武器と同じ中級ランク。普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_branch_beast_claw",
+      "name": "バグ・ナクへの派生",
+      "rank": "中級",
+      "price": 108,
+      "craftType": "武器派生",
+      "category": "両手武器",
+      "baseItem": "アイアンガントレット",
+      "branchType": "獣牙系",
+      "resultItem": "バグ・ナク",
+      "resultKind": "武器",
+      "resultCount": 1,
+      "requiredMaterials": "鍛鉄インゴット×1, 小さな爪×2, なめし革×1",
+      "requiredTools": "普通",
+      "difficulty": 10,
+      "description": "アイアンガントレットを素材加工し、バグ・ナクへ派生させる。",
+      "effect": "アイアンガントレットを消費し、バグ・ナクを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "武器派生,獣牙系,中級",
+      "notes": "完成武器と同じ中級ランク。普通以上の鍛冶道具が必要。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
     }
   ],
   "spells": [
@@ -10883,7 +12221,7 @@ const SYSTEM_HELP = [
       "調合と鍛冶は施設を借りられる前提。",
       "採取道具セット、採掘道具セット、探索道具セットは現時点では使用しない。",
       "武器と防具の破損、修理ルールは現時点では扱わない。",
-      "調合道具と鍛冶道具は素材ランクごとに対応アイテムを登録する。",
+      "調合道具と鍛冶道具は、アイテムランクと対応素材ランクを分けて登録する。",
       "素材ランクは低級、普通、良質、希少、高級。",
       "調合道具は旅薬師の乳鉢具、硝子秤の調合具、晶瓶の調合具、星滴の蒸留具、月環の錬成具。",
       "鍛冶道具は野鍛冶の槌箱、焼入れ金床具、鋼噛み火ばさみ具、星鉄火ばさみ具、竜炉の鍛冶具。",
@@ -11297,7 +12635,7 @@ const FACILITY_RANK_LEVELS = {
   '希少':4, '特級':4, '4':4, 'Ⅳ':4,
   '高級':5, '最上級':5, '5':5, 'Ⅴ':5
 };
-const FACILITY_RANK_LIMIT_LABELS = {'':'全ランク', '0':'初期以下', '1':'低級/初級以下', '2':'普通/中級以下', '3':'良質/上級以下', '4':'希少以下', '5':'高級以下'};
+const FACILITY_RANK_LIMIT_LABELS = {'':'全ランク', '0':'初期以下', '1':'初級以下', '2':'中級以下', '3':'上級以下', '4':'特級以下', '5':'最上級以下'};
 function facilityRankLevel(rank){
   const raw=String(rank||'').trim();
   if(!raw) return null;
@@ -11807,6 +13145,7 @@ function dropMaterialOutputBlock(row={}){
   const detail = dropMaterialDetailText(material);
   return [base, ...detail.map(line=>'  ' + line)].join('\n');
 }
+const ITEM_RANKS = ['初期','初級','中級','上級','特級','最上級'];
 const MATERIAL_RANK_DIFFICULTY = { '低級':7, '普通':9, '良質':11, '希少':13, '高級':15 };
 const TOOL_RANKS = ['低級','普通','良質','希少','高級'];
 const UPGRADE_STEP_RULES = [
@@ -12767,10 +14106,17 @@ function formOptionValues(key, field){
   if(field==='equipSlot') ['なし','右手/左手','両手','鎧','装飾品','所持品'].forEach(v=>values.add(v));
   if(field==='skill') ['近接','射撃','魔法','祈祷','調合','採取','細工','防御','回避','操作','近接/魔法','射撃または調合'].forEach(v=>values.add(v));
   if(field==='rank'){
+    values.clear();
     const dataKind = currentFormValue('dataKind') || (key==='materials' ? '素材' : '');
-    if(dataKind==='素材') state.material_ranks.forEach(r=>{ if(r.name && String(r.enabled||'TRUE').toUpperCase()!=='FALSE') values.add(String(r.name)); });
-    ['低級','普通','良質','希少','高級','初級','中級','上級','高難度','異界'].forEach(v=>values.add(v));
+    if(dataKind==='素材'){
+      state.material_ranks.forEach(r=>{ if(r.name && String(r.enabled||'TRUE').toUpperCase()!=='FALSE') values.add(String(r.name)); });
+    }else if(['items','recipes','spells'].includes(key)){
+      ITEM_RANKS.forEach(v=>values.add(v));
+    }else{
+      (state[key]||[]).forEach(r=>{ if(r && String(r[field]||'').trim()) values.add(String(r[field]).trim()); });
+    }
   }
+  if(field==='toolRank') TOOL_RANKS.forEach(v=>values.add(v));
   if(field==='type') ['魔法','祈祷'].forEach(v=>values.add(v));
   if(field==='enabled') ['TRUE','FALSE'].forEach(v=>values.add(v));
   if(field==='checkType') ['近接>=回避値','射撃>=回避値','魔法>=回避値','祈祷>=10','祈祷>=抵抗値','調合>=回避値','採取','なし'].forEach(v=>values.add(v));
@@ -12778,7 +14124,7 @@ function formOptionValues(key, field){
   if(field==='equipmentUpgradeEffect') ['なし','威力','命中','防御貫通','物属性付与','火属性付与','水属性付与','風属性付与','雷属性付与','光属性付与','闇属性付与','無属性付与','特殊効果付与'].forEach(v=>values.add(v));
   if(field==='craftType') ['調合','鍛冶','武器派生','防具製作','バッグ製作','素材加工'].forEach(v=>values.add(v));
   if(field==='baseItem') (state.items || []).forEach(r=>{ if(String(r.dataKind || '').trim() !== '素材' && String(r.itemType || '').trim() === '武器' && r.name) values.add(String(r.name)); });
-  if(field==='branchType') ['基礎強化系','鉱石系','獣牙系','甲殻系','羽鱗系','結晶・魔導系','聖祈系','特殊用途系'].forEach(v=>values.add(v));
+  if(field==='branchType') ['基礎強化系','鉱石系','木材・植物系','獣牙系','甲殻系','羽鱗系','結晶・魔導系','聖祈系','特殊用途系'].forEach(v=>values.add(v));
   if(field==='resultKind') ['アイテム','素材','武器','防具','バッグ','調合品'].forEach(v=>values.add(v));
   if(['physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity'].includes(field)) ['-','耐','無','反','吸','弱'].forEach(v=>values.add(v));
   if(field==='scale') ['1PCあたり','パーティ全体','小規模','標準','大規模','高難度'].forEach(v=>values.add(v));
@@ -13331,7 +14677,8 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='itemCategory') help += '<div class="form-help">選んだアイテム種別に紐づくカテゴリだけ表示します。</div>';
   if(field==='materialType') help += '<div class="form-help">素材用の親分類です。候補は「素材種別」で管理します。</div>';
   if(field==='materialCategory') help += '<div class="form-help">選んだ素材種別に紐づくカテゴリだけ表示します。</div>';
-  if(field==='rank') help += '<div class="form-help">素材のランクは「素材ランク」タブで管理します。候補にない場合は横のボタンから追加できます。</div>';
+  if(field==='rank') help += '<div class="form-help">アイテム・レシピは初期〜最上級、素材は低級〜高級を使用します。素材ランクは「素材ランク」タブで管理します。</div>';
+  if(field==='toolRank') help += '<div class="form-help">調合・鍛冶道具が扱える素材ランクです。アイテム自身のランクとは別に管理します。</div>';
   if(field==='bagCapacity') help += '<div class="form-help">バッグ専用の所持品枠数です。倉庫のスタック数や1枠数とは別項目です。</div>';
   if(field==='equipmentUpgradeEffect') help += '<div class="form-help">魔物素材を武器強化に使用した時の強化内容です。主に素材種別が「魔物素材」の行で使います。</div>';
   if(field==='craftType') help += '<div class="form-help">調合・鍛冶・武器派生など、製作データの用途を選びます。管理画面ではこの区分ごとに分割表示します。</div>';
@@ -13402,6 +14749,7 @@ function itemFormFields(row){
     return ['materialType','materialCategory','name','rank','price','source','usageTags','equipmentUpgradeEffect','description','effect','notes'];
   }
   const itemType = String(row.itemType || '').trim();
+  if(itemType === '道具') return ['itemType','itemCategory','name','csVisible','price','rank','toolRank','equipSlot','maxStack','description','effect','unlockFacility','tags','notes'];
   if(itemType === 'バッグ'){
     return ['itemType','itemCategory','name','csVisible','price','rank','bagCapacity','description','effect','unlockFacility','tags','notes'];
   }
@@ -13712,8 +15060,9 @@ function cleanUploadRow(row){
 const UPLOAD_JSONP_URL_LIMIT = 2200;
 const UPLOAD_PART_CHAR_STEP = 260;
 const UPLOAD_GZIP_B64_PART_STEP = 1150;
-const UPLOAD_GZIP_RAW_CHARS_PER_CHUNK = 20000;
+const UPLOAD_GZIP_RAW_CHARS_PER_CHUNK = 90000;
 const UPLOAD_GZIP_CHUNK_TIMEOUT_MS = 15000;
+const UPLOAD_GZIP_POST_TIMEOUT_MS = 180000;
 function uploadPartPayload(token, chunkIndex, partIndex, textPart){
   return payload('putUploadChunk', {
     token,
@@ -13783,11 +15132,11 @@ function canUseGzipUpload(){
     && typeof Uint8Array === 'function';
 }
 async function gzipBase64FromText(text){
-  const stream = new CompressionStream('gzip');
-  const writer = stream.writable.getWriter();
-  await writer.write(new TextEncoder().encode(String(text ?? '')));
-  await writer.close();
-  const buffer = await new Response(stream.readable).arrayBuffer();
+  // readable側を同時に消費するpipeThrough方式にする。
+  // 旧方式は大きめの入力でbackpressureが発生し、圧縮中のまま止まることがあった。
+  const source = new Blob([String(text ?? '')]).stream();
+  const compressed = source.pipeThrough(new CompressionStream('gzip'));
+  const buffer = await new Response(compressed).arrayBuffer();
   return bytesToBase64(new Uint8Array(buffer));
 }
 function estimateRowsChunkUrlSafe(token, chunkIndex, rows){
@@ -13837,11 +15186,137 @@ function makeGzipUploadRowChunks(rows){
   if(current.length) chunks.push(current);
   return chunks;
 }
-async function uploadRowsByTextChunks(key, rows, mode){
+function postApiByIframe(data, timeoutMs=UPLOAD_GZIP_POST_TIMEOUT_MS){
+  if(isGasMode()) return callApi(data);
+  return new Promise((resolve,reject)=>{
+    const base=apiBaseUrl();
+    if(!base){ reject(new Error('ローカルHTMLから送信する場合はWeb App URLを入力してください。')); return; }
+    const requestId=`post_${Date.now()}_${Math.random().toString(36).slice(2)}`;
+    const frameName=`recraftDbPost_${Date.now()}_${Math.random().toString(36).slice(2)}`.replace(/[^A-Za-z0-9_]/g,'');
+    const iframe=document.createElement('iframe');
+    iframe.name=frameName;
+    iframe.style.display='none';
+    iframe.setAttribute('aria-hidden','true');
+    const form=document.createElement('form');
+    form.method='POST';
+    form.action=base;
+    form.target=frameName;
+    form.style.display='none';
+    const action=String(data && data.action || '').trim();
+    const body={...(data||{})};
+    delete body.action;
+    const fields={action,payload:JSON.stringify(body),responseMode:'postMessage',requestId};
+    Object.entries(fields).forEach(([name,value])=>{
+      const input=document.createElement('input');
+      input.type='hidden'; input.name=name; input.value=String(value ?? '');
+      form.appendChild(input);
+    });
+    let settled=false;
+    const cleanup=()=>{
+      window.removeEventListener('message',onMessage);
+      clearTimeout(timer);
+      setTimeout(()=>{ try{ form.remove(); iframe.remove(); }catch(e){} },0);
+    };
+    const finish=(fn,value)=>{ if(settled) return; settled=true; cleanup(); fn(value); };
+    const onMessage=(event)=>{
+      const msg=event && event.data;
+      if(!msg || msg.source!=='recraft-db-post' || msg.requestId!==requestId) return;
+      const result=msg.result || {ok:false,error:'DB送信結果が空です'};
+      if(result.ok===false) finish(reject,new Error(result.error || 'DB一括POST送信に失敗しました'));
+      else finish(resolve,result);
+    };
+    window.addEventListener('message',onMessage);
+    const timer=setTimeout(()=>finish(reject,new Error('DB一括POST送信がタイムアウトしました。従来の分割送信へ切り替えます。')),timeoutMs);
+    document.body.appendChild(iframe);
+    document.body.appendChild(form);
+    try{ form.submit(); }catch(e){ finish(reject,e); }
+  });
+}
+
+async function uploadRowsByGzipPost(key, rows, mode, dataKindScope=''){
+  const list=rows || [];
+  uploadProgressStart(`${labelKey(key)}の高速圧縮DB送信`, list.length);
+  let rawChars=0;
+  let gzipBase64Chars=0;
+  try{
+    const chunks=makeGzipUploadRowChunks(list);
+    const gzipChunks=[];
+    uploadProgressLog(`対象を${chunks.length}圧縮チャンクに分割しました。圧縮後は1回のPOSTでまとめて送信します。`);
+    let preparedRows=0;
+    for(let c=0;c<chunks.length;c++){
+      const text=JSON.stringify(chunks[c]);
+      rawChars+=text.length;
+      const compressStart=performance.now();
+      uploadProgressUpdate({
+        phase:`${labelKey(key)}を圧縮中`,
+        percent:Math.min(45,(c/Math.max(1,chunks.length))*45),
+        currentRows:preparedRows,
+        totalRows:list.length,
+        chunks:`${c+1}/${chunks.length}`,
+        parts:0,
+        rawChars,
+        sentChars:gzipBase64Chars*0.75,
+        detail:`チャンク${c+1}/${chunks.length}をgzip圧縮しています。`
+      });
+      const heartbeat=uploadProgressHeartbeat(()=>({
+        phase:`${labelKey(key)}を圧縮中`,
+        percent:Math.min(45,((c+0.5)/Math.max(1,chunks.length))*45),
+        currentRows:preparedRows,
+        totalRows:list.length,
+        chunks:`${c+1}/${chunks.length}`,
+        parts:0,
+        rawChars,
+        sentChars:gzipBase64Chars*0.75,
+        detail:`チャンク${c+1}/${chunks.length}を圧縮中です。`
+      }),700);
+      let gzipBase64;
+      try{
+        gzipBase64=await withUploadTimeout(
+          gzipBase64FromText(text),
+          UPLOAD_GZIP_CHUNK_TIMEOUT_MS,
+          `チャンク${c+1}/${chunks.length}のgzip圧縮が${UPLOAD_GZIP_CHUNK_TIMEOUT_MS/1000}秒を超えました。`
+        );
+      }finally{ clearInterval(heartbeat); }
+      gzipBase64Chars+=gzipBase64.length;
+      gzipChunks.push({chunkIndex:c,valueB64:gzipBase64});
+      preparedRows+=chunks[c].length;
+      const approx=Math.round(gzipBase64.length*0.75);
+      const ratio=text.length ? Math.max(1,Math.round((approx/text.length)*100)) : 100;
+      uploadProgressLog(`チャンク${c+1}/${chunks.length}：${chunks[c].length}行 / 元${formatUploadBytes(text.length)} → 圧縮後約${formatUploadBytes(approx)}（約${ratio}%） / 圧縮${formatUploadTime(performance.now()-compressStart)}`);
+    }
+    uploadProgressUpdate({
+      phase:`${labelKey(key)}を一括送信中`,
+      percent:55,
+      currentRows:list.length,
+      totalRows:list.length,
+      chunks:`${chunks.length}/${chunks.length}`,
+      parts:1,
+      rawChars,
+      sentChars:gzipBase64Chars*0.75,
+      detail:'圧縮済みデータを1回のPOSTでApps Scriptへ送信し、そのままDBへ反映しています。'
+    });
+    uploadProgressLog(`圧縮済み${formatUploadBytes(gzipBase64Chars*0.75)}を一括POST送信します。`);
+    const result=await postApiByIframe(payload('writeGzipBatch',{
+      sheetKey:key,
+      mode,
+      dataKindScope,
+      gzipChunks
+    }));
+    if(!result || result.ok===false) throw new Error(result && result.error || `${labelKey(key)}の高速圧縮送信に失敗しました`);
+    const done={...result,uploadEncoding:'gzipBase64Post',sentRows:list.length,sentChunks:chunks.length,sentParts:1,rawChars,gzipBase64Chars};
+    uploadProgressDone(done);
+    return done;
+  }catch(e){
+    uploadProgressFail(e);
+    throw e;
+  }
+}
+
+async function uploadRowsByTextChunks(key, rows, mode, dataKindScope=''){
   const token = uploadToken(mode === 'replace' ? 'rp' : 'up', key);
   const list = rows || [];
   uploadProgressStart(`${labelKey(key)}の通常DB送信`, list.length);
-  const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'text'}));
+  const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'text', dataKindScope}));
   if(!begin.ok) throw new Error(begin.error || `${labelKey(key)}のDB送信準備に失敗しました`);
   let sentChunks = 0;
   let sentParts = 0;
@@ -13886,11 +15361,11 @@ async function uploadRowsByTextChunks(key, rows, mode){
     throw e;
   }
 }
-async function uploadRowsByGzipChunks(key, rows, mode){
+async function uploadRowsByGzipChunks(key, rows, mode, dataKindScope=''){
   const token = uploadToken(mode === 'replace' ? 'gzrp' : 'gzup', key);
   const list = rows || [];
   uploadProgressStart(`${labelKey(key)}の圧縮DB送信`, list.length);
-  const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'gzipBase64'}));
+  const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'gzipBase64', dataKindScope}));
   if(!begin.ok) throw new Error(begin.error || `${labelKey(key)}のDB圧縮送信準備に失敗しました`);
   let sentChunks = 0;
   let sentParts = 0;
@@ -14001,20 +15476,26 @@ async function uploadRowsByGzipChunks(key, rows, mode){
     throw e;
   }
 }
-async function uploadRowsByChunks(key, rows, mode){
+async function uploadRowsByChunks(key, rows, mode, dataKindScope=''){
   await assertServerVersion();
   const list = rows || [];
   if(canUseGzipUpload()){
     try{
-      return await uploadRowsByGzipChunks(key, list, mode);
-    }catch(e){
-      console.warn('gzip upload failed; fallback to text chunks', e);
-      toast(`${labelKey(key)}の圧縮送信に失敗しました。通常送信に切り替えます。`, 'warn');
-      return await uploadRowsByTextChunks(key, list, mode);
+      return await uploadRowsByGzipPost(key, list, mode, dataKindScope);
+    }catch(postError){
+      console.warn('fast gzip POST failed; fallback to legacy gzip chunks', postError);
+      toast(`${labelKey(key)}の高速圧縮送信に失敗しました。従来の圧縮分割送信へ切り替えます。`, 'warn');
+      try{
+        return await uploadRowsByGzipChunks(key, list, mode, dataKindScope);
+      }catch(gzipError){
+        console.warn('legacy gzip upload failed; fallback to text chunks', gzipError);
+        toast(`${labelKey(key)}の圧縮送信に失敗しました。通常送信に切り替えます。`, 'warn');
+        return await uploadRowsByTextChunks(key, list, mode, dataKindScope);
+      }
     }
   }
   toast('このブラウザは圧縮送信に未対応のため、通常送信でDB登録します。', 'warn');
-  return await uploadRowsByTextChunks(key, list, mode);
+  return await uploadRowsByTextChunks(key, list, mode, dataKindScope);
 }
 function callApi(data){
   return new Promise((resolve,reject)=>{
@@ -14035,11 +15516,11 @@ async function writeApi(data){
   return callApi(data);
 }
 
-async function upsertSheetRowsByJsonp(key, rows){
-  return uploadRowsByChunks(key, rows || [], 'upsert');
+async function upsertSheetRowsByJsonp(key, rows, dataKindScope=''){
+  return uploadRowsByChunks(key, rows || [], 'upsert', dataKindScope);
 }
-async function replaceSheetRowsByJsonp(key, rows){
-  return uploadRowsByChunks(key, rows || [], 'replace');
+async function replaceSheetRowsByJsonp(key, rows, dataKindScope=''){
+  return uploadRowsByChunks(key, rows || [], 'replace', dataKindScope);
 }
 let __serverVersionChecked = false;
 function parseVersionParts(value){
@@ -14242,7 +15723,7 @@ async function loadSheet(tableKey){
 async function saveSheetInternal(tableKey, options={}){
   const base = baseKeyForTable(tableKey);
   const rows = cloneRowsForSave(base, rowsForTableForSave(tableKey));
-  const res = await upsertSheetRowsByJsonp(base, rows);
+  const res = await upsertSheetRowsByJsonp(base, rows, dataKindForTable(tableKey));
   if(!res || !res.ok){
     throw new Error((res && res.error) || `${labelKey(tableKey)}のDB登録に失敗しました`);
   }
@@ -14275,7 +15756,7 @@ async function saveSingleRow(tableKey, idx, mode='upsert'){
   if(mode === 'replace' && !confirm(`「${name}」だけをDB置換します。\n同じ表の他データは保持します。\nよろしいですか？`)) return;
   try{
     toast(`${labelKey(tableKey)}「${name}」の${label}を開始します`, 'warn');
-    const res = await upsertSheetRowsByJsonp(base, [row]);
+    const res = await upsertSheetRowsByJsonp(base, [row], dataKindForTable(tableKey));
     if(!res || !res.ok) throw new Error((res && res.error) || `${name}の${label}に失敗しました`);
     rerenderTableGroup(tableKey);
     updateCounts();
@@ -14298,46 +15779,66 @@ function showTablePageForOperation(tableKey){
   setGroupActive(inferGroupFromPanel(tableKey));
   showPanel(tableKey);
 }
+function fullDbLabel(key){
+  return key === 'items' ? 'アイテム・素材' : labelKey(key);
+}
+async function writeFullDbKeyInternal(dbKey, mode){
+  const rows = cloneRowsForSave(dbKey, state[dbKey] || []);
+  // 全データ操作では物理DBシートを一度だけ送る。
+  // itemsシートにはアイテムと素材の両方を含め、dataKindScopeを付けず全体登録/置換する。
+  const res = mode === 'replace'
+    ? await replaceSheetRowsByJsonp(dbKey, rows, '')
+    : await upsertSheetRowsByJsonp(dbKey, rows, '');
+  if(!res || !res.ok){
+    throw new Error((res && res.error) || `${fullDbLabel(dbKey)}のDB${mode === 'replace' ? '置換' : '登録'}に失敗しました`);
+  }
+  state = normalizeStateData({ ...state, [dbKey]: rows });
+  rerenderTableGroup(dbKey);
+  updateCounts();
+  updateJsonBox();
+  return res;
+}
 async function runAllPages(mode){
-  if(window.__recraftAllPageRunning){ toast('全ページ処理中です。完了するまで待ってください。','warn'); return; }
+  if(window.__recraftAllPageRunning){ toast('全データ処理中です。完了するまで待ってください。','warn'); return; }
   const isReplace = mode === 'replace';
   const actionLabel = isReplace ? 'DB置換' : 'DB登録';
-  const total = PAGE_TABLE_KEYS.length;
-  if(!confirm(`全ページ${actionLabel}を開始します。
-各表を1ページずつ処理し、失敗した表で停止します。
+  const total = FULL_DB_KEYS.length;
+  if(!confirm(`全データ${actionLabel}を開始します。
+DBシートを一度ずつ処理し、失敗した表で停止します。
+アイテムと素材は同じDBシートへまとめて一度だけ送信します。
 よろしいですか？`)) return;
-  toast(`全ページ${actionLabel}を開始します`, 'warn');
+  toast(`全データ${actionLabel}を開始します`, 'warn');
   window.__recraftAllPageRunning = true;
   setAllPageButtonsDisabled(true);
   const done=[];
   try{
-    for(let i=0;i<PAGE_TABLE_KEYS.length;i++){
-      const tableKey = PAGE_TABLE_KEYS[i];
-      showTablePageForOperation(tableKey);
-      toast(`${i+1}/${total} ${labelKey(tableKey)}を${actionLabel}中...`, 'warn');
-      if(isReplace) await replaceSheetInternal(tableKey, {silent:true});
-      else await saveSheetInternal(tableKey, {silent:true});
-      done.push(labelKey(tableKey));
+    for(let i=0;i<FULL_DB_KEYS.length;i++){
+      const dbKey = FULL_DB_KEYS[i];
+      showTablePageForOperation(dbKey);
+      toast(`${i+1}/${total} ${fullDbLabel(dbKey)}を${actionLabel}中...`, 'warn');
+      await writeFullDbKeyInternal(dbKey, isReplace ? 'replace' : 'upsert');
+      done.push(fullDbLabel(dbKey));
       await sleep(120);
     }
-    toast(`全ページ${actionLabel}が完了しました（${total}/${total}）`);
+    toast(`全データ${actionLabel}が完了しました（${total}/${total}）`);
   }catch(e){
-    const failedKey = PAGE_TABLE_KEYS[done.length];
-    const detail = `全ページ${actionLabel}を停止しました。
+    const failedKey = FULL_DB_KEYS[done.length];
+    const failedLabel = failedKey ? fullDbLabel(failedKey) : '不明';
+    const detail = `全データ${actionLabel}を停止しました。
 完了: ${done.length ? done.join('、') : 'なし'}
-失敗: ${labelKey(failedKey)}
+失敗: ${failedLabel}
 
 ${e.message || e}`;
     console.error(detail, e);
     alert(detail);
-    toast(`${labelKey(failedKey)}の${actionLabel}で失敗しました`, 'error');
+    toast(`${failedLabel}の${actionLabel}で失敗しました`, 'error');
   }finally{
     window.__recraftAllPageRunning = false;
     setAllPageButtonsDisabled(false);
   }
 }
 async function saveAll(){
-  runAllPages('save');
+  return runAllPages('save');
 }
 async function dedupeAll(){
   if(!confirm('DB内の重複行を整理します。\n同じIDの行は後ろにある行を最新として残します。IDが空の場合は、名称・分類などから重複判定します。')) return;
@@ -14351,40 +15852,22 @@ async function dedupeAll(){
 }
 async function replaceSheetInternal(tableKey, options={}){
   const base = baseKeyForTable(tableKey);
-  let rows = cloneRowsForSave(base, rowsForTableForSave(tableKey));
-  let stateMode = 'replace';
-  if(base === 'items'){
-    // アイテム表と素材表はDB上では同じ「アイテム」シートを共有している。
-    // 片方だけ置換する時は、もう片方を保持する。DB読込に失敗した場合は現在画面にあるstateを保持対象にする。
-    let remoteRows = [];
-    try{
-      const res = await callApi(payload('list', { sheetKey: base }));
-      if(!res.ok) throw new Error(res.error || `${labelKey(tableKey)}のDB読込に失敗しました`);
-      remoteRows = res.rows || [];
-    }catch(e){
-      console.warn('アイテム/素材保持用のDB読込に失敗したため、画面上のstateから保持します:', e);
-      remoteRows = state[base] || [];
-      if(!options.silent) toast('保持用のDB読込に失敗したため、画面上のアイテム/素材データを使って置換します', 'warn');
-    }
-    const want = dataKindForTable(tableKey);
-    const preserved = remoteRows.filter(row=>{
-      const kind = String(row.dataKind || 'アイテム').trim() || 'アイテム';
-      return want === '素材' ? kind !== '素材' : kind === '素材';
-    });
-    rows = preserved.concat(rows);
-    stateMode = 'replaceAllBase';
-  }
-  const res = await replaceSheetRowsByJsonp(base, rows);
+  const rows = cloneRowsForSave(base, rowsForTableForSave(tableKey));
+  const dataKindScope = dataKindForTable(tableKey);
+  // アイテムと素材は同じDBシートを共有するが、反対側のデータは送らない。
+  // GAS側がdataKindScope外の既存行を保持して部分置換する。
+  const res = await replaceSheetRowsByJsonp(base, rows, dataKindScope);
   if(!res || !res.ok){
     throw new Error((res && res.error) || `${labelKey(tableKey)}のDB置換に失敗しました`);
   }
-  applySavedRowsToState(tableKey, rows, stateMode);
+  applySavedRowsToState(tableKey, rows, 'replace');
   rerenderTableGroup(tableKey);
   updateCounts();
   updateJsonBox();
   if(!options.silent) toast(`${labelKey(tableKey)}をDB置換しました`);
   return res;
 }
+
 async function replaceSheet(tableKey){
   if(!confirm(`${labelKey(tableKey)}だけを、画面上の内容でDB置換します。
 他の表には触りません。よろしいですか？`)) return;
@@ -14394,7 +15877,7 @@ async function replaceSheet(tableKey){
   }catch(e){toast(e.message,'error')}
 }
 async function replaceAll(){
-  runAllPages('replace');
+  return runAllPages('replace');
 }
 async function loadAll(){
   try{
