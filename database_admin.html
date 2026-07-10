@@ -406,6 +406,7 @@
 .guild-quest-card-title{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-weight:700}
 .guild-quest-meta{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
 .guild-quest-desc{font-size:.92rem;color:var(--muted,#6b6254);line-height:1.55}
+.guild-daily-controls{display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin:8px 0 12px}.guild-daily-controls label{min-width:130px}.facility-branch-section{margin-top:18px;border:2px solid var(--line,#d8d2c4);border-radius:16px;background:#fffaf0;padding:12px}.facility-branch-section>h4{margin:0 0 4px}.facility-sales-section{margin-top:8px}.facility-sales-section>h4{margin:0 0 6px}
 
 .upload-progress-panel{
   margin-top:12px;
@@ -848,6 +849,14 @@
         <div id="facilitySmithyWork" class="facility-work-block">
           <div class="input-action-row">
             <div>
+              <label for="facilityUpgradeEquipmentType">強化する装備種別</label>
+              <select id="facilityUpgradeEquipmentType"><option value="武器">武器</option><option value="防具">防具</option></select>
+            </div>
+            <div>
+              <label for="facilityUpgradeEquipmentSelect">強化する装備</label>
+              <select id="facilityUpgradeEquipmentSelect"></select>
+            </div>
+            <div>
               <label for="facilityUpgradeMaterialInput">強化素材</label>
               <input id="facilityUpgradeMaterialInput" list="facilityUpgradeMaterialOptions" placeholder="素材名を検索">
               <datalist id="facilityUpgradeMaterialOptions"></datalist>
@@ -860,7 +869,7 @@
               <label for="facilitySmithToolRankInput">使用道具ランク</label>
               <select id="facilitySmithToolRankInput"></select>
             </div>
-            <button class="secondary" type="button" data-facility-upgrade-check>強化内容を確認</button>
+            <button class="secondary" type="button" data-facility-upgrade-check>強化内容を確認</button><button class="ghost" type="button" data-facility-upgrade-reset>選択をやり直す</button>
           </div>
           <div id="facilityUpgradeResult" class="facility-upgrade-result muted">強化素材・強化回数・道具ランクを選択してください。</div>
         </div>
@@ -1012,7 +1021,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.108';
+const RECRAFT_DB_VERSION = 'v90.8.116';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.107';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1026,19 +1035,19 @@ const SCHEMA = {
   material_categories: ['id','name','materialType','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   material_ranks: ['id','name','price','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   equipment_categories: ['id','name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
-  items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','toolRank','equipSlot','skill','power','maxStack','ammoUse','ammoKind','quiverCapacity','bagCapacity','offhandBonus','reloadTurns','modifiers','upgradeLimit','mpCost','target','checkType','element','description','effect','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
+  items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','toolRank','equipSlot','skill','power','maxStack','ammoUse','ammoKind','quiverCapacity','bagCapacity','offhandBonus','reloadTurns','modifiers','upgradeLimit','mpCost','target','checkType','element','description','effect','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeTarget','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   recipes: ['id','name','rank','price','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   spells: ['id','type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   quest_rewards: ['id','rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards','notes','updatedAt','ownerKey','createdBy'],
   quests: ['id','name','questCategory','enabled','questType','rank','areaName','progressStep','fixedEvents','clearCondition','bossMonster','questBossName','questBossFormation','questBossComposition','rewardMoney','rewardItems','unlockResult','description','notes','updatedAt','ownerKey','createdBy'],
   exploration_areas: ['id','name','areaType','difficulty','unlockCondition','mainMaterials','mainMonsters','eventTableId','progressStep','description','notes','updatedAt','ownerKey','createdBy'],
   event_tables: ['id','tableId','areaName','eventName','eventType','conditionType','conditionValue','checkType','targetValue','treasureTableId','encounterCountRule','encounterCountMin','encounterCountMax','encounterFormation','encounterComposition','result','progressEffect','notes','updatedAt','ownerKey','createdBy'],
-  treasure_tables: ['id','tableId','areaName','treasureRank','entryType','entryName','entryPublicId','recipeName','scrollRank','quantity','weight','description','enabled','notes','updatedAt','ownerKey','createdBy'],
+  treasure_tables: ['id','tableId','areaName','treasureRank','chestName','hasLock','unlockDifficulty','hasTrap','trapDetectDifficulty','trapDisarmDifficulty','trapName','trapEffect','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','quantity','weight','description','enabled','notes','updatedAt','ownerKey','createdBy'],
   appraisal_rules: ['id','facilityName','scrollRank','difficulty','spellType','spellRank','candidateTags','description','enabled','notes','updatedAt','ownerKey','createdBy'],
-  monsters: ['id','name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','description','notes','updatedAt','ownerKey','createdBy']
+  monsters: ['id','name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', toolRank:'対応素材ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', modifiers:'補正値', upgradeLimit:'強化可能回数', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具ランク', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', actions:'行動', drops:'ドロップ'
+  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', toolRank:'対応素材ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', modifiers:'補正値', upgradeLimit:'強化可能回数', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具ランク', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', equipmentUpgradeTarget:'強化対象', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知難易度', trapDisarmDifficulty:'罠解除難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ'
 };
 
 const FORM_PRIMARY_FIELDS = {
@@ -1048,24 +1057,24 @@ const FORM_PRIMARY_FIELDS = {
   material_categories: ['name','materialType','description','sortOrder','enabled'],
   material_ranks: ['id','name','price','description','sortOrder','enabled'],
   equipment_categories: ['name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled'],
-  items: ['name','publicId','csVisible','itemType','itemCategory','price','rank','toolRank','equipSlot','skill','power','upgradeLimit','mpCost','target','checkType','element','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','unlockFacility','tags'],
+  items: ['name','publicId','csVisible','itemType','itemCategory','price','rank','toolRank','equipSlot','skill','power','upgradeLimit','mpCost','target','checkType','element','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeTarget','unlockFacility','tags'],
   recipes: ['name','rank','price','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags'],
-  materials: ['name','publicId','materialType','materialCategory','rank','price','source','usageTags','equipmentUpgradeEffect','description','effect','notes'],
+  materials: ['name','publicId','materialType','materialCategory','rank','price','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeTarget','description','effect','notes'],
   spells: ['type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags'],
   quest_rewards: ['rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards'],
   quests: ['name','questCategory','enabled','questType','rank','areaName','progressStep','fixedEvents','clearCondition','bossMonster','questBossName','questBossFormation','questBossComposition','rewardMoney','rewardItems','unlockResult','description','notes'],
   exploration_areas: ['name','areaType','difficulty','unlockCondition','mainMaterials','mainMonsters','eventTableId','description','notes'],
   event_tables: ['tableId','areaName','eventName','eventType','conditionType','conditionValue','checkType','targetValue','treasureTableId','encounterCountRule','encounterCountMin','encounterCountMax','encounterFormation','encounterComposition','result','progressEffect','notes'],
-  treasure_tables: ['tableId','areaName','treasureRank','entryType','entryName','entryPublicId','recipeName','scrollRank','quantity','weight','description','enabled','notes'],
+  treasure_tables: ['tableId','areaName','treasureRank','chestName','hasLock','unlockDifficulty','hasTrap','trapDetectDifficulty','trapDisarmDifficulty','trapName','trapEffect','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','quantity','weight','description','enabled','notes'],
   appraisal_rules: ['facilityName','scrollRank','difficulty','spellType','spellRank','candidateTags','description','enabled','notes'],
-  monsters: ['name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','description','notes']
+  monsters: ['name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','description','notes']
 };
 const FORM_LONG_FIELDS = new Set(['description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','rewardItems','unlockResult','mainMaterials','mainMonsters','result','progressEffect','actions','drops','modifiers','encounterComposition']);
 const RECORD_CARD_KEYS = new Set(['items','materials','recipes','spells']);
 const FIELD_PLACEHOLDERS = {
-  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'アイテムは初期〜最上級、素材は低級〜高級', toolRank:'例：低級。調合・鍛冶道具が扱える素材ランク', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', requiredTools:'例：低級。低級なら低級以上の道具が必要', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：獣牙系。モンハン式の素材派生ラインを管理します。', equipmentUpgradeEffect:'例：威力+1。魔物素材を武器強化に使った時の強化内容を選択します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：低級 / 普通', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定スクロール：初級', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：初級', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：初級', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
+  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'アイテムは初期〜最上級、素材は低級〜高級', toolRank:'例：低級。調合・鍛冶道具が扱える素材ランク', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', requiredTools:'例：低級。低級なら低級以上の道具が必要', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：獣牙系。モンハン式の素材派生ラインを管理します。', equipmentUpgradeEffect:'例：威力+1。魔物素材を武器強化に使った時の強化内容を選択します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：低級 / 普通', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定スクロール：初級', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：初級', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：初級', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', dismantleDifficulty:'例：7。採取技能>=解体難易度で判定し、成功時は全ドロップ率+10%（上限100%）。目安はチュートリアル5～6、通常6～9、ボス10以上', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
 };
-const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','toolRank','equipSlot','skill','checkType','type','role','setItem','unlockFacility','equipmentUpgradeEffect','ammoUse','ammoKind','craftType','baseItem','branchType','enabled','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','conditionType','conditionValue','treasureTableId','tableId','treasureRank','entryType','entryName','entryPublicId','recipeName','scrollRank','facilityName','spellType','spellRank','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity']);
+const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','toolRank','equipSlot','skill','checkType','type','role','setItem','unlockFacility','equipmentUpgradeEffect','equipmentUpgradeTarget','ammoUse','ammoKind','craftType','baseItem','branchType','enabled','hasLock','hasTrap','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','conditionType','conditionValue','treasureTableId','tableId','treasureRank','hasLock','hasTrap','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','facilityName','spellType','spellRank','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity']);
 let formState = { key:null, idx:null, mode:'new', defaultDataKind:'' };
 let quickCategoryDirty = false;
 let currentMainTab = 'categories';
@@ -1073,6 +1082,32 @@ let currentCategoryTab = 'item_types';
 let currentRecipeView = '調合';
 let currentFacilityView = '鍛冶屋';
 let currentFacilityRankLimit = '';
+let currentGuildShowHiddenImportant = false;
+let currentGuildDailyCount = 5;
+let currentGuildDailyKeys = [];
+const GUILD_DAILY_STORAGE_KEY = 'recraft_alchemia_guild_daily_selection_v1';
+function loadGuildDailyState(){
+  try{
+    const raw=localStorage.getItem(GUILD_DAILY_STORAGE_KEY);
+    if(!raw)return;
+    const data=JSON.parse(raw);
+    currentGuildDailyCount=Math.max(1,Math.min(10,Number(data.count)||5));
+    currentGuildDailyKeys=Array.isArray(data.keys)?data.keys.map(String):[];
+  }catch(e){
+    console.warn('guild daily state load failed',e);
+    currentGuildDailyCount=5;
+    currentGuildDailyKeys=[];
+  }
+}
+function saveGuildDailyState(){
+  try{
+    localStorage.setItem(GUILD_DAILY_STORAGE_KEY,JSON.stringify({
+      count:currentGuildDailyCount,
+      keys:(currentGuildDailyKeys||[]).map(String)
+    }));
+  }catch(e){console.warn('guild daily state save failed',e);}
+}
+loadGuildDailyState();
 const RECIPE_VIEW_META = {
   '調合': {title:'調合レシピ', description:'薬品・爆弾・香など、薬屋/調合施設で作るアイテムを管理します。'},
   '鍛冶': {title:'鍛冶レシピ', description:'装備や金属加工など、鍛冶屋で作る通常の鍛冶データを管理します。'},
@@ -1090,11 +1125,11 @@ const ADVANCED_FILTERS = {
   material_ranks: [{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   equipment_categories: [{field:'itemCategory', label:'分類'},{field:'equipSlot', label:'装備/使用枠'},{field:'skill', label:'使用技能'},{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   items: [{field:'itemType', label:'アイテム種別'},{field:'csVisible', label:'キャラシ表示'},{field:'itemCategory', label:'アイテムカテゴリ'},{field:'rank', label:'ランク'},{field:'toolRank', label:'対応素材ランク'},{field:'equipSlot', label:'装備/使用枠'},{field:'skill', label:'使用技能'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  materials: [{field:'materialType', label:'素材種別'},{field:'materialCategory', label:'素材カテゴリ'},{field:'rank', label:'ランク'},{field:'source', label:'入手先'},{field:'equipmentUpgradeEffect', label:'装備強化内容'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
+  materials: [{field:'materialType', label:'素材種別'},{field:'materialCategory', label:'素材カテゴリ'},{field:'rank', label:'ランク'},{field:'source', label:'入手先'},{field:'equipmentUpgradeEffect', label:'装備強化内容'},{field:'equipmentUpgradeTarget', label:'強化対象'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   recipes: [{field:'rank', label:'ランク'},{field:'craftType', label:'製作区分'},{field:'category', label:'分類'},{field:'baseItem', label:'派生元'},{field:'branchType', label:'派生系統'},{field:'resultKind', label:'完成品種別'},{field:'difficulty', label:'難度'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   spells: [{field:'type', label:'種別'},{field:'rank', label:'ランク'},{field:'role', label:'役割'},{field:'target', label:'対象'},{field:'setItem', label:'必要装備'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   quest_rewards: [{field:'rank', label:'ランク'},{field:'scale', label:'規模'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  quests: [{field:'questCategory', label:'クエスト分類'},{field:'enabled', label:'有効'},{field:'questType', label:'クエスト種別'},{field:'rank', label:'ランク'},{field:'areaName', label:'エリア'},{field:'questBossName', label:'クエストボス'},{field:'bossMonster', label:'設定魔物'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
+  quests: [{field:'questCategory', label:'クエスト分類'},{field:'enabled', label:'有効'},{field:'questType', label:'クエスト種別'},{field:'rank', label:'ランク'},{field:'areaName', label:'エリア'},{field:'bonusPoints', label:'ボーナスポイント'},{field:'questBossName', label:'クエストボス'},{field:'bossMonster', label:'設定魔物'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   exploration_areas: [{field:'areaType', label:'エリア種別'},{field:'difficulty', label:'難度'},{field:'eventTableId', label:'イベント表ID'},{field:'progressStep', label:'進行度上昇'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   event_tables: [{field:'tableId', label:'表ID'},{field:'areaName', label:'エリア'},{field:'eventType', label:'イベント種別'},{field:'conditionType', label:'前提条件'},{field:'conditionValue', label:'条件内容'},{field:'encounterCountRule', label:'出現数'},{field:'treasureTableId', label:'宝箱表'},{field:'checkType', label:'判定'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   treasure_tables: [{field:'tableId', label:'表ID'},{field:'areaName', label:'エリア'},{field:'treasureRank', label:'ランク'},{field:'entryType', label:'中身種別'},{field:'enabled', label:'有効'}],
@@ -3392,8 +3427,8 @@ const DEFAULTS = {
       "price": 150,
       "rank": "初級",
       "equipSlot": "右手/左手",
-      "effect": "",
-      "source": "",
+      "effect": "魔法術式登録枠1。",
+      "source": "鍛冶屋",
       "usageTags": "魔法,術式,初期倉庫",
       "tags": "魔法,術式,初期倉庫",
       "power": "",
@@ -3402,9 +3437,51 @@ const DEFAULTS = {
       "description": "魔法の術式を記すための書物。頁に刻んだ魔力の線が、術者の詠唱を導く。",
       "publicId": "RCA-W2J4-TSN9",
       "upgradeLimit": "2",
+      "spellSlots": "1",
       "modifiers": "",
       "reloadTurns": "",
       "toolRank": ""
+    },
+    {
+      "id": "book_magic_grimoire",
+      "publicId": "RCA-MGBK-GRIM",
+      "dataKind": "アイテム",
+      "itemType": "術式装備",
+      "itemCategory": "魔導書",
+      "name": "グリモワール",
+      "csVisible": "TRUE",
+      "price": 520,
+      "rank": "中級",
+      "equipSlot": "右手/左手",
+      "spellSlots": "1",
+      "effect": "魔法術式の消費MPを、1依頼につき1回だけ1点軽減する（最低0）。",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "魔法,術式,武器派生",
+      "tags": "魔法,術式,武器派生,補助",
+      "description": "複数の索引と補助記号を備え、術式の展開を安定させる実用的な魔導書。",
+      "upgradeLimit": "3",
+      "notes": "術式枠は固定1。"
+    },
+    {
+      "id": "book_magic_arcana_codex",
+      "publicId": "RCA-MGBK-ARCA",
+      "dataKind": "アイテム",
+      "itemType": "術式装備",
+      "itemCategory": "魔導書",
+      "name": "アルカナ・コーデックス",
+      "csVisible": "TRUE",
+      "price": 560,
+      "rank": "中級",
+      "equipSlot": "右手/左手",
+      "spellSlots": "1",
+      "power": "+1",
+      "effect": "魔法術式で与えるダメージまたは回復量+1。",
+      "source": "鍛冶屋（武器派生）",
+      "usageTags": "魔法,術式,武器派生",
+      "tags": "魔法,術式,武器派生,増幅",
+      "description": "魔力を増幅する環状紋を頁ごとに刻んだ、攻撃的な構成の魔導書。",
+      "upgradeLimit": "3",
+      "notes": "術式枠は固定1。"
     },
     {
       "id": "book_prayer",
@@ -4616,7 +4693,8 @@ const DEFAULTS = {
       "publicId": "RCA-64X3-USPY",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "equipmentUpgradeTarget": "武器"
     },
     {
       "id": "mat_puru_membrane",
@@ -4648,7 +4726,8 @@ const DEFAULTS = {
       "publicId": "RCA-C9BK-8MA8",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "equipmentUpgradeTarget": "防具"
     },
     {
       "id": "mat_small_slime_core",
@@ -4680,7 +4759,8 @@ const DEFAULTS = {
       "publicId": "RCA-6XEB-ZZGV",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "equipmentUpgradeTarget": "武器"
     },
     {
       "id": "mat_small_beast_pelt",
@@ -4712,7 +4792,8 @@ const DEFAULTS = {
       "publicId": "RCA-VNQE-XG6J",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "equipmentUpgradeTarget": "防具"
     },
     {
       "id": "mat_small_beast_fang",
@@ -4744,7 +4825,8 @@ const DEFAULTS = {
       "publicId": "RCA-Y66C-ZEJR",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "equipmentUpgradeTarget": "武器"
     },
     {
       "id": "mat_small_claw",
@@ -4776,7 +4858,8 @@ const DEFAULTS = {
       "publicId": "RCA-HMBK-QF4A",
       "upgradeLimit": "0",
       "modifiers": "",
-      "reloadTurns": ""
+      "reloadTurns": "",
+      "equipmentUpgradeTarget": "武器"
     },
     {
       "id": "mat_hard_carapace",
@@ -4816,7 +4899,8 @@ const DEFAULTS = {
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
-      "publicId": "RCA-CARA-001"
+      "publicId": "RCA-CARA-001",
+      "equipmentUpgradeTarget": "武器・防具"
     },
     {
       "id": "mat_insect_wing",
@@ -4856,7 +4940,8 @@ const DEFAULTS = {
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
-      "publicId": "RCA-WING-001"
+      "publicId": "RCA-WING-001",
+      "equipmentUpgradeTarget": "武器"
     },
     {
       "id": "mat_spore_powder",
@@ -4896,7 +4981,8 @@ const DEFAULTS = {
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
-      "publicId": "RCA-SPOR-001"
+      "publicId": "RCA-SPOR-001",
+      "equipmentUpgradeTarget": "武器"
     },
     {
       "id": "mat_living_root",
@@ -4936,7 +5022,8 @@ const DEFAULTS = {
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
-      "publicId": "RCA-ROOT-001"
+      "publicId": "RCA-ROOT-001",
+      "equipmentUpgradeTarget": "武器・防具"
     },
     {
       "id": "mat_muddy_hide",
@@ -4976,7 +5063,8 @@ const DEFAULTS = {
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
-      "publicId": "RCA-MUDH-001"
+      "publicId": "RCA-MUDH-001",
+      "equipmentUpgradeTarget": "防具"
     },
     {
       "id": "mat_swamp_mucus",
@@ -5016,7 +5104,8 @@ const DEFAULTS = {
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
-      "publicId": "RCA-MUCU-001"
+      "publicId": "RCA-MUCU-001",
+      "equipmentUpgradeTarget": "武器"
     },
     {
       "id": "mat_lord_swamp_core",
@@ -5056,7 +5145,8 @@ const DEFAULTS = {
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
-      "publicId": "RCA-LORD-001"
+      "publicId": "RCA-LORD-001",
+      "equipmentUpgradeTarget": "武器"
     },
     {
       "id": "valu_old_copper_coins",
@@ -5681,7 +5771,8 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "equipmentUpgradeTarget": "武器"
     },
     {
       "id": "mat_forest_lord_heartwood",
@@ -5722,7 +5813,8 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "equipmentUpgradeTarget": "防具"
     },
     {
       "id": "mat_iron_ore",
@@ -7213,6 +7305,126 @@ const DEFAULTS = {
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
+    },
+    {
+      "id": "recipe_armor_travel_jacket",
+      "name": "旅風のジャケット製作",
+      "rank": "初級",
+      "price": "180",
+      "craftType": "防具製作",
+      "category": "軽装",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "旅風のジャケット",
+      "resultKind": "アイテム",
+      "resultCount": 1,
+      "requiredMaterials": "なめし革×2, 強化木材×1",
+      "requiredTools": "低級",
+      "difficulty": "9",
+      "description": "軽く動きやすい旅装を仕立てる。",
+      "effect": "旅風のジャケットを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "防具製作,鍛冶屋,軽装",
+      "notes": "",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_armor_ironcord_vest",
+      "name": "鉄紐のベスト製作",
+      "rank": "初級",
+      "price": "220",
+      "craftType": "防具製作",
+      "category": "中装",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "鉄紐のベスト",
+      "resultKind": "アイテム",
+      "resultCount": 1,
+      "requiredMaterials": "なめし革×2, 鍛鉄インゴット×1",
+      "requiredTools": "低級",
+      "difficulty": "10",
+      "description": "革地へ鉄紐を編み込み、柔軟性と防護を両立する。",
+      "effect": "鉄紐のベストを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "防具製作,鍛冶屋,中装",
+      "notes": "",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_armor_studded_jerkin",
+      "name": "鋲打ちの胴衣製作",
+      "rank": "初級",
+      "price": "280",
+      "craftType": "防具製作",
+      "category": "重装",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "鋲打ちの胴衣",
+      "resultKind": "アイテム",
+      "resultCount": 1,
+      "requiredMaterials": "鍛鉄インゴット×2, なめし革×1, 甲殻板×1",
+      "requiredTools": "低級",
+      "difficulty": "11",
+      "description": "鋲と甲殻板で胴衣を補強する。",
+      "effect": "鋲打ちの胴衣を1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "防具製作,鍛冶屋,重装",
+      "notes": "",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_armor_starweave_cape",
+      "name": "星糸のケープ製作",
+      "rank": "初級",
+      "price": "240",
+      "craftType": "防具製作",
+      "category": "魔導衣",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "星糸のケープ",
+      "resultKind": "アイテム",
+      "resultCount": 1,
+      "requiredMaterials": "魔晶粉×2, しなやかな蔓×1, 薄虫の羽×1",
+      "requiredTools": "低級",
+      "difficulty": "10",
+      "description": "魔力を通す繊維で軽い外套を仕立てる。",
+      "effect": "星糸のケープを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "防具製作,鍛冶屋,魔導衣",
+      "notes": "",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "recipe_armor_prayer_stole",
+      "name": "祈り布のストール製作",
+      "rank": "初級",
+      "price": "240",
+      "craftType": "防具製作",
+      "category": "祈祷衣",
+      "baseItem": "",
+      "branchType": "",
+      "resultItem": "祈り布のストール",
+      "resultKind": "アイテム",
+      "resultCount": 1,
+      "requiredMaterials": "祈祷紙×1, 清め草×2, なめし革×1",
+      "requiredTools": "低級",
+      "difficulty": "10",
+      "description": "清めた布材を祈りの形に仕立てる。",
+      "effect": "祈り布のストールを1個作成する。",
+      "unlockFacility": "鍛冶屋",
+      "tags": "防具製作,鍛冶屋,祈祷衣",
+      "notes": "",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
     }
   ],
   "spells": [
@@ -7492,6 +7704,7 @@ const DEFAULTS = {
       "bossMonster": "プチスライム / ラフィンラット",
       "rewardMoney": "80G",
       "rewardItems": "ポーション×1",
+      "bonusPoints": 1,
       "unlockResult": "通常依頼の受注許可、解放済みエリアの自由探索許可",
       "description": "街はずれの草原で採取判定と小型魔物との戦闘を行う腕試し。50%で素材入手、100%で固定戦闘が発生する。",
       "notes": "個別受注可能。メインクエストではなく、後から参加したPCにも使えるチュートリアル。 重要クエスト扱い。通常依頼解放の確認用。 クエストボス構成は固定魔物セットとして扱う。",
@@ -7513,6 +7726,7 @@ const DEFAULTS = {
       "bossMonster": "ラピットホーン / ラフィンラット",
       "rewardMoney": "140G",
       "rewardItems": "小獣の毛皮×1, 小獣の牙×1",
+      "bonusPoints": 1,
       "unlockResult": "近郊の森 解放",
       "description": "草原の奥に続く森道を塞ぐ魔物群を討伐するエリア開放クエスト。討伐成功で近郊の森を解放する。",
       "notes": "一度きり。重要クエスト。エリア開放クエストは、エリア内で遭遇可能な魔物を組み合わせたクエストボス討伐を条件にする。",
@@ -7537,6 +7751,7 @@ const DEFAULTS = {
       "bossMonster": "ルートハウンド / ブランチリング / マイコニド",
       "rewardMoney": "170G",
       "rewardItems": "動く根×1, 胞子粉×1",
+      "bonusPoints": 1,
       "unlockResult": "水辺の湿地 解放",
       "description": "近郊の森の奥で湿地入口を塞ぐ魔物群を討伐するエリア開放クエスト。討伐成功で水辺の湿地を解放する。",
       "notes": "一度きり。重要クエスト。エリア開放クエストは、エリア内で遭遇可能な魔物を組み合わせたクエストボス討伐を条件にする。",
@@ -10224,6 +10439,7 @@ const DEFAULTS = {
       "resistValue": "7",
       "defenseValue": "1",
       "initiative": "5",
+      "dismantleDifficulty": "5",
       "physicalAffinity": "-",
       "fireAffinity": "弱",
       "waterAffinity": "耐",
@@ -10249,6 +10465,7 @@ const DEFAULTS = {
       "resistValue": "6",
       "defenseValue": "0",
       "initiative": "8",
+      "dismantleDifficulty": "6",
       "physicalAffinity": "-",
       "fireAffinity": "-",
       "waterAffinity": "-",
@@ -10274,6 +10491,7 @@ const DEFAULTS = {
       "resistValue": "6",
       "defenseValue": "0",
       "initiative": "9",
+      "dismantleDifficulty": "7",
       "physicalAffinity": "-",
       "fireAffinity": "-",
       "waterAffinity": "-",
@@ -10302,6 +10520,7 @@ const DEFAULTS = {
       "resistValue": "6",
       "defenseValue": "0",
       "initiative": "10",
+      "dismantleDifficulty": "8",
       "physicalAffinity": "-",
       "fireAffinity": "弱",
       "waterAffinity": "耐",
@@ -10330,6 +10549,7 @@ const DEFAULTS = {
       "resistValue": "7",
       "defenseValue": "2",
       "initiative": "4",
+      "dismantleDifficulty": "9",
       "physicalAffinity": "耐",
       "fireAffinity": "弱",
       "waterAffinity": "-",
@@ -10358,6 +10578,7 @@ const DEFAULTS = {
       "resistValue": "7",
       "defenseValue": "1",
       "initiative": "4",
+      "dismantleDifficulty": "8",
       "physicalAffinity": "-",
       "fireAffinity": "-",
       "waterAffinity": "弱",
@@ -10386,6 +10607,7 @@ const DEFAULTS = {
       "resistValue": "6",
       "defenseValue": "0",
       "initiative": "9",
+      "dismantleDifficulty": "7",
       "physicalAffinity": "-",
       "fireAffinity": "-",
       "waterAffinity": "-",
@@ -10414,6 +10636,7 @@ const DEFAULTS = {
       "resistValue": "8",
       "defenseValue": "1",
       "initiative": "4",
+      "dismantleDifficulty": "7",
       "physicalAffinity": "-",
       "fireAffinity": "弱",
       "waterAffinity": "耐",
@@ -10442,6 +10665,7 @@ const DEFAULTS = {
       "resistValue": "8",
       "defenseValue": "1",
       "initiative": "7",
+      "dismantleDifficulty": "8",
       "physicalAffinity": "-",
       "fireAffinity": "弱",
       "waterAffinity": "耐",
@@ -10470,6 +10694,7 @@ const DEFAULTS = {
       "resistValue": "8",
       "defenseValue": "2",
       "initiative": "4",
+      "dismantleDifficulty": "7",
       "physicalAffinity": "耐",
       "fireAffinity": "弱",
       "waterAffinity": "耐",
@@ -10498,6 +10723,7 @@ const DEFAULTS = {
       "resistValue": "6",
       "defenseValue": "0",
       "initiative": "8",
+      "dismantleDifficulty": "7",
       "physicalAffinity": "-",
       "fireAffinity": "-",
       "waterAffinity": "耐",
@@ -10526,6 +10752,7 @@ const DEFAULTS = {
       "resistValue": "7",
       "defenseValue": "1",
       "initiative": "5",
+      "dismantleDifficulty": "6",
       "physicalAffinity": "-",
       "fireAffinity": "弱",
       "waterAffinity": "耐",
@@ -10554,6 +10781,7 @@ const DEFAULTS = {
       "resistValue": "6",
       "defenseValue": "0",
       "initiative": "11",
+      "dismantleDifficulty": "8",
       "physicalAffinity": "-",
       "fireAffinity": "弱",
       "waterAffinity": "耐",
@@ -10582,6 +10810,7 @@ const DEFAULTS = {
       "resistValue": "8",
       "defenseValue": "2",
       "initiative": "3",
+      "dismantleDifficulty": "7",
       "physicalAffinity": "耐",
       "fireAffinity": "-",
       "waterAffinity": "吸",
@@ -10610,6 +10839,7 @@ const DEFAULTS = {
       "resistValue": "10",
       "defenseValue": "3",
       "initiative": "7",
+      "dismantleDifficulty": "10",
       "physicalAffinity": "-",
       "fireAffinity": "-",
       "waterAffinity": "吸",
@@ -10638,6 +10868,7 @@ const DEFAULTS = {
       "resistValue": "7",
       "defenseValue": "2",
       "initiative": "10",
+      "dismantleDifficulty": "11",
       "physicalAffinity": "-",
       "fireAffinity": "-",
       "waterAffinity": "-",
@@ -10666,6 +10897,7 @@ const DEFAULTS = {
       "resistValue": "10",
       "defenseValue": "3",
       "initiative": "5",
+      "dismantleDifficulty": "11",
       "physicalAffinity": "-",
       "fireAffinity": "弱",
       "waterAffinity": "耐",
@@ -10823,7 +11055,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "街はずれの草原の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_grass_common_cache_02",
@@ -10842,7 +11082,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "街はずれの草原の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_grass_common_cache_03",
@@ -10861,7 +11109,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "街はずれの草原の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_grass_common_cache_04",
@@ -10880,7 +11136,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "街はずれの草原の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_grass_common_cache_05",
@@ -10899,7 +11163,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "街はずれの草原の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_grass_common_cache_06",
@@ -10918,7 +11190,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "街はずれの草原の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_grass_common_cache_07",
@@ -10937,7 +11217,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "街はずれの草原の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_grass_common_cache_08",
@@ -10956,7 +11244,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "街はずれの草原の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_grass_old_box_01",
@@ -10975,7 +11271,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "古びた木箱",
+      "hasLock": "あり",
+      "unlockDifficulty": "8",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "9",
+      "trapName": "錆びた針",
+      "trapEffect": "開封者に1D4ダメージ。"
     },
     {
       "id": "tre_grass_old_box_02",
@@ -10994,7 +11298,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "古びた木箱",
+      "hasLock": "あり",
+      "unlockDifficulty": "8",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "9",
+      "trapName": "錆びた針",
+      "trapEffect": "開封者に1D4ダメージ。"
     },
     {
       "id": "tre_grass_old_box_03",
@@ -11013,7 +11325,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "古びた木箱",
+      "hasLock": "あり",
+      "unlockDifficulty": "8",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "9",
+      "trapName": "錆びた針",
+      "trapEffect": "開封者に1D4ダメージ。"
     },
     {
       "id": "tre_grass_old_box_04",
@@ -11032,7 +11352,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "古びた木箱",
+      "hasLock": "あり",
+      "unlockDifficulty": "8",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "9",
+      "trapName": "錆びた針",
+      "trapEffect": "開封者に1D4ダメージ。"
     },
     {
       "id": "tre_grass_old_box_05",
@@ -11051,7 +11379,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "古びた木箱",
+      "hasLock": "あり",
+      "unlockDifficulty": "8",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "9",
+      "trapName": "錆びた針",
+      "trapEffect": "開封者に1D4ダメージ。"
     },
     {
       "id": "tre_grass_old_box_06",
@@ -11070,7 +11406,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "古びた木箱",
+      "hasLock": "あり",
+      "unlockDifficulty": "8",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "9",
+      "trapName": "錆びた針",
+      "trapEffect": "開封者に1D4ダメージ。"
     },
     {
       "id": "tre_grass_old_box_07",
@@ -11089,7 +11433,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "古びた木箱",
+      "hasLock": "あり",
+      "unlockDifficulty": "8",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "9",
+      "trapName": "錆びた針",
+      "trapEffect": "開封者に1D4ダメージ。"
     },
     {
       "id": "tre_grass_old_box_08",
@@ -11108,7 +11460,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "古びた木箱",
+      "hasLock": "あり",
+      "unlockDifficulty": "8",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "9",
+      "trapName": "錆びた針",
+      "trapEffect": "開封者に1D4ダメージ。"
     },
     {
       "id": "tre_forest_common_cache_01",
@@ -11127,7 +11487,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "森の隠し箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_forest_common_cache_02",
@@ -11146,7 +11514,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "森の隠し箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_forest_common_cache_03",
@@ -11165,7 +11541,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "森の隠し箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_forest_common_cache_04",
@@ -11184,7 +11568,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "森の隠し箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_forest_common_cache_05",
@@ -11203,7 +11595,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "森の隠し箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_forest_common_cache_06",
@@ -11222,7 +11622,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "森の隠し箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_forest_common_cache_07",
@@ -11241,7 +11649,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "森の隠し箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_forest_common_cache_08",
@@ -11260,7 +11676,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "森の隠し箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_forest_common_cache_09",
@@ -11279,7 +11703,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "森の隠し箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "8",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_forest_mage_satchel_01",
@@ -11298,7 +11730,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "苔むした術師鞄",
+      "hasLock": "あり",
+      "unlockDifficulty": "9",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "9",
+      "trapDisarmDifficulty": "10",
+      "trapName": "眠り胞子",
+      "trapEffect": "失敗した者は次の判定-1。"
     },
     {
       "id": "tre_forest_mage_satchel_02",
@@ -11317,7 +11757,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "苔むした術師鞄",
+      "hasLock": "あり",
+      "unlockDifficulty": "9",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "9",
+      "trapDisarmDifficulty": "10",
+      "trapName": "眠り胞子",
+      "trapEffect": "失敗した者は次の判定-1。"
     },
     {
       "id": "tre_forest_mage_satchel_03",
@@ -11336,7 +11784,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "苔むした術師鞄",
+      "hasLock": "あり",
+      "unlockDifficulty": "9",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "9",
+      "trapDisarmDifficulty": "10",
+      "trapName": "眠り胞子",
+      "trapEffect": "失敗した者は次の判定-1。"
     },
     {
       "id": "tre_forest_mage_satchel_04",
@@ -11355,7 +11811,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "苔むした術師鞄",
+      "hasLock": "あり",
+      "unlockDifficulty": "9",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "9",
+      "trapDisarmDifficulty": "10",
+      "trapName": "眠り胞子",
+      "trapEffect": "失敗した者は次の判定-1。"
     },
     {
       "id": "tre_forest_mage_satchel_05",
@@ -11374,7 +11838,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "苔むした術師鞄",
+      "hasLock": "あり",
+      "unlockDifficulty": "9",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "9",
+      "trapDisarmDifficulty": "10",
+      "trapName": "眠り胞子",
+      "trapEffect": "失敗した者は次の判定-1。"
     },
     {
       "id": "tre_forest_mage_satchel_06",
@@ -11393,7 +11865,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "苔むした術師鞄",
+      "hasLock": "あり",
+      "unlockDifficulty": "9",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "9",
+      "trapDisarmDifficulty": "10",
+      "trapName": "眠り胞子",
+      "trapEffect": "失敗した者は次の判定-1。"
     },
     {
       "id": "tre_forest_mage_satchel_07",
@@ -11412,7 +11892,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "苔むした術師鞄",
+      "hasLock": "あり",
+      "unlockDifficulty": "9",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "9",
+      "trapDisarmDifficulty": "10",
+      "trapName": "眠り胞子",
+      "trapEffect": "失敗した者は次の判定-1。"
     },
     {
       "id": "tre_forest_mage_satchel_08",
@@ -11431,7 +11919,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "苔むした術師鞄",
+      "hasLock": "あり",
+      "unlockDifficulty": "9",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "9",
+      "trapDisarmDifficulty": "10",
+      "trapName": "眠り胞子",
+      "trapEffect": "失敗した者は次の判定-1。"
     },
     {
       "id": "tre_forest_mage_satchel_09",
@@ -11450,7 +11946,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "苔むした術師鞄",
+      "hasLock": "あり",
+      "unlockDifficulty": "9",
+      "hasTrap": "あり",
+      "trapDetectDifficulty": "9",
+      "trapDisarmDifficulty": "10",
+      "trapName": "眠り胞子",
+      "trapEffect": "失敗した者は次の判定-1。"
     },
     {
       "id": "tre_wetland_common_cache_01",
@@ -11469,7 +11973,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_common_cache_02",
@@ -11488,7 +12000,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_common_cache_03",
@@ -11507,7 +12027,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_common_cache_04",
@@ -11526,7 +12054,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_common_cache_05",
@@ -11545,7 +12081,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_common_cache_06",
@@ -11564,7 +12108,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_common_cache_07",
@@ -11583,7 +12135,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_common_cache_08",
@@ -11602,7 +12162,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_common_cache_09",
@@ -11621,7 +12189,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_sunken_box_01",
@@ -11640,7 +12216,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_sunken_box_02",
@@ -11659,7 +12243,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_sunken_box_03",
@@ -11678,7 +12270,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_sunken_box_04",
@@ -11697,7 +12297,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_sunken_box_05",
@@ -11716,7 +12324,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_sunken_box_06",
@@ -11735,7 +12351,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_sunken_box_07",
@@ -11754,7 +12378,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_sunken_box_08",
@@ -11773,7 +12405,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_sunken_box_09",
@@ -11792,7 +12432,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_lord_cache_01",
@@ -11811,7 +12459,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_lord_cache_02",
@@ -11830,7 +12486,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_lord_cache_03",
@@ -11849,7 +12513,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_lord_cache_04",
@@ -11868,7 +12540,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_lord_cache_05",
@@ -11887,7 +12567,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_lord_cache_06",
@@ -11906,7 +12594,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_lord_cache_07",
@@ -11925,7 +12621,15 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     },
     {
       "id": "tre_wetland_lord_cache_08",
@@ -11944,11 +12648,18 @@ const DEFAULTS = {
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "chestName": "水辺の湿地の宝箱",
+      "hasLock": "なし",
+      "unlockDifficulty": "7",
+      "hasTrap": "なし",
+      "trapDetectDifficulty": "7",
+      "trapDisarmDifficulty": "8",
+      "trapName": "",
+      "trapEffect": ""
     }
   ]
 };
-
 let state = unifyEffectNotesForDisplayRows(structuredClone(DEFAULTS));
 
 function structuredClone(obj){ return JSON.parse(JSON.stringify(obj)); }
@@ -12725,10 +13436,10 @@ function questFacilityCategory(row={}){
 function questFacilityEnabled(row={}){
   return String(row.enabled ?? 'TRUE').trim().toUpperCase() !== 'FALSE';
 }
-function facilityQuestRows(category=''){
+function facilityQuestRows(category='', includeDisabled=false){
   return (state.quests||[]).filter(q=>{
     if(!q || !String(q.name||q.id||'').trim()) return false;
-    if(!questFacilityEnabled(q)) return false;
+    if(!includeDisabled && !questFacilityEnabled(q)) return false;
     const cat=questFacilityCategory(q);
     if(category && cat !== category) return false;
     return cat === '重要' || cat === 'デイリー';
@@ -12756,8 +13467,11 @@ function guildQuestCardHtml(q={}){
   const reward=[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ');
   const boss=questBossFacilityText(q);
   const formation=questFormationFacilityText(q);
-  return `<div class="guild-quest-card">
-    <div class="guild-quest-card-title"><span>${escapeHtml(q.name||q.id||'名称未設定')}</span>${q.unlockResult?`<span class="facility-chip">${escapeHtml(q.unlockResult)}</span>`:''}</div>
+  const questKey=String(q.id||q.name||'').trim();
+  const isVisible=questFacilityEnabled(q);
+  const visibilityButton=cat==='重要' ? `<button class="ghost" type="button" data-guild-important-toggle="${escapeHtml(questKey)}" data-visible="${isVisible?'1':'0'}">${isVisible?'非表示にする':'表示する'}</button>` : '';
+  return `<div class="guild-quest-card${cat==='重要'&&!isVisible?' is-disabled':''}">
+    <div class="guild-quest-card-title"><span>${escapeHtml(q.name||q.id||'名称未設定')}</span><span>${q.unlockResult?`<span class="facility-chip">${escapeHtml(q.unlockResult)}</span>`:''}${visibilityButton}</span></div>
     <div class="guild-quest-meta">${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>
     ${q.description ? `<div class="guild-quest-desc"><b>内容：</b>${escapeHtml(q.description)}</div>` : ''}
     ${q.clearCondition ? `<div class="guild-quest-desc"><b>クリア条件：</b>${escapeHtml(q.clearCondition)}</div>` : ''}
@@ -12766,21 +13480,60 @@ function guildQuestCardHtml(q={}){
     ${reward ? `<div class="guild-quest-desc"><b>報酬：</b>${escapeHtml(reward)}</div>` : ''}
   </div>`;
 }
+function dailyQuestSampleForToday(rows,count=5){
+  const list=[...(rows||[])]; if(list.length<=count) return list;
+  const day=new Date().toLocaleDateString('sv-SE');
+  let seed=0; for(const ch of day) seed=(seed*31+ch.charCodeAt(0))>>>0;
+  for(let i=list.length-1;i>0;i--){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const j=seed%(i+1);[list[i],list[j]]=[list[j],list[i]];}
+  return list.slice(0,count);
+}
+function guildDailySelectedRows(){
+  const rows=facilityQuestRows('デイリー');
+  const map=new Map(rows.map(q=>[String(q.id||q.name||''),q]));
+  let picked=(currentGuildDailyKeys||[]).map(k=>map.get(String(k))).filter(Boolean).slice(0,currentGuildDailyCount);
+  if(!picked.length && rows.length){
+    picked=dailyQuestSampleForToday(rows,currentGuildDailyCount);
+    currentGuildDailyKeys=picked.map(q=>String(q.id||q.name||''));
+    saveGuildDailyState();
+  }else{
+    const validKeys=picked.map(q=>String(q.id||q.name||''));
+    if(JSON.stringify(validKeys)!==JSON.stringify(currentGuildDailyKeys||[])){
+      currentGuildDailyKeys=validKeys;
+      saveGuildDailyState();
+    }
+  }
+  return picked;
+}
+function rerollGuildDailyQuests(){
+  const rows=facilityQuestRows('デイリー');
+  const current=new Set((currentGuildDailyKeys||[]).map(String));
+  let pool=rows.filter(q=>!current.has(String(q.id||q.name||'')));
+  if(pool.length<currentGuildDailyCount) pool=[...rows];
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  const picked=pool.slice(0,Math.min(currentGuildDailyCount,pool.length));
+  currentGuildDailyKeys=picked.map(q=>String(q.id||q.name||''));
+  saveGuildDailyState();
+  renderFacilitiesPanel();
+  toast(`デイリークエストを${picked.length}件再抽選しました`);
+}
 function guildQuestSectionHtml(category='重要'){
-  const rows=facilityQuestRows(category);
+  const rows=category==='デイリー' ? guildDailySelectedRows() : facilityQuestRows(category,currentGuildShowHiddenImportant);
   const title=category==='重要' ? '重要クエスト' : 'デイリークエスト';
   const note=category==='重要'
-    ? '施設やエリアの解放などに必要な受注可能クエストです。OFFの重要クエストは表示しません。'
-    : '再受注可能な依頼です。進行管理側でランダム選出できます。';
+    ? '施設やエリアの解放などに必要な受注可能クエストです。非表示の重要クエストは通常表示とコピーから除外します。'
+    : '登録済み候補から抽選された現在のデイリーだけを表示します。再抽選時は候補数が足りる限り現在の選出と重複しません。';
+  const controls=category==='デイリー' ? `<div class="guild-daily-controls"><label>表示件数<select data-guild-daily-count>${[1,2,3,4,5,6,7,8,9,10].map(n=>`<option value="${n}"${n===currentGuildDailyCount?' selected':''}>${n}件</option>`).join('')}</select></label><button class="secondary" type="button" data-guild-daily-reroll>デイリークエストを再抽選</button><button class="ghost" type="button" data-guild-copy-category="デイリー">現在のデイリーをコピー</button></div>` : '';
   return `<section class="guild-quest-section">
     <h4>${escapeHtml(title)} <span class="view-mode-chip">${rows.length}件</span></h4>
     <p class="table-toolbar-note">${escapeHtml(note)}</p>
+    ${controls}
     ${rows.length ? rows.map(guildQuestCardHtml).join('') : `<p class="notice">受注可能な${escapeHtml(title)}はありません。</p>`}
   </section>`;
 }
 function guildQuestListHtml(){
   return `<div class="guild-quest-list">${guildQuestSectionHtml('重要')}${guildQuestSectionHtml('デイリー')}</div>`;
 }
+
 function questFacilityLine(q={}){
   const reward=[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ');
   const lines=[`- ${q.name||q.id||'名称未設定'}（${[questFacilityCategory(q),q.questType,q.rank,q.areaName].filter(Boolean).join('・')}）`];
@@ -12792,19 +13545,30 @@ function questFacilityLine(q={}){
   if(q.unlockResult) lines.push(`  解放：${q.unlockResult}`);
   return lines.join('\n');
 }
+function guildQuestCategoryText(category='重要'){
+  const rows=category==='デイリー' ? guildDailySelectedRows() : facilityQuestRows('重要');
+  const title=category==='デイリー' ? 'デイリークエスト' : '重要クエスト';
+  return [`【ギルド・${title}】`, rows.length ? rows.map(questFacilityLine).join('\n') : `- 受注可能な${title}はありません`].join('\n');
+}
 function guildQuestListText(){
-  const important=facilityQuestRows('重要');
-  const daily=facilityQuestRows('デイリー');
   return [
     '【ギルド】',
     '受注可能クエスト一覧',
     '',
-    '重要クエスト',
-    important.length ? important.map(questFacilityLine).join('\n') : '- 受注可能な重要クエストはありません',
+    guildQuestCategoryText('重要'),
     '',
-    'デイリークエスト',
-    daily.length ? daily.map(questFacilityLine).join('\n') : '- 受注可能なデイリークエストはありません'
+    guildQuestCategoryText('デイリー')
   ].join('\n');
+}
+function setGuildImportantVisibility(questKey='', visible=true){
+  const key=String(questKey||'').trim();
+  const row=(state.quests||[]).find(q=>String(q.id||q.name||'').trim()===key);
+  if(!row) return false;
+  row.enabled=visible ? 'TRUE' : 'FALSE';
+  renderTable('quests');
+  renderFacilitiesPanel();
+  updateJsonBox();
+  return true;
 }
 function facilityDisplayCount(facilityName){
   return facilityName==='ギルド' ? facilityQuestRows().length : facilityProducts(facilityName).length;
@@ -12820,7 +13584,22 @@ function buildFacilitySalesText(targetFacilityName=''){
     const products=facilityProducts(f.name);
     const productText = products.length ? products.map(facilityProductLine).join('\n') : '- 販売商品未設定';
     const serviceText = (f.services||[]).length ? f.services.map(facilityServiceLine).join('\n') : '- サービス未設定';
-    return `【${f.name}】\n${f.role}\n表示範囲：${facilityRankLimitLabel()}\n\n販売商品\n${productText}\n\nサービス\n${serviceText}`;
+    let branchText = '';
+    if(f.name==='鍛冶屋'){
+      const rows=(state.recipes||[]).filter(r=>String(r.craftType||'').trim()==='武器派生');
+      const groups={};
+      rows.forEach(r=>{ const base=String(r.baseItem||'派生元未設定').trim()||'派生元未設定'; (groups[base]||(groups[base]=[])).push(r); });
+      branchText='\n\n武器派生リスト\n' + (Object.entries(groups).length ? Object.entries(groups).map(([base,list])=>{
+        const lines=[`■ ${base}`];
+        list.forEach(r=>{
+          lines.push(`- ${r.resultItem||r.name||'派生先未設定'}（${r.rank||'ランク未設定'} / ${String(r.price||0)}G）`);
+          lines.push(`  必要素材：${r.requiredMaterials||'未設定'}`);
+          if(r.effect) lines.push(`  効果：${r.effect}`);
+        });
+        return lines.join('\n');
+      }).join('\n') : '- 武器派生は未設定です。');
+    }
+    return `【${f.name}】\n${f.role}\n表示範囲：${facilityRankLimitLabel()}\n\n販売商品\n${productText}${branchText}\n\nサービス\n${serviceText}`;
   }).join('\n\n');
 }
 function renderFacilityProductDetails(row){
@@ -12852,8 +13631,15 @@ function renderFacilitiesPanel(){
     const productHtml = isGuild
       ? guildQuestListHtml()
       : (products.length ? products.map(renderFacilityProductDetails).join('') : `<p class="notice">この条件に一致する販売商品はありません。表示ランクを上げるか、アイテム/素材のランク・入手先・解放施設を確認してください。</p>`);
+    const branchRows = f.name==='鍛冶屋' ? (state.recipes||[]).filter(r=>String(r.craftType||'').trim()==='武器派生') : [];
+    const branchGroups = {};
+    branchRows.forEach(r=>{const k=String(r.baseItem||'派生元未設定').trim()||'派生元未設定';(branchGroups[k]||(branchGroups[k]=[])).push(r);});
+    const branchHtml = f.name==='鍛冶屋' ? `<section class="facility-branch-section"><h4>武器派生リスト <span class="view-mode-chip">${branchRows.length}件</span></h4>${Object.entries(branchGroups).map(([base,rows])=>`<details class="facility-product"><summary><span class="facility-product-title"><span>${escapeHtml(base)}</span><span class="facility-chip">${rows.length}派生</span></span></summary><div class="facility-product-body">${rows.map(r=>`<div class="guild-quest-card"><b>${escapeHtml(r.resultItem||r.name)}</b><div class="facility-product-meta"><span class="facility-chip">ランク:${escapeHtml(r.rank||'未設定')}</span><span class="facility-chip">費用:${escapeHtml(String(r.price||0))}G</span></div><div><b>必要素材：</b>${escapeHtml(r.requiredMaterials||'未設定')}</div>${r.effect?`<div><b>効果：</b>${escapeHtml(r.effect)}</div>`:''}</div>`).join('')}</div></details>`).join('')||'<p class="notice">武器派生は未設定です。</p>'}</section>` : '';
     const serviceHtml = (f.services||[]).map(s=>`<li><b>${escapeHtml(s.name)}</b> <span class="facility-chip">${escapeHtml(s.price||'価格未設定')}</span><br>${escapeHtml(s.description||'')}</li>`).join('');
-    return `<section class="facility-card">\n      <div class="facility-card-head">\n        <div><h3>${escapeHtml(f.name)}</h3><p class="facility-role">${escapeHtml(f.role)}</p></div>\n        <div class="facility-actions"><button class="ghost" data-facility-copy="${escapeHtml(f.name)}">この施設のリストをコピー</button></div>\n      </div>\n      <p class="table-toolbar-note">${escapeHtml(label)} <span class="view-mode-chip">${count}件</span>${isGuild ? '' : ` <span class="view-mode-chip">${escapeHtml(facilityRankLimitLabel())}</span>`}</p>\n      <div class="facility-product-list">${productHtml}</div>\n      <p class="table-toolbar-note">サービス</p>\n      <ul class="facility-service-list">${serviceHtml}</ul>\n    </section>`;
+    const actionHtml = isGuild
+      ? `<button class="ghost" data-guild-toggle-hidden>${currentGuildShowHiddenImportant?'非表示の重要クエストを隠す':'非表示の重要クエストも表示'}</button><button class="ghost" data-guild-copy-category="重要">重要クエストをコピー</button><button class="ghost" data-facility-copy="ギルド">両方コピー</button>`
+      : `<button class="ghost" data-facility-copy="${escapeHtml(f.name)}">この施設のリストをコピー</button>`;
+    return `<section class="facility-card">\n      <div class="facility-card-head">\n        <div><h3>${escapeHtml(f.name)}</h3><p class="facility-role">${escapeHtml(f.role)}</p></div>\n        <div class="facility-actions">${actionHtml}</div>\n      </div>\n      <p class="table-toolbar-note">${escapeHtml(label)} <span class="view-mode-chip">${count}件</span>${isGuild ? '' : ` <span class="view-mode-chip">${escapeHtml(facilityRankLimitLabel())}</span>`}</p>\n      <div class="facility-product-list">${productHtml}</div>\n      ${branchHtml}\n      <p class="table-toolbar-note">サービス</p>\n      <ul class="facility-service-list">${serviceHtml}</ul>\n    </section>`;
   }).join('');
   const out=$('facilitySalesText');
   if(out) out.value=buildFacilitySalesText();
@@ -13372,6 +14158,7 @@ function renderFacilityWorkPanel(){
   if(antique) antique.classList.toggle('hidden', kind !== 'antique');
   if(none) none.classList.toggle('hidden', kind !== 'none');
   if(kind === 'smithy'){
+    renderFacilityUpgradeEquipmentSelect();
     renderFacilityUpgradeLookupList();
     renderUpgradeStepSelect($('facilityUpgradeStepInput')?.value || '1');
     renderToolRankSelect('facilitySmithToolRankInput', $('facilitySmithToolRankInput')?.value || '低級');
@@ -13385,8 +14172,28 @@ function renderFacilityWorkPanel(){
     renderAntiqueTranscriptionResult();
   }
 }
+function facilityUpgradeEquipmentRows(){
+  const type=$('facilityUpgradeEquipmentType')?.value||'武器';
+  return (state.items||[]).filter(r=>String(r.dataKind||'').trim()==='アイテム' && String(r.itemType||'').trim()===type);
+}
+function renderFacilityUpgradeEquipmentSelect(){
+  const sel=$('facilityUpgradeEquipmentSelect'); if(!sel)return;
+  const prev=sel.value; const rows=facilityUpgradeEquipmentRows();
+  sel.innerHTML='<option value="">装備を選択</option>'+rows.map(r=>`<option value="${escapeHtml(r.name||r.id||'')}">${escapeHtml(r.name||r.id||'名称未設定')}（${escapeHtml(r.rank||'ランク未設定')}）</option>`).join('');
+  if([...sel.options].some(o=>o.value===prev)) sel.value=prev;
+}
+function upgradeMaterialTarget(mat){
+  const explicit=String(mat?.equipmentUpgradeTarget||'').trim(); if(explicit)return explicit;
+  const e=String(mat?.equipmentUpgradeEffect||'');
+  if(/防御|回避|耐性/.test(e)) return '防具';
+  return e ? '武器' : '';
+}
+function facilityUpgradeMaterialCompatible(mat){
+  const type=$('facilityUpgradeEquipmentType')?.value||'武器'; const target=upgradeMaterialTarget(mat);
+  return target==='武器・防具'||target===type;
+}
 function facilityUpgradeMaterials(){
-  return (state.items || []).filter(r=>String(r.dataKind || '').trim()==='素材' && String(r.materialType || '').trim()==='魔物素材');
+  return (state.items || []).filter(r=>String(r.dataKind || '').trim()==='素材' && String(r.equipmentUpgradeEffect||'').trim() && facilityUpgradeMaterialCompatible(r));
 }
 function findUpgradeMaterialByName(name=''){
   const q = String(name || '').trim();
@@ -13410,7 +14217,7 @@ function renderFacilityUpgradeLookupList(){
   const rows = facilityUpgradeMaterials();
   list.innerHTML = rows.map(m=>{
     const name = String(m.name || m.id || '').trim();
-    const label = [m.rank ? 'ランク:' + m.rank : '', m.materialCategory || '', m.price ? '売値:' + m.price + 'G' : ''].filter(Boolean).join(' / ');
+    const label = [m.rank ? 'ランク:' + m.rank : '', '対象:' + (upgradeMaterialTarget(m)||'未設定'), m.materialCategory || '', m.price ? '売値:' + m.price + 'G' : ''].filter(Boolean).join(' / ');
     return `<option value="${escapeHtml(name)}"${label ? ` label="${escapeHtml(label)}"` : ''}></option>`;
   }).join('');
   input.placeholder = rows.length ? '素材名を検索' : '強化素材がありません';
@@ -13425,6 +14232,8 @@ function renderFacilityUpgradeResult(materialName=''){
     result.innerHTML = '強化素材を選択してください。';
     return;
   }
+  const equipmentName=String($('facilityUpgradeEquipmentSelect')?.value||'').trim();
+  const equipmentType=String($('facilityUpgradeEquipmentType')?.value||'武器').trim();
   const effect = String(mat.equipmentUpgradeEffect || '').trim();
   const value = String(mat.equipmentUpgradeValue || '').trim();
   const baseDifficulty = materialRankDifficulty(mat.rank);
@@ -13439,6 +14248,8 @@ function renderFacilityUpgradeResult(materialName=''){
     <div class="facility-product-meta">
       ${[mat.rank ? 'ランク:' + mat.rank : '', mat.materialType, mat.materialCategory, mat.price ? '素材売値:' + mat.price + 'G' : ''].filter(Boolean).map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}
     </div>
+    <div><b>強化する装備：</b>${escapeHtml(equipmentName||'未選択')}（${escapeHtml(equipmentType)}）</div>
+    <div><b>強化可能対象：</b>${escapeHtml(upgradeMaterialTarget(mat)||'未設定')}</div>
     <div><b>今回の強化回数：</b>${escapeHtml(rule.label)}</div>
     <div><b>必要価格：</b>${price.total ? `${escapeHtml(String(price.total))}G（基準${escapeHtml(String(price.base))}G × ${escapeHtml(String(rule.priceRate))}）` : '未設定'}</div>
     <div><b>基本強化難易度：</b>${escapeHtml(baseDifficulty || '未設定')}</div>
@@ -13610,7 +14421,7 @@ function monsterCardHtml(row, idx){
   ].filter(Boolean).join('');
   const statHtml = [
     monsterStat('HP', row.hp), monsterStat('MP', row.mp), monsterStat('命中', row.hitValue), monsterStat('回避', row.evasionValue),
-    monsterStat('抵抗', row.resistValue), monsterStat('防御', row.defenseValue), monsterStat('先制', row.initiative)
+    monsterStat('抵抗', row.resistValue), monsterStat('防御', row.defenseValue), monsterStat('先制', row.initiative), monsterStat('解体', row.dismantleDifficulty)
   ].join('');
   const affinityHtml = [
     ['物', row.physicalAffinity], ['火', row.fireAffinity], ['水', row.waterAffinity], ['風', row.windAffinity],
@@ -14121,6 +14932,8 @@ function formOptionValues(key, field){
   if(field==='enabled') ['TRUE','FALSE'].forEach(v=>values.add(v));
   if(field==='checkType') ['近接>=回避値','射撃>=回避値','魔法>=回避値','祈祷>=10','祈祷>=抵抗値','調合>=回避値','採取','なし'].forEach(v=>values.add(v));
   if(field==='element') ['物','火','水','風','雷','光','闇','無'].forEach(v=>values.add(v));
+  if(field==='hasLock' || field==='hasTrap') ['なし','あり'].forEach(v=>values.add(v));
+  if(field==='equipmentUpgradeTarget') ['武器','防具','武器・防具'].forEach(v=>values.add(v));
   if(field==='equipmentUpgradeEffect') ['なし','威力','命中','防御貫通','物属性付与','火属性付与','水属性付与','風属性付与','雷属性付与','光属性付与','闇属性付与','無属性付与','特殊効果付与'].forEach(v=>values.add(v));
   if(field==='craftType') ['調合','鍛冶','武器派生','防具製作','バッグ製作','素材加工'].forEach(v=>values.add(v));
   if(field==='baseItem') (state.items || []).forEach(r=>{ if(String(r.dataKind || '').trim() !== '素材' && String(r.itemType || '').trim() === '武器' && r.name) values.add(String(r.name)); });
@@ -14680,6 +15493,8 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='rank') help += '<div class="form-help">アイテム・レシピは初期〜最上級、素材は低級〜高級を使用します。素材ランクは「素材ランク」タブで管理します。</div>';
   if(field==='toolRank') help += '<div class="form-help">調合・鍛冶道具が扱える素材ランクです。アイテム自身のランクとは別に管理します。</div>';
   if(field==='bagCapacity') help += '<div class="form-help">バッグ専用の所持品枠数です。倉庫のスタック数や1枠数とは別項目です。</div>';
+  if(field==='hasLock' || field==='hasTrap') ['なし','あり'].forEach(v=>values.add(v));
+  if(field==='equipmentUpgradeTarget') help += '<div class="form-help">この素材で強化できる装備種別です。武器／防具／武器・防具から選択します。</div>';
   if(field==='equipmentUpgradeEffect') help += '<div class="form-help">魔物素材を武器強化に使用した時の強化内容です。主に素材種別が「魔物素材」の行で使います。</div>';
   if(field==='craftType') help += '<div class="form-help">調合・鍛冶・武器派生など、製作データの用途を選びます。管理画面ではこの区分ごとに分割表示します。</div>';
   if(field==='baseItem') help += '<div class="form-help">武器派生の派生元です。候補にはアイテム種別が「武器」の名称を表示します。</div>';
@@ -14746,7 +15561,7 @@ function currentFormRowSnapshot(){
 function itemFormFields(row){
   const kind = String(row.dataKind || 'アイテム').trim() || 'アイテム';
   if(kind==='素材'){
-    return ['materialType','materialCategory','name','rank','price','source','usageTags','equipmentUpgradeEffect','description','effect','notes'];
+    return ['materialType','materialCategory','name','rank','price','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeTarget','description','effect','notes'];
   }
   const itemType = String(row.itemType || '').trim();
   if(itemType === '道具') return ['itemType','itemCategory','name','csVisible','price','rank','toolRank','equipSlot','maxStack','description','effect','unlockFacility','tags','notes'];
@@ -14929,6 +15744,24 @@ function estimateJsonpUrlLength(data){
 }
 
 
+const UPLOAD_RESUME_STORAGE_KEY = 'recraft_alchemia_upload_resume_v90_8_110';
+const ALL_DB_RESUME_STORAGE_KEY = 'recraft_alchemia_all_db_resume_v90_8_110';
+function uploadResumeLoad(){
+  try{return JSON.parse(localStorage.getItem(UPLOAD_RESUME_STORAGE_KEY)||'null');}catch(e){return null;}
+}
+function uploadResumeSave(v){
+  try{localStorage.setItem(UPLOAD_RESUME_STORAGE_KEY,JSON.stringify(v||{}));}catch(e){console.warn('upload resume save failed',e);}
+}
+function uploadResumeClear(){try{localStorage.removeItem(UPLOAD_RESUME_STORAGE_KEY);}catch(e){}}
+function uploadResumeFingerprint(key,mode,dataKindScope,rows){
+  const text=JSON.stringify((rows||[]).map(cleanUploadRow));
+  let h=2166136261;
+  for(let i=0;i<text.length;i++){h^=text.charCodeAt(i);h=Math.imul(h,16777619);}
+  return [key,mode,dataKindScope||'',(rows||[]).length,text.length,(h>>>0).toString(16)].join('|');
+}
+function allDbResumeLoad(){try{return JSON.parse(localStorage.getItem(ALL_DB_RESUME_STORAGE_KEY)||'null');}catch(e){return null;}}
+function allDbResumeSave(v){try{localStorage.setItem(ALL_DB_RESUME_STORAGE_KEY,JSON.stringify(v||{}));}catch(e){}}
+function allDbResumeClear(){try{localStorage.removeItem(ALL_DB_RESUME_STORAGE_KEY);}catch(e){}}
 let __uploadProgress = {active:false, startedAt:0, title:'', totalRows:0, logs:[]};
 function formatUploadBytes(n){
   const v=Number(n||0);
@@ -15062,7 +15895,6 @@ const UPLOAD_PART_CHAR_STEP = 260;
 const UPLOAD_GZIP_B64_PART_STEP = 1150;
 const UPLOAD_GZIP_RAW_CHARS_PER_CHUNK = 90000;
 const UPLOAD_GZIP_CHUNK_TIMEOUT_MS = 15000;
-const UPLOAD_GZIP_POST_TIMEOUT_MS = 180000;
 function uploadPartPayload(token, chunkIndex, partIndex, textPart){
   return payload('putUploadChunk', {
     token,
@@ -15186,132 +16018,8 @@ function makeGzipUploadRowChunks(rows){
   if(current.length) chunks.push(current);
   return chunks;
 }
-function postApiByIframe(data, timeoutMs=UPLOAD_GZIP_POST_TIMEOUT_MS){
-  if(isGasMode()) return callApi(data);
-  return new Promise((resolve,reject)=>{
-    const base=apiBaseUrl();
-    if(!base){ reject(new Error('ローカルHTMLから送信する場合はWeb App URLを入力してください。')); return; }
-    const requestId=`post_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-    const frameName=`recraftDbPost_${Date.now()}_${Math.random().toString(36).slice(2)}`.replace(/[^A-Za-z0-9_]/g,'');
-    const iframe=document.createElement('iframe');
-    iframe.name=frameName;
-    iframe.style.display='none';
-    iframe.setAttribute('aria-hidden','true');
-    const form=document.createElement('form');
-    form.method='POST';
-    form.action=base;
-    form.target=frameName;
-    form.style.display='none';
-    const action=String(data && data.action || '').trim();
-    const body={...(data||{})};
-    delete body.action;
-    const fields={action,payload:JSON.stringify(body),responseMode:'postMessage',requestId};
-    Object.entries(fields).forEach(([name,value])=>{
-      const input=document.createElement('input');
-      input.type='hidden'; input.name=name; input.value=String(value ?? '');
-      form.appendChild(input);
-    });
-    let settled=false;
-    const cleanup=()=>{
-      window.removeEventListener('message',onMessage);
-      clearTimeout(timer);
-      setTimeout(()=>{ try{ form.remove(); iframe.remove(); }catch(e){} },0);
-    };
-    const finish=(fn,value)=>{ if(settled) return; settled=true; cleanup(); fn(value); };
-    const onMessage=(event)=>{
-      const msg=event && event.data;
-      if(!msg || msg.source!=='recraft-db-post' || msg.requestId!==requestId) return;
-      const result=msg.result || {ok:false,error:'DB送信結果が空です'};
-      if(result.ok===false) finish(reject,new Error(result.error || 'DB一括POST送信に失敗しました'));
-      else finish(resolve,result);
-    };
-    window.addEventListener('message',onMessage);
-    const timer=setTimeout(()=>finish(reject,new Error('DB一括POST送信がタイムアウトしました。従来の分割送信へ切り替えます。')),timeoutMs);
-    document.body.appendChild(iframe);
-    document.body.appendChild(form);
-    try{ form.submit(); }catch(e){ finish(reject,e); }
-  });
-}
 
-async function uploadRowsByGzipPost(key, rows, mode, dataKindScope=''){
-  const list=rows || [];
-  uploadProgressStart(`${labelKey(key)}の高速圧縮DB送信`, list.length);
-  let rawChars=0;
-  let gzipBase64Chars=0;
-  try{
-    const chunks=makeGzipUploadRowChunks(list);
-    const gzipChunks=[];
-    uploadProgressLog(`対象を${chunks.length}圧縮チャンクに分割しました。圧縮後は1回のPOSTでまとめて送信します。`);
-    let preparedRows=0;
-    for(let c=0;c<chunks.length;c++){
-      const text=JSON.stringify(chunks[c]);
-      rawChars+=text.length;
-      const compressStart=performance.now();
-      uploadProgressUpdate({
-        phase:`${labelKey(key)}を圧縮中`,
-        percent:Math.min(45,(c/Math.max(1,chunks.length))*45),
-        currentRows:preparedRows,
-        totalRows:list.length,
-        chunks:`${c+1}/${chunks.length}`,
-        parts:0,
-        rawChars,
-        sentChars:gzipBase64Chars*0.75,
-        detail:`チャンク${c+1}/${chunks.length}をgzip圧縮しています。`
-      });
-      const heartbeat=uploadProgressHeartbeat(()=>({
-        phase:`${labelKey(key)}を圧縮中`,
-        percent:Math.min(45,((c+0.5)/Math.max(1,chunks.length))*45),
-        currentRows:preparedRows,
-        totalRows:list.length,
-        chunks:`${c+1}/${chunks.length}`,
-        parts:0,
-        rawChars,
-        sentChars:gzipBase64Chars*0.75,
-        detail:`チャンク${c+1}/${chunks.length}を圧縮中です。`
-      }),700);
-      let gzipBase64;
-      try{
-        gzipBase64=await withUploadTimeout(
-          gzipBase64FromText(text),
-          UPLOAD_GZIP_CHUNK_TIMEOUT_MS,
-          `チャンク${c+1}/${chunks.length}のgzip圧縮が${UPLOAD_GZIP_CHUNK_TIMEOUT_MS/1000}秒を超えました。`
-        );
-      }finally{ clearInterval(heartbeat); }
-      gzipBase64Chars+=gzipBase64.length;
-      gzipChunks.push({chunkIndex:c,valueB64:gzipBase64});
-      preparedRows+=chunks[c].length;
-      const approx=Math.round(gzipBase64.length*0.75);
-      const ratio=text.length ? Math.max(1,Math.round((approx/text.length)*100)) : 100;
-      uploadProgressLog(`チャンク${c+1}/${chunks.length}：${chunks[c].length}行 / 元${formatUploadBytes(text.length)} → 圧縮後約${formatUploadBytes(approx)}（約${ratio}%） / 圧縮${formatUploadTime(performance.now()-compressStart)}`);
-    }
-    uploadProgressUpdate({
-      phase:`${labelKey(key)}を一括送信中`,
-      percent:55,
-      currentRows:list.length,
-      totalRows:list.length,
-      chunks:`${chunks.length}/${chunks.length}`,
-      parts:1,
-      rawChars,
-      sentChars:gzipBase64Chars*0.75,
-      detail:'圧縮済みデータを1回のPOSTでApps Scriptへ送信し、そのままDBへ反映しています。'
-    });
-    uploadProgressLog(`圧縮済み${formatUploadBytes(gzipBase64Chars*0.75)}を一括POST送信します。`);
-    const result=await postApiByIframe(payload('writeGzipBatch',{
-      sheetKey:key,
-      mode,
-      dataKindScope,
-      gzipChunks
-    }));
-    if(!result || result.ok===false) throw new Error(result && result.error || `${labelKey(key)}の高速圧縮送信に失敗しました`);
-    const done={...result,uploadEncoding:'gzipBase64Post',sentRows:list.length,sentChunks:chunks.length,sentParts:1,rawChars,gzipBase64Chars};
-    uploadProgressDone(done);
-    return done;
-  }catch(e){
-    uploadProgressFail(e);
-    throw e;
-  }
-}
-
+async 
 async function uploadRowsByTextChunks(key, rows, mode, dataKindScope=''){
   const token = uploadToken(mode === 'replace' ? 'rp' : 'up', key);
   const list = rows || [];
@@ -15362,140 +16070,74 @@ async function uploadRowsByTextChunks(key, rows, mode, dataKindScope=''){
   }
 }
 async function uploadRowsByGzipChunks(key, rows, mode, dataKindScope=''){
-  const token = uploadToken(mode === 'replace' ? 'gzrp' : 'gzup', key);
   const list = rows || [];
-  uploadProgressStart(`${labelKey(key)}の圧縮DB送信`, list.length);
-  const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'gzipBase64', dataKindScope}));
-  if(!begin.ok) throw new Error(begin.error || `${labelKey(key)}のDB圧縮送信準備に失敗しました`);
-  let sentChunks = 0;
-  let sentParts = 0;
+  const fingerprint = uploadResumeFingerprint(key,mode,dataKindScope,list);
+  const previous = uploadResumeLoad();
+  const canResume = previous && previous.encoding==='gzipBase64' && previous.fingerprint===fingerprint && previous.token;
+  const token = canResume ? previous.token : uploadToken(mode === 'replace' ? 'gzrp' : 'gzup', key);
+  uploadProgressStart(`${labelKey(key)}の圧縮分割DB送信${canResume?'（続きから）':''}`, list.length);
+  if(!canResume){
+    const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'gzipBase64', dataKindScope}));
+    if(!begin.ok) throw new Error(begin.error || `${labelKey(key)}のDB圧縮送信準備に失敗しました`);
+  }else uploadProgressLog(`保存済み位置から再開します：チャンク${Number(previous.nextChunk||0)+1} / パーツ${Number(previous.nextPart||0)+1}`);
+  let sentChunks = Number(canResume ? previous.nextChunk||0 : 0);
+  let sentParts = Number(canResume ? previous.sentParts||0 : 0);
   let rawChars = 0;
   let gzipBase64Chars = 0;
+  const chunks = makeGzipUploadRowChunks(list);
+  let startChunk = Math.min(chunks.length, Number(canResume ? previous.nextChunk||0 : 0));
+  let startPart = Math.max(0, Number(canResume ? previous.nextPart||0 : 0));
   try{
-    const chunks = makeGzipUploadRowChunks(list);
-    uploadProgressLog(`圧縮単位：最大${UPLOAD_GZIP_RAW_CHARS_PER_CHUNK.toLocaleString()}文字のJSONごと。${chunks.length}チャンクに分割しました。長時間止まる場合は自動で通常送信へ切り替えます。`);
-    let sentRows = 0;
-    for(let c=0; c<chunks.length; c++){
-      const text = JSON.stringify(chunks[c]);
-      uploadProgressUpdate({
-        phase:`${labelKey(key)}を圧縮中`,
-        percent:Math.min(15 + (c/Math.max(1,chunks.length))*20,35),
-        currentRows:sentRows,
-        totalRows:list.length,
-        chunks:`${c+1}/${chunks.length}`,
-        parts:sentParts,
-        rawChars,
-        sentChars:gzipBase64Chars*0.75,
-        detail:`チャンク${c+1}/${chunks.length}をgzip圧縮しています。`
-      });
-      const compressStart = performance.now();
-      rawChars += text.length;
-      const baseCompressPercent = Math.min(15 + (c/Math.max(1,chunks.length))*20,35);
-      const heartbeat = uploadProgressHeartbeat((ticks)=>{
-        const elapsed = performance.now() - compressStart;
-        const creep = Math.min(18, elapsed / 1000 * 2);
-        return {
-          phase:`${labelKey(key)}を圧縮中`,
-          percent:Math.min(35, baseCompressPercent + creep),
-          currentRows:sentRows,
-          totalRows:list.length,
-          chunks:`${c+1}/${chunks.length}`,
-          parts:sentParts,
-          rawChars,
-          sentChars:gzipBase64Chars*0.75,
-          detail:`チャンク${c+1}/${chunks.length}をgzip圧縮中です。経過${formatUploadTime(elapsed)}。長引く場合は${UPLOAD_GZIP_CHUNK_TIMEOUT_MS/1000}秒で通常送信へ切り替えます。`
-        };
-      }, 700);
-      let gzipBase64;
-      try{
-        gzipBase64 = await withUploadTimeout(
-          gzipBase64FromText(text),
-          UPLOAD_GZIP_CHUNK_TIMEOUT_MS,
-          `チャンク${c+1}/${chunks.length}のgzip圧縮が${UPLOAD_GZIP_CHUNK_TIMEOUT_MS/1000}秒を超えました。通常送信へ切り替えます。`
-        );
-      }finally{
-        clearInterval(heartbeat);
-      }
-      const compressMs = performance.now() - compressStart;
+    uploadProgressLog(`圧縮単位：最大${UPLOAD_GZIP_RAW_CHARS_PER_CHUNK.toLocaleString()}文字。全${chunks.length}チャンクです。`);
+    let sentRows = chunks.slice(0,startChunk).reduce((n,r)=>n+r.length,0);
+    for(let c=startChunk; c<chunks.length; c++){
+      const text = JSON.stringify(chunks[c]); rawChars += text.length;
+      uploadProgressUpdate({phase:`${labelKey(key)}を圧縮中`,percent:10+Math.min(20,(c/Math.max(1,chunks.length))*20),currentRows:sentRows,totalRows:list.length,chunks:`${c+1}/${chunks.length}`,parts:sentParts,detail:`チャンク${c+1}を圧縮しています。`});
+      const gzipBase64 = await withUploadTimeout(gzipBase64FromText(text),UPLOAD_GZIP_CHUNK_TIMEOUT_MS,`チャンク${c+1}の圧縮がタイムアウトしました。`);
       gzipBase64Chars += gzipBase64.length;
-      const parts = splitGzipBase64ForJsonpUpload(token, c, gzipBase64);
-      const approxSentBytes = Math.round(gzipBase64.length * 0.75);
-      const ratio = text.length ? Math.max(1, Math.round((approxSentBytes / text.length) * 100)) : 100;
-      uploadProgressLog(`チャンク${c+1}/${chunks.length}：${chunks[c].length}行 / 元${formatUploadBytes(text.length)} → 圧縮後約${formatUploadBytes(approxSentBytes)}（約${ratio}%） / 圧縮${formatUploadTime(compressMs)} / ${parts.length}パーツ`);
-      for(let p=0; p<parts.length; p++){
-        const res = await callApi(uploadGzipPartPayload(token, c, p, parts[p]));
-        if(!res.ok) throw new Error(res.error || `${labelKey(key)}のDB圧縮送信に失敗しました`);
+      const parts = splitGzipBase64ForJsonpUpload(token,c,gzipBase64);
+      const p0 = c===startChunk ? Math.min(startPart,parts.length) : 0;
+      uploadProgressLog(`チャンク${c+1}/${chunks.length}：${chunks[c].length}行 / ${parts.length}パーツ（${p0?`${p0+1}から再開`:'先頭から'}）`);
+      for(let p=p0;p<parts.length;p++){
+        const res=await callApi(uploadGzipPartPayload(token,c,p,parts[p]));
+        if(!res.ok) throw new Error(res.error||`${labelKey(key)}のDB圧縮送信に失敗しました`);
         sentParts++;
-        uploadProgressUpdate({
-          phase:`${labelKey(key)}を圧縮送信中`,
-          percent:35 + Math.min(53, ((c + (p+1)/parts.length) / Math.max(1,chunks.length)) * 53),
-          currentRows:sentRows,
-          totalRows:list.length,
-          chunks:`${c+1}/${chunks.length}`,
-          parts:sentParts,
-          rawChars,
-          sentChars:gzipBase64Chars*0.75,
-          detail:`チャンク${c+1}の${p+1}/${parts.length}パーツを送信しました。`
-        });
+        const nextPart=p+1;
+        const checkpoint=nextPart>=parts.length
+          ? {nextChunk:c+1,nextPart:0}
+          : {nextChunk:c,nextPart:nextPart};
+        uploadResumeSave({encoding:'gzipBase64',fingerprint,token,key,mode,dataKindScope,sentParts,...checkpoint,updatedAt:new Date().toISOString()});
+        uploadProgressUpdate({phase:`${labelKey(key)}を圧縮分割送信中`,percent:30+Math.min(60,((c+(p+1)/parts.length)/Math.max(1,chunks.length))*60),currentRows:sentRows,totalRows:list.length,chunks:`${c+1}/${chunks.length}`,parts:sentParts,rawChars,sentChars:gzipBase64Chars*.75,detail:`チャンク${c+1}の${p+1}/${parts.length}パーツを送信しました。`});
       }
-      sentChunks++;
-      sentRows += chunks[c].length;
-      uploadProgressUpdate({
-        phase:`${labelKey(key)}を圧縮送信中`,
-        percent:35 + Math.min(53, (sentRows / Math.max(1,list.length))*53),
-        currentRows:sentRows,
-        totalRows:list.length,
-        chunks:`${sentChunks}/${chunks.length}`,
-        parts:sentParts,
-        rawChars,
-        sentChars:gzipBase64Chars*0.75,
-        detail:`${sentRows}/${list.length}行を送信しました。`
-      });
-      if(chunks.length > 1) await sleep(15);
+      sentChunks=c+1; sentRows+=chunks[c].length; startPart=0;
+      if(chunks.length>1) await sleep(15);
     }
-    uploadProgressUpdate({
-      phase:'DB反映中',
-      percent:92,
-      currentRows:list.length,
-      totalRows:list.length,
-      chunks:`${sentChunks}/${chunks.length}`,
-      parts:sentParts,
-      rawChars,
-      sentChars:gzipBase64Chars*0.75,
-      detail:'Apps Script側でgzip解凍し、シートへ一括反映しています。'
-    });
-    uploadProgressLog('Apps Script側でgzip解凍とDB反映を開始します。');
-    const commit = await callApi(payload('commitUpload', {token}));
-    if(!commit.ok) throw new Error(commit.error || `${labelKey(key)}のDB反映に失敗しました`);
-    const result={...commit, uploadEncoding:'gzipBase64', sentRows:list.length, sentChunks, sentParts, rawChars, gzipBase64Chars};
-    uploadProgressDone(result);
-    return result;
+    uploadProgressUpdate({phase:'DB反映中',percent:94,currentRows:list.length,totalRows:list.length,chunks:`${sentChunks}/${chunks.length}`,parts:sentParts,detail:'Apps Script側で復元してDBへ反映しています。'});
+    const commit=await callApi(payload('commitUpload',{token}));
+    if(!commit.ok) throw new Error(commit.error||`${labelKey(key)}のDB反映に失敗しました`);
+    uploadResumeClear();
+    const result={...commit,uploadEncoding:'gzipBase64',sentRows:list.length,sentChunks, sentParts,rawChars,gzipBase64Chars};
+    uploadProgressDone(result); return result;
   }catch(e){
     uploadProgressFail(e);
-    try{ await callApi(payload('abortUpload', {token})); }catch(abortErr){ console.warn('compressed upload abort failed', abortErr); }
+    uploadProgressLog('送信位置を保存しました。「続きから再開」を選ぶと未送信パーツから再開します。');
     throw e;
   }
 }
 async function uploadRowsByChunks(key, rows, mode, dataKindScope=''){
   await assertServerVersion();
-  const list = rows || [];
+  const list=rows||[];
   if(canUseGzipUpload()){
-    try{
-      return await uploadRowsByGzipPost(key, list, mode, dataKindScope);
-    }catch(postError){
-      console.warn('fast gzip POST failed; fallback to legacy gzip chunks', postError);
-      toast(`${labelKey(key)}の高速圧縮送信に失敗しました。従来の圧縮分割送信へ切り替えます。`, 'warn');
-      try{
-        return await uploadRowsByGzipChunks(key, list, mode, dataKindScope);
-      }catch(gzipError){
-        console.warn('legacy gzip upload failed; fallback to text chunks', gzipError);
-        toast(`${labelKey(key)}の圧縮送信に失敗しました。通常送信に切り替えます。`, 'warn');
-        return await uploadRowsByTextChunks(key, list, mode, dataKindScope);
-      }
+    try{return await uploadRowsByGzipChunks(key,list,mode,dataKindScope);}
+    catch(gzipError){
+      const saved=uploadResumeLoad();
+      if(saved) throw gzipError;
+      console.warn('gzip split upload failed; fallback to text chunks',gzipError);
+      toast(`${labelKey(key)}の圧縮分割送信に失敗したため、通常分割送信へ切り替えます。`,'warn');
+      return await uploadRowsByTextChunks(key,list,mode,dataKindScope);
     }
   }
-  toast('このブラウザは圧縮送信に未対応のため、通常送信でDB登録します。', 'warn');
-  return await uploadRowsByTextChunks(key, list, mode, dataKindScope);
+  return await uploadRowsByTextChunks(key,list,mode,dataKindScope);
 }
 function callApi(data){
   return new Promise((resolve,reject)=>{
@@ -15799,43 +16441,39 @@ async function writeFullDbKeyInternal(dbKey, mode){
   return res;
 }
 async function runAllPages(mode){
-  if(window.__recraftAllPageRunning){ toast('全データ処理中です。完了するまで待ってください。','warn'); return; }
-  const isReplace = mode === 'replace';
-  const actionLabel = isReplace ? 'DB置換' : 'DB登録';
-  const total = FULL_DB_KEYS.length;
-  if(!confirm(`全データ${actionLabel}を開始します。
-DBシートを一度ずつ処理し、失敗した表で停止します。
-アイテムと素材は同じDBシートへまとめて一度だけ送信します。
-よろしいですか？`)) return;
-  toast(`全データ${actionLabel}を開始します`, 'warn');
-  window.__recraftAllPageRunning = true;
-  setAllPageButtonsDisabled(true);
-  const done=[];
+  if(window.__recraftAllPageRunning){toast('全データ処理中です。','warn');return;}
+  const isReplace=mode==='replace'; const actionLabel=isReplace?'DB置換':'DB登録'; const total=FULL_DB_KEYS.length;
+  const savedAll=allDbResumeLoad();
+  let index=0;
+  if(savedAll && savedAll.mode===mode && Number(savedAll.index||0)<total){
+    const resume=confirm(`前回の全データ${actionLabel}が「${fullDbLabel(FULL_DB_KEYS[Number(savedAll.index||0)])}」の途中で停止しています。\n\nOK：続きから再開\nキャンセル：最初からやり直す`);
+    if(resume) index=Number(savedAll.index||0); else {allDbResumeClear();uploadResumeClear();}
+  }else if(!confirm(`全データ${actionLabel}を開始します。\n途中で失敗した場合は、続きから再開するか最初からやり直すか選択できます。\nよろしいですか？`)) return;
+  toast(`全データ${actionLabel}${index?'を続きから再開':'を開始'}します`,'warn');
+  window.__recraftAllPageRunning=true; setAllPageButtonsDisabled(true);
   try{
-    for(let i=0;i<FULL_DB_KEYS.length;i++){
-      const dbKey = FULL_DB_KEYS[i];
+    while(index<total){
+      const dbKey=FULL_DB_KEYS[index];
+      allDbResumeSave({mode,index,dbKey,updatedAt:new Date().toISOString()});
       showTablePageForOperation(dbKey);
-      toast(`${i+1}/${total} ${fullDbLabel(dbKey)}を${actionLabel}中...`, 'warn');
-      await writeFullDbKeyInternal(dbKey, isReplace ? 'replace' : 'upsert');
-      done.push(fullDbLabel(dbKey));
+      toast(`${index+1}/${total} ${fullDbLabel(dbKey)}を${actionLabel}中...`,'warn');
+      try{
+        await writeFullDbKeyInternal(dbKey,isReplace?'replace':'upsert');
+        index++; allDbResumeSave({mode,index,dbKey:FULL_DB_KEYS[index]||'',updatedAt:new Date().toISOString()});
+      }catch(e){
+        const resume=confirm(`${fullDbLabel(dbKey)}の${actionLabel}中に失敗しました。\n${e.message||e}\n\nOK：保存した送信位置から続ける\nキャンセル：この表を最初からやり直す`);
+        if(!resume){
+          const sess=uploadResumeLoad();
+          if(sess&&sess.token){try{await callApi(payload('abortUpload',{token:sess.token}));}catch(_){} }
+          uploadResumeClear();
+        }
+        continue;
+      }
       await sleep(120);
     }
+    allDbResumeClear();uploadResumeClear();
     toast(`全データ${actionLabel}が完了しました（${total}/${total}）`);
-  }catch(e){
-    const failedKey = FULL_DB_KEYS[done.length];
-    const failedLabel = failedKey ? fullDbLabel(failedKey) : '不明';
-    const detail = `全データ${actionLabel}を停止しました。
-完了: ${done.length ? done.join('、') : 'なし'}
-失敗: ${failedLabel}
-
-${e.message || e}`;
-    console.error(detail, e);
-    alert(detail);
-    toast(`${failedLabel}の${actionLabel}で失敗しました`, 'error');
-  }finally{
-    window.__recraftAllPageRunning = false;
-    setAllPageButtonsDisabled(false);
-  }
+  }finally{window.__recraftAllPageRunning=false;setAllPageButtonsDisabled(false);}
 }
 async function saveAll(){
   return runAllPages('save');
@@ -15952,7 +16590,22 @@ document.addEventListener('click',e=>{
   const addMod=e.target.closest('[data-modifier-add]'); if(addMod){ const editor=addMod.closest('[data-modifier-editor]'); const list=editor.querySelector('[data-modifier-list]'); list.querySelector('[data-modifier-empty]')?.remove(); const idx=list.querySelectorAll('[data-modifier-row]').length; list.insertAdjacentHTML('beforeend', modifierEditorRowHtml({}, idx)); syncModifierEditor(editor); return; }
   const remMod=e.target.closest('[data-modifier-remove]'); if(remMod){ const editor=remMod.closest('[data-modifier-editor]'); remMod.closest('[data-modifier-row]')?.remove(); const list=editor.querySelector('[data-modifier-list]'); if(!list.querySelector('[data-modifier-row]')) list.innerHTML='<div class="muted small" data-modifier-empty>補正値はまだありません。</div>'; syncModifierEditor(editor); return; }
   const quickCat=e.target.closest('[data-quick-category-field]'); if(quickCat){ quickCreateCategory(quickCat.dataset.quickCategoryField); return; }
+  const upgradeReset=e.target.closest('[data-facility-upgrade-reset]'); if(upgradeReset){ if($('facilityUpgradeEquipmentSelect')) $('facilityUpgradeEquipmentSelect').value=''; if($('facilityUpgradeMaterialInput')) $('facilityUpgradeMaterialInput').value=''; renderFacilityUpgradeResult(''); toast('装備強化の選択をリセットしました'); return; }
   const facilityRefresh=e.target.closest('[data-facility-refresh]'); if(facilityRefresh){ renderFacilitiesPanel(); toast('販売商品リストを更新しました'); return; }
+  const guildDailyCount=e.target.closest('[data-guild-daily-count]'); if(guildDailyCount){ currentGuildDailyCount=Math.max(1,Math.min(10,Number(guildDailyCount.value)||5)); saveGuildDailyState(); rerollGuildDailyQuests(); return; }
+  const guildDailyReroll=e.target.closest('[data-guild-daily-reroll]'); if(guildDailyReroll){ rerollGuildDailyQuests(); return; }
+  const guildHiddenToggle=e.target.closest('[data-guild-toggle-hidden]'); if(guildHiddenToggle){ currentGuildShowHiddenImportant=!currentGuildShowHiddenImportant; renderFacilitiesPanel(); return; }
+  const guildToggle=e.target.closest('[data-guild-important-toggle]'); if(guildToggle){
+    const key=guildToggle.dataset.guildImportantToggle||'';
+    const visible=guildToggle.dataset.visible==='1';
+    if(setGuildImportantVisibility(key,!visible)) toast(`重要クエストを${visible?'非表示':'表示'}にしました。DBへ反映する場合はクエスト表を登録または置換してください。`);
+    return;
+  }
+  const guildCategoryCopy=e.target.closest('[data-guild-copy-category]'); if(guildCategoryCopy){
+    const category=guildCategoryCopy.dataset.guildCopyCategory==='デイリー'?'デイリー':'重要';
+    copyAdminTextDirect(guildQuestCategoryText(category)).then(ok=>{if(ok) toast(`${category}クエストをコピーしました`);});
+    return;
+  }
   const facilityCopyAll=e.target.closest('[data-facility-copy-all]'); if(facilityCopyAll){ copyFacilitySalesList(); return; }
   const facilityCopy=e.target.closest('[data-facility-copy]'); if(facilityCopy){ copyFacilitySalesList(facilityCopy.dataset.facilityCopy); return; }
   const facilityUpgradeCheck=e.target.closest('[data-facility-upgrade-check]'); if(facilityUpgradeCheck){ renderFacilityUpgradeResult(); return; }
@@ -16036,6 +16689,8 @@ document.addEventListener('input',e=>{
   if(e.target.closest('[data-modifier-editor]')) syncModifierEditor(e.target.closest('[data-modifier-editor]'));
 });
 document.addEventListener('change',e=>{
+  if(e.target?.id==='facilityUpgradeEquipmentType'){ renderFacilityUpgradeEquipmentSelect(); if($('facilityUpgradeMaterialInput')) $('facilityUpgradeMaterialInput').value=''; renderFacilityUpgradeLookupList(); renderFacilityUpgradeResult(''); return; }
+  if(e.target?.id==='facilityUpgradeEquipmentSelect'){ renderFacilityUpgradeResult($('facilityUpgradeMaterialInput')?.value||''); return; }
   if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
   if(['facilityUpgradeMaterialInput','facilityUpgradeStepInput','facilitySmithToolRankInput'].includes(e.target.id)){ renderFacilityUpgradeResult(); return; }
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)){ renderFacilityAlchemyResult(); return; }
