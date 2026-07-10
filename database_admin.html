@@ -406,6 +406,7 @@
 .guild-quest-card-title{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-weight:700}
 .guild-quest-meta{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
 .guild-quest-desc{font-size:.92rem;color:var(--muted,#6b6254);line-height:1.55}
+.guild-daily-controls{display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin:8px 0 12px}.guild-daily-controls label{min-width:130px}.facility-branch-section{margin-top:18px;border:2px solid var(--line,#d8d2c4);border-radius:16px;background:#fffaf0;padding:12px}.facility-branch-section>h4{margin:0 0 4px}.facility-sales-section{margin-top:8px}.facility-sales-section>h4{margin:0 0 6px}
 
 .upload-progress-panel{
   margin-top:12px;
@@ -1012,7 +1013,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.109';
+const RECRAFT_DB_VERSION = 'v90.8.110';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.107';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1073,6 +1074,9 @@ let currentCategoryTab = 'item_types';
 let currentRecipeView = '調合';
 let currentFacilityView = '鍛冶屋';
 let currentFacilityRankLimit = '';
+let currentGuildShowHiddenImportant = false;
+let currentGuildDailyCount = 5;
+let currentGuildDailyKeys = [];
 const RECIPE_VIEW_META = {
   '調合': {title:'調合レシピ', description:'薬品・爆弾・香など、薬屋/調合施設で作るアイテムを管理します。'},
   '鍛冶': {title:'鍛冶レシピ', description:'装備や金属加工など、鍛冶屋で作る通常の鍛冶データを管理します。'},
@@ -12725,10 +12729,10 @@ function questFacilityCategory(row={}){
 function questFacilityEnabled(row={}){
   return String(row.enabled ?? 'TRUE').trim().toUpperCase() !== 'FALSE';
 }
-function facilityQuestRows(category=''){
+function facilityQuestRows(category='', includeDisabled=false){
   return (state.quests||[]).filter(q=>{
     if(!q || !String(q.name||q.id||'').trim()) return false;
-    if(!questFacilityEnabled(q)) return false;
+    if(!includeDisabled && !questFacilityEnabled(q)) return false;
     const cat=questFacilityCategory(q);
     if(category && cat !== category) return false;
     return cat === '重要' || cat === 'デイリー';
@@ -12756,8 +12760,11 @@ function guildQuestCardHtml(q={}){
   const reward=[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ');
   const boss=questBossFacilityText(q);
   const formation=questFormationFacilityText(q);
-  return `<div class="guild-quest-card">
-    <div class="guild-quest-card-title"><span>${escapeHtml(q.name||q.id||'名称未設定')}</span>${q.unlockResult?`<span class="facility-chip">${escapeHtml(q.unlockResult)}</span>`:''}</div>
+  const questKey=String(q.id||q.name||'').trim();
+  const isVisible=questFacilityEnabled(q);
+  const visibilityButton=cat==='重要' ? `<button class="ghost" type="button" data-guild-important-toggle="${escapeHtml(questKey)}" data-visible="${isVisible?'1':'0'}">${isVisible?'非表示にする':'表示する'}</button>` : '';
+  return `<div class="guild-quest-card${cat==='重要'&&!isVisible?' is-disabled':''}">
+    <div class="guild-quest-card-title"><span>${escapeHtml(q.name||q.id||'名称未設定')}</span><span>${q.unlockResult?`<span class="facility-chip">${escapeHtml(q.unlockResult)}</span>`:''}${visibilityButton}</span></div>
     <div class="guild-quest-meta">${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>
     ${q.description ? `<div class="guild-quest-desc"><b>内容：</b>${escapeHtml(q.description)}</div>` : ''}
     ${q.clearCondition ? `<div class="guild-quest-desc"><b>クリア条件：</b>${escapeHtml(q.clearCondition)}</div>` : ''}
@@ -12773,22 +12780,45 @@ function dailyQuestSampleForToday(rows,count=5){
   for(let i=list.length-1;i>0;i--){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const j=seed%(i+1);[list[i],list[j]]=[list[j],list[i]];}
   return list.slice(0,count);
 }
+function guildDailySelectedRows(){
+  const rows=facilityQuestRows('デイリー');
+  const map=new Map(rows.map(q=>[String(q.id||q.name||''),q]));
+  let picked=(currentGuildDailyKeys||[]).map(k=>map.get(String(k))).filter(Boolean).slice(0,currentGuildDailyCount);
+  if(!picked.length && rows.length){
+    picked=dailyQuestSampleForToday(rows,currentGuildDailyCount);
+    currentGuildDailyKeys=picked.map(q=>String(q.id||q.name||''));
+  }
+  return picked;
+}
+function rerollGuildDailyQuests(){
+  const rows=facilityQuestRows('デイリー');
+  const current=new Set((currentGuildDailyKeys||[]).map(String));
+  let pool=rows.filter(q=>!current.has(String(q.id||q.name||'')));
+  if(pool.length<currentGuildDailyCount) pool=[...rows];
+  for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}
+  const picked=pool.slice(0,Math.min(currentGuildDailyCount,pool.length));
+  currentGuildDailyKeys=picked.map(q=>String(q.id||q.name||''));
+  renderFacilitiesPanel();
+  toast(`デイリークエストを${picked.length}件再抽選しました`);
+}
 function guildQuestSectionHtml(category='重要'){
-  const allRows=facilityQuestRows(category);
-  const rows=category==='デイリー' ? dailyQuestSampleForToday(allRows,5) : allRows;
+  const rows=category==='デイリー' ? guildDailySelectedRows() : facilityQuestRows(category,currentGuildShowHiddenImportant);
   const title=category==='重要' ? '重要クエスト' : 'デイリークエスト';
   const note=category==='重要'
-    ? '施設やエリアの解放などに必要な受注可能クエストです。OFFの重要クエストは表示しません。'
-    : '再受注可能な依頼です。進行管理側でランダム選出できます。';
+    ? '施設やエリアの解放などに必要な受注可能クエストです。非表示の重要クエストは通常表示とコピーから除外します。'
+    : '登録済み候補から抽選された現在のデイリーだけを表示します。再抽選時は候補数が足りる限り現在の選出と重複しません。';
+  const controls=category==='デイリー' ? `<div class="guild-daily-controls"><label>表示件数<select data-guild-daily-count>${[1,2,3,4,5,6,7,8,9,10].map(n=>`<option value="${n}"${n===currentGuildDailyCount?' selected':''}>${n}件</option>`).join('')}</select></label><button class="secondary" type="button" data-guild-daily-reroll>デイリークエストを再抽選</button><button class="ghost" type="button" data-guild-copy-category="デイリー">現在のデイリーをコピー</button></div>` : '';
   return `<section class="guild-quest-section">
     <h4>${escapeHtml(title)} <span class="view-mode-chip">${rows.length}件</span></h4>
     <p class="table-toolbar-note">${escapeHtml(note)}</p>
+    ${controls}
     ${rows.length ? rows.map(guildQuestCardHtml).join('') : `<p class="notice">受注可能な${escapeHtml(title)}はありません。</p>`}
   </section>`;
 }
 function guildQuestListHtml(){
   return `<div class="guild-quest-list">${guildQuestSectionHtml('重要')}${guildQuestSectionHtml('デイリー')}</div>`;
 }
+
 function questFacilityLine(q={}){
   const reward=[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ');
   const lines=[`- ${q.name||q.id||'名称未設定'}（${[questFacilityCategory(q),q.questType,q.rank,q.areaName].filter(Boolean).join('・')}）`];
@@ -12800,19 +12830,30 @@ function questFacilityLine(q={}){
   if(q.unlockResult) lines.push(`  解放：${q.unlockResult}`);
   return lines.join('\n');
 }
+function guildQuestCategoryText(category='重要'){
+  const rows=category==='デイリー' ? guildDailySelectedRows() : facilityQuestRows('重要');
+  const title=category==='デイリー' ? 'デイリークエスト' : '重要クエスト';
+  return [`【ギルド・${title}】`, rows.length ? rows.map(questFacilityLine).join('\n') : `- 受注可能な${title}はありません`].join('\n');
+}
 function guildQuestListText(){
-  const important=facilityQuestRows('重要');
-  const daily=facilityQuestRows('デイリー');
   return [
     '【ギルド】',
     '受注可能クエスト一覧',
     '',
-    '重要クエスト',
-    important.length ? important.map(questFacilityLine).join('\n') : '- 受注可能な重要クエストはありません',
+    guildQuestCategoryText('重要'),
     '',
-    'デイリークエスト',
-    daily.length ? daily.map(questFacilityLine).join('\n') : '- 受注可能なデイリークエストはありません'
+    guildQuestCategoryText('デイリー')
   ].join('\n');
+}
+function setGuildImportantVisibility(questKey='', visible=true){
+  const key=String(questKey||'').trim();
+  const row=(state.quests||[]).find(q=>String(q.id||q.name||'').trim()===key);
+  if(!row) return false;
+  row.enabled=visible ? 'TRUE' : 'FALSE';
+  renderTable('quests');
+  renderFacilitiesPanel();
+  updateJsonBox();
+  return true;
 }
 function facilityDisplayCount(facilityName){
   return facilityName==='ギルド' ? facilityQuestRows().length : facilityProducts(facilityName).length;
@@ -12828,7 +12869,22 @@ function buildFacilitySalesText(targetFacilityName=''){
     const products=facilityProducts(f.name);
     const productText = products.length ? products.map(facilityProductLine).join('\n') : '- 販売商品未設定';
     const serviceText = (f.services||[]).length ? f.services.map(facilityServiceLine).join('\n') : '- サービス未設定';
-    return `【${f.name}】\n${f.role}\n表示範囲：${facilityRankLimitLabel()}\n\n販売商品\n${productText}\n\nサービス\n${serviceText}`;
+    let branchText = '';
+    if(f.name==='鍛冶屋'){
+      const rows=(state.recipes||[]).filter(r=>String(r.craftType||'').trim()==='武器派生');
+      const groups={};
+      rows.forEach(r=>{ const base=String(r.baseItem||'派生元未設定').trim()||'派生元未設定'; (groups[base]||(groups[base]=[])).push(r); });
+      branchText='\n\n武器派生リスト\n' + (Object.entries(groups).length ? Object.entries(groups).map(([base,list])=>{
+        const lines=[`■ ${base}`];
+        list.forEach(r=>{
+          lines.push(`- ${r.resultItem||r.name||'派生先未設定'}（${r.rank||'ランク未設定'} / ${String(r.price||0)}G）`);
+          lines.push(`  必要素材：${r.requiredMaterials||'未設定'}`);
+          if(r.effect) lines.push(`  効果：${r.effect}`);
+        });
+        return lines.join('\n');
+      }).join('\n') : '- 武器派生は未設定です。');
+    }
+    return `【${f.name}】\n${f.role}\n表示範囲：${facilityRankLimitLabel()}\n\n販売商品\n${productText}${branchText}\n\nサービス\n${serviceText}`;
   }).join('\n\n');
 }
 function renderFacilityProductDetails(row){
@@ -12863,9 +12919,12 @@ function renderFacilitiesPanel(){
     const branchRows = f.name==='鍛冶屋' ? (state.recipes||[]).filter(r=>String(r.craftType||'').trim()==='武器派生') : [];
     const branchGroups = {};
     branchRows.forEach(r=>{const k=String(r.baseItem||'派生元未設定').trim()||'派生元未設定';(branchGroups[k]||(branchGroups[k]=[])).push(r);});
-    const branchHtml = f.name==='鍛冶屋' ? `<div class="facility-branch-list"><p class="table-toolbar-note">武器派生リスト <span class="view-mode-chip">${branchRows.length}件</span></p>${Object.entries(branchGroups).map(([base,rows])=>`<details class="facility-product"><summary><span class="facility-product-title"><span>${escapeHtml(base)}</span><span class="facility-chip">${rows.length}派生</span></span></summary><div class="facility-product-body">${rows.map(r=>`<div class="guild-quest-card"><b>${escapeHtml(r.resultItem||r.name)}</b><div class="facility-product-meta"><span class="facility-chip">ランク:${escapeHtml(r.rank||'未設定')}</span><span class="facility-chip">費用:${escapeHtml(String(r.price||0))}G</span></div><div><b>必要素材：</b>${escapeHtml(r.requiredMaterials||'未設定')}</div>${r.effect?`<div><b>効果：</b>${escapeHtml(r.effect)}</div>`:''}</div>`).join('')}</div></details>`).join('')||'<p class="notice">武器派生は未設定です。</p>'}</div>` : '';
+    const branchHtml = f.name==='鍛冶屋' ? `<section class="facility-branch-section"><h4>武器派生リスト <span class="view-mode-chip">${branchRows.length}件</span></h4>${Object.entries(branchGroups).map(([base,rows])=>`<details class="facility-product"><summary><span class="facility-product-title"><span>${escapeHtml(base)}</span><span class="facility-chip">${rows.length}派生</span></span></summary><div class="facility-product-body">${rows.map(r=>`<div class="guild-quest-card"><b>${escapeHtml(r.resultItem||r.name)}</b><div class="facility-product-meta"><span class="facility-chip">ランク:${escapeHtml(r.rank||'未設定')}</span><span class="facility-chip">費用:${escapeHtml(String(r.price||0))}G</span></div><div><b>必要素材：</b>${escapeHtml(r.requiredMaterials||'未設定')}</div>${r.effect?`<div><b>効果：</b>${escapeHtml(r.effect)}</div>`:''}</div>`).join('')}</div></details>`).join('')||'<p class="notice">武器派生は未設定です。</p>'}</section>` : '';
     const serviceHtml = (f.services||[]).map(s=>`<li><b>${escapeHtml(s.name)}</b> <span class="facility-chip">${escapeHtml(s.price||'価格未設定')}</span><br>${escapeHtml(s.description||'')}</li>`).join('');
-    return `<section class="facility-card">\n      <div class="facility-card-head">\n        <div><h3>${escapeHtml(f.name)}</h3><p class="facility-role">${escapeHtml(f.role)}</p></div>\n        <div class="facility-actions"><button class="ghost" data-facility-copy="${escapeHtml(f.name)}">この施設のリストをコピー</button></div>\n      </div>\n      <p class="table-toolbar-note">${escapeHtml(label)} <span class="view-mode-chip">${count}件</span>${isGuild ? '' : ` <span class="view-mode-chip">${escapeHtml(facilityRankLimitLabel())}</span>`}</p>\n      <div class="facility-product-list">${productHtml}</div>\n      <p class="table-toolbar-note">サービス</p>\n      <ul class="facility-service-list">${serviceHtml}</ul>\n    </section>`;
+    const actionHtml = isGuild
+      ? `<button class="ghost" data-guild-toggle-hidden>${currentGuildShowHiddenImportant?'非表示の重要クエストを隠す':'非表示の重要クエストも表示'}</button><button class="ghost" data-guild-copy-category="重要">重要クエストをコピー</button><button class="ghost" data-facility-copy="ギルド">両方コピー</button>`
+      : `<button class="ghost" data-facility-copy="${escapeHtml(f.name)}">この施設のリストをコピー</button>`;
+    return `<section class="facility-card">\n      <div class="facility-card-head">\n        <div><h3>${escapeHtml(f.name)}</h3><p class="facility-role">${escapeHtml(f.role)}</p></div>\n        <div class="facility-actions">${actionHtml}</div>\n      </div>\n      <p class="table-toolbar-note">${escapeHtml(label)} <span class="view-mode-chip">${count}件</span>${isGuild ? '' : ` <span class="view-mode-chip">${escapeHtml(facilityRankLimitLabel())}</span>`}</p>\n      <div class="facility-product-list">${productHtml}</div>\n      ${branchHtml}\n      <p class="table-toolbar-note">サービス</p>\n      <ul class="facility-service-list">${serviceHtml}</ul>\n    </section>`;
   }).join('');
   const out=$('facilitySalesText');
   if(out) out.value=buildFacilitySalesText();
@@ -14941,8 +15000,8 @@ function estimateJsonpUrlLength(data){
 }
 
 
-const UPLOAD_RESUME_STORAGE_KEY = 'recraft_alchemia_upload_resume_v90_8_109';
-const ALL_DB_RESUME_STORAGE_KEY = 'recraft_alchemia_all_db_resume_v90_8_109';
+const UPLOAD_RESUME_STORAGE_KEY = 'recraft_alchemia_upload_resume_v90_8_110';
+const ALL_DB_RESUME_STORAGE_KEY = 'recraft_alchemia_all_db_resume_v90_8_110';
 function uploadResumeLoad(){
   try{return JSON.parse(localStorage.getItem(UPLOAD_RESUME_STORAGE_KEY)||'null');}catch(e){return null;}
 }
@@ -15092,7 +15151,6 @@ const UPLOAD_PART_CHAR_STEP = 260;
 const UPLOAD_GZIP_B64_PART_STEP = 1150;
 const UPLOAD_GZIP_RAW_CHARS_PER_CHUNK = 90000;
 const UPLOAD_GZIP_CHUNK_TIMEOUT_MS = 15000;
-const UPLOAD_GZIP_POST_TIMEOUT_MS = 180000;
 function uploadPartPayload(token, chunkIndex, partIndex, textPart){
   return payload('putUploadChunk', {
     token,
@@ -15216,132 +15274,8 @@ function makeGzipUploadRowChunks(rows){
   if(current.length) chunks.push(current);
   return chunks;
 }
-function postApiByIframe(data, timeoutMs=UPLOAD_GZIP_POST_TIMEOUT_MS){
-  if(isGasMode()) return callApi(data);
-  return new Promise((resolve,reject)=>{
-    const base=apiBaseUrl();
-    if(!base){ reject(new Error('ローカルHTMLから送信する場合はWeb App URLを入力してください。')); return; }
-    const requestId=`post_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-    const frameName=`recraftDbPost_${Date.now()}_${Math.random().toString(36).slice(2)}`.replace(/[^A-Za-z0-9_]/g,'');
-    const iframe=document.createElement('iframe');
-    iframe.name=frameName;
-    iframe.style.display='none';
-    iframe.setAttribute('aria-hidden','true');
-    const form=document.createElement('form');
-    form.method='POST';
-    form.action=base;
-    form.target=frameName;
-    form.style.display='none';
-    const action=String(data && data.action || '').trim();
-    const body={...(data||{})};
-    delete body.action;
-    const fields={action,payload:JSON.stringify(body),responseMode:'postMessage',requestId};
-    Object.entries(fields).forEach(([name,value])=>{
-      const input=document.createElement('input');
-      input.type='hidden'; input.name=name; input.value=String(value ?? '');
-      form.appendChild(input);
-    });
-    let settled=false;
-    const cleanup=()=>{
-      window.removeEventListener('message',onMessage);
-      clearTimeout(timer);
-      setTimeout(()=>{ try{ form.remove(); iframe.remove(); }catch(e){} },0);
-    };
-    const finish=(fn,value)=>{ if(settled) return; settled=true; cleanup(); fn(value); };
-    const onMessage=(event)=>{
-      const msg=event && event.data;
-      if(!msg || msg.source!=='recraft-db-post' || msg.requestId!==requestId) return;
-      const result=msg.result || {ok:false,error:'DB送信結果が空です'};
-      if(result.ok===false) finish(reject,new Error(result.error || 'DB一括POST送信に失敗しました'));
-      else finish(resolve,result);
-    };
-    window.addEventListener('message',onMessage);
-    const timer=setTimeout(()=>finish(reject,new Error('DB一括POST送信がタイムアウトしました。従来の分割送信へ切り替えます。')),timeoutMs);
-    document.body.appendChild(iframe);
-    document.body.appendChild(form);
-    try{ form.submit(); }catch(e){ finish(reject,e); }
-  });
-}
 
-async function uploadRowsByGzipPost(key, rows, mode, dataKindScope=''){
-  const list=rows || [];
-  uploadProgressStart(`${labelKey(key)}の高速圧縮DB送信`, list.length);
-  let rawChars=0;
-  let gzipBase64Chars=0;
-  try{
-    const chunks=makeGzipUploadRowChunks(list);
-    const gzipChunks=[];
-    uploadProgressLog(`対象を${chunks.length}圧縮チャンクに分割しました。圧縮後は1回のPOSTでまとめて送信します。`);
-    let preparedRows=0;
-    for(let c=0;c<chunks.length;c++){
-      const text=JSON.stringify(chunks[c]);
-      rawChars+=text.length;
-      const compressStart=performance.now();
-      uploadProgressUpdate({
-        phase:`${labelKey(key)}を圧縮中`,
-        percent:Math.min(45,(c/Math.max(1,chunks.length))*45),
-        currentRows:preparedRows,
-        totalRows:list.length,
-        chunks:`${c+1}/${chunks.length}`,
-        parts:0,
-        rawChars,
-        sentChars:gzipBase64Chars*0.75,
-        detail:`チャンク${c+1}/${chunks.length}をgzip圧縮しています。`
-      });
-      const heartbeat=uploadProgressHeartbeat(()=>({
-        phase:`${labelKey(key)}を圧縮中`,
-        percent:Math.min(45,((c+0.5)/Math.max(1,chunks.length))*45),
-        currentRows:preparedRows,
-        totalRows:list.length,
-        chunks:`${c+1}/${chunks.length}`,
-        parts:0,
-        rawChars,
-        sentChars:gzipBase64Chars*0.75,
-        detail:`チャンク${c+1}/${chunks.length}を圧縮中です。`
-      }),700);
-      let gzipBase64;
-      try{
-        gzipBase64=await withUploadTimeout(
-          gzipBase64FromText(text),
-          UPLOAD_GZIP_CHUNK_TIMEOUT_MS,
-          `チャンク${c+1}/${chunks.length}のgzip圧縮が${UPLOAD_GZIP_CHUNK_TIMEOUT_MS/1000}秒を超えました。`
-        );
-      }finally{ clearInterval(heartbeat); }
-      gzipBase64Chars+=gzipBase64.length;
-      gzipChunks.push({chunkIndex:c,valueB64:gzipBase64});
-      preparedRows+=chunks[c].length;
-      const approx=Math.round(gzipBase64.length*0.75);
-      const ratio=text.length ? Math.max(1,Math.round((approx/text.length)*100)) : 100;
-      uploadProgressLog(`チャンク${c+1}/${chunks.length}：${chunks[c].length}行 / 元${formatUploadBytes(text.length)} → 圧縮後約${formatUploadBytes(approx)}（約${ratio}%） / 圧縮${formatUploadTime(performance.now()-compressStart)}`);
-    }
-    uploadProgressUpdate({
-      phase:`${labelKey(key)}を一括送信中`,
-      percent:55,
-      currentRows:list.length,
-      totalRows:list.length,
-      chunks:`${chunks.length}/${chunks.length}`,
-      parts:1,
-      rawChars,
-      sentChars:gzipBase64Chars*0.75,
-      detail:'圧縮済みデータを1回のPOSTでApps Scriptへ送信し、そのままDBへ反映しています。'
-    });
-    uploadProgressLog(`圧縮済み${formatUploadBytes(gzipBase64Chars*0.75)}を一括POST送信します。`);
-    const result=await postApiByIframe(payload('writeGzipBatch',{
-      sheetKey:key,
-      mode,
-      dataKindScope,
-      gzipChunks
-    }));
-    if(!result || result.ok===false) throw new Error(result && result.error || `${labelKey(key)}の高速圧縮送信に失敗しました`);
-    const done={...result,uploadEncoding:'gzipBase64Post',sentRows:list.length,sentChunks:chunks.length,sentParts:1,rawChars,gzipBase64Chars};
-    uploadProgressDone(done);
-    return done;
-  }catch(e){
-    uploadProgressFail(e);
-    throw e;
-  }
-}
-
+async 
 async function uploadRowsByTextChunks(key, rows, mode, dataKindScope=''){
   const token = uploadToken(mode === 'replace' ? 'rp' : 'up', key);
   const list = rows || [];
@@ -15913,6 +15847,20 @@ document.addEventListener('click',e=>{
   const remMod=e.target.closest('[data-modifier-remove]'); if(remMod){ const editor=remMod.closest('[data-modifier-editor]'); remMod.closest('[data-modifier-row]')?.remove(); const list=editor.querySelector('[data-modifier-list]'); if(!list.querySelector('[data-modifier-row]')) list.innerHTML='<div class="muted small" data-modifier-empty>補正値はまだありません。</div>'; syncModifierEditor(editor); return; }
   const quickCat=e.target.closest('[data-quick-category-field]'); if(quickCat){ quickCreateCategory(quickCat.dataset.quickCategoryField); return; }
   const facilityRefresh=e.target.closest('[data-facility-refresh]'); if(facilityRefresh){ renderFacilitiesPanel(); toast('販売商品リストを更新しました'); return; }
+  const guildDailyCount=e.target.closest('[data-guild-daily-count]'); if(guildDailyCount){ currentGuildDailyCount=Math.max(1,Math.min(10,Number(guildDailyCount.value)||5)); rerollGuildDailyQuests(); return; }
+  const guildDailyReroll=e.target.closest('[data-guild-daily-reroll]'); if(guildDailyReroll){ rerollGuildDailyQuests(); return; }
+  const guildHiddenToggle=e.target.closest('[data-guild-toggle-hidden]'); if(guildHiddenToggle){ currentGuildShowHiddenImportant=!currentGuildShowHiddenImportant; renderFacilitiesPanel(); return; }
+  const guildToggle=e.target.closest('[data-guild-important-toggle]'); if(guildToggle){
+    const key=guildToggle.dataset.guildImportantToggle||'';
+    const visible=guildToggle.dataset.visible==='1';
+    if(setGuildImportantVisibility(key,!visible)) toast(`重要クエストを${visible?'非表示':'表示'}にしました。DBへ反映する場合はクエスト表を登録または置換してください。`);
+    return;
+  }
+  const guildCategoryCopy=e.target.closest('[data-guild-copy-category]'); if(guildCategoryCopy){
+    const category=guildCategoryCopy.dataset.guildCopyCategory==='デイリー'?'デイリー':'重要';
+    copyAdminTextDirect(guildQuestCategoryText(category)).then(ok=>{if(ok) toast(`${category}クエストをコピーしました`);});
+    return;
+  }
   const facilityCopyAll=e.target.closest('[data-facility-copy-all]'); if(facilityCopyAll){ copyFacilitySalesList(); return; }
   const facilityCopy=e.target.closest('[data-facility-copy]'); if(facilityCopy){ copyFacilitySalesList(facilityCopy.dataset.facilityCopy); return; }
   const facilityUpgradeCheck=e.target.closest('[data-facility-upgrade-check]'); if(facilityUpgradeCheck){ renderFacilityUpgradeResult(); return; }
