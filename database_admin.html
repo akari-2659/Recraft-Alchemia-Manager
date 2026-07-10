@@ -1012,7 +1012,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.108';
+const RECRAFT_DB_VERSION = 'v90.8.109';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.107';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -12766,8 +12766,16 @@ function guildQuestCardHtml(q={}){
     ${reward ? `<div class="guild-quest-desc"><b>報酬：</b>${escapeHtml(reward)}</div>` : ''}
   </div>`;
 }
+function dailyQuestSampleForToday(rows,count=5){
+  const list=[...(rows||[])]; if(list.length<=count) return list;
+  const day=new Date().toLocaleDateString('sv-SE');
+  let seed=0; for(const ch of day) seed=(seed*31+ch.charCodeAt(0))>>>0;
+  for(let i=list.length-1;i>0;i--){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const j=seed%(i+1);[list[i],list[j]]=[list[j],list[i]];}
+  return list.slice(0,count);
+}
 function guildQuestSectionHtml(category='重要'){
-  const rows=facilityQuestRows(category);
+  const allRows=facilityQuestRows(category);
+  const rows=category==='デイリー' ? dailyQuestSampleForToday(allRows,5) : allRows;
   const title=category==='重要' ? '重要クエスト' : 'デイリークエスト';
   const note=category==='重要'
     ? '施設やエリアの解放などに必要な受注可能クエストです。OFFの重要クエストは表示しません。'
@@ -12852,6 +12860,10 @@ function renderFacilitiesPanel(){
     const productHtml = isGuild
       ? guildQuestListHtml()
       : (products.length ? products.map(renderFacilityProductDetails).join('') : `<p class="notice">この条件に一致する販売商品はありません。表示ランクを上げるか、アイテム/素材のランク・入手先・解放施設を確認してください。</p>`);
+    const branchRows = f.name==='鍛冶屋' ? (state.recipes||[]).filter(r=>String(r.craftType||'').trim()==='武器派生') : [];
+    const branchGroups = {};
+    branchRows.forEach(r=>{const k=String(r.baseItem||'派生元未設定').trim()||'派生元未設定';(branchGroups[k]||(branchGroups[k]=[])).push(r);});
+    const branchHtml = f.name==='鍛冶屋' ? `<div class="facility-branch-list"><p class="table-toolbar-note">武器派生リスト <span class="view-mode-chip">${branchRows.length}件</span></p>${Object.entries(branchGroups).map(([base,rows])=>`<details class="facility-product"><summary><span class="facility-product-title"><span>${escapeHtml(base)}</span><span class="facility-chip">${rows.length}派生</span></span></summary><div class="facility-product-body">${rows.map(r=>`<div class="guild-quest-card"><b>${escapeHtml(r.resultItem||r.name)}</b><div class="facility-product-meta"><span class="facility-chip">ランク:${escapeHtml(r.rank||'未設定')}</span><span class="facility-chip">費用:${escapeHtml(String(r.price||0))}G</span></div><div><b>必要素材：</b>${escapeHtml(r.requiredMaterials||'未設定')}</div>${r.effect?`<div><b>効果：</b>${escapeHtml(r.effect)}</div>`:''}</div>`).join('')}</div></details>`).join('')||'<p class="notice">武器派生は未設定です。</p>'}</div>` : '';
     const serviceHtml = (f.services||[]).map(s=>`<li><b>${escapeHtml(s.name)}</b> <span class="facility-chip">${escapeHtml(s.price||'価格未設定')}</span><br>${escapeHtml(s.description||'')}</li>`).join('');
     return `<section class="facility-card">\n      <div class="facility-card-head">\n        <div><h3>${escapeHtml(f.name)}</h3><p class="facility-role">${escapeHtml(f.role)}</p></div>\n        <div class="facility-actions"><button class="ghost" data-facility-copy="${escapeHtml(f.name)}">この施設のリストをコピー</button></div>\n      </div>\n      <p class="table-toolbar-note">${escapeHtml(label)} <span class="view-mode-chip">${count}件</span>${isGuild ? '' : ` <span class="view-mode-chip">${escapeHtml(facilityRankLimitLabel())}</span>`}</p>\n      <div class="facility-product-list">${productHtml}</div>\n      <p class="table-toolbar-note">サービス</p>\n      <ul class="facility-service-list">${serviceHtml}</ul>\n    </section>`;
   }).join('');
@@ -14929,6 +14941,24 @@ function estimateJsonpUrlLength(data){
 }
 
 
+const UPLOAD_RESUME_STORAGE_KEY = 'recraft_alchemia_upload_resume_v90_8_109';
+const ALL_DB_RESUME_STORAGE_KEY = 'recraft_alchemia_all_db_resume_v90_8_109';
+function uploadResumeLoad(){
+  try{return JSON.parse(localStorage.getItem(UPLOAD_RESUME_STORAGE_KEY)||'null');}catch(e){return null;}
+}
+function uploadResumeSave(v){
+  try{localStorage.setItem(UPLOAD_RESUME_STORAGE_KEY,JSON.stringify(v||{}));}catch(e){console.warn('upload resume save failed',e);}
+}
+function uploadResumeClear(){try{localStorage.removeItem(UPLOAD_RESUME_STORAGE_KEY);}catch(e){}}
+function uploadResumeFingerprint(key,mode,dataKindScope,rows){
+  const text=JSON.stringify((rows||[]).map(cleanUploadRow));
+  let h=2166136261;
+  for(let i=0;i<text.length;i++){h^=text.charCodeAt(i);h=Math.imul(h,16777619);}
+  return [key,mode,dataKindScope||'',(rows||[]).length,text.length,(h>>>0).toString(16)].join('|');
+}
+function allDbResumeLoad(){try{return JSON.parse(localStorage.getItem(ALL_DB_RESUME_STORAGE_KEY)||'null');}catch(e){return null;}}
+function allDbResumeSave(v){try{localStorage.setItem(ALL_DB_RESUME_STORAGE_KEY,JSON.stringify(v||{}));}catch(e){}}
+function allDbResumeClear(){try{localStorage.removeItem(ALL_DB_RESUME_STORAGE_KEY);}catch(e){}}
 let __uploadProgress = {active:false, startedAt:0, title:'', totalRows:0, logs:[]};
 function formatUploadBytes(n){
   const v=Number(n||0);
@@ -15362,140 +15392,74 @@ async function uploadRowsByTextChunks(key, rows, mode, dataKindScope=''){
   }
 }
 async function uploadRowsByGzipChunks(key, rows, mode, dataKindScope=''){
-  const token = uploadToken(mode === 'replace' ? 'gzrp' : 'gzup', key);
   const list = rows || [];
-  uploadProgressStart(`${labelKey(key)}の圧縮DB送信`, list.length);
-  const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'gzipBase64', dataKindScope}));
-  if(!begin.ok) throw new Error(begin.error || `${labelKey(key)}のDB圧縮送信準備に失敗しました`);
-  let sentChunks = 0;
-  let sentParts = 0;
+  const fingerprint = uploadResumeFingerprint(key,mode,dataKindScope,list);
+  const previous = uploadResumeLoad();
+  const canResume = previous && previous.encoding==='gzipBase64' && previous.fingerprint===fingerprint && previous.token;
+  const token = canResume ? previous.token : uploadToken(mode === 'replace' ? 'gzrp' : 'gzup', key);
+  uploadProgressStart(`${labelKey(key)}の圧縮分割DB送信${canResume?'（続きから）':''}`, list.length);
+  if(!canResume){
+    const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'gzipBase64', dataKindScope}));
+    if(!begin.ok) throw new Error(begin.error || `${labelKey(key)}のDB圧縮送信準備に失敗しました`);
+  }else uploadProgressLog(`保存済み位置から再開します：チャンク${Number(previous.nextChunk||0)+1} / パーツ${Number(previous.nextPart||0)+1}`);
+  let sentChunks = Number(canResume ? previous.nextChunk||0 : 0);
+  let sentParts = Number(canResume ? previous.sentParts||0 : 0);
   let rawChars = 0;
   let gzipBase64Chars = 0;
+  const chunks = makeGzipUploadRowChunks(list);
+  let startChunk = Math.min(chunks.length, Number(canResume ? previous.nextChunk||0 : 0));
+  let startPart = Math.max(0, Number(canResume ? previous.nextPart||0 : 0));
   try{
-    const chunks = makeGzipUploadRowChunks(list);
-    uploadProgressLog(`圧縮単位：最大${UPLOAD_GZIP_RAW_CHARS_PER_CHUNK.toLocaleString()}文字のJSONごと。${chunks.length}チャンクに分割しました。長時間止まる場合は自動で通常送信へ切り替えます。`);
-    let sentRows = 0;
-    for(let c=0; c<chunks.length; c++){
-      const text = JSON.stringify(chunks[c]);
-      uploadProgressUpdate({
-        phase:`${labelKey(key)}を圧縮中`,
-        percent:Math.min(15 + (c/Math.max(1,chunks.length))*20,35),
-        currentRows:sentRows,
-        totalRows:list.length,
-        chunks:`${c+1}/${chunks.length}`,
-        parts:sentParts,
-        rawChars,
-        sentChars:gzipBase64Chars*0.75,
-        detail:`チャンク${c+1}/${chunks.length}をgzip圧縮しています。`
-      });
-      const compressStart = performance.now();
-      rawChars += text.length;
-      const baseCompressPercent = Math.min(15 + (c/Math.max(1,chunks.length))*20,35);
-      const heartbeat = uploadProgressHeartbeat((ticks)=>{
-        const elapsed = performance.now() - compressStart;
-        const creep = Math.min(18, elapsed / 1000 * 2);
-        return {
-          phase:`${labelKey(key)}を圧縮中`,
-          percent:Math.min(35, baseCompressPercent + creep),
-          currentRows:sentRows,
-          totalRows:list.length,
-          chunks:`${c+1}/${chunks.length}`,
-          parts:sentParts,
-          rawChars,
-          sentChars:gzipBase64Chars*0.75,
-          detail:`チャンク${c+1}/${chunks.length}をgzip圧縮中です。経過${formatUploadTime(elapsed)}。長引く場合は${UPLOAD_GZIP_CHUNK_TIMEOUT_MS/1000}秒で通常送信へ切り替えます。`
-        };
-      }, 700);
-      let gzipBase64;
-      try{
-        gzipBase64 = await withUploadTimeout(
-          gzipBase64FromText(text),
-          UPLOAD_GZIP_CHUNK_TIMEOUT_MS,
-          `チャンク${c+1}/${chunks.length}のgzip圧縮が${UPLOAD_GZIP_CHUNK_TIMEOUT_MS/1000}秒を超えました。通常送信へ切り替えます。`
-        );
-      }finally{
-        clearInterval(heartbeat);
-      }
-      const compressMs = performance.now() - compressStart;
+    uploadProgressLog(`圧縮単位：最大${UPLOAD_GZIP_RAW_CHARS_PER_CHUNK.toLocaleString()}文字。全${chunks.length}チャンクです。`);
+    let sentRows = chunks.slice(0,startChunk).reduce((n,r)=>n+r.length,0);
+    for(let c=startChunk; c<chunks.length; c++){
+      const text = JSON.stringify(chunks[c]); rawChars += text.length;
+      uploadProgressUpdate({phase:`${labelKey(key)}を圧縮中`,percent:10+Math.min(20,(c/Math.max(1,chunks.length))*20),currentRows:sentRows,totalRows:list.length,chunks:`${c+1}/${chunks.length}`,parts:sentParts,detail:`チャンク${c+1}を圧縮しています。`});
+      const gzipBase64 = await withUploadTimeout(gzipBase64FromText(text),UPLOAD_GZIP_CHUNK_TIMEOUT_MS,`チャンク${c+1}の圧縮がタイムアウトしました。`);
       gzipBase64Chars += gzipBase64.length;
-      const parts = splitGzipBase64ForJsonpUpload(token, c, gzipBase64);
-      const approxSentBytes = Math.round(gzipBase64.length * 0.75);
-      const ratio = text.length ? Math.max(1, Math.round((approxSentBytes / text.length) * 100)) : 100;
-      uploadProgressLog(`チャンク${c+1}/${chunks.length}：${chunks[c].length}行 / 元${formatUploadBytes(text.length)} → 圧縮後約${formatUploadBytes(approxSentBytes)}（約${ratio}%） / 圧縮${formatUploadTime(compressMs)} / ${parts.length}パーツ`);
-      for(let p=0; p<parts.length; p++){
-        const res = await callApi(uploadGzipPartPayload(token, c, p, parts[p]));
-        if(!res.ok) throw new Error(res.error || `${labelKey(key)}のDB圧縮送信に失敗しました`);
+      const parts = splitGzipBase64ForJsonpUpload(token,c,gzipBase64);
+      const p0 = c===startChunk ? Math.min(startPart,parts.length) : 0;
+      uploadProgressLog(`チャンク${c+1}/${chunks.length}：${chunks[c].length}行 / ${parts.length}パーツ（${p0?`${p0+1}から再開`:'先頭から'}）`);
+      for(let p=p0;p<parts.length;p++){
+        const res=await callApi(uploadGzipPartPayload(token,c,p,parts[p]));
+        if(!res.ok) throw new Error(res.error||`${labelKey(key)}のDB圧縮送信に失敗しました`);
         sentParts++;
-        uploadProgressUpdate({
-          phase:`${labelKey(key)}を圧縮送信中`,
-          percent:35 + Math.min(53, ((c + (p+1)/parts.length) / Math.max(1,chunks.length)) * 53),
-          currentRows:sentRows,
-          totalRows:list.length,
-          chunks:`${c+1}/${chunks.length}`,
-          parts:sentParts,
-          rawChars,
-          sentChars:gzipBase64Chars*0.75,
-          detail:`チャンク${c+1}の${p+1}/${parts.length}パーツを送信しました。`
-        });
+        const nextPart=p+1;
+        const checkpoint=nextPart>=parts.length
+          ? {nextChunk:c+1,nextPart:0}
+          : {nextChunk:c,nextPart:nextPart};
+        uploadResumeSave({encoding:'gzipBase64',fingerprint,token,key,mode,dataKindScope,sentParts,...checkpoint,updatedAt:new Date().toISOString()});
+        uploadProgressUpdate({phase:`${labelKey(key)}を圧縮分割送信中`,percent:30+Math.min(60,((c+(p+1)/parts.length)/Math.max(1,chunks.length))*60),currentRows:sentRows,totalRows:list.length,chunks:`${c+1}/${chunks.length}`,parts:sentParts,rawChars,sentChars:gzipBase64Chars*.75,detail:`チャンク${c+1}の${p+1}/${parts.length}パーツを送信しました。`});
       }
-      sentChunks++;
-      sentRows += chunks[c].length;
-      uploadProgressUpdate({
-        phase:`${labelKey(key)}を圧縮送信中`,
-        percent:35 + Math.min(53, (sentRows / Math.max(1,list.length))*53),
-        currentRows:sentRows,
-        totalRows:list.length,
-        chunks:`${sentChunks}/${chunks.length}`,
-        parts:sentParts,
-        rawChars,
-        sentChars:gzipBase64Chars*0.75,
-        detail:`${sentRows}/${list.length}行を送信しました。`
-      });
-      if(chunks.length > 1) await sleep(15);
+      sentChunks=c+1; sentRows+=chunks[c].length; startPart=0;
+      if(chunks.length>1) await sleep(15);
     }
-    uploadProgressUpdate({
-      phase:'DB反映中',
-      percent:92,
-      currentRows:list.length,
-      totalRows:list.length,
-      chunks:`${sentChunks}/${chunks.length}`,
-      parts:sentParts,
-      rawChars,
-      sentChars:gzipBase64Chars*0.75,
-      detail:'Apps Script側でgzip解凍し、シートへ一括反映しています。'
-    });
-    uploadProgressLog('Apps Script側でgzip解凍とDB反映を開始します。');
-    const commit = await callApi(payload('commitUpload', {token}));
-    if(!commit.ok) throw new Error(commit.error || `${labelKey(key)}のDB反映に失敗しました`);
-    const result={...commit, uploadEncoding:'gzipBase64', sentRows:list.length, sentChunks, sentParts, rawChars, gzipBase64Chars};
-    uploadProgressDone(result);
-    return result;
+    uploadProgressUpdate({phase:'DB反映中',percent:94,currentRows:list.length,totalRows:list.length,chunks:`${sentChunks}/${chunks.length}`,parts:sentParts,detail:'Apps Script側で復元してDBへ反映しています。'});
+    const commit=await callApi(payload('commitUpload',{token}));
+    if(!commit.ok) throw new Error(commit.error||`${labelKey(key)}のDB反映に失敗しました`);
+    uploadResumeClear();
+    const result={...commit,uploadEncoding:'gzipBase64',sentRows:list.length,sentChunks, sentParts,rawChars,gzipBase64Chars};
+    uploadProgressDone(result); return result;
   }catch(e){
     uploadProgressFail(e);
-    try{ await callApi(payload('abortUpload', {token})); }catch(abortErr){ console.warn('compressed upload abort failed', abortErr); }
+    uploadProgressLog('送信位置を保存しました。「続きから再開」を選ぶと未送信パーツから再開します。');
     throw e;
   }
 }
 async function uploadRowsByChunks(key, rows, mode, dataKindScope=''){
   await assertServerVersion();
-  const list = rows || [];
+  const list=rows||[];
   if(canUseGzipUpload()){
-    try{
-      return await uploadRowsByGzipPost(key, list, mode, dataKindScope);
-    }catch(postError){
-      console.warn('fast gzip POST failed; fallback to legacy gzip chunks', postError);
-      toast(`${labelKey(key)}の高速圧縮送信に失敗しました。従来の圧縮分割送信へ切り替えます。`, 'warn');
-      try{
-        return await uploadRowsByGzipChunks(key, list, mode, dataKindScope);
-      }catch(gzipError){
-        console.warn('legacy gzip upload failed; fallback to text chunks', gzipError);
-        toast(`${labelKey(key)}の圧縮送信に失敗しました。通常送信に切り替えます。`, 'warn');
-        return await uploadRowsByTextChunks(key, list, mode, dataKindScope);
-      }
+    try{return await uploadRowsByGzipChunks(key,list,mode,dataKindScope);}
+    catch(gzipError){
+      const saved=uploadResumeLoad();
+      if(saved) throw gzipError;
+      console.warn('gzip split upload failed; fallback to text chunks',gzipError);
+      toast(`${labelKey(key)}の圧縮分割送信に失敗したため、通常分割送信へ切り替えます。`,'warn');
+      return await uploadRowsByTextChunks(key,list,mode,dataKindScope);
     }
   }
-  toast('このブラウザは圧縮送信に未対応のため、通常送信でDB登録します。', 'warn');
-  return await uploadRowsByTextChunks(key, list, mode, dataKindScope);
+  return await uploadRowsByTextChunks(key,list,mode,dataKindScope);
 }
 function callApi(data){
   return new Promise((resolve,reject)=>{
@@ -15799,43 +15763,39 @@ async function writeFullDbKeyInternal(dbKey, mode){
   return res;
 }
 async function runAllPages(mode){
-  if(window.__recraftAllPageRunning){ toast('全データ処理中です。完了するまで待ってください。','warn'); return; }
-  const isReplace = mode === 'replace';
-  const actionLabel = isReplace ? 'DB置換' : 'DB登録';
-  const total = FULL_DB_KEYS.length;
-  if(!confirm(`全データ${actionLabel}を開始します。
-DBシートを一度ずつ処理し、失敗した表で停止します。
-アイテムと素材は同じDBシートへまとめて一度だけ送信します。
-よろしいですか？`)) return;
-  toast(`全データ${actionLabel}を開始します`, 'warn');
-  window.__recraftAllPageRunning = true;
-  setAllPageButtonsDisabled(true);
-  const done=[];
+  if(window.__recraftAllPageRunning){toast('全データ処理中です。','warn');return;}
+  const isReplace=mode==='replace'; const actionLabel=isReplace?'DB置換':'DB登録'; const total=FULL_DB_KEYS.length;
+  const savedAll=allDbResumeLoad();
+  let index=0;
+  if(savedAll && savedAll.mode===mode && Number(savedAll.index||0)<total){
+    const resume=confirm(`前回の全データ${actionLabel}が「${fullDbLabel(FULL_DB_KEYS[Number(savedAll.index||0)])}」の途中で停止しています。\n\nOK：続きから再開\nキャンセル：最初からやり直す`);
+    if(resume) index=Number(savedAll.index||0); else {allDbResumeClear();uploadResumeClear();}
+  }else if(!confirm(`全データ${actionLabel}を開始します。\n途中で失敗した場合は、続きから再開するか最初からやり直すか選択できます。\nよろしいですか？`)) return;
+  toast(`全データ${actionLabel}${index?'を続きから再開':'を開始'}します`,'warn');
+  window.__recraftAllPageRunning=true; setAllPageButtonsDisabled(true);
   try{
-    for(let i=0;i<FULL_DB_KEYS.length;i++){
-      const dbKey = FULL_DB_KEYS[i];
+    while(index<total){
+      const dbKey=FULL_DB_KEYS[index];
+      allDbResumeSave({mode,index,dbKey,updatedAt:new Date().toISOString()});
       showTablePageForOperation(dbKey);
-      toast(`${i+1}/${total} ${fullDbLabel(dbKey)}を${actionLabel}中...`, 'warn');
-      await writeFullDbKeyInternal(dbKey, isReplace ? 'replace' : 'upsert');
-      done.push(fullDbLabel(dbKey));
+      toast(`${index+1}/${total} ${fullDbLabel(dbKey)}を${actionLabel}中...`,'warn');
+      try{
+        await writeFullDbKeyInternal(dbKey,isReplace?'replace':'upsert');
+        index++; allDbResumeSave({mode,index,dbKey:FULL_DB_KEYS[index]||'',updatedAt:new Date().toISOString()});
+      }catch(e){
+        const resume=confirm(`${fullDbLabel(dbKey)}の${actionLabel}中に失敗しました。\n${e.message||e}\n\nOK：保存した送信位置から続ける\nキャンセル：この表を最初からやり直す`);
+        if(!resume){
+          const sess=uploadResumeLoad();
+          if(sess&&sess.token){try{await callApi(payload('abortUpload',{token:sess.token}));}catch(_){} }
+          uploadResumeClear();
+        }
+        continue;
+      }
       await sleep(120);
     }
+    allDbResumeClear();uploadResumeClear();
     toast(`全データ${actionLabel}が完了しました（${total}/${total}）`);
-  }catch(e){
-    const failedKey = FULL_DB_KEYS[done.length];
-    const failedLabel = failedKey ? fullDbLabel(failedKey) : '不明';
-    const detail = `全データ${actionLabel}を停止しました。
-完了: ${done.length ? done.join('、') : 'なし'}
-失敗: ${failedLabel}
-
-${e.message || e}`;
-    console.error(detail, e);
-    alert(detail);
-    toast(`${failedLabel}の${actionLabel}で失敗しました`, 'error');
-  }finally{
-    window.__recraftAllPageRunning = false;
-    setAllPageButtonsDisabled(false);
-  }
+  }finally{window.__recraftAllPageRunning=false;setAllPageButtonsDisabled(false);}
 }
 async function saveAll(){
   return runAllPages('save');
