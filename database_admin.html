@@ -952,8 +952,8 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.102';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.86';
+const RECRAFT_DB_VERSION = 'v90.8.103';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.103';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const PAGE_TABLE_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','materials','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -13524,6 +13524,15 @@ function utf8ToBase64(str){
   const text = String(str ?? '');
   return btoa(unescape(encodeURIComponent(text)));
 }
+function bytesToBase64(bytes){
+  const arr = bytes instanceof Uint8Array ? bytes : new Uint8Array(bytes || []);
+  let binary = '';
+  const step = 0x8000;
+  for(let i=0; i<arr.length; i+=step){
+    binary += String.fromCharCode(...arr.subarray(i, i + step));
+  }
+  return btoa(binary);
+}
 function uploadToken(prefix, key){
   return `${prefix}_${key}_${Date.now()}_${Math.random().toString(36).slice(2)}`.replace(/[^A-Za-z0-9_-]/g,'').slice(0,48);
 }
@@ -13537,6 +13546,8 @@ function cleanUploadRow(row){
 }
 const UPLOAD_JSONP_URL_LIMIT = 2200;
 const UPLOAD_PART_CHAR_STEP = 260;
+const UPLOAD_GZIP_B64_PART_STEP = 1150;
+const UPLOAD_GZIP_RAW_CHARS_PER_CHUNK = 90000;
 function uploadPartPayload(token, chunkIndex, partIndex, textPart){
   return payload('putUploadChunk', {
     token,
@@ -13545,8 +13556,19 @@ function uploadPartPayload(token, chunkIndex, partIndex, textPart){
     valueB64: utf8ToBase64(textPart)
   });
 }
+function uploadGzipPartPayload(token, chunkIndex, partIndex, gzipBase64Part){
+  return payload('putUploadGzipChunk', {
+    token,
+    chunkIndex,
+    partIndex,
+    valueB64: String(gzipBase64Part || '')
+  });
+}
 function isUploadPartUrlSafe(token, chunkIndex, partIndex, textPart){
   return estimateJsonpUrlLength(uploadPartPayload(token, chunkIndex, partIndex, textPart)) <= UPLOAD_JSONP_URL_LIMIT;
+}
+function isGzipPartUrlSafe(token, chunkIndex, partIndex, gzipBase64Part){
+  return estimateJsonpUrlLength(uploadGzipPartPayload(token, chunkIndex, partIndex, gzipBase64Part)) <= UPLOAD_JSONP_URL_LIMIT;
 }
 function splitTextForJsonpUpload(token, chunkIndex, text){
   const s = String(text ?? '');
@@ -13567,6 +13589,40 @@ function splitTextForJsonpUpload(token, chunkIndex, text){
     pos += size;
   }
   return parts;
+}
+function splitGzipBase64ForJsonpUpload(token, chunkIndex, gzipBase64){
+  const s = String(gzipBase64 || '');
+  if(!s.length) return [''];
+  const parts=[];
+  let pos=0;
+  while(pos < s.length){
+    let size = Math.min(UPLOAD_GZIP_B64_PART_STEP, s.length - pos);
+    let part = s.slice(pos, pos + size);
+    while(size > 1 && !isGzipPartUrlSafe(token, chunkIndex, parts.length, part)){
+      size = Math.max(1, Math.floor(size * 0.72));
+      part = s.slice(pos, pos + size);
+    }
+    if(size <= 1 && !isGzipPartUrlSafe(token, chunkIndex, parts.length, part)){
+      throw new Error('圧縮済みデータ1文字分でも送信URLが長すぎます。WebアプリURLまたは管理キーが異常に長い可能性があります。');
+    }
+    parts.push(part);
+    pos += size;
+  }
+  return parts;
+}
+function canUseGzipUpload(){
+  return typeof CompressionStream === 'function'
+    && typeof TextEncoder === 'function'
+    && typeof Response === 'function'
+    && typeof Uint8Array === 'function';
+}
+async function gzipBase64FromText(text){
+  const stream = new CompressionStream('gzip');
+  const writer = stream.writable.getWriter();
+  await writer.write(new TextEncoder().encode(String(text ?? '')));
+  await writer.close();
+  const buffer = await new Response(stream.readable).arrayBuffer();
+  return bytesToBase64(new Uint8Array(buffer));
 }
 function estimateRowsChunkUrlSafe(token, chunkIndex, rows){
   const text = JSON.stringify(rows || []);
@@ -13596,11 +13652,29 @@ function makeUploadRowChunks(token, rows){
   if(current.length) chunks.push(current);
   return chunks;
 }
-async function uploadRowsByChunks(key, rows, mode){
-  await assertServerVersion();
+function makeGzipUploadRowChunks(rows){
+  const list = (rows || []).map(cleanUploadRow);
+  const chunks=[];
+  let current=[];
+  let currentChars=2; // []
+  for(const row of list){
+    const rowText = JSON.stringify(row || {});
+    const addChars = rowText.length + (current.length ? 1 : 0);
+    if(current.length && currentChars + addChars > UPLOAD_GZIP_RAW_CHARS_PER_CHUNK){
+      chunks.push(current);
+      current=[];
+      currentChars=2;
+    }
+    current.push(row);
+    currentChars += addChars;
+  }
+  if(current.length) chunks.push(current);
+  return chunks;
+}
+async function uploadRowsByTextChunks(key, rows, mode){
   const token = uploadToken(mode === 'replace' ? 'rp' : 'up', key);
   const list = rows || [];
-  const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token}));
+  const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'text'}));
   if(!begin.ok) throw new Error(begin.error || `${labelKey(key)}のDB送信準備に失敗しました`);
   let sentChunks = 0;
   let sentParts = 0;
@@ -13623,11 +13697,63 @@ async function uploadRowsByChunks(key, rows, mode){
     }
     const commit = await callApi(payload('commitUpload', {token}));
     if(!commit.ok) throw new Error(commit.error || `${labelKey(key)}のDB反映に失敗しました`);
-    return {...commit, sentRows:list.length, sentChunks, sentParts};
+    return {...commit, uploadEncoding:'text', sentRows:list.length, sentChunks, sentParts};
   }catch(e){
     try{ await callApi(payload('abortUpload', {token})); }catch(abortErr){ console.warn('upload abort failed', abortErr); }
     throw e;
   }
+}
+async function uploadRowsByGzipChunks(key, rows, mode){
+  const token = uploadToken(mode === 'replace' ? 'gzrp' : 'gzup', key);
+  const list = rows || [];
+  const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'gzipBase64'}));
+  if(!begin.ok) throw new Error(begin.error || `${labelKey(key)}のDB圧縮送信準備に失敗しました`);
+  let sentChunks = 0;
+  let sentParts = 0;
+  let rawChars = 0;
+  let gzipBase64Chars = 0;
+  try{
+    const chunks = makeGzipUploadRowChunks(list);
+    let sentRows = 0;
+    for(let c=0; c<chunks.length; c++){
+      const text = JSON.stringify(chunks[c]);
+      rawChars += text.length;
+      const gzipBase64 = await gzipBase64FromText(text);
+      gzipBase64Chars += gzipBase64.length;
+      const parts = splitGzipBase64ForJsonpUpload(token, c, gzipBase64);
+      for(let p=0; p<parts.length; p++){
+        const res = await callApi(uploadGzipPartPayload(token, c, p, parts[p]));
+        if(!res.ok) throw new Error(res.error || `${labelKey(key)}のDB圧縮送信に失敗しました`);
+        sentParts++;
+      }
+      sentChunks++;
+      sentRows += chunks[c].length;
+      const ratio = rawChars ? Math.max(1, Math.round((gzipBase64Chars * 0.75 / rawChars) * 100)) : 100;
+      toast(`${labelKey(key)}を圧縮送信中... ${sentRows}/${list.length}行 / 圧縮後約${ratio}%`, 'warn');
+      if(chunks.length > 1) await sleep(15);
+    }
+    const commit = await callApi(payload('commitUpload', {token}));
+    if(!commit.ok) throw new Error(commit.error || `${labelKey(key)}のDB反映に失敗しました`);
+    return {...commit, uploadEncoding:'gzipBase64', sentRows:list.length, sentChunks, sentParts, rawChars, gzipBase64Chars};
+  }catch(e){
+    try{ await callApi(payload('abortUpload', {token})); }catch(abortErr){ console.warn('compressed upload abort failed', abortErr); }
+    throw e;
+  }
+}
+async function uploadRowsByChunks(key, rows, mode){
+  await assertServerVersion();
+  const list = rows || [];
+  if(canUseGzipUpload()){
+    try{
+      return await uploadRowsByGzipChunks(key, list, mode);
+    }catch(e){
+      console.warn('gzip upload failed; fallback to text chunks', e);
+      toast(`${labelKey(key)}の圧縮送信に失敗しました。通常送信に切り替えます。`, 'warn');
+      return await uploadRowsByTextChunks(key, list, mode);
+    }
+  }
+  toast('このブラウザは圧縮送信に未対応のため、通常送信でDB登録します。', 'warn');
+  return await uploadRowsByTextChunks(key, list, mode);
 }
 function callApi(data){
   return new Promise((resolve,reject)=>{
