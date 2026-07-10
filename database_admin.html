@@ -398,6 +398,14 @@
 .quest-event-editor{display:grid;gap:10px}.hidden-quest-fixed-raw{display:none!important}.quest-event-list{display:grid;gap:8px}.quest-event-row{border:1px solid var(--line);border-radius:14px;background:#fffaf3;overflow:hidden}.quest-event-row>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;font-weight:900;color:#5b3821}.quest-event-row>summary::-webkit-details-marker{display:none}.quest-event-row>summary:after{content:'開閉';font-size:11px;color:var(--muted);font-weight:800}.quest-event-row[open]>summary{border-bottom:1px solid var(--line)}.quest-event-body{display:grid;gap:8px;padding:12px}.quest-event-grid{display:grid;grid-template-columns:.75fr 1fr;gap:8px}.quest-event-grid textarea{min-height:76px}.quest-event-grid .wide{grid-column:1/-1}.quest-event-mini{display:flex;flex-wrap:wrap;gap:6px;align-items:center;color:var(--muted);font-size:12px}.quest-event-mini b{color:#6a3f25}.quest-event-actions{display:flex;justify-content:flex-end}.quest-progress-select{max-width:220px}@media(max-width:780px){.quest-event-grid{grid-template-columns:1fr}}
   .internal-raw-field, textarea.internal-raw-field { display: none !important; visibility: hidden !important; height: 0 !important; min-height: 0 !important; padding: 0 !important; margin: 0 !important; border: 0 !important; overflow: hidden !important; }
 .soft-divider{border:0;border-top:1px solid var(--line,#d8d2c4);margin:14px 0;}
+
+.guild-quest-list{display:grid;gap:12px;margin-top:8px}
+.guild-quest-section{border:1px solid var(--line,#d8d2c4);border-radius:14px;background:#fffdf7;padding:12px}
+.guild-quest-section h4{margin:0 0 8px}
+.guild-quest-card{border:1px solid var(--line,#d8d2c4);border-radius:12px;background:#fff;padding:10px;margin:8px 0}
+.guild-quest-card-title{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-weight:700}
+.guild-quest-meta{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
+.guild-quest-desc{font-size:.92rem;color:var(--muted,#6b6254);line-height:1.55}
 </style>
 </head>
 <body>
@@ -513,6 +521,7 @@
       <button class="subtab" data-main-tab="facilities" data-facility-view="薬屋">薬屋</button>
       <button class="subtab" data-main-tab="facilities" data-facility-view="宿屋">宿屋</button>
       <button class="subtab" data-main-tab="facilities" data-facility-view="骨董屋">骨董屋</button>
+      <button class="subtab" data-main-tab="facilities" data-facility-view="ギルド">ギルド</button>
     </div>
   </div>
 
@@ -943,7 +952,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.100';
+const RECRAFT_DB_VERSION = 'v90.8.102';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.86';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -6080,13 +6089,13 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "街はずれの草原",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t採取確認地点\t失敗でも薬草または丈夫な枝×1。成功で薬草、清め草、丈夫な枝から2個。目標値+3以上で好きな低級採取素材+1。\n100%\t試験用の魔物遭遇\tプチスライム1体とラフィンラット1体と戦闘。勝利でクエストクリア。",
-      "clearCondition": "採取素材を合計3個以上入手し、エリアイベントを2回以上解決し、小型魔物を1体撃退する。",
+      "fixedEvents": "50%\t採取確認地点\t判定：採取>=8。成功：薬草×2、清め草×1を入手。失敗：薬草×1を入手。目標値+3以上：丈夫な枝×1を追加で入手。\n100%\t試験用の魔物遭遇\t戦闘発生：前衛にプチスライム×1、前衛にラフィンラット×1。勝利後、各魔物のドロップ判定を1回ずつ行う。",
+      "clearCondition": "採取確認地点で素材を1個以上入手し、100%固定イベントのプチスライム×1・ラフィンラット×1を討伐する。",
       "bossMonster": "プチスライム / ラフィンラット",
       "rewardMoney": "80G",
       "rewardItems": "ポーション×1",
       "unlockResult": "通常依頼の受注許可、解放済みエリアの自由探索許可",
-      "description": "復興中の街で活動を始めるための腕試し。街はずれの草原で採取・探索・戦闘を一通り確認する。",
+      "description": "街はずれの草原で採取判定と小型魔物との戦闘を行う腕試し。50%で素材入手、100%で固定戦闘が発生する。",
       "notes": "個別受注可能。メインクエストではなく、後から参加したPCにも使えるチュートリアル。 重要クエスト扱い。通常依頼解放の確認用。 クエストボス構成は固定魔物セットとして扱う。",
       "questCategory": "重要",
       "enabled": "TRUE",
@@ -6101,13 +6110,13 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "街はずれの草原",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t森道へ続く獣道\t草原の奥に森へ続く獣道を見つける。探索または感知に成功すると、ボス遭遇前に有利な足場を確保できる。\n100%\t森道を塞ぐ魔物群討伐\t森へ向かう道に陣取った魔物の群れと戦闘。討伐すると近郊の森へ安全に入れる道を確保する。",
-      "clearCondition": "クエストボス「森道を塞ぐ魔物群」を討伐し、近郊の森へ続く安全な道を確保する。",
-      "bossMonster": "ラフィンラット / ラピットホーン",
+      "fixedEvents": "50%\t森道へ続く獣道\t判定：探索>=9または感知>=9。成功：100%固定戦闘の1ラウンド目のみ味方全員の先制判定+1。失敗：補正なし。\n100%\t森道を塞ぐ魔物群討伐\t戦闘発生：前衛にラピットホーン×1、前衛にラフィンラット×2。勝利後、近郊の森を解放する。",
+      "clearCondition": "100%固定イベントのクエストボス「森道を塞ぐ魔物群」を討伐する。",
+      "bossMonster": "ラピットホーン / ラフィンラット",
       "rewardMoney": "140G",
       "rewardItems": "小獣の毛皮×1, 小獣の牙×1",
       "unlockResult": "近郊の森 解放",
-      "description": "草原の奥に続く道を塞ぐ魔物群を討伐し、近郊の森へ進むための安全な経路を確保する。",
+      "description": "草原の奥に続く森道を塞ぐ魔物群を討伐するエリア開放クエスト。討伐成功で近郊の森を解放する。",
       "notes": "一度きり。重要クエスト。エリア開放クエストは、エリア内で遭遇可能な魔物を組み合わせたクエストボス討伐を条件にする。",
       "updatedAt": "",
       "ownerKey": "",
@@ -6125,13 +6134,13 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "近郊の森",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t湿地へ続くぬかるみ道\t森の奥で湿地へ向かうぬかるんだ道を見つける。運動または探索で安全な足場を確認する。\n100%\t湿地入口の魔物群討伐\t湿地入口に集まった森の魔物群と戦闘。討伐すると水辺の湿地へ進めるようになる。",
-      "clearCondition": "クエストボス「湿地入口の魔物群」を討伐し、水辺の湿地へ進む入口を確保する。",
+      "fixedEvents": "50%\t湿地へ続くぬかるみ道\t判定：運動>=10または探索>=10。成功：100%固定戦闘の1ラウンド目のみ味方全員の回避判定+1。失敗：100%固定戦闘の1ラウンド目のみ味方全員の回避判定-1。\n100%\t湿地入口の魔物群討伐\t戦闘発生：前衛にルートハウンド×1、前衛にブランチリング×1、後衛にマイコニド×1。勝利後、水辺の湿地を解放する。",
+      "clearCondition": "100%固定イベントのクエストボス「湿地入口の魔物群」を討伐する。",
       "bossMonster": "ルートハウンド / ブランチリング / マイコニド",
       "rewardMoney": "170G",
       "rewardItems": "動く根×1, 胞子粉×1",
       "unlockResult": "水辺の湿地 解放",
-      "description": "近郊の森の奥で湿地入口を塞ぐ魔物群を討伐し、水辺の湿地へ踏み込むための入口を確保する。",
+      "description": "近郊の森の奥で湿地入口を塞ぐ魔物群を討伐するエリア開放クエスト。討伐成功で水辺の湿地を解放する。",
       "notes": "一度きり。重要クエスト。エリア開放クエストは、エリア内で遭遇可能な魔物を組み合わせたクエストボス討伐を条件にする。",
       "updatedAt": "",
       "ownerKey": "",
@@ -6149,13 +6158,13 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "街はずれの草原",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t朝露草の群生地\t朝露を含んだ草花を見つける。採取に成功すると草花系素材を追加で得る。",
-      "clearCondition": "進行度100%で必要量の草花素材を集める。",
+      "fixedEvents": "50%\t朝露草の群生地\t判定：採取>=8。成功：薬草×2、清め草×1を入手。失敗：薬草×1を入手。目標値+3以上：澄んだ水×1を追加で入手。\n100%\t納品用の束作り\t判定：細工>=8または採取>=8。成功：納品用朝露草束×1を作成してクエストクリア。失敗：薬草×1を追加で消費して納品用朝露草束×1を作成し、クエストクリア。",
+      "clearCondition": "納品用朝露草束×1を作成する。",
       "bossMonster": "",
       "rewardMoney": "70G",
       "rewardItems": "薬草×1",
       "unlockResult": "",
-      "description": "工房で使う薬草を集める日替わり依頼。",
+      "description": "薬屋に納品する朝露草束を作る日替わり依頼。50%で素材を集め、100%で納品用の束を作成する。",
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
@@ -6173,22 +6182,22 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "街はずれの草原",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t魔物の巣跡\t小型魔物が集まりやすい草むらを見つける。戦闘または回避で対処する。",
-      "clearCondition": "進行度100%で草原の小型魔物を十分に追い払う。",
+      "fixedEvents": "50%\t魔物の巣跡\t戦闘発生：前衛にプチスライム×1、前衛にラフィンラット×1。勝利後、各魔物のドロップ判定を1回ずつ行う。\n100%\t草原魔物の追い払い\t戦闘発生：前衛にラフィンラット×2。勝利後、クエストクリア。勝利報酬として小獣の毛皮×1を入手。",
+      "clearCondition": "50%固定戦闘と100%固定戦闘の両方に勝利する。",
       "bossMonster": "",
       "rewardMoney": "90G",
       "rewardItems": "",
       "unlockResult": "",
-      "description": "街道や畑へ出る小型魔物を減らす日替わり依頼。",
+      "description": "街道や畑へ出る小型魔物を倒す日替わり依頼。50%と100%で固定戦闘が発生する。",
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
       "questCategory": "デイリー",
       "enabled": "TRUE",
-      "questBossName": "",
-      "questBossFormation": "",
-      "questBossComposition": ""
+      "questBossName": "草原魔物の追い払い",
+      "questBossFormation": "前衛：ラフィンラット ×2",
+      "questBossComposition": "前衛,ラフィンラット,2"
     },
     {
       "id": "quest_daily_lost_goods",
@@ -6197,13 +6206,13 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "街はずれの草原",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t破れた荷袋\t荷物の破片を発見する。探索に成功すると捜索を有利に進められる。",
-      "clearCondition": "進行度100%で落とし物を発見する。",
+      "fixedEvents": "50%\t破れた荷袋\t判定：探索>=9。成功：落とし物の手がかり×1を入手し、100%固定イベントの探索判定+2。失敗：補正なし。\n100%\t行商人の荷物回収\t判定：探索>=9。成功：行商人の荷物×1を入手してクエストクリア。失敗：行商人の荷物×1は入手するが、報酬金-20G。",
+      "clearCondition": "行商人の荷物×1を回収する。",
       "bossMonster": "",
       "rewardMoney": "80G",
       "rewardItems": "",
       "unlockResult": "",
-      "description": "草原で落とされた荷物を探す調査依頼。",
+      "description": "草原で落とされた行商人の荷物を探す調査依頼。50%の成功で100%の探索判定に+2される。",
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
@@ -6221,22 +6230,22 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "街はずれの草原",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t新しい足跡\t畑へ向かう獣の足跡を発見する。追跡で先回りできる。",
-      "clearCondition": "進行度100%で獣を追い払い、畑の被害を防ぐ。",
+      "fixedEvents": "50%\t新しい足跡\t判定：追跡>=9または感知>=9。成功：100%固定戦闘の先制判定+1。失敗：補正なし。\n100%\t畑荒らしの追い払い\t戦闘発生：前衛にラピットホーン×1、前衛にラフィンラット×1。勝利後、小獣の毛皮×1を入手してクエストクリア。",
+      "clearCondition": "100%固定イベントのラピットホーン×1・ラフィンラット×1を討伐する。",
       "bossMonster": "",
       "rewardMoney": "95G",
       "rewardItems": "小獣の毛皮×1",
       "unlockResult": "",
-      "description": "農地周辺を荒らす小型獣への対処依頼。",
+      "description": "農地周辺を荒らす小型魔物を討伐する依頼。50%の追跡成功で100%戦闘の先制判定+1。",
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
       "questCategory": "デイリー",
       "enabled": "TRUE",
-      "questBossName": "",
-      "questBossFormation": "",
-      "questBossComposition": ""
+      "questBossName": "畑荒らしの小型魔物",
+      "questBossFormation": "前衛：ラピットホーン ×1 / 前衛：ラフィンラット ×1",
+      "questBossComposition": "前衛,ラピットホーン,1;前衛,ラフィンラット,1"
     },
     {
       "id": "quest_daily_firewood",
@@ -6245,13 +6254,13 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "近郊の森",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t乾いた倒木\tよく乾いた倒木を発見する。力業または採取で多めに木材を得る。",
-      "clearCondition": "進行度100%で必要量の薪を集める。",
+      "fixedEvents": "50%\t乾いた倒木\t判定：力業>=9または採取>=9。成功：丈夫な枝×2を入手。失敗：丈夫な枝×1を入手。目標値+3以上：しなやかな蔓×1を追加で入手。\n100%\t薪束の回収\t判定：力業>=9または採取>=9。成功：丈夫な枝×3を入手してクエストクリア。失敗：丈夫な枝×1を入手してクエストクリア、報酬金-20G。",
+      "clearCondition": "丈夫な枝を合計3個以上入手する。",
       "bossMonster": "",
       "rewardMoney": "80G",
       "rewardItems": "丈夫な枝×1",
       "unlockResult": "",
-      "description": "工房の炉や生活に使う薪を集める依頼。",
+      "description": "工房の炉や生活に使う薪を集める依頼。固定イベントで丈夫な枝を具体数入手する。",
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
@@ -6269,13 +6278,13 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "近郊の森",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t木漏れ日の薬草地\t状態の良い薬草地を発見する。採取で草花系素材を得る。",
-      "clearCondition": "進行度100%で森の薬草を十分に集める。",
+      "fixedEvents": "50%\t木漏れ日の薬草地\t判定：採取>=9。成功：清め草×2、丸茸×1を入手。失敗：清め草×1を入手。\n100%\t森薬草の選別\t判定：知識>=9または採取>=9。成功：薬草×1、清め草×2を入手してクエストクリア。失敗：薬草×1、清め草×1を入手してクエストクリア。",
+      "clearCondition": "薬草または清め草を合計3個以上入手する。",
       "bossMonster": "",
       "rewardMoney": "90G",
       "rewardItems": "清め草×1",
       "unlockResult": "",
-      "description": "森に生える薬草や茸を採取する依頼。",
+      "description": "森に生える薬草や茸を採取する依頼。50%と100%で入手できる素材数を明記する。",
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
@@ -6293,22 +6302,22 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "近郊の森",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t獣の通り道\t獣や植物魔物が通る道を発見する。感知または追跡で追加情報を得る。",
-      "clearCondition": "進行度100%で森の魔物の動きを記録する。",
+      "fixedEvents": "50%\t獣の通り道\t判定：追跡>=9または感知>=9。成功：100%固定戦闘の先制判定+2。失敗：補正なし。\n100%\t痕跡の主との遭遇\t戦闘発生：前衛にルートハウンド×1。勝利後、動く根×1を入手してクエストクリア。",
+      "clearCondition": "100%固定イベントのルートハウンド×1を討伐する。",
       "bossMonster": "",
       "rewardMoney": "110G",
       "rewardItems": "",
       "unlockResult": "",
-      "description": "森に潜む魔物の出没状況を調べる依頼。",
+      "description": "森に潜む魔物の通り道を調べる依頼。50%成功で100%戦闘の先制判定+2。",
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
       "questCategory": "デイリー",
       "enabled": "TRUE",
-      "questBossName": "",
-      "questBossFormation": "",
-      "questBossComposition": ""
+      "questBossName": "痕跡の主",
+      "questBossFormation": "前衛：ルートハウンド ×1",
+      "questBossComposition": "前衛,ルートハウンド,1"
     },
     {
       "id": "quest_daily_stream_water",
@@ -6317,13 +6326,13 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "水辺の湿地",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t澄んだ湧き水\t濁りの少ない水場を発見する。採取で水素材を得る。",
-      "clearCondition": "進行度100%で調合用の水を十分に汲み上げる。",
+      "fixedEvents": "50%\t澄んだ湧き水\t判定：採取>=9。成功：澄んだ水×2を入手。失敗：澄んだ水×1を入手。目標値+3以上：小さな水晶片×1を追加で入手。\n100%\t水瓶の満杯確認\t判定：採取>=9または細工>=9。成功：澄んだ水×3を入手してクエストクリア。失敗：澄んだ水×1を入手してクエストクリア、報酬金-20G。",
+      "clearCondition": "澄んだ水を合計3個以上入手する。",
       "bossMonster": "",
       "rewardMoney": "90G",
       "rewardItems": "澄んだ水×1",
       "unlockResult": "",
-      "description": "調合に使う清水を集める依頼。",
+      "description": "調合に使う清水を集める依頼。固定イベントで澄んだ水の入手数を明記する。",
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
@@ -6341,22 +6350,22 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "水辺の湿地",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t粘液溜まり\t湿った地面に残る粘液を発見する。採取か戦闘で素材を得る。",
-      "clearCondition": "進行度100%で粘液素材を必要量回収する。",
+      "fixedEvents": "50%\t粘液溜まり\t判定：採取>=9。成功：ゼラチン液×1、湿地粘液×1を入手。失敗：戦闘発生：後衛にバブルスライム×1。勝利後、ゼラチン液×1を入手。\n100%\t泡立つ粘液核\t戦闘発生：後衛にバブルスライム×1、前衛にドロマール×1。勝利後、湿地粘液×1を入手してクエストクリア。",
+      "clearCondition": "ゼラチン液×1と湿地粘液×1を入手する。",
       "bossMonster": "",
       "rewardMoney": "110G",
       "rewardItems": "ゼラチン液×1",
       "unlockResult": "",
-      "description": "スライム系素材を集める日替わり依頼。",
+      "description": "スライム系素材を集める日替わり依頼。失敗時や100%で発生する戦闘構成を明記する。",
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
       "questCategory": "デイリー",
       "enabled": "TRUE",
-      "questBossName": "",
-      "questBossFormation": "",
-      "questBossComposition": ""
+      "questBossName": "泡立つ粘液核",
+      "questBossFormation": "後衛：バブルスライム ×1 / 前衛：ドロマール ×1",
+      "questBossComposition": "後衛,バブルスライム,1;前衛,ドロマール,1"
     },
     {
       "id": "quest_daily_wetland_sound",
@@ -6365,22 +6374,22 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "水辺の湿地",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t水草の奥の音\t水草の奥から音がする。探索または感知で正体に近づく。",
-      "clearCondition": "進行度100%で異音の正体を確認する。",
+      "fixedEvents": "50%\t水草の奥の音\t判定：感知>=9または探索>=9。成功：100%固定戦闘の先制判定+1。失敗：100%固定戦闘の1ラウンド目のみ味方全員の命中判定-1。\n100%\t異音の主との戦闘\t戦闘発生：前衛にマッドホッパー×1、後衛にミストモスキート×1。勝利後、薄虫の羽×1を入手してクエストクリア。",
+      "clearCondition": "100%固定イベントのマッドホッパー×1・ミストモスキート×1を討伐する。",
       "bossMonster": "",
       "rewardMoney": "120G",
       "rewardItems": "",
       "unlockResult": "",
-      "description": "湿地で聞こえる不審な音を調べる依頼。",
+      "description": "湿地で聞こえる不審な音の正体を討伐する依頼。50%の結果で100%戦闘の補正が変わる。",
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
       "questCategory": "デイリー",
       "enabled": "TRUE",
-      "questBossName": "",
-      "questBossFormation": "",
-      "questBossComposition": ""
+      "questBossName": "異音の主",
+      "questBossFormation": "前衛：マッドホッパー ×1 / 後衛：ミストモスキート ×1",
+      "questBossComposition": "前衛,マッドホッパー,1;後衛,ミストモスキート,1"
     }
   ],
   "exploration_areas": [
@@ -6445,7 +6454,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "8",
       "treasureTableId": "",
-      "result": "成功で薬草1D3個。目標値+3以上で追加+1。",
+      "result": "判定成功：薬草×1D3を入手。目標値+3以上：薬草×1を追加で入手。失敗：入手なし。",
       "progressEffect": "",
       "notes": "基本の採取地点。",
       "updatedAt": "",
@@ -6468,7 +6477,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で清め草1D2個。目標値+3以上で薬草×1も入手。",
+      "result": "判定成功：清め草×1D2を入手。目標値+3以上：薬草×1を追加で入手。失敗：入手なし。",
       "progressEffect": "",
       "notes": "草花系素材。",
       "updatedAt": "",
@@ -6491,7 +6500,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "8",
       "treasureTableId": "",
-      "result": "成功で丈夫な枝またはしなやかな蔓を1D3個。",
+      "result": "判定成功：丈夫な枝×1D2、しなやかな蔓×1を入手。失敗：丈夫な枝×1を入手。",
       "progressEffect": "",
       "notes": "木材系素材。",
       "updatedAt": "",
@@ -6514,7 +6523,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "8",
       "treasureTableId": "",
-      "result": "成功で澄んだ水1D3個。目標値+6以上で小さな水晶片×1。",
+      "result": "判定成功：澄んだ水×1D3を入手。目標値+6以上：小さな水晶片×1を追加で入手。失敗：入手なし。",
       "progressEffect": "",
       "notes": "水素材。",
       "updatedAt": "",
@@ -6537,7 +6546,7 @@ const DEFAULTS = {
       "checkType": "運動>=目標値",
       "targetValue": "8",
       "treasureTableId": "",
-      "result": "成功で丸茸1D3個。失敗時は入手なし。",
+      "result": "判定成功：丸茸×1D3を入手。失敗：入手なし。",
       "progressEffect": "",
       "notes": "木の上にある素材を取る。",
       "updatedAt": "",
@@ -6560,7 +6569,7 @@ const DEFAULTS = {
       "checkType": "力業>=目標値",
       "targetValue": "8",
       "treasureTableId": "",
-      "result": "成功でしなやかな蔓1D3個。",
+      "result": "判定成功：しなやかな蔓×1D3を入手。失敗：次の運動判定-1。",
       "progressEffect": "",
       "notes": "根や蔓を引き抜く。",
       "updatedAt": "",
@@ -6583,7 +6592,7 @@ const DEFAULTS = {
       "checkType": "感知>=目標値",
       "targetValue": "8",
       "treasureTableId": "",
-      "result": "成功で次の魔物遭遇時、先制判定+2。",
+      "result": "判定成功：次の魔物遭遇1回の先制判定+2。失敗：補正なし。",
       "progressEffect": "",
       "notes": "感知判定の導入。",
       "updatedAt": "",
@@ -6606,7 +6615,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "草原の小型魔物が群れで現れる。前衛にラフィンラット、後衛にヴェスパットを配置する。",
+      "result": "戦闘発生：前衛にラフィンラット×人数半数切上、後衛にヴェスパット×1。勝利後、各魔物のドロップ判定を行う。",
       "progressEffect": "",
       "notes": "通常遭遇。",
       "updatedAt": "",
@@ -6629,7 +6638,7 @@ const DEFAULTS = {
       "checkType": "探索>=目標値",
       "targetValue": "8",
       "treasureTableId": "",
-      "result": "成功で安全に進む。失敗時、ランダム魔物遭遇。",
+      "result": "判定成功：次の探索判定+1。失敗：即座に魔物遭遇を1回抽選する。",
       "progressEffect": "",
       "notes": "探索障害。",
       "updatedAt": "",
@@ -6652,7 +6661,7 @@ const DEFAULTS = {
       "checkType": "探索>=目標値",
       "targetValue": "9",
       "treasureTableId": "grass_common_cache",
-      "result": "成功で荷車跡から小さな収穫物を見つける。宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「grass_common_cache」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "換金品・アイテム候補。",
       "updatedAt": "",
@@ -6675,7 +6684,7 @@ const DEFAULTS = {
       "checkType": "探索>=目標値",
       "targetValue": "9",
       "treasureTableId": "grass_common_cache",
-      "result": "古い野営跡を発見する。成功で残された荷物を調べられる。",
+      "result": "判定成功：宝箱表「grass_common_cache」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "宝箱表を使用。",
       "updatedAt": "",
@@ -6698,7 +6707,7 @@ const DEFAULTS = {
       "checkType": "細工>=目標値",
       "targetValue": "10",
       "treasureTableId": "grass_old_box",
-      "result": "小箱を発見。細工成功で中身を壊さず開ける。失敗時は中身の抽選結果から換金品を除外してもよい。",
+      "result": "判定成功：宝箱表「grass_old_box」を1回抽選する。失敗：宝箱表「grass_old_box」を1回抽選し、換金品が出た場合は入手なしに変更する。",
       "progressEffect": "",
       "notes": "小箱イベント。",
       "updatedAt": "",
@@ -6721,7 +6730,7 @@ const DEFAULTS = {
       "checkType": "知識>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で古い交易路の情報を得る。次回の落とし物系イベント候補を優先してよい。",
+      "result": "判定成功：次に発生する「落とし物」「宝箱」系イベントの探索判定+1。失敗：補正なし。",
       "progressEffect": "",
       "notes": "情報イベント。",
       "updatedAt": "",
@@ -6744,7 +6753,7 @@ const DEFAULTS = {
       "checkType": "運動>=目標値",
       "targetValue": "8",
       "treasureTableId": "",
-      "result": "失敗時、次の回避判定-1。成功時は影響なし。",
+      "result": "判定成功：ペナルティなし。失敗：次の回避判定-1。",
       "progressEffect": "",
       "notes": "足場の悪さ。",
       "updatedAt": "",
@@ -6767,7 +6776,7 @@ const DEFAULTS = {
       "checkType": "感知>=目標値",
       "targetValue": "8",
       "treasureTableId": "",
-      "result": "成功で魔物の種類を選んで確認できる。失敗時は通常遭遇。",
+      "result": "判定成功：次の魔物遭遇で出現構成を戦闘前に公開し、味方全員の先制判定+1。失敗：補正なしで魔物遭遇を1回抽選する。",
       "progressEffect": "",
       "notes": "遭遇前兆。",
       "updatedAt": "",
@@ -6790,7 +6799,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "短く休むならHPまたはMPを2点回復してよい。",
+      "result": "休息を選ぶ：味方1人のHPまたはMPを2点回復する。休息しない：効果なし。",
       "progressEffect": "",
       "notes": "小休止。",
       "updatedAt": "",
@@ -6813,7 +6822,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で小さな水晶片×1。目標値+3以上で追加+1。",
+      "result": "判定成功：小さな水晶片×1を入手。目標値+3以上：小さな水晶片×1を追加で入手。失敗：入手なし。",
       "progressEffect": "",
       "notes": "鉱物系素材。",
       "updatedAt": "",
@@ -6836,7 +6845,7 @@ const DEFAULTS = {
       "checkType": "探索>=目標値",
       "targetValue": "8",
       "treasureTableId": "grass_common_cache",
-      "result": "草の中から古い矢筒跡を見つける。宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「grass_common_cache」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "矢弾・小物候補。",
       "updatedAt": "",
@@ -6859,7 +6868,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "ラピットホーン1体と遭遇。戦闘前に探索>=8に成功すると先制+1。",
+      "result": "戦闘発生：前衛にラピットホーン×人数半数切上。戦闘前に探索>=8成功で味方全員の先制判定+1。",
       "progressEffect": "",
       "notes": "獣遭遇。",
       "updatedAt": "",
@@ -6882,7 +6891,7 @@ const DEFAULTS = {
       "checkType": "知識>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で虫系魔物の弱点情報を1つ得る。",
+      "result": "判定成功：カラパスビートルの火属性相性を公開する。失敗：情報なし。",
       "progressEffect": "",
       "notes": "知識イベント。",
       "updatedAt": "",
@@ -6905,7 +6914,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "8",
       "treasureTableId": "",
-      "result": "成功で薬草または清め草を1D3個。目標値+3以上で追加+1。",
+      "result": "判定成功：薬草×1D2、清め草×1を入手。目標値+3以上：薬草または清め草×1を追加で入手。失敗：薬草×1を入手。",
       "progressEffect": "",
       "notes": "噂条件イベント。",
       "updatedAt": "",
@@ -6928,7 +6937,7 @@ const DEFAULTS = {
       "checkType": "感知>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で薄虫の羽×1、または次の魔物遭遇を回避してよい。",
+      "result": "判定成功：薄虫の羽×1を入手し、次の魔物遭遇1回を発生なしに変更できる。失敗：入手なし、遭遇回避なし。",
       "progressEffect": "",
       "notes": "噂条件イベント。",
       "updatedAt": "",
@@ -6951,7 +6960,7 @@ const DEFAULTS = {
       "checkType": "探索>=目標値",
       "targetValue": "9",
       "treasureTableId": "grass_common_cache",
-      "result": "落とされた小袋を発見する。宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「grass_common_cache」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "噂条件イベント。",
       "updatedAt": "",
@@ -6974,7 +6983,7 @@ const DEFAULTS = {
       "checkType": "細工>=目標値",
       "targetValue": "10",
       "treasureTableId": "grass_old_box",
-      "result": "草原に埋もれた古い小箱を発見する。宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「grass_old_box」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "噂条件イベント。",
       "updatedAt": "",
@@ -6997,7 +7006,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "探索の終盤、草を押し分けて王冠のような大角を持つ獣が現れる。街はずれの草原のボス「草角王ラグヴェル」と遭遇する。",
+      "result": "戦闘発生：前衛に草角王ラグヴェル×1。勝利後、草角王ラグヴェルのドロップ判定を行う。",
       "progressEffect": "",
       "notes": "噂条件：草原の丘で王冠のような角を見た。クエスト報酬には影響しない。分類はボス遭遇。",
       "updatedAt": "",
@@ -7020,7 +7029,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "グラウワーム1体と遭遇。地面が崩れやすく、最初の運動判定-1。",
+      "result": "戦闘発生：前衛にグラウワーム×人数半数切上。1ラウンド目のみ味方全員の運動判定-1。",
       "progressEffect": "",
       "notes": "地虫遭遇。",
       "updatedAt": "",
@@ -7043,7 +7052,7 @@ const DEFAULTS = {
       "checkType": "感知>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で今日の草原のイベント候補から魔物遭遇を1回だけ避けてもよい。",
+      "result": "判定成功：この日の草原探索中、次の魔物遭遇1回を発生なしに変更できる。失敗：効果なし。",
       "progressEffect": "",
       "notes": "地形観察。",
       "updatedAt": "",
@@ -7066,7 +7075,7 @@ const DEFAULTS = {
       "checkType": "知識>=目標値",
       "targetValue": "10",
       "treasureTableId": "grass_old_box",
-      "result": "小さな祠跡を見つける。成功で宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「grass_old_box」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "小さな遺物。",
       "updatedAt": "",
@@ -7089,7 +7098,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "ランダムイベントなしとして扱ってよい。全員が短く休むなら次の探索判定+1。",
+      "result": "休息を選ぶ：次の探索判定+1。休息しない：効果なし。",
       "progressEffect": "",
       "notes": "安全イベント。",
       "updatedAt": "",
@@ -7112,7 +7121,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "ラフィンラット1体、または2体と遭遇。人数に応じて調整。",
+      "result": "戦闘発生：前衛にラフィンラット×人数半数切上。勝利後、ラフィンラットのドロップ判定を行う。",
       "progressEffect": "",
       "notes": "既存魔物の追加遭遇。",
       "updatedAt": "",
@@ -7135,7 +7144,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で薬草または清め草を1D3個。目標値+3以上で追加+1。",
+      "result": "判定成功：薬草×1D2、清め草×1を入手。目標値+3以上：薬草または清め草×1を追加で入手。失敗：薬草×1を入手。",
       "progressEffect": "",
       "notes": "森の薬草。",
       "updatedAt": "",
@@ -7158,7 +7167,7 @@ const DEFAULTS = {
       "checkType": "力業>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で丈夫な枝1D3個。目標値+3以上でしなやかな蔓×1。",
+      "result": "判定成功：丈夫な枝×1D3を入手。目標値+3以上：しなやかな蔓×1を追加で入手。失敗：丈夫な枝×1を入手。",
       "progressEffect": "",
       "notes": "木材。",
       "updatedAt": "",
@@ -7181,7 +7190,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で丸茸1D3個。目標値+3以上で胞子粉×1。",
+      "result": "判定成功：丸茸×1D3を入手。目標値+3以上：胞子粉×1を追加で入手。失敗：丸茸×1を入手。",
       "progressEffect": "",
       "notes": "茸素材。",
       "updatedAt": "",
@@ -7204,7 +7213,7 @@ const DEFAULTS = {
       "checkType": "追跡>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で出現魔物を1体確認。次の魔物遭遇で先制判定+1。",
+      "result": "判定成功：次の魔物遭遇で出現構成を戦闘前に公開し、味方全員の先制判定+1。失敗：補正なし。",
       "progressEffect": "",
       "notes": "獣道調査。",
       "updatedAt": "",
@@ -7227,7 +7236,7 @@ const DEFAULTS = {
       "checkType": "運動>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で安全に進む。失敗時、次の判定-1。枝を切るなら丈夫な枝×1。",
+      "result": "判定成功：ペナルティなし。失敗：次の判定-1。枝を切って進む場合：判定不要で丈夫な枝×1を入手し、次の判定-1は発生しない。",
       "progressEffect": "",
       "notes": "障害。",
       "updatedAt": "",
@@ -7250,7 +7259,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で澄んだ水1D3個。目標値+3以上で薬草×1。",
+      "result": "判定成功：澄んだ水×1D3を入手。目標値+3以上：薬草×1を追加で入手。失敗：澄んだ水×1を入手。",
       "progressEffect": "",
       "notes": "水場。",
       "updatedAt": "",
@@ -7273,7 +7282,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "硬い甲虫の背後から羽音が近づく。前衛にカラパスビートル、後衛にヴェスパットを配置する。",
+      "result": "戦闘発生：前衛にカラパスビートル×1、後衛にヴェスパット×人数半数切上。勝利後、各魔物のドロップ判定を行う。",
       "progressEffect": "",
       "notes": "虫系。",
       "updatedAt": "",
@@ -7296,7 +7305,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "安全な木陰。HPまたはMPを2点回復してよい。",
+      "result": "休息を選ぶ：味方1人のHPまたはMPを2点回復する。休息しない：効果なし。",
       "progressEffect": "",
       "notes": "休息。",
       "updatedAt": "",
@@ -7319,7 +7328,7 @@ const DEFAULTS = {
       "checkType": "力業>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功でしなやかな蔓1D3個。失敗時、次の運動判定-1。",
+      "result": "判定成功：しなやかな蔓×1D3を入手。失敗：次の運動判定-1。",
       "progressEffect": "",
       "notes": "蔓素材。",
       "updatedAt": "",
@@ -7342,7 +7351,7 @@ const DEFAULTS = {
       "checkType": "知識>=目標値",
       "targetValue": "10",
       "treasureTableId": "",
-      "result": "成功で森に関する古い道標を読み取る。次の探索判定+1。",
+      "result": "判定成功：次の探索判定+1。失敗：補正なし。",
       "progressEffect": "",
       "notes": "知識。",
       "updatedAt": "",
@@ -7365,7 +7374,7 @@ const DEFAULTS = {
       "checkType": "探索>=目標値",
       "targetValue": "9",
       "treasureTableId": "forest_common_cache",
-      "result": "古い鞄を発見。宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「forest_common_cache」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "宝箱。",
       "updatedAt": "",
@@ -7388,7 +7397,7 @@ const DEFAULTS = {
       "checkType": "感知>=目標値",
       "targetValue": "10",
       "treasureTableId": "forest_common_cache",
-      "result": "木の枝葉に隠れた小箱を見つける。宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「forest_common_cache」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "宝箱。",
       "updatedAt": "",
@@ -7411,7 +7420,7 @@ const DEFAULTS = {
       "checkType": "知識>=目標値",
       "targetValue": "10",
       "treasureTableId": "forest_mage_satchel",
-      "result": "魔導師らしい古い荷物を発見する。成功で宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「forest_mage_satchel」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "スクロール候補。",
       "updatedAt": "",
@@ -7434,7 +7443,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "ラスクレイル1体と遭遇。木の上から攻撃してくる。",
+      "result": "戦闘発生：前衛にラスクレイル×人数半数切上。1ラウンド目のみ敵の先制判定+1。",
       "progressEffect": "",
       "notes": "獣。",
       "updatedAt": "",
@@ -7457,7 +7466,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "マイコニド1体と遭遇。最初の抵抗判定に注意。",
+      "result": "戦闘発生：後衛にマイコニド×人数半数切上。1ラウンド目開始時、味方全員は抵抗>=9に失敗すると次の判定-1。",
       "progressEffect": "",
       "notes": "植物魔物。",
       "updatedAt": "",
@@ -7480,7 +7489,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "ルートハウンド1体と遭遇。探索>=9成功なら先制+1。",
+      "result": "戦闘発生：前衛にルートハウンド×人数半数切上。戦闘前に探索>=9成功で味方全員の先制判定+1。",
       "progressEffect": "",
       "notes": "植物獣。",
       "updatedAt": "",
@@ -7503,7 +7512,7 @@ const DEFAULTS = {
       "checkType": "共感>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で小動物が安全な道を示す。次の障害イベントを1回無視してよい。",
+      "result": "判定成功：次の障害イベント1回を発生なしに変更できる。失敗：効果なし。",
       "progressEffect": "",
       "notes": "共感。",
       "updatedAt": "",
@@ -7526,7 +7535,7 @@ const DEFAULTS = {
       "checkType": "細工>=目標値",
       "targetValue": "9",
       "treasureTableId": "forest_common_cache",
-      "result": "倒れた巣箱の中から使える物を探す。宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「forest_common_cache」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "小箱。",
       "updatedAt": "",
@@ -7549,7 +7558,7 @@ const DEFAULTS = {
       "checkType": "感知>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で危険を避ける。失敗時、ランダム魔物遭遇。",
+      "result": "判定成功：次の魔物遭遇1回を発生なしに変更できる。失敗：即座に魔物遭遇を1回抽選する。",
       "progressEffect": "",
       "notes": "危険察知。",
       "updatedAt": "",
@@ -7572,7 +7581,7 @@ const DEFAULTS = {
       "checkType": "知識>=目標値",
       "targetValue": "10",
       "treasureTableId": "",
-      "result": "成功で森薬草の扱いを思い出す。次の採取判定+1。",
+      "result": "判定成功：次の採取判定+1。失敗：補正なし。",
       "progressEffect": "",
       "notes": "薬草情報。",
       "updatedAt": "",
@@ -7595,7 +7604,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "歩く枝のような魔物と、胞子を撒く茸型魔物が一緒に現れる。",
+      "result": "戦闘発生：前衛にブランチリング×1、後衛にマイコニド×1。勝利後、各魔物のドロップ判定を行う。",
       "progressEffect": "",
       "notes": "噂条件イベント。",
       "updatedAt": "",
@@ -7618,7 +7627,7 @@ const DEFAULTS = {
       "checkType": "細工>=目標値",
       "targetValue": "10",
       "treasureTableId": "forest_common_cache",
-      "result": "古い切り株の下に小箱を発見。宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「forest_common_cache」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "噂条件イベント。",
       "updatedAt": "",
@@ -7641,7 +7650,7 @@ const DEFAULTS = {
       "checkType": "知識>=目標値",
       "targetValue": "10",
       "treasureTableId": "forest_mage_satchel",
-      "result": "湿気を避けて残った魔導紙片を見つける。宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「forest_mage_satchel」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "噂条件イベント。",
       "updatedAt": "",
@@ -7664,7 +7673,7 @@ const DEFAULTS = {
       "checkType": "探索>=目標値",
       "targetValue": "11",
       "treasureTableId": "forest_mage_satchel",
-      "result": "木の根元に隠された古い鞄を見つける。宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「forest_mage_satchel」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "噂条件イベント。",
       "updatedAt": "",
@@ -7687,7 +7696,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "探索の終盤、森全体が低く軋み、古木のような巨体が根を引きずって現れる。近郊の森のボス「森奥の枝王ヴィルドラン」と遭遇する。",
+      "result": "戦闘発生：前衛に森奥の枝王ヴィルドラン×1。勝利後、森奥の枝王ヴィルドランのドロップ判定を行う。",
       "progressEffect": "",
       "notes": "噂条件：森の奥で古木が唸る声がした。クエスト報酬には影響しない。分類はボス遭遇。",
       "updatedAt": "",
@@ -7710,7 +7719,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で丸茸または清め草を1D2個。",
+      "result": "判定成功：丸茸×1、清め草×1を入手。失敗：丸茸×1を入手。",
       "progressEffect": "",
       "notes": "苔・茸。",
       "updatedAt": "",
@@ -7733,7 +7742,7 @@ const DEFAULTS = {
       "checkType": "感知>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で近くの魔物を察知。次の魔物遭遇を回避してよい。",
+      "result": "判定成功：次の魔物遭遇1回を発生なしに変更できる。失敗：効果なし。",
       "progressEffect": "",
       "notes": "自然観察。",
       "updatedAt": "",
@@ -7756,7 +7765,7 @@ const DEFAULTS = {
       "checkType": "力業>=目標値",
       "targetValue": "10",
       "treasureTableId": "forest_common_cache",
-      "result": "根に絡まった古箱を引き抜く。成功で宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「forest_common_cache」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "宝箱。",
       "updatedAt": "",
@@ -7779,7 +7788,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "ブランチリング1体と遭遇。周囲に木材素材が残る。",
+      "result": "戦闘発生：前衛にブランチリング×人数半数切上。勝利後、動く根×1を追加で入手。",
       "progressEffect": "",
       "notes": "植物魔物。",
       "updatedAt": "",
@@ -7802,7 +7811,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "緑の濃い安全地帯。短く休むなら次の抵抗判定+1。",
+      "result": "休息を選ぶ：次の抵抗判定+1。休息しない：効果なし。",
       "progressEffect": "",
       "notes": "休息。",
       "updatedAt": "",
@@ -7825,7 +7834,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で澄んだ水1D3個。目標値+3以上で追加+1。",
+      "result": "判定成功：澄んだ水×1D3を入手。目標値+3以上：澄んだ水×1を追加で入手。失敗：澄んだ水×1を入手。",
       "progressEffect": "",
       "notes": "水素材。",
       "updatedAt": "",
@@ -7848,7 +7857,7 @@ const DEFAULTS = {
       "checkType": "運動>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で安全に進む。失敗時、次の回避判定-1。",
+      "result": "判定成功：ペナルティなし。失敗：次の回避判定-1。",
       "progressEffect": "",
       "notes": "足場。",
       "updatedAt": "",
@@ -7871,7 +7880,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功でしなやかな蔓または薬草を1D3個。目標値+3以上で澄んだ水×1。",
+      "result": "判定成功：しなやかな蔓×1D2、薬草×1を入手。目標値+3以上：澄んだ水×1を追加で入手。失敗：しなやかな蔓×1を入手。",
       "progressEffect": "",
       "notes": "水草。",
       "updatedAt": "",
@@ -7894,7 +7903,7 @@ const DEFAULTS = {
       "checkType": "細工>=目標値",
       "targetValue": "10",
       "treasureTableId": "wetland_sunken_box",
-      "result": "半分沈んだ木箱を見つける。成功で宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「wetland_sunken_box」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "宝箱。",
       "updatedAt": "",
@@ -7917,7 +7926,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "ぬかるみから跳ねる魔物と、霧に紛れる吸血虫が同時に襲ってくる。",
+      "result": "戦闘発生：前衛にマッドホッパー×人数半数切上、後衛にミストモスキート×人数半数切上。勝利後、各魔物のドロップ判定を行う。",
       "progressEffect": "",
       "notes": "虫系。",
       "updatedAt": "",
@@ -7940,7 +7949,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "マッドホッパー1体と遭遇。勝利でドロップ判定。",
+      "result": "戦闘発生：前衛にマッドホッパー×人数半数切上。勝利後、マッドホッパーのドロップ判定を行う。",
       "progressEffect": "",
       "notes": "両生系。",
       "updatedAt": "",
@@ -7963,7 +7972,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "ドロマール1体と遭遇。湿地粘液の入手候補。",
+      "result": "戦闘発生：前衛にドロマール×1。勝利後、湿地粘液×1を追加で入手。",
       "progressEffect": "",
       "notes": "泥状魔物。",
       "updatedAt": "",
@@ -7986,7 +7995,7 @@ const DEFAULTS = {
       "checkType": "力業>=目標値",
       "targetValue": "10",
       "treasureTableId": "",
-      "result": "成功で仲間を引き上げる。失敗時、次の判定-1。",
+      "result": "判定成功：味方1人の次の運動判定+1。失敗：次の判定-1。",
       "progressEffect": "",
       "notes": "障害。",
       "updatedAt": "",
@@ -8009,7 +8018,7 @@ const DEFAULTS = {
       "checkType": "感知>=目標値",
       "targetValue": "10",
       "treasureTableId": "",
-      "result": "成功で小さな水晶片×1。目標値+3以上で澄んだ水×1。",
+      "result": "判定成功：小さな水晶片×1を入手。目標値+3以上：澄んだ水×1を追加で入手。失敗：入手なし。",
       "progressEffect": "",
       "notes": "発見。",
       "updatedAt": "",
@@ -8032,7 +8041,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功でゼラチン液1D2個。目標値+3以上で湿地粘液×1。",
+      "result": "判定成功：ゼラチン液×1D2を入手。目標値+3以上：湿地粘液×1を追加で入手。失敗：ゼラチン液×1を入手。",
       "progressEffect": "",
       "notes": "粘液素材。",
       "updatedAt": "",
@@ -8055,7 +8064,7 @@ const DEFAULTS = {
       "checkType": "探索>=目標値",
       "targetValue": "10",
       "treasureTableId": "wetland_common_cache",
-      "result": "泥水に沈んだ革袋を発見。宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「wetland_common_cache」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "宝箱。",
       "updatedAt": "",
@@ -8078,7 +8087,7 @@ const DEFAULTS = {
       "checkType": "探索>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で魔物の進路を確認。次の魔物遭遇で先制+1。",
+      "result": "判定成功：次の魔物遭遇1回の先制判定+1。失敗：補正なし。",
       "progressEffect": "",
       "notes": "足跡。",
       "updatedAt": "",
@@ -8101,7 +8110,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "安全な浅瀬。HPまたはMPを2点回復してよい。",
+      "result": "休息を選ぶ：味方1人のHPまたはMPを2点回復する。休息しない：効果なし。",
       "progressEffect": "",
       "notes": "休息。",
       "updatedAt": "",
@@ -8124,7 +8133,7 @@ const DEFAULTS = {
       "checkType": "細工>=目標値",
       "targetValue": "9",
       "treasureTableId": "wetland_common_cache",
-      "result": "水草に絡まった小瓶や包みを見つける。宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「wetland_common_cache」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "宝箱。",
       "updatedAt": "",
@@ -8147,7 +8156,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "バブルスライム1体と遭遇。勝利でゼラチン液を狙える。",
+      "result": "戦闘発生：後衛にバブルスライム×人数半数切上。勝利後、ゼラチン液×1を追加で入手。",
       "progressEffect": "",
       "notes": "スライム。",
       "updatedAt": "",
@@ -8170,7 +8179,7 @@ const DEFAULTS = {
       "checkType": "運動>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "失敗時、次の命中判定-1。成功時、澄んだ水×1を得てもよい。",
+      "result": "判定成功：澄んだ水×1を入手。失敗：次の命中判定-1。",
       "progressEffect": "",
       "notes": "足元。",
       "updatedAt": "",
@@ -8193,7 +8202,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "10",
       "treasureTableId": "",
-      "result": "成功で湿地粘液1D2個。失敗時、虫の群れイベントを発生させてもよい。",
+      "result": "判定成功：湿地粘液×1D2を入手。失敗：戦闘発生：前衛にマッドホッパー×1、後衛にミストモスキート×1。",
       "progressEffect": "",
       "notes": "粘液。",
       "updatedAt": "",
@@ -8216,7 +8225,7 @@ const DEFAULTS = {
       "checkType": "細工>=目標値",
       "targetValue": "11",
       "treasureTableId": "wetland_sunken_box",
-      "result": "古い防水箱を発見。成功で宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「wetland_sunken_box」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "宝箱。",
       "updatedAt": "",
@@ -8239,7 +8248,7 @@ const DEFAULTS = {
       "checkType": "感知>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で遭遇する魔物を確認。失敗時、マッドホッパーまたはミストモスキートと遭遇。",
+      "result": "判定成功：戦闘前に出現魔物を公開し、味方全員の先制判定+1。失敗：戦闘発生：前衛にマッドホッパー×1、後衛にミストモスキート×1。",
       "progressEffect": "",
       "notes": "前兆。",
       "updatedAt": "",
@@ -8262,7 +8271,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "10",
       "treasureTableId": "",
-      "result": "成功でゼラチン液×1、湿地粘液×1。目標値+3以上で追加どちらか×1。",
+      "result": "判定成功：ゼラチン液×1、湿地粘液×1を入手。目標値+3以上：ゼラチン液または湿地粘液×1を追加で入手。失敗：ゼラチン液×1を入手。",
       "progressEffect": "",
       "notes": "素材。",
       "updatedAt": "",
@@ -8285,7 +8294,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "泡立つ水面を調べる。成功で湿地粘液×1。失敗または望むならバブルスライム1体と遭遇。",
+      "result": "判定成功：湿地粘液×1を入手。失敗：戦闘発生：後衛にバブルスライム×1。",
       "progressEffect": "",
       "notes": "噂条件イベント。",
       "updatedAt": "",
@@ -8308,7 +8317,7 @@ const DEFAULTS = {
       "checkType": "探索>=目標値",
       "targetValue": "10",
       "treasureTableId": "",
-      "result": "ぬかるみに残る大きな足跡を発見。成功でボスの存在を示す情報を得る。",
+      "result": "判定成功：この日の水辺の湿地探索でボス遭遇イベントが発生した場合、味方全員の先制判定+1。失敗：補正なし。",
       "progressEffect": "",
       "notes": "噂条件イベント。",
       "updatedAt": "",
@@ -8331,7 +8340,7 @@ const DEFAULTS = {
       "checkType": "細工>=目標値",
       "targetValue": "11",
       "treasureTableId": "wetland_sunken_box",
-      "result": "沈んだ防水箱を見つける。宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「wetland_sunken_box」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "噂条件イベント。",
       "updatedAt": "",
@@ -8354,7 +8363,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "wetland_lord_cache",
-      "result": "探索の終盤、ぬかるんだ水辺の奥から巨大な影が現れる。水辺の湿地のボス「沼主グラボロス」と遭遇する。",
+      "result": "戦闘発生：前衛に沼主グラボロス×1。勝利後、宝箱表「wetland_lord_cache」を1回抽選し、沼主グラボロスのドロップ判定を行う。",
       "progressEffect": "",
       "notes": "噂条件：沼の奥で低い唸り声がした。クエスト報酬には影響しない。分類はボス遭遇。",
       "updatedAt": "",
@@ -8377,7 +8386,7 @@ const DEFAULTS = {
       "checkType": "探索>=目標値",
       "targetValue": "10",
       "treasureTableId": "wetland_common_cache",
-      "result": "泥に沈んだ古い札束を見つける。宝箱表を抽選してよい。",
+      "result": "判定成功：宝箱表「wetland_common_cache」を1回抽選する。失敗：抽選なし。",
       "progressEffect": "",
       "notes": "宝箱。",
       "updatedAt": "",
@@ -8400,7 +8409,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "ミストモスキート1体、または2体と遭遇。人数に応じて調整。",
+      "result": "戦闘発生：後衛にミストモスキート×人数半数切上。勝利後、ミストモスキートのドロップ判定を行う。",
       "progressEffect": "",
       "notes": "虫。",
       "updatedAt": "",
@@ -8423,7 +8432,7 @@ const DEFAULTS = {
       "checkType": "採取>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で丸茸1D2個。目標値+3以上で清め草×1。",
+      "result": "判定成功：丸茸×1D2を入手。目標値+3以上：清め草×1を追加で入手。失敗：丸茸×1を入手。",
       "progressEffect": "",
       "notes": "茸。",
       "updatedAt": "",
@@ -8446,7 +8455,7 @@ const DEFAULTS = {
       "checkType": "知識>=目標値",
       "targetValue": "10",
       "treasureTableId": "",
-      "result": "成功で安全な水路を選ぶ。次の障害イベントを1回無視してよい。",
+      "result": "判定成功：次の障害イベント1回を発生なしに変更できる。失敗：補正なし。",
       "progressEffect": "",
       "notes": "知識。",
       "updatedAt": "",
@@ -8469,7 +8478,7 @@ const DEFAULTS = {
       "checkType": "探索>=目標値",
       "targetValue": "9",
       "treasureTableId": "",
-      "result": "成功で湿地粘液×1。失敗時、ドロマールと遭遇。",
+      "result": "判定成功：湿地粘液×1を入手。失敗：戦闘発生：前衛にドロマール×1。",
       "progressEffect": "",
       "notes": "痕跡。",
       "updatedAt": "",
@@ -8492,7 +8501,7 @@ const DEFAULTS = {
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "音の少ない安全地帯。短く休むなら次の感知判定+1。",
+      "result": "休息を選ぶ：次の感知判定+1。休息しない：効果なし。",
       "progressEffect": "",
       "notes": "休息。",
       "updatedAt": "",
@@ -10744,6 +10753,15 @@ const FACILITY_DEFS = [
       {name:'スクロール鑑定', price:'ランク依存', description:'未鑑定スクロールの内容を調べる。判定は集中。難易度と候補は鑑定ルール表で管理する。'},
       {name:'術式化', price:'素材消費', description:'鑑定済みスクロールを魔導書・祈祷書へ登録できる形にする。魔法は魔導インク、祈祷は祈祷紙を消費し、集中で判定する。'}
     ]
+  },
+  {
+    id:'guild',
+    name:'ギルド',
+    role:'受注可能クエストの掲示・受付を担当。重要クエストとデイリークエストを分けて表示する。',
+    services:[
+      {name:'重要クエスト受付', price:'0G', description:'施設やエリアの解放などに必要な一度きりのクエストを掲示する。OFFの重要クエストは受注可能一覧には表示しない。'},
+      {name:'デイリークエスト掲示', price:'0G', description:'再受注可能な日替わり依頼を掲示する。進行管理側ではランダム選出して使う。'}
+    ]
   }
 ];
 
@@ -10757,11 +10775,14 @@ const SYSTEM_HELP = [
       "NPC"
     ],
     "body": [
-      "基本施設は鍛冶屋、薬屋、宿屋、骨董屋。",
+      "基本施設は鍛冶屋、薬屋、宿屋、骨董屋、ギルド。",
       "鍛冶屋は武器、防具、バッグ、矢筒、鍛冶素材、鍛冶施設利用を扱う。",
       "薬屋はポーション系、薬品系調合品、調合素材、調合施設利用を扱う。",
       "宿屋は宿泊、休息、噂、クエスト情報を扱う。商品販売は主目的にしない。",
       "骨董屋は未鑑定スクロールの販売、スクロール鑑定、鑑定済みスクロールの術式化を扱う。",
+      "ギルドは受注可能クエストを、重要クエストとデイリークエストに分けて掲示する。",
+      "重要クエストは有効列がTRUEのものだけ、ギルドの受注可能一覧に表示する。",
+      "デイリークエストは再受注可能な依頼として、ギルドのデイリー欄に表示する。",
       "スクロール鑑定と術式化の判定は集中で行う。",
       "魔法スクロールの術式化には魔導インクを、祈祷スクロールの術式化には祈祷紙を使う。",
       "雑貨屋は現時点では使用しない。",
@@ -11296,9 +11317,108 @@ function facilityProductLine(row){
 function facilityServiceLine(service){
   return `- ${service.name}（${service.price || '価格未設定'}）：${service.description || ''}`;
 }
+
+function questFacilityCategory(row={}){
+  const raw=String(row.questCategory||'').trim();
+  if(raw) return raw;
+  const type=String(row.questType||'').trim();
+  return type.includes('デイリー') ? 'デイリー' : '重要';
+}
+function questFacilityEnabled(row={}){
+  return String(row.enabled ?? 'TRUE').trim().toUpperCase() !== 'FALSE';
+}
+function facilityQuestRows(category=''){
+  return (state.quests||[]).filter(q=>{
+    if(!q || !String(q.name||q.id||'').trim()) return false;
+    if(!questFacilityEnabled(q)) return false;
+    const cat=questFacilityCategory(q);
+    if(category && cat !== category) return false;
+    return cat === '重要' || cat === 'デイリー';
+  }).sort((a,b)=>{
+    const ac=questFacilityCategory(a), bc=questFacilityCategory(b);
+    const cc=compareValues(ac, bc);
+    if(cc) return ac==='重要' ? -1 : 1;
+    const aa=compareValues(a.areaName||'', b.areaName||'');
+    if(aa) return aa;
+    return compareValues(a.name||a.id||'', b.name||b.id||'');
+  });
+}
+function questBossFacilityText(q={}){
+  const name=String(q.questBossName||'').trim();
+  const monsters=String(q.bossMonster||'').trim();
+  if(name && monsters) return `${name}（${monsters}）`;
+  return name || monsters || '';
+}
+function questFormationFacilityText(q={}){
+  return String(q.questBossFormation || q.questBossComposition || '').trim();
+}
+function guildQuestCardHtml(q={}){
+  const cat=questFacilityCategory(q);
+  const chips=[cat, q.questType, q.rank, q.areaName ? `エリア:${q.areaName}` : '', q.unlockResult ? `解放:${q.unlockResult}` : ''].filter(Boolean);
+  const reward=[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ');
+  const boss=questBossFacilityText(q);
+  const formation=questFormationFacilityText(q);
+  return `<div class="guild-quest-card">
+    <div class="guild-quest-card-title"><span>${escapeHtml(q.name||q.id||'名称未設定')}</span>${q.unlockResult?`<span class="facility-chip">${escapeHtml(q.unlockResult)}</span>`:''}</div>
+    <div class="guild-quest-meta">${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>
+    ${q.description ? `<div class="guild-quest-desc"><b>内容：</b>${escapeHtml(q.description)}</div>` : ''}
+    ${q.clearCondition ? `<div class="guild-quest-desc"><b>クリア条件：</b>${escapeHtml(q.clearCondition)}</div>` : ''}
+    ${boss ? `<div class="guild-quest-desc"><b>クエストボス：</b>${escapeHtml(boss)}</div>` : ''}
+    ${formation ? `<div class="guild-quest-desc"><b>構成：</b>${escapeHtml(formation)}</div>` : ''}
+    ${reward ? `<div class="guild-quest-desc"><b>報酬：</b>${escapeHtml(reward)}</div>` : ''}
+  </div>`;
+}
+function guildQuestSectionHtml(category='重要'){
+  const rows=facilityQuestRows(category);
+  const title=category==='重要' ? '重要クエスト' : 'デイリークエスト';
+  const note=category==='重要'
+    ? '施設やエリアの解放などに必要な受注可能クエストです。OFFの重要クエストは表示しません。'
+    : '再受注可能な依頼です。進行管理側でランダム選出できます。';
+  return `<section class="guild-quest-section">
+    <h4>${escapeHtml(title)} <span class="view-mode-chip">${rows.length}件</span></h4>
+    <p class="table-toolbar-note">${escapeHtml(note)}</p>
+    ${rows.length ? rows.map(guildQuestCardHtml).join('') : `<p class="notice">受注可能な${escapeHtml(title)}はありません。</p>`}
+  </section>`;
+}
+function guildQuestListHtml(){
+  return `<div class="guild-quest-list">${guildQuestSectionHtml('重要')}${guildQuestSectionHtml('デイリー')}</div>`;
+}
+function questFacilityLine(q={}){
+  const reward=[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ');
+  const lines=[`- ${q.name||q.id||'名称未設定'}（${[questFacilityCategory(q),q.questType,q.rank,q.areaName].filter(Boolean).join('・')}）`];
+  if(q.description) lines.push(`  内容：${q.description}`);
+  if(q.clearCondition) lines.push(`  クリア条件：${q.clearCondition}`);
+  if(questBossFacilityText(q)) lines.push(`  クエストボス：${questBossFacilityText(q)}`);
+  if(questFormationFacilityText(q)) lines.push(`  構成：${questFormationFacilityText(q)}`);
+  if(reward) lines.push(`  報酬：${reward}`);
+  if(q.unlockResult) lines.push(`  解放：${q.unlockResult}`);
+  return lines.join('\n');
+}
+function guildQuestListText(){
+  const important=facilityQuestRows('重要');
+  const daily=facilityQuestRows('デイリー');
+  return [
+    '【ギルド】',
+    '受注可能クエスト一覧',
+    '',
+    '重要クエスト',
+    important.length ? important.map(questFacilityLine).join('\n') : '- 受注可能な重要クエストはありません',
+    '',
+    'デイリークエスト',
+    daily.length ? daily.map(questFacilityLine).join('\n') : '- 受注可能なデイリークエストはありません'
+  ].join('\n');
+}
+function facilityDisplayCount(facilityName){
+  return facilityName==='ギルド' ? facilityQuestRows().length : facilityProducts(facilityName).length;
+}
+function facilityDisplayLabel(facilityName){
+  return facilityName==='ギルド' ? '受注可能クエスト' : '販売商品';
+}
+
 function buildFacilitySalesText(targetFacilityName=''){
   const defs = targetFacilityName ? FACILITY_DEFS.filter(f=>f.name===targetFacilityName) : facilityActiveDefs();
   return defs.map(f=>{
+    if(f.name==='ギルド') return guildQuestListText();
     const products=facilityProducts(f.name);
     const productText = products.length ? products.map(facilityProductLine).join('\n') : '- 販売商品未設定';
     const serviceText = (f.services||[]).length ? f.services.map(facilityServiceLine).join('\n') : '- サービス未設定';
@@ -11321,14 +11441,21 @@ function renderFacilitiesPanel(){
   const rankSelect=$('facilityRankLimitSelect');
   if(rankSelect && rankSelect.value !== String(currentFacilityRankLimit||'')) rankSelect.value = String(currentFacilityRankLimit||'');
   summary.innerHTML = FACILITY_DEFS.map(f=>{
-    const count=facilityProducts(f.name).length;
-    return `<div class="facility-summary-card ${f.name===currentFacilityView?'active':''}"><b>${count}</b><span>${escapeHtml(f.name)}の販売商品 / ${escapeHtml(facilityRankLimitLabel())}</span></div>`;
+    const count=facilityDisplayCount(f.name);
+    const label=facilityDisplayLabel(f.name);
+    const range=f.name==='ギルド' ? '受注可能' : facilityRankLimitLabel();
+    return `<div class="facility-summary-card ${f.name===currentFacilityView?'active':''}"><b>${count}</b><span>${escapeHtml(f.name)}の${escapeHtml(label)} / ${escapeHtml(range)}</span></div>`;
   }).join('');
   cards.innerHTML = defs.map(f=>{
     const products=facilityProducts(f.name);
-    const productHtml = products.length ? products.map(renderFacilityProductDetails).join('') : `<p class="notice">この条件に一致する販売商品はありません。表示ランクを上げるか、アイテム/素材のランク・入手先・解放施設を確認してください。</p>`;
+    const isGuild=f.name==='ギルド';
+    const count=isGuild ? facilityQuestRows().length : products.length;
+    const label=isGuild ? '受注可能クエスト' : '販売商品';
+    const productHtml = isGuild
+      ? guildQuestListHtml()
+      : (products.length ? products.map(renderFacilityProductDetails).join('') : `<p class="notice">この条件に一致する販売商品はありません。表示ランクを上げるか、アイテム/素材のランク・入手先・解放施設を確認してください。</p>`);
     const serviceHtml = (f.services||[]).map(s=>`<li><b>${escapeHtml(s.name)}</b> <span class="facility-chip">${escapeHtml(s.price||'価格未設定')}</span><br>${escapeHtml(s.description||'')}</li>`).join('');
-    return `<section class="facility-card">\n      <div class="facility-card-head">\n        <div><h3>${escapeHtml(f.name)}</h3><p class="facility-role">${escapeHtml(f.role)}</p></div>\n        <div class="facility-actions"><button class="ghost" data-facility-copy="${escapeHtml(f.name)}">この施設のリストをコピー</button></div>\n      </div>\n      <p class="table-toolbar-note">販売商品 <span class="view-mode-chip">${products.length}件</span> <span class="view-mode-chip">${escapeHtml(facilityRankLimitLabel())}</span></p>\n      <div class="facility-product-list">${productHtml}</div>\n      <p class="table-toolbar-note">サービス</p>\n      <ul class="facility-service-list">${serviceHtml}</ul>\n    </section>`;
+    return `<section class="facility-card">\n      <div class="facility-card-head">\n        <div><h3>${escapeHtml(f.name)}</h3><p class="facility-role">${escapeHtml(f.role)}</p></div>\n        <div class="facility-actions"><button class="ghost" data-facility-copy="${escapeHtml(f.name)}">この施設のリストをコピー</button></div>\n      </div>\n      <p class="table-toolbar-note">${escapeHtml(label)} <span class="view-mode-chip">${count}件</span>${isGuild ? '' : ` <span class="view-mode-chip">${escapeHtml(facilityRankLimitLabel())}</span>`}</p>\n      <div class="facility-product-list">${productHtml}</div>\n      <p class="table-toolbar-note">サービス</p>\n      <ul class="facility-service-list">${serviceHtml}</ul>\n    </section>`;
   }).join('');
   const out=$('facilitySalesText');
   if(out) out.value=buildFacilitySalesText();
