@@ -406,6 +406,57 @@
 .guild-quest-card-title{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-weight:700}
 .guild-quest-meta{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
 .guild-quest-desc{font-size:.92rem;color:var(--muted,#6b6254);line-height:1.55}
+
+.upload-progress-panel{
+  margin-top:12px;
+  border:1px solid #d8c6ad;
+  border-radius:16px;
+  background:#fffaf2;
+  padding:12px;
+  box-shadow:0 8px 24px rgba(80,54,28,.08);
+}
+.upload-progress-head{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+}
+.upload-progress-title{font-weight:700;color:#4b3825}
+.upload-progress-percent{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#6b4b2d}
+.upload-progress-track{
+  height:14px;
+  border:1px solid #d2bfa5;
+  background:#f3e8d9;
+  border-radius:999px;
+  overflow:hidden;
+  margin-top:10px;
+}
+.upload-progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#9f6d3d,#d29a59);
+  transition:width .18s ease;
+}
+.upload-progress-meta{
+  margin-top:8px;
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.6;
+  white-space:pre-wrap;
+}
+.upload-progress-log{
+  margin-top:8px;
+  max-height:130px;
+  overflow:auto;
+  background:#2b241d;
+  color:#f8ead7;
+  border-radius:12px;
+  padding:8px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:12px;
+  white-space:pre-wrap;
+}
 </style>
 </head>
 <body>
@@ -443,6 +494,15 @@
       この管理ツールは固定のWeb App URLへ接続します。通常は、各表の <span class="kbd">この表だけDB読込</span> / <span class="kbd">この表だけDB登録</span> / <span class="kbd">この表だけDB置換</span>、または各行の <span class="kbd">個別DB登録</span> / <span class="kbd">個別DB置換</span> を使ってください。
       個別DB置換は対象1件だけを上書きし、同じ表の他データは保持します。全ページ操作は各表を順番に処理し、途中で失敗した場合はそこで停止します。
     </p>
+    <div id="uploadProgressPanel" class="upload-progress-panel hidden">
+      <div class="upload-progress-head">
+        <div class="upload-progress-title" id="uploadProgressTitle">DB送信待機中</div>
+        <div class="upload-progress-percent" id="uploadProgressPercent">0%</div>
+      </div>
+      <div class="upload-progress-track"><div class="upload-progress-bar" id="uploadProgressBar"></div></div>
+      <div class="upload-progress-meta" id="uploadProgressMeta">送信状況がここに表示されます。</div>
+      <div class="upload-progress-log" id="uploadProgressLog"></div>
+    </div>
     <div class="stats">
       <div class="stat"><b id="countItemTypes">0</b><span>アイテム種別</span></div>
       <div class="stat"><b id="countItemCategories">0</b><span>アイテムカテゴリ</span></div>
@@ -952,7 +1012,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.103';
+const RECRAFT_DB_VERSION = 'v90.8.104';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.103';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -13520,6 +13580,88 @@ function estimateJsonpUrlLength(data){
   return u.toString().length;
 }
 
+
+let __uploadProgress = {active:false, startedAt:0, title:'', totalRows:0, logs:[]};
+function formatUploadBytes(n){
+  const v=Number(n||0);
+  if(v>=1024*1024) return (v/(1024*1024)).toFixed(2)+'MB';
+  if(v>=1024) return (v/1024).toFixed(1)+'KB';
+  return Math.round(v)+'B';
+}
+function formatUploadTime(ms){
+  const v=Number(ms||0);
+  if(v>=1000) return (v/1000).toFixed(1)+'秒';
+  return Math.round(v)+'ms';
+}
+function uploadProgressElements(){
+  return {
+    panel:$('uploadProgressPanel'),
+    title:$('uploadProgressTitle'),
+    percent:$('uploadProgressPercent'),
+    bar:$('uploadProgressBar'),
+    meta:$('uploadProgressMeta'),
+    log:$('uploadProgressLog')
+  };
+}
+function uploadProgressStart(title,totalRows){
+  __uploadProgress={active:true,startedAt:performance.now(),title:String(title||'DB送信'),totalRows:Number(totalRows||0),logs:[]};
+  const el=uploadProgressElements();
+  if(el.panel) el.panel.classList.remove('hidden');
+  uploadProgressUpdate({phase:title||'DB送信を開始します',percent:0,currentRows:0,totalRows,detail:'準備中です。'});
+  uploadProgressLog(`${title||'DB送信'}を開始します。対象${totalRows||0}行。`);
+}
+function uploadProgressUpdate(info={}){
+  const el=uploadProgressElements();
+  const percent=Math.max(0,Math.min(100,Number(info.percent||0)));
+  const elapsed=__uploadProgress.startedAt ? performance.now()-__uploadProgress.startedAt : 0;
+  if(el.title) el.title.textContent=info.phase || __uploadProgress.title || 'DB送信中';
+  if(el.percent) el.percent.textContent=`${percent.toFixed(0)}%`;
+  if(el.bar) el.bar.style.width=percent+'%';
+  const lines=[];
+  if(info.currentRows!==undefined || info.totalRows!==undefined){
+    lines.push(`行数：${Number(info.currentRows||0)} / ${Number(info.totalRows||__uploadProgress.totalRows||0)}行`);
+  }
+  if(info.chunks!==undefined) lines.push(`チャンク：${info.chunks}`);
+  if(info.parts!==undefined) lines.push(`送信パーツ：${info.parts}`);
+  if(info.rawChars!==undefined || info.sentChars!==undefined){
+    const raw=Number(info.rawChars||0);
+    const sent=Number(info.sentChars||0);
+    const ratio=raw ? Math.round((sent/raw)*100) : 0;
+    lines.push(`サイズ：元JSON ${formatUploadBytes(raw)} / 送信目安 ${formatUploadBytes(sent)} / 約${ratio}%`);
+  }
+  lines.push(`経過：${formatUploadTime(elapsed)}`);
+  if(info.detail) lines.push(String(info.detail));
+  if(el.meta) el.meta.textContent=lines.filter(Boolean).join('\n');
+}
+function uploadProgressLog(line){
+  const text=`[${new Date().toLocaleTimeString('ja-JP',{hour12:false})}] ${line}`;
+  __uploadProgress.logs.push(text);
+  __uploadProgress.logs=__uploadProgress.logs.slice(-40);
+  const el=uploadProgressElements();
+  if(el.log) el.log.textContent=__uploadProgress.logs.join('\n');
+}
+function uploadProgressDone(result={}){
+  const elapsed=__uploadProgress.startedAt ? performance.now()-__uploadProgress.startedAt : 0;
+  const raw=Number(result.rawChars||0);
+  const sent=Number(result.gzipBase64Chars ? result.gzipBase64Chars*0.75 : 0);
+  uploadProgressUpdate({
+    phase:'DB送信が完了しました',
+    percent:100,
+    currentRows:result.sentRows||__uploadProgress.totalRows||0,
+    totalRows:__uploadProgress.totalRows||result.sentRows||0,
+    chunks:result.sentChunks||0,
+    parts:result.sentParts||0,
+    rawChars:raw||undefined,
+    sentChars:sent||undefined,
+    detail:`完了しました。処理時間：${formatUploadTime(elapsed)} / 方式：${result.uploadEncoding||'text'}`
+  });
+  uploadProgressLog(`完了：${result.sentRows||0}行 / ${result.sentChunks||0}チャンク / ${result.sentParts||0}パーツ / ${formatUploadTime(elapsed)}`);
+}
+function uploadProgressFail(err){
+  uploadProgressUpdate({phase:'DB送信に失敗しました',percent:100,detail:String(err && err.message ? err.message : err)});
+  uploadProgressLog('失敗：'+String(err && err.message ? err.message : err));
+}
+
 function utf8ToBase64(str){
   const text = String(str ?? '');
   return btoa(unescape(encodeURIComponent(text)));
@@ -13674,31 +13816,48 @@ function makeGzipUploadRowChunks(rows){
 async function uploadRowsByTextChunks(key, rows, mode){
   const token = uploadToken(mode === 'replace' ? 'rp' : 'up', key);
   const list = rows || [];
+  uploadProgressStart(`${labelKey(key)}の通常DB送信`, list.length);
   const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'text'}));
   if(!begin.ok) throw new Error(begin.error || `${labelKey(key)}のDB送信準備に失敗しました`);
   let sentChunks = 0;
   let sentParts = 0;
+  let rawChars = 0;
   try{
     const chunks = makeUploadRowChunks(token, list);
+    uploadProgressLog(`通常送信用に${chunks.length}チャンクへ分割しました。`);
     for(let c=0; c<chunks.length; c++){
       const text = JSON.stringify(chunks[c]);
+      rawChars += text.length;
       const parts = splitTextForJsonpUpload(token, c, text);
+      uploadProgressLog(`チャンク${c+1}/${chunks.length}：${chunks[c].length}行 / ${parts.length}パーツ送信`);
       for(let p=0; p<parts.length; p++){
         const res = await callApi(uploadPartPayload(token, c, p, parts[p]));
         if(!res.ok) throw new Error(res.error || `${labelKey(key)}のDB送信に失敗しました`);
         sentParts++;
+        uploadProgressUpdate({
+          phase:`${labelKey(key)}を通常送信中`,
+          percent:Math.min(88, ((c + (p+1)/parts.length) / Math.max(1,chunks.length)) * 88),
+          currentRows:chunks.slice(0,c).reduce((sum,rows)=>sum+rows.length,0),
+          totalRows:list.length,
+          chunks:`${c+1}/${chunks.length}`,
+          parts:sentParts,
+          rawChars,
+          sentChars:rawChars,
+          detail:`チャンク${c+1}の${p+1}/${parts.length}パーツを送信しました。`
+        });
       }
       sentChunks++;
-      if(chunks.length > 3){
-        const sentRows = chunks.slice(0, c + 1).reduce((sum, rows)=>sum + rows.length, 0);
-        toast(`${labelKey(key)}をDB送信中... ${sentRows}/${list.length}行`, 'warn');
-        await sleep(15);
-      }
+      if(chunks.length > 3) await sleep(15);
     }
+    uploadProgressUpdate({phase:'DB反映中',percent:92,currentRows:list.length,totalRows:list.length,chunks:`${sentChunks}/${chunks.length}`,parts:sentParts,rawChars,sentChars:rawChars,detail:'Apps Script側でシートへ一括反映しています。'});
+    uploadProgressLog('Apps Script側でDB反映を開始します。');
     const commit = await callApi(payload('commitUpload', {token}));
     if(!commit.ok) throw new Error(commit.error || `${labelKey(key)}のDB反映に失敗しました`);
-    return {...commit, uploadEncoding:'text', sentRows:list.length, sentChunks, sentParts};
+    const result={...commit, uploadEncoding:'text', sentRows:list.length, sentChunks, sentParts, rawChars};
+    uploadProgressDone(result);
+    return result;
   }catch(e){
+    uploadProgressFail(e);
     try{ await callApi(payload('abortUpload', {token})); }catch(abortErr){ console.warn('upload abort failed', abortErr); }
     throw e;
   }
@@ -13706,6 +13865,7 @@ async function uploadRowsByTextChunks(key, rows, mode){
 async function uploadRowsByGzipChunks(key, rows, mode){
   const token = uploadToken(mode === 'replace' ? 'gzrp' : 'gzup', key);
   const list = rows || [];
+  uploadProgressStart(`${labelKey(key)}の圧縮DB送信`, list.length);
   const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'gzipBase64'}));
   if(!begin.ok) throw new Error(begin.error || `${labelKey(key)}のDB圧縮送信準備に失敗しました`);
   let sentChunks = 0;
@@ -13714,28 +13874,80 @@ async function uploadRowsByGzipChunks(key, rows, mode){
   let gzipBase64Chars = 0;
   try{
     const chunks = makeGzipUploadRowChunks(list);
+    uploadProgressLog(`圧縮単位：最大${UPLOAD_GZIP_RAW_CHARS_PER_CHUNK.toLocaleString()}文字のJSONごと。${chunks.length}チャンクに分割しました。`);
     let sentRows = 0;
     for(let c=0; c<chunks.length; c++){
       const text = JSON.stringify(chunks[c]);
+      uploadProgressUpdate({
+        phase:`${labelKey(key)}を圧縮中`,
+        percent:Math.min(15 + (c/Math.max(1,chunks.length))*20,35),
+        currentRows:sentRows,
+        totalRows:list.length,
+        chunks:`${c+1}/${chunks.length}`,
+        parts:sentParts,
+        rawChars,
+        sentChars:gzipBase64Chars*0.75,
+        detail:`チャンク${c+1}/${chunks.length}をgzip圧縮しています。`
+      });
+      const compressStart = performance.now();
       rawChars += text.length;
       const gzipBase64 = await gzipBase64FromText(text);
+      const compressMs = performance.now() - compressStart;
       gzipBase64Chars += gzipBase64.length;
       const parts = splitGzipBase64ForJsonpUpload(token, c, gzipBase64);
+      const approxSentBytes = Math.round(gzipBase64.length * 0.75);
+      const ratio = text.length ? Math.max(1, Math.round((approxSentBytes / text.length) * 100)) : 100;
+      uploadProgressLog(`チャンク${c+1}/${chunks.length}：${chunks[c].length}行 / 元${formatUploadBytes(text.length)} → 圧縮後約${formatUploadBytes(approxSentBytes)}（約${ratio}%） / 圧縮${formatUploadTime(compressMs)} / ${parts.length}パーツ`);
       for(let p=0; p<parts.length; p++){
         const res = await callApi(uploadGzipPartPayload(token, c, p, parts[p]));
         if(!res.ok) throw new Error(res.error || `${labelKey(key)}のDB圧縮送信に失敗しました`);
         sentParts++;
+        uploadProgressUpdate({
+          phase:`${labelKey(key)}を圧縮送信中`,
+          percent:35 + Math.min(53, ((c + (p+1)/parts.length) / Math.max(1,chunks.length)) * 53),
+          currentRows:sentRows,
+          totalRows:list.length,
+          chunks:`${c+1}/${chunks.length}`,
+          parts:sentParts,
+          rawChars,
+          sentChars:gzipBase64Chars*0.75,
+          detail:`チャンク${c+1}の${p+1}/${parts.length}パーツを送信しました。`
+        });
       }
       sentChunks++;
       sentRows += chunks[c].length;
-      const ratio = rawChars ? Math.max(1, Math.round((gzipBase64Chars * 0.75 / rawChars) * 100)) : 100;
-      toast(`${labelKey(key)}を圧縮送信中... ${sentRows}/${list.length}行 / 圧縮後約${ratio}%`, 'warn');
+      uploadProgressUpdate({
+        phase:`${labelKey(key)}を圧縮送信中`,
+        percent:35 + Math.min(53, (sentRows / Math.max(1,list.length))*53),
+        currentRows:sentRows,
+        totalRows:list.length,
+        chunks:`${sentChunks}/${chunks.length}`,
+        parts:sentParts,
+        rawChars,
+        sentChars:gzipBase64Chars*0.75,
+        detail:`${sentRows}/${list.length}行を送信しました。`
+      });
       if(chunks.length > 1) await sleep(15);
     }
+    uploadProgressUpdate({
+      phase:'DB反映中',
+      percent:92,
+      currentRows:list.length,
+      totalRows:list.length,
+      chunks:`${sentChunks}/${chunks.length}`,
+      parts:sentParts,
+      rawChars,
+      sentChars:gzipBase64Chars*0.75,
+      detail:'Apps Script側でgzip解凍し、シートへ一括反映しています。'
+    });
+    uploadProgressLog('Apps Script側でgzip解凍とDB反映を開始します。');
     const commit = await callApi(payload('commitUpload', {token}));
     if(!commit.ok) throw new Error(commit.error || `${labelKey(key)}のDB反映に失敗しました`);
-    return {...commit, uploadEncoding:'gzipBase64', sentRows:list.length, sentChunks, sentParts, rawChars, gzipBase64Chars};
+    const result={...commit, uploadEncoding:'gzipBase64', sentRows:list.length, sentChunks, sentParts, rawChars, gzipBase64Chars};
+    uploadProgressDone(result);
+    return result;
   }catch(e){
+    uploadProgressFail(e);
     try{ await callApi(payload('abortUpload', {token})); }catch(abortErr){ console.warn('compressed upload abort failed', abortErr); }
     throw e;
   }
