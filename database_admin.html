@@ -1012,7 +1012,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.104';
+const RECRAFT_DB_VERSION = 'v90.8.105';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.103';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -13640,6 +13640,29 @@ function uploadProgressLog(line){
   const el=uploadProgressElements();
   if(el.log) el.log.textContent=__uploadProgress.logs.join('\n');
 }
+function uploadProgressHeartbeat(infoFn, intervalMs=700){
+  let ticks=0;
+  return setInterval(()=>{
+    ticks++;
+    try{
+      const info = typeof infoFn === 'function' ? infoFn(ticks) : {};
+      uploadProgressUpdate(info || {});
+      if(ticks % 5 === 0 && info && info.detail) uploadProgressLog(info.detail);
+    }catch(e){
+      console.warn('upload progress heartbeat failed', e);
+    }
+  }, intervalMs);
+}
+function withUploadTimeout(promise, timeoutMs, message){
+  if(!timeoutMs || timeoutMs <= 0) return promise;
+  let timer;
+  return Promise.race([
+    promise,
+    new Promise((_, reject)=>{
+      timer=setTimeout(()=>reject(new Error(message || '処理がタイムアウトしました')), timeoutMs);
+    })
+  ]).finally(()=>clearTimeout(timer));
+}
 function uploadProgressDone(result={}){
   const elapsed=__uploadProgress.startedAt ? performance.now()-__uploadProgress.startedAt : 0;
   const raw=Number(result.rawChars||0);
@@ -13689,7 +13712,8 @@ function cleanUploadRow(row){
 const UPLOAD_JSONP_URL_LIMIT = 2200;
 const UPLOAD_PART_CHAR_STEP = 260;
 const UPLOAD_GZIP_B64_PART_STEP = 1150;
-const UPLOAD_GZIP_RAW_CHARS_PER_CHUNK = 90000;
+const UPLOAD_GZIP_RAW_CHARS_PER_CHUNK = 20000;
+const UPLOAD_GZIP_CHUNK_TIMEOUT_MS = 15000;
 function uploadPartPayload(token, chunkIndex, partIndex, textPart){
   return payload('putUploadChunk', {
     token,
@@ -13874,7 +13898,7 @@ async function uploadRowsByGzipChunks(key, rows, mode){
   let gzipBase64Chars = 0;
   try{
     const chunks = makeGzipUploadRowChunks(list);
-    uploadProgressLog(`圧縮単位：最大${UPLOAD_GZIP_RAW_CHARS_PER_CHUNK.toLocaleString()}文字のJSONごと。${chunks.length}チャンクに分割しました。`);
+    uploadProgressLog(`圧縮単位：最大${UPLOAD_GZIP_RAW_CHARS_PER_CHUNK.toLocaleString()}文字のJSONごと。${chunks.length}チャンクに分割しました。長時間止まる場合は自動で通常送信へ切り替えます。`);
     let sentRows = 0;
     for(let c=0; c<chunks.length; c++){
       const text = JSON.stringify(chunks[c]);
@@ -13891,7 +13915,32 @@ async function uploadRowsByGzipChunks(key, rows, mode){
       });
       const compressStart = performance.now();
       rawChars += text.length;
-      const gzipBase64 = await gzipBase64FromText(text);
+      const baseCompressPercent = Math.min(15 + (c/Math.max(1,chunks.length))*20,35);
+      const heartbeat = uploadProgressHeartbeat((ticks)=>{
+        const elapsed = performance.now() - compressStart;
+        const creep = Math.min(18, elapsed / 1000 * 2);
+        return {
+          phase:`${labelKey(key)}を圧縮中`,
+          percent:Math.min(35, baseCompressPercent + creep),
+          currentRows:sentRows,
+          totalRows:list.length,
+          chunks:`${c+1}/${chunks.length}`,
+          parts:sentParts,
+          rawChars,
+          sentChars:gzipBase64Chars*0.75,
+          detail:`チャンク${c+1}/${chunks.length}をgzip圧縮中です。経過${formatUploadTime(elapsed)}。長引く場合は${UPLOAD_GZIP_CHUNK_TIMEOUT_MS/1000}秒で通常送信へ切り替えます。`
+        };
+      }, 700);
+      let gzipBase64;
+      try{
+        gzipBase64 = await withUploadTimeout(
+          gzipBase64FromText(text),
+          UPLOAD_GZIP_CHUNK_TIMEOUT_MS,
+          `チャンク${c+1}/${chunks.length}のgzip圧縮が${UPLOAD_GZIP_CHUNK_TIMEOUT_MS/1000}秒を超えました。通常送信へ切り替えます。`
+        );
+      }finally{
+        clearInterval(heartbeat);
+      }
       const compressMs = performance.now() - compressStart;
       gzipBase64Chars += gzipBase64.length;
       const parts = splitGzipBase64ForJsonpUpload(token, c, gzipBase64);
