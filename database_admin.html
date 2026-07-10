@@ -397,6 +397,7 @@
 .monster-line-editor{display:grid;gap:8px}.monster-line-head,.monster-line-row{display:grid;gap:6px;align-items:center}.monster-line-head{font-size:11px;color:var(--muted);font-weight:900}.monster-line-head.action-head,.monster-line-row[data-monster-action-row]{grid-template-columns:1.1fr 1.1fr 1fr .7fr .8fr 1.4fr auto}.monster-line-head.drop-head,.monster-line-row[data-monster-drop-row]{grid-template-columns:1fr 1fr 1.45fr .75fr .65fr auto}.monster-line-row input,.monster-line-row select{min-width:0}.hidden-monster-raw{display:none!important}
 .quest-event-editor{display:grid;gap:10px}.hidden-quest-fixed-raw{display:none!important}.quest-event-list{display:grid;gap:8px}.quest-event-row{border:1px solid var(--line);border-radius:14px;background:#fffaf3;overflow:hidden}.quest-event-row>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;font-weight:900;color:#5b3821}.quest-event-row>summary::-webkit-details-marker{display:none}.quest-event-row>summary:after{content:'開閉';font-size:11px;color:var(--muted);font-weight:800}.quest-event-row[open]>summary{border-bottom:1px solid var(--line)}.quest-event-body{display:grid;gap:8px;padding:12px}.quest-event-grid{display:grid;grid-template-columns:.75fr 1fr;gap:8px}.quest-event-grid textarea{min-height:76px}.quest-event-grid .wide{grid-column:1/-1}.quest-event-mini{display:flex;flex-wrap:wrap;gap:6px;align-items:center;color:var(--muted);font-size:12px}.quest-event-mini b{color:#6a3f25}.quest-event-actions{display:flex;justify-content:flex-end}.quest-progress-select{max-width:220px}@media(max-width:780px){.quest-event-grid{grid-template-columns:1fr}}
   .internal-raw-field, textarea.internal-raw-field { display: none !important; visibility: hidden !important; height: 0 !important; min-height: 0 !important; padding: 0 !important; margin: 0 !important; border: 0 !important; overflow: hidden !important; }
+.soft-divider{border:0;border-top:1px solid var(--line,#d8d2c4);margin:14px 0;}
 </style>
 </head>
 <body>
@@ -511,6 +512,7 @@
       <button class="subtab" data-main-tab="facilities" data-facility-view="鍛冶屋">鍛冶屋</button>
       <button class="subtab" data-main-tab="facilities" data-facility-view="薬屋">薬屋</button>
       <button class="subtab" data-main-tab="facilities" data-facility-view="宿屋">宿屋</button>
+      <button class="subtab" data-main-tab="facilities" data-facility-view="骨董屋">骨董屋</button>
     </div>
   </div>
 
@@ -807,6 +809,61 @@
           </div>
           <div id="facilityAlchemyResult" class="facility-upgrade-result muted">作成するアイテムと道具ランクを選択してください。</div>
         </div>
+        <div id="facilityAntiqueWork" class="facility-work-block hidden">
+          <div class="input-action-row">
+            <div>
+              <label for="facilityAntiqueStockCount">ランダム販売数</label>
+              <select id="facilityAntiqueStockCount">
+                <option value="1">1点</option>
+                <option value="2">2点</option>
+                <option value="3" selected>3点</option>
+                <option value="4">4点</option>
+                <option value="5">5点</option>
+              </select>
+            </div>
+            <button class="secondary" type="button" data-facility-antique-random>未鑑定スクロールをランダム選出</button>
+          </div>
+          <div id="facilityAntiqueStockResult" class="facility-upgrade-result muted">未鑑定スクロールのランダム販売枠を選出できます。</div>
+
+          <hr class="soft-divider">
+
+          <div class="input-action-row">
+            <div>
+              <label for="facilityAppraisalRankInput">鑑定スクロール階級</label>
+              <select id="facilityAppraisalRankInput">
+                <option value="初級">初級</option>
+                <option value="中級">中級</option>
+                <option value="上級">上級</option>
+                <option value="特級">特級</option>
+              </select>
+            </div>
+            <button class="secondary" type="button" data-facility-appraisal-check>鑑定難易度を確認</button>
+          </div>
+          <div id="facilityAppraisalResult" class="facility-upgrade-result muted">鑑定するスクロール階級を選択してください。</div>
+
+          <hr class="soft-divider">
+
+          <div class="input-action-row">
+            <div>
+              <label for="facilityTranscribeTypeInput">術式種別</label>
+              <select id="facilityTranscribeTypeInput">
+                <option value="魔法">魔法</option>
+                <option value="祈祷">祈祷</option>
+              </select>
+            </div>
+            <div>
+              <label for="facilityTranscribeRankInput">術式階級</label>
+              <select id="facilityTranscribeRankInput">
+                <option value="初級">初級</option>
+                <option value="中級">中級</option>
+                <option value="上級">上級</option>
+                <option value="特級">特級</option>
+              </select>
+            </div>
+            <button class="secondary" type="button" data-facility-transcribe-check>術式化難易度を確認</button>
+          </div>
+          <div id="facilityTranscribeResult" class="facility-upgrade-result muted">術式種別と階級を選択してください。</div>
+        </div>
         <div id="facilityNoWork" class="facility-upgrade-result muted hidden">この施設には強化・調合の難易度確認項目はありません。</div>
       </section>
       <div class="facility-output">
@@ -886,7 +943,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.96';
+const RECRAFT_DB_VERSION = 'v90.8.100';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.86';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -904,7 +961,7 @@ const SCHEMA = {
   recipes: ['id','name','rank','price','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   spells: ['id','type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   quest_rewards: ['id','rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards','notes','updatedAt','ownerKey','createdBy'],
-  quests: ['id','name','questType','rank','areaName','progressStep','fixedEvents','clearCondition','bossMonster','rewardMoney','rewardItems','unlockResult','description','notes','updatedAt','ownerKey','createdBy'],
+  quests: ['id','name','questCategory','enabled','questType','rank','areaName','progressStep','fixedEvents','clearCondition','bossMonster','questBossName','questBossFormation','questBossComposition','rewardMoney','rewardItems','unlockResult','description','notes','updatedAt','ownerKey','createdBy'],
   exploration_areas: ['id','name','areaType','difficulty','unlockCondition','mainMaterials','mainMonsters','eventTableId','progressStep','description','notes','updatedAt','ownerKey','createdBy'],
   event_tables: ['id','tableId','areaName','eventName','eventType','conditionType','conditionValue','checkType','targetValue','treasureTableId','encounterCountRule','encounterCountMin','encounterCountMax','encounterFormation','encounterComposition','result','progressEffect','notes','updatedAt','ownerKey','createdBy'],
   treasure_tables: ['id','tableId','areaName','treasureRank','entryType','entryName','entryPublicId','recipeName','scrollRank','quantity','weight','description','enabled','notes','updatedAt','ownerKey','createdBy'],
@@ -912,7 +969,7 @@ const SCHEMA = {
   monsters: ['id','name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', modifiers:'補正値', upgradeLimit:'強化可能回数', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具ランク', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'ボス/達成イベント', rewardMoney:'報酬金', rewardItems:'報酬アイテム', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', actions:'行動', drops:'ドロップ'
+  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', modifiers:'補正値', upgradeLimit:'強化可能回数', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具ランク', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', actions:'行動', drops:'ドロップ'
 };
 
 const FORM_PRIMARY_FIELDS = {
@@ -927,7 +984,7 @@ const FORM_PRIMARY_FIELDS = {
   materials: ['name','publicId','materialType','materialCategory','rank','price','source','usageTags','equipmentUpgradeEffect','description','effect','notes'],
   spells: ['type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags'],
   quest_rewards: ['rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards'],
-  quests: ['name','questType','rank','areaName','progressStep','fixedEvents','clearCondition','bossMonster','rewardMoney','rewardItems','unlockResult','description','notes'],
+  quests: ['name','questCategory','enabled','questType','rank','areaName','progressStep','fixedEvents','clearCondition','bossMonster','questBossName','questBossFormation','questBossComposition','rewardMoney','rewardItems','unlockResult','description','notes'],
   exploration_areas: ['name','areaType','difficulty','unlockCondition','mainMaterials','mainMonsters','eventTableId','description','notes'],
   event_tables: ['tableId','areaName','eventName','eventType','conditionType','conditionValue','checkType','targetValue','treasureTableId','encounterCountRule','encounterCountMin','encounterCountMax','encounterFormation','encounterComposition','result','progressEffect','notes'],
   treasure_tables: ['tableId','areaName','treasureRank','entryType','entryName','entryPublicId','recipeName','scrollRank','quantity','weight','description','enabled','notes'],
@@ -968,7 +1025,7 @@ const ADVANCED_FILTERS = {
   recipes: [{field:'rank', label:'ランク'},{field:'craftType', label:'製作区分'},{field:'category', label:'分類'},{field:'baseItem', label:'派生元'},{field:'branchType', label:'派生系統'},{field:'resultKind', label:'完成品種別'},{field:'difficulty', label:'難度'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   spells: [{field:'type', label:'種別'},{field:'rank', label:'ランク'},{field:'role', label:'役割'},{field:'target', label:'対象'},{field:'setItem', label:'必要装備'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   quest_rewards: [{field:'rank', label:'ランク'},{field:'scale', label:'規模'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  quests: [{field:'questType', label:'クエスト種別'},{field:'rank', label:'ランク'},{field:'areaName', label:'エリア'},{field:'bossMonster', label:'ボス/達成イベント'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
+  quests: [{field:'questCategory', label:'クエスト分類'},{field:'enabled', label:'有効'},{field:'questType', label:'クエスト種別'},{field:'rank', label:'ランク'},{field:'areaName', label:'エリア'},{field:'questBossName', label:'クエストボス'},{field:'bossMonster', label:'設定魔物'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   exploration_areas: [{field:'areaType', label:'エリア種別'},{field:'difficulty', label:'難度'},{field:'eventTableId', label:'イベント表ID'},{field:'progressStep', label:'進行度上昇'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   event_tables: [{field:'tableId', label:'表ID'},{field:'areaName', label:'エリア'},{field:'eventType', label:'イベント種別'},{field:'conditionType', label:'前提条件'},{field:'conditionValue', label:'条件内容'},{field:'encounterCountRule', label:'出現数'},{field:'treasureTableId', label:'宝箱表'},{field:'checkType', label:'判定'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   treasure_tables: [{field:'tableId', label:'表ID'},{field:'areaName', label:'エリア'},{field:'treasureRank', label:'ランク'},{field:'entryType', label:'中身種別'},{field:'enabled', label:'有効'}],
@@ -3488,11 +3545,11 @@ const DEFAULTS = {
       "name": "魔導インク",
       "price": 50,
       "rank": "普通",
-      "effect": "術式研究・写本用",
+      "effect": "魔法スクロールを魔導書へ登録する術式化素材。術式化時に魔導インク×1を消費し、集中判定を行う。",
       "source": "",
-      "usageTags": "素材,魔法",
-      "tags": "素材,魔法",
-      "description": "魔力に反応して色を変えるインク。術式の写本や研究記録に使われる。",
+      "usageTags": "素材,魔法,術式化,魔導書",
+      "tags": "素材,魔法,術式化,魔導書",
+      "description": "魔力に反応して色を変えるインク。鑑定済みの魔法スクロールを魔導書へ写し取り、扱える術式として定着させるために使われる。",
       "notes": "",
       "equipmentUpgradeEffect": "",
       "equipmentUpgradeValue": "",
@@ -3511,11 +3568,11 @@ const DEFAULTS = {
       "name": "祈祷紙",
       "price": 50,
       "rank": "普通",
-      "effect": "祈祷術式の写本用",
+      "effect": "祈祷スクロールを祈祷書へ登録する術式化素材。術式化時に祈祷紙×1を消費し、集中判定を行う。",
       "source": "",
-      "usageTags": "素材,祈祷",
-      "tags": "素材,祈祷",
-      "description": "祈りを留めやすい薄紙。祈祷の言葉を書き写すと、繊維がほのかに光る。",
+      "usageTags": "素材,祈祷,術式化,祈祷書",
+      "tags": "素材,祈祷,術式化,祈祷書",
+      "description": "祈りを留めやすい薄紙。鑑定済みの祈祷スクロールを祈祷書へ写し取り、扱える祈祷として定着させるために使われる。",
       "notes": "",
       "equipmentUpgradeEffect": "",
       "equipmentUpgradeValue": "",
@@ -5014,7 +5071,7 @@ const DEFAULTS = {
       "materialCategory": "",
       "name": "未鑑定スクロール：初級",
       "csVisible": "TRUE",
-      "price": "80",
+      "price": "180",
       "rank": "初級",
       "equipSlot": "",
       "skill": "",
@@ -5033,14 +5090,14 @@ const DEFAULTS = {
       "checkType": "",
       "element": "",
       "description": "魔力の痕跡が残る古いスクロール。鑑定するまで内容は分からない。",
-      "effect": "鑑定に成功すると、初級の魔法術式スクロールとして内容が判明する。",
-      "source": "宝箱",
-      "usageTags": "",
+      "effect": "骨董屋で鑑定すると、初級相当の魔法または祈祷スクロールとして内容が判明する。",
+      "source": "宝箱 / 骨董屋",
+      "usageTags": "スクロール,未鑑定,鑑定,術式化",
       "equipmentUpgradeEffect": "",
       "equipmentUpgradeValue": "",
-      "unlockFacility": "",
-      "tags": "スクロール,未鑑定,魔法",
-      "notes": "",
+      "unlockFacility": "骨董屋",
+      "tags": "スクロール,未鑑定,魔法,祈祷,ランダム販売",
+      "notes": "骨董屋ではランダム販売枠。宝箱からも入手できる。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
@@ -5055,7 +5112,7 @@ const DEFAULTS = {
       "materialCategory": "",
       "name": "未鑑定スクロール：中級",
       "csVisible": "TRUE",
-      "price": "180",
+      "price": "450",
       "rank": "中級",
       "equipSlot": "",
       "skill": "",
@@ -5074,14 +5131,14 @@ const DEFAULTS = {
       "checkType": "",
       "element": "",
       "description": "強い魔力の痕跡が残る古いスクロール。鑑定するまで内容は分からない。",
-      "effect": "鑑定に成功すると、中級相当の魔法術式スクロールとして内容が判明する。現時点では候補データ追加後に使用する。",
-      "source": "宝箱",
-      "usageTags": "",
+      "effect": "骨董屋で鑑定すると、中級相当の魔法または祈祷スクロールとして内容が判明する。",
+      "source": "宝箱 / 骨董屋",
+      "usageTags": "スクロール,未鑑定,鑑定,術式化",
       "equipmentUpgradeEffect": "",
       "equipmentUpgradeValue": "",
-      "unlockFacility": "",
-      "tags": "スクロール,未鑑定,魔法",
-      "notes": "",
+      "unlockFacility": "骨董屋",
+      "tags": "スクロール,未鑑定,魔法,祈祷,ランダム販売",
+      "notes": "骨董屋ではランダム販売枠。宝箱からも入手できる。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
@@ -5327,6 +5384,170 @@ const DEFAULTS = {
       "equipmentUpgradeValue": "",
       "unlockFacility": "",
       "tags": "スクロール,術式,魔法,初級",
+      "notes": "",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "scroll_unidentified_advanced",
+      "publicId": "RCA-UASC-3Z7P",
+      "dataKind": "アイテム",
+      "itemType": "スクロール",
+      "itemCategory": "未鑑定スクロール",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "未鑑定スクロール：上級",
+      "csVisible": "TRUE",
+      "price": "900",
+      "rank": "上級",
+      "equipSlot": "",
+      "skill": "",
+      "power": "",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "",
+      "upgradeLimit": "0",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "",
+      "description": "濃い魔力の痕跡が残る古いスクロール。鑑定するまで内容は分からない。",
+      "effect": "骨董屋で鑑定すると、上級相当の魔法または祈祷スクロールとして内容が判明する。",
+      "source": "宝箱 / 骨董屋",
+      "usageTags": "スクロール,未鑑定,鑑定,術式化",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "骨董屋",
+      "tags": "スクロール,未鑑定,魔法,祈祷,ランダム販売",
+      "notes": "骨董屋では高額なランダム販売枠。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "scroll_unidentified_master",
+      "publicId": "RCA-UHSC-9K2M",
+      "dataKind": "アイテム",
+      "itemType": "スクロール",
+      "itemCategory": "未鑑定スクロール",
+      "materialType": "",
+      "materialCategory": "",
+      "name": "未鑑定スクロール：特級",
+      "csVisible": "TRUE",
+      "price": "1500",
+      "rank": "特級",
+      "equipSlot": "",
+      "skill": "",
+      "power": "",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "",
+      "upgradeLimit": "0",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "",
+      "description": "古い封印と強い魔力を帯びた希少なスクロール。鑑定するまで内容は分からない。",
+      "effect": "骨董屋で鑑定すると、特級相当の魔法または祈祷スクロールとして内容が判明する。",
+      "source": "骨董屋",
+      "usageTags": "スクロール,未鑑定,鑑定,術式化",
+      "equipmentUpgradeEffect": "",
+      "equipmentUpgradeValue": "",
+      "unlockFacility": "骨董屋",
+      "tags": "スクロール,未鑑定,魔法,祈祷,ランダム販売",
+      "notes": "骨董屋の高額ランダム販売枠。通常の宝箱にはまだ入れない想定。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "mat_grass_king_horn",
+      "publicId": "RCA-GKHO-001",
+      "dataKind": "素材",
+      "itemType": "",
+      "itemCategory": "",
+      "materialType": "魔物素材",
+      "materialCategory": "獣",
+      "name": "草角王の大角",
+      "csVisible": "TRUE",
+      "price": "60",
+      "rank": "普通",
+      "equipSlot": "",
+      "skill": "",
+      "power": "",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "",
+      "upgradeLimit": "0",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "",
+      "description": "草原を駆ける大角のボスから得られる硬い角。軽く鋭く、武器の芯材や矢弾の強化に向く。",
+      "effect": "武器強化に使うと、威力を高める素材になる。",
+      "source": "草角王ラグヴェル",
+      "usageTags": "素材,鍛冶,武器強化,矢弾",
+      "equipmentUpgradeEffect": "威力+1",
+      "equipmentUpgradeValue": "1",
+      "unlockFacility": "",
+      "tags": "素材,ボス素材,獣",
+      "notes": "",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "mat_forest_lord_heartwood",
+      "publicId": "RCA-FLHW-001",
+      "dataKind": "素材",
+      "itemType": "",
+      "itemCategory": "",
+      "materialType": "魔物素材",
+      "materialCategory": "植物魔物",
+      "name": "森王の樹心",
+      "csVisible": "TRUE",
+      "price": "65",
+      "rank": "普通",
+      "equipSlot": "",
+      "skill": "",
+      "power": "",
+      "maxStack": "",
+      "ammoUse": "",
+      "ammoKind": "",
+      "quiverCapacity": "",
+      "bagCapacity": "",
+      "offhandBonus": "",
+      "reloadTurns": "",
+      "modifiers": "",
+      "upgradeLimit": "0",
+      "mpCost": "",
+      "target": "",
+      "checkType": "",
+      "element": "",
+      "description": "森奥の古い魔物から取れる濃い年輪を持つ芯材。しなやかで割れにくく、防具や杖の補強に向く。",
+      "effect": "装備強化に使うと、防御や安定性を高める素材になる。",
+      "source": "森奥の枝王ヴィルドラン",
+      "usageTags": "素材,鍛冶,防具強化,杖",
+      "equipmentUpgradeEffect": "防御+1",
+      "equipmentUpgradeValue": "1",
+      "unlockFacility": "",
+      "tags": "素材,ボス素材,植物魔物",
       "notes": "",
       "updatedAt": "",
       "ownerKey": "",
@@ -5866,7 +6087,12 @@ const DEFAULTS = {
       "rewardItems": "ポーション×1",
       "unlockResult": "通常依頼の受注許可、解放済みエリアの自由探索許可",
       "description": "復興中の街で活動を始めるための腕試し。街はずれの草原で採取・探索・戦闘を一通り確認する。",
-      "notes": "個別受注可能。メインクエストではなく、後から参加したPCにも使えるチュートリアル。"
+      "notes": "個別受注可能。メインクエストではなく、後から参加したPCにも使えるチュートリアル。 重要クエスト扱い。通常依頼解放の確認用。 クエストボス構成は固定魔物セットとして扱う。",
+      "questCategory": "重要",
+      "enabled": "TRUE",
+      "questBossName": "試験用の魔物遭遇",
+      "questBossFormation": "前衛：プチスライム ×1 / 前衛：ラフィンラット ×1",
+      "questBossComposition": "前衛,プチスライム,1;前衛,ラフィンラット,1"
     },
     {
       "id": "quest_unlock_nearby_forest",
@@ -5875,17 +6101,22 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "街はずれの草原",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t獣道の入口\t草原の奥に森へ続く獣道を見つける。探索または感知に成功すると、次のエリアイベントで不意打ちを受けにくい。\n100%\t森道の確保\t小型魔物を追い払い、近郊の森へ安全に入れる道を確保する。",
-      "clearCondition": "進行度100%で近郊の森を解放する。",
-      "bossMonster": "",
-      "rewardMoney": "120G",
-      "rewardItems": "薬草×2",
+      "fixedEvents": "50%\t森道へ続く獣道\t草原の奥に森へ続く獣道を見つける。探索または感知に成功すると、ボス遭遇前に有利な足場を確保できる。\n100%\t森道を塞ぐ魔物群討伐\t森へ向かう道に陣取った魔物の群れと戦闘。討伐すると近郊の森へ安全に入れる道を確保する。",
+      "clearCondition": "クエストボス「森道を塞ぐ魔物群」を討伐し、近郊の森へ続く安全な道を確保する。",
+      "bossMonster": "ラフィンラット / ラピットホーン",
+      "rewardMoney": "140G",
+      "rewardItems": "小獣の毛皮×1, 小獣の牙×1",
       "unlockResult": "近郊の森 解放",
-      "description": "草原の奥に続く道を調査し、近郊の森へ進むための安全な経路を確保する。",
-      "notes": "一度きり。",
+      "description": "草原の奥に続く道を塞ぐ魔物群を討伐し、近郊の森へ進むための安全な経路を確保する。",
+      "notes": "一度きり。重要クエスト。エリア開放クエストは、エリア内で遭遇可能な魔物を組み合わせたクエストボス討伐を条件にする。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "questCategory": "重要",
+      "enabled": "TRUE",
+      "questBossName": "森道を塞ぐ魔物群",
+      "questBossFormation": "前衛：ラピットホーン ×1 / 前衛：ラフィンラット ×2",
+      "questBossComposition": "前衛,ラピットホーン,1;前衛,ラフィンラット,2"
     },
     {
       "id": "quest_unlock_waterside_wetland",
@@ -5894,17 +6125,22 @@ const DEFAULTS = {
       "rank": "小規模",
       "areaName": "近郊の森",
       "progressStep": "+25%",
-      "fixedEvents": "50%\t湿った獣道\t森の奥で湿地へ向かうぬかるんだ道を見つける。運動または探索で安全な足場を確認する。\n100%\t湿地入口の確保\t水辺の魔物を退け、湿地の入口を探索拠点として使えるようにする。",
-      "clearCondition": "進行度100%で水辺の湿地を解放する。",
-      "bossMonster": "",
-      "rewardMoney": "150G",
-      "rewardItems": "澄んだ水×2",
+      "fixedEvents": "50%\t湿地へ続くぬかるみ道\t森の奥で湿地へ向かうぬかるんだ道を見つける。運動または探索で安全な足場を確認する。\n100%\t湿地入口の魔物群討伐\t湿地入口に集まった森の魔物群と戦闘。討伐すると水辺の湿地へ進めるようになる。",
+      "clearCondition": "クエストボス「湿地入口の魔物群」を討伐し、水辺の湿地へ進む入口を確保する。",
+      "bossMonster": "ルートハウンド / ブランチリング / マイコニド",
+      "rewardMoney": "170G",
+      "rewardItems": "動く根×1, 胞子粉×1",
       "unlockResult": "水辺の湿地 解放",
-      "description": "近郊の森の先にある湿地帯へ踏み込み、安全に探索できる入口を確保する。",
-      "notes": "一度きり。",
+      "description": "近郊の森の奥で湿地入口を塞ぐ魔物群を討伐し、水辺の湿地へ踏み込むための入口を確保する。",
+      "notes": "一度きり。重要クエスト。エリア開放クエストは、エリア内で遭遇可能な魔物を組み合わせたクエストボス討伐を条件にする。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "questCategory": "重要",
+      "enabled": "TRUE",
+      "questBossName": "湿地入口の魔物群",
+      "questBossFormation": "前衛：ルートハウンド ×1 / 前衛：ブランチリング ×1 / 後衛：マイコニド ×1",
+      "questBossComposition": "前衛,ルートハウンド,1;前衛,ブランチリング,1;後衛,マイコニド,1"
     },
     {
       "id": "quest_daily_dewgrass",
@@ -5923,7 +6159,12 @@ const DEFAULTS = {
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "questCategory": "デイリー",
+      "enabled": "TRUE",
+      "questBossName": "",
+      "questBossFormation": "",
+      "questBossComposition": ""
     },
     {
       "id": "quest_daily_grass_monsters",
@@ -5942,7 +6183,12 @@ const DEFAULTS = {
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "questCategory": "デイリー",
+      "enabled": "TRUE",
+      "questBossName": "",
+      "questBossFormation": "",
+      "questBossComposition": ""
     },
     {
       "id": "quest_daily_lost_goods",
@@ -5961,7 +6207,12 @@ const DEFAULTS = {
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "questCategory": "デイリー",
+      "enabled": "TRUE",
+      "questBossName": "",
+      "questBossFormation": "",
+      "questBossComposition": ""
     },
     {
       "id": "quest_daily_field_pest",
@@ -5980,7 +6231,12 @@ const DEFAULTS = {
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "questCategory": "デイリー",
+      "enabled": "TRUE",
+      "questBossName": "",
+      "questBossFormation": "",
+      "questBossComposition": ""
     },
     {
       "id": "quest_daily_firewood",
@@ -5999,7 +6255,12 @@ const DEFAULTS = {
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "questCategory": "デイリー",
+      "enabled": "TRUE",
+      "questBossName": "",
+      "questBossFormation": "",
+      "questBossComposition": ""
     },
     {
       "id": "quest_daily_forest_herbs",
@@ -6018,7 +6279,12 @@ const DEFAULTS = {
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "questCategory": "デイリー",
+      "enabled": "TRUE",
+      "questBossName": "",
+      "questBossFormation": "",
+      "questBossComposition": ""
     },
     {
       "id": "quest_daily_beast_tracks",
@@ -6037,7 +6303,12 @@ const DEFAULTS = {
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "questCategory": "デイリー",
+      "enabled": "TRUE",
+      "questBossName": "",
+      "questBossFormation": "",
+      "questBossComposition": ""
     },
     {
       "id": "quest_daily_stream_water",
@@ -6056,7 +6327,12 @@ const DEFAULTS = {
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "questCategory": "デイリー",
+      "enabled": "TRUE",
+      "questBossName": "",
+      "questBossFormation": "",
+      "questBossComposition": ""
     },
     {
       "id": "quest_daily_mucus_collect",
@@ -6075,7 +6351,12 @@ const DEFAULTS = {
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "questCategory": "デイリー",
+      "enabled": "TRUE",
+      "questBossName": "",
+      "questBossFormation": "",
+      "questBossComposition": ""
     },
     {
       "id": "quest_daily_wetland_sound",
@@ -6094,7 +6375,12 @@ const DEFAULTS = {
       "notes": "反復可能。日替わり依頼として再受注可能。",
       "updatedAt": "",
       "ownerKey": "",
-      "createdBy": ""
+      "createdBy": "",
+      "questCategory": "デイリー",
+      "enabled": "TRUE",
+      "questBossName": "",
+      "questBossFormation": "",
+      "questBossComposition": ""
     }
   ],
   "exploration_areas": [
@@ -6704,24 +6990,24 @@ const DEFAULTS = {
       "id": "evt_grass_25",
       "tableId": "evt_outskirts_grass_daily",
       "areaName": "街はずれの草原",
-      "eventName": "ヴェスパットの羽音",
-      "eventType": "魔物遭遇",
-      "conditionType": "なし",
-      "conditionValue": "",
+      "eventName": "草角王の影",
+      "eventType": "ボス遭遇",
+      "conditionType": "噂話",
+      "conditionValue": "草原の丘で王冠のような角を見た",
       "checkType": "なし",
       "targetValue": "",
       "treasureTableId": "",
-      "result": "ヴェスパット1体と遭遇。勝利で薄虫の羽のドロップ判定。",
+      "result": "探索の終盤、草を押し分けて王冠のような大角を持つ獣が現れる。街はずれの草原のボス「草角王ラグヴェル」と遭遇する。",
       "progressEffect": "",
-      "notes": "飛行虫系遭遇。",
+      "notes": "噂条件：草原の丘で王冠のような角を見た。クエスト報酬には影響しない。分類はボス遭遇。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
-      "encounterCountRule": "半数切上",
+      "encounterCountRule": "固定",
       "encounterCountMin": "1",
-      "encounterCountMax": "4",
-      "encounterComposition": "後衛,ヴェスパット,人数半数切上",
-      "encounterFormation": "後衛：ヴェスパット"
+      "encounterCountMax": "1",
+      "encounterComposition": "前衛,草角王ラグヴェル,1",
+      "encounterFormation": "前衛：草角王ラグヴェル ×1"
     },
     {
       "id": "evt_grass_26",
@@ -7394,24 +7680,24 @@ const DEFAULTS = {
       "id": "evt_forest_25",
       "tableId": "evt_nearby_forest_daily",
       "areaName": "近郊の森",
-      "eventName": "枝打ちできる倒木",
-      "eventType": "採取",
-      "conditionType": "なし",
-      "conditionValue": "",
-      "checkType": "力業>=目標値",
-      "targetValue": "10",
+      "eventName": "森王の気配",
+      "eventType": "ボス遭遇",
+      "conditionType": "噂話",
+      "conditionValue": "森の奥で古木が唸る声がした",
+      "checkType": "なし",
+      "targetValue": "",
       "treasureTableId": "",
-      "result": "成功で丈夫な枝2個。目標値+3以上で追加+1。",
+      "result": "探索の終盤、森全体が低く軋み、古木のような巨体が根を引きずって現れる。近郊の森のボス「森奥の枝王ヴィルドラン」と遭遇する。",
       "progressEffect": "",
-      "notes": "木材。",
+      "notes": "噂条件：森の奥で古木が唸る声がした。クエスト報酬には影響しない。分類はボス遭遇。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": "",
-      "encounterCountRule": "",
-      "encounterCountMin": "",
-      "encounterCountMax": "",
-      "encounterComposition": "",
-      "encounterFormation": ""
+      "encounterCountRule": "固定",
+      "encounterCountMin": "1",
+      "encounterCountMax": "1",
+      "encounterComposition": "前衛,森奥の枝王ヴィルドラン,1",
+      "encounterFormation": "前衛：森奥の枝王ヴィルドラン ×1"
     },
     {
       "id": "evt_forest_26",
@@ -8470,6 +8756,52 @@ const DEFAULTS = {
       "encounterCountMax": "",
       "encounterComposition": "",
       "encounterFormation": ""
+    },
+    {
+      "id": "rumor_grass_boss",
+      "tableId": "rumors_inn_daily",
+      "areaName": "街はずれの草原",
+      "eventName": "草原の丘で王冠のような角を見た",
+      "eventType": "宿屋の噂",
+      "conditionType": "なし",
+      "conditionValue": "",
+      "checkType": "なし",
+      "targetValue": "",
+      "treasureTableId": "",
+      "result": "草原の丘で、王冠のように枝分かれした大角を持つ獣を見たという話がある。普通の獣とは違う、草原のボスの気配だ。",
+      "progressEffect": "この噂を選択した日に街はずれの草原探索を100%まで進めると、ボス「草角王ラグヴェル」と遭遇する。",
+      "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
+    },
+    {
+      "id": "rumor_forest_boss",
+      "tableId": "rumors_inn_daily",
+      "areaName": "近郊の森",
+      "eventName": "森の奥で古木が唸る声がした",
+      "eventType": "宿屋の噂",
+      "conditionType": "なし",
+      "conditionValue": "",
+      "checkType": "なし",
+      "targetValue": "",
+      "treasureTableId": "",
+      "result": "近郊の森の奥で、夜になると古木が唸るような低い音がするらしい。森に棲みついたボスが目を覚ましているのかもしれない。",
+      "progressEffect": "この噂を選択した日に近郊の森探索を100%まで進めると、ボス「森奥の枝王ヴィルドラン」と遭遇する。",
+      "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": "",
+      "encounterCountRule": "",
+      "encounterCountMin": "",
+      "encounterCountMax": "",
+      "encounterComposition": "",
+      "encounterFormation": ""
     }
   ],
   "monsters": [
@@ -8886,50 +9218,181 @@ const DEFAULTS = {
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
+    },
+    {
+      "id": "mon_grass_horn_king_ragvel",
+      "name": "草角王ラグヴェル",
+      "monsterType": "獣",
+      "rank": "ボス",
+      "hp": "56",
+      "mp": "0",
+      "hitValue": "6",
+      "evasionValue": "9",
+      "resistValue": "7",
+      "defenseValue": "2",
+      "initiative": "10",
+      "physicalAffinity": "-",
+      "fireAffinity": "-",
+      "waterAffinity": "-",
+      "windAffinity": "耐",
+      "thunderAffinity": "弱",
+      "lightAffinity": "-",
+      "darkAffinity": "-",
+      "neutralAffinity": "-",
+      "actions": "王角突き\t近接>=回避値\t敵1体\t物\t2D6+1\t王冠のような大角で鋭く突く。標準的な単体攻撃。\n草原疾走\t近接>=回避値\t敵前衛2体\t物\t1D6+2\t草を巻き上げながら駆け抜け、前衛をまとめて崩す。\n蹄鳴らし\tなし\t敵全体\t無\tなし\t重い蹄音で威圧する。対象の次の判定に-1。\n角の構え\tなし\t自身\t無\tなし\t次に行う王角突きのダメージ+1D6。ただし次の自身の回避値-1。",
+      "drops": "魔物素材\t獣\tmat_grass_king_horn\t草角王の大角\t100%\t1個\n魔物素材\t獣\tmat_small_beast_pelt\t小獣の毛皮\t70%\t2個\n魔物素材\t獣\tmat_small_beast_fang\t小獣の牙\t60%\t2個",
+      "description": "街はずれの草原に現れるボス。王冠のように枝分かれした大角を持つ獣型の魔物で、群れを散らすほどの突進力を持つ。",
+      "notes": "噂「草原の丘で王冠のような角を見た」が出た日に、街はずれの草原探索をクリアすると遭遇するボス。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "mon_forest_branch_lord_vildran",
+      "name": "森奥の枝王ヴィルドラン",
+      "monsterType": "植物魔物",
+      "rank": "ボス",
+      "hp": "66",
+      "mp": "8",
+      "hitValue": "5",
+      "evasionValue": "7",
+      "resistValue": "10",
+      "defenseValue": "3",
+      "initiative": "5",
+      "physicalAffinity": "-",
+      "fireAffinity": "弱",
+      "waterAffinity": "耐",
+      "windAffinity": "耐",
+      "thunderAffinity": "-",
+      "lightAffinity": "-",
+      "darkAffinity": "-",
+      "neutralAffinity": "-",
+      "actions": "枝王の薙ぎ払い\t近接>=回避値\t敵前衛2体\t物\t2D6\t太い枝腕を横薙ぎに振るい、前衛を巻き込む。\n絡み根の檻\t射撃>=回避値\t敵1体\t物\t1D6+1\t地面から根を伸ばして絡め取る。命中時、対象の次の回避判定-1。\n胞子の森霧\t魔法>=抵抗値\t敵全体\t無\tなし\t眠気を誘う森霧を広げる。抵抗に失敗した対象は次の判定-1。\n樹液再生\tなし\t自身\t水\t1D6+1回復\tHPが半分以下の時に使用。湿った根から樹液を吸い上げて自身を修復する。",
+      "drops": "魔物素材\t植物魔物\tmat_forest_lord_heartwood\t森王の樹心\t100%\t1個\n魔物素材\t植物魔物\tmat_living_root\t動く根\t80%\t2個\n魔物素材\t植物魔物\tmat_spore_powder\t胞子粉\t60%\t2個",
+      "description": "近郊の森の奥に根を張るボス。古木が魔物化したような姿で、森霧と根を操り、侵入者を森の養分にしようとする。",
+      "notes": "噂「森の奥で古木が唸る声がした」が出た日に、近郊の森探索をクリアすると遭遇するボス。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
     }
   ],
   "appraisal_rules": [
     {
-      "id": "appraise_inn_beginner_magic",
-      "facilityName": "宿屋",
+      "id": "appraise_antique_beginner_magic",
+      "facilityName": "骨董屋",
       "scrollRank": "初級",
       "difficulty": "9",
       "spellType": "魔法",
       "spellRank": "初級",
       "candidateTags": "",
-      "description": "宿屋で聞ける噂や伝手を使って、初級の未鑑定スクロールを鑑定する。成功時、初級魔法術式からランダムに内容が判明する。",
+      "description": "骨董屋で初級の未鑑定スクロールを鑑定する。成功時、初級魔法術式からランダムに内容が判明する。",
       "enabled": "TRUE",
-      "notes": "",
+      "notes": "判定は集中。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
     },
     {
-      "id": "appraise_inn_intermediate_magic",
-      "facilityName": "宿屋",
+      "id": "appraise_antique_beginner_prayer",
+      "facilityName": "骨董屋",
+      "scrollRank": "初級",
+      "difficulty": "9",
+      "spellType": "祈祷",
+      "spellRank": "初級",
+      "candidateTags": "",
+      "description": "骨董屋で初級の未鑑定スクロールを鑑定する。成功時、初級祈祷からランダムに内容が判明する。",
+      "enabled": "TRUE",
+      "notes": "判定は集中。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "appraise_antique_intermediate_magic",
+      "facilityName": "骨董屋",
       "scrollRank": "中級",
       "difficulty": "11",
       "spellType": "魔法",
       "spellRank": "中級",
       "candidateTags": "",
-      "description": "中級スクロール用の鑑定枠。中級術式データを追加した後に候補として機能する。",
+      "description": "骨董屋で中級の未鑑定スクロールを鑑定する。中級術式データを追加した後に候補として機能する。",
       "enabled": "TRUE",
-      "notes": "現時点では中級魔法術式候補が未登録なら抽選結果なし。",
+      "notes": "判定は集中。現時点で中級候補が未登録なら抽選結果なし。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
     },
     {
-      "id": "appraise_workshop_beginner_magic",
-      "facilityName": "工房",
-      "scrollRank": "初級",
-      "difficulty": "10",
-      "spellType": "魔法",
-      "spellRank": "初級",
+      "id": "appraise_antique_intermediate_prayer",
+      "facilityName": "骨董屋",
+      "scrollRank": "中級",
+      "difficulty": "11",
+      "spellType": "祈祷",
+      "spellRank": "中級",
       "candidateTags": "",
-      "description": "工房で魔力反応を確認して初級スクロールを鑑定する。宿屋より少し難しいが、設備解放後の代替手段として使う。",
+      "description": "骨董屋で中級の未鑑定スクロールを鑑定する。中級祈祷データを追加した後に候補として機能する。",
       "enabled": "TRUE",
-      "notes": "",
+      "notes": "判定は集中。現時点で中級候補が未登録なら抽選結果なし。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "appraise_antique_advanced_magic",
+      "facilityName": "骨董屋",
+      "scrollRank": "上級",
+      "difficulty": "13",
+      "spellType": "魔法",
+      "spellRank": "上級",
+      "candidateTags": "",
+      "description": "骨董屋で上級の未鑑定スクロールを鑑定する。上級術式データを追加した後に候補として機能する。",
+      "enabled": "TRUE",
+      "notes": "判定は集中。高額販売・高難易度枠。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "appraise_antique_advanced_prayer",
+      "facilityName": "骨董屋",
+      "scrollRank": "上級",
+      "difficulty": "13",
+      "spellType": "祈祷",
+      "spellRank": "上級",
+      "candidateTags": "",
+      "description": "骨董屋で上級の未鑑定スクロールを鑑定する。上級祈祷データを追加した後に候補として機能する。",
+      "enabled": "TRUE",
+      "notes": "判定は集中。高額販売・高難易度枠。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "appraise_antique_master_magic",
+      "facilityName": "骨董屋",
+      "scrollRank": "特級",
+      "difficulty": "15",
+      "spellType": "魔法",
+      "spellRank": "特級",
+      "candidateTags": "",
+      "description": "骨董屋で特級の未鑑定スクロールを鑑定する。特級術式データを追加した後に候補として機能する。",
+      "enabled": "TRUE",
+      "notes": "判定は集中。希少な高額枠。",
+      "updatedAt": "",
+      "ownerKey": "",
+      "createdBy": ""
+    },
+    {
+      "id": "appraise_antique_master_prayer",
+      "facilityName": "骨董屋",
+      "scrollRank": "特級",
+      "difficulty": "15",
+      "spellType": "祈祷",
+      "spellRank": "特級",
+      "candidateTags": "",
+      "description": "骨董屋で特級の未鑑定スクロールを鑑定する。特級祈祷データを追加した後に候補として機能する。",
+      "enabled": "TRUE",
+      "notes": "判定は集中。希少な高額枠。",
       "updatedAt": "",
       "ownerKey": "",
       "createdBy": ""
@@ -10269,8 +10732,17 @@ const FACILITY_DEFS = [
     services:[
       {name:'宿泊', price:'30G', description:'HP/MPを全回復し、1日経過する。'},
       {name:'休息', price:'10G', description:'短時間休む。日数経過なし、または短時間経過として扱う。'},
-      {name:'噂を聞く', price:'0〜10G', description:'クエスト、探索エリア、素材、魔物などの情報を得る。'},
-      {name:'スクロール鑑定', price:'ランク依存', description:'未鑑定スクロールの内容を調べる。難易度と候補は鑑定ルール表で管理する。'}
+      {name:'噂を聞く', price:'0〜10G', description:'クエスト、探索エリア、素材、魔物などの情報を得る。'}
+    ]
+  },
+  {
+    id:'antique',
+    name:'骨董屋',
+    role:'未鑑定スクロールの販売・鑑定と、鑑定済みスクロールの術式化を担当。',
+    services:[
+      {name:'未鑑定スクロール販売', price:'高額/ランダム', description:'初級から特級までの未鑑定スクロールを日替わりで少数販売する。'},
+      {name:'スクロール鑑定', price:'ランク依存', description:'未鑑定スクロールの内容を調べる。判定は集中。難易度と候補は鑑定ルール表で管理する。'},
+      {name:'術式化', price:'素材消費', description:'鑑定済みスクロールを魔導書・祈祷書へ登録できる形にする。魔法は魔導インク、祈祷は祈祷紙を消費し、集中で判定する。'}
     ]
   }
 ];
@@ -10285,10 +10757,13 @@ const SYSTEM_HELP = [
       "NPC"
     ],
     "body": [
-      "基本施設は鍛冶屋、薬屋、宿屋。",
+      "基本施設は鍛冶屋、薬屋、宿屋、骨董屋。",
       "鍛冶屋は武器、防具、バッグ、矢筒、鍛冶素材、鍛冶施設利用を扱う。",
       "薬屋はポーション系、薬品系調合品、調合素材、調合施設利用を扱う。",
       "宿屋は宿泊、休息、噂、クエスト情報を扱う。商品販売は主目的にしない。",
+      "骨董屋は未鑑定スクロールの販売、スクロール鑑定、鑑定済みスクロールの術式化を扱う。",
+      "スクロール鑑定と術式化の判定は集中で行う。",
+      "魔法スクロールの術式化には魔導インクを、祈祷スクロールの術式化には祈祷紙を使う。",
       "雑貨屋は現時点では使用しない。",
       "施設NPCは、リネット、ガルド・ヴェルナー、ミレイユ・オルセーヌ、ロジーナ・エルメル。",
       "リネットは拠点と工房の案内役。",
@@ -11223,9 +11698,85 @@ function upgradeWorkPrice(material={}, rule=UPGRADE_STEP_RULES[0]){
 function facilityActiveDefs(){
   return FACILITY_DEFS.filter(f=>!currentFacilityView || f.name === currentFacilityView);
 }
+
+const SCROLL_RANK_DIFFICULTIES = {'初級':9, '中級':11, '上級':13, '特級':15};
+function scrollRankDifficulty(rank='初級'){
+  const raw = String(rank || '初級').trim();
+  return SCROLL_RANK_DIFFICULTIES[raw] || 9;
+}
+function antiqueScrollRows(){
+  return (state.items || []).filter(row=>{
+    const name = String(row.name || '').trim();
+    const category = String(row.itemCategory || '').trim();
+    return name.includes('未鑑定スクロール') || category.includes('未鑑定スクロール');
+  }).filter(row=>textHasFacility(row, '骨董屋') || String(row.source || '').includes('骨董屋') || String(row.unlockFacility || '').includes('骨董屋'));
+}
+function shuffleRows(rows=[]){
+  const out = [...rows];
+  for(let i=out.length-1;i>0;i--){
+    const j = Math.floor(Math.random() * (i+1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+function renderAntiqueAppraisalResult(){
+  const result = $('facilityAppraisalResult');
+  if(!result) return;
+  const rank = $('facilityAppraisalRankInput')?.value || '初級';
+  const difficulty = scrollRankDifficulty(rank);
+  result.classList.remove('muted');
+  result.innerHTML = `<div><b>スクロール鑑定</b></div>
+    <div class="facility-product-meta">
+      <span class="facility-chip">対象:${escapeHtml(rank)}未鑑定スクロール</span>
+      <span class="facility-chip">判定:集中</span>
+    </div>
+    <div><b>鑑定難易度：</b>${escapeHtml(String(difficulty))}</div>
+    <div><b>判定式：</b>2D6+集中&gt;=${escapeHtml(String(difficulty))}</div>
+    <div><b>成功時：</b>対応階級の魔法または祈祷スクロールとして内容が判明します。</div>`;
+}
+function renderAntiqueTranscriptionResult(){
+  const result = $('facilityTranscribeResult');
+  if(!result) return;
+  const type = $('facilityTranscribeTypeInput')?.value || '魔法';
+  const rank = $('facilityTranscribeRankInput')?.value || '初級';
+  const difficulty = scrollRankDifficulty(rank);
+  const material = type === '祈祷' ? '祈祷紙×1' : '魔導インク×1';
+  const book = type === '祈祷' ? '祈祷書' : '魔導書';
+  result.classList.remove('muted');
+  result.innerHTML = `<div><b>術式化 / 登録準備</b></div>
+    <div class="facility-product-meta">
+      <span class="facility-chip">種別:${escapeHtml(type)}</span>
+      <span class="facility-chip">階級:${escapeHtml(rank)}</span>
+      <span class="facility-chip">判定:集中</span>
+    </div>
+    <div><b>必要素材：</b>${escapeHtml(material)}</div>
+    <div><b>対象：</b>鑑定済み${escapeHtml(type)}スクロール → ${escapeHtml(book)}へ登録</div>
+    <div><b>術式化難易度：</b>${escapeHtml(String(difficulty))}</div>
+    <div><b>判定式：</b>2D6+集中&gt;=${escapeHtml(String(difficulty))}</div>
+    <div><b>成功時：</b>スクロールの内容を${escapeHtml(book)}へ登録できる形に整えます。</div>
+    <div><b>失敗時：</b>素材消費の有無やスクロール破損はGM判断。基本案では素材のみ消費、スクロールは残る扱いを推奨します。</div>`;
+}
+function renderAntiqueRandomStock(){
+  const result = $('facilityAntiqueStockResult');
+  if(!result) return;
+  const count = Math.max(1, Number($('facilityAntiqueStockCount')?.value || 3) || 3);
+  const rows = shuffleRows(antiqueScrollRows()).slice(0, count);
+  if(!rows.length){
+    result.classList.add('muted');
+    result.innerHTML = '骨董屋で販売可能な未鑑定スクロールがありません。アイテム表の入手先または解放施設を確認してください。';
+    return;
+  }
+  result.classList.remove('muted');
+  result.innerHTML = `<div><b>骨董屋ランダム販売枠</b></div>` + rows.map(row=>{
+    const chips = [row.rank ? 'ランク:' + row.rank : '', row.price ? '価格:' + row.price + 'G' : '', row.source ? '入手:' + row.source : ''].filter(Boolean);
+    return `<div class="facility-product-meta"><b>${escapeHtml(row.name || '未鑑定スクロール')}</b>${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>`;
+  }).join('') + `<div class="muted small">骨董屋の在庫は高額・ランダム販売枠として扱います。</div>`;
+}
+
 function facilityWorkKind(){
   if(currentFacilityView === '鍛冶屋') return 'smithy';
   if(currentFacilityView === '薬屋') return 'alchemy';
+  if(currentFacilityView === '骨董屋') return 'antique';
   return 'none';
 }
 function facilityRecipeRows(kind='調合'){
@@ -11280,15 +11831,19 @@ function renderFacilityWorkPanel(){
   const notice = $('facilityWorkNotice');
   const smithy = $('facilitySmithyWork');
   const alchemy = $('facilityAlchemyWork');
+  const antique = $('facilityAntiqueWork');
   const none = $('facilityNoWork');
-  if(title) title.textContent = kind === 'smithy' ? '装備強化' : kind === 'alchemy' ? '調合' : '施設作業';
+  if(title) title.textContent = kind === 'smithy' ? '装備強化' : kind === 'alchemy' ? '調合' : kind === 'antique' ? 'スクロール鑑定 / 術式化' : '施設作業';
   if(notice) notice.textContent = kind === 'smithy'
     ? '強化素材・今回の強化回数・使用道具ランクから、必要価格と最終難易度を表示します。'
     : kind === 'alchemy'
       ? '作成するアイテムと使用道具ランクから、必要道具ランクと最終調合難易度を表示します。'
-      : 'この施設で確認できる強化・調合作業はありません。';
+      : kind === 'antique'
+        ? '未鑑定スクロールのランダム販売、集中による鑑定、魔導インク/祈祷紙を使った術式化を確認します。'
+        : 'この施設で確認できる強化・調合・鑑定作業はありません。';
   if(smithy) smithy.classList.toggle('hidden', kind !== 'smithy');
   if(alchemy) alchemy.classList.toggle('hidden', kind !== 'alchemy');
+  if(antique) antique.classList.toggle('hidden', kind !== 'antique');
   if(none) none.classList.toggle('hidden', kind !== 'none');
   if(kind === 'smithy'){
     renderFacilityUpgradeLookupList();
@@ -11299,6 +11854,9 @@ function renderFacilityWorkPanel(){
     renderFacilityAlchemyLookupList();
     renderToolRankSelect('facilityAlchemyToolRankInput', $('facilityAlchemyToolRankInput')?.value || '低級');
     renderFacilityAlchemyResult($('facilityAlchemyRecipeSelect')?.value || '');
+  } else if(kind === 'antique'){
+    renderAntiqueAppraisalResult();
+    renderAntiqueTranscriptionResult();
   }
 }
 function facilityUpgradeMaterials(){
@@ -13402,6 +13960,9 @@ document.addEventListener('click',e=>{
   const facilityCopy=e.target.closest('[data-facility-copy]'); if(facilityCopy){ copyFacilitySalesList(facilityCopy.dataset.facilityCopy); return; }
   const facilityUpgradeCheck=e.target.closest('[data-facility-upgrade-check]'); if(facilityUpgradeCheck){ renderFacilityUpgradeResult(); return; }
   const facilityAlchemyCheck=e.target.closest('[data-facility-alchemy-check]'); if(facilityAlchemyCheck){ renderFacilityAlchemyResult(); return; }
+  const facilityAntiqueRandom=e.target.closest('[data-facility-antique-random]'); if(facilityAntiqueRandom){ renderAntiqueRandomStock(); return; }
+  const facilityAppraisalCheck=e.target.closest('[data-facility-appraisal-check]'); if(facilityAppraisalCheck){ renderAntiqueAppraisalResult(); return; }
+  const facilityTranscribeCheck=e.target.closest('[data-facility-transcribe-check]'); if(facilityTranscribeCheck){ renderAntiqueTranscriptionResult(); return; }
   const helpCopy=e.target.closest('[data-help-copy]'); if(helpCopy){ copySystemHelp(); return; }
   const helpExpand=e.target.closest('[data-help-expand]'); if(helpExpand){ document.querySelectorAll('#helpCards details').forEach(d=>d.open=true); return; }
   const helpCollapse=e.target.closest('[data-help-collapse]'); if(helpCollapse){ document.querySelectorAll('#helpCards details').forEach(d=>d.open=false); return; }
@@ -13468,6 +14029,8 @@ document.addEventListener('input',e=>{
   if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
   if(['facilityUpgradeMaterialInput','facilityUpgradeStepInput','facilitySmithToolRankInput'].includes(e.target.id)) renderFacilityUpgradeResult();
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)) renderFacilityAlchemyResult();
+  if(['facilityAppraisalRankInput'].includes(e.target.id)) renderAntiqueAppraisalResult();
+  if(['facilityTranscribeTypeInput','facilityTranscribeRankInput'].includes(e.target.id)) renderAntiqueTranscriptionResult();
   if(e.target.closest('[data-check-builder]')) syncCheckBuilder(e.target.closest('[data-check-builder]'));
   if(e.target.closest('[data-monster-actions-editor]')) syncMonsterActionEditor(e.target.closest('[data-monster-actions-editor]'));
   if(e.target.closest('[data-monster-drops-editor]')) syncMonsterDropEditor(e.target.closest('[data-monster-drops-editor]'));
@@ -13479,6 +14042,8 @@ document.addEventListener('change',e=>{
   if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
   if(['facilityUpgradeMaterialInput','facilityUpgradeStepInput','facilitySmithToolRankInput'].includes(e.target.id)){ renderFacilityUpgradeResult(); return; }
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)){ renderFacilityAlchemyResult(); return; }
+  if(['facilityAppraisalRankInput'].includes(e.target.id)){ renderAntiqueAppraisalResult(); return; }
+  if(['facilityTranscribeTypeInput','facilityTranscribeRankInput'].includes(e.target.id)){ renderAntiqueTranscriptionResult(); return; }
   if(e.target.dataset.formField==='dataKind'){ rerenderCurrentForm(); return; }
   if(e.target.dataset.formField==='craftType'){ currentRecipeView = e.target.value || currentRecipeView; rerenderCurrentForm(); return; }
   if(e.target.dataset.formField==='progressStep'){ document.querySelectorAll('[data-quest-fixed-events-editor]').forEach(refreshQuestFixedEventPercentOptions); return; }

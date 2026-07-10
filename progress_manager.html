@@ -20,6 +20,15 @@ h2{font-size:18px;margin:0 0 12px;display:flex;justify-content:space-between;gap
 label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0 4px}select,input,textarea{width:100%;font:inherit;border:1px solid var(--line);border-radius:12px;background:#fffdf7;color:var(--ink);padding:10px 11px}textarea{min-height:80px;resize:vertical}button{border:0;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;font-weight:700;padding:10px 13px;cursor:pointer;box-shadow:0 8px 18px rgba(139,94,52,.18)}button.secondary{background:#efe0c6;color:var(--ink);box-shadow:none;border:1px solid var(--line)}button.ghost{background:transparent;color:var(--accent);border:1px solid var(--line);box-shadow:none}button.danger{background:var(--bad)}button:disabled{opacity:.55;cursor:not-allowed}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .status{border:1px solid var(--line);background:#fffdf8;border-radius:14px;padding:10px;color:var(--muted);font-size:13px;line-height:1.65}.status.good{border-color:#a8d4bb;color:var(--good);background:#f0fff6}.status.bad{border-color:#e1b0aa;color:var(--bad);background:#fff3f1}.status.warn{border-color:#e6c985;color:var(--warn);background:#fff9e8}.progress-wrap{background:#ead8bc;border:1px solid var(--line);height:22px;border-radius:999px;overflow:hidden;position:relative}.progress-bar{height:100%;background:linear-gradient(90deg,#8b5e34,#d5964d);width:0%;transition:.2s}.progress-label{position:absolute;inset:0;display:grid;place-items:center;font-size:12px;font-weight:800;color:#322416;text-shadow:0 1px 0 rgba(255,255,255,.55)}
 .card{border:1px solid var(--line);background:#fffdf8;border-radius:14px;padding:12px;margin-top:10px}.kv{display:grid;grid-template-columns:120px 1fr;gap:6px 10px;font-size:13px}.kv b{color:var(--muted)}.result{white-space:pre-wrap;border:1px dashed var(--line);border-radius:14px;background:#fffdf8;padding:12px;min-height:56px;font-family:ui-monospace,"SFMono-Regular",Consolas,"Yu Gothic",monospace;font-size:13px;line-height:1.65}.drop-list{display:grid;gap:8px}.drop-row{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;border:1px solid var(--line);background:#fffdf8;border-radius:12px;padding:9px;font-size:13px}.drop-row.success{border-color:#9bcdad;background:#f4fff7}.drop-row.fail{opacity:.72}.pill{display:inline-flex;gap:4px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:3px 8px;font-size:12px;color:var(--muted);background:#fffdf8}.log{max-height:170px;overflow:auto;font-size:12px;line-height:1.6}.log div{border-bottom:1px solid #eee0c9;padding:4px 0}.copy-note{font-size:12px;color:var(--good);font-weight:700;display:none}.copy-note.show{display:inline}.event-card{border:1px solid var(--line);border-radius:12px;background:#fffdf8;padding:10px;margin-top:8px}.event-card.active{border-color:#9bcdad;background:#f4fff7}.event-card.next{border-color:#e6c985;background:#fff9e8}.event-title{font-weight:800;margin-bottom:4px}.tabs{display:flex;gap:8px;flex-wrap:wrap}.event-section{margin-top:10px}.event-section-title{font-weight:900;margin:8px 0 4px;display:flex;gap:8px;align-items:center}.badge{display:inline-flex;align-items:center;border-radius:999px;padding:2px 8px;font-size:11px;font-weight:800;border:1px solid var(--line);background:#fffdf8;color:var(--muted)}.badge.fixed{background:#fff9e8;color:var(--warn);border-color:#e6c985}.badge.random{background:#f0fff6;color:var(--good);border-color:#9bcdad}.event-card.fixed{border-color:#e6c985;background:#fff9e8}.event-card.random{border-color:#9bcdad;background:#f4fff7}.tab-nav{display:flex;gap:8px;flex-wrap:wrap}.tab-btn{background:#efe0c6;color:var(--ink);box-shadow:none;border:1px solid var(--line)}.tab-btn.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border-color:transparent;box-shadow:0 8px 18px rgba(139,94,52,.18)}.tab-panel{grid-column:1/-1;display:none}.tab-panel.active{display:block}.hidden{display:none!important}
+
+.quest-category-bar{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px}
+.quest-category-btn{border:1px solid var(--line);background:#fffaf0;border-radius:999px;padding:7px 12px;cursor:pointer}
+.quest-category-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.quest-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0 12px}
+.quest-tools label{display:flex;gap:6px;align-items:center;margin:0}
+.daily-tools{margin-top:12px}
+.quest-pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 8px;margin-left:6px;background:#fff}
+.quest-pill.off{background:#eee;color:#777}
 </style>
 </head>
 <body>
@@ -70,6 +79,31 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
   <div class="grid">
     <section class="panel tab-panel active" data-progress-tab="quest">
       <h2>クエスト進行 <span class="copy-note" id="questCopyNote">コピーしました</span></h2>
+      <label>クエスト分類</label>
+      <div class="quest-category-bar">
+        <button class="quest-category-btn active" type="button" data-quest-category="重要">重要クエスト</button>
+        <button class="quest-category-btn" type="button" data-quest-category="デイリー">デイリークエスト</button>
+      </div>
+      <div class="quest-tools">
+        <label id="questShowOffWrap"><input type="checkbox" id="questShowDisabledImportant"> OFFの重要クエストも表示</label>
+        <button class="secondary" type="button" id="questListCopyBtn">表示中クエスト一覧コピー</button>
+      </div>
+      <div id="dailyQuestTools" class="card daily-tools hidden">
+        <div class="quest-tools">
+          <label>デイリー選出数
+            <select id="dailyQuestCount">
+              <option value="1">1件</option>
+              <option value="2">2件</option>
+              <option value="3" selected>3件</option>
+              <option value="4">4件</option>
+              <option value="5">5件</option>
+            </select>
+          </label>
+          <button class="secondary" type="button" id="rollDailyQuestsBtn">デイリークエストをランダム選出</button>
+          <button class="secondary" type="button" id="copyDailyQuestsBtn">デイリー選出コピー</button>
+        </div>
+        <div id="dailyQuestResult" class="muted small">デイリークエストをランダム選出できます。再選出可能です。</div>
+      </div>
       <label>クエスト</label>
       <select id="questSelect"></select>
       <div id="questDetail" class="card muted">DB読込後、クエストを選択してください。</div>
@@ -218,7 +252,8 @@ const VERSION='v90.8.91';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
-const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},lastEventText:'',lastEventKey:'',lastQuestEventText:'',lastQuestEventKey:'',lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastAppraisalText:'',lastDropText:'',lastDropSuccessText:'',log:[]};
+const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},lastEventText:'',lastEventKey:'',lastQuestEventText:'',lastQuestEventKey:'',lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastAppraisalText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],log:[]};
+let currentQuestCategory='重要';
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function clamp(n){return Math.max(0,Math.min(100,Number(n)||0));}
 function now(){return new Date().toLocaleString('ja-JP',{hour12:false});}
@@ -248,6 +283,130 @@ function restoreSavedState(){
 }
 function optText(row){return row ? `${row.name||row.eventName||row.id||'名称未設定'}` : '未選択';}
 function fillSelect(sel, rows, labelFn){ sel.innerHTML=''; rows.forEach((r,i)=>{const o=document.createElement('option'); o.value=String(i); o.textContent=labelFn?labelFn(r):optText(r); sel.appendChild(o);}); if(!rows.length){const o=document.createElement('option'); o.value=''; o.textContent='データなし'; sel.appendChild(o);} }
+
+
+function questBossText(q={}){
+  const name=String(q.questBossName || '').trim();
+  const monsters=String(q.bossMonster || '').trim();
+  if(name && monsters) return `${name}（${monsters}）`;
+  return name || monsters || '';
+}
+function questBossFormationText(q={}){
+  return String(q.questBossFormation || q.questBossComposition || '').trim();
+}
+
+function questCategoryFor(row={}){
+  const raw=String(row.questCategory || '').trim();
+  if(raw) return raw;
+  const type=String(row.questType || '').trim();
+  return type.includes('デイリー') ? 'デイリー' : '重要';
+}
+function questEnabled(row={}){
+  return String(row.enabled ?? 'TRUE').trim().toUpperCase() !== 'FALSE';
+}
+function questRowsForCurrentCategory(){
+  const showOff = !!$('questShowDisabledImportant')?.checked;
+  return (state.quests || []).filter(q=>{
+    const cat = questCategoryFor(q);
+    if(cat !== currentQuestCategory) return false;
+    if(cat === '重要' && !showOff && !questEnabled(q)) return false;
+    if(cat === 'デイリー' && !questEnabled(q)) return false;
+    return true;
+  });
+}
+function fillQuestSelect(prefer=''){
+  const sel=$('questSelect');
+  if(!sel)return;
+  const rows=questRowsForCurrentCategory();
+  const prev=String(prefer || sel.value || '').trim();
+  sel.innerHTML='';
+  if(!rows.length){
+    const o=document.createElement('option');
+    o.value='';
+    o.textContent=currentQuestCategory==='重要' ? '表示できる重要クエストがありません' : '表示できるデイリークエストがありません';
+    sel.appendChild(o);
+    return;
+  }
+  rows.forEach(q=>{
+    const o=document.createElement('option');
+    o.value=String(q.id || q.name || '');
+    const off = !questEnabled(q) ? ' [OFF]' : '';
+    const unlock = q.unlockResult ? ` / ${q.unlockResult}` : '';
+    o.textContent=`${q.name||q.id}${off} / ${q.rank||''}${unlock}`;
+    sel.appendChild(o);
+  });
+  if(prev && [...sel.options].some(o=>o.value===prev)) sel.value=prev;
+}
+function setQuestCategory(cat='重要'){
+  currentQuestCategory = cat === 'デイリー' ? 'デイリー' : '重要';
+  document.querySelectorAll('[data-quest-category]').forEach(btn=>btn.classList.toggle('active', btn.dataset.questCategory===currentQuestCategory));
+  const showWrap=$('questShowOffWrap');
+  if(showWrap) showWrap.classList.toggle('hidden', currentQuestCategory !== '重要');
+  const dailyTools=$('dailyQuestTools');
+  if(dailyTools) dailyTools.classList.toggle('hidden', currentQuestCategory !== 'デイリー');
+  fillQuestSelect();
+  renderQuest();
+}
+function questListMemo(){
+  const rows=questRowsForCurrentCategory();
+  const title=currentQuestCategory==='重要' ? '【重要クエスト一覧】' : '【デイリークエスト一覧】';
+  if(!rows.length)return `${title}\n表示できるクエストはありません。`;
+  const lines=[title];
+  rows.forEach(q=>{
+    const reward=[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ');
+    const off = !questEnabled(q) ? '（OFF）' : '';
+    lines.push(`・${q.name||q.id}${off}`);
+    if(q.areaName) lines.push(`  エリア：${q.areaName}`);
+    if(q.description) lines.push(`  内容：${q.description}`);
+    if(questBossText(q)) lines.push(`  クエストボス：${questBossText(q)}`);
+    if(questBossFormationText(q)) lines.push(`  構成：${questBossFormationText(q)}`);
+    if(reward) lines.push(`  報酬：${reward}`);
+    if(q.unlockResult) lines.push(`  解放：${q.unlockResult}`);
+  });
+  return lines.join('\n');
+}
+function dailyQuestRows(){
+  return (state.quests || []).filter(q=>questCategoryFor(q)==='デイリー' && questEnabled(q));
+}
+function shuffledRows(rows=[]){
+  const out=[...rows];
+  for(let i=out.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [out[i],out[j]]=[out[j],out[i]];
+  }
+  return out;
+}
+function rollDailyQuests(){
+  const rows=dailyQuestRows();
+  const count=Math.max(1, Math.min(10, Number($('dailyQuestCount')?.value || 3) || 3));
+  const picked=shuffledRows(rows).slice(0, Math.min(count, rows.length));
+  const lines=['【デイリークエスト選出】'];
+  if(!picked.length){
+    lines.push('選出できるデイリークエストがありません。');
+  }else{
+    picked.forEach(q=>{
+      const reward=[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ');
+      lines.push(`・${q.name||q.id}`);
+      if(q.areaName) lines.push(`  エリア：${q.areaName}`);
+      if(q.description) lines.push(`  内容：${q.description}`);
+      if(reward) lines.push(`  報酬：${reward}`);
+    });
+  }
+  state.lastDailyQuestKeys=picked.map(q=>q.id||q.name||'');
+  state.lastDailyQuestText=lines.join('\n');
+  renderDailyQuestResult();
+  addLog(`デイリークエストを${picked.length}件選出しました。`);
+}
+function renderDailyQuestResult(){
+  const box=$('dailyQuestResult');
+  if(!box)return;
+  if(!state.lastDailyQuestText){
+    box.textContent='デイリークエストをランダム選出できます。再選出可能です。';
+    return;
+  }
+  box.innerHTML=esc(state.lastDailyQuestText).replace(/\n/g,'<br>');
+}
+
 function fillMonsterSearch(prefer=''){
   const input=$('monsterSelect');
   const list=$('monsterSelectList');
@@ -283,7 +442,7 @@ async function loadDb(){
     state.quests=quests; state.areas=areas; state.events=events; state.monsters=monsters; state.items=items; state.treasures=treasures; state.appraisalRules=appraisalRules; state.spells=spells; state.recipes=recipes;
     state.progress={quests:{},areas:{}};
     state.lastEventText=''; state.lastEventKey=''; state.lastQuestEventText=''; state.lastQuestEventKey=''; state.lastRumorText=''; state.lastRumorKey=''; state.lastTreasureText=''; state.lastAppraisalText=''; state.lastDropText=''; state.lastDropSuccessText='';
-    fillSelect($('questSelect'),quests,r=>`${r.name||r.id} / ${r.rank||''}`);
+    fillQuestSelect();
     fillSelect($('areaSelect'),areas,r=>`${r.name||r.id} / ${r.areaType||''}`);
     fillSelect($('eventAreaSelect'),areas,r=>`${r.name||r.id} / 表:${r.eventTableId||'未設定'}`);
     fillEventTables();
@@ -466,7 +625,7 @@ function renderQuest(){
   $('questNote').value=p.note||'';
   $('questBar').style.width=clamp(p.value)+'%';
   $('questLabel').textContent=clamp(p.value)+'%';
-  $('questDetail').innerHTML=`<div class="kv"><b>種別</b><span>${esc(q.questType||'')}</span><b>ランク</b><span>${esc(q.rank||'')}</span><b>エリア</b><span>${esc(q.areaName||'')}</span><b>進行上昇値</b><span>+${questStepAmount(q)}%</span><b>固定イベント数</b><span>${questSpecificEvents(q).length}件</span><b>クリア条件</b><span>${esc(q.clearCondition||'')}</span><b>報酬</b><span>${esc([q.rewardMoney,q.rewardItems].filter(Boolean).join(' / '))}</span></div>${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
+  $('questDetail').innerHTML=`<div class="kv"><b>分類</b><span>${esc(questCategoryFor(q))}${!questEnabled(q)?'<span class="quest-pill off">OFF</span>':'<span class="quest-pill">ON</span>'}</span><b>種別</b><span>${esc(q.questType||'')}</span><b>ランク</b><span>${esc(q.rank||'')}</span><b>エリア</b><span>${esc(q.areaName||'')}</span><b>進行上昇値</b><span>+${questStepAmount(q)}%</span><b>固定イベント数</b><span>${questSpecificEvents(q).length}件</span><b>クエストボス</b><span>${esc(questBossText(q))}</span><b>構成</b><span>${esc(questBossFormationText(q))}</span><b>クリア条件</b><span>${esc(q.clearCondition||'')}</span><b>報酬</b><span>${esc([q.rewardMoney,q.rewardItems].filter(Boolean).join(' / '))}</span></div>${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
   renderQuestStepInfo(q,p);
   renderQuestEvents();
 }
@@ -480,7 +639,7 @@ function renderMonster(){
   const m=selected($('monsterSelect'),state.monsters); if(!m){$('monsterDetail').textContent='魔物データがありません。'; return;}
   $('monsterDetail').innerHTML=`<div class="kv"><b>HP</b><span>${esc(m.hp||'')}</span><b>命中</b><span>${esc(m.hitValue||'')}</span><b>回避</b><span>${esc(m.evasionValue||'')}</span><b>抵抗</b><span>${esc(m.resistValue||'')}</span><b>防御</b><span>${esc(m.defenseValue||'')}</span><b>先制</b><span>${esc(m.initiative||'')}</span></div>`;
 }
-function renderAll(){fillEventTables(); fillRumorSelect(); fillRumorAreas(); fillInnRumorSelect(); fillTreasureTables(); fillAppraisalRules(); fillMonsterSearch($('monsterSelect')?.value || ''); renderQuest(); renderArea(); renderMonster(); renderRumorResult(); renderLog();}
+function renderAll(){fillQuestSelect($('questSelect')?.value || ''); fillEventTables(); fillRumorSelect(); fillRumorAreas(); fillInnRumorSelect(); fillTreasureTables(); fillAppraisalRules(); fillMonsterSearch($('monsterSelect')?.value || ''); renderQuest(); renderArea(); renderMonster(); renderRumorResult(); renderDailyQuestResult(); renderLog();}
 function getNumFromText(s, fallback=0){const m=String(s||'').match(/[+-]?\d+/); return m?Number(m[0]):fallback;}
 function advanceQuestProgress(){const q=selected($('questSelect'),state.quests); if(!q)return; const p=progressObj('quests',q.id||q.name); const add=questStepAmount(q); const before=clamp(p.value); p.value=clamp(before+add); saveState(false); renderQuest(); addLog(`${q.name||q.id} の進行度を +${add}% しました。${before}% → ${p.value}%`);}
 function advanceAreaProgress(){const a=selected($('areaSelect'),state.areas); if(!a)return; const p=progressObj('areas',a.id||a.name); const add=areaStepAmount(a); const before=clamp(p.value); p.value=clamp(before+add); saveState(false); renderArea(); addLog(`${a.name||a.id} の探索進行度を +${add}% しました。${before}% → ${p.value}%`); if(before<100 && p.value>=100) triggerAreaClearRumorEvent(a);}
@@ -1015,9 +1174,13 @@ function questInfoMemo(){
   const reward=[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ');
   return [
     `【クエスト】${q.name||q.id}`,
+    q.questCategory?`分類：${q.questCategory}`:'',
     q.areaName?`エリア：${q.areaName}`:'',
     q.description?`内容：${q.description}`:'',
-    reward?`報酬：${reward}`:''
+    questBossText(q)?`クエストボス：${questBossText(q)}`:'',
+    reward?`報酬：${reward}`:'',
+    questBossFormationText(q)?`構成：${questBossFormationText(q)}`:'',
+    q.unlockResult?`解放：${q.unlockResult}`:''
   ].filter(Boolean).join('\n');
 }
 function areaMemo(){const a=selected($('areaSelect'),state.areas); if(!a)return ''; const p=progressObj('areas',a.id||a.name); return [`【エリア進行】${a.name||a.id}`,`探索進行度：${clamp(p.value)}%`,a.eventTableId?`イベント表：${a.eventTableId}`:'',a.mainMaterials?`主な素材：${a.mainMaterials}`:'',a.mainMonsters?`主な魔物：${a.mainMonsters}`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
@@ -1034,12 +1197,14 @@ function bindTabs(){
   switchProgressTab(localStorage.getItem(STORE_KEY+'_tab') || 'quest');
 }
 function bind(){
-  $('fixedUrlLabel').textContent=GAS_URL; bindTabs(); $('loadDbBtn').addEventListener('click',loadDb); $('saveStateBtn').addEventListener('click',()=>saveState(true)); $('restoreStateBtn').addEventListener('click',restoreSavedState); $('clearStateBtn').addEventListener('click',()=>{if(confirm('進行状態を初期化しますか？')){localStorage.removeItem(STORE_KEY); state.progress={quests:{},areas:{}}; state.log=[]; renderAll(); addLog('進行状態を初期化しました。');}});
+  $('fixedUrlLabel').textContent=GAS_URL; bindTabs(); setQuestCategory('重要'); $('loadDbBtn').addEventListener('click',loadDb); $('saveStateBtn').addEventListener('click',()=>saveState(true)); $('restoreStateBtn').addEventListener('click',restoreSavedState); $('clearStateBtn').addEventListener('click',()=>{if(confirm('進行状態を初期化しますか？')){localStorage.removeItem(STORE_KEY); state.progress={quests:{},areas:{}}; state.log=[]; renderAll(); addLog('進行状態を初期化しました。');}});
+  document.querySelectorAll('[data-quest-category]').forEach(btn=>btn.addEventListener('click',()=>setQuestCategory(btn.dataset.questCategory)));
+  $('questShowDisabledImportant')?.addEventListener('change',()=>{fillQuestSelect(); renderQuest();});
   $('questSelect').addEventListener('change',()=>{state.lastQuestEventText=''; state.lastQuestEventKey=''; renderQuest();}); $('areaSelect').addEventListener('change',renderArea); $('monsterSelect').addEventListener('change',renderMonster); $('monsterSelect').addEventListener('input',renderMonster); $('eventAreaSelect').addEventListener('change',fillEventTables); $('rumorAreaSelect').addEventListener('change',()=>{fillInnRumorSelect(); renderRumorResult();}); $('rumorSelectForInn').addEventListener('change',()=>applyRumorIndex($('rumorSelectForInn').value,true)); $('rumorSelect').addEventListener('change',()=>{state.lastEventText=''; state.lastEventKey=''; renderRumorDetail(); fillInnRumorSelect(); renderRumorResult(selectedRumor(),'apply');}); $('partySizeSelect').addEventListener('change',()=>{state.lastEventText=''; state.lastEventKey='';});
   $('questAdvanceBtn').addEventListener('click',advanceQuestProgress); $('areaAdvanceBtn').addEventListener('click',advanceAreaProgress);
   $('questResetBtn').addEventListener('click',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).value=0; saveState(false); renderQuest();}}); $('areaResetBtn').addEventListener('click',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).value=0; saveState(false); renderArea();}});
   $('questNote').addEventListener('input',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).note=$('questNote').value; saveState(false);}}); $('areaNote').addEventListener('input',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).note=$('areaNote').value; saveState(false);}});
-  $('questCopyBtn').addEventListener('click',()=>copyText(questMemo(),'questCopyNote')); $('questInfoCopyBtn').addEventListener('click',()=>copyText(questInfoMemo(),'questCopyNote')); $('areaCopyBtn').addEventListener('click',()=>copyText(areaMemo(),'areaCopyNote'));
+  $('questCopyBtn').addEventListener('click',()=>copyText(questMemo(),'questCopyNote')); $('questInfoCopyBtn').addEventListener('click',()=>copyText(questInfoMemo(),'questCopyNote')); $('questListCopyBtn')?.addEventListener('click',()=>copyText(questListMemo(),'questCopyNote')); $('rollDailyQuestsBtn')?.addEventListener('click',rollDailyQuests); $('copyDailyQuestsBtn')?.addEventListener('click',()=>copyText(state.lastDailyQuestText,'questCopyNote')); $('areaCopyBtn').addEventListener('click',()=>copyText(areaMemo(),'areaCopyNote'));
   $('rollQuestEventBtn').addEventListener('click',rollQuestEvent); $('copyQuestEventBtn').addEventListener('click',()=>copyText(state.lastQuestEventText,'questCopyNote'));
   $('rollRumorBtn').addEventListener('click',rollRumor); $('applyRumorBtn').addEventListener('click',()=>applyRumorIndex($('rumorSelectForInn').value,true)); $('clearRumorBtn').addEventListener('click',clearRumor); $('copyRumorBtn').addEventListener('click',()=>copyText(state.lastRumorText,'rumorCopyNote'));
   $('rollEventBtn').addEventListener('click',rollEvent); $('copyEventBtn').addEventListener('click',()=>copyText(state.lastEventText,'eventCopyNote'));
