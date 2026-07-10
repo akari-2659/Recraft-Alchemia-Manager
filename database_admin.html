@@ -1012,7 +1012,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.109';
+const RECRAFT_DB_VERSION = 'v90.8.110';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.107';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -14941,8 +14941,8 @@ function estimateJsonpUrlLength(data){
 }
 
 
-const UPLOAD_RESUME_STORAGE_KEY = 'recraft_alchemia_upload_resume_v90_8_109';
-const ALL_DB_RESUME_STORAGE_KEY = 'recraft_alchemia_all_db_resume_v90_8_109';
+const UPLOAD_RESUME_STORAGE_KEY = 'recraft_alchemia_upload_resume_v90_8_110';
+const ALL_DB_RESUME_STORAGE_KEY = 'recraft_alchemia_all_db_resume_v90_8_110';
 function uploadResumeLoad(){
   try{return JSON.parse(localStorage.getItem(UPLOAD_RESUME_STORAGE_KEY)||'null');}catch(e){return null;}
 }
@@ -15092,7 +15092,6 @@ const UPLOAD_PART_CHAR_STEP = 260;
 const UPLOAD_GZIP_B64_PART_STEP = 1150;
 const UPLOAD_GZIP_RAW_CHARS_PER_CHUNK = 90000;
 const UPLOAD_GZIP_CHUNK_TIMEOUT_MS = 15000;
-const UPLOAD_GZIP_POST_TIMEOUT_MS = 180000;
 function uploadPartPayload(token, chunkIndex, partIndex, textPart){
   return payload('putUploadChunk', {
     token,
@@ -15216,132 +15215,8 @@ function makeGzipUploadRowChunks(rows){
   if(current.length) chunks.push(current);
   return chunks;
 }
-function postApiByIframe(data, timeoutMs=UPLOAD_GZIP_POST_TIMEOUT_MS){
-  if(isGasMode()) return callApi(data);
-  return new Promise((resolve,reject)=>{
-    const base=apiBaseUrl();
-    if(!base){ reject(new Error('ローカルHTMLから送信する場合はWeb App URLを入力してください。')); return; }
-    const requestId=`post_${Date.now()}_${Math.random().toString(36).slice(2)}`;
-    const frameName=`recraftDbPost_${Date.now()}_${Math.random().toString(36).slice(2)}`.replace(/[^A-Za-z0-9_]/g,'');
-    const iframe=document.createElement('iframe');
-    iframe.name=frameName;
-    iframe.style.display='none';
-    iframe.setAttribute('aria-hidden','true');
-    const form=document.createElement('form');
-    form.method='POST';
-    form.action=base;
-    form.target=frameName;
-    form.style.display='none';
-    const action=String(data && data.action || '').trim();
-    const body={...(data||{})};
-    delete body.action;
-    const fields={action,payload:JSON.stringify(body),responseMode:'postMessage',requestId};
-    Object.entries(fields).forEach(([name,value])=>{
-      const input=document.createElement('input');
-      input.type='hidden'; input.name=name; input.value=String(value ?? '');
-      form.appendChild(input);
-    });
-    let settled=false;
-    const cleanup=()=>{
-      window.removeEventListener('message',onMessage);
-      clearTimeout(timer);
-      setTimeout(()=>{ try{ form.remove(); iframe.remove(); }catch(e){} },0);
-    };
-    const finish=(fn,value)=>{ if(settled) return; settled=true; cleanup(); fn(value); };
-    const onMessage=(event)=>{
-      const msg=event && event.data;
-      if(!msg || msg.source!=='recraft-db-post' || msg.requestId!==requestId) return;
-      const result=msg.result || {ok:false,error:'DB送信結果が空です'};
-      if(result.ok===false) finish(reject,new Error(result.error || 'DB一括POST送信に失敗しました'));
-      else finish(resolve,result);
-    };
-    window.addEventListener('message',onMessage);
-    const timer=setTimeout(()=>finish(reject,new Error('DB一括POST送信がタイムアウトしました。従来の分割送信へ切り替えます。')),timeoutMs);
-    document.body.appendChild(iframe);
-    document.body.appendChild(form);
-    try{ form.submit(); }catch(e){ finish(reject,e); }
-  });
-}
 
-async function uploadRowsByGzipPost(key, rows, mode, dataKindScope=''){
-  const list=rows || [];
-  uploadProgressStart(`${labelKey(key)}の高速圧縮DB送信`, list.length);
-  let rawChars=0;
-  let gzipBase64Chars=0;
-  try{
-    const chunks=makeGzipUploadRowChunks(list);
-    const gzipChunks=[];
-    uploadProgressLog(`対象を${chunks.length}圧縮チャンクに分割しました。圧縮後は1回のPOSTでまとめて送信します。`);
-    let preparedRows=0;
-    for(let c=0;c<chunks.length;c++){
-      const text=JSON.stringify(chunks[c]);
-      rawChars+=text.length;
-      const compressStart=performance.now();
-      uploadProgressUpdate({
-        phase:`${labelKey(key)}を圧縮中`,
-        percent:Math.min(45,(c/Math.max(1,chunks.length))*45),
-        currentRows:preparedRows,
-        totalRows:list.length,
-        chunks:`${c+1}/${chunks.length}`,
-        parts:0,
-        rawChars,
-        sentChars:gzipBase64Chars*0.75,
-        detail:`チャンク${c+1}/${chunks.length}をgzip圧縮しています。`
-      });
-      const heartbeat=uploadProgressHeartbeat(()=>({
-        phase:`${labelKey(key)}を圧縮中`,
-        percent:Math.min(45,((c+0.5)/Math.max(1,chunks.length))*45),
-        currentRows:preparedRows,
-        totalRows:list.length,
-        chunks:`${c+1}/${chunks.length}`,
-        parts:0,
-        rawChars,
-        sentChars:gzipBase64Chars*0.75,
-        detail:`チャンク${c+1}/${chunks.length}を圧縮中です。`
-      }),700);
-      let gzipBase64;
-      try{
-        gzipBase64=await withUploadTimeout(
-          gzipBase64FromText(text),
-          UPLOAD_GZIP_CHUNK_TIMEOUT_MS,
-          `チャンク${c+1}/${chunks.length}のgzip圧縮が${UPLOAD_GZIP_CHUNK_TIMEOUT_MS/1000}秒を超えました。`
-        );
-      }finally{ clearInterval(heartbeat); }
-      gzipBase64Chars+=gzipBase64.length;
-      gzipChunks.push({chunkIndex:c,valueB64:gzipBase64});
-      preparedRows+=chunks[c].length;
-      const approx=Math.round(gzipBase64.length*0.75);
-      const ratio=text.length ? Math.max(1,Math.round((approx/text.length)*100)) : 100;
-      uploadProgressLog(`チャンク${c+1}/${chunks.length}：${chunks[c].length}行 / 元${formatUploadBytes(text.length)} → 圧縮後約${formatUploadBytes(approx)}（約${ratio}%） / 圧縮${formatUploadTime(performance.now()-compressStart)}`);
-    }
-    uploadProgressUpdate({
-      phase:`${labelKey(key)}を一括送信中`,
-      percent:55,
-      currentRows:list.length,
-      totalRows:list.length,
-      chunks:`${chunks.length}/${chunks.length}`,
-      parts:1,
-      rawChars,
-      sentChars:gzipBase64Chars*0.75,
-      detail:'圧縮済みデータを1回のPOSTでApps Scriptへ送信し、そのままDBへ反映しています。'
-    });
-    uploadProgressLog(`圧縮済み${formatUploadBytes(gzipBase64Chars*0.75)}を一括POST送信します。`);
-    const result=await postApiByIframe(payload('writeGzipBatch',{
-      sheetKey:key,
-      mode,
-      dataKindScope,
-      gzipChunks
-    }));
-    if(!result || result.ok===false) throw new Error(result && result.error || `${labelKey(key)}の高速圧縮送信に失敗しました`);
-    const done={...result,uploadEncoding:'gzipBase64Post',sentRows:list.length,sentChunks:chunks.length,sentParts:1,rawChars,gzipBase64Chars};
-    uploadProgressDone(done);
-    return done;
-  }catch(e){
-    uploadProgressFail(e);
-    throw e;
-  }
-}
-
+async 
 async function uploadRowsByTextChunks(key, rows, mode, dataKindScope=''){
   const token = uploadToken(mode === 'replace' ? 'rp' : 'up', key);
   const list = rows || [];
