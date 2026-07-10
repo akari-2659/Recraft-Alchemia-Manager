@@ -4581,7 +4581,6 @@ function makeGzipUploadRowChunks(rows){
   return chunks;
 }
 
-async 
 async function uploadRowsByTextChunks(key, rows, mode, dataKindScope=''){
   const token = uploadToken(mode === 'replace' ? 'rp' : 'up', key);
   const list = rows || [];
@@ -5308,7 +5307,21 @@ $('btnExportJson').addEventListener('click',()=>{updateJsonBox();toast('JSONを�
 $('btnImportJson').addEventListener('click',()=>{try{fromJsonBox()}catch(e){toast(e.message,'error')}});
 $('btnDownloadJson').addEventListener('click',downloadJson);
 if($('btnLoadBundledInitialData')) $('btnLoadBundledInitialData').addEventListener('click',loadBundledInitialData);
-if($('btnChooseInitialData')) $('btnChooseInitialData').addEventListener('click',()=>$('initialDataFileInput')?.click());
+function openInitialDataFilePicker(){
+  const input = $('initialDataFileInput');
+  if(!input) return;
+  input.value = '';
+  try{
+    if(typeof input.showPicker === 'function'){
+      input.showPicker();
+      return;
+    }
+  }catch(e){
+    console.warn('showPicker fallback', e);
+  }
+  input.click();
+}
+if($('btnChooseInitialData')) $('btnChooseInitialData').addEventListener('click',openInitialDataFilePicker);
 if($('initialDataFileInput')) $('initialDataFileInput').addEventListener('change',async e=>{
   try{ await loadInitialDataFile(e.target.files?.[0]); }
   catch(err){ toast(`初期データJSONの読込に失敗しました
