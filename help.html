@@ -301,13 +301,4 @@
 - 初級/低級の装飾品は原則1回まで強化可能。
 - 魔導書と祈祷書は原則2回まで強化可能。
 - 素手、普段着、バッグ、矢筒、素材、調合品、道具、矢弾、スクロールは原則0回。
-- 実際に適用した強化内容はキャラクターシートの装備欄で、1強化1行で記録する。</textarea></section>
-<section class="help-section" id="dismantle-rule">
-  <h2>魔物討伐後の解体判定</h2>
-  <p><b>判定：</b>採取技能 &gt;= 魔物の解体難易度</p>
-  <p><b>成功：</b>その魔物に設定されたすべてのドロップ率を+10%します。補正後の上限は100%です。</p>
-  <p><b>失敗：</b>ドロップ率への補正はありません。</p>
-  <p><b>難易度の目安：</b>チュートリアル5～6、通常魔物6～9、ボス級10以上。身体が硬い、巨大、素材の切り分けが難しい魔物ほど高く設定します。</p>
-  <p>各ドロップは補正後の確率で個別に判定するため、複数の素材を同時に獲得する場合があります。</p>
-</section>
-<section><h2>魔導書・術式枠・重要クエスト報酬</h2><p>魔導書と祈祷書の基本術式枠は装備ごとの固定値です。技能ポイントでは増えません。「術式登録枠」または「術式枠増加」の装備強化が付いた場合のみ、その強化値ぶん実際の選択枠が増えます。</p><p>重要クエストにはボーナスポイントを設定できます。クリア時の報酬表示・コピーにボーナスポイントを含めます。</p></section></main><script>const search=document.getElementById('search');const cards=Array.from(document.querySelectorAll('.help-card'));function filterCards(){const q=(search.value||'').trim().toLowerCase();cards.forEach(card=>{card.hidden=!!q&&!card.textContent.toLowerCase().includes(q);})}search.addEventListener('input',filterCards);document.getElementById('openAll').addEventListener('click',()=>cards.forEach(card=>{if(!card.hidden)card.open=true;}));document.getElementById('closeAll').addEventListener('click',()=>cards.forEach(card=>card.open=false));document.getElementById('copyAll').addEventListener('click',async()=>{const text=document.getElementById('allText').value;try{await navigator.clipboard.writeText(text);}catch(e){const ta=document.getElementById('allText');ta.style.position='fixed';ta.style.left='8px';ta.style.top='8px';ta.style.width='90vw';ta.style.height='60vh';ta.select();}});</script></body></html>
+- 実際に適用した強化内容はキャラクターシートの装備欄で、1強化1行で記録する。</textarea></section></main><script>const search=document.getElementById('search');const cards=Array.from(document.querySelectorAll('.help-card'));function filterCards(){const q=(search.value||'').trim().toLowerCase();cards.forEach(card=>{card.hidden=!!q&&!card.textContent.toLowerCase().includes(q);})}search.addEventListener('input',filterCards);document.getElementById('openAll').addEventListener('click',()=>cards.forEach(card=>{if(!card.hidden)card.open=true;}));document.getElementById('closeAll').addEventListener('click',()=>cards.forEach(card=>card.open=false));document.getElementById('copyAll').addEventListener('click',async()=>{const text=document.getElementById('allText').value;try{await navigator.clipboard.writeText(text);}catch(e){const ta=document.getElementById('allText');ta.style.position='fixed';ta.style.left='8px';ta.style.top='8px';ta.style.width='90vw';ta.style.height='60vh';ta.select();}});</script></body></html>
