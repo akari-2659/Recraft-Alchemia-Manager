@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.126</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.127</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -476,7 +476,7 @@
 </style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.126 / 最終更新日：2026年7月11日</div>
+<div class="ra-build-info">Version：v90.8.127 / 最終更新日：2026年7月11日</div>
 
 <header>
   <div class="title-card">
@@ -1033,8 +1033,8 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.126';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.107';
+const RECRAFT_DB_VERSION = 'v90.8.127';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.127';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -1048,8 +1048,8 @@ const SCHEMA = {
   material_ranks: ['id','name','price','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   equipment_categories: ['id','name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','toolRank','equipSlot','skill','power','maxStack','ammoUse','ammoKind','quiverCapacity','bagCapacity','offhandBonus','reloadTurns','modifiers','upgradeLimit','mpCost','target','checkType','element','description','effect','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeTarget','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
-  recipes: ['id','name','rank','price','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
-  spells: ['id','type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
+  recipes: ['id','publicId','name','rank','price','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
+  spells: ['id','publicId','type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   quest_rewards: ['id','rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards','notes','updatedAt','ownerKey','createdBy'],
   quests: ['id','name','questCategory','enabled','questType','rank','areaName','progressStep','fixedEvents','clearCondition','bossMonster','questBossName','questBossFormation','questBossComposition','rewardMoney','rewardItems','unlockResult','description','notes','updatedAt','ownerKey','createdBy'],
   exploration_areas: ['id','name','areaType','difficulty','unlockCondition','mainMaterials','mainMonsters','eventTableId','progressStep','description','notes','updatedAt','ownerKey','createdBy'],
@@ -1070,9 +1070,9 @@ const FORM_PRIMARY_FIELDS = {
   material_ranks: ['id','name','price','description','sortOrder','enabled'],
   equipment_categories: ['name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled'],
   items: ['name','publicId','csVisible','itemType','itemCategory','price','rank','toolRank','equipSlot','skill','power','upgradeLimit','mpCost','target','checkType','element','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeTarget','unlockFacility','tags'],
-  recipes: ['name','rank','price','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags'],
+  recipes: ['name','publicId','rank','price','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags'],
   materials: ['name','publicId','materialType','materialCategory','rank','price','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeTarget','description','effect','notes'],
-  spells: ['type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags'],
+  spells: ['type','name','publicId','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags'],
   quest_rewards: ['rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards'],
   quests: ['name','questCategory','enabled','questType','rank','areaName','progressStep','fixedEvents','clearCondition','bossMonster','questBossName','questBossFormation','questBossComposition','rewardMoney','rewardItems','unlockResult','description','notes'],
   exploration_areas: ['name','areaType','difficulty','unlockCondition','mainMaterials','mainMonsters','eventTableId','description','notes'],
@@ -2259,6 +2259,7 @@ function fieldText(row={}, field){
   return String(row[field] ?? '').trim();
 }
 function warehouseKindForRow(row={}, key=''){
+  if(baseKeyForTable(key)==='spells') return '術式';
   const dataKind = fieldText(row,'dataKind');
   const itemType = fieldText(row,'itemType');
   const materialType = fieldText(row,'materialType');
@@ -2327,6 +2328,7 @@ function buildRecipeInfoText(row={}){
   const requiredRank = requiredToolRankForRecipe(row);
   const lines = [];
   lines.push(`【${name}】`);
+  lines.push(warehouseCopyLine('登録ID', fieldText(row,'publicId')));
   lines.push(warehouseCopyLine('個数', fieldText(row,'resultCount') || '1'));
   lines.push(warehouseCopyLine('ランク', fieldText(row,'rank')));
   lines.push(warehouseCopyLine('価格', productPriceText(row)));
@@ -2656,7 +2658,7 @@ function renderAntiqueAppraisalResult(){
     <div><b>鑑定難易度：</b>${escapeHtml(String(difficulty))}</div>
     <div><b>判定式：</b>2D6+鑑定技能&gt;=${escapeHtml(String(difficulty))}</div>
     <div><b>鑑定料：</b>${escapeHtml(String(fee))}G</div>
-    <div><b>成功時：</b>対応階級の術式内容が判明し、「鑑定結果：術式名」として確定します。</div>`;
+    <div><b>成功時：</b>進行管理のスクロール鑑定で術式を決定し、「鑑定結果：○○」として術式名・術式登録ID・鑑定後スクロール登録IDを表示します。</div>`;
 }
 function renderAntiqueTranscriptionResult(){
   const result = $('facilityTranscribeResult');
@@ -4093,6 +4095,7 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='csVisible') help += '<div class="form-help">TRUEならキャラシHTML側のDB装備/アイテム候補に表示。FALSEならDBには残りますが、キャラシ候補には出ません。</div>';
   if(field==='ownerKey') help += '<div class="form-help">空欄なら全員に見える公開データ。入力すると同じ管理キーの人だけ読めます。</div>';
   if(field==='id') help += '<div class="form-help">種別では任意IDを決められます。カテゴリやアイテムは空欄でも自動生成されます。</div>';
+  if(field==='publicId') help += '<div class="form-help">プレイヤーへ渡す登録IDです。空欄で保存すると RCA-XXXX-XXXX 形式で自動生成します。</div>';
   if(field==='itemType') help += '<div class="form-help">アイテム用の親分類です。候補は「アイテム種別」で管理します。</div>';
   if(field==='itemCategory') help += '<div class="form-help">選んだアイテム種別に紐づくカテゴリだけ表示します。</div>';
   if(field==='materialType') help += '<div class="form-help">素材用の親分類です。候補は「素材種別」で管理します。</div>';
@@ -4168,24 +4171,24 @@ function currentFormRowSnapshot(){
 function itemFormFields(row){
   const kind = String(row.dataKind || 'アイテム').trim() || 'アイテム';
   if(kind==='素材'){
-    return ['materialType','materialCategory','name','rank','price','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeTarget','description','effect','notes'];
+    return ['materialType','materialCategory','name','publicId','rank','price','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeTarget','description','effect','notes'];
   }
   const itemType = String(row.itemType || '').trim();
-  if(itemType === '道具') return ['itemType','itemCategory','name','csVisible','price','rank','toolRank','equipSlot','maxStack','description','effect','unlockFacility','tags','notes'];
+  if(itemType === '道具') return ['itemType','itemCategory','name','publicId','csVisible','price','rank','toolRank','equipSlot','maxStack','description','effect','unlockFacility','tags','notes'];
   if(itemType === 'バッグ'){
-    return ['itemType','itemCategory','name','csVisible','price','rank','bagCapacity','description','effect','unlockFacility','tags','notes'];
+    return ['itemType','itemCategory','name','publicId','csVisible','price','rank','bagCapacity','description','effect','unlockFacility','tags','notes'];
   }
-  return ['itemType','itemCategory','name','csVisible','price','rank','equipSlot','skill','power','maxStack','offhandBonus','reloadTurns','modifiers','mpCost','target','checkType','element','description','effect','unlockFacility','tags','notes'];
+  return ['itemType','itemCategory','name','publicId','csVisible','price','rank','equipSlot','skill','power','maxStack','offhandBonus','reloadTurns','modifiers','mpCost','target','checkType','element','description','effect','unlockFacility','tags','notes'];
 }
 function recipeFormFields(row){
   const craftType = String(row.craftType || activeRecipeCraftType() || '調合').trim();
   if(craftType === '武器派生'){
-    return ['name','rank','price','craftType','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes'];
+    return ['name','publicId','rank','price','craftType','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes'];
   }
   if(craftType === '素材加工'){
-    return ['name','rank','price','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes'];
+    return ['name','publicId','rank','price','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes'];
   }
-  return ['name','rank','price','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes'];
+  return ['name','publicId','rank','price','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','requiredTools','difficulty','description','effect','unlockFacility','tags','notes'];
 }
 function formFieldsFor(key,row){
   if(key==='items') return [...new Set(['id','ownerKey','createdBy','updatedAt', ...itemFormFields(row)])].filter(f=>SCHEMA[key].includes(f));
@@ -4229,6 +4232,27 @@ function closeForm(){
   $('editModal').classList.add('hidden'); $('editModal').setAttribute('aria-hidden','true');
   formState={key:null,idx:null,mode:'new',defaultDataKind:''};
 }
+function allRegistrationIds(){
+  return new Set(['items','spells','recipes'].flatMap(k=>(state[k]||[]).map(r=>String(r.publicId||'').trim().toUpperCase())).filter(Boolean));
+}
+function generateRegistrationId(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const used=allRegistrationIds();
+  for(let attempt=0;attempt<100;attempt++){
+    const bytes=new Uint8Array(8);
+    if(window.crypto && crypto.getRandomValues) crypto.getRandomValues(bytes);
+    else for(let i=0;i<bytes.length;i++) bytes[i]=Math.floor(Math.random()*256);
+    const token=[...bytes].map(v=>chars[v%chars.length]).join('');
+    const id=`RCA-${token.slice(0,4)}-${token.slice(4,8)}`;
+    if(!used.has(id)) return id;
+  }
+  const fallback=Date.now().toString(36).toUpperCase().replace(/[^A-Z0-9]/g,'').padEnd(8,'X').slice(-8);
+  return `RCA-${fallback.slice(0,4)}-${fallback.slice(4,8)}`;
+}
+function ensurePlayerFacingPublicId(key,row){
+  if(['items','spells','recipes'].includes(key) && !String(row.publicId||'').trim()) row.publicId=generateRegistrationId();
+  return row;
+}
 function collectFormRow(){
   const {key,idx}=formState; if(!key) throw new Error('編集中のデータがありません');
   syncAllCheckBuilders($('editModal'));
@@ -4244,6 +4268,7 @@ function collectFormRow(){
   if(base.checkType !== undefined) normalizeRowCheckType(key, base);
   if(key==='equipment_categories' || key==='items') { Object.assign(base, migrateLegacyModifierFields(base)); ensurePhysicalElementForWeapon(base); }
   if(!String(base.id||'').trim()) base.id = `${key}_${Date.now()}`;
+  ensurePlayerFacingPublicId(key, base);
   base.updatedAt = nowIso();
   if(base.ownerKey === undefined) base.ownerKey=currentAdminKey();
   if(base.createdBy === undefined || !String(base.createdBy).trim()) base.createdBy=currentCreatedBy();

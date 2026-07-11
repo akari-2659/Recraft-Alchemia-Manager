@@ -37,7 +37,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.126 / 最終更新日：2026年7月11日</div>
+<div class="ra-build-info">Version：v90.8.127 / 最終更新日：2026年7月11日</div>
 
 <header>
   <div class="header-inner">
@@ -260,7 +260,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.126';
+const VERSION='v90.8.127';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -1115,9 +1115,10 @@ function rollAppraisal(){
   lines.push(`スクロールランク：${rule.scrollRank||''}`);
   lines.push(`判定式：2D6+鑑定技能>=${rule.difficulty||''}`);
   lines.push(`鑑定料：${appraisalFee(rule.scrollRank)}G`);
-  lines.push(`鑑定結果：${spell.name}`);
-  lines.push(`鑑定後アイテム：${spell.name}のスクロール`);
-  if(scroll?.publicId) lines.push(`登録ID：${scroll.publicId}`);
+  lines.push(`鑑定結果：${spell.name}（${spell.type||'術式'}・${spell.rank||rule.scrollRank||'ランク未設定'}）`);
+  if(spell.publicId) lines.push(`術式登録ID：${spell.publicId}`);
+  lines.push(`鑑定後スクロール：${spell.name}のスクロール`);
+  if(scroll?.publicId) lines.push(`スクロール登録ID：${scroll.publicId}`);
   lines.push(`術式種別：${spell.type||''}`);
   lines.push(`術式ランク：${spell.rank||''}`);
   if(spell.element) lines.push(`属性：${spell.element}`);
