@@ -3,39 +3,33 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>リクラフト・アルケミア 管理ハブ v90.8.51</title>
+  <title>リクラフト・アルケミア 管理ハブ v90.8.133</title>
   <style>
-    :root{color-scheme:light dark;--bg:#f7f2e8;--card:#fffaf0;--ink:#2d241b;--muted:#7b6a58;--line:#d8c7aa;--accent:#8b5e34;--accent2:#c28b45;--danger:#9b3b2f}
+    :root{--bg:#f7f2e8;--card:#fffaf0;--ink:#2d241b;--muted:#7b6a58;--line:#d8c7aa;--accent:#8b5e34;--accent2:#c28b45}
     *{box-sizing:border-box} html,body{height:100%} body{margin:0;font-family:"Yu Gothic","Hiragino Sans",system-ui,sans-serif;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;min-height:100svh}
     header{padding:14px 16px;border-bottom:1px solid var(--line);background:rgba(255,250,240,.96);position:sticky;top:0;z-index:10;box-shadow:0 6px 20px rgba(80,50,20,.08)}
-    .top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}.title h1{font-size:clamp(18px,3vw,26px);margin:0 0 4px}.title p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}.tabs{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.tabs button,.tabs a{appearance:none;border:1px solid var(--line);border-radius:999px;padding:9px 12px;background:#fffaf0;color:var(--ink);text-decoration:none;font-weight:700;cursor:pointer;font-size:13px}.tabs button.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border-color:transparent}.tabs a{color:var(--muted)}
-    main{flex:1;min-height:0;display:flex;flex-direction:column}.notice{padding:8px 16px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line);background:rgba(255,255,255,.45)}.framewrap{flex:1;min-height:0;position:relative}.toolframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:white;display:none}.toolframe.active{display:block}.fallback{display:none;padding:16px}.fallback a{color:var(--accent);font-weight:700}@media(max-width:720px){header{padding:12px}.tabs{width:100%}.tabs button,.tabs a{flex:1;text-align:center}.notice{font-size:11px}.toolframe{height:calc(100svh - 154px)}}
+    .build{font-size:12px;color:var(--muted);margin-bottom:6px} .top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap} .title h1{font-size:clamp(18px,3vw,26px);margin:0 0 4px} .title p{margin:0;color:var(--muted);font-size:12px;line-height:1.5} .tabs{display:flex;gap:8px;flex-wrap:wrap;align-items:center} .tabs button{appearance:none;border:1px solid var(--line);border-radius:999px;padding:9px 12px;background:#fffaf0;color:var(--ink);font-weight:700;cursor:pointer;font-size:13px} .tabs button.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border-color:transparent}
+    main{flex:1;min-height:0;display:flex;flex-direction:column} .notice{padding:8px 16px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line);background:rgba(255,255,255,.45)} .framewrap{flex:1;min-height:0;position:relative} .toolframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:white;display:none} .toolframe.active{display:block} @media(max-width:720px){header{padding:12px}.tabs{width:100%}.tabs button{flex:1;text-align:center}}
   </style>
 </head>
 <body>
   <header>
+    <div class="build">Version：v90.8.133 / 最終更新日：2026年7月11日</div>
     <div class="top">
-      <div class="title">
-        <h1>リクラフト・アルケミア 管理ハブ</h1>
-        <p>アイテム・魔物・イベント管理と、クエスト/エリア進行管理をまとめて開く管理専用ページです。</p>
-      </div>
+      <div class="title"><h1>リクラフト・アルケミア 管理ハブ</h1><p>DB管理、クエスト・エリア進行管理、ヘルプを切り替えます。</p></div>
       <nav class="tabs" aria-label="管理ツール切替">
         <button type="button" class="active" data-target="database">アイテム・DB管理</button>
         <button type="button" data-target="progress">イベント・進行管理</button>
         <button type="button" data-target="help">ヘルプ</button>
-        
       </nav>
     </div>
   </header>
   <main>
-    <div class="notice" id="notice">現在：アイテム・DB管理。固定DB URLを使用します。</div>
+    <div class="notice" id="notice">現在：アイテム・DB管理。</div>
     <div class="framewrap">
-      <iframe id="frame-database" class="toolframe active" src="database_admin.html?v=90.8.51" title="アイテム・DB管理"></iframe>
-      <iframe id="frame-progress" class="toolframe" src="progress_manager.html?v=90.8.51" title="イベント・進行管理"></iframe>
-      <iframe id="frame-help" class="toolframe" src="help.html?v=90.8.51" title="ヘルプ"></iframe>
-      <div class="fallback">
-        iframeが表示できない場合は、<a href="database_admin.html?v=90.8.51">アイテム・DB管理</a> または <a href="progress_manager.html?v=90.8.51">イベント・進行管理</a>、<a href="help.html?v=90.8.51">ヘルプ</a> を直接開いてください。
-      </div>
+      <iframe id="frame-database" class="toolframe active" src="database_admin.html?v=90.8.133" title="アイテム・DB管理"></iframe>
+      <iframe id="frame-progress" class="toolframe" src="progress_manager.html?v=90.8.133" title="イベント・進行管理"></iframe>
+      <iframe id="frame-help" class="toolframe" src="help.html?v=90.8.133" title="ヘルプ"></iframe>
     </div>
   </main>
   <script>
@@ -44,7 +38,7 @@
       document.querySelectorAll('.tabs button[data-target]').forEach(btn=>btn.classList.toggle('active',btn.dataset.target===key));
       document.querySelectorAll('.toolframe').forEach(frame=>frame.classList.remove('active'));
       const frame=document.getElementById('frame-'+key); if(frame) frame.classList.add('active');
-      const notice=document.getElementById('notice'); if(notice) notice.textContent='現在：'+(labels[key]||key)+'。固定DB URLを使用します。';
+      const notice=document.getElementById('notice'); if(notice) notice.textContent='現在：'+(labels[key]||key)+'。';
       try{history.replaceState(null,'','#'+key);}catch(e){}
     }
     document.querySelectorAll('.tabs button[data-target]').forEach(btn=>btn.addEventListener('click',()=>showTool(btn.dataset.target)));

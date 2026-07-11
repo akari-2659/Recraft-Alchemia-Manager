@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.129</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.133</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -476,7 +476,7 @@
 </style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.129 / 最終更新日：2026年7月11日</div>
+<div class="ra-build-info">Version：v90.8.133 / 最終更新日：2026年7月11日</div>
 
 <header>
   <div class="title-card">
@@ -1033,8 +1033,8 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.129';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.127';
+const RECRAFT_DB_VERSION = 'v90.8.133';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.133';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -1800,6 +1800,7 @@ const SYSTEM_HELP = [
       "魔物出力にキャラクターメモは含めない。",
       "魔物出力にドロップは含めない。",
       "チャットパレットは『choice[技名1,技名2,…]』から始める。",
+      "各行動には対象と距離（近接／遠距離／自身）を表示する。",
       "ダイスのない効果も技能セクションに入れる。"
     ]
   },
@@ -2909,6 +2910,18 @@ function monsterMemo(row={}){
   // ドロップや詳細説明は管理HTML側で確認する。
   return '';
 }
+function monsterActionRange(action={}){
+  const parsed = parseCheckType(action.checkType || '');
+  const left = parsed.left || '';
+  const target = compactMonsterText(action.target);
+  if(target.includes('自身')) return '自身';
+  if(left === '近接') return '近接';
+  if(left === '射撃' || left === '魔法' || left === '祈祷') return '遠距離';
+  return target ? '遠距離' : '特殊';
+}
+function monsterActionTarget(action={}){
+  return compactMonsterText(action.target) || '対象未設定';
+}
 function monsterActionCheckCommand(row={}, action={}){
   const parsed = parseCheckType(action.checkType || '');
   if(!parsed.raw || parsed.left === 'なし') return '';
@@ -2921,12 +2934,16 @@ function monsterActionCheckCommand(row={}, action={}){
   else if(left === 'なし') return '';
   const numeric = String(mod ?? '').trim();
   const formula = numeric ? `2D6+${numeric}>=${right}` : `2D6>=${right}`;
-  return `${formula} 【${action.name || '魔物行動'}】`;
+  const range = monsterActionRange(action);
+  const target = monsterActionTarget(action);
+  return `${formula} 【${action.name || '魔物行動'}／${range}／対象：${target}】`;
 }
 function monsterDamageCommand(action={}){
   const power = compactMonsterText(action.power);
   if(!power || power === 'なし' || power === '-') return '';
-  return `${power} 【${action.name || '魔物行動'}ダメージ】`;
+  const range = monsterActionRange(action);
+  const target = monsterActionTarget(action);
+  return `${power} 【${action.name || '魔物行動'}ダメージ／${range}／対象：${target}】`;
 }
 function monsterChatPalette(row={}){
   const name = compactMonsterText(row.name) || '名称未設定の魔物';
@@ -2938,12 +2955,16 @@ function monsterChatPalette(row={}){
     lines.push(`// ${name}`);
     actions.forEach(action=>{
       const actionName = action.name || '魔物行動';
+      const range = monsterActionRange(action);
+      const target = monsterActionTarget(action);
+      const element = compactMonsterText(action.element);
       const check = monsterActionCheckCommand(row, action);
       const damage = monsterDamageCommand(action);
       const effect = compactMonsterText(action.effect);
+      lines.push(`// 【${actionName}】 距離：${range}／対象：${target}${element ? `／属性：${element}` : ''}`);
       if(check) lines.push(check);
       if(damage) lines.push(damage);
-      if(effect) lines.push(`// ${actionName} 効果：${effect}`);
+      if(effect) lines.push(`// 効果：${effect}`);
       if(!check && !damage && !effect) lines.push(`// ${actionName}`);
     });
   }else{
@@ -4249,8 +4270,19 @@ function generateRegistrationId(){
   const fallback=Date.now().toString(36).toUpperCase().replace(/[^A-Z0-9]/g,'').padEnd(8,'X').slice(-8);
   return `RCA-${fallback.slice(0,4)}-${fallback.slice(4,8)}`;
 }
+function registrationIdConflict(key,row,pid){
+  const target=String(pid||'').trim().toUpperCase();
+  if(!target) return false;
+  return ['items','spells','recipes'].some(section=>(state[section]||[]).some(other=>{
+    if(section===key && String(other.id||'')===String(row.id||'')) return false;
+    return String(other.publicId||'').trim().toUpperCase()===target;
+  }));
+}
 function ensurePlayerFacingPublicId(key,row){
-  if(['items','spells','recipes'].includes(key) && !String(row.publicId||'').trim()) row.publicId=generateRegistrationId();
+  if(!['items','spells','recipes'].includes(key)) return row;
+  let pid=String(row.publicId||'').trim().toUpperCase();
+  if(!/^RCA-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(pid) || registrationIdConflict(key,row,pid)) pid=generateRegistrationId();
+  row.publicId=pid;
   return row;
 }
 function collectFormRow(){

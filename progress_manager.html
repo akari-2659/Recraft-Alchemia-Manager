@@ -37,13 +37,13 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.129 / 最終更新日：2026年7月11日</div>
+<div class="ra-build-info">Version：v90.8.133 / 最終更新日：2026年7月11日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.93 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.133 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -260,7 +260,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.129';
+const VERSION='v90.8.133';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -616,7 +616,7 @@ function renderQuestEvents(){
     parts.push('<div class="muted small">このクエストには固定イベントが登録されていません。</div>');
   }
   parts.push('</div>');
-  parts.push(`<div class="event-section"><div class="event-section-title"><span class="badge random">ランダム</span> クエストランダムイベント</div><div class="muted small">選択中クエストの対象エリアに設定されたランダムイベントです。下の「クエストランダムイベント抽選」を押した時だけ結果が出ます。候補数：${randomRows.length}件</div>`);
+  parts.push(`<div class="event-section"><div class="event-section-title"><span class="badge random">ランダム</span> クエストランダムイベント</div><div class="muted small">選択中クエストの対象エリアに設定されたランダムイベントです。下の「クエストランダムイベント抽選」を押した時だけ結果が出ます。戦闘イベントは登録済みの出現構成をそのまま使用します。候補数：${randomRows.length}件</div>`);
   if(state.lastQuestEventText){
     parts.push(`<div class="event-card random"><div class="event-title"><span class="badge random">ランダム</span> 直近の抽選結果</div><div class="muted small">${esc(state.lastQuestEventText).replace(/\n/g,'<br>')}</div></div>`);
   }else{
@@ -643,17 +643,13 @@ function rollQuestEvent(){
 該当エリアのランダムイベントがありません。`; renderQuestEvents(); return;}
   const picked=pickRandomEvent(rows, state.lastQuestEventKey);
   state.lastQuestEventKey=eventUniqueKey(picked);
-  const lines=[
-    `【ランダムイベント】${q.name||q.id}`,
-    area?`エリア：${area.name||area.id}`:'',
-    `表：${tableId}`,
-    `イベント：${picked.eventName||'名称未設定'}`,
-    picked.eventType?`種別：${picked.eventType}`:'',
-    picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'',
-    picked.result?`結果：${picked.result}`:'',
-    picked.progressEffect?`補足：${picked.progressEffect}`:''
-  ].filter(Boolean);
-  state.lastQuestEventText=lines.join('\n');
+  state.lastQuestEventText=formatEventOutput(
+    `【クエストランダムイベント】${q.name||q.id}`,
+    picked,
+    area,
+    tableId,
+    ['戦闘イベントは表示された出現構成を使用し、追加の魔物抽選は行いません。']
+  );
   renderQuestEvents(); addLog(`クエストランダムイベント：${q.name||q.id} / ${picked.eventName||'名称未設定'}`);
 }
 function renderQuest(){
