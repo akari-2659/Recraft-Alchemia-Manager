@@ -1,6 +1,6 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "v90.8.127",
+  "version": "v90.8.128",
   "encoding": "UTF-8",
   "description": "リクラフト・アルケミア初期データ。制作・購入の両方が可能な商品は、店頭価格が素材代＋施設制作費を上回るよう調整済み。",
   "data": {
@@ -7966,7 +7966,7 @@
         "difficulty": "初級",
         "unlockCondition": "初期解放",
         "mainMaterials": "薬草、清め草、丸茸、丈夫な枝、しなやかな蔓、澄んだ水、小さな水晶片、鉄鉱石",
-        "mainMonsters": "プチスライム、ラフィンラット、ラピットホーン、ヴェスパット、カラパスビートル、グラウワーム",
+        "mainMonsters": "プチスライム、ラフィンラット、ラピットホーン、ヴェスパット、カラパスビートル、グラウワーム、草角王ラグヴェル",
         "eventTableId": "evt_outskirts_grass_daily",
         "progressStep": "+25%",
         "description": "街のすぐ外に広がる草原。復興前のため手入れされていないが、薬草や枝材が採れ、小型魔物も多く棲みついている。",
@@ -7982,7 +7982,7 @@
         "difficulty": "初級",
         "unlockCondition": "クエスト「森道の安全確認」クリア",
         "mainMaterials": "薬草、清め草、丸茸、丈夫な枝、しなやかな蔓",
-        "mainMonsters": "ラスクレイル、マイコニド、ルートハウンド、ブランチリング",
+        "mainMonsters": "ラスクレイル、マイコニド、ルートハウンド、ブランチリング、森奥の枝王ヴィルドラン",
         "eventTableId": "evt_nearby_forest_daily",
         "progressStep": "+25%",
         "description": "街から少し離れた森。木材や茸、獣・植物魔物の素材を得やすい。奥へ進むほど足場や視界が悪くなる。",
