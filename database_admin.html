@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.125</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.126</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -476,7 +476,7 @@
 </style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.125 / 最終更新日：2026年7月11日</div>
+<div class="ra-build-info">Version：v90.8.126 / 最終更新日：2026年7月11日</div>
 
 <header>
   <div class="title-card">
@@ -1033,7 +1033,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.125';
+const RECRAFT_DB_VERSION = 'v90.8.126';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.107';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1593,6 +1593,7 @@ const SYSTEM_HELP = [
       "例：装備強化内容『水付与(防具)』、装備強化値『水』。",
       "武器は素材による派生や強化に反映する。",
       "防具は派生式ではなく、購入または作成した防具を後から強化する方式。",
+      "制作と購入の両方が可能な商品は、店頭購入価格を必要素材の価格合計＋施設制作費より高く設定する。",
       "属性として扱う値は、物、火、水、風、雷、光、闇、無。",
       "採取素材など、魔物素材ではない素材は装備強化内容と装備強化値を空欄にしてよい。",
       "魔物素材の特徴が装備性能に出るように、素材ごとに装備強化内容と装備強化値を設定する。",
