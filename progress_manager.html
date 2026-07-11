@@ -37,7 +37,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.127 / 最終更新日：2026年7月11日</div>
+<div class="ra-build-info">Version：v90.8.129 / 最終更新日：2026年7月11日</div>
 
 <header>
   <div class="header-inner">
@@ -260,7 +260,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.127';
+const VERSION='v90.8.129';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -677,7 +677,7 @@ function renderQuest(){
 function renderArea(){
   const a=selected($('areaSelect'),state.areas); if(!a){$('areaDetail').textContent='エリアデータがありません。'; return;}
   const p=progressObj('areas',a.id||a.name); $('areaNote').value=p.note||''; $('areaBar').style.width=clamp(p.value)+'%'; $('areaLabel').textContent=clamp(p.value)+'%';
-  $('areaDetail').innerHTML=`<div class="kv"><b>種別</b><span>${esc(a.areaType||'')}</span><b>難度</b><span>${esc(a.difficulty||'')}</span><b>イベント表</b><span>${esc(a.eventTableId||'')}</span><b>探索進行上昇</b><span>+${areaStepAmount(a)}%</span><b>主な素材</b><span>${esc(a.mainMaterials||'')}</span><b>主な魔物</b><span>${esc(a.mainMonsters||'')}</span></div>${a.description?`<p class="muted">${esc(a.description)}</p>`:''}`;
+  $('areaDetail').innerHTML=`<div class="kv"><b>種別</b><span>${esc(a.areaType||'')}</span><b>難度</b><span>${esc(a.difficulty||'')}</span><b>イベント表</b><span>${esc(a.eventTableId||'')}</span><b>探索進行上昇</b><span>+${areaStepAmount(a)}%</span><b>主な素材</b><span>${esc(a.mainMaterials||'')}</span><b>主な魔物</b><span>${esc(a.mainMonsters||'')}</span><b>フィールド効果</b><span>${esc(a.fieldEffect||'なし')}</span></div>${a.description?`<p class="muted">${esc(a.description)}</p>`:''}`;
   const step=areaStepAmount(a); const current=clamp(p.value); $('areaStepInfo').innerHTML=`<div class="kv"><b>現在</b><span>${current}%</span><b>1回の進行</b><span>+${step}%</span><b>進行後</b><span>${clamp(current+step)}%</span></div><p class="muted small">探索進行はエリア登録側の固定値で上昇します。ランダムイベント結果では進行度を自動変更しません。</p>`;
 }
 function renderMonster(){
@@ -932,7 +932,7 @@ function formatEventOutput(prefix, picked, area, tableId, extraLines=[]){
   const condition = eventConditionType(picked)==='なし' ? '' : `前提：${eventConditionType(picked)}${picked.conditionValue?` / ${picked.conditionValue}`:''}`;
   const encounter = encounterCountText(picked);
   const composition = encounterCompositionText(picked);
-  return [prefix, area?`エリア：${area.name||area.id}`:'', `表：${tableId}`, picked.eventName?`イベント：${picked.eventName}`:'', picked.eventType?`種別：${picked.eventType}`:'', condition, encounter, composition, picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'', picked.result?`結果：${picked.result}`:'', picked.progressEffect?`補足：${picked.progressEffect}`:'', ...extraLines].filter(Boolean).join('\n');
+  return [prefix, area?`エリア：${area.name||area.id}`:'', area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'', `表：${tableId}`, picked.eventName?`イベント：${picked.eventName}`:'', picked.eventType?`種別：${picked.eventType}`:'', condition, encounter, composition, picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'', picked.result?`結果：${picked.result}`:'', picked.progressEffect?`補足：${picked.progressEffect}`:'', ...extraLines].filter(Boolean).join('\n');
 }
 function triggerAreaClearRumorEvent(area){
   const rumor=selectedRumor();
@@ -1258,7 +1258,7 @@ function questInfoMemo(){
   const q=selected($('questSelect'),state.quests);
   return q ? questPublicInfoLines(q).join('\n') : '';
 }
-function areaMemo(){const a=selected($('areaSelect'),state.areas); if(!a)return ''; const p=progressObj('areas',a.id||a.name); return [`【エリア進行】${a.name||a.id}`,`探索進行度：${clamp(p.value)}%`,a.eventTableId?`イベント表：${a.eventTableId}`:'',a.mainMaterials?`主な素材：${a.mainMaterials}`:'',a.mainMonsters?`主な魔物：${a.mainMonsters}`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
+function areaMemo(){const a=selected($('areaSelect'),state.areas); if(!a)return ''; const p=progressObj('areas',a.id||a.name); return [`【エリア進行】${a.name||a.id}`,`探索進行度：${clamp(p.value)}%`,a.eventTableId?`イベント表：${a.eventTableId}`:'',a.mainMaterials?`主な素材：${a.mainMaterials}`:'',a.mainMonsters?`主な魔物：${a.mainMonsters}`:'',a.fieldEffect&&a.fieldEffect!=='なし'?`フィールド効果：${a.fieldEffect}`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
 function switchProgressTab(tab){
   let key=String(tab || 'quest');
   const panels=[...document.querySelectorAll('[data-progress-tab]')];
