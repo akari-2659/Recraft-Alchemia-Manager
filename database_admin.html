@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.90</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.125</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -458,9 +458,26 @@
   font-size:12px;
   white-space:pre-wrap;
 }
+
+  .facility-inner-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 14px}
+  .facility-inner-tab{border:1px solid var(--line);background:var(--panel2);color:var(--text);padding:8px 12px;border-radius:999px;font-weight:700;cursor:pointer}
+  .facility-inner-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .facility-tab-panel{margin-top:8px}
+  .facility-recipe-grid{display:grid;gap:10px}
+  .facility-recipe-card{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--panel2)}
+  .facility-recipe-card h5{margin:0 0 8px;font-size:1rem}
+  .facility-work-route{display:grid;gap:6px;margin-top:8px;padding:10px;border:1px dashed var(--line);border-radius:10px}
+
+</style>
+
+<style id="raBuildInfoStyle">
+.ra-build-info{position:fixed;top:8px;right:8px;z-index:99999;padding:6px 10px;border:1px solid rgba(91,69,45,.28);border-radius:999px;background:rgba(255,253,248,.94);box-shadow:0 2px 10px rgba(0,0,0,.12);font-size:12px;font-weight:800;color:#5b452d;line-height:1.2;backdrop-filter:blur(4px)}
+@media(max-width:760px){.ra-build-info{position:static;margin:8px auto 0;width:max-content;max-width:calc(100% - 16px);text-align:center}}
 </style>
 </head>
 <body>
+<div class="ra-build-info">Version：v90.8.125 / 最終更新日：2026年7月11日</div>
+
 <header>
   <div class="title-card">
     <h1>リクラフト・アルケミア<br>統合DB管理ツール</h1>
@@ -498,12 +515,9 @@
     <div class="toolbar initial-data-toolbar">
       <div class="field">
         <label>初期データJSON</label>
-        <div id="initialDataStatus" class="status-box warn">未読込：HTML起動時は初期データを展開しません</div>
-        <div class="small">新規DB構築や初期内容の再登録時だけ読み込みます。通常運用ではDB読込を使用してください。</div>
+        <div id="initialDataStatus" class="status-box warn">自動読込中：data/recraft_alchemia_initial_data.json</div>
+        <div class="small">GitHub Pages上で同梱JSONを自動読込します。手動ファイル選択は使用しません。</div>
       </div>
-      <input id="initialDataFileInput" class="hidden" type="file" accept="application/json,.json">
-      <button class="secondary" id="btnLoadBundledInitialData">同梱JSONを読込</button>
-      <button class="secondary" id="btnChooseInitialData">JSONファイルを選択</button>
       <button class="ghost" id="btnClearWorkingData">画面データを空にする</button>
     </div>
     <div id="uploadProgressPanel" class="upload-progress-panel hidden">
@@ -899,59 +913,46 @@
           <div id="facilityAlchemyResult" class="facility-upgrade-result muted">作成するアイテムと道具ランクを選択してください。</div>
         </div>
         <div id="facilityAntiqueWork" class="facility-work-block hidden">
-          <div class="input-action-row">
-            <div>
-              <label for="facilityAntiqueStockCount">ランダム販売数</label>
-              <select id="facilityAntiqueStockCount">
-                <option value="1">1点</option>
-                <option value="2">2点</option>
-                <option value="3" selected>3点</option>
-                <option value="4">4点</option>
-                <option value="5">5点</option>
-              </select>
+          <div id="facilityAntiqueStockWork">
+            <div class="input-action-row">
+              <div>
+                <label for="facilityAntiqueStockCount">ランダム販売数</label>
+                <select id="facilityAntiqueStockCount">
+                  <option value="1">1点</option><option value="2">2点</option><option value="3" selected>3点</option><option value="4">4点</option><option value="5">5点</option>
+                </select>
+              </div>
+              <button class="secondary" type="button" data-facility-antique-random>未鑑定スクロールをランダム選出</button>
             </div>
-            <button class="secondary" type="button" data-facility-antique-random>未鑑定スクロールをランダム選出</button>
+            <div id="facilityAntiqueStockResult" class="facility-upgrade-result muted">未鑑定スクロールのランダム販売枠を選出できます。</div>
           </div>
-          <div id="facilityAntiqueStockResult" class="facility-upgrade-result muted">未鑑定スクロールのランダム販売枠を選出できます。</div>
-
-          <hr class="soft-divider">
-
-          <div class="input-action-row">
-            <div>
-              <label for="facilityAppraisalRankInput">鑑定スクロール階級</label>
-              <select id="facilityAppraisalRankInput">
-                <option value="初級">初級</option>
-                <option value="中級">中級</option>
-                <option value="上級">上級</option>
-                <option value="特級">特級</option>
-              </select>
+          <div id="facilityAntiqueAppraisalWork" class="hidden">
+            <div class="input-action-row">
+              <div>
+                <label for="facilityAppraisalRankInput">鑑定スクロール階級</label>
+                <select id="facilityAppraisalRankInput">
+                  <option value="初級">初級</option><option value="中級">中級</option><option value="上級">上級</option><option value="特級">特級</option>
+                </select>
+              </div>
+              <button class="secondary" type="button" data-facility-appraisal-check>鑑定内容を確認</button>
             </div>
-            <button class="secondary" type="button" data-facility-appraisal-check>鑑定難易度を確認</button>
+            <div id="facilityAppraisalResult" class="facility-upgrade-result muted">鑑定するスクロール階級を選択してください。</div>
           </div>
-          <div id="facilityAppraisalResult" class="facility-upgrade-result muted">鑑定するスクロール階級を選択してください。</div>
-
-          <hr class="soft-divider">
-
-          <div class="input-action-row">
-            <div>
-              <label for="facilityTranscribeTypeInput">術式種別</label>
-              <select id="facilityTranscribeTypeInput">
-                <option value="魔法">魔法</option>
-                <option value="祈祷">祈祷</option>
-              </select>
+          <div id="facilityAntiqueTranscribeWork" class="hidden">
+            <div class="input-action-row">
+              <div>
+                <label for="facilityTranscribeTypeInput">術式種別</label>
+                <select id="facilityTranscribeTypeInput"><option value="魔法">魔法</option><option value="祈祷">祈祷</option></select>
+              </div>
+              <div>
+                <label for="facilityTranscribeRankInput">術式階級</label>
+                <select id="facilityTranscribeRankInput">
+                  <option value="初級">初級</option><option value="中級">中級</option><option value="上級">上級</option><option value="特級">特級</option>
+                </select>
+              </div>
+              <button class="secondary" type="button" data-facility-transcribe-check>術式化内容を確認</button>
             </div>
-            <div>
-              <label for="facilityTranscribeRankInput">術式階級</label>
-              <select id="facilityTranscribeRankInput">
-                <option value="初級">初級</option>
-                <option value="中級">中級</option>
-                <option value="上級">上級</option>
-                <option value="特級">特級</option>
-              </select>
-            </div>
-            <button class="secondary" type="button" data-facility-transcribe-check>術式化難易度を確認</button>
+            <div id="facilityTranscribeResult" class="facility-upgrade-result muted">術式種別と階級を選択してください。</div>
           </div>
-          <div id="facilityTranscribeResult" class="facility-upgrade-result muted">術式種別と階級を選択してください。</div>
         </div>
         <div id="facilityNoWork" class="facility-upgrade-result muted hidden">この施設には強化・調合の難易度確認項目はありません。</div>
       </section>
@@ -1032,7 +1033,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.116';
+const RECRAFT_DB_VERSION = 'v90.8.125';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.107';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1092,6 +1093,9 @@ let currentMainTab = 'categories';
 let currentCategoryTab = 'item_types';
 let currentRecipeView = '調合';
 let currentFacilityView = '鍛冶屋';
+const currentFacilitySectionByName = {
+  '鍛冶屋':'sales','薬屋':'sales','宿屋':'services','骨董屋':'sales','ギルド':'important'
+};
 let currentFacilityRankLimit = '';
 let currentGuildShowHiddenImportant = false;
 let currentGuildDailyCount = 5;
@@ -1186,7 +1190,7 @@ function updateInitialDataStatus(){
     el.textContent = `読込済み：${initialDataSource || '初期データJSON'}（${initialDataRowCount(DEFAULTS)}件）`;
   }else{
     el.className = 'status-box warn';
-    el.textContent = '未読込：HTML起動時は初期データを展開しません';
+    el.textContent = '自動読込中：data/recraft_alchemia_initial_data.json';
   }
 }
 function applyInitialData(raw, sourceLabel='初期データJSON'){
@@ -1201,20 +1205,18 @@ function applyInitialData(raw, sourceLabel='初期データJSON'){
   toast(`初期データを読み込みました（${initialDataRowCount(DEFAULTS)}件）`);
 }
 async function loadBundledInitialData(){
+  const status=$('initialDataStatus');
   try{
-    const res = await fetch(INITIAL_DATA_PATH, {cache:'no-store'});
+    if(status){ status.className='status-box warn'; status.textContent='自動読込中：data/recraft_alchemia_initial_data.json'; }
+    const res = await fetch(`${INITIAL_DATA_PATH}?v=${encodeURIComponent(RECRAFT_DB_VERSION)}`, {cache:'no-store'});
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
     const raw = await res.json();
-    applyInitialData(raw, '同梱JSON');
+    applyInitialData(raw, '同梱JSON（自動）');
   }catch(e){
-    toast(`同梱JSONを自動で読み込めませんでした。ローカル版では「JSONファイルを選択」を使用してください。\n${e.message||e}`, 'error');
+    if(status){ status.className='status-box bad'; status.textContent=`自動読込失敗：${e.message||e}`; }
+    toast(`初期データJSONの自動読込に失敗しました。GitHub Pages上で data/recraft_alchemia_initial_data.json の配置を確認してください。
+${e.message||e}`, 'error');
   }
-}
-async function loadInitialDataFile(file){
-  if(!file) return;
-  const text = await file.text();
-  const raw = JSON.parse(text.replace(/^\uFEFF/,''));
-  applyInitialData(raw, file.name || '選択したJSON');
 }
 function clearWorkingData(){
   if(!confirm('画面上のデータを空にしますか？\nDB上のデータは変更されません。')) return;
@@ -1387,50 +1389,44 @@ function escapeHtml(s){ return String(s ?? '').replace(/[&<>"]/g, c=>({'&':'&amp
 
 const FACILITY_DEFS = [
   {
-    id:'smithy',
-    name:'鍛冶屋',
-    role:'武器・防具・バッグ・鍛冶素材の販売と、鍛冶施設利用を担当。',
+    id:'smithy', name:'鍛冶屋',
+    role:'武器・防具・バッグ・鍛冶素材の販売、製作、武器派生、素材加工、装備強化を担当。',
     services:[
-      {name:'鍛冶施設利用', price:'任意', description:'武器・防具・バッグ作成、装備強化、金属加工に使用。'},
-      {name:'装備作成/強化', price:'レシピ依存', description:'素材とレシピを使って作成・強化を行う。'}
+      {name:'鍛冶施設利用', price:'レシピ依存', description:'道具を持たない場合でも、素材と施設依頼費を支払って鍛冶作業を依頼できる。'},
+      {name:'装備強化', price:'素材ランク・強化回数依存', description:'自作は鍛冶道具＋素材、施設依頼は素材＋依頼費で行う。'}
     ]
   },
   {
-    id:'pharmacy',
-    name:'薬屋',
+    id:'pharmacy', name:'薬屋',
     role:'ポーション・薬品系道具・調合素材の販売と、調合施設利用を担当。',
     services:[
-      {name:'調合施設利用', price:'任意', description:'薬品・消耗品・調合アイテムの作成に使用。'},
-      {name:'薬品調合', price:'レシピ依存', description:'素材とレシピを使って薬品系アイテムを作成する。'}
+      {name:'調合施設利用', price:'レシピ依存', description:'自作は調合道具＋素材、施設依頼は素材＋依頼費で行う。'}
     ]
   },
   {
-    id:'inn',
-    name:'宿屋',
-    role:'宿泊・休息・噂/クエスト情報を担当。商品販売ではなくサービス中心。',
+    id:'inn', name:'宿屋',
+    role:'宿泊・休息・噂やクエスト情報を担当。商品販売ではなくサービス中心。',
     services:[
       {name:'宿泊', price:'30G', description:'HP/MPを全回復し、1日経過する。'},
-      {name:'休息', price:'10G', description:'短時間休む。日数経過なし、または短時間経過として扱う。'},
+      {name:'休息', price:'10G', description:'短時間休む。'},
       {name:'噂を聞く', price:'0〜10G', description:'クエスト、探索エリア、素材、魔物などの情報を得る。'}
     ]
   },
   {
-    id:'antique',
-    name:'骨董屋',
-    role:'未鑑定スクロールの販売・鑑定と、鑑定済みスクロールの術式化を担当。',
+    id:'antique', name:'骨董屋',
+    role:'未鑑定スクロールの販売・鑑定、鑑定済みスクロールの術式化、術式用品の販売を担当。',
     services:[
-      {name:'未鑑定スクロール販売', price:'高額/ランダム', description:'初級から特級までの未鑑定スクロールを日替わりで少数販売する。'},
-      {name:'スクロール鑑定', price:'ランク依存', description:'未鑑定スクロールの内容を調べる。判定は集中。難易度と候補は鑑定ルール表で管理する。'},
-      {name:'術式化', price:'素材消費', description:'鑑定済みスクロールを魔導書・祈祷書へ登録できる形にする。魔法は魔導インク、祈祷は祈祷紙を消費し、集中で判定する。'}
+      {name:'スクロール鑑定', price:'初級30G〜', description:'2D6+鑑定技能で内容を判別する。鑑定結果は「鑑定結果：術式名」で表示する。'},
+      {name:'術式化依頼', price:'初級80G〜', description:'鑑定済みスクロールと魔導インク/祈祷紙を消費して、魔導書/祈祷書へ登録可能な術式にする。'},
+      {name:'自力術式化', price:'0G', description:'写術具＋鑑定済みスクロール＋対応素材を使用し、集中判定で術式化する。'}
     ]
   },
   {
-    id:'guild',
-    name:'ギルド',
+    id:'guild', name:'ギルド',
     role:'受注可能クエストの掲示・受付を担当。重要クエストとデイリークエストを分けて表示する。',
     services:[
-      {name:'重要クエスト受付', price:'0G', description:'施設やエリアの解放などに必要な一度きりのクエストを掲示する。OFFの重要クエストは受注可能一覧には表示しない。'},
-      {name:'デイリークエスト掲示', price:'0G', description:'再受注可能な日替わり依頼を掲示する。進行管理側ではランダム選出して使う。'}
+      {name:'重要クエスト受付', price:'0G', description:'施設やエリアの解放などに必要な一度きりの依頼を掲示する。'},
+      {name:'デイリークエスト掲示', price:'0G', description:'登録済み候補から指定件数を抽選して掲示する。'}
     ]
   }
 ];
@@ -1449,12 +1445,12 @@ const SYSTEM_HELP = [
       "鍛冶屋は武器、防具、バッグ、矢筒、鍛冶素材、鍛冶施設利用を扱う。",
       "薬屋はポーション系、薬品系調合品、調合素材、調合施設利用を扱う。",
       "宿屋は宿泊、休息、噂、クエスト情報を扱う。商品販売は主目的にしない。",
-      "骨董屋は未鑑定スクロールの販売、スクロール鑑定、鑑定済みスクロールの術式化を扱う。",
+      "骨董屋は未鑑定スクロールの販売、鑑定、術式化、魔導インク・祈祷紙・写術具・聖印・魔印の常設販売を扱う。",
       "ギルドは受注可能クエストを、重要クエストとデイリークエストに分けて掲示する。",
       "重要クエストは有効列がTRUEのものだけ、ギルドの受注可能一覧に表示する。",
       "デイリークエストは再受注可能な依頼として、ギルドのデイリー欄に表示する。",
-      "スクロール鑑定と術式化の判定は集中で行う。",
-      "魔法スクロールの術式化には魔導インクを、祈祷スクロールの術式化には祈祷紙を使う。",
+      "スクロール鑑定は鑑定技能で行う。術式化の自力判定は集中で行う。",
+      "魔法スクロールの術式化には魔導インクを、祈祷スクロールの術式化には祈祷紙を使う。自力術式化には写術具も必要。",
       "雑貨屋は現時点では使用しない。",
       "施設NPCは、リネット、ガルド・ヴェルナー、ミレイユ・オルセーヌ、ロジーナ・エルメル。",
       "リネットは拠点と工房の案内役。",
@@ -1936,22 +1932,23 @@ function facilityProductType(row){
   return 'item';
 }
 function facilityProducts(facilityName){
-  const itemRows = (state.items||[])
-    .filter(row=>row && String(row.name||'').trim() && textHasFacility(row, facilityName) && facilityRankVisible(row))
-    .map(row=>({...row, __facilityProductType:'item'}));
-  const recipeRows = (state.recipes||[])
-    .filter(row=>row && String(row.name||row.resultItem||'').trim() && String(row.price ?? '').trim() && textHasFacility(row, facilityName) && facilityRankVisible(row))
-    .map(row=>({...row, __facilityProductType:'recipe'}));
-  return [...itemRows, ...recipeRows].sort((a,b)=>{
-      const at=facilityProductType(a)==='recipe' ? 'レシピ' : (a.itemType||a.dataKind||'');
-      const bt=facilityProductType(b)==='recipe' ? 'レシピ' : (b.itemType||b.dataKind||'');
-      const af=compareValues(at, bt);
-      if(af) return af;
+  const branchResults = new Set((state.recipes||[])
+    .filter(r=>String(r.craftType||'').trim()==='武器派生')
+    .map(r=>String(r.resultItem||'').trim()).filter(Boolean));
+  return (state.items||[])
+    .filter(row=>{
+      if(!row || !String(row.name||'').trim() || !textHasFacility(row, facilityName) || !facilityRankVisible(row)) return false;
+      if(facilityName==='鍛冶屋' && branchResults.has(String(row.name||'').trim())) return false;
+      if(facilityName==='骨董屋' && (String(row.itemCategory||'').includes('未鑑定スクロール') || String(row.tags||'').includes('ランダム販売'))) return false;
+      return true;
+    })
+    .map(row=>({...row, __facilityProductType:'item'}))
+    .sort((a,b)=>{
+      const at=a.itemType||a.dataKind||'', bt=b.itemType||b.dataKind||'';
+      const af=compareValues(at,bt); if(af) return af;
       const al=facilityRankLevel(a.rank), bl=facilityRankLevel(b.rank);
-      if(al !== null && bl !== null && al !== bl) return al-bl;
-      const ar=compareValues(a.rank||'', b.rank||'');
-      if(ar) return ar;
-      return compareValues((a.resultItem || a.name || ''), (b.resultItem || b.name || ''));
+      if(al!==null && bl!==null && al!==bl) return al-bl;
+      return compareValues(a.name||'',b.name||'');
     });
 }
 function productPriceText(row){
@@ -2022,23 +2019,20 @@ function questBossFacilityText(q={}){
 function questFormationFacilityText(q={}){
   return String(q.questBossFormation || q.questBossComposition || '').trim();
 }
+function questPublicRewardFacility(q={}){
+  return [q.rewardMoney,q.rewardItems,Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'',q.unlockResult?`解放：${q.unlockResult}`:''].filter(Boolean).join(' / ');
+}
 function guildQuestCardHtml(q={}){
   const cat=questFacilityCategory(q);
-  const chips=[cat, q.questType, q.rank, q.areaName ? `エリア:${q.areaName}` : '', q.unlockResult ? `解放:${q.unlockResult}` : ''].filter(Boolean);
-  const reward=[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ');
-  const boss=questBossFacilityText(q);
-  const formation=questFormationFacilityText(q);
   const questKey=String(q.id||q.name||'').trim();
   const isVisible=questFacilityEnabled(q);
   const visibilityButton=cat==='重要' ? `<button class="ghost" type="button" data-guild-important-toggle="${escapeHtml(questKey)}" data-visible="${isVisible?'1':'0'}">${isVisible?'非表示にする':'表示する'}</button>` : '';
   return `<div class="guild-quest-card${cat==='重要'&&!isVisible?' is-disabled':''}">
-    <div class="guild-quest-card-title"><span>${escapeHtml(q.name||q.id||'名称未設定')}</span><span>${q.unlockResult?`<span class="facility-chip">${escapeHtml(q.unlockResult)}</span>`:''}${visibilityButton}</span></div>
-    <div class="guild-quest-meta">${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>
-    ${q.description ? `<div class="guild-quest-desc"><b>内容：</b>${escapeHtml(q.description)}</div>` : ''}
-    ${q.clearCondition ? `<div class="guild-quest-desc"><b>クリア条件：</b>${escapeHtml(q.clearCondition)}</div>` : ''}
-    ${boss ? `<div class="guild-quest-desc"><b>クエストボス：</b>${escapeHtml(boss)}</div>` : ''}
-    ${formation ? `<div class="guild-quest-desc"><b>構成：</b>${escapeHtml(formation)}</div>` : ''}
-    ${reward ? `<div class="guild-quest-desc"><b>報酬：</b>${escapeHtml(reward)}</div>` : ''}
+    <div class="guild-quest-card-title"><span>クエスト名：${escapeHtml(q.name||q.id||'名称未設定')}</span><span>${visibilityButton}</span></div>
+    <div class="guild-quest-desc"><b>クエスト説明：</b>${escapeHtml(q.description||'説明未設定')}</div>
+    <div class="guild-quest-desc"><b>エリア：</b>${escapeHtml(q.areaName||'未設定')}</div>
+    <div class="guild-quest-desc"><b>達成条件：</b>${escapeHtml(q.clearCondition||'未設定')}</div>
+    <div class="guild-quest-desc"><b>報酬：</b>${escapeHtml(questPublicRewardFacility(q)||'なし')}</div>
   </div>`;
 }
 function dailyQuestSampleForToday(rows,count=5){
@@ -2096,20 +2090,18 @@ function guildQuestListHtml(){
 }
 
 function questFacilityLine(q={}){
-  const reward=[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ');
-  const lines=[`- ${q.name||q.id||'名称未設定'}（${[questFacilityCategory(q),q.questType,q.rank,q.areaName].filter(Boolean).join('・')}）`];
-  if(q.description) lines.push(`  内容：${q.description}`);
-  if(q.clearCondition) lines.push(`  クリア条件：${q.clearCondition}`);
-  if(questBossFacilityText(q)) lines.push(`  クエストボス：${questBossFacilityText(q)}`);
-  if(questFormationFacilityText(q)) lines.push(`  構成：${questFormationFacilityText(q)}`);
-  if(reward) lines.push(`  報酬：${reward}`);
-  if(q.unlockResult) lines.push(`  解放：${q.unlockResult}`);
-  return lines.join('\n');
+  return [
+    `クエスト名：${q.name||q.id||'名称未設定'}`,
+    `クエスト説明：${q.description||'説明未設定'}`,
+    `エリア：${q.areaName||'未設定'}`,
+    `達成条件：${q.clearCondition||'未設定'}`,
+    `報酬：${questPublicRewardFacility(q)||'なし'}`
+  ].join('\n');
 }
 function guildQuestCategoryText(category='重要'){
   const rows=category==='デイリー' ? guildDailySelectedRows() : facilityQuestRows('重要');
   const title=category==='デイリー' ? 'デイリークエスト' : '重要クエスト';
-  return [`【ギルド・${title}】`, rows.length ? rows.map(questFacilityLine).join('\n') : `- 受注可能な${title}はありません`].join('\n');
+  return [`【ギルド・${title}】`, rows.length ? rows.map(questFacilityLine).join('\n\n') : `- 受注可能な${title}はありません`].join('\n');
 }
 function guildQuestListText(){
   return [
@@ -2143,24 +2135,23 @@ function buildFacilitySalesText(targetFacilityName=''){
   return defs.map(f=>{
     if(f.name==='ギルド') return guildQuestListText();
     const products=facilityProducts(f.name);
-    const productText = products.length ? products.map(facilityProductLine).join('\n') : '- 販売商品未設定';
-    const serviceText = (f.services||[]).length ? f.services.map(facilityServiceLine).join('\n') : '- サービス未設定';
-    let branchText = '';
+    const sections=[`【${f.name}】`,f.role,`表示範囲：${facilityRankLimitLabel()}`,'','販売商品',products.length?products.map(facilityProductLine).join('\n'):'- 販売商品未設定'];
     if(f.name==='鍛冶屋'){
-      const rows=(state.recipes||[]).filter(r=>String(r.craftType||'').trim()==='武器派生');
-      const groups={};
-      rows.forEach(r=>{ const base=String(r.baseItem||'派生元未設定').trim()||'派生元未設定'; (groups[base]||(groups[base]=[])).push(r); });
-      branchText='\n\n武器派生リスト\n' + (Object.entries(groups).length ? Object.entries(groups).map(([base,list])=>{
-        const lines=[`■ ${base}`];
-        list.forEach(r=>{
-          lines.push(`- ${r.resultItem||r.name||'派生先未設定'}（${r.rank||'ランク未設定'} / ${String(r.price||0)}G）`);
-          lines.push(`  必要素材：${r.requiredMaterials||'未設定'}`);
-          if(r.effect) lines.push(`  効果：${r.effect}`);
-        });
-        return lines.join('\n');
-      }).join('\n') : '- 武器派生は未設定です。');
+      [['武器派生','武器派生'],['防具製作','防具製作'],['鍛冶製作','鍛冶'],['素材加工','素材加工']].forEach(([title,type])=>{
+        const rows=facilityRecipeRows(type);
+        sections.push('',title,rows.length?rows.map(r=>[
+          `- ${r.resultItem||r.name||'名称未設定'}（${r.rank||'ランク未設定'} / ${String(r.price||0)}G）`,
+          `  必要素材：${r.requiredMaterials||'未設定'}`,
+          `  必要道具ランク：${requiredToolRankForRecipe(r)}以上`,
+          `  作成難易度：${r.difficulty||'未設定'}`
+        ].join('\n')).join('\n'):`- ${title}は未設定`);
+      });
+    }else if(f.name==='薬屋'){
+      const rows=facilityRecipeRows('調合');
+      sections.push('','調合',rows.length?rows.map(r=>`- ${r.resultItem||r.name||'名称未設定'} / 素材:${r.requiredMaterials||'未設定'} / 道具:${requiredToolRankForRecipe(r)}以上 / 難度:${r.difficulty||'未設定'} / ${String(r.price||0)}G`).join('\n'):'- 調合は未設定');
     }
-    return `【${f.name}】\n${f.role}\n表示範囲：${facilityRankLimitLabel()}\n\n販売商品\n${productText}${branchText}\n\nサービス\n${serviceText}`;
+    sections.push('','サービス',(f.services||[]).length?f.services.map(facilityServiceLine).join('\n'):'- サービス未設定');
+    return sections.join('\n');
   }).join('\n\n');
 }
 function renderFacilityProductDetails(row){
@@ -2175,35 +2166,37 @@ function renderFacilitiesPanel(){
   const summary=$('facilitySummary');
   const cards=$('facilityCards');
   if(!summary || !cards) return;
-  const defs = facilityActiveDefs();
+  const defs=facilityActiveDefs();
   const rankSelect=$('facilityRankLimitSelect');
-  if(rankSelect && rankSelect.value !== String(currentFacilityRankLimit||'')) rankSelect.value = String(currentFacilityRankLimit||'');
-  summary.innerHTML = FACILITY_DEFS.map(f=>{
+  if(rankSelect && rankSelect.value!==String(currentFacilityRankLimit||'')) rankSelect.value=String(currentFacilityRankLimit||'');
+  summary.innerHTML=FACILITY_DEFS.map(f=>{
     const count=facilityDisplayCount(f.name);
     const label=facilityDisplayLabel(f.name);
-    const range=f.name==='ギルド' ? '受注可能' : facilityRankLimitLabel();
+    const range=f.name==='ギルド'?'受注可能':facilityRankLimitLabel();
     return `<div class="facility-summary-card ${f.name===currentFacilityView?'active':''}"><b>${count}</b><span>${escapeHtml(f.name)}の${escapeHtml(label)} / ${escapeHtml(range)}</span></div>`;
   }).join('');
-  cards.innerHTML = defs.map(f=>{
-    const products=facilityProducts(f.name);
-    const isGuild=f.name==='ギルド';
-    const count=isGuild ? facilityQuestRows().length : products.length;
-    const label=isGuild ? '受注可能クエスト' : '販売商品';
-    const productHtml = isGuild
-      ? guildQuestListHtml()
-      : (products.length ? products.map(renderFacilityProductDetails).join('') : `<p class="notice">この条件に一致する販売商品はありません。表示ランクを上げるか、アイテム/素材のランク・入手先・解放施設を確認してください。</p>`);
-    const branchRows = f.name==='鍛冶屋' ? (state.recipes||[]).filter(r=>String(r.craftType||'').trim()==='武器派生') : [];
-    const branchGroups = {};
-    branchRows.forEach(r=>{const k=String(r.baseItem||'派生元未設定').trim()||'派生元未設定';(branchGroups[k]||(branchGroups[k]=[])).push(r);});
-    const branchHtml = f.name==='鍛冶屋' ? `<section class="facility-branch-section"><h4>武器派生リスト <span class="view-mode-chip">${branchRows.length}件</span></h4>${Object.entries(branchGroups).map(([base,rows])=>`<details class="facility-product"><summary><span class="facility-product-title"><span>${escapeHtml(base)}</span><span class="facility-chip">${rows.length}派生</span></span></summary><div class="facility-product-body">${rows.map(r=>`<div class="guild-quest-card"><b>${escapeHtml(r.resultItem||r.name)}</b><div class="facility-product-meta"><span class="facility-chip">ランク:${escapeHtml(r.rank||'未設定')}</span><span class="facility-chip">費用:${escapeHtml(String(r.price||0))}G</span></div><div><b>必要素材：</b>${escapeHtml(r.requiredMaterials||'未設定')}</div>${r.effect?`<div><b>効果：</b>${escapeHtml(r.effect)}</div>`:''}</div>`).join('')}</div></details>`).join('')||'<p class="notice">武器派生は未設定です。</p>'}</section>` : '';
-    const serviceHtml = (f.services||[]).map(s=>`<li><b>${escapeHtml(s.name)}</b> <span class="facility-chip">${escapeHtml(s.price||'価格未設定')}</span><br>${escapeHtml(s.description||'')}</li>`).join('');
-    const actionHtml = isGuild
-      ? `<button class="ghost" data-guild-toggle-hidden>${currentGuildShowHiddenImportant?'非表示の重要クエストを隠す':'非表示の重要クエストも表示'}</button><button class="ghost" data-guild-copy-category="重要">重要クエストをコピー</button><button class="ghost" data-facility-copy="ギルド">両方コピー</button>`
-      : `<button class="ghost" data-facility-copy="${escapeHtml(f.name)}">この施設のリストをコピー</button>`;
-    return `<section class="facility-card">\n      <div class="facility-card-head">\n        <div><h3>${escapeHtml(f.name)}</h3><p class="facility-role">${escapeHtml(f.role)}</p></div>\n        <div class="facility-actions">${actionHtml}</div>\n      </div>\n      <p class="table-toolbar-note">${escapeHtml(label)} <span class="view-mode-chip">${count}件</span>${isGuild ? '' : ` <span class="view-mode-chip">${escapeHtml(facilityRankLimitLabel())}</span>`}</p>\n      <div class="facility-product-list">${productHtml}</div>\n      ${branchHtml}\n      <p class="table-toolbar-note">サービス</p>\n      <ul class="facility-service-list">${serviceHtml}</ul>\n    </section>`;
+  cards.innerHTML=defs.map(f=>{
+    const active=activeFacilitySection(f.name);
+    const tabs=facilitySectionDefs(f.name);
+    const tabHtml=`<div class="facility-inner-tabs">${tabs.map(([id,label])=>`<button type="button" class="facility-inner-tab ${id===active?'active':''}" data-facility-section="${escapeHtml(id)}">${escapeHtml(label)}</button>`).join('')}</div>`;
+    let body='';
+    if(active==='sales'){
+      const rows=facilityProducts(f.name);
+      body=rows.length?`<div class="facility-product-list">${rows.map(renderFacilityProductDetails).join('')}</div>`:'<p class="notice">この条件に一致する常設販売商品はありません。</p>';
+    }else if(active==='branches') body=renderFacilityRecipeGroup('武器派生');
+    else if(active==='armor') body=renderFacilityRecipeGroup('防具製作');
+    else if(active==='smith') body=renderFacilityRecipeGroup('鍛冶');
+    else if(active==='materials') body=renderFacilityRecipeGroup('素材加工');
+    else if(active==='important') body=`<div class="facility-actions"><button class="ghost" data-guild-toggle-hidden>${currentGuildShowHiddenImportant?'非表示の重要クエストを隠す':'非表示の重要クエストも表示'}</button><button class="ghost" data-guild-copy-category="重要">重要クエストをコピー</button></div>${guildQuestSectionHtml('重要')}`;
+    else if(active==='daily') body=guildQuestSectionHtml('デイリー');
+    else if(active==='services') body=`<ul class="facility-service-list">${(f.services||[]).map(s=>`<li><b>${escapeHtml(s.name)}</b> <span class="facility-chip">${escapeHtml(s.price||'価格未設定')}</span><br>${escapeHtml(s.description||'')}</li>`).join('')}</ul>`;
+    else body='<p class="notice">下の施設作業欄で内容を確認してください。</p>';
+    return `<section class="facility-card">
+      <div class="facility-card-head"><div><h3>${escapeHtml(f.name)}</h3><p class="facility-role">${escapeHtml(f.role)}</p></div><div class="facility-actions"><button class="ghost" data-facility-copy="${escapeHtml(f.name)}">この施設の一覧をコピー</button></div></div>
+      ${tabHtml}<div class="facility-tab-panel">${body}</div>
+    </section>`;
   }).join('');
-  const out=$('facilitySalesText');
-  if(out) out.value=buildFacilitySalesText();
+  const out=$('facilitySalesText'); if(out) out.value=buildFacilitySalesText();
   renderFacilityWorkPanel();
 }
 async function copyFacilitySalesList(facilityName=''){
@@ -2321,7 +2314,8 @@ function buildPlayerItemInfoText(row={}, key='', count='1'){
   if(useInfo.length) lines.push('性能：' + useInfo.join(' / '));
 
   lines.push(warehouseCopyLine('説明', fieldText(row,'description')));
-  lines.push(warehouseCopyLine('効果', fieldText(row,'effect')));
+  const isMonsterMaterial = kind === '素材' && fieldText(row,'materialType') === '魔物素材';
+  if(!isMonsterMaterial) lines.push(warehouseCopyLine('効果', fieldText(row,'effect')));
   return lines.filter(Boolean).join('\n');
 }
 
@@ -2572,6 +2566,63 @@ function facilityActiveDefs(){
   return FACILITY_DEFS.filter(f=>!currentFacilityView || f.name === currentFacilityView);
 }
 
+
+const FACILITY_SECTION_DEFS = {
+  '鍛冶屋':[
+    ['sales','販売商品'],['branches','武器派生'],['armor','防具製作'],['smith','鍛冶製作'],['materials','素材加工'],['upgrade','装備強化'],['services','サービス']
+  ],
+  '薬屋':[['sales','販売商品'],['alchemy','調合'],['services','サービス']],
+  '宿屋':[['services','サービス']],
+  '骨董屋':[['sales','常設販売'],['random','未鑑定スクロール'],['appraisal','鑑定'],['transcribe','術式化'],['services','サービス']],
+  'ギルド':[['important','重要クエスト'],['daily','デイリークエスト'],['services','サービス']]
+};
+function facilitySectionDefs(name=currentFacilityView){ return FACILITY_SECTION_DEFS[name] || [['services','サービス']]; }
+function activeFacilitySection(name=currentFacilityView){
+  const defs=facilitySectionDefs(name);
+  const current=currentFacilitySectionByName[name];
+  return defs.some(([id])=>id===current) ? current : defs[0][0];
+}
+function facilityRecipeRows(craftType){
+  return (state.recipes||[]).filter(r=>
+    String(r.craftType||'').trim()===craftType &&
+    facilityRankVisible(r) &&
+    (!String(r.unlockFacility||'').trim() || textHasFacility(r,currentFacilityView))
+  );
+}
+function renderFacilityRecipeCard(row={}){
+  const price=String(row.price??'').trim();
+  const requiredRank=requiredToolRankForRecipe(row);
+  return `<div class="facility-recipe-card">
+    <h5>${escapeHtml(row.resultItem||row.name||'名称未設定')}</h5>
+    <div class="facility-product-meta">
+      ${[row.rank?`ランク:${row.rank}`:'',row.craftType||'',price?`施設依頼:${price}G`:'価格未設定'].filter(Boolean).map(v=>`<span class="facility-chip">${escapeHtml(v)}</span>`).join('')}
+    </div>
+    ${row.baseItem?`<div><b>派生元：</b>${escapeHtml(row.baseItem)}</div>`:''}
+    <div><b>必要素材：</b>${escapeHtml(row.requiredMaterials||'未設定')}</div>
+    <div><b>必要道具ランク：</b>${escapeHtml(requiredRank)}以上</div>
+    <div><b>作成難易度：</b>${escapeHtml(row.difficulty||'未設定')}</div>
+    <div><b>施設依頼価格：</b>${price?`${escapeHtml(price)}G`:'未設定'}</div>
+    ${row.description?`<div><b>説明：</b>${escapeHtml(row.description)}</div>`:''}
+    ${row.effect?`<div><b>効果：</b>${escapeHtml(row.effect)}</div>`:''}
+  </div>`;
+}
+function renderFacilityRecipeGroup(craftType){
+  const rows=facilityRecipeRows(craftType);
+  if(!rows.length) return `<p class="notice">${escapeHtml(craftType)}の登録データはありません。</p>`;
+  if(craftType==='武器派生'){
+    const groups={};
+    rows.forEach(r=>{const k=String(r.baseItem||'派生元未設定').trim()||'派生元未設定';(groups[k]||(groups[k]=[])).push(r);});
+    return Object.entries(groups).map(([base,list])=>`<details class="facility-product"><summary><span class="facility-product-title"><span>${escapeHtml(base)}</span><span class="facility-chip">${list.length}派生</span></span></summary><div class="facility-product-body facility-recipe-grid">${list.map(renderFacilityRecipeCard).join('')}</div></details>`).join('');
+  }
+  return `<div class="facility-recipe-grid">${rows.map(renderFacilityRecipeCard).join('')}</div>`;
+}
+const APPRAISAL_FEES = {'初級':30,'中級':80,'上級':180,'特級':350};
+const TRANSCRIPTION_FEES = {'初級':80,'中級':180,'上級':400,'特級':750};
+const TRANSCRIPTION_MATERIAL_COUNTS = {'初級':1,'中級':2,'上級':3,'特級':4};
+function appraisalFee(rank='初級'){ return APPRAISAL_FEES[String(rank||'初級').trim()] || 30; }
+function transcriptionFee(rank='初級'){ return TRANSCRIPTION_FEES[String(rank||'初級').trim()] || 80; }
+function transcriptionMaterialCount(rank='初級'){ return TRANSCRIPTION_MATERIAL_COUNTS[String(rank||'初級').trim()] || 1; }
+
 const SCROLL_RANK_DIFFICULTIES = {'初級':9, '中級':11, '上級':13, '特級':15};
 function scrollRankDifficulty(rank='初級'){
   const raw = String(rank || '初級').trim();
@@ -2597,15 +2648,14 @@ function renderAntiqueAppraisalResult(){
   if(!result) return;
   const rank = $('facilityAppraisalRankInput')?.value || '初級';
   const difficulty = scrollRankDifficulty(rank);
+  const fee=appraisalFee(rank);
   result.classList.remove('muted');
   result.innerHTML = `<div><b>スクロール鑑定</b></div>
-    <div class="facility-product-meta">
-      <span class="facility-chip">対象:${escapeHtml(rank)}未鑑定スクロール</span>
-      <span class="facility-chip">判定:集中</span>
-    </div>
+    <div class="facility-product-meta"><span class="facility-chip">対象:${escapeHtml(rank)}未鑑定スクロール</span><span class="facility-chip">判定:鑑定技能</span><span class="facility-chip">鑑定料:${fee}G</span></div>
     <div><b>鑑定難易度：</b>${escapeHtml(String(difficulty))}</div>
-    <div><b>判定式：</b>2D6+集中&gt;=${escapeHtml(String(difficulty))}</div>
-    <div><b>成功時：</b>対応階級の魔法または祈祷スクロールとして内容が判明します。</div>`;
+    <div><b>判定式：</b>2D6+鑑定技能&gt;=${escapeHtml(String(difficulty))}</div>
+    <div><b>鑑定料：</b>${escapeHtml(String(fee))}G</div>
+    <div><b>成功時：</b>対応階級の術式内容が判明し、「鑑定結果：術式名」として確定します。</div>`;
 }
 function renderAntiqueTranscriptionResult(){
   const result = $('facilityTranscribeResult');
@@ -2613,21 +2663,18 @@ function renderAntiqueTranscriptionResult(){
   const type = $('facilityTranscribeTypeInput')?.value || '魔法';
   const rank = $('facilityTranscribeRankInput')?.value || '初級';
   const difficulty = scrollRankDifficulty(rank);
-  const material = type === '祈祷' ? '祈祷紙×1' : '魔導インク×1';
+  const count=transcriptionMaterialCount(rank);
+  const materialName = type === '祈祷' ? '祈祷紙' : '魔導インク';
+  const material = `${materialName}×${count}`;
   const book = type === '祈祷' ? '祈祷書' : '魔導書';
+  const fee=transcriptionFee(rank);
   result.classList.remove('muted');
-  result.innerHTML = `<div><b>術式化 / 登録準備</b></div>
-    <div class="facility-product-meta">
-      <span class="facility-chip">種別:${escapeHtml(type)}</span>
-      <span class="facility-chip">階級:${escapeHtml(rank)}</span>
-      <span class="facility-chip">判定:集中</span>
-    </div>
-    <div><b>必要素材：</b>${escapeHtml(material)}</div>
-    <div><b>対象：</b>鑑定済み${escapeHtml(type)}スクロール → ${escapeHtml(book)}へ登録</div>
-    <div><b>術式化難易度：</b>${escapeHtml(String(difficulty))}</div>
-    <div><b>判定式：</b>2D6+集中&gt;=${escapeHtml(String(difficulty))}</div>
-    <div><b>成功時：</b>スクロールの内容を${escapeHtml(book)}へ登録できる形に整えます。</div>
-    <div><b>失敗時：</b>素材消費の有無やスクロール破損はGM判断。基本案では素材のみ消費、スクロールは残る扱いを推奨します。</div>`;
+  result.innerHTML = `<div><b>術式化</b></div>
+    <div class="facility-product-meta"><span class="facility-chip">種別:${escapeHtml(type)}</span><span class="facility-chip">階級:${escapeHtml(rank)}</span><span class="facility-chip">自力判定:集中</span></div>
+    <div><b>共通消費：</b>鑑定済み${escapeHtml(type)}スクロール×1、${escapeHtml(material)}</div>
+    <div class="facility-work-route"><b>自分で術式化</b><span>必要道具：写術具（普通ランク以上）</span><span>判定式：2D6+集中&gt;=${escapeHtml(String(difficulty))}</span><span>費用：0G</span></div>
+    <div class="facility-work-route"><b>骨董屋へ依頼</b><span>必要道具：不要</span><span>施設依頼費：${escapeHtml(String(fee))}G</span><span>素材とスクロールは同様に消費</span></div>
+    <div><b>結果：</b>${escapeHtml(book)}へ登録できる術式として定着します。</div>`;
 }
 function renderAntiqueRandomStock(){
   const result = $('facilityAntiqueStockResult');
@@ -2647,9 +2694,10 @@ function renderAntiqueRandomStock(){
 }
 
 function facilityWorkKind(){
-  if(currentFacilityView === '鍛冶屋') return 'smithy';
-  if(currentFacilityView === '薬屋') return 'alchemy';
-  if(currentFacilityView === '骨董屋') return 'antique';
+  const section=activeFacilitySection();
+  if(currentFacilityView==='鍛冶屋' && section==='upgrade') return 'smithy';
+  if(currentFacilityView==='薬屋' && section==='alchemy') return 'alchemy';
+  if(currentFacilityView==='骨董屋' && ['random','appraisal','transcribe'].includes(section)) return `antique-${section}`;
   return 'none';
 }
 function facilityRecipeRows(kind='調合'){
@@ -2699,38 +2747,34 @@ function renderFacilityAlchemyResult(recipeKey=''){
     ${row.description ? `<div><b>説明：</b>${escapeHtml(row.description)}</div>` : ''}`;
 }
 function renderFacilityWorkPanel(){
-  const kind = facilityWorkKind();
-  const title = $('facilityWorkTitle');
-  const notice = $('facilityWorkNotice');
-  const smithy = $('facilitySmithyWork');
-  const alchemy = $('facilityAlchemyWork');
-  const antique = $('facilityAntiqueWork');
-  const none = $('facilityNoWork');
-  if(title) title.textContent = kind === 'smithy' ? '装備強化' : kind === 'alchemy' ? '調合' : kind === 'antique' ? 'スクロール鑑定 / 術式化' : '施設作業';
-  if(notice) notice.textContent = kind === 'smithy'
-    ? '強化素材・今回の強化回数・使用道具ランクから、必要価格と最終難易度を表示します。'
-    : kind === 'alchemy'
-      ? '作成するアイテムと使用道具ランクから、必要道具ランクと最終調合難易度を表示します。'
-      : kind === 'antique'
-        ? '未鑑定スクロールのランダム販売、集中による鑑定、魔導インク/祈祷紙を使った術式化を確認します。'
-        : 'この施設で確認できる強化・調合・鑑定作業はありません。';
-  if(smithy) smithy.classList.toggle('hidden', kind !== 'smithy');
-  if(alchemy) alchemy.classList.toggle('hidden', kind !== 'alchemy');
-  if(antique) antique.classList.toggle('hidden', kind !== 'antique');
-  if(none) none.classList.toggle('hidden', kind !== 'none');
-  if(kind === 'smithy'){
-    renderFacilityUpgradeEquipmentSelect();
-    renderFacilityUpgradeLookupList();
-    renderUpgradeStepSelect($('facilityUpgradeStepInput')?.value || '1');
-    renderToolRankSelect('facilitySmithToolRankInput', $('facilitySmithToolRankInput')?.value || '低級');
-    renderFacilityUpgradeResult($('facilityUpgradeMaterialInput')?.value || '');
-  } else if(kind === 'alchemy'){
-    renderFacilityAlchemyLookupList();
-    renderToolRankSelect('facilityAlchemyToolRankInput', $('facilityAlchemyToolRankInput')?.value || '低級');
-    renderFacilityAlchemyResult($('facilityAlchemyRecipeSelect')?.value || '');
-  } else if(kind === 'antique'){
-    renderAntiqueAppraisalResult();
-    renderAntiqueTranscriptionResult();
+  const kind=facilityWorkKind();
+  const panel=$('facilityWorkPanel');
+  const title=$('facilityWorkTitle'), notice=$('facilityWorkNotice');
+  const smithy=$('facilitySmithyWork'), alchemy=$('facilityAlchemyWork'), antique=$('facilityAntiqueWork'), none=$('facilityNoWork');
+  const show=kind!=='none';
+  if(panel) panel.classList.toggle('hidden',!show);
+  if(smithy) smithy.classList.toggle('hidden',kind!=='smithy');
+  if(alchemy) alchemy.classList.toggle('hidden',kind!=='alchemy');
+  if(antique) antique.classList.toggle('hidden',!kind.startsWith('antique-'));
+  if(none) none.classList.add('hidden');
+  if(!show) return;
+  if(kind==='smithy'){
+    if(title) title.textContent='装備強化';
+    if(notice) notice.textContent='自作は鍛冶道具＋素材、施設依頼は素材＋表示価格で行います。';
+    renderFacilityUpgradeEquipmentSelect(); renderFacilityUpgradeLookupList(); renderUpgradeStepSelect($('facilityUpgradeStepInput')?.value||'1'); renderToolRankSelect('facilitySmithToolRankInput',$('facilitySmithToolRankInput')?.value||'低級'); renderFacilityUpgradeResult($('facilityUpgradeMaterialInput')?.value||'');
+  }else if(kind==='alchemy'){
+    if(title) title.textContent='調合';
+    if(notice) notice.textContent='必要素材・必要道具ランク・難易度・施設依頼価格を確認します。';
+    renderFacilityAlchemyLookupList(); renderToolRankSelect('facilityAlchemyToolRankInput',$('facilityAlchemyToolRankInput')?.value||'低級'); renderFacilityAlchemyResult($('facilityAlchemyRecipeSelect')?.value||'');
+  }else{
+    const section=activeFacilitySection();
+    if(title) title.textContent=section==='random'?'未鑑定スクロール':section==='appraisal'?'スクロール鑑定':'術式化';
+    if(notice) notice.textContent=section==='random'?'未鑑定スクロールのランダム販売枠を抽選します。':section==='appraisal'?'鑑定技能による判定と鑑定料を確認します。':'自力術式化と骨董屋への依頼を比較します。';
+    $('facilityAntiqueStockWork')?.classList.toggle('hidden',section!=='random');
+    $('facilityAntiqueAppraisalWork')?.classList.toggle('hidden',section!=='appraisal');
+    $('facilityAntiqueTranscribeWork')?.classList.toggle('hidden',section!=='transcribe');
+    if(section==='appraisal') renderAntiqueAppraisalResult();
+    if(section==='transcribe') renderAntiqueTranscriptionResult();
   }
 }
 function facilityUpgradeEquipmentRows(){
@@ -5154,6 +5198,11 @@ document.addEventListener('click',e=>{
   const remMod=e.target.closest('[data-modifier-remove]'); if(remMod){ const editor=remMod.closest('[data-modifier-editor]'); remMod.closest('[data-modifier-row]')?.remove(); const list=editor.querySelector('[data-modifier-list]'); if(!list.querySelector('[data-modifier-row]')) list.innerHTML='<div class="muted small" data-modifier-empty>補正値はまだありません。</div>'; syncModifierEditor(editor); return; }
   const quickCat=e.target.closest('[data-quick-category-field]'); if(quickCat){ quickCreateCategory(quickCat.dataset.quickCategoryField); return; }
   const upgradeReset=e.target.closest('[data-facility-upgrade-reset]'); if(upgradeReset){ if($('facilityUpgradeEquipmentSelect')) $('facilityUpgradeEquipmentSelect').value=''; if($('facilityUpgradeMaterialInput')) $('facilityUpgradeMaterialInput').value=''; renderFacilityUpgradeResult(''); toast('装備強化の選択をリセットしました'); return; }
+  const facilitySection=e.target.closest('[data-facility-section]'); if(facilitySection){
+    currentFacilitySectionByName[currentFacilityView]=facilitySection.dataset.facilitySection||facilitySectionDefs(currentFacilityView)[0][0];
+    renderFacilitiesPanel();
+    return;
+  }
   const facilityRefresh=e.target.closest('[data-facility-refresh]'); if(facilityRefresh){ renderFacilitiesPanel(); toast('販売商品リストを更新しました'); return; }
   const guildDailyCount=e.target.closest('[data-guild-daily-count]'); if(guildDailyCount){ currentGuildDailyCount=Math.max(1,Math.min(10,Number(guildDailyCount.value)||5)); saveGuildDailyState(); rerollGuildDailyQuests(); return; }
   const guildDailyReroll=e.target.closest('[data-guild-daily-reroll]'); if(guildDailyReroll){ rerollGuildDailyQuests(); return; }
@@ -5306,32 +5355,11 @@ $('btnDedupeAll').addEventListener('click',dedupeAll);
 $('btnExportJson').addEventListener('click',()=>{updateJsonBox();toast('JSONを更新しました')});
 $('btnImportJson').addEventListener('click',()=>{try{fromJsonBox()}catch(e){toast(e.message,'error')}});
 $('btnDownloadJson').addEventListener('click',downloadJson);
-if($('btnLoadBundledInitialData')) $('btnLoadBundledInitialData').addEventListener('click',loadBundledInitialData);
-function openInitialDataFilePicker(){
-  const input = $('initialDataFileInput');
-  if(!input) return;
-  input.value = '';
-  try{
-    if(typeof input.showPicker === 'function'){
-      input.showPicker();
-      return;
-    }
-  }catch(e){
-    console.warn('showPicker fallback', e);
-  }
-  input.click();
-}
-if($('btnChooseInitialData')) $('btnChooseInitialData').addEventListener('click',openInitialDataFilePicker);
-if($('initialDataFileInput')) $('initialDataFileInput').addEventListener('change',async e=>{
-  try{ await loadInitialDataFile(e.target.files?.[0]); }
-  catch(err){ toast(`初期データJSONの読込に失敗しました
-${err.message||err}`, 'error'); }
-  finally{ e.target.value=''; }
-});
 if($('btnClearWorkingData')) $('btnClearWorkingData').addEventListener('click',clearWorkingData);
 $('schemaPreview').textContent=JSON.stringify(SCHEMA,null,2);
 renderAll();
 updateInitialDataStatus();
+loadBundledInitialData();
 
 function helpItemText(item) {
   const body = Array.isArray(item.body) ? item.body.join('\n') : String(item.body || '');

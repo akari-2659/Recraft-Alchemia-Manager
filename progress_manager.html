@@ -30,8 +30,15 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 .quest-pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 8px;margin-left:6px;background:#fff}
 .quest-pill.off{background:#eee;color:#777}
 </style>
+
+<style id="raBuildInfoStyle">
+.ra-build-info{position:fixed;top:8px;right:8px;z-index:99999;padding:6px 10px;border:1px solid rgba(91,69,45,.28);border-radius:999px;background:rgba(255,253,248,.94);box-shadow:0 2px 10px rgba(0,0,0,.12);font-size:12px;font-weight:800;color:#5b452d;line-height:1.2;backdrop-filter:blur(4px)}
+@media(max-width:760px){.ra-build-info{position:static;margin:8px auto 0;width:max-content;max-width:calc(100% - 16px);text-align:center}}
+</style>
 </head>
 <body>
+<div class="ra-build-info">Version：v90.8.125 / 最終更新日：2026年7月11日</div>
+
 <header>
   <div class="header-inner">
     <div>
@@ -215,7 +222,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
       <h2>スクロール鑑定 <span class="copy-note" id="appraisalCopyNote">コピーしました</span></h2>
       <label>鑑定ルール</label>
       <select id="appraisalRuleSelect"></select>
-      <p class="muted small">未鑑定スクロールの鑑定に成功した後、ここでランクに応じた術式内容を決定します。キャラシへの自動登録は次段階で実装予定です。</p>
+      <p class="muted small">プレイヤーが 2D6+鑑定技能 で鑑定判定を行い、成功後にここで術式内容を決定します。鑑定料はランクごとに異なります。</p>
       <div class="buttons">
         <button id="rollAppraisalBtn">鑑定成功時の術式を決定</button>
         <button class="secondary" id="copyAppraisalBtn">結果コピー</button>
@@ -253,7 +260,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.113';
+const VERSION='v90.8.125';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -375,24 +382,11 @@ function questListMemoForCategory(category='重要'){
       if(!showOff && !questEnabled(q)) return false;
       return true;
     }
-    if(!questEnabled(q)) return false;
-    return new Set(state.lastDailyQuestKeys||[]).has(String(q.id||q.name||''));
+    return questEnabled(q) && new Set(state.lastDailyQuestKeys||[]).has(String(q.id||q.name||''));
   });
   const title=cat==='重要' ? '【未クリア重要クエスト一覧】' : '【現在のデイリークエスト一覧】';
   if(!rows.length)return `${title}\n表示できるクエストはありません。`;
-  const lines=[title];
-  rows.forEach(q=>{
-    const reward=[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ');
-    const off = !questEnabled(q) ? '（OFF）' : '';
-    lines.push(`・${q.name||q.id}${off}`);
-    if(q.areaName) lines.push(`  エリア：${q.areaName}`);
-    if(q.description) lines.push(`  内容：${q.description}`);
-    if(questBossText(q)) lines.push(`  クエストボス：${questBossText(q)}`);
-    if(questBossFormationText(q)) lines.push(`  構成：${questBossFormationText(q)}`);
-    if(reward) lines.push(`  報酬：${reward}`);
-    if(q.unlockResult) lines.push(`  解放：${q.unlockResult}`);
-  });
-  return lines.join('\n');
+  return [title, rows.map(q=>questPublicInfoLines(q).join('\n')).join('\n\n')].join('\n');
 }
 function questListMemo(){
   return questListMemoForCategory(currentQuestCategory);
@@ -410,17 +404,8 @@ function shuffledRows(rows=[]){
 }
 function dailyQuestTextFor(rows=[]){
   const lines=['【現在のデイリークエスト】'];
-  if(!rows.length){
-    lines.push('選出できるデイリークエストがありません。');
-  }else{
-    rows.forEach(q=>{
-      const reward=[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ');
-      lines.push(`・${q.name||q.id}`);
-      if(q.areaName) lines.push(`  エリア：${q.areaName}`);
-      if(q.description) lines.push(`  内容：${q.description}`);
-      if(reward) lines.push(`  報酬：${reward}`);
-    });
-  }
+  if(!rows.length) lines.push('選出できるデイリークエストがありません。');
+  else lines.push(rows.map(q=>questPublicInfoLines(q).join('\n')).join('\n\n'));
   return lines.join('\n');
 }
 function ensureDailyQuestSelection(){
@@ -1022,6 +1007,10 @@ function renderTreasureTrapInfo(){
 function trapDetectText(){const r=selectedTreasureMeta(); return r?`【罠感知判定】\n2D6+{感知}>=${r.trapDetectDifficulty||'目標値'}`:'';}
 function trapDisarmText(){const r=selectedTreasureMeta(); return r&&yn(r.hasTrap)?`【罠解除判定】\n2D6+{細工}>=${r.trapDisarmDifficulty||'目標値'}`:'この宝箱に罠は設定されていません。';}
 function unlockText(){const r=selectedTreasureMeta(); return r&&yn(r.hasLock)?`【解錠判定】\n2D6+{細工}>=${r.unlockDifficulty||'目標値'}`:'この宝箱に鍵は設定されていません。';}
+const APPRAISAL_FEES={'初級':30,'中級':80,'上級':180,'特級':350};
+const TRANSCRIPTION_FEES={'初級':80,'中級':180,'上級':400,'特級':750};
+function appraisalFee(rank='初級'){return APPRAISAL_FEES[String(rank||'初級').trim()]||30;}
+function transcriptionFee(rank='初級'){return TRANSCRIPTION_FEES[String(rank||'初級').trim()]||80;}
 function fillAppraisalRules(){
   const sel=$('appraisalRuleSelect');
   if(!sel)return;
@@ -1033,7 +1022,7 @@ function fillAppraisalRules(){
   rows.forEach((r,i)=>{
     const o=document.createElement('option');
     o.value=String(i);
-    o.textContent=`${r.facilityName||'施設未設定'} / ${r.scrollRank||'ランク未設定'} / 難度${r.difficulty||'?'} / ${r.spellType||''}${r.spellRank?` ${r.spellRank}`:''}`;
+    o.textContent=`${r.facilityName||'施設未設定'} / ${r.scrollRank||'ランク未設定'} / 2D6+鑑定>=${r.difficulty||'?'} / ${appraisalFee(r.scrollRank)}G / ${r.spellType||''}${r.spellRank?` ${r.spellRank}`:''}`;
     sel.appendChild(o);
   });
 }
@@ -1115,7 +1104,7 @@ function rollAppraisal(){
   if(!rule){$('appraisalResult').textContent='鑑定ルールがありません。'; return;}
   const candidates=(state.spells||[]).filter(s=>spellMatchesRule(s,rule));
   if(!candidates.length){
-    state.lastAppraisalText=[`【スクロール鑑定】${rule.facilityName||''}`,`スクロールランク：${rule.scrollRank||''}`,`鑑定難易度：${rule.difficulty||''}`,'結果：候補術式がありません。spells表のtype/rank/candidateTagsを確認してください。'].filter(Boolean).join('\n');
+    state.lastAppraisalText=[`【スクロール鑑定】${rule.facilityName||''}`,`スクロールランク：${rule.scrollRank||''}`,`判定式：2D6+鑑定技能>=${rule.difficulty||''}`,`鑑定料：${appraisalFee(rule.scrollRank)}G`,'鑑定結果：候補術式がありません。術式データと鑑定条件を確認してください。'].filter(Boolean).join('\n');
     $('appraisalResult').textContent=state.lastAppraisalText;
     return;
   }
@@ -1124,8 +1113,9 @@ function rollAppraisal(){
   const lines=[];
   lines.push(`【スクロール鑑定】${rule.facilityName||''}`);
   lines.push(`スクロールランク：${rule.scrollRank||''}`);
-  lines.push(`鑑定難易度：${rule.difficulty||''}`);
-  lines.push(`判明した術式：${spell.name}`);
+  lines.push(`判定式：2D6+鑑定技能>=${rule.difficulty||''}`);
+  lines.push(`鑑定料：${appraisalFee(rule.scrollRank)}G`);
+  lines.push(`鑑定結果：${spell.name}`);
   lines.push(`鑑定後アイテム：${spell.name}のスクロール`);
   if(scroll?.publicId) lines.push(`登録ID：${scroll.publicId}`);
   lines.push(`術式種別：${spell.type||''}`);
@@ -1134,8 +1124,10 @@ function rollAppraisal(){
   if(spell.mpCost) lines.push(`コスト：${spell.mpCost}`);
   if(spell.target) lines.push(`対象：${spell.target}`);
   if(spell.power) lines.push(`威力/効果値：${spell.power}`);
+  if(spell.description) lines.push(`説明：${spell.description}`);
   if(spell.effect) lines.push(`効果：${spell.effect}`);
-  lines.push('補足：この結果はコピーして管理してください。キャラシへの自動登録・スクロール消費は次段階で実装します。');
+  lines.push(`使用：このスクロールを消費すると、術式「${spell.name}」をコスト消費なしで1回発動できます。`);
+  lines.push(`術式化：鑑定済みスクロールと対応素材を消費。自力なら写術具＋集中判定、骨董屋依頼なら${transcriptionFee(rule.scrollRank)}Gが必要です。`);
   state.lastAppraisalText=lines.filter(Boolean).join('\n');
   $('appraisalResult').textContent=state.lastAppraisalText;
   addLog(`スクロール鑑定：${rule.scrollRank||''} → ${spell.name}`);
@@ -1167,7 +1159,7 @@ function findDropMaterial(d={}){
     || materialRows().find(r=>name && String(r.name || '').trim() === name)
     || null;
 }
-function dropDetailLines(material){
+function dropDetailLines(material, options={}){
   if(!material) return [];
   const lines = [];
   const rank = String(material.rank || '').trim();
@@ -1175,11 +1167,13 @@ function dropDetailLines(material){
   const price = String(material.price ?? '').trim();
   const desc = String(material.description || '').trim();
   const effect = String(material.effect || '').trim();
+  const isMonsterMaterial = String(material.materialType || '').trim() === '魔物素材';
+  const forCopy = !!options.forCopy;
   if(rank) lines.push('ランク：' + rank);
   if(cat) lines.push('分類：' + cat + '素材');
   if(price) lines.push('売値：' + price + 'G');
   if(desc) lines.push('説明：' + desc);
-  if(effect) lines.push('効果：' + effect);
+  if(effect && !(forCopy && isMonsterMaterial)) lines.push('効果：' + effect);
   return lines;
 }
 
@@ -1205,7 +1199,7 @@ function dropPlayerInfoBlock(d={}){
   lines.push(`【${name}】`);
   lines.push(`登録ID：${publicId || '公開ID未設定'}`);
   lines.push(`個数：${count}`);
-  const details = dropDetailLines(material);
+  const details = dropDetailLines(material, {forCopy:true});
   if(details.length) lines.push(...details);
   return lines.join('\n');
 }
@@ -1247,20 +1241,21 @@ async function copyText(text,noteId){
   if(noteId){const el=$(noteId); el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),1200);} addLog('結果をコピーしました。');
 }
 function questMemo(){const q=selected($('questSelect'),state.quests); if(!q)return ''; const p=progressObj('quests',q.id||q.name); return [`【クエスト進行】${q.name||q.id}`,`進行度：${clamp(p.value)}%`,q.clearCondition?`クリア条件：${q.clearCondition}`:'',q.rewardMoney||q.rewardItems||Number(q.bonusPoints||0)>0?`報酬：${[q.rewardMoney,q.rewardItems,Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / ')}`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
+function questPublicRewardText(q={}){
+  return [q.rewardMoney,q.rewardItems,Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'',q.unlockResult?`解放：${q.unlockResult}`:''].filter(Boolean).join(' / ');
+}
+function questPublicInfoLines(q={}){
+  return [
+    `クエスト名：${q.name||q.id||'名称未設定'}`,
+    `クエスト説明：${q.description||'説明未設定'}`,
+    `エリア：${q.areaName||'未設定'}`,
+    `達成条件：${q.clearCondition||'未設定'}`,
+    `報酬：${questPublicRewardText(q)||'なし'}`
+  ];
+}
 function questInfoMemo(){
   const q=selected($('questSelect'),state.quests);
-  if(!q)return '';
-  const reward=[q.rewardMoney,q.rewardItems].filter(Boolean).join(' / ');
-  return [
-    `【クエスト】${q.name||q.id}`,
-    q.questCategory?`分類：${q.questCategory}`:'',
-    q.areaName?`エリア：${q.areaName}`:'',
-    q.description?`内容：${q.description}`:'',
-    questBossText(q)?`クエストボス：${questBossText(q)}`:'',
-    reward?`報酬：${reward}`:'',
-    questBossFormationText(q)?`構成：${questBossFormationText(q)}`:'',
-    q.unlockResult?`解放：${q.unlockResult}`:''
-  ].filter(Boolean).join('\n');
+  return q ? questPublicInfoLines(q).join('\n') : '';
 }
 function areaMemo(){const a=selected($('areaSelect'),state.areas); if(!a)return ''; const p=progressObj('areas',a.id||a.name); return [`【エリア進行】${a.name||a.id}`,`探索進行度：${clamp(p.value)}%`,a.eventTableId?`イベント表：${a.eventTableId}`:'',a.mainMaterials?`主な素材：${a.mainMaterials}`:'',a.mainMonsters?`主な魔物：${a.mainMonsters}`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
 function switchProgressTab(tab){
