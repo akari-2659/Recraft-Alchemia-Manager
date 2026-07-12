@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.144</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.149</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -476,7 +476,7 @@
 </style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.144 / 最終更新日：2026年7月12日</div>
+<div class="ra-build-info">Version：v90.8.149 / 最終更新日：2026年7月12日</div>
 
 <header>
   <div class="title-card">
@@ -1033,7 +1033,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.144';
+const RECRAFT_DB_VERSION = 'v90.8.149';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.133';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1571,6 +1571,7 @@ const SYSTEM_HELP = [
     "body": [
       "魔物素材には、装備強化に使用した際の強化内容と強化値を設定する。",
       "魔物素材はすべて何かしらの装備強化内容を持つ。",
+      "魔物素材は装備強化内容・装備強化値・強化対象の3項目を必須とし、未設定のまま保存またはDB送信できない。",
       "効果が複数の素材で重複しても問題ない。",
       "装備強化内容は選択式の項目『equipmentUpgradeEffect / 装備強化内容』で管理する。",
       "装備強化値は自由入力の項目『equipmentUpgradeValue / 装備強化値』で管理する。",
@@ -1737,7 +1738,9 @@ const SYSTEM_HELP = [
       "祈祷書のセット祈祷枠は、1 + 祈祷に割り振ったポイント。",
       "セット術式とセット祈祷は、所持している術式データから選択する。",
       "火球、氷槍、雷撃、光弾、闇弾、爆発範囲などの攻撃・投射・範囲系魔法は回避で防ぐ。",
-      "毒、呪いなどの身体・精神・状態異常系効果は抵抗で防ぐ。"
+      "毒、呪いなどの身体・精神・状態異常系効果は抵抗で防ぐ。",
+      "魔物行動も同じ基準とし、攻撃・投射・範囲攻撃は回避、身体・精神・状態異常系効果は抵抗を達成値にする。",
+      "効果文に「抵抗に失敗」とある魔物行動は、必ず抵抗値を使用する。"
     ]
   },
   {
@@ -3500,13 +3503,25 @@ function normalizeCheckTypeValue(value){
   raw = raw.replace(/＞＝/g, '>=').replace(/≧/g, '>=').replace(/\s+/g, '');
   const m = raw.match(/^(.+?)>=(.+)$/);
   if(m){
-    let left = normalizeCheckLeftSkill(m[1]);
-    let right = m[2].trim();
-    if(left === '魔法' && right === '抵抗値') right = '回避値';
+    const left = normalizeCheckLeftSkill(m[1]);
+    const right = m[2].trim();
     return `${left}>=${right}`;
   }
-  if(raw === '魔法>=抵抗値') return '魔法>=回避値';
   return normalizeCheckLeftSkill(raw);
+}
+function normalizeMonsterActionCheckType(row={}){
+  const normalized = normalizeCheckTypeValue(row.checkType);
+  const parsed = parseCheckType(normalized);
+  const effect = String(row.effect || '').trim();
+  const power = String(row.power || '').trim();
+  const noDamage = !power || power === 'なし' || power === '-';
+  const statusOnlyMagic = (parsed.left === '魔法' || parsed.left === '祈祷')
+    && noDamage
+    && /(毒|拘束|萎縮|泥まみれ|胞子|粘着|視界不良|体勢崩れ)状態/.test(effect);
+  if(parsed.left && parsed.left !== 'なし' && (/抵抗に失敗/.test(effect) || statusOnlyMagic)){
+    return `${parsed.left}>=抵抗値`;
+  }
+  return normalized;
 }
 function parseCheckType(value){
   const raw = normalizeCheckTypeValue(value);
@@ -3576,11 +3591,11 @@ function formOptionValues(key, field){
   if(field==='toolRank') TOOL_RANKS.forEach(v=>values.add(v));
   if(field==='type') ['魔法','祈祷'].forEach(v=>values.add(v));
   if(field==='enabled') ['TRUE','FALSE'].forEach(v=>values.add(v));
-  if(field==='checkType') ['近接>=回避値','射撃>=回避値','魔法>=回避値','祈祷>=10','祈祷>=抵抗値','調合>=回避値','採取','なし'].forEach(v=>values.add(v));
+  if(field==='checkType') ['近接>=回避値','射撃>=回避値','魔法>=回避値','魔法>=抵抗値','祈祷>=10','祈祷>=回避値','祈祷>=抵抗値','調合>=回避値','採取','なし'].forEach(v=>values.add(v));
   if(field==='element') ['物','火','水','風','雷','光','闇','無'].forEach(v=>values.add(v));
   if(field==='hasLock' || field==='hasTrap') ['なし','あり'].forEach(v=>values.add(v));
   if(field==='equipmentUpgradeTarget') ['武器','防具','武器・防具'].forEach(v=>values.add(v));
-  if(field==='equipmentUpgradeEffect') ['なし','威力','命中','防御貫通','物属性付与','火属性付与','水属性付与','風属性付与','雷属性付与','光属性付与','闇属性付与','無属性付与','特殊効果付与'].forEach(v=>values.add(v));
+  if(field==='equipmentUpgradeEffect') ['なし','威力','命中','防御貫通','防御値','防御行動値','回避補正','物属性付与','火属性付与','水属性付与','風属性付与','雷属性付与','光属性付与','闇属性付与','無属性付与','物耐性付与','火耐性付与','水耐性付与','風耐性付与','雷耐性付与','光耐性付与','闇耐性付与','無耐性付与','特殊効果付与'].forEach(v=>values.add(v));
   if(field==='craftType') ['調合','鍛冶','武器派生','防具製作','バッグ製作','素材加工'].forEach(v=>values.add(v));
   if(field==='baseItem') (state.items || []).forEach(r=>{ if(String(r.dataKind || '').trim() !== '素材' && String(r.itemType || '').trim() === '武器' && r.name) values.add(String(r.name)); });
   if(field==='branchType') ['基礎強化系','鉱石系','木材・植物系','獣牙系','甲殻系','羽鱗系','結晶・魔導系','聖祈系','特殊用途系'].forEach(v=>values.add(v));
@@ -3644,7 +3659,7 @@ function parseMonsterActions(value){
 }
 function serializeMonsterActions(rows){
   return (rows || []).map(r=>({
-    name:String(r.name||'').trim(), checkType:normalizeCheckTypeValue(r.checkType), target:String(r.target||'').trim(), element:String(r.element||'').trim(), power:String(r.power||'').trim(), effect:String(r.effect||'').trim()
+    name:String(r.name||'').trim(), checkType:normalizeMonsterActionCheckType(r), target:String(r.target||'').trim(), element:String(r.element||'').trim(), power:String(r.power||'').trim(), effect:String(r.effect||'').trim()
   })).filter(r=>r.name || r.checkType || r.target || r.element || r.power || r.effect)
     .map(r=>[r.name,r.checkType,r.target,r.element,r.power,r.effect].join('\t')).join('\n');
 }
@@ -4208,7 +4223,7 @@ function currentFormRowSnapshot(){
 function itemFormFields(row){
   const kind = String(row.dataKind || 'アイテム').trim() || 'アイテム';
   if(kind==='素材'){
-    return ['materialType','materialCategory','name','publicId','rank','price','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeTarget','description','effect','notes'];
+    return ['materialType','materialCategory','name','publicId','rank','price','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeTarget','description','effect','notes'];
   }
   const itemType = String(row.itemType || '').trim();
   if(itemType === '道具') return ['itemType','itemCategory','name','publicId','csVisible','price','rank','toolRank','equipSlot','maxStack','description','effect','unlockFacility','tags','notes'];
@@ -4301,6 +4316,23 @@ function ensurePlayerFacingPublicId(key,row){
   row.publicId=pid;
   return row;
 }
+function monsterMaterialUpgradeMissingFields(row={}){
+  const isMonsterMaterial = String(row.dataKind || '').trim()==='素材' && String(row.materialType || '').trim()==='魔物素材';
+  if(!isMonsterMaterial) return [];
+  const missing=[];
+  const effect=String(row.equipmentUpgradeEffect || '').trim();
+  if(!effect || effect==='なし') missing.push('装備強化内容');
+  if(!String(row.equipmentUpgradeValue || '').trim()) missing.push('装備強化値');
+  if(!String(row.equipmentUpgradeTarget || '').trim()) missing.push('強化対象');
+  return missing;
+}
+function assertMonsterMaterialUpgradeRows(rows=[]){
+  const invalid=(rows || []).map(row=>({row,missing:monsterMaterialUpgradeMissingFields(row)})).filter(x=>x.missing.length);
+  if(!invalid.length) return;
+  const details=invalid.slice(0,10).map(x=>`・${String(x.row.name || x.row.id || '名称未設定')}：${x.missing.join('・')}`).join('\n');
+  const rest=invalid.length>10 ? `\nほか${invalid.length-10}件` : '';
+  throw new Error(`魔物素材には装備強化内容・装備強化値・強化対象の設定が必須です。\n${details}${rest}`);
+}
 function collectFormRow(){
   const {key,idx}=formState; if(!key) throw new Error('編集中のデータがありません');
   syncAllCheckBuilders($('editModal'));
@@ -4322,6 +4354,7 @@ function collectFormRow(){
   if(base.createdBy === undefined || !String(base.createdBy).trim()) base.createdBy=currentCreatedBy();
   const clean = {};
   (SCHEMA[key]||[]).forEach(field=>clean[field]=base[field] === undefined || base[field] === null ? '' : base[field]);
+  if(key==='items') assertMonsterMaterialUpgradeRows([clean]);
   return clean;
 }
 function applyFormToState(){
@@ -4976,6 +5009,7 @@ function rowsForTableForSave(tableKey){
   });
 }
 function cloneRowsForSave(baseKey, rows){
+  if(baseKey==='items') assertMonsterMaterialUpgradeRows(rows || []);
   return (rows || []).map(src=>{
     const r = {...(src || {})};
     if((baseKey === 'items' || baseKey === 'spells' || baseKey === 'equipment_categories')){

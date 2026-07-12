@@ -37,13 +37,13 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.145 / 最終更新日：2026年7月12日</div>
+<div class="ra-build-info">Version：v90.8.149 / 最終更新日：2026年7月12日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.145 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.149 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -260,7 +260,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.145';
+const VERSION='v90.8.149';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -1206,6 +1206,9 @@ function treasureDetailBlock(row, heading='【宝箱結果】'){
   const q=rollDiceText(row.quantity||'1');
   const item=findItemByNameOrId(row.entryName,row.entryPublicId);
   const lines=[];
+  const quantityNumber=Number(q.text);
+  const unitPrice=Number(item?.price||0);
+  const currencyMatch=String(row.entryName||'').match(/(\d+)\s*G/i);
   lines.push(`${heading}${row.tableId||''}`);
   lines.push(`中身種別：${row.entryType||''}`);
   lines.push(`名称：${row.entryName||row.recipeName||'名称未設定'}`);
@@ -1213,8 +1216,15 @@ function treasureDetailBlock(row, heading='【宝箱結果】'){
   if(row.recipeName) lines.push(`レシピ：${row.recipeName}`);
   if(row.scrollRank) lines.push(`スクロールランク：${row.scrollRank}`);
   lines.push(`数量：${q.text}${q.detail?`（${q.detail}）`:''}`);
+  if(row.entryType==='通貨' && currencyMatch){
+    const amount=Number(currencyMatch[1]||0)*(Number.isFinite(quantityNumber)?quantityNumber:1);
+    lines.push(`獲得金額：${amount}G（即時入手）`);
+  }
   if(item?.rank) lines.push(`ランク：${item.rank}`);
-  if(item?.price) lines.push(`売値：${item.price}G`);
+  if(unitPrice>0){
+    lines.push(`売却単価：${unitPrice}G`);
+    if(Number.isFinite(quantityNumber) && quantityNumber>0) lines.push(`合計売却価値：${unitPrice*quantityNumber}G`);
+  }
   if(row.description) lines.push(`説明：${row.description}`);
   if(row.entryType==='未鑑定スクロール') lines.push('補足：鑑定に成功したら、スクロール鑑定欄で該当ランクの術式内容を決定してください。');
   return lines.filter(Boolean).join('\n');
