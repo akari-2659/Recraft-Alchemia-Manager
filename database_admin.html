@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.135</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.137</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -476,7 +476,7 @@
 </style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.135 / 最終更新日：2026年7月11日</div>
+<div class="ra-build-info">Version：v90.8.137 / 最終更新日：2026年7月12日</div>
 
 <header>
   <div class="title-card">
@@ -1033,7 +1033,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.135';
+const RECRAFT_DB_VERSION = 'v90.8.137';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.133';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1800,7 +1800,9 @@ const SYSTEM_HELP = [
       "魔物出力にキャラクターメモは含めない。",
       "魔物出力にドロップは含めない。",
       "チャットパレットは『choice[技名1,技名2,…]』から始める。",
-      "各行動には対象と距離（近接／遠距離／自身）を表示する。",
+      "ターン開始時にプレイヤーへ公開するのは行動名だけ。対象・距離・威力・効果は公開しない。",
+      "GM用チャットパレットには対象、距離（近接／遠距離／自身）、ダメージ、効果を表示する。",
+      "状態異常を付与する行動は、状態名だけでなく具体的な効果と継続期間もチャットパレットへ表示する。",
       "ダイスのない効果も技能セクションに入れる。"
     ]
   },
@@ -2910,6 +2912,22 @@ function monsterMemo(row={}){
   // ドロップや詳細説明は管理HTML側で確認する。
   return '';
 }
+const MONSTER_STATUS_DEFINITIONS = {
+  '毒状態':'※毒状態：次の自分のターン終了時に1D6ダメージを受け、その後解除する。解毒薬または清めの祈りで先に解除できる。',
+  '拘束状態':'※拘束状態：次のラウンド終了まで回避-2。拘束中はかばうを行えない。',
+  '萎縮状態':'※萎縮状態：次のラウンド終了まで攻撃・術式・祈祷判定-1。',
+  '泥まみれ状態':'※泥まみれ状態：次のラウンド終了まで命中・回避-1。',
+  '胞子状態':'※胞子状態：次のラウンド終了まで術式・祈祷・抵抗判定-1。',
+  '粘着状態':'※粘着状態：次のラウンド終了まで回避-2、防御行動値-1。',
+  '視界不良状態':'※視界不良状態：次のラウンド終了まで命中・回避-1。',
+  '体勢崩れ状態':'※体勢崩れ状態：次のラウンド終了まで防御-1。'
+};
+function monsterActionStatusNotes(action={}){
+  const text = `${action.name || ''} ${action.effect || ''}`;
+  return Object.entries(MONSTER_STATUS_DEFINITIONS)
+    .filter(([status])=>text.includes(status))
+    .map(([,description])=>description);
+}
 function monsterActionRange(action={}){
   const parsed = parseCheckType(action.checkType || '');
   const left = parsed.left || '';
@@ -2965,6 +2983,7 @@ function monsterChatPalette(row={}){
       if(check) lines.push(check);
       if(damage) lines.push(damage);
       if(effect) lines.push(`// 効果：${effect}`);
+      monsterActionStatusNotes(action).forEach(note=>lines.push(`// ${note}`));
       if(!check && !damage && !effect) lines.push(`// ${actionName}`);
     });
   }else{

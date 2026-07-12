@@ -4,7 +4,7 @@
 @media(max-width:760px){.ra-build-info{position:static;margin:8px auto 0;width:max-content;max-width:calc(100% - 16px);text-align:center}}
 </style>
 </head><body>
-<div class="ra-build-info">Version：v90.8.135 / 最終更新日：2026年7月11日</div>
+<div class="ra-build-info">Version：v90.8.137 / 最終更新日：2026年7月12日</div>
 <header><div class="title-card"><h1>リクラフト・アルケミア ヘルプ</h1><p class="subtitle">確定済みのシステム仕様を確認するページ。未確定案、変更履歴、作業メモは含めない。</p></div></header><main><section class="panel"><div class="toolbar"><input id="search" type="search" placeholder="防御・かばう・矢筒・装備強化などで検索"><button class="ghost" id="openAll" type="button">すべて開く</button><button class="ghost" id="closeAll" type="button">すべて閉じる</button><button id="copyAll" type="button">全文コピー</button></div><p class="notice">各項目は折り畳み式。検索すると該当項目だけ表示。</p><div class="help-layout" id="helpLayout"><details class="help-card">
   <summary><span>施設</span><span class="tags"><span>鍛冶屋</span><span>薬屋</span><span>宿屋</span><span>NPC</span></span></summary>
   <div class="help-body"><ul><li>基本施設は鍛冶屋、薬屋、宿屋。</li><li>鍛冶屋は武器、防具、バッグ、矢筒、鍛冶素材、鍛冶施設利用を扱う。</li><li>薬屋はポーション系、薬品系調合品、調合素材、調合施設利用を扱う。</li><li>宿屋は宿泊、休息、噂、クエスト情報を扱う。商品販売は主目的にしない。</li><li>雑貨屋は現時点では使用しない。</li><li>施設NPCは、リネット、ガルド・ヴェルナー、ミレイユ・オルセーヌ、ロジーナ・エルメル。</li><li>リネットは拠点と工房の案内役。</li><li>ガルド・ヴェルナーは鍛冶屋担当。</li><li>ミレイユ・オルセーヌは薬屋担当。</li><li>ロジーナ・エルメルは宿屋担当。</li></ul></div>
@@ -58,7 +58,7 @@
   <div class="help-body"><ul><li>武器ダメージ出力は、片手武器の場合『【左手(右手)武器ダメージ】』形式にする。</li><li>両手武器のダメージ出力は『【両手武器ダメージ】』形式にする。</li><li>術式の出力名は『【術式名】』形式にする。</li><li>武器ダメージが設定されている武器のみ出力する。</li><li>常時防御値の出力ラベルは『防御』。</li><li>回避値の出力ラベルは『回避』。</li></ul></div>
 </details><details class="help-card">
   <summary><span>魔物出力</span><span class="tags"><span>魔物</span><span>チャットパレット</span><span>出力</span></span></summary>
-  <div class="help-body"><ul><li>魔物出力はJSONではなく、クリップボードコピー形式にする。</li><li>魔物出力にキャラクターメモは含めない。</li><li>魔物出力にドロップは含めない。</li><li>チャットパレットは『choice[技名1,技名2,…]』から始める。</li><li>各行動には対象と距離（近接／遠距離／自身）を表示する。</li><li>ダイスのない効果も技能セクションに入れる。</li></ul></div>
+  <div class="help-body"><ul><li>魔物出力はJSONではなく、クリップボードコピー形式にする。</li><li>魔物出力にキャラクターメモは含めない。</li><li>魔物出力にドロップは含めない。</li><li>チャットパレットは『choice[技名1,技名2,…]』から始める。</li><li>ターン開始時にプレイヤーへ公開するのは行動名だけ。対象・距離・威力・効果は公開しない。</li><li>GM用チャットパレットには対象、距離（近接／遠距離／自身）、ダメージ、効果を表示する。</li><li>状態異常を付与する行動は、状態名だけでなく具体的な効果と継続期間もチャットパレットへ表示する。</li><li>ダイスのない効果も技能セクションに入れる。</li></ul></div>
 </details><details class="help-card">
   <summary><span>管理HTML</span><span class="tags"><span>管理</span><span>検索</span><span>コピー</span></span></summary>
   <div class="help-body"><ul><li>アイテム、素材、装備カテゴリなどの一覧では名前検索を常時表示する。</li><li>詳細フィルターとソート情報は折り畳み式の『絞り込み・ソート』にまとめる。</li><li>各行の情報コピーから、プレイヤーに渡すアイテム情報と登録IDをコピーできる。</li><li>情報コピーには、内部ID、管理キー、登録者、解放施設、装備強化内容、装備強化値を含めない。</li><li>情報コピーは、プレイヤーが読んで分かる範囲のアイテム情報と登録IDを出す。</li><li>素材は、名称、登録ID、個数、ランク、分類、売値、説明、効果を基本に出す。</li><li>武器、防具、術式、道具、矢弾などは、使用に必要なコスト、対象、判定、属性、威力、最大スタックなどを追加で出す。</li></ul></div>
@@ -278,7 +278,9 @@
 - 魔物出力にキャラクターメモは含めない。
 - 魔物出力にドロップは含めない。
 - チャットパレットは『choice[技名1,技名2,…]』から始める。
-- 各行動には対象と距離（近接／遠距離／自身）を表示する。
+- ターン開始時にプレイヤーへ公開するのは行動名だけ。対象・距離・威力・効果は公開しない。
+- GM用チャットパレットには対象、距離（近接／遠距離／自身）、ダメージ、効果を表示する。
+- 状態異常を付与する行動は、状態名だけでなく具体的な効果と継続期間もチャットパレットへ表示する。
 - ダイスのない効果も技能セクションに入れる。
 
 管理HTML
