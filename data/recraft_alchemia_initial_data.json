@@ -1,6 +1,6 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "v90.8.138",
+  "version": "v90.8.139",
   "encoding": "UTF-8",
   "description": "通常魔物・強敵・エリアボスの行動をエリア難易度に沿って再調整。ダメージをD6系へ統一し、範囲攻撃・持続妨害・防御貫通を追加。状態異常はGM用チャットパレットへ具体的な効果説明を併記。",
   "data": {
@@ -2027,7 +2027,7 @@
         "notes": "",
         "publicId": "RCA-NA95-LL9W",
         "upgradeLimit": "0",
-        "modifiers": "skill:guard\t1D3",
+        "modifiers": "combat:guardAction\t1D3",
         "reloadTurns": "",
         "toolRank": ""
       },
@@ -2050,7 +2050,7 @@
         "notes": "",
         "publicId": "RCA-456K-857L",
         "upgradeLimit": "2",
-        "modifiers": "combat:defense\t3\nskill:guard\t1D6+2\nskill:evade\t-1",
+        "modifiers": "combat:defense\t3\ncombat:guardAction\t1D6+2\nskill:evade\t-1",
         "reloadTurns": "",
         "toolRank": ""
       },
@@ -2073,7 +2073,7 @@
         "notes": "",
         "publicId": "RCA-7RCD-RZFQ",
         "upgradeLimit": "2",
-        "modifiers": "combat:defense\t1\nskill:guard\t1D6\nskill:evade\t1",
+        "modifiers": "combat:defense\t1\ncombat:guardAction\t1D6\nskill:evade\t1",
         "reloadTurns": "",
         "toolRank": ""
       },
@@ -2096,7 +2096,7 @@
         "notes": "",
         "publicId": "RCA-JHBG-H8KA",
         "upgradeLimit": "2",
-        "modifiers": "combat:defense\t1\nskill:guard\t1D6",
+        "modifiers": "combat:defense\t1\ncombat:guardAction\t1D6",
         "reloadTurns": "",
         "toolRank": ""
       },
@@ -2119,7 +2119,7 @@
         "notes": "",
         "publicId": "RCA-Z2R6-3CSM",
         "upgradeLimit": "2",
-        "modifiers": "combat:defense\t2\nskill:guard\t1D6+1",
+        "modifiers": "combat:defense\t2\ncombat:guardAction\t1D6+1",
         "reloadTurns": "",
         "toolRank": ""
       },
@@ -2142,7 +2142,7 @@
         "notes": "",
         "publicId": "RCA-GZTB-SMM2",
         "upgradeLimit": "2",
-        "modifiers": "combat:defense\t1\nskill:guard\t1D6",
+        "modifiers": "combat:defense\t1\ncombat:guardAction\t1D6",
         "reloadTurns": "",
         "toolRank": ""
       },
@@ -2771,7 +2771,7 @@
         "price": 180,
         "rank": "初級",
         "equipSlot": "右手/左手",
-        "effect": "防御行動・かばうに向く。",
+        "effect": "防御値+2。防御行動値+3。回避-1。",
         "source": "",
         "usageTags": "盾,防御,かばう",
         "tags": "盾,防御,かばう",
@@ -2779,7 +2779,7 @@
         "notes": "",
         "publicId": "RCA-DAYG-4XZF",
         "upgradeLimit": "2",
-        "modifiers": "combat:defense\t2\nskill:guard\t+3\nskill:evade\t-1",
+        "modifiers": "combat:defense\t2\ncombat:guardAction\t+3\nskill:evade\t-1",
         "reloadTurns": "",
         "toolRank": ""
       },
@@ -2794,7 +2794,7 @@
         "price": 240,
         "rank": "初級",
         "equipSlot": "右手/左手",
-        "effect": "魔法・異界攻撃への防御時、追加軽減+2。",
+        "effect": "防御値+1。防御行動値+2。魔法・異界攻撃を防御した時、さらに2点軽減する。",
         "source": "",
         "usageTags": "盾,魔法,異界",
         "tags": "盾,魔法,異界",
@@ -2802,7 +2802,7 @@
         "notes": "",
         "publicId": "RCA-5RLQ-NKQ9",
         "upgradeLimit": "2",
-        "modifiers": "combat:defense\t1\nskill:guard\t+2",
+        "modifiers": "combat:defense\t1\ncombat:guardAction\t+2",
         "reloadTurns": "",
         "toolRank": ""
       },
@@ -2817,7 +2817,7 @@
         "price": 80,
         "rank": "初級",
         "equipSlot": "右手/左手",
-        "effect": "扱いやすい",
+        "effect": "防御値+1。防御行動値+2。",
         "source": "",
         "usageTags": "盾,防御",
         "tags": "盾,防御",
@@ -2825,7 +2825,7 @@
         "notes": "",
         "publicId": "RCA-SZE5-D5ST",
         "upgradeLimit": "2",
-        "modifiers": "combat:defense\t1\nskill:guard\t+2",
+        "modifiers": "combat:defense\t1\ncombat:guardAction\t+2",
         "reloadTurns": "",
         "toolRank": ""
       },

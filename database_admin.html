@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.138</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.139</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -476,7 +476,7 @@
 </style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.138 / 最終更新日：2026年7月12日</div>
+<div class="ra-build-info">Version：v90.8.139 / 最終更新日：2026年7月12日</div>
 
 <header>
   <div class="title-card">
@@ -1033,7 +1033,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.138';
+const RECRAFT_DB_VERSION = 'v90.8.139';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.133';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1059,7 +1059,7 @@ const SCHEMA = {
   monsters: ['id','name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', toolRank:'対応素材ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'常時防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', modifiers:'補正値', upgradeLimit:'強化可能回数', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具ランク', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', equipmentUpgradeTarget:'強化対象', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知難易度', trapDisarmDifficulty:'罠解除難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'常時防御値', initiative:'先制値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ'
+  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', rank:'ランク', toolRank:'対応素材ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', modifiers:'補正値', upgradeLimit:'強化可能回数', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具ランク', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', equipmentUpgradeTarget:'強化対象', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知難易度', trapDisarmDifficulty:'罠解除難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'防御値', initiative:'先制値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ'
 };
 
 const FORM_PRIMARY_FIELDS = {
@@ -1576,14 +1576,14 @@ const SYSTEM_HELP = [
       "装備強化値は自由入力の項目『equipmentUpgradeValue / 装備強化値』で管理する。",
       "装備強化内容の選択肢には、強化分類と対象装備を含める。",
       "武器用の例：威力(武器)、命中(武器)、防御貫通(武器)、火属性付与(武器)、火属性強化(武器)、特殊効果付与(武器)。",
-      "防具用の例：常時防御値(防具)、防御行動値(防具)、回避補正(防具)、火付与(防具)、水付与(防具)、特殊効果付与(防具)。",
-      "防具の防御系強化は、キャラシのステータス名に準拠して常時防御値と防御行動値を分ける。",
-      "常時防御値(防具)は、通常時から適用されるダメージ軽減値を上げる。",
+      "防具用の例：防御値(防具)、防御行動値(防具)、回避補正(防具)、火付与(防具)、水付与(防具)、特殊効果付与(防具)。",
+      "防具の防御系強化は、キャラシのステータス名に準拠して防御値と防御行動値を分ける。",
+      "防御値(防具)は、通常時から適用されるダメージ軽減値を上げる。",
       "防御行動値(防具)は、行動として防御した時の追加軽減値を上げる。",
       "回避補正(防具)は、装備による回避値の補正を上げる。",
-      "常時防御値(防具)は強力な強化として扱い、低ランク素材では原則付与しない。",
+      "防御値(防具)は強力な強化として扱い、低ランク素材では原則付与しない。",
       "低ランク素材の防具強化は、防御行動値、回避補正、属性耐性付与、特殊効果付与を基本とする。",
-      "硬い甲殻や金属殻など、常時の硬さを明確に表す素材だけ常時防御値(防具)を持たせる。",
+      "硬い甲殻や金属殻など、常時の硬さを明確に表す素材だけ防御値(防具)を持たせる。",
       "強化内容は、何が上がるのか、何が付与されるのかを表す。",
       "強化値は、具体的な数値、属性名、耐性名、または特殊効果の内容を表す。",
       "例：装備強化内容『威力(武器)』、装備強化値『+1』。",
@@ -1642,16 +1642,17 @@ const SYSTEM_HELP = [
     "title": "防御",
     "tags": [
       "防御",
-      "常時防御値",
+      "防御値",
       "防御行動値",
       "防御技能"
     ],
     "body": [
-      "常時防御値は、通常時にも適用されるダメージ軽減値。",
+      "防御値は、通常時にも適用されるダメージ軽減値。",
       "防御行動値は、行動として防御を選んだ時にだけ使う追加軽減値。",
       "防御行動値が1D6なら、防御行動時に1D6点ダメージを軽減する。",
-      "防御技能に振り分けたポイントは、防御行動時の追加軽減値として扱う。",
-      "防御行動時の最終ダメージは、受けるダメージ - 防御行動値 - 防御技能ポイント - 常時防御値。",
+      "防御技能に振り分けたポイントは、防御行動の有無にかかわらず常時ダメージを軽減する。",
+      "通常時の最終ダメージは、受けるダメージ - 防御値 - 防御技能ポイント。",
+      "防御行動時の最終ダメージは、受けるダメージ - 防御行動値 - 防御技能ポイント - 防御値。",
       "防御行動そのものに判定は行わない。",
       "防御は回避ではない。攻撃を受け止めてダメージを減らす行動。",
       "最終ダメージは0未満にならない。"
@@ -1669,7 +1670,7 @@ const SYSTEM_HELP = [
       "かばう判定は、防御技能 >= 敵の先制値。",
       "成功した場合、攻撃対象を自分に変更する。",
       "成功後、自分が防御行動を取ったものとしてダメージを軽減する。",
-      "かばう成功時の最終ダメージは、受けるダメージ - 防御行動値 - 防御技能ポイント - 常時防御値。",
+      "かばう成功時の最終ダメージは、受けるダメージ - 防御行動値 - 防御技能ポイント - 防御値。",
       "単体攻撃はかばえる。",
       "複数対象攻撃は、対象のうち1人分だけかばえる。",
       "範囲攻撃は状況次第で1人だけかばえる。",
@@ -1784,7 +1785,7 @@ const SYSTEM_HELP = [
       "両手武器のダメージ出力は『【両手武器ダメージ】』形式にする。",
       "術式の出力名は『【術式名】』形式にする。",
       "武器ダメージが設定されている武器のみ出力する。",
-      "常時防御値の出力ラベルは『防御』。",
+      "防御値の出力ラベルは『防御』。",
       "回避値の出力ラベルは『回避』。"
     ]
   },
@@ -3942,7 +3943,7 @@ function syncAllQuestFixedEventEditors(){
 const MODIFIER_TARGET_OPTIONS = [
   ['ability:body','能力：体力'], ['ability:dexterity','能力：器用'], ['ability:sense','能力：感覚'], ['ability:intellect','能力：知性'], ['ability:will','能力：意志'], ['ability:charm','能力：魅力'],
   ['hit','命中（装備種別に応じて近接/射撃）'], ['skill:melee','技能：近接'], ['skill:shoot','技能：射撃'], ['skill:guard','技能：防御'], ['skill:evade','技能：回避'], ['skill:resist','技能：抵抗'],
-  ['combat:defense','戦闘：防御'], ['combat:evasion','戦闘：回避値'], ['combat:initiative','戦闘：先制値'], ['resource:maxHp','最大HP'], ['resource:maxMp','最大MP']
+  ['combat:defense','戦闘：防御値'], ['combat:guardAction','戦闘：防御行動値'], ['combat:evasion','戦闘：回避値'], ['combat:initiative','戦闘：先制値'], ['resource:maxHp','最大HP'], ['resource:maxMp','最大MP']
 ];
 function adminModifierTargetOptions(selected=''){
   const groups=[
@@ -3955,7 +3956,7 @@ function adminModifierTargetOptions(selected=''){
       ['skill:negotiate','交渉'], ['skill:empathy','共感'], ['skill:social','社交'], ['skill:encourage','鼓舞']
     ]],
     ['戦闘', [
-      ['hit','命中'], ['combat:defense','防御'], ['combat:evasion','回避値'], ['combat:initiative','先制値']
+      ['hit','命中'], ['combat:defense','防御値'], ['combat:guardAction','防御行動値'], ['combat:evasion','回避値'], ['combat:initiative','先制値']
     ]],
     ['リソース', [
       ['resource:maxHp','最大HP'], ['resource:maxMp','最大MP']
@@ -3973,7 +3974,7 @@ function adminModifierTargetOptions(selected=''){
 function adminModifierTargetDisplayName(target=''){
   const key=normalizeModifierTargetAlias(target);
   const names={
-    'hit':'命中','combat:defense':'防御','combat:evasion':'回避値','combat:initiative':'先制値',
+    'hit':'命中','combat:defense':'防御値','combat:guardAction':'防御行動値','combat:evasion':'回避値','combat:initiative':'先制値',
     'resource:maxHp':'最大HP','resource:maxMp':'最大MP',
     'ability:body':'体力','ability:dexterity':'器用','ability:sense':'感覚','ability:intellect':'知性','ability:will':'意志','ability:charm':'魅力',
     'skill:force':'力業','skill:melee':'近接','skill:guard':'防御','skill:shoot':'射撃','skill:throw':'投擲','skill:evade':'回避','skill:resist':'抵抗',
@@ -4007,8 +4008,8 @@ function normalizeModifierTargetAlias(target=''){
   const raw=String(target||'').trim();
   const aliases={
     '命中':'hit','命中補正':'hit','hitMod':'hit','hit':'hit',
-    '常時防御':'combat:defense','常時防御値':'combat:defense','防御':'combat:defense','防御値':'combat:defense','alwaysDefense':'combat:defense','defense':'combat:defense',
-    '防御行動':'skill:guard','防御行動値':'skill:guard','guardValue':'skill:guard','guard':'skill:guard',
+    '常時防御':'combat:defense','防御値':'combat:defense','防御':'combat:defense','防御値':'combat:defense','alwaysDefense':'combat:defense','defense':'combat:defense',
+    '防御行動':'combat:guardAction','防御行動値':'combat:guardAction','guardValue':'combat:guardAction','guard':'combat:guardAction',
     '回避':'skill:evade','回避補正':'skill:evade','evasionMod':'skill:evade','evade':'skill:evade',
     '知識':'skill:knowledge',
     'monsterKnowledge':'skill:knowledge','materialKnowledge':'skill:knowledge','elementKnowledge':'skill:knowledge',
@@ -4025,7 +4026,7 @@ function legacyModifierRowsFromRow(row={}){
   const rows=[];
   const hit=first('hitMod','hit'); if(hit && !isZeroModifierText(hit)) rows.push({target:'hit', value:hit});
   const defense=first('alwaysDefense','defense'); if(defense && !isZeroModifierText(defense)) rows.push({target:'combat:defense', value:defense});
-  const guard=first('guardValue','guard'); if(guard && !isZeroModifierText(guard)) rows.push({target:'skill:guard', value:guard});
+  const guard=first('guardValue','guard'); if(guard && !isZeroModifierText(guard)) rows.push({target:'combat:guardAction', value:guard});
   const evade=first('evasionMod','evade'); if(evade && !isZeroModifierText(evade)) rows.push({target:'skill:evade', value:evade});
   return rows;
 }
