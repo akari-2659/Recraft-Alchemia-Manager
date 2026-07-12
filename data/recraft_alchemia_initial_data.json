@@ -1,6 +1,6 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "v90.8.143",
+  "version": "v90.8.144",
   "encoding": "UTF-8",
   "description": "通常魔物・強敵・エリアボスの行動をエリア難易度に沿って再調整。ダメージをD6系へ統一し、範囲攻撃・持続妨害・防御貫通を追加。状態異常はGM用チャットパレットへ具体的な効果説明を併記。",
   "data": {

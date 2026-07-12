@@ -37,13 +37,13 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.143 / 最終更新日：2026年7月12日</div>
+<div class="ra-build-info">Version：v90.8.144 / 最終更新日：2026年7月12日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.143 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.144 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -260,11 +260,11 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.143';
+const VERSION='v90.8.144';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
-const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},lastEventText:'',lastEventKey:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',triggeredQuestEvents:{},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastAppraisalText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],log:[]};
+const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},lastEventText:'',lastEventKey:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',triggeredQuestEvents:{},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastAppraisalText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],treasureSetup:null,log:[]};
 let currentQuestCategory='重要';
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function clamp(n){return Math.max(0,Math.min(100,Number(n)||0));}
@@ -273,13 +273,13 @@ function addLog(text){state.log.unshift(`[${now()}] ${text}`); state.log=state.l
 function renderLog(){ $('log').innerHTML = state.log.length ? state.log.map(x=>`<div>${esc(x)}</div>`).join('') : '<div class="muted">ログはまだありません。</div>'; }
 function setStatus(type,msg){const el=$('dbStatus'); el.className='status '+(type||''); el.textContent=msg;}
 function saveState(show=true){
-  localStorage.setItem(STORE_KEY, JSON.stringify({progress:state.progress, log:state.log, adminKey:$('adminKey').value||'', lastDailyQuestText:state.lastDailyQuestText||'', lastDailyQuestKeys:state.lastDailyQuestKeys||[], dailyQuestCount:Number($('dailyQuestCount')?.value||3)||3, lastQuestFixedEventText:state.lastQuestFixedEventText||'', lastQuestFixedEventKey:state.lastQuestFixedEventKey||'', triggeredQuestEvents:state.triggeredQuestEvents||{}}));
+  localStorage.setItem(STORE_KEY, JSON.stringify({progress:state.progress, log:state.log, adminKey:$('adminKey').value||'', lastDailyQuestText:state.lastDailyQuestText||'', lastDailyQuestKeys:state.lastDailyQuestKeys||[], dailyQuestCount:Number($('dailyQuestCount')?.value||3)||3, lastQuestFixedEventText:state.lastQuestFixedEventText||'', lastQuestFixedEventKey:state.lastQuestFixedEventKey||'', triggeredQuestEvents:state.triggeredQuestEvents||{}, treasureSetup:state.treasureSetup||null}));
   if(show) addLog('進行状態を保存しました。');
 }
 function loadState(){
   // DB読込時の初期ゲージは必ず0%にするため、進行度は自動復元しない。
   // 保存済み進行を使う場合は「保存済み進行を復元」を押す。
-  try{const raw=localStorage.getItem(STORE_KEY); if(!raw)return; const data=JSON.parse(raw); state.log=data.log||[]; state.lastDailyQuestText=data.lastDailyQuestText||''; state.lastDailyQuestKeys=Array.isArray(data.lastDailyQuestKeys)?data.lastDailyQuestKeys:[]; $('adminKey').value=data.adminKey||''; if($('dailyQuestCount')&&data.dailyQuestCount) $('dailyQuestCount').value=String(data.dailyQuestCount);}catch(e){}
+  try{const raw=localStorage.getItem(STORE_KEY); if(!raw)return; const data=JSON.parse(raw); state.log=data.log||[]; state.lastDailyQuestText=data.lastDailyQuestText||''; state.lastDailyQuestKeys=Array.isArray(data.lastDailyQuestKeys)?data.lastDailyQuestKeys:[]; $('adminKey').value=data.adminKey||''; if($('dailyQuestCount')&&data.dailyQuestCount) $('dailyQuestCount').value=String(data.dailyQuestCount); state.treasureSetup=data.treasureSetup||null;}catch(e){}
 }
 function restoreSavedState(){
   try{
@@ -293,6 +293,7 @@ function restoreSavedState(){
     state.lastQuestFixedEventText=data.lastQuestFixedEventText||state.lastQuestFixedEventText||'';
     state.lastQuestFixedEventKey=data.lastQuestFixedEventKey||state.lastQuestFixedEventKey||'';
     state.triggeredQuestEvents=(data.triggeredQuestEvents&&typeof data.triggeredQuestEvents==='object')?data.triggeredQuestEvents:(state.triggeredQuestEvents||{});
+    state.treasureSetup=data.treasureSetup||state.treasureSetup||null;
     if($('dailyQuestCount')&&data.dailyQuestCount) $('dailyQuestCount').value=String(data.dailyQuestCount);
     $('adminKey').value=data.adminKey||$('adminKey').value||'';
     renderAll();
@@ -692,7 +693,7 @@ function triggerQuestSpecificEvents(q,before,after){
       ['このイベントはクエスト進行度による確定発生です。ランダム抽選ではありません。']
     );
     if(e.treasureTableId){
-      fillTreasureTables(String(e.treasureTableId));
+      prepareTreasureEvent(String(e.treasureTableId), area?.name||'');
       const fixedRows=treasureRows(String(e.treasureTableId));
       if(fixedRows.length){
         const picked=fixedRows[0];
@@ -993,7 +994,7 @@ function triggerAreaClearRumorEvent(area){
   const picked=rows[0];
   state.lastEventKey=eventUniqueKey(picked);
   state.lastEventText=formatEventOutput(`【探索クリア時イベント】${picked.eventName||'名称未設定'}`, picked, area, tableId, [`噂：${rumor.eventName||''}`]);
-  $('eventResult').textContent=state.lastEventText; if(picked.treasureTableId) fillTreasureTables(String(picked.treasureTableId));
+  $('eventResult').textContent=state.lastEventText; if(picked.treasureTableId) prepareTreasureEvent(String(picked.treasureTableId), area?.name||'');
   addLog(`探索クリア時イベント：${area.name||area.id} / ${picked.eventName||'名称未設定'}`);
   return true;
 }
@@ -1014,7 +1015,7 @@ function rollEvent(){
   state.lastEventKey=eventUniqueKey(picked);
   const rumorLine=rumor ? [`今日の噂：${rumor.eventName||''}`] : [];
   state.lastEventText=formatEventOutput(`【ランダムイベント】${picked.eventName||'名称未設定'}`, picked, area, tableId, rumorLine);
-  $('eventResult').textContent=state.lastEventText; if(picked.treasureTableId) fillTreasureTables(String(picked.treasureTableId)); addLog(`イベント抽選：${picked.eventName||'名称未設定'}`);
+  $('eventResult').textContent=state.lastEventText; if(picked.treasureTableId) prepareTreasureEvent(String(picked.treasureTableId), area?.name||''); addLog(`イベント抽選：${picked.eventName||'名称未設定'}`);
 }
 
 function enabledRow(row){return String(row && row.enabled || 'TRUE').trim().toUpperCase() !== 'FALSE';}
@@ -1045,18 +1046,85 @@ function fillTreasureTables(prefer=''){
   if(prefer && [...sel.options].some(o=>o.value===prefer)) sel.value=prefer;
   renderTreasureTrapInfo();
 }
+const TREASURE_AREA_PROFILES={
+  '街はずれの草原':{
+    lockChance:20, trapChance:15, detect:[5,7], disarm:[5,7], unlock:[5,7],
+    traps:[
+      {name:'飛び出す針',effect:'開封者に1D6ダメージ。'},
+      {name:'指挟みのばね',effect:'開封者に1D6ダメージ。'},
+      {name:'粉塵袋',effect:'開封者は次の自分のターン終了まで回避－1。'}
+    ]
+  },
+  '近郊の森':{
+    lockChance:35, trapChance:30, detect:[7,9], disarm:[7,10], unlock:[7,9],
+    traps:[
+      {name:'毒針',effect:'開封者は毒状態になる。※毒状態：次の自分のターン終了時に1D6ダメージを受け、その後解除する。解毒薬または清めの祈りで先に解除できる。'},
+      {name:'絡み蔓',effect:'開封者は拘束状態になる。※拘束状態：次の自分の行動まで回避－2。行動後に解除する。'},
+      {name:'胞子の噴出',effect:'開封者は胞子状態になる。※胞子状態：次の自分のターン終了まで術式・祈祷判定－1。'},
+      {name:'粘着樹液',effect:'開封者は粘着状態になる。※粘着状態：次の自分のターン終了まで回避－1。'}
+    ]
+  },
+  '水辺の湿地':{
+    lockChance:45, trapChance:40, detect:[9,11], disarm:[9,12], unlock:[8,11],
+    traps:[
+      {name:'毒液噴射',effect:'開封者に1D6+1ダメージを与え、毒状態にする。※毒状態：次の自分のターン終了時に1D6ダメージを受け、その後解除する。解毒薬または清めの祈りで先に解除できる。'},
+      {name:'泥の噴出',effect:'開封者は泥まみれ状態になる。※泥まみれ状態：次の自分のターン終了まで回避－1。'},
+      {name:'腐食液',effect:'開封者に1D6ダメージを与え、次のラウンド終了まで防御－1。'},
+      {name:'沼ガス',effect:'開封者は視界不良状態になる。※視界不良状態：次の自分のターン終了まで命中－1。'}
+    ]
+  }
+};
 function selectedTreasureMeta(){ return treasureRows($('treasureTableSelect')?.value||'')[0]||null; }
-function yn(v){return String(v||'なし').trim()==='あり';}
+function randomInt(min,max){min=Number(min)||0;max=Number(max)||min;return min+Math.floor(Math.random()*(max-min+1));}
+function treasureAreaName(tableId, explicit=''){
+  const direct=String(explicit||'').trim();
+  if(direct)return direct;
+  const row=treasureRows(tableId)[0];
+  return String(row?.areaName||'').trim();
+}
+function treasureProfile(areaName){
+  return TREASURE_AREA_PROFILES[areaName] || TREASURE_AREA_PROFILES['街はずれの草原'];
+}
+function generateTreasureSetup(tableId, areaName=''){
+  const row=treasureRows(tableId)[0]||null;
+  if(!row){state.treasureSetup=null;renderTreasureTrapInfo();return null;}
+  const area=treasureAreaName(tableId,areaName);
+  const profile=treasureProfile(area);
+  const hasLock=Math.random()*100<profile.lockChance;
+  const hasTrap=Math.random()*100<profile.trapChance;
+  const trap=hasTrap?profile.traps[Math.floor(Math.random()*profile.traps.length)]:null;
+  state.treasureSetup={
+    tableId:String(tableId||''),areaName:area,chestName:row.chestName||row.tableId||'宝箱',
+    hasLock,hasTrap,
+    unlockDifficulty:randomInt(...profile.unlock),
+    trapDetectDifficulty:randomInt(...profile.detect),
+    trapDisarmDifficulty:randomInt(...profile.disarm),
+    trapName:trap?.name||'',trapEffect:trap?.effect||''
+  };
+  renderTreasureTrapInfo(); saveState(false); return state.treasureSetup;
+}
+function currentTreasureSetup(){
+  const tableId=$('treasureTableSelect')?.value||'';
+  if(!tableId)return null;
+  if(!state.treasureSetup || String(state.treasureSetup.tableId||'')!==String(tableId)) return generateTreasureSetup(tableId);
+  return state.treasureSetup;
+}
+function prepareTreasureEvent(tableId, areaName=''){
+  fillTreasureTables(tableId);
+  const setup=generateTreasureSetup(tableId,areaName);
+  if(setup)addLog(`宝箱状態生成：${setup.areaName||'エリア未設定'} / 鍵${setup.hasLock?'あり':'なし'} / 罠${setup.hasTrap?'あり':'なし'}`);
+  return setup;
+}
 function renderTreasureTrapInfo(){
- const row=selectedTreasureMeta(), box=$('treasureTrapInfo'); if(!box)return;
- if(!row){box.textContent='宝箱表を選択してください。';return;}
- const lines=[`【GM用】${row.chestName||row.tableId||'宝箱'}`,`鍵：${row.hasLock||'なし'}${yn(row.hasLock)?` / 解錠難易度 ${row.unlockDifficulty||'未設定'}`:''}`,`罠：${row.hasTrap||'なし'}`,`罠感知難易度：${row.trapDetectDifficulty||'未設定'}`];
- if(yn(row.hasTrap)){lines.push(`罠解除難易度：${row.trapDisarmDifficulty||'未設定'}`); if(row.trapName)lines.push(`罠：${row.trapName}`); if(row.trapEffect)lines.push(`発動効果：${row.trapEffect}`);}
+ const r=currentTreasureSetup(), box=$('treasureTrapInfo'); if(!box)return;
+ if(!r){box.textContent='宝箱表を選択してください。';return;}
+ const lines=[`【GM用】${r.chestName||r.tableId||'宝箱'}`,`エリア：${r.areaName||'未設定'}`,`鍵：${r.hasLock?'あり':'なし'}${r.hasLock?` / 解錠難易度 ${r.unlockDifficulty}`:''}`,`罠：${r.hasTrap?'あり':'なし'}`,`罠感知難易度：${r.trapDetectDifficulty}`];
+ if(r.hasTrap){lines.push(`罠解除難易度：${r.trapDisarmDifficulty}`); if(r.trapName)lines.push(`罠内容：${r.trapName}`); if(r.trapEffect)lines.push(`発動効果：${r.trapEffect}`);}
  box.textContent=lines.join('\n');
 }
-function trapDetectText(){const r=selectedTreasureMeta(); return r?`【罠感知判定】\n2D6+{感知}>=${r.trapDetectDifficulty||'目標値'}`:'';}
-function trapDisarmText(){const r=selectedTreasureMeta(); return r&&yn(r.hasTrap)?`【罠解除判定】\n2D6+{細工}>=${r.trapDisarmDifficulty||'目標値'}`:'この宝箱に罠は設定されていません。';}
-function unlockText(){const r=selectedTreasureMeta(); return r&&yn(r.hasLock)?`【解錠判定】\n2D6+{細工}>=${r.unlockDifficulty||'目標値'}`:'この宝箱に鍵は設定されていません。';}
+function trapDetectText(){const r=currentTreasureSetup(); return r?`【罠感知判定】\n2D6+{感知}>=${r.trapDetectDifficulty}`:'';}
+function trapDisarmText(){const r=currentTreasureSetup(); return r&&r.hasTrap?`【罠解除判定】\n2D6+{細工}>=${r.trapDisarmDifficulty}`:'この宝箱に罠はありません。';}
+function unlockText(){const r=currentTreasureSetup(); return r&&r.hasLock?`【解錠判定】\n2D6+{細工}>=${r.unlockDifficulty}`:'この宝箱に鍵はありません。';}
 const APPRAISAL_FEES={'初級':30,'中級':80,'上級':180,'特級':350};
 const TRANSCRIPTION_FEES={'初級':80,'中級':180,'上級':400,'特級':750};
 function appraisalFee(rank='初級'){return APPRAISAL_FEES[String(rank||'初級').trim()]||30;}
@@ -1333,7 +1401,7 @@ function bind(){
   $('rollQuestEventBtn').addEventListener('click',rollQuestEvent); $('copyQuestEventBtn').addEventListener('click',()=>copyText(state.lastQuestEventText,'questCopyNote'));
   $('rollRumorBtn').addEventListener('click',rollRumor); $('applyRumorBtn').addEventListener('click',()=>applyRumorIndex($('rumorSelectForInn').value,true)); $('clearRumorBtn').addEventListener('click',clearRumor); $('copyRumorBtn').addEventListener('click',()=>copyText(state.lastRumorText,'rumorCopyNote'));
   $('rollEventBtn').addEventListener('click',rollEvent); $('copyEventBtn').addEventListener('click',()=>copyText(state.lastEventText,'eventCopyNote'));
-  $('treasureTableSelect').addEventListener('change',renderTreasureTrapInfo); $('copyTrapDetectBtn').addEventListener('click',()=>copyText(trapDetectText(),'treasureCopyNote')); $('copyTrapDisarmBtn').addEventListener('click',()=>copyText(trapDisarmText(),'treasureCopyNote')); $('copyUnlockBtn').addEventListener('click',()=>copyText(unlockText(),'treasureCopyNote')); $('rollTreasureBtn').addEventListener('click',rollTreasure); $('copyTreasureBtn').addEventListener('click',()=>copyText(state.lastTreasureText,'treasureCopyNote'));
+  $('treasureTableSelect').addEventListener('change',()=>generateTreasureSetup($('treasureTableSelect').value)); $('copyTrapDetectBtn').addEventListener('click',()=>copyText(trapDetectText(),'treasureCopyNote')); $('copyTrapDisarmBtn').addEventListener('click',()=>copyText(trapDisarmText(),'treasureCopyNote')); $('copyUnlockBtn').addEventListener('click',()=>copyText(unlockText(),'treasureCopyNote')); $('rollTreasureBtn').addEventListener('click',rollTreasure); $('copyTreasureBtn').addEventListener('click',()=>copyText(state.lastTreasureText,'treasureCopyNote'));
   $('rollAppraisalBtn').addEventListener('click',rollAppraisal); $('copyAppraisalBtn').addEventListener('click',()=>copyText(state.lastAppraisalText,'appraisalCopyNote'));
   $('rollDropBtn').addEventListener('click',rollDrops); $('copyDropBtn').addEventListener('click',()=>copyText(state.lastDropText,'dropCopyNote')); $('copyDropSuccessBtn').addEventListener('click',()=>copyText(state.lastDropSuccessText,'dropCopyNote'));
   $('copyLogBtn').addEventListener('click',()=>copyText(state.log.slice().reverse().join('\n'))); $('clearLogBtn').addEventListener('click',()=>{state.log=[]; renderLog(); saveState(false);});
