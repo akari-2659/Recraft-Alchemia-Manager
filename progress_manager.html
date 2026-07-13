@@ -37,13 +37,13 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.154 / 最終更新日：2026年7月13日</div>
+<div class="ra-build-info">Version：v90.8.157 / 最終更新日：2026年7月13日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.154 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.157 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -260,7 +260,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.154';
+const VERSION='v90.8.157';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -1064,16 +1064,37 @@ function resolveEncounterCountToken(token='',partySize=selectedPartySize()){
   if(raw==='人数半数切捨')return String(clampEncounterCount(Math.floor(partySize/2),1,4));
   return raw;
 }
-function encounterCompositionText(row={}){
+function encounterCompositionGroups(row={},partySize=selectedPartySize()){
   const raw=String(row.encounterComposition||'').trim();
-  if(raw){
-    const lines=raw.split(/\n+|;|；/).map(line=>{const cols=line.split(/\t|,|，|、/).map(v=>String(v||'').trim()).filter(Boolean);if(cols.length>=3)return `${cols[0]}：${cols[1]} ×${resolveEncounterCountToken(cols[2])}`;if(cols.length===2)return `${cols[0]}：${cols[1]}`;return line.trim();}).filter(Boolean);
-    if(lines.length)return ['出現構成：',...lines].join('\n');
-  }
+  if(!raw)return [];
+  return raw.split(/\n+|;|；/).map(line=>{
+    const cols=line.split(/\t|,|，|、/).map(v=>String(v||'').trim()).filter(Boolean);
+    if(cols.length<3)return null;
+    const resolved=resolveEncounterCountToken(cols[2],partySize);
+    const count=Number(resolved);
+    if(!Number.isFinite(count)||count<1)return null;
+    return {position:cols[0],name:cols[1],count:Math.floor(count)};
+  }).filter(Boolean);
+}
+function encounterCompositionText(row={}){
+  const groups=encounterCompositionGroups(row);
+  if(groups.length)return ['出現構成：',...groups.map(group=>`${group.position}：${group.name} ×${group.count}`)].join('\n');
   const formation=String(row.encounterFormation||'').trim();return formation?`配置：${formation}`:'';
+}
+function encounterCompositionTotal(row={},partySize=selectedPartySize()){
+  const groups=encounterCompositionGroups(row,partySize);
+  return groups.length?groups.reduce((sum,group)=>sum+group.count,0):'';
+}
+function resolveEncounterTokensInText(text='',partySize=selectedPartySize()){
+  return String(text||'')
+    .replace(/人数半数切上/g,resolveEncounterCountToken('人数半数切上',partySize))
+    .replace(/人数半数切捨/g,resolveEncounterCountToken('人数半数切捨',partySize))
+    .replace(/人数同数/g,resolveEncounterCountToken('人数同数',partySize));
 }
 function encounterCountText(row={},resolution=null){
   if(resolution)return `出現数：${resolution.total}体（パーティー${resolution.partySize}人 / 遭遇値${resolution.spent} / ${resolution.pattern}）`;
+  const compositionTotal=encounterCompositionTotal(row);
+  if(compositionTotal!=='')return `出現数：${compositionTotal}体（パーティー${selectedPartySize()}人 / 出現構成から算出）`;
   const count=encounterCountForEvent(row);return count?`出現数：${count}体（パーティー${selectedPartySize()}人 / ${row.encounterCountRule||'指定なし'}）`:'';
 }
 function formatEventOutput(prefix,picked,area,tableId,extraLines=[]){
@@ -1081,7 +1102,7 @@ function formatEventOutput(prefix,picked,area,tableId,extraLines=[]){
   const random=String(picked.encounterCountRule||'').trim()==='ランダム編成'?generateRandomEncounter(area?.name||picked.areaName||'',{partySize:selectedPartySize()}):null;
   const encounter=encounterCountText(picked,random);
   const composition=random?encounterResolutionBlock(random):encounterCompositionText(picked);
-  return [prefix,area?`エリア：${area.name||area.id}`:'',area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'',`表：${tableId}`,picked.eventName?`イベント：${picked.eventName}`:'',picked.eventType?`種別：${picked.eventType}`:'',condition,encounter,composition,picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'',picked.result?`結果：${picked.result}`:'',picked.progressEffect?`補足：${picked.progressEffect}`:'',...extraLines].filter(Boolean).join('\n');
+  return [prefix,area?`エリア：${area.name||area.id}`:'',area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'',`表：${tableId}`,picked.eventName?`イベント：${picked.eventName}`:'',picked.eventType?`種別：${picked.eventType}`:'',condition,encounter,composition,picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'',picked.result?`結果：${resolveEncounterTokensInText(picked.result)}`:'',picked.progressEffect?`補足：${picked.progressEffect}`:'',...extraLines].filter(Boolean).join('\n');
 }
 function triggerAreaClearRumorEvent(area){
   const rumor=selectedRumor();
