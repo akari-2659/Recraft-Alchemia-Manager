@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.158</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.160</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -484,7 +484,7 @@
 </style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.158 / 最終更新日：2026年7月13日</div>
+<div class="ra-build-info">Version：v90.8.160 / 最終更新日：2026年7月13日</div>
 
 <header>
   <div class="title-card">
@@ -1052,7 +1052,7 @@
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.158';
+const RECRAFT_DB_VERSION = 'v90.8.160';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.157';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -3113,6 +3113,9 @@ function monsterChatPalette(row={}){
   }
   if(actions.length){
     const actionNames = actions.map(a=>compactMonsterText(a.name) || '名称未設定').filter(Boolean);
+    const isConditionalAction = action=>/(のみ使用|HPが半分以下|HP半分以下|次の行動で|戦闘中1回|1戦闘1回)/.test(`${action.effect || ''} ${action.power || ''}`);
+    const normalActionNames = actions.filter(a=>!isConditionalAction(a)).map(a=>compactMonsterText(a.name) || '名称未設定').filter(Boolean);
+    if(normalActionNames.length && normalActionNames.length < actionNames.length) lines.push(`choice[${normalActionNames.join(',')}]`);
     if(actionNames.length) lines.push(`choice[${actionNames.join(',')}]`);
     lines.push(`// ${name}`);
     actions.forEach(action=>{
@@ -4309,7 +4312,7 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='equipmentUpgradeDetail') help += '<div class="form-help">装備強化内容が特殊効果の場合、発動条件・対象・補正値・持続期間・解除条件・重複可否まで具体的に入力します。</div>';
   if(field==='craftType') help += '<div class="form-help">調合・鍛冶・武器派生など、製作データの用途を選びます。管理画面ではこの区分ごとに分割表示します。</div>';
   if(field==='baseItem') help += '<div class="form-help">武器派生の派生元です。武器に加えて、魔導書・祈祷書も候補へ表示します。</div>';
-  if(field==='branchType') help += '<div class="form-help">基礎武器から並列に伸ばす素材派生ラインです。同一系統の段階進化は可能ですが、派生途中から別系統へ分岐させません。派生素材は実装済みまたは実装確定素材だけを使用します。</div>';
+  if(field==='branchType') help += '<div class="form-help">基礎武器から並列に伸ばす素材派生ラインです。同一系統の段階進化は可能ですが、派生途中から別系統へ分岐させません。派生素材は実装済みまたは実装確定素材だけを使用し、複数種類・合計複数個を必須とします。</div>';
   if(field==='offhandBonus') help += '<div class="form-help">二刀攻撃で副手にした時に追加する固定値。短剣/片手剣/槌/片手槍は2、片手斧は3、杖は1が目安です。</div>';
   if(field==='checkType') help += '<div class="form-help">左側は対応技能、右側は目標値です。右側は候補から選ぶほか、数値や任意の名称を直接入力できます。</div>';
   if(field==='fixedEvents') help += '<div class="form-help">固定イベント欄の「追加」から、発生%・イベント名・内容を1件ずつ登録します。</div>';
@@ -4483,6 +4486,30 @@ function assertMonsterMaterialUpgradeRows(rows=[]){
   const rest=invalid.length>10 ? `\nほか${invalid.length-10}件` : '';
   throw new Error(`魔物素材には装備強化内容・装備強化値・強化対象の設定が必須です。特殊効果の場合は特殊能力詳細も必須です。\n${details}${rest}`);
 }
+function weaponBranchMaterialSummary(row={}){
+  if(String(row.craftType || '').trim()!=='武器派生') return {types:0,total:0};
+  const parts=String(row.requiredMaterials || '').split(/[,、\n]+/).map(v=>v.trim()).filter(Boolean);
+  const names=new Set();
+  let total=0;
+  parts.forEach(part=>{
+    const m=part.match(/^(.*?)×\s*(\d+)/);
+    const name=String(m ? m[1] : part).trim();
+    if(name) names.add(name);
+    total += m ? Math.max(0,Number(m[2])||0) : 1;
+  });
+  return {types:names.size,total};
+}
+function assertWeaponBranchMaterialRows(rows=[]){
+  const invalid=(rows || []).filter(row=>{
+    if(String(row.craftType || '').trim()!=='武器派生') return false;
+    const s=weaponBranchMaterialSummary(row);
+    return s.types<2 || s.total<2;
+  });
+  if(!invalid.length) return;
+  const details=invalid.slice(0,10).map(row=>`・${String(row.name || row.id || '名称未設定')}：${String(row.requiredMaterials || '必要素材未設定')}`).join('\n');
+  const rest=invalid.length>10 ? `\nほか${invalid.length-10}件` : '';
+  throw new Error(`武器派生には複数種類かつ合計複数個の素材が必要です。単一素材だけでは保存・DB送信できません。\n${details}${rest}`);
+}
 function collectFormRow(){
   const {key,idx}=formState; if(!key) throw new Error('編集中のデータがありません');
   syncAllCheckBuilders($('editModal'));
@@ -4505,6 +4532,7 @@ function collectFormRow(){
   const clean = {};
   (SCHEMA[key]||[]).forEach(field=>clean[field]=base[field] === undefined || base[field] === null ? '' : base[field]);
   if(key==='items') assertMonsterMaterialUpgradeRows([clean]);
+  if(key==='recipes') assertWeaponBranchMaterialRows([clean]);
   return clean;
 }
 function applyFormToState(){
@@ -5160,6 +5188,7 @@ function rowsForTableForSave(tableKey){
 }
 function cloneRowsForSave(baseKey, rows){
   if(baseKey==='items') assertMonsterMaterialUpgradeRows(rows || []);
+  if(baseKey==='recipes') assertWeaponBranchMaterialRows(rows || []);
   return (rows || []).map(src=>{
     const r = {...(src || {})};
     if((baseKey === 'items' || baseKey === 'spells' || baseKey === 'equipment_categories')){

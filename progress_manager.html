@@ -37,13 +37,13 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.158 / 最終更新日：2026年7月13日</div>
+<div class="ra-build-info">Version：v90.8.160 / 最終更新日：2026年7月13日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.158 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.160 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -260,7 +260,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.158';
+const VERSION='v90.8.160';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -938,17 +938,26 @@ function selectedPartySize(){
 const ENCOUNTER_COSTS={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,'ブランチリング':1,'マッドホッパー':1,'ミストモスキート':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'バブルスライム':2,
-  'ルートハウンド':3,'ドロマール':3
+  'ルートハウンド':3,'ドロマール':3,
+  'ミラースライム':2,'フェイズモス':1,'グラスレイ':3,'エコーリード':2,'リフトクラブ':3,'ヴォイドハウンド':3
 };
 const AREA_ENCOUNTER_POOLS={
   '街はずれの草原':['プチスライム','ラフィンラット','ラピットホーン','ヴェスパット','カラパスビートル','グラウワーム'],
   '近郊の森':['ラフィンラット','ラピットホーン','ヴェスパット','カラパスビートル','ラスクレイル','マイコニド','ルートハウンド','ブランチリング'],
-  '水辺の湿地':['プチスライム','グラウワーム','マイコニド','マッドホッパー','バブルスライム','ミストモスキート','ドロマール']
+  '水辺の湿地':['プチスライム','グラウワーム','マイコニド','マッドホッパー','バブルスライム','ミストモスキート','ドロマール'],
+  '反照の水庭':['ミラースライム','フェイズモス','グラスレイ','エコーリード','リフトクラブ','ヴォイドハウンド']
 };
 const ENCOUNTER_BACKLINE_RATE={
   'プチスライム':.15,'ラフィンラット':.10,'ラピットホーン':.10,'ヴェスパット':.60,'カラパスビートル':.10,'グラウワーム':.10,
   'ラスクレイル':.50,'マイコニド':.55,'ルートハウンド':.20,'ブランチリング':.30,'マッドホッパー':.15,'バブルスライム':.50,
-  'ミストモスキート':.60,'ドロマール':.10
+  'ミストモスキート':.60,'ドロマール':.10,
+  'ミラースライム':.30,'フェイズモス':.55,'グラスレイ':.30,'エコーリード':.50,'リフトクラブ':.15,'ヴォイドハウンド':.35
+};
+const AREA_ENCOUNTER_BUDGET_OFFSETS={
+  '街はずれの草原':{min:0,max:0},
+  '近郊の森':{min:0,max:1},
+  '水辺の湿地':{min:1,max:1},
+  '反照の水庭':{min:1,max:2}
 };
 function partyEncounterProfile(size=selectedPartySize()){
   const profiles={1:{min:2,max:3,count:3},2:{min:3,max:4,count:4},3:{min:4,max:5,count:5},4:{min:4,max:5,count:5},5:{min:5,max:6,count:6},6:{min:6,max:7,count:7},7:{min:7,max:8,count:8}};
@@ -983,7 +992,8 @@ function generateRandomEncounter(areaName='', options={}){
   const reservedPicks=[];
   reserved.forEach(g=>{for(let i=0;i<Math.max(0,Number(g.count)||0);i++)reservedPicks.push(String(g.name||''));});
   const reservedCost=reservedPicks.reduce((sum,n)=>sum+(ENCOUNTER_COSTS[n]||1),0);
-  const baseBudget=Number(options.budgetOverride)||randomInt(profile.min,profile.max);
+  const areaOffset=AREA_ENCOUNTER_BUDGET_OFFSETS[String(areaName||'').trim()]||{min:0,max:0};
+  const baseBudget=Number(options.budgetOverride)||randomInt(profile.min+Number(areaOffset.min||0),profile.max+Number(areaOffset.max||0));
   const budget=Math.max(reservedCost,baseBudget);
   let remaining=Math.max(0,budget-reservedCost);
   const maxCount=Math.max(reservedPicks.length,Number(options.maxCount)||profile.count);
