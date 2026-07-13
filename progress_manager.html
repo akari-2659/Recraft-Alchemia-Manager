@@ -37,13 +37,13 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.149 / 最終更新日：2026年7月12日</div>
+<div class="ra-build-info">Version：v90.8.154 / 最終更新日：2026年7月13日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.149 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.154 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -210,7 +210,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
       <h2>宝箱抽選 <span class="copy-note" id="treasureCopyNote">コピーしました</span></h2>
       <label>宝箱表</label>
       <select id="treasureTableSelect"></select>
-      <p class="muted small">発見・宝箱イベントで表示された宝箱表IDを選び、「宝箱の中身を決定」を押してください。中身・鍵・罠・各難易度をその時点で同時に決定します。鍵・罠・中身なしはそれぞれ独立して発生します。クエスト固有宝箱にはこの抽選を適用しません。</p>
+      <p class="muted small">発見・宝箱イベントで表示された宝箱表IDを選び、「宝箱の中身を決定」を押してください。中身・鍵・罠・各難易度をその時点で同時に決定します。鍵がある場合は、エリアに応じた解錠難易度も設定します。鍵・罠・中身なしはそれぞれ独立して発生します。クエスト固有宝箱にはこの抽選を適用しません。</p>
       <div class="buttons">
         <button class="secondary" id="copyTrapDetectBtn">罠感知判定をコピー</button><button class="secondary" id="copyTrapDisarmBtn">罠解除判定をコピー</button><button class="secondary" id="copyUnlockBtn">解錠判定をコピー</button><button id="rollTreasureBtn">宝箱の中身を決定</button>
         <button class="secondary" id="copyTreasureBtn">結果コピー</button>
@@ -260,11 +260,11 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.149';
+const VERSION='v90.8.154';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
-const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},lastEventText:'',lastEventKey:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',triggeredQuestEvents:{},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastAppraisalText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],treasureSetup:null,treasureContext:null,log:[]};
+const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},lastEventText:'',lastEventKey:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',triggeredQuestEvents:{},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastAppraisalText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],questEncounterCache:{},treasureSetup:null,treasureContext:null,log:[]};
 let currentQuestCategory='重要';
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function clamp(n){return Math.max(0,Math.min(100,Number(n)||0));}
@@ -273,13 +273,13 @@ function addLog(text){state.log.unshift(`[${now()}] ${text}`); state.log=state.l
 function renderLog(){ $('log').innerHTML = state.log.length ? state.log.map(x=>`<div>${esc(x)}</div>`).join('') : '<div class="muted">ログはまだありません。</div>'; }
 function setStatus(type,msg){const el=$('dbStatus'); el.className='status '+(type||''); el.textContent=msg;}
 function saveState(show=true){
-  localStorage.setItem(STORE_KEY, JSON.stringify({progress:state.progress, log:state.log, adminKey:$('adminKey').value||'', lastDailyQuestText:state.lastDailyQuestText||'', lastDailyQuestKeys:state.lastDailyQuestKeys||[], dailyQuestCount:Number($('dailyQuestCount')?.value||3)||3, lastQuestFixedEventText:state.lastQuestFixedEventText||'', lastQuestFixedEventKey:state.lastQuestFixedEventKey||'', triggeredQuestEvents:state.triggeredQuestEvents||{}, treasureSetup:state.treasureSetup||null, treasureContext:state.treasureContext||null}));
+  localStorage.setItem(STORE_KEY, JSON.stringify({progress:state.progress, log:state.log, adminKey:$('adminKey').value||'', lastDailyQuestText:state.lastDailyQuestText||'', lastDailyQuestKeys:state.lastDailyQuestKeys||[], questEncounterCache:state.questEncounterCache||{}, dailyQuestCount:Number($('dailyQuestCount')?.value||3)||3, lastQuestFixedEventText:state.lastQuestFixedEventText||'', lastQuestFixedEventKey:state.lastQuestFixedEventKey||'', triggeredQuestEvents:state.triggeredQuestEvents||{}, treasureSetup:state.treasureSetup||null, treasureContext:state.treasureContext||null}));
   if(show) addLog('進行状態を保存しました。');
 }
 function loadState(){
   // DB読込時の初期ゲージは必ず0%にするため、進行度は自動復元しない。
   // 保存済み進行を使う場合は「保存済み進行を復元」を押す。
-  try{const raw=localStorage.getItem(STORE_KEY); if(!raw)return; const data=JSON.parse(raw); state.log=data.log||[]; state.lastDailyQuestText=data.lastDailyQuestText||''; state.lastDailyQuestKeys=Array.isArray(data.lastDailyQuestKeys)?data.lastDailyQuestKeys:[]; $('adminKey').value=data.adminKey||''; if($('dailyQuestCount')&&data.dailyQuestCount) $('dailyQuestCount').value=String(data.dailyQuestCount); state.treasureSetup=data.treasureSetup||null; state.treasureContext=data.treasureContext||null;}catch(e){}
+  try{const raw=localStorage.getItem(STORE_KEY); if(!raw)return; const data=JSON.parse(raw); state.log=data.log||[]; state.lastDailyQuestText=data.lastDailyQuestText||''; state.lastDailyQuestKeys=Array.isArray(data.lastDailyQuestKeys)?data.lastDailyQuestKeys:[]; state.questEncounterCache=(data.questEncounterCache&&typeof data.questEncounterCache==='object')?data.questEncounterCache:{}; $('adminKey').value=data.adminKey||''; if($('dailyQuestCount')&&data.dailyQuestCount) $('dailyQuestCount').value=String(data.dailyQuestCount); state.treasureSetup=data.treasureSetup||null; state.treasureContext=data.treasureContext||null;}catch(e){}
 }
 function restoreSavedState(){
   try{
@@ -290,6 +290,7 @@ function restoreSavedState(){
     state.log=data.log||state.log||[];
     state.lastDailyQuestText=data.lastDailyQuestText||state.lastDailyQuestText||'';
     state.lastDailyQuestKeys=Array.isArray(data.lastDailyQuestKeys)?data.lastDailyQuestKeys:(state.lastDailyQuestKeys||[]);
+    state.questEncounterCache=(data.questEncounterCache&&typeof data.questEncounterCache==='object')?data.questEncounterCache:(state.questEncounterCache||{});
     state.lastQuestFixedEventText=data.lastQuestFixedEventText||state.lastQuestFixedEventText||'';
     state.lastQuestFixedEventKey=data.lastQuestFixedEventKey||state.lastQuestFixedEventKey||'';
     state.triggeredQuestEvents=(data.triggeredQuestEvents&&typeof data.triggeredQuestEvents==='object')?data.triggeredQuestEvents:(state.triggeredQuestEvents||{});
@@ -312,6 +313,11 @@ function questBossText(q={}){
   return name || monsters || '';
 }
 function questBossFormationText(q={}){
+  const marker=String(q.questBossComposition||'').trim();
+  if(marker.startsWith('ランダム編成') || marker.startsWith('指定対象＋ランダム随伴')){
+    const resolved=resolveQuestEncounter(q);
+    return resolved ? encounterResolutionText(resolved) : String(q.questBossFormation||'人数対応ランダム編成').trim();
+  }
   return String(q.questBossFormation || q.questBossComposition || '').trim();
 }
 
@@ -431,6 +437,7 @@ function ensureDailyQuestSelection(){
 }
 function rollDailyQuests(){
   const rows=dailyQuestRows();
+  state.questEncounterCache={};
   const count=Math.max(1, Math.min(10, Number($('dailyQuestCount')?.value || 3) || 3));
   const current=new Set((state.lastDailyQuestKeys||[]).map(String));
   let pool=rows.filter(q=>!current.has(String(q.id||q.name||'')));
@@ -928,63 +935,153 @@ function selectedPartySize(){
   const n = Number($('partySizeSelect')?.value || 4);
   return Math.min(7, Math.max(1, Number.isFinite(n) ? Math.floor(n) : 4));
 }
+const ENCOUNTER_COSTS={
+  'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,'ブランチリング':1,'マッドホッパー':1,'ミストモスキート':1,
+  'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'バブルスライム':2,
+  'ルートハウンド':3,'ドロマール':3
+};
+const AREA_ENCOUNTER_POOLS={
+  '街はずれの草原':['プチスライム','ラフィンラット','ラピットホーン','ヴェスパット','カラパスビートル','グラウワーム'],
+  '近郊の森':['ラフィンラット','ラピットホーン','ヴェスパット','カラパスビートル','ラスクレイル','マイコニド','ルートハウンド','ブランチリング'],
+  '水辺の湿地':['プチスライム','グラウワーム','マイコニド','マッドホッパー','バブルスライム','ミストモスキート','ドロマール']
+};
+const ENCOUNTER_BACKLINE_RATE={
+  'プチスライム':.15,'ラフィンラット':.10,'ラピットホーン':.10,'ヴェスパット':.60,'カラパスビートル':.10,'グラウワーム':.10,
+  'ラスクレイル':.50,'マイコニド':.55,'ルートハウンド':.20,'ブランチリング':.30,'マッドホッパー':.15,'バブルスライム':.50,
+  'ミストモスキート':.60,'ドロマール':.10
+};
+function partyEncounterProfile(size=selectedPartySize()){
+  const profiles={1:{min:2,max:3,count:3},2:{min:3,max:4,count:4},3:{min:4,max:5,count:5},4:{min:4,max:5,count:5},5:{min:5,max:6,count:6},6:{min:6,max:7,count:7},7:{min:7,max:8,count:8}};
+  return profiles[size]||profiles[4];
+}
+function randomInt(min,max){const lo=Math.ceil(Number(min)||0),hi=Math.floor(Number(max)||lo);return lo+Math.floor(Math.random()*Math.max(1,hi-lo+1));}
+function randomRow(rows=[]){return rows.length?rows[Math.floor(Math.random()*rows.length)]:null;}
+function encounterPoolForArea(areaName=''){
+  const name=String(areaName||'').trim();
+  const names=AREA_ENCOUNTER_POOLS[name]||[];
+  const available=new Set((state.monsters||[]).filter(m=>String(m.rank||'')!=='ボス').map(m=>String(m.name||'').trim()));
+  return names.filter(n=>available.has(n));
+}
+function groupEncounterPicks(picks=[]){
+  const map=new Map();
+  picks.forEach(name=>map.set(name,(map.get(name)||0)+1));
+  const groups=[...map.entries()].map(([name,count])=>({
+    name,count,
+    formation:Math.random()<(ENCOUNTER_BACKLINE_RATE[name]??.25)?'後衛':'前衛',
+    cost:ENCOUNTER_COSTS[name]||1
+  }));
+  if(groups.length && !groups.some(g=>g.formation==='前衛')){
+    groups[Math.floor(Math.random()*groups.length)].formation='前衛';
+  }
+  return groups;
+}
+function generateRandomEncounter(areaName='', options={}){
+  const size=Number(options.partySize||selectedPartySize());
+  const profile=partyEncounterProfile(size);
+  const pool=encounterPoolForArea(areaName);
+  const reserved=Array.isArray(options.reservedGroups)?options.reservedGroups:[];
+  const reservedPicks=[];
+  reserved.forEach(g=>{for(let i=0;i<Math.max(0,Number(g.count)||0);i++)reservedPicks.push(String(g.name||''));});
+  const reservedCost=reservedPicks.reduce((sum,n)=>sum+(ENCOUNTER_COSTS[n]||1),0);
+  const baseBudget=Number(options.budgetOverride)||randomInt(profile.min,profile.max);
+  const budget=Math.max(reservedCost,baseBudget);
+  let remaining=Math.max(0,budget-reservedCost);
+  const maxCount=Math.max(reservedPicks.length,Number(options.maxCount)||profile.count);
+  const picks=[...reservedPicks];
+  if(!pool.length && !picks.length)return null;
+  const roll=Math.random();
+  const pattern=options.pattern || (roll<.32?'単一種の群れ':roll<.78?'混成遭遇':'強敵＋取り巻き');
+  const eligible=()=>pool.filter(n=>(ENCOUNTER_COSTS[n]||1)<=remaining);
+  if(pattern==='単一種の群れ' && remaining>0){
+    const choices=pool.filter(n=>(ENCOUNTER_COSTS[n]||1)<=remaining);
+    const name=randomRow(choices);
+    if(name){const cost=ENCOUNTER_COSTS[name]||1;while(remaining>=cost&&picks.length<maxCount){picks.push(name);remaining-=cost;}}
+  }else if(pattern==='強敵＋取り巻き' && remaining>0){
+    const strong=[...pool].filter(n=>(ENCOUNTER_COSTS[n]||1)<=remaining).sort((a,b)=>(ENCOUNTER_COSTS[b]||1)-(ENCOUNTER_COSTS[a]||1));
+    const maxCost=strong.length?(ENCOUNTER_COSTS[strong[0]]||1):0;
+    const strongPick=randomRow(strong.filter(n=>(ENCOUNTER_COSTS[n]||1)===maxCost));
+    if(strongPick){picks.push(strongPick);remaining-=ENCOUNTER_COSTS[strongPick]||1;}
+    const minions=pool.filter(n=>(ENCOUNTER_COSTS[n]||1)===1);
+    while(remaining>0&&picks.length<maxCount){const n=randomRow(minions.filter(x=>(ENCOUNTER_COSTS[x]||1)<=remaining))||randomRow(eligible());if(!n)break;picks.push(n);remaining-=ENCOUNTER_COSTS[n]||1;}
+  }else{
+    let guard=30;
+    while(remaining>0&&picks.length<maxCount&&guard-->0){
+      const choices=eligible();if(!choices.length)break;
+      let n=randomRow(choices);
+      if(picks.length&&choices.some(x=>x!==picks[picks.length-1])&&Math.random()<.75){n=randomRow(choices.filter(x=>x!==picks[picks.length-1]));}
+      picks.push(n);remaining-=ENCOUNTER_COSTS[n]||1;
+    }
+  }
+  if(!picks.length){const n=randomRow(pool);if(n)picks.push(n);}
+  const groups=groupEncounterPicks(picks);
+  return {areaName,partySize:size,budget,spent:groups.reduce((s,g)=>s+g.cost*g.count,0),pattern,groups,total:picks.length};
+}
+function encounterResolutionText(resolution){
+  if(!resolution||!resolution.groups?.length)return '';
+  return resolution.groups.map(g=>`${g.formation}：${g.name} ×${g.count}`).join(' / ');
+}
+function encounterResolutionBlock(resolution){
+  if(!resolution||!resolution.groups?.length)return '';
+  return ['出現構成：',...resolution.groups.map(g=>`${g.formation}：${g.name} ×${g.count}`)].join('\n');
+}
+function resolveQuestEncounter(q={},force=false){
+  const marker=String(q.questBossComposition||'').trim();
+  if(!marker.startsWith('ランダム編成')&&!marker.startsWith('指定対象＋ランダム随伴'))return null;
+  const size=selectedPartySize();
+  const key=`${q.id||q.name||'quest'}::${size}`;
+  state.questEncounterCache=state.questEncounterCache||{};
+  if(!force&&state.questEncounterCache[key])return state.questEncounterCache[key];
+  const parts=marker.split(/,|，/).map(v=>v.trim());
+  let resolved=null;
+  if(parts[0]==='ランダム編成'){
+    resolved=generateRandomEncounter(parts[1]||q.areaName||'',{partySize:size});
+  }else{
+    const target=parts[1]||String(q.bossMonster||'').split('/')[0].trim();
+    const count=Math.max(1,Number(parts[2])||1);
+    resolved=generateRandomEncounter(parts[3]||q.areaName||'',{partySize:size,reservedGroups:[{name:target,count}],pattern:'混成遭遇'});
+  }
+  if(resolved){state.questEncounterCache[key]=resolved;saveState(false);}
+  return resolved;
+}
 function clampEncounterCount(n, min=1, max=7){
-  const lo = Math.max(1, Number(min) || 1);
-  const hi = Math.min(7, Math.max(lo, Number(max) || 7));
-  const value = Math.max(lo, Math.min(hi, Math.floor(Number(n) || lo)));
-  return value;
+  const lo=Math.max(1,Number(min)||1),hi=Math.min(8,Math.max(lo,Number(max)||8));
+  return Math.max(lo,Math.min(hi,Math.floor(Number(n)||lo)));
 }
 function encounterCountForEvent(row={}, partySize=selectedPartySize()){
-  const rule = String(row.encounterCountRule || '').trim();
-  if(!rule) return '';
-  const min = row.encounterCountMin || 1;
-  const max = row.encounterCountMax || (rule === '人数同数' ? 7 : 4);
-  if(rule === '固定') return clampEncounterCount(row.encounterCountMin || row.encounterCountMax || 1, min, max);
-  if(rule === '人数同数') return clampEncounterCount(partySize, min, max);
-  if(rule === '半数切上') return clampEncounterCount(Math.ceil(partySize / 2), min, max);
+  const rule=String(row.encounterCountRule||'').trim();
+  if(!rule||rule==='ランダム編成')return '';
+  const min=row.encounterCountMin||1,max=row.encounterCountMax||(rule==='人数同数'?7:4);
+  if(rule==='固定')return clampEncounterCount(row.encounterCountMin||row.encounterCountMax||1,min,max);
+  if(rule==='人数同数')return clampEncounterCount(partySize,min,max);
+  if(rule==='半数切上')return clampEncounterCount(Math.ceil(partySize/2),min,max);
   return '';
 }
-
-function resolveEncounterCountToken(token='', partySize=selectedPartySize()){
-  const raw = String(token || '').trim();
-  if(!raw) return '';
-  if(/^\d+$/.test(raw)) return raw;
-  if(raw === '人数同数') return String(clampEncounterCount(partySize, 1, 7));
-  if(raw === '人数半数切上') return String(clampEncounterCount(Math.ceil(partySize / 2), 1, 4));
-  if(raw === '人数半数切捨') return String(clampEncounterCount(Math.floor(partySize / 2), 1, 4));
+function resolveEncounterCountToken(token='',partySize=selectedPartySize()){
+  const raw=String(token||'').trim();if(!raw)return '';
+  if(/^\d+$/.test(raw))return raw;
+  if(raw==='人数同数')return String(clampEncounterCount(partySize,1,7));
+  if(raw==='人数半数切上')return String(clampEncounterCount(Math.ceil(partySize/2),1,4));
+  if(raw==='人数半数切捨')return String(clampEncounterCount(Math.floor(partySize/2),1,4));
   return raw;
 }
 function encounterCompositionText(row={}){
-  const raw = String(row.encounterComposition || '').trim();
+  const raw=String(row.encounterComposition||'').trim();
   if(raw){
-    const lines = raw.split(/\n+|;|；/).map(line=>{
-      const cols = line.split(/\t|,|，|、/).map(s=>String(s||'').trim()).filter(Boolean);
-      if(cols.length >= 3){
-        return `${cols[0]}：${cols[1]} ×${resolveEncounterCountToken(cols[2])}`;
-      }
-      if(cols.length === 2){
-        return `${cols[0]}：${cols[1]}`;
-      }
-      return line.trim();
-    }).filter(Boolean);
-    if(lines.length) return ['出現構成：', ...lines].join('\n');
+    const lines=raw.split(/\n+|;|；/).map(line=>{const cols=line.split(/\t|,|，|、/).map(v=>String(v||'').trim()).filter(Boolean);if(cols.length>=3)return `${cols[0]}：${cols[1]} ×${resolveEncounterCountToken(cols[2])}`;if(cols.length===2)return `${cols[0]}：${cols[1]}`;return line.trim();}).filter(Boolean);
+    if(lines.length)return ['出現構成：',...lines].join('\n');
   }
-  const formation = String(row.encounterFormation || '').trim();
-  if(formation) return `配置：${formation}`;
-  return '';
+  const formation=String(row.encounterFormation||'').trim();return formation?`配置：${formation}`:'';
 }
-
-function encounterCountText(row={}){
-  const count = encounterCountForEvent(row);
-  if(!count) return '';
-  return `出現数：${count}体（パーティー${selectedPartySize()}人 / ${row.encounterCountRule || '指定なし'}）`;
+function encounterCountText(row={},resolution=null){
+  if(resolution)return `出現数：${resolution.total}体（パーティー${resolution.partySize}人 / 遭遇値${resolution.spent} / ${resolution.pattern}）`;
+  const count=encounterCountForEvent(row);return count?`出現数：${count}体（パーティー${selectedPartySize()}人 / ${row.encounterCountRule||'指定なし'}）`:'';
 }
-
-function formatEventOutput(prefix, picked, area, tableId, extraLines=[]){
-  const condition = eventConditionType(picked)==='なし' ? '' : `前提：${eventConditionType(picked)}${picked.conditionValue?` / ${picked.conditionValue}`:''}`;
-  const encounter = encounterCountText(picked);
-  const composition = encounterCompositionText(picked);
-  return [prefix, area?`エリア：${area.name||area.id}`:'', area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'', `表：${tableId}`, picked.eventName?`イベント：${picked.eventName}`:'', picked.eventType?`種別：${picked.eventType}`:'', condition, encounter, composition, picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'', picked.result?`結果：${picked.result}`:'', picked.progressEffect?`補足：${picked.progressEffect}`:'', ...extraLines].filter(Boolean).join('\n');
+function formatEventOutput(prefix,picked,area,tableId,extraLines=[]){
+  const condition=eventConditionType(picked)==='なし'?'':`前提：${eventConditionType(picked)}${picked.conditionValue?` / ${picked.conditionValue}`:''}`;
+  const random=String(picked.encounterCountRule||'').trim()==='ランダム編成'?generateRandomEncounter(area?.name||picked.areaName||'',{partySize:selectedPartySize()}):null;
+  const encounter=encounterCountText(picked,random);
+  const composition=random?encounterResolutionBlock(random):encounterCompositionText(picked);
+  return [prefix,area?`エリア：${area.name||area.id}`:'',area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'',`表：${tableId}`,picked.eventName?`イベント：${picked.eventName}`:'',picked.eventType?`種別：${picked.eventType}`:'',condition,encounter,composition,picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'',picked.result?`結果：${picked.result}`:'',picked.progressEffect?`補足：${picked.progressEffect}`:'',...extraLines].filter(Boolean).join('\n');
 }
 function triggerAreaClearRumorEvent(area){
   const rumor=selectedRumor();
@@ -1150,17 +1247,19 @@ function renderTreasureTrapInfo(){
    box.textContent=tableId?'「宝箱の中身を決定」を押すと、中身・鍵・罠・各難易度を同時に決定します。':'宝箱表を選択してください。';
    return;
  }
- const lines=[`【GM用】${r.chestName||r.tableId||'宝箱'}`,`エリア：${r.areaName||'未設定'}`,`鍵：${r.hasLock?'あり':'なし'}${r.hasLock?` / 解錠難易度 ${r.unlockDifficulty}`:''}`,`罠：${r.hasTrap?'あり':'なし'}`,`罠感知難易度：${r.trapDetectDifficulty}`];
+ const lines=[`【GM用】${r.chestName||r.tableId||'宝箱'}`,`エリア：${r.areaName||'未設定'}`,`鍵：${r.hasLock?'あり':'なし'}${r.hasLock?` / 解錠難易度（細工） ${r.unlockDifficulty}`:''}`,`罠：${r.hasTrap?'あり':'なし'}`,`罠感知難易度：${r.trapDetectDifficulty}`];
  if(r.hasTrap){lines.push(`罠解除難易度：${r.trapDisarmDifficulty}`); if(r.trapName)lines.push(`罠内容：${r.trapName}`); if(r.trapEffect)lines.push(`発動効果：${r.trapEffect}`);}
  box.textContent=lines.join('\n');
 }
 function trapDetectText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.questFixed)return 'このクエスト固有宝箱では罠感知判定を行いません。'; return `【罠感知判定】\n2D6+{感知}>=${r.trapDetectDifficulty}`;}
 function trapDisarmText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.questFixed)return 'このクエスト固有宝箱では罠解除判定を行いません。'; return r.hasTrap?`【罠解除判定】\n2D6+{細工}>=${r.trapDisarmDifficulty}`:'この宝箱に罠はありません。';}
-function unlockText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.questFixed)return 'このクエスト固有宝箱では解錠判定を行いません。'; return r.hasLock?`【解錠判定】\n2D6+{細工}>=${r.unlockDifficulty}`:'この宝箱に鍵はありません。';}
-const APPRAISAL_FEES={'初級':30,'中級':80,'上級':180,'特級':350};
-const TRANSCRIPTION_FEES={'初級':80,'中級':180,'上級':400,'特級':750};
-function appraisalFee(rank='初級'){return APPRAISAL_FEES[String(rank||'初級').trim()]||30;}
-function transcriptionFee(rank='初級'){return TRANSCRIPTION_FEES[String(rank||'初級').trim()]||80;}
+function unlockText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.questFixed)return 'このクエスト固有宝箱では解錠判定を行いません。'; return r.hasLock?`【鍵の解除判定】\n2D6+{細工}>=${r.unlockDifficulty}`:'この宝箱に鍵はありません。';}
+const APPRAISAL_FEES={'初級':150,'中級':400,'上級':1000,'特級':2000};
+const TRANSCRIPTION_DIFFICULTIES={'初級':7,'中級':10,'上級':13,'特級':16};
+const TRANSCRIPTION_MATERIAL_COUNTS={'初級':1,'中級':2,'上級':3,'特級':4};
+function appraisalFee(rank='初級'){return APPRAISAL_FEES[String(rank||'初級').trim()]||150;}
+function transcriptionDifficulty(rank='初級'){return TRANSCRIPTION_DIFFICULTIES[String(rank||'初級').trim()]||7;}
+function transcriptionMaterialCount(rank='初級'){return TRANSCRIPTION_MATERIAL_COUNTS[String(rank||'初級').trim()]||1;}
 function fillAppraisalRules(){
   const sel=$('appraisalRuleSelect');
   if(!sel)return;
@@ -1172,7 +1271,7 @@ function fillAppraisalRules(){
   rows.forEach((r,i)=>{
     const o=document.createElement('option');
     o.value=String(i);
-    o.textContent=`${r.facilityName||'施設未設定'} / ${r.scrollRank||'ランク未設定'} / 2D6+鑑定>=${r.difficulty||'?'} / ${appraisalFee(r.scrollRank)}G / ${r.spellType||''}${r.spellRank?` ${r.spellRank}`:''}`;
+    o.textContent=`${r.facilityName||'施設未設定'} / 未鑑定スクロール：${r.scrollRank||'ランク未設定'} / 道具判定 2D6+鑑定>=${r.difficulty||'?'} / 施設鑑定 ${appraisalFee(r.scrollRank)}G`;
     sel.appendChild(o);
   });
 }
@@ -1284,7 +1383,7 @@ function rollAppraisal(){
   if(!rule){$('appraisalResult').textContent='鑑定ルールがありません。'; return;}
   const candidates=(state.spells||[]).filter(s=>spellMatchesRule(s,rule));
   if(!candidates.length){
-    state.lastAppraisalText=[`【スクロール鑑定】${rule.facilityName||''}`,`スクロールランク：${rule.scrollRank||''}`,`判定式：2D6+鑑定技能>=${rule.difficulty||''}`,`鑑定料：${appraisalFee(rule.scrollRank)}G`,'鑑定結果：候補術式がありません。術式データと鑑定条件を確認してください。'].filter(Boolean).join('\n');
+    state.lastAppraisalText=[`【スクロール鑑定】${rule.facilityName||''}`,`スクロールランク：${rule.scrollRank||''}`,`道具鑑定：術式鑑定具を使用し、2D6+鑑定技能>=${rule.difficulty||''}`,`施設鑑定：${appraisalFee(rule.scrollRank)}Gで自動成功`,'鑑定結果：候補術式がありません。術式データと鑑定条件を確認してください。'].filter(Boolean).join('\n');
     $('appraisalResult').textContent=state.lastAppraisalText;
     return;
   }
@@ -1293,8 +1392,8 @@ function rollAppraisal(){
   const lines=[];
   lines.push(`【スクロール鑑定】${rule.facilityName||''}`);
   lines.push(`スクロールランク：${rule.scrollRank||''}`);
-  lines.push(`判定式：2D6+鑑定技能>=${rule.difficulty||''}`);
-  lines.push(`鑑定料：${appraisalFee(rule.scrollRank)}G`);
+  lines.push(`道具鑑定：術式鑑定具を使用し、2D6+鑑定技能>=${rule.difficulty||''}`);
+  lines.push(`施設鑑定：${appraisalFee(rule.scrollRank)}Gを支払えば自動成功`);
   lines.push(`鑑定結果：${spell.name}（${spell.type||'術式'}・${spell.rank||rule.scrollRank||'ランク未設定'}）`);
   if(spell.publicId) lines.push(`術式登録ID：${spell.publicId}`);
   lines.push(`鑑定後スクロール：${spell.name}のスクロール`);
@@ -1308,7 +1407,7 @@ function rollAppraisal(){
   if(spell.description) lines.push(`説明：${spell.description}`);
   if(spell.effect) lines.push(`効果：${spell.effect}`);
   lines.push(`使用：このスクロールを消費すると、術式「${spell.name}」をコスト消費なしで1回発動できます。`);
-  lines.push(`術式化：鑑定済みスクロールと対応素材を消費。自力なら写術具＋集中判定、骨董屋依頼なら${transcriptionFee(rule.scrollRank)}Gが必要です。`);
+  lines.push(`術式化：鑑定済みスクロールと対応素材×${transcriptionMaterialCount(rule.scrollRank)}を消費し、2D6+集中>=${transcriptionDifficulty(rule.scrollRank)}。施設への術式化依頼はできません。`);
   state.lastAppraisalText=lines.filter(Boolean).join('\n');
   $('appraisalResult').textContent=state.lastAppraisalText;
   addLog(`スクロール鑑定：${rule.scrollRank||''} → ${spell.name}`);
@@ -1459,7 +1558,7 @@ function bind(){
   $('questAdvanceBtn').addEventListener('click',advanceQuestProgress); $('areaAdvanceBtn').addEventListener('click',advanceAreaProgress);
   $('questResetBtn').addEventListener('click',()=>{const q=selected($('questSelect'),state.quests); if(q){const qkey=String(q.id||q.name||''); progressObj('quests',qkey).value=0; Object.keys(state.triggeredQuestEvents||{}).forEach(k=>{if(k.startsWith(qkey+':')) delete state.triggeredQuestEvents[k];}); state.lastQuestFixedEventText=''; state.lastQuestFixedEventKey=''; saveState(false); renderQuest();}}); $('areaResetBtn').addEventListener('click',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).value=0; saveState(false); renderArea();}});
   $('questNote').addEventListener('input',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).note=$('questNote').value; saveState(false);}}); $('areaNote').addEventListener('input',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).note=$('areaNote').value; saveState(false);}});
-  $('questCopyBtn').addEventListener('click',()=>copyText(questMemo(),'questCopyNote')); $('questInfoCopyBtn').addEventListener('click',()=>copyText(questInfoMemo(),'questCopyNote')); $('copyImportantQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('重要'),'questCopyNote')); $('copyDailyQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('デイリー'),'questCopyNote')); $('rollDailyQuestsBtn')?.addEventListener('click',rollDailyQuests); $('dailyQuestCount')?.addEventListener('change',rollDailyQuests); $('copyDailyQuestsBtn')?.addEventListener('click',()=>copyText(state.lastDailyQuestText,'questCopyNote')); $('areaCopyBtn').addEventListener('click',()=>copyText(areaMemo(),'areaCopyNote'));
+  $('questCopyBtn').addEventListener('click',()=>copyText(questMemo(),'questCopyNote')); $('questInfoCopyBtn').addEventListener('click',()=>copyText(questInfoMemo(),'questCopyNote')); $('copyImportantQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('重要'),'questCopyNote')); $('copyDailyQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('デイリー'),'questCopyNote')); $('rollDailyQuestsBtn')?.addEventListener('click',rollDailyQuests); $('partySizeSelect')?.addEventListener('change',()=>{renderQuest();saveState(false);}); $('dailyQuestCount')?.addEventListener('change',rollDailyQuests); $('copyDailyQuestsBtn')?.addEventListener('click',()=>copyText(state.lastDailyQuestText,'questCopyNote')); $('areaCopyBtn').addEventListener('click',()=>copyText(areaMemo(),'areaCopyNote'));
   $('rollQuestEventBtn').addEventListener('click',rollQuestEvent); $('copyQuestEventBtn').addEventListener('click',()=>copyText(state.lastQuestEventText,'questCopyNote'));
   $('rollRumorBtn').addEventListener('click',rollRumor); $('applyRumorBtn').addEventListener('click',()=>applyRumorIndex($('rumorSelectForInn').value,true)); $('clearRumorBtn').addEventListener('click',clearRumor); $('copyRumorBtn').addEventListener('click',()=>copyText(state.lastRumorText,'rumorCopyNote'));
   $('rollEventBtn').addEventListener('click',rollEvent); $('copyEventBtn').addEventListener('click',()=>copyText(state.lastEventText,'eventCopyNote'));
