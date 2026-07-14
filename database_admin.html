@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.171</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.172</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -483,7 +483,7 @@
   .facility-work-route{display:grid;gap:6px;margin-top:8px;padding:10px;border:1px dashed var(--line);border-radius:10px}
 
 
-/* v90.8.171: レイアウト安定化・左揃え・ボタン折返し */
+/* v90.8.172: レイアウト安定化・左揃え・ボタン折返し */
 html,body{max-width:100%;overflow-x:hidden}
 body,button,input,select,textarea,label,summary,th,td,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.badge{text-align:left!important}
 button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere;word-break:normal;line-height:1.35;height:auto;min-width:0;max-width:100%}
@@ -505,7 +505,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;ov
 </style>
 
 <style id="raNoHorizontalScrollV165">
-/* v90.8.171: 横スクロール廃止・折り返しレイアウト */
+/* v90.8.172: 横スクロール廃止・折り返しレイアウト */
 html,body{width:100%;max-width:100%;overflow-x:hidden!important}
 main,header,.panel,.category-subpanel,.table-wrap,.advanced-filters,.monster-area-groups,.monster-card-list,.monster-card,.monster-card summary,.monster-card-body{min-width:0;max-width:100%}
 .table-wrap{overflow-x:hidden!important;overflow-y:auto;max-width:100%;}
@@ -553,7 +553,7 @@ td.controls,th.controls{position:static!important;left:auto!important;min-width:
 
 
 <style id="raCompactButtonsV166">
-/* v90.8.171: ボタンを内容幅中心にし、必要な位置で自然に折り返す */
+/* v90.8.172: ボタンを内容幅中心にし、必要な位置で自然に折り返す */
 button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip{
   width:auto!important;
   max-width:100%!important;
@@ -606,7 +606,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip{
 
 
 <style id="raLayoutAuditV167">
-/* v90.8.171: 管理画面全体を用途別に整理。素材・魔物のコンパクト操作は維持。 */
+/* v90.8.172: 管理画面全体を用途別に整理。素材・魔物のコンパクト操作は維持。 */
 :root{--nav-bg:#f4e7d6;--nav-active:#9d6734;--action-bg:#fffdf8;--db-bg:#f3eee6}
 
 /* 大カテゴリは横に引き伸ばさず、まとまりのあるナビゲーションとして表示 */
@@ -815,35 +815,40 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip{
 </style>
 
 
-<style id="raListActionButtonsV171">
-/* v90.8.171: 行形式一覧の操作ボタンを横並びの複数列へ整理 */
+<style id="raListActionButtonsV172">
+/* v90.8.172: 行形式一覧の操作ボタンを小型化。横並びは維持する */
 @media (min-width:1201px){
   .responsive-data-table th.controls,
   .responsive-data-table td.controls{
-    width:330px!important;
-    min-width:330px!important;
-    max-width:330px!important;
+    width:270px!important;
+    min-width:270px!important;
+    max-width:270px!important;
   }
 }
 .responsive-data-table .row-actions{
   display:grid!important;
   grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  gap:6px!important;
+  gap:4px!important;
   width:100%!important;
-  align-items:stretch!important;
+  align-items:center!important;
 }
 .responsive-data-table .row-actions>button{
   width:100%!important;
   min-width:0!important;
-  min-height:32px!important;
-  padding:6px 8px!important;
+  min-height:26px!important;
+  padding:3px 5px!important;
+  border-radius:7px!important;
+  font-size:11px!important;
+  line-height:1.2!important;
   text-align:center!important;
   white-space:normal!important;
   overflow-wrap:anywhere!important;
   justify-self:stretch!important;
+  box-shadow:none!important;
 }
 @media(max-width:620px){
   .responsive-data-table .row-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .responsive-data-table .row-actions>button{min-height:28px!important;font-size:11px!important}
 }
 @media(max-width:340px){
   .responsive-data-table .row-actions{grid-template-columns:1fr!important}
@@ -852,7 +857,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip{
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.171 / 最終更新日：2026年7月15日</div>
+<div class="ra-build-info">Version：v90.8.172 / 最終更新日：2026年7月15日</div>
 
 <header>
   <div class="title-card">
@@ -1431,7 +1436,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip{
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.171';
+const RECRAFT_DB_VERSION = 'v90.8.172';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.169';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];

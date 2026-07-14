@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>リクラフト・アルケミア 管理ハブ v90.8.171</title>
+  <title>リクラフト・アルケミア 管理ハブ v90.8.172</title>
   <style>
     :root{--bg:#f7f2e8;--card:#fffaf0;--ink:#2d241b;--muted:#7b6a58;--line:#d8c7aa;--accent:#8b5e34;--accent2:#c28b45}
     *{box-sizing:border-box} html,body{height:100%} body{margin:0;font-family:"Yu Gothic","Hiragino Sans",system-ui,sans-serif;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;min-height:100svh}
@@ -11,7 +11,7 @@
     .build{font-size:12px;color:var(--muted);margin-bottom:6px} .top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap} .title h1{font-size:clamp(18px,3vw,26px);margin:0 0 4px} .title p{margin:0;color:var(--muted);font-size:12px;line-height:1.5} .tabs{display:flex;gap:8px;flex-wrap:wrap;align-items:center} .tabs button{appearance:none;border:1px solid var(--line);border-radius:999px;padding:9px 12px;background:#fffaf0;color:var(--ink);font-weight:700;cursor:pointer;font-size:13px} .tabs button.active{background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border-color:transparent}
     main{flex:1;min-height:0;display:flex;flex-direction:column} .notice{padding:8px 16px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line);background:rgba(255,255,255,.45)} .framewrap{flex:1;min-height:0;position:relative} .toolframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:white;display:none} .toolframe.active{display:block} @media(max-width:720px){header{padding:12px}.tabs{width:100%}.tabs button{flex:1;text-align:center}}
   
-/* v90.8.171: レイアウト安定化・左揃え・ボタン折返し */
+/* v90.8.172: レイアウト安定化・左揃え・ボタン折返し */
 html,body{max-width:100%;overflow-x:hidden}
 body,button,input,select,textarea,label,summary,th,td,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.badge{text-align:left!important}
 button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere;word-break:normal;line-height:1.35;height:auto;min-width:0;max-width:100%}
@@ -36,7 +36,7 @@ pre,code{max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere;word-break:b
 
 
 <style id="raCompactButtonsV166">
-/* v90.8.171: ボタン幅を文字量に合わせる */
+/* v90.8.172: ボタン幅を文字量に合わせる */
 button,.tab,.subtab,.tab-btn{
   width:auto!important;
   max-width:100%!important;
@@ -63,7 +63,7 @@ button,.tab,.subtab,.tab-btn{
 </head>
 <body>
   <header>
-    <div class="build">Version：v90.8.171 / 最終更新日：2026年7月15日</div>
+    <div class="build">Version：v90.8.172 / 最終更新日：2026年7月15日</div>
     <div class="top">
       <div class="title"><h1>リクラフト・アルケミア 管理ハブ</h1><p>DB管理、クエスト・エリア進行管理、ヘルプを切り替えます。</p></div>
       <nav class="tabs" aria-label="管理ツール切替">
@@ -76,7 +76,7 @@ button,.tab,.subtab,.tab-btn{
   <main>
     <div class="notice" id="notice">現在：アイテム・DB管理。</div>
     <div class="framewrap">
-      <iframe id="frame-database" class="toolframe active" src="database_admin.html?v=90.8.133" title="アイテム・DB管理"></iframe>
+      <iframe id="frame-database" class="toolframe active" src="database_admin.html?v=90.8.172" title="アイテム・DB管理"></iframe>
       <iframe id="frame-progress" class="toolframe" src="progress_manager.html?v=90.8.133" title="イベント・進行管理"></iframe>
       <iframe id="frame-help" class="toolframe" src="help.html?v=90.8.133" title="ヘルプ"></iframe>
     </div>
