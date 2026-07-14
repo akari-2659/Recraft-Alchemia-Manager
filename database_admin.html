@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.166</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.170</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -483,7 +483,7 @@
   .facility-work-route{display:grid;gap:6px;margin-top:8px;padding:10px;border:1px dashed var(--line);border-radius:10px}
 
 
-/* v90.8.166: レイアウト安定化・左揃え・ボタン折返し */
+/* v90.8.170: レイアウト安定化・左揃え・ボタン折返し */
 html,body{max-width:100%;overflow-x:hidden}
 body,button,input,select,textarea,label,summary,th,td,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.badge{text-align:left!important}
 button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere;word-break:normal;line-height:1.35;height:auto;min-width:0;max-width:100%}
@@ -505,7 +505,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;ov
 </style>
 
 <style id="raNoHorizontalScrollV165">
-/* v90.8.166: 横スクロール廃止・折り返しレイアウト */
+/* v90.8.170: 横スクロール廃止・折り返しレイアウト */
 html,body{width:100%;max-width:100%;overflow-x:hidden!important}
 main,header,.panel,.category-subpanel,.table-wrap,.advanced-filters,.monster-area-groups,.monster-card-list,.monster-card,.monster-card summary,.monster-card-body{min-width:0;max-width:100%}
 .table-wrap{overflow-x:hidden!important;overflow-y:auto;max-width:100%;}
@@ -553,7 +553,7 @@ td.controls,th.controls{position:static!important;left:auto!important;min-width:
 
 
 <style id="raCompactButtonsV166">
-/* v90.8.166: ボタンを内容幅中心にし、必要な位置で自然に折り返す */
+/* v90.8.170: ボタンを内容幅中心にし、必要な位置で自然に折り返す */
 button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip{
   width:auto!important;
   max-width:100%!important;
@@ -604,9 +604,219 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip{
 }
 </style>
 
+
+<style id="raLayoutAuditV167">
+/* v90.8.170: 管理画面全体を用途別に整理。素材・魔物のコンパクト操作は維持。 */
+:root{--nav-bg:#f4e7d6;--nav-active:#9d6734;--action-bg:#fffdf8;--db-bg:#f3eee6}
+
+/* 大カテゴリは横に引き伸ばさず、まとまりのあるナビゲーションとして表示 */
+.major-tabs{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(104px,128px))!important;
+  gap:7px!important;
+  width:max-content!important;
+  max-width:100%!important;
+  padding:7px!important;
+  margin:0!important;
+  position:sticky;
+  top:0;
+  border:1px solid #dfcbb2;
+  border-radius:15px;
+  background:rgba(255,250,243,.96);
+  box-shadow:0 6px 16px rgba(75,50,28,.06);
+}
+.major-tabs>.tab{
+  width:100%!important;
+  min-height:39px;
+  padding:8px 11px!important;
+  border-radius:10px!important;
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+}
+
+/* 小カテゴリは内容幅のチップ型。長い一覧でも自然に折り返す */
+.subnav-block{
+  padding:11px 12px!important;
+  border:1px solid #e6d5c0;
+  border-radius:15px!important;
+  background:rgba(255,252,247,.78);
+}
+.section-subtabs{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:7px!important;
+  width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:visible!important;
+}
+.section-subtabs>.subtab{
+  width:auto!important;
+  min-width:0!important;
+  min-height:37px;
+  padding:8px 12px!important;
+  border-radius:10px!important;
+  flex:0 1 auto!important;
+  display:flex;
+  align-items:center;
+}
+.tab-label{margin:0 0 7px 2px;font-size:12px;font-weight:900;letter-spacing:.05em;color:var(--muted)}
+.tab-block{margin:15px 0 10px}
+
+/* 各表の操作を、検索・画面操作・DB操作に明確に分離 */
+.record-toolbar{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:8px!important;
+  width:100%!important;
+  padding-bottom:12px!important;
+}
+.toolbar-search-row{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%;min-width:0}
+.toolbar-search-row>.field,.toolbar-search-row>.field.small{width:100%!important;min-width:0!important;flex:none!important}
+.toolbar-screen-actions,.toolbar-db-actions,.global-db-maintenance,.global-db-write{
+  position:relative;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:7px!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  width:100%!important;
+  min-width:0;
+  padding:25px 9px 9px;
+  border:1px solid #e2d1bc;
+  border-radius:13px;
+  background:var(--action-bg);
+}
+.toolbar-db-actions,.global-db-write{background:var(--db-bg)}
+.toolbar-action-label{
+  position:absolute;
+  top:6px;
+  left:10px;
+  font-size:11px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.04em;
+  color:var(--muted);
+}
+.toolbar-screen-actions>button,.toolbar-db-actions>button,.global-db-maintenance>button,.global-db-write>button{
+  width:auto!important;
+  min-width:0!important;
+  min-height:36px;
+  padding:7px 10px!important;
+  border-radius:9px!important;
+  flex:0 1 auto!important;
+  justify-self:start!important;
+}
+
+/* 最上部のDB操作も、入力・保守・全データ操作を区分 */
+.global-db-toolbar{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:9px!important;
+  width:100%!important;
+  align-items:stretch!important;
+}
+.global-db-fields{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(150px,190px) minmax(150px,190px);
+  gap:9px;
+  width:100%;
+  min-width:0;
+}
+.global-db-fields>.field{width:100%!important;min-width:0!important;flex:none!important}
+.global-db-action-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.62fr);gap:9px;width:100%}
+
+/* 初期データ欄と施設・ヘルプなどの単純な操作列 */
+.initial-data-toolbar{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:9px!important;align-items:end!important}
+.initial-data-toolbar>.field{width:100%!important;min-width:0!important;flex:none!important}
+.initial-data-toolbar>button{width:auto!important;min-height:39px;border-radius:10px!important}
+.section-actions,.filter-actions,.facility-actions,.help-actions,.monster-output-actions,.modal-foot,
+.guild-daily-controls,.quest-event-actions,.input-action-row,.monster-line-editor .buttons{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  gap:7px!important;
+  width:100%;
+}
+.section-actions>button,.filter-actions>button,.facility-actions>button,.help-actions>button,
+.monster-output-actions>button,.modal-foot>button,.guild-daily-controls>button,.quest-event-actions>button,
+.input-action-row>button{width:auto!important;min-width:0!important;flex:0 1 auto!important}
+
+/* 施設内の階層ナビゲーションも小カテゴリと同じ見た目へ */
+.facility-inner-tabs,.facility-weapon-category-tabs{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:7px!important;
+  width:100%!important;
+  overflow:visible!important;
+  padding:7px!important;
+  border:1px solid #e5d4bf;
+  border-radius:13px;
+  background:#fffaf3;
+}
+.facility-inner-tabs>button,.facility-weapon-category-tabs>button{
+  width:auto!important;
+  min-width:0!important;
+  min-height:36px;
+  padding:7px 10px!important;
+  border-radius:9px!important;
+  flex:0 1 auto!important;
+}
+
+/* 素材・魔物・各一覧カードの操作は、好評だった内容幅のまま */
+.monster-card-actions,.responsive-data-table .row-actions{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  justify-content:flex-start!important;
+  gap:6px!important;
+  width:100%!important;
+  padding-top:2px;
+}
+.monster-card-actions>button,.responsive-data-table .row-actions>button{
+  width:auto!important;
+  min-width:0!important;
+  min-height:30px;
+  padding:6px 9px!important;
+  border-radius:9px!important;
+  flex:0 1 auto!important;
+}
+
+/* 読みやすさを優先し、長文や表の横はみ出しを防止 */
+.table-toolbar-note,.notice,.status-box,.facility-product-body,.copy-card-text{overflow-wrap:anywhere;word-break:break-word}
+.help-output,pre{white-space:pre-wrap!important;overflow-x:hidden!important;overflow-wrap:anywhere}
+
+@media(max-width:900px){
+  .major-tabs{grid-template-columns:repeat(3,minmax(0,1fr))!important;width:100%!important}
+  .global-db-fields{grid-template-columns:1fr 1fr}
+  .global-db-fields>.field:first-child{grid-column:1/-1}
+  .global-db-action-grid{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .major-tabs{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .section-subtabs{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .section-subtabs>.subtab{width:100%!important}
+  .global-db-fields{grid-template-columns:1fr}
+  .toolbar-screen-actions,.toolbar-db-actions,.global-db-maintenance,.global-db-write{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    align-items:stretch!important;
+  }
+  .toolbar-action-label{grid-column:1/-1;position:static;margin-bottom:0}
+  .toolbar-screen-actions>button,.toolbar-db-actions>button,.global-db-maintenance>button,.global-db-write>button{width:100%!important}
+  .initial-data-toolbar{grid-template-columns:1fr!important}
+  .initial-data-toolbar>button{width:auto!important}
+}
+@media(max-width:380px){
+  .major-tabs,.section-subtabs{grid-template-columns:1fr!important}
+  .toolbar-screen-actions,.toolbar-db-actions,.global-db-maintenance,.global-db-write{grid-template-columns:1fr!important}
+}
+</style>
+
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.166 / 最終更新日：2026年7月14日</div>
+<div class="ra-build-info">Version：v90.8.170 / 最終更新日：2026年7月14日</div>
 
 <header>
   <div class="title-card">
@@ -1076,6 +1286,10 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip{
           <div id="facilityAntiqueAppraisalWork" class="hidden">
             <div class="input-action-row">
               <div>
+                <label for="facilityAppraisalTypeInput">鑑定スクロール種別</label>
+                <select id="facilityAppraisalTypeInput"><option value="魔法">魔法</option><option value="祈祷">祈祷</option></select>
+              </div>
+              <div>
                 <label for="facilityAppraisalRankInput">鑑定スクロール階級</label>
                 <select id="facilityAppraisalRankInput">
                   <option value="初級">初級</option><option value="中級">中級</option><option value="上級">上級</option><option value="特級">特級</option>
@@ -1181,8 +1395,8 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip{
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.166';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.157';
+const RECRAFT_DB_VERSION = 'v90.8.170';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.169';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -1204,10 +1418,10 @@ const SCHEMA = {
   event_tables: ['id','tableId','areaName','eventName','eventType','conditionType','conditionValue','checkType','targetValue','treasureTableId','encounterCountRule','encounterCountMin','encounterCountMax','encounterFormation','encounterComposition','result','progressEffect','notes','updatedAt','ownerKey','createdBy'],
   treasure_tables: ['id','tableId','areaName','treasureRank','chestName','hasLock','unlockDifficulty','hasTrap','trapDetectDifficulty','trapDisarmDifficulty','trapName','trapEffect','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','quantity','weight','description','enabled','notes','updatedAt','ownerKey','createdBy'],
   appraisal_rules: ['id','facilityName','scrollRank','difficulty','spellType','spellRank','candidateTags','description','enabled','notes','updatedAt','ownerKey','createdBy'],
-  monsters: ['id','name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule','passiveName','passiveEffect','actions','drops','habit','description','notes','updatedAt','ownerKey','createdBy']
+  monsters: ['id','name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','encounterValue','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule','passiveName','passiveEffect','actions','drops','habit','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', recipePrice:'レシピ価格', recipeSource:'レシピ入手先', craftSkill:'製作技能', rank:'ランク', toolRank:'対応素材ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', modifiers:'補正値', upgradeLimit:'強化可能回数', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', pullRule:'引き寄せ', passiveName:'固有パッシブ名', passiveEffect:'固有パッシブ効果', habit:'習性', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具ランク', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', equipmentUpgradeDetail:'特殊能力詳細', equipmentUpgradeTarget:'強化対象', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知難易度', trapDisarmDifficulty:'罠解除難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'防御値', initiative:'先制値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ'
+  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', recipePrice:'レシピ価格', recipeSource:'レシピ入手先', craftSkill:'製作技能', rank:'ランク', toolRank:'対応素材ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', modifiers:'補正値', upgradeLimit:'強化可能回数', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', pullRule:'引き寄せ', passiveName:'固有パッシブ名', passiveEffect:'固有パッシブ効果', habit:'習性', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', requiredTools:'必要道具ランク', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', equipmentUpgradeDetail:'特殊能力詳細', equipmentUpgradeTarget:'強化対象', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知難易度', trapDisarmDifficulty:'罠解除難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'防御値', initiative:'先制値', encounterValue:'遭遇値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ'
 };
 
 const FORM_PRIMARY_FIELDS = {
@@ -1227,12 +1441,12 @@ const FORM_PRIMARY_FIELDS = {
   event_tables: ['tableId','areaName','eventName','eventType','conditionType','conditionValue','checkType','targetValue','treasureTableId','encounterCountRule','encounterCountMin','encounterCountMax','encounterFormation','encounterComposition','result','progressEffect','notes'],
   treasure_tables: ['tableId','areaName','treasureRank','chestName','hasLock','unlockDifficulty','hasTrap','trapDetectDifficulty','trapDisarmDifficulty','trapName','trapEffect','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','quantity','weight','description','enabled','notes'],
   appraisal_rules: ['facilityName','scrollRank','difficulty','spellType','spellRank','candidateTags','description','enabled','notes'],
-  monsters: ['name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule','passiveName','passiveEffect','actions','drops','habit','description','notes']
+  monsters: ['name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','encounterValue','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule','passiveName','passiveEffect','actions','drops','habit','description','notes']
 };
 const FORM_LONG_FIELDS = new Set(['habit','description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','rewardItems','unlockResult','mainMaterials','mainMonsters','result','progressEffect','actions','drops','passiveEffect','modifiers','encounterComposition','equipmentUpgradeDetail']);
 const RECORD_CARD_KEYS = new Set(['items','materials','recipes','spells']);
 const FIELD_PLACEHOLDERS = {
-  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'アイテムは初期〜最上級、素材は低級〜高級', toolRank:'例：低級。調合・鍛冶道具が扱える素材ランク', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', requiredTools:'例：低級。低級なら低級以上の道具が必要', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：獣牙系。モンハン式の素材派生ラインを管理します。', equipmentUpgradeEffect:'例：威力+1。魔物素材を装備強化に使った時の強化内容を選択します。', equipmentUpgradeDetail:'特殊効果が付く場合、発動条件・対象・補正値・持続や解除条件を具体的に入力します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：低級 / 普通', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定スクロール：初級', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：初級', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：初級', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', dismantleDifficulty:'例：7。採取技能>=解体難易度で判定し、成功時は全ドロップ率+10%（上限100%）。目安はチュートリアル5～6、通常6～9、ボス10以上', pullRule:'可 / 不可', passiveName:'例：胞子反応', passiveEffect:'発動条件・処理・回数制限を具体的に入力', habit:'生息場所・群れ方・警戒時の行動などを1～3文で入力', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
+  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'アイテムは初期〜最上級、素材は低級〜高級', toolRank:'例：低級。調合・鍛冶道具が扱える素材ランク', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', requiredTools:'例：低級。低級なら低級以上の道具が必要', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：獣牙系。モンハン式の素材派生ラインを管理します。', equipmentUpgradeEffect:'例：威力+1。魔物素材を装備強化に使った時の強化内容を選択します。', equipmentUpgradeDetail:'特殊効果が付く場合、発動条件・対象・補正値・持続や解除条件を具体的に入力します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：低級 / 普通', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定の魔法スクロール：初級', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：初級', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：初級', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', encounterValue:'1～3。魔物単体の戦闘負荷。エリアではなく能力・行動の強さで設定します。', dismantleDifficulty:'例：7。採取技能>=解体難易度で判定し、成功時は全ドロップ率+10%（上限100%）。目安はチュートリアル5～6、通常6～9、ボス10以上', pullRule:'可 / 不可', passiveName:'例：胞子反応', passiveEffect:'発動条件・処理・回数制限を具体的に入力', habit:'生息場所・群れ方・警戒時の行動などを1～3文で入力', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
 };
 const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','toolRank','equipSlot','skill','checkType','type','role','setItem','unlockFacility','equipmentUpgradeEffect','equipmentUpgradeTarget','ammoUse','ammoKind','craftSkill','craftType','baseItem','branchType','enabled','hasLock','hasTrap','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','conditionType','conditionValue','treasureTableId','tableId','treasureRank','hasLock','hasTrap','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','facilityName','spellType','spellRank','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule']);
 let formState = { key:null, idx:null, mode:'new', defaultDataKind:'' };
@@ -1560,8 +1774,8 @@ const FACILITY_DEFS = [
     id:'inn', name:'宿屋',
     role:'宿泊・休息・噂やクエスト情報を担当。商品販売ではなくサービス中心。',
     services:[
-      {name:'宿泊', price:'30G', description:'HP/MPを全回復し、1日経過する。'},
-      {name:'休息', price:'10G', description:'短時間休む。'},
+      {name:'宿泊', price:'45G', description:'一日を終了して翌日へ進み、HP/MPを全回復して疲労度を0にする。'},
+      {name:'休息', price:'30G', description:'1行動を消費してHP/MPを全回復する。日付と疲労度は変化しない。'},
       {name:'噂を聞く', price:'0〜10G', description:'クエスト、探索エリア、素材、魔物などの情報を得る。'}
     ]
   },
@@ -1596,7 +1810,7 @@ const SYSTEM_HELP = [
       "基本施設は鍛冶屋、薬屋、宿屋、骨董屋、ギルド。",
       "鍛冶屋は武器、盾、防具、バッグ、矢筒、鍛冶素材、戦闘用罠、細工道具、鍛冶・仕掛け製作施設利用を扱う。",
       "薬屋はポーション系、薬品系調合品、調合素材、調合施設利用を扱う。",
-      "宿屋は宿泊、休息、噂、クエスト情報を扱う。商品販売は主目的にしない。",
+      "宿屋は宿泊45G、休息30G、噂、クエスト情報を扱う。休息は1行動を消費してHP/MPを全回復し、宿泊は一日を終了してHP/MP全回復・疲労度0にする。",
       "骨董屋は未鑑定スクロールの高額ランダム販売、施設鑑定、魔導インク・祈祷紙・術式鑑定具・聖印・魔印の常設販売を扱う。店頭ではスクロールの中身を公開しない。",
       "ギルドは受注可能クエストを、重要クエストとデイリークエストに分けて掲示する。",
       "重要クエストは有効列がTRUEのものだけ、ギルドの受注可能一覧に表示する。",
@@ -1891,7 +2105,7 @@ const SYSTEM_HELP = [
       "祈祷書のセット祈祷枠は、1 + 祈祷に割り振ったポイント。",
       "セット術式とセット祈祷は、所持している術式データから選択する。",
       "火球、氷槍、雷撃、光弾、闇弾、爆発範囲などの攻撃・投射・範囲系魔法は回避で防ぐ。",
-      "毒、呪いなどの身体・精神・状態異常系効果は抵抗で防ぐ。",
+      "毒・汚染・呪いなどの状態異常系効果は抵抗で防ぐ。毒はラウンド終了時1D3無属性ダメージ（防御値適用なし）、汚染はHP回復量-2、呪いは攻撃・術式・祈祷判定-1。同名状態は重複しない。",
       "魔物行動も同じ基準とし、攻撃・投射・範囲攻撃は回避、身体・精神・状態異常系効果は抵抗を達成値にする。",
       "効果文に「抵抗に失敗」とある魔物行動は、必ず抵抗値を使用する。"
     ]
@@ -2302,7 +2516,7 @@ function facilityDisplayLabel(facilityName){
 function antiqueRandomStockLines(){
   if(!(currentAntiqueRandomRows||[]).length) return ['- ランダム販売は未選出'];
   const lines=[`選出範囲：${currentAntiqueRandomArea||'未設定'}`];
-  currentAntiqueRandomRows.forEach(row=>lines.push(`- 未鑑定スクロール：${row.rank||'ランク未設定'} ${row.price?row.price+'G':'価格未設定'}`));
+  currentAntiqueRandomRows.forEach(row=>lines.push(`- ${row.name||`未鑑定の${unidentifiedScrollType(row)||'術式'}スクロール：${row.rank||'ランク未設定'}`} ${row.price?row.price+'G':'価格未設定'}`));
   return lines;
 }
 function buildFacilitySalesText(targetFacilityName=''){
@@ -2909,12 +3123,19 @@ function scrollRankAllowed(rank='初級',area='街はずれの草原'){
   const maxRank=maxScrollRankForUnlockedArea(area);
   return SCROLL_RANK_ORDER.indexOf(String(rank||'初級').trim())<=SCROLL_RANK_ORDER.indexOf(maxRank);
 }
+function isUnidentifiedScrollRow(row={}){
+  const text=[row.name,row.itemCategory,row.tags,row.usageTags].map(v=>String(v||'')).join(' ');
+  return text.includes('未鑑定') && text.includes('スクロール');
+}
+function unidentifiedScrollType(row={}){
+  const text=[row.name,row.itemCategory,row.tags,row.usageTags].map(v=>String(v||'')).join(' ');
+  if(text.includes('祈祷')) return '祈祷';
+  if(text.includes('魔法')) return '魔法';
+  return '';
+}
 function antiqueScrollRows(){
-  return (state.items || []).filter(row=>{
-    const name = String(row.name || '').trim();
-    const category = String(row.itemCategory || '').trim();
-    return name.includes('未鑑定スクロール') || category.includes('未鑑定スクロール');
-  }).filter(row=>textHasFacility(row, '骨董屋') || String(row.source || '').includes('骨董屋') || String(row.unlockFacility || '').includes('骨董屋'));
+  return (state.items || []).filter(isUnidentifiedScrollRow)
+    .filter(row=>textHasFacility(row, '骨董屋') || String(row.source || '').includes('骨董屋') || String(row.unlockFacility || '').includes('骨董屋'));
 }
 function shuffleRows(rows=[]){
   const out = [...rows];
@@ -2927,16 +3148,17 @@ function shuffleRows(rows=[]){
 function renderAntiqueAppraisalResult(){
   const result = $('facilityAppraisalResult');
   if(!result) return;
+  const type = $('facilityAppraisalTypeInput')?.value || '魔法';
   const rank = $('facilityAppraisalRankInput')?.value || '初級';
   const difficulty = scrollRankDifficulty(rank);
   const fee=appraisalFee(rank);
   result.classList.remove('muted');
   result.innerHTML = `<div><b>スクロール鑑定</b></div>
-    <div class="facility-product-meta"><span class="facility-chip">対象:${escapeHtml(rank)}未鑑定スクロール</span><span class="facility-chip">判定:鑑定技能</span><span class="facility-chip">鑑定料:${fee}G</span></div>
+    <div class="facility-product-meta"><span class="facility-chip">対象:未鑑定の${escapeHtml(type)}スクロール・${escapeHtml(rank)}</span><span class="facility-chip">判定:鑑定技能</span><span class="facility-chip">鑑定料:${fee}G</span></div>
     <div><b>鑑定難易度：</b>${escapeHtml(String(difficulty))}</div>
     <div><b>道具鑑定：</b>術式鑑定具を使用し、2D6+鑑定技能&gt;=${escapeHtml(String(difficulty))}</div>
     <div><b>施設鑑定：</b>${escapeHtml(String(fee))}Gを支払えば自動成功</div>
-    <div><b>成功時：</b>進行管理のスクロール鑑定で術式を決定し、「鑑定結果：○○」として術式名・術式登録ID・鑑定後スクロール登録IDを表示します。</div>`;
+    <div><b>成功時：</b>${escapeHtml(type)}の候補だけから、進行管理のスクロール鑑定で術式を決定し、「鑑定結果：○○」として術式名・術式登録ID・鑑定後スクロール登録IDを表示します。</div>`;
 }
 function renderAntiqueTranscriptionResult(){
   const result = $('facilityTranscribeResult');
@@ -2971,7 +3193,7 @@ function renderAntiqueRandomStock(){
   }
   result.classList.remove('muted');
   result.innerHTML = `<div><b>骨董屋ランダム販売枠</b></div><div class="muted small">選出範囲：${escapeHtml(area)} / 上限:${escapeHtml(maxScrollRankForUnlockedArea(area))} / 重複あり / 中身は鑑定まで非公開</div>` + rows.map(row=>{
-    const label=`未鑑定スクロール：${row.rank||'ランク未設定'}`;
+    const label=String(row.name||'').trim() || `未鑑定の${unidentifiedScrollType(row)||'術式'}スクロール：${row.rank||'ランク未設定'}`;
     const chips = [row.price ? '価格:' + row.price + 'G' : '', '内容:非公開'].filter(Boolean);
     return `<div class="facility-product-meta"><b>${escapeHtml(label)}</b>${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>`;
   }).join('');
@@ -3207,7 +3429,9 @@ function monsterMemo(row={}){
   return '';
 }
 const MONSTER_STATUS_DEFINITIONS = {
-  '毒状態':'※毒状態：次の自分のターン終了時に1D6ダメージを受け、その後解除する。解毒薬または清めの祈りで先に解除できる。',
+  '毒状態':'※毒状態：ラウンド終了時に1D3無属性ダメージを受ける。このダメージに防御値は適用しない。同名状態は重複せず、戦闘終了または解毒薬・浄化水・清めの祈りで解除する。',
+  '汚染状態':'※汚染状態：HPを回復する時、回復量を2点減らす（最低0）。同名状態は重複せず、戦闘終了または浄化水・清めの祈りで解除する。',
+  '呪い状態':'※呪い状態：攻撃・術式・祈祷判定に-1。同名状態は重複せず、戦闘終了または浄化水・清めの祈りで解除する。',
   '拘束状態':'※拘束状態：次のラウンド終了まで回避-2。拘束中はかばうを行えない。',
   '萎縮状態':'※萎縮状態：次のラウンド終了まで攻撃・術式・祈祷判定-1。',
   '泥まみれ状態':'※泥まみれ状態：次のラウンド終了まで命中・回避-1。',
@@ -3368,7 +3592,7 @@ function monsterCardHtml(row, idx){
   ].filter(Boolean).join('');
   const statHtml = [
     monsterStat('HP', row.hp), monsterStat('MP', row.mp), monsterStat('命中', row.hitValue), monsterStat('回避', row.evasionValue),
-    monsterStat('抵抗', row.resistValue), monsterStat('防御', row.defenseValue), monsterStat('先制', row.initiative), monsterStat('解体', row.dismantleDifficulty)
+    monsterStat('抵抗', row.resistValue), monsterStat('防御', row.defenseValue), monsterStat('先制', row.initiative), monsterStat('遭遇', row.encounterValue), monsterStat('解体', row.dismantleDifficulty)
   ].join('');
   const affinityHtml = [
     ['物', row.physicalAffinity], ['火', row.fireAffinity], ['水', row.waterAffinity], ['風', row.windAffinity],
@@ -4489,6 +4713,7 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='rank') help += '<div class="form-help">アイテム・レシピは初期〜最上級、素材は低級〜高級を使用します。素材ランクは「素材ランク」タブで管理します。</div>';
   if(field==='toolRank') help += '<div class="form-help">調合・鍛冶道具が扱える素材ランクです。アイテム自身のランクとは別に管理します。</div>';
   if(field==='bagCapacity') help += '<div class="form-help">バッグ専用の所持品枠数です。倉庫のスタック数や1枠数とは別項目です。</div>';
+  if(field==='encounterValue') help += '<div class="form-help">通常魔物は1～3で設定します。1＝小型・軽量、2＝標準、3＝強敵。エリアが後半かどうかではなく、その魔物自身の能力と行動で決めます。ボスは通常遭遇から除外されるため空欄で構いません。</div>';
   if(field==='hasLock' || field==='hasTrap') ['なし','あり'].forEach(v=>values.add(v));
   if(field==='equipmentUpgradeTarget') help += '<div class="form-help">この素材で強化できる装備種別です。武器・防具・盾・装飾品・魔導書・祈祷書を指定できます。複数対象は「・」で区切ります。</div>';
   if(field==='equipmentUpgradeEffect') help += '<div class="form-help">魔物素材を武器強化に使用した時の強化内容です。主に素材種別が「魔物素材」の行で使います。</div>';
@@ -5867,5 +6092,66 @@ document.addEventListener('click', (ev) => {
 
 
 </script>
+
+<script id="raLayoutAuditScriptV167">
+(() => {
+  const directChildren = (parent, selector) => Array.from(parent.children).filter(el => el.matches(selector));
+  const makeGroup = (className, label) => {
+    const group = document.createElement('div');
+    group.className = className;
+    const tag = document.createElement('span');
+    tag.className = 'toolbar-action-label';
+    tag.textContent = label;
+    group.appendChild(tag);
+    return group;
+  };
+  const prepareRecordToolbars = () => {
+    document.querySelectorAll('.panel .toolbar').forEach(toolbar => {
+      if (toolbar.dataset.raLayoutReady === '1') return;
+      const buttons = directChildren(toolbar, 'button');
+      const isRecordToolbar = buttons.some(btn => btn.matches('[data-add],[data-add-kind],[data-add-recipe-craft],[data-reset],[data-load],[data-save],[data-replace]'));
+      if (!isRecordToolbar) return;
+      const fields = directChildren(toolbar, '.field');
+      const searchRow = document.createElement('div');
+      searchRow.className = 'toolbar-search-row';
+      fields.forEach(field => searchRow.appendChild(field));
+      const screenGroup = makeGroup('toolbar-screen-actions', '画面操作');
+      const dbGroup = makeGroup('toolbar-db-actions', 'DB操作');
+      buttons.forEach(btn => {
+        if (btn.matches('[data-load],[data-save],[data-replace]')) dbGroup.appendChild(btn);
+        else screenGroup.appendChild(btn);
+      });
+      toolbar.replaceChildren(searchRow, screenGroup, dbGroup);
+      toolbar.classList.add('record-toolbar');
+      toolbar.dataset.raLayoutReady = '1';
+    });
+  };
+  const prepareGlobalToolbar = () => {
+    const toolbar = document.querySelector('main > .panel:first-of-type > .toolbar:first-child');
+    if (!toolbar || toolbar.dataset.raLayoutReady === '1') return;
+    const fields = directChildren(toolbar, '.field');
+    const buttons = directChildren(toolbar, 'button');
+    const fieldGroup = document.createElement('div');
+    fieldGroup.className = 'global-db-fields';
+    fields.forEach(field => fieldGroup.appendChild(field));
+    const maintenance = makeGroup('global-db-maintenance', 'DB保守');
+    const write = makeGroup('global-db-write', '全データ操作');
+    buttons.forEach(btn => {
+      if (btn.id === 'btnSavePages' || btn.id === 'btnReplacePages') write.appendChild(btn);
+      else maintenance.appendChild(btn);
+    });
+    const actionGrid = document.createElement('div');
+    actionGrid.className = 'global-db-action-grid';
+    actionGrid.append(maintenance, write);
+    toolbar.replaceChildren(fieldGroup, actionGrid);
+    toolbar.classList.add('global-db-toolbar');
+    toolbar.dataset.raLayoutReady = '1';
+  };
+  const run = () => { prepareGlobalToolbar(); prepareRecordToolbars(); };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run, {once:true});
+  else run();
+})();
+</script>
+
 </body>
 </html>
