@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.165</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.166</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -483,7 +483,7 @@
   .facility-work-route{display:grid;gap:6px;margin-top:8px;padding:10px;border:1px dashed var(--line);border-radius:10px}
 
 
-/* v90.8.165: レイアウト安定化・左揃え・ボタン折返し */
+/* v90.8.166: レイアウト安定化・左揃え・ボタン折返し */
 html,body{max-width:100%;overflow-x:hidden}
 body,button,input,select,textarea,label,summary,th,td,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.badge{text-align:left!important}
 button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere;word-break:normal;line-height:1.35;height:auto;min-width:0;max-width:100%}
@@ -505,7 +505,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;ov
 </style>
 
 <style id="raNoHorizontalScrollV165">
-/* v90.8.165: 横スクロール廃止・折り返しレイアウト */
+/* v90.8.166: 横スクロール廃止・折り返しレイアウト */
 html,body{width:100%;max-width:100%;overflow-x:hidden!important}
 main,header,.panel,.category-subpanel,.table-wrap,.advanced-filters,.monster-area-groups,.monster-card-list,.monster-card,.monster-card summary,.monster-card-body{min-width:0;max-width:100%}
 .table-wrap{overflow-x:hidden!important;overflow-y:auto;max-width:100%;}
@@ -551,9 +551,62 @@ td.controls,th.controls{position:static!important;left:auto!important;min-width:
 }
 </style>
 
+
+<style id="raCompactButtonsV166">
+/* v90.8.166: ボタンを内容幅中心にし、必要な位置で自然に折り返す */
+button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip{
+  width:auto!important;
+  max-width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  padding-left:12px;
+  padding-right:12px;
+  text-align:left!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere;
+  flex:0 1 auto!important;
+  justify-self:start!important;
+}
+.toolbar,.tabs,.subtabs,.section-actions,.filter-actions,.facility-actions,.help-actions,
+.monster-output-actions,.modal-foot,.monster-card-actions,.responsive-data-table .row-actions,
+.facility-inner-tabs,.facility-weapon-category-tabs,.guild-daily-controls,.quest-event-actions,
+.input-action-row,.monster-line-editor .buttons{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:flex-start!important;
+  justify-content:flex-start!important;
+  gap:7px!important;
+  width:100%;
+  max-width:100%;
+}
+.toolbar{align-items:flex-end!important}
+.toolbar .field,.toolbar .field.small{
+  flex:1 1 100%!important;
+  width:100%!important;
+  min-width:0!important;
+}
+.toolbar>button,.tabs>button,.subtabs>button,.section-actions>button,.filter-actions>button,
+.facility-actions>button,.help-actions>button,.monster-output-actions>button,.modal-foot>button,
+.monster-card-actions>button,.responsive-data-table .row-actions>button,
+.facility-inner-tabs>button,.facility-weapon-category-tabs>button,.guild-daily-controls>button,
+.quest-event-actions>button,.input-action-row>button{
+  width:auto!important;
+  flex:0 1 auto!important;
+  justify-self:start!important;
+}
+.monster-card-actions,.responsive-data-table .row-actions{padding-top:2px}
+@media(max-width:520px){
+  button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip{padding-left:10px;padding-right:10px}
+  .toolbar,.tabs,.subtabs,.section-actions,.filter-actions,.facility-actions,.help-actions,
+  .monster-output-actions,.modal-foot,.monster-card-actions,.responsive-data-table .row-actions,
+  .facility-inner-tabs,.facility-weapon-category-tabs,.guild-daily-controls,.quest-event-actions,
+  .input-action-row{gap:6px!important}
+}
+</style>
+
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.165 / 最終更新日：2026年7月14日</div>
+<div class="ra-build-info">Version：v90.8.166 / 最終更新日：2026年7月14日</div>
 
 <header>
   <div class="title-card">
@@ -1128,7 +1181,7 @@ td.controls,th.controls{position:static!important;left:auto!important;min-width:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.165';
+const RECRAFT_DB_VERSION = 'v90.8.166';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.157';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
