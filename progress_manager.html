@@ -30,7 +30,7 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 .quest-pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 8px;margin-left:6px;background:#fff}
 .quest-pill.off{background:#eee;color:#777}
 
-/* v90.8.164: レイアウト安定化・左揃え・ボタン折返し */
+/* v90.8.165: レイアウト安定化・左揃え・ボタン折返し */
 html,body{max-width:100%;overflow-x:hidden}
 body,button,input,select,textarea,label,summary,th,td,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.badge{text-align:left!important}
 button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere;word-break:normal;line-height:1.35;height:auto;min-width:0;max-width:100%}
@@ -50,15 +50,33 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;ov
 .ra-build-info{position:fixed;top:8px;right:8px;z-index:99999;padding:6px 10px;border:1px solid rgba(91,69,45,.28);border-radius:999px;background:rgba(255,253,248,.94);box-shadow:0 2px 10px rgba(0,0,0,.12);font-size:12px;font-weight:800;color:#5b452d;line-height:1.2;backdrop-filter:blur(4px)}
 @media(max-width:760px){.ra-build-info{position:static;margin:8px auto 0;width:max-content;max-width:calc(100% - 16px);text-align:center}}
 </style>
+
+<style id="raNoHorizontalScrollV165">
+/* v90.8.165: 進行管理横スクロール廃止・折り返し */
+html,body{width:100%;max-width:100%;overflow-x:hidden!important}
+main,header,.header-inner,.grid,.panel,.card,.event-card,.tab-panel,.status,.result,.drop-list,.drop-row{min-width:0;max-width:100%}
+button,input,select,textarea,label,.badge,.pill{min-width:0;max-width:100%;text-align:left!important;white-space:normal!important;overflow-wrap:anywhere;word-break:break-word}
+.buttons,.tabs,.tab-nav,.quest-category-bar,.quest-tools{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px;width:100%;align-items:stretch;justify-content:start!important}
+.buttons>button,.tabs>button,.tab-nav>button,.quest-category-bar>button,.quest-tools>button{width:100%;min-width:0;text-align:left!important}
+.result,.log,pre{overflow-x:hidden!important;overflow-y:auto;white-space:pre-wrap!important;overflow-wrap:anywhere;word-break:break-word}
+.kv{grid-template-columns:minmax(100px,120px) minmax(0,1fr)}
+@media(max-width:720px){
+  .drop-row{grid-template-columns:1fr}
+  .kv{grid-template-columns:1fr}
+  .buttons,.tabs,.tab-nav,.quest-category-bar,.quest-tools{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:460px){.buttons,.tabs,.tab-nav,.quest-category-bar,.quest-tools{grid-template-columns:1fr!important}}
+</style>
+
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.164 / 最終更新日：2026年7月14日</div>
+<div class="ra-build-info">Version：v90.8.165 / 最終更新日：2026年7月14日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.164 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.165 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -287,7 +305,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;ov
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.164';
+const VERSION='v90.8.165';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.164</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.165</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -483,7 +483,7 @@
   .facility-work-route{display:grid;gap:6px;margin-top:8px;padding:10px;border:1px dashed var(--line);border-radius:10px}
 
 
-/* v90.8.164: レイアウト安定化・左揃え・ボタン折返し */
+/* v90.8.165: レイアウト安定化・左揃え・ボタン折返し */
 html,body{max-width:100%;overflow-x:hidden}
 body,button,input,select,textarea,label,summary,th,td,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.badge{text-align:left!important}
 button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere;word-break:normal;line-height:1.35;height:auto;min-width:0;max-width:100%}
@@ -503,9 +503,57 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;ov
 .ra-build-info{position:fixed;top:8px;right:8px;z-index:99999;padding:6px 10px;border:1px solid rgba(91,69,45,.28);border-radius:999px;background:rgba(255,253,248,.94);box-shadow:0 2px 10px rgba(0,0,0,.12);font-size:12px;font-weight:800;color:#5b452d;line-height:1.2;backdrop-filter:blur(4px)}
 @media(max-width:760px){.ra-build-info{position:static;margin:8px auto 0;width:max-content;max-width:calc(100% - 16px);text-align:center}}
 </style>
+
+<style id="raNoHorizontalScrollV165">
+/* v90.8.165: 横スクロール廃止・折り返しレイアウト */
+html,body{width:100%;max-width:100%;overflow-x:hidden!important}
+main,header,.panel,.category-subpanel,.table-wrap,.advanced-filters,.monster-area-groups,.monster-card-list,.monster-card,.monster-card summary,.monster-card-body{min-width:0;max-width:100%}
+.table-wrap{overflow-x:hidden!important;overflow-y:auto;max-width:100%;}
+table{width:100%!important;max-width:100%!important;min-width:0!important;table-layout:fixed}
+th,td{min-width:0!important;max-width:none!important;white-space:normal!important;overflow-wrap:anywhere;word-break:break-word}
+td.controls,th.controls{position:static!important;left:auto!important;min-width:0!important;max-width:none!important;width:auto!important;white-space:normal!important}
+.card-table,.card-table tbody,.card-table tr,.card-table td{display:block;width:100%;max-width:100%;min-width:0}
+.card-table{border-collapse:separate;table-layout:fixed}
+.card-table .monster-list-cell{overflow:hidden}
+.monster-card-head{grid-template-columns:minmax(0,1fr)!important}
+.monster-title b,.monster-id,.monster-stat b{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;max-width:100%!important}
+.monster-card-actions{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;width:100%;justify-content:start!important}
+.monster-card-actions button{width:100%;min-width:0!important;white-space:normal!important;text-align:left!important}
+.toolbar{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))!important;gap:8px;align-items:stretch!important;width:100%}
+.toolbar .field,.toolbar .field.small{grid-column:1/-1!important;min-width:0!important;width:100%}
+.toolbar button{width:100%!important;min-width:0!important;text-align:left!important;white-space:normal!important}
+.tabs,.subtabs,.section-actions,.filter-actions,.facility-actions,.help-actions,.monster-output-actions,.modal-foot{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;width:100%;justify-content:start!important}
+.tabs>button,.subtabs>button,.section-actions>button,.filter-actions>button,.facility-actions>button,.help-actions>button,.monster-output-actions>button,.modal-foot>button{width:100%!important;min-width:0!important;text-align:left!important;white-space:normal!important}
+.responsive-data-table{table-layout:fixed}
+.responsive-data-table td,.responsive-data-table th{overflow-wrap:anywhere;word-break:break-word}
+.responsive-data-table .row-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;width:100%}
+.responsive-data-table .row-actions button{width:100%;min-width:0;white-space:normal!important;text-align:left!important;overflow:visible;text-overflow:clip}
+@media(max-width:1200px){
+  .responsive-data-table thead{display:none}
+  .responsive-data-table,.responsive-data-table tbody{display:block;width:100%}
+  .responsive-data-table tbody{padding:10px;display:grid;gap:12px}
+  .responsive-data-table tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:14px;background:#fffdf8;overflow:hidden;box-shadow:0 5px 14px rgba(79,50,24,.05)}
+  .responsive-data-table tr.empty-row{display:block;padding:12px}
+  .responsive-data-table td{display:grid;grid-template-columns:minmax(105px,.42fr) minmax(0,1fr);gap:8px;align-items:start;border-right:0;border-bottom:1px solid #eadcc9;padding:9px 10px;background:#fffdf8}
+  .responsive-data-table td::before{content:attr(data-label);font-size:11px;font-weight:900;color:var(--muted);line-height:1.35}
+  .responsive-data-table td.controls{grid-column:1/-1;display:block;background:#fff7ec}
+  .responsive-data-table td.controls::before{display:none}
+  .responsive-data-table td:last-child{border-bottom:0}
+}
+@media(max-width:820px){
+  .monster-card-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .responsive-data-table tr{grid-template-columns:1fr}
+  .responsive-data-table td.controls{grid-column:auto}
+}
+@media(max-width:480px){
+  .monster-card-actions,.responsive-data-table .row-actions,.tabs,.subtabs,.section-actions,.filter-actions,.facility-actions,.help-actions,.monster-output-actions,.modal-foot{grid-template-columns:1fr!important}
+  .responsive-data-table td{grid-template-columns:1fr;gap:3px}
+}
+</style>
+
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.164 / 最終更新日：2026年7月14日</div>
+<div class="ra-build-info">Version：v90.8.165 / 最終更新日：2026年7月14日</div>
 
 <header>
   <div class="title-card">
@@ -1080,7 +1128,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;ov
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.164';
+const RECRAFT_DB_VERSION = 'v90.8.165';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.157';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -3330,6 +3378,7 @@ function renderMonsterCardsTable(key){
   renderFilterControls(key);
   const table=$('table-'+key);
   if(!table) return;
+  table.className='card-table';
   const filter=($('filter-'+key)?.value||'').toLowerCase().trim();
   const totalRows=indexedRowsForTable(key);
   let rows=totalRows.filter(({row})=>{
@@ -3409,6 +3458,7 @@ function questCardHtml(row, idx){
 function renderQuestCardsTable(key){
   renderFilterControls(key);
   const table=$('table-'+key); if(!table) return;
+  table.className='card-table';
   const filter=($('filter-'+key)?.value||'').toLowerCase().trim();
   const totalRows=indexedRowsForTable(key);
   let rows=totalRows.filter(({row})=>{
@@ -3462,6 +3512,7 @@ function eventRowCardHtml(row, idx){
 function renderEventAreaCardsTable(key){
   renderFilterControls(key);
   const table=$('table-'+key); if(!table) return;
+  table.className='card-table';
   const filter=($('filter-'+key)?.value||'').toLowerCase().trim();
   const totalRows=indexedRowsForTable(key);
   let rows=totalRows.filter(({row})=>{
@@ -3557,6 +3608,7 @@ function renderRecordCardsTable(key){
   renderFilterControls(key);
   const table=$('table-'+key);
   if(!table) return;
+  table.className='card-table';
   const filter=($('filter-'+key)?.value||'').toLowerCase().trim();
   const totalRows=indexedRowsForTable(key);
   let rows=totalRows.filter(({row})=>{
@@ -3586,6 +3638,7 @@ function renderTable(key){
   renderFilterControls(key);
   const table=$('table-'+key);
   if(!table) return;
+  table.className='responsive-data-table';
   const filter=($('filter-'+key)?.value||'').toLowerCase().trim();
   const headers=visibleHeadersForTable(key);
   const totalRows=indexedRowsForTable(key);
@@ -3613,10 +3666,10 @@ function renderTable(key){
   }
   rows.forEach(({row,idx})=>{
     const editKey=baseKeyForTable(key);
-    html+=`<tr><td class="controls"><div class="row-actions"><button class="secondary" data-copy-card="${key}:${idx}">情報コピー</button><button class="secondary" data-row-save="${key}:${idx}">個別DB登録</button><button class="danger" data-row-replace="${key}:${idx}">個別DB置換</button><button class="ghost" data-edit-row="${editKey}:${idx}">編集</button><button class="ghost" data-dup="${editKey}:${idx}">複製</button><button class="danger" data-del="${editKey}:${idx}">削除</button></div></td>`;
+    html+=`<tr><td class="controls" data-label="操作"><div class="row-actions"><button class="secondary" data-copy-card="${key}:${idx}">情報コピー</button><button class="secondary" data-row-save="${key}:${idx}">個別DB登録</button><button class="danger" data-row-replace="${key}:${idx}">個別DB置換</button><button class="ghost" data-edit-row="${editKey}:${idx}">編集</button><button class="ghost" data-dup="${editKey}:${idx}">複製</button><button class="danger" data-del="${editKey}:${idx}">削除</button></div></td>`;
     headers.forEach(h=>{
       const cls = FORM_LONG_FIELDS.has(h) ? 'readonly-cell long' : 'readonly-cell';
-      html+=`<td class="${cls}">${escapeHtml(displayFieldValue(row, h))}</td>`;
+      html+=`<td class="${cls}" data-label="${escapeHtml(LABELS[h]||h)}">${escapeHtml(displayFieldValue(row, h))}</td>`;
     });
     html+='</tr>';
   });
