@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.184</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.185</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -483,6 +483,10 @@
   .facility-weapon-category-tabs{display:flex;gap:8px;overflow-x:auto;padding:2px 0 10px;scrollbar-width:thin}
   .facility-weapon-category-tab{white-space:nowrap;border-radius:999px;padding:8px 12px}
   .facility-weapon-category-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .facility-branch-search{display:grid;gap:6px;margin:0 0 10px}
+  .facility-branch-search label{font-size:12px;font-weight:800;color:var(--muted)}
+  .facility-branch-search input{width:100%;min-width:0}
+  .facility-weapon-category-tab .count{font-size:11px;opacity:.75;margin-left:4px}
   .facility-branch-tree{display:grid;gap:10px;margin-top:10px}
   .facility-branch-root-group{border:1px solid var(--line);border-radius:14px;padding:10px;background:var(--panel2)}
   .facility-branch-root-group>h5{margin:0 0 8px}
@@ -982,7 +986,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.184 / 最終更新日：2026年7月15日</div>
+<div class="ra-build-info">Version：v90.8.185 / 最終更新日：2026年7月15日</div>
 
 <header>
   <div class="title-card">
@@ -1553,7 +1557,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.184';
+const RECRAFT_DB_VERSION = 'v90.8.185';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1618,6 +1622,7 @@ const currentFacilitySectionByName = {
 };
 let currentFacilityRankLimit = '';
 let currentFacilityWeaponCategory = '';
+let currentFacilityWeaponBranchSearch = '';
 let currentAntiqueRandomRows = [];
 let currentAntiqueRandomArea = '';
 let currentGuildShowHiddenImportant = false;
@@ -2119,7 +2124,7 @@ const SYSTEM_HELP = [
     ],
     "body": [
       "レシピはDB上では1表で管理する。",
-      "管理HTML上では、調合レシピ、鍛冶レシピ、仕掛け製作、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。プレイヤー施設の武器派生は武器カテゴリ別タブ→主素材の分類を象徴する短い名称の「○○派生」→系統内の段階で表示し、元武器は必要素材として扱う。",
+      "管理HTML上では、調合レシピ、鍛冶レシピ、仕掛け製作、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。管理HTMLとプレイヤー施設の武器派生は、武器カテゴリ別タブ→主素材の分類を象徴する短い名称の「○○派生」→系統内の段階で表示し、元武器は必要素材として扱う。全武器カテゴリの派生系統数は4系統へ統一する。",
       "武器上位化は、初期武器や基礎武器から素材で派生する方式。",
       "武器派生はモンハンに近い素材派生として扱う。",
       "武器派生を含む作成可能品には対応レシピを用意する。",
@@ -3284,7 +3289,7 @@ function renderFacilityRecipeCard(row={}){
     <div class="facility-product-meta">
       ${[row.rank?playerRankLabel(row.rank):'',row.craftType||'',row.branchType?`系統:${row.branchType}`:''].filter(Boolean).map(v=>`<span class="facility-chip">${escapeHtml(v)}</span>`).join('')}
     </div>
-    ${row.baseItem?`<div><b>派生元：</b>${escapeHtml(row.baseItem)}</div>`:''}
+    ${row.baseItem && String(row.craftType||'').trim()!=='武器派生'?`<div><b>派生元：</b>${escapeHtml(row.baseItem)}</div>`:''}
     <div><b>必要素材：</b>${escapeHtml(row.requiredMaterials||'未設定')}</div>
     <div class="facility-work-route"><b>自作</b><span>レシピ必須</span><span>技能:${escapeHtml(skill)}</span><span>道具:${escapeHtml(requiredRank)}以上</span><span>難度:${escapeHtml(row.difficulty||'未設定')}</span></div>
     <div class="facility-work-route"><b>施設依頼</b><span>レシピ不要</span><span>${price?`${escapeHtml(price)}G`:'価格未設定'}</span></div>
@@ -3323,8 +3328,12 @@ function renderFacilityBranchBase(rootName='',direct=[]){
 }
 function renderFacilityWeaponBranches(rows=[]){
   if(!rows.length) return '<p class="notice">武器派生の登録データはありません。</p>';
+  const norm=v=>String(v||'').normalize('NFKC').toLocaleLowerCase('ja').replace(/\s+/g,'');
+  const query=norm(currentFacilityWeaponBranchSearch);
   const categoryMap=new Map();
   rows.forEach(r=>{
+    const hay=norm([r.branchType,r.resultItem,r.name,r.baseItem,r.requiredMaterials].filter(Boolean).join(' '));
+    if(query && !hay.includes(query)) return;
     const category=facilityWeaponCategoryForName(r.resultItem||'',r.category||facilityWeaponCategoryForName(r.baseItem||''));
     if(!categoryMap.has(category)) categoryMap.set(category,[]);
     categoryMap.get(category).push(r);
@@ -3334,22 +3343,30 @@ function renderFacilityWeaponBranches(rows=[]){
     if(ai>=0||bi>=0) return (ai<0?999:ai)-(bi<0?999:bi);
     return compareValues(a,b);
   });
+  const search=`<div class="facility-branch-search"><label for="facilityWeaponBranchSearch">派生名・武器名・素材名検索</label><input id="facilityWeaponBranchSearch" type="search" value="${escapeHtml(currentFacilityWeaponBranchSearch)}" placeholder="例：反照、ショートダガー、甲殻板"></div>`;
+  if(!categories.length) return search+'<p class="notice">検索条件に一致する武器派生はありません。</p>';
   if(!categories.includes(currentFacilityWeaponCategory)) currentFacilityWeaponCategory=categories[0]||'';
+  const tabs=`<div class="facility-weapon-category-tabs">${categories.map(c=>{
+    const count=new Set((categoryMap.get(c)||[]).map(r=>String(r.branchType||'').trim()).filter(Boolean)).size;
+    return `<button type="button" class="facility-weapon-category-tab ${c===currentFacilityWeaponCategory?'active':''}" data-facility-weapon-category="${escapeHtml(c)}">${escapeHtml(c)}<span class="count">${count}</span></button>`;
+  }).join('')}</div>`;
   const selectedRows=categoryMap.get(currentFacilityWeaponCategory)||[];
-  const resultNames=new Set(selectedRows.map(r=>String(r.resultItem||'').trim()).filter(Boolean));
-  const roots=[...new Set(selectedRows.map(r=>String(r.baseItem||'').trim()).filter(n=>n&&!resultNames.has(n)))];
-  const childrenMap=new Map();
-  selectedRows.forEach(r=>{const k=String(r.baseItem||'').trim();if(!childrenMap.has(k))childrenMap.set(k,[]);childrenMap.get(k).push(r);});
-  const tabs=`<div class="facility-weapon-category-tabs">${categories.map(c=>`<button type="button" class="facility-weapon-category-tab ${c===currentFacilityWeaponCategory?'active':''}" data-facility-weapon-category="${escapeHtml(c)}">${escapeHtml(c)}</button>`).join('')}</div>`;
-  const body=roots.map(rootName=>{
-    const direct=(childrenMap.get(rootName)||[]).slice().sort((a,b)=>compareValues(a.resultItem||'',b.resultItem||''));
-    const entries=[renderFacilityBranchBase(rootName,direct),...direct.map(first=>{
-      const chain=facilityBranchChain(first,childrenMap);
-      return `<details class="facility-product"><summary><span class="facility-product-title"><span>${escapeHtml(first.resultItem||first.name||'名称未設定')}</span><span class="facility-chip">${escapeHtml(first.branchType||'派生系統')}</span></span></summary><div class="facility-product-body facility-branch-chain">${chain.map((row,idx)=>(idx?'<div class="facility-branch-arrow">↓</div>':'')+renderFacilityRecipeCard(row)).join('')}</div></details>`;
-    })];
-    return `<section class="facility-branch-root-group"><div class="facility-branch-tree">${entries.join('')}</div></section>`;
-  }).join('')||'<p class="notice">この武器種の派生元を特定できませんでした。</p>';
-  return tabs+body;
+  const byBranch=new Map();
+  selectedRows.forEach(r=>{
+    const label=String(r.branchType||'').trim()||'未分類';
+    if(!byBranch.has(label)) byBranch.set(label,[]);
+    byBranch.get(label).push(r);
+  });
+  const groups=[...byBranch.entries()].sort((a,b)=>compareValues(a[0],b[0])).map(([label,groupRows],groupIndex)=>{
+    const resultNames=new Set(groupRows.map(r=>String(r.resultItem||'').trim()).filter(Boolean));
+    const roots=[...new Set(groupRows.map(r=>String(r.baseItem||'').trim()).filter(n=>n&&!resultNames.has(n)))];
+    const childrenMap=new Map();
+    groupRows.forEach(r=>{const k=String(r.baseItem||'').trim();if(!childrenMap.has(k))childrenMap.set(k,[]);childrenMap.get(k).push(r);});
+    const lines=roots.flatMap(rootName=>(childrenMap.get(rootName)||[]).slice().sort((a,b)=>compareValues(a.resultItem||'',b.resultItem||'')).map(first=>facilityBranchChain(first,childrenMap)));
+    const stageCount=lines.reduce((sum,line)=>sum+line.length,0);
+    return `<details class="facility-product" ${groupIndex===0?'open':''}><summary><span class="facility-product-title"><span>${escapeHtml(label)}派生</span><span class="facility-chip">${stageCount}段階</span></span></summary><div class="facility-product-body facility-branch-chain">${lines.map(chain=>`<div class="facility-branch-root-group"><div class="facility-branch-chain">${chain.map((row,idx)=>(idx?'<div class="facility-branch-arrow">↓</div>':'')+renderFacilityRecipeCard(row)).join('')}</div></div>`).join('')}</div></details>`;
+  }).join('');
+  return search+tabs+`<div class="facility-branch-tree">${groups}</div>`;
 }
 function renderFacilityRecipeGroup(craftType){
   const rows=facilityRecipeRows(craftType);
@@ -6362,6 +6379,7 @@ document.addEventListener('input',e=>{
   if(edit){ const [key,idx,field]=edit.split(':'); state[key][+idx][field]=e.target.textContent; if(baseKeyForTable(key)==='items') renderFacilitiesPanel(); renderHelpPanel(); updateCounts(); updateJsonBox(); }
   if(e.target.id && e.target.id.startsWith('filter-')) renderTable(e.target.id.replace('filter-',''));
   if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
+  if(e.target.id==='facilityWeaponBranchSearch'){ currentFacilityWeaponBranchSearch=e.target.value||''; renderFacilitiesPanel(); const input=$('facilityWeaponBranchSearch'); if(input){input.focus();input.setSelectionRange(input.value.length,input.value.length);} return; }
   if(['facilityUpgradeMaterialInput','facilityUpgradeStepInput','facilitySmithToolRankInput'].includes(e.target.id)) renderFacilityUpgradeResult();
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)) renderFacilityAlchemyResult();
   if(['facilityAppraisalRankInput'].includes(e.target.id)) renderAntiqueAppraisalResult();
