@@ -1,5 +1,6 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>リクラフト・アルケミア ヘルプ</title><style>:root{--bg:#f5efe4;--ink:#3d3025;--muted:#7e6d5b;--line:#dccbb4;--accent:#a96f37;--shadow:0 14px 34px rgba(76,49,25,.15);--radius:18px}*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(180deg,#fbf7ef 0%,var(--bg) 100%);min-height:100vh}header,main{max-width:1180px;margin:0 auto;padding:22px}.title-card,.panel{background:rgba(255,250,242,.9);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}h1{margin:0 0 8px;font-size:clamp(24px,4vw,36px)}.subtitle,.notice{margin:0 0 14px;color:var(--muted);line-height:1.7}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}input{flex:1;min-width:220px;border:1px solid #cfbea8;border-radius:12px;background:#fffdf8;color:var(--ink);padding:10px 12px;font:inherit}button{border:0;border-radius:12px;background:var(--accent);color:#fff;font-weight:800;padding:10px 14px;cursor:pointer}button.ghost{background:#fff9f1;color:var(--ink);border:1px solid #e3cdb4}.help-layout{display:grid;gap:12px}.help-card{border:1px solid #ead9c4;background:#fffdf8;border-radius:16px;overflow:hidden}.help-card[hidden]{display:none}.help-card summary{cursor:pointer;list-style:none;padding:13px 15px;font-weight:900;color:#5b3821;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}.tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.tags span{display:inline-flex;border:1px solid #ead9c4;background:#fffaf3;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:800;color:#684c31}.help-body{border-top:1px solid #ead9c4;padding:12px 15px;color:#5d4935;line-height:1.75;font-size:14px}.help-body ul{margin:0;padding-left:1.35em}textarea{position:absolute;left:-9999px;width:1px;height:1px}
-/* v90.8.170: レイアウト安定化・左揃え・ボタン折返し */
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>リクラフト・アルケミア ヘルプ</title><style>:root{--bg:#f5efe4;--ink:#3d3025;--muted:#7e6d5b;--line:#dccbb4;--accent:#a96f37;--shadow:0 14px 34px rgba(76,49,25,.15);--radius:18px}*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:linear-gradient(180deg,#fbf7ef 0%,var(--bg) 100%);min-height:100vh}header,main{max-width:1180px;margin:0 auto;padding:22px}.title-card,.panel{background:rgba(255,250,242,.9);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}h1{margin:0 0 8px;font-size:clamp(24px,4vw,36px)}.subtitle,.notice{margin:0 0 14px;color:var(--muted);line-height:1.7}.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}input{flex:1;min-width:220px;border:1px solid #cfbea8;border-radius:12px;background:#fffdf8;color:var(--ink);padding:10px 12px;font:inherit}button{border:0;border-radius:12px;background:var(--accent);color:#fff;font-weight:800;padding:10px 14px;cursor:pointer}button.ghost{background:#fff9f1;color:var(--ink);border:1px solid #e3cdb4}.help-layout{display:grid;gap:12px}.help-card{border:1px solid #ead9c4;background:#fffdf8;border-radius:16px;overflow:hidden}.help-card[hidden]{display:none}.help-card summary{cursor:pointer;list-style:none;padding:13px 15px;font-weight:900;color:#5b3821;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}.tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.tags span{display:inline-flex;border:1px solid #ead9c4;background:#fffaf3;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:800;color:#684c31}.help-body{border-top:1px solid #ead9c4;padding:12px 15px;color:#5d4935;line-height:1.75;font-size:14px}.help-body ul{margin:0;padding-left:1.35em}textarea{position:absolute;left:-9999px;width:1px;height:1px}
+/* v90.8.176: レイアウト安定化・左揃え・ボタン折返し */
 html,body{max-width:100%;overflow-x:hidden}
 body,button,input,select,textarea,label,summary,th,td,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.badge{text-align:left!important}
 button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere;word-break:normal;line-height:1.35;height:auto;min-width:0;max-width:100%}
@@ -18,17 +19,14 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;ov
 .ra-build-info{position:fixed;top:8px;right:8px;z-index:99999;padding:6px 10px;border:1px solid rgba(91,69,45,.28);border-radius:999px;background:rgba(255,253,248,.94);box-shadow:0 2px 10px rgba(0,0,0,.12);font-size:12px;font-weight:800;color:#5b452d;line-height:1.2;backdrop-filter:blur(4px)}
 @media(max-width:760px){.ra-build-info{position:static;margin:8px auto 0;width:max-content;max-width:calc(100% - 16px);text-align:center}}
 </style>
-
 <style id="raNoHorizontalScrollV165">
 html,body{width:100%;max-width:100%;overflow-x:hidden!important}
 main,header,section,.panel,.card,.tabs,.subtabs{min-width:0;max-width:100%}
 button,input,select,textarea,label,summary,th,td{min-width:0;max-width:100%;text-align:left!important;white-space:normal!important;overflow-wrap:anywhere;word-break:break-word}
 pre,code{max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word}
 </style>
-
-
 <style id="raCompactButtonsV166">
-/* v90.8.170: ボタン幅を文字量に合わせる */
+/* v90.8.176: ボタン幅を文字量に合わせる */
 button,.tab,.subtab,.tab-btn{
   width:auto!important;
   max-width:100%!important;
@@ -51,84 +49,90 @@ button,.tab,.subtab,.tab-btn{
 }
 .buttons>button,.tabs>button,.subtabs>button,.actions>button,.section-actions>button{width:auto!important;flex:0 1 auto!important}
 </style>
-
-</head><body>
-<div class="ra-build-info">Version：v90.8.170 / 最終更新日：2026年7月14日</div>
-<header><div class="title-card"><h1>リクラフト・アルケミア ヘルプ</h1><p class="subtitle">確定済みのシステム仕様を確認するページ。未確定案、変更履歴、作業メモは含めない。</p></div></header><main><section class="panel"><div class="toolbar"><input id="search" type="search" placeholder="防御・かばう・矢筒・装備強化などで検索"><button class="ghost" id="openAll" type="button">すべて開く</button><button class="ghost" id="closeAll" type="button">すべて閉じる</button><button id="copyAll" type="button">全文コピー</button></div><p class="notice">各項目は折り畳み式。検索すると該当項目だけ表示。</p><div class="help-layout" id="helpLayout"><details class="help-card">
-  <summary><span>施設</span><span class="tags"><span>鍛冶屋</span><span>薬屋</span><span>宿屋</span><span>NPC</span></span></summary>
-  <div class="help-body"><ul><li>基本施設は鍛冶屋、薬屋、宿屋。</li><li>鍛冶屋は武器、盾、防具、バッグ、矢筒、鍛冶素材、戦闘用罠、細工道具、鍛冶・仕掛け製作施設利用を扱う。</li><li>薬屋はポーション系、薬品系調合品、調合素材、調合施設利用を扱う。</li><li>宿屋は宿泊45G、休息30G、噂、クエスト情報を扱う。商品販売は主目的にしない。</li><li>休息は1行動を消費してHP・MPを全回復する。日付と疲労度は変化しない。</li><li>宿泊は一日を終了して翌日へ進み、HP・MPを全回復して疲労度を0にする。</li><li>雑貨屋は現時点では使用しない。</li><li>施設NPCは、リネット、ガルド・ヴェルナー、ミレイユ・オルセーヌ、ロジーナ・エルメル。</li><li>リネットは拠点と工房の案内役。</li><li>ガルド・ヴェルナーは鍛冶屋担当。</li><li>ミレイユ・オルセーヌは薬屋担当。</li><li>ロジーナ・エルメルは宿屋担当。</li></ul></div>
+<style id="raHelpAlignmentV174">body,input,textarea,summary,.help-body,.notice{text-align:left!important}button,.tags span{text-align:center!important}.toolbar{justify-content:flex-start!important}</style></head><body>
+<div class="ra-build-info">Version：v90.8.181 / 最終更新日：2026年7月15日</div>
+<header><div class="title-card"><h1>リクラフト・アルケミア ヘルプ</h1><p class="subtitle">確定済みのシステム仕様を確認するページ。未確定案、変更履歴、作業メモは含めない。</p></div></header><main><section class="panel"><div class="toolbar"><input id="search" placeholder="防御・かばう・矢筒・装備強化などで検索" type="search"/><button class="ghost" id="openAll" type="button">すべて開く</button><button class="ghost" id="closeAll" type="button">すべて閉じる</button><button id="copyAll" type="button">全文コピー</button></div><p class="notice">探索エリア画面の各エリアカードに解放キーを表示し、コピーできます。編集画面ではランダム再生成も可能です。<br>各項目は折り畳み式。検索すると該当項目だけ表示。</p><div class="help-layout" id="helpLayout"><details class="help-card">
+<summary><span>プレイヤー向け施設カタログ</span><span class="tags"><span>解放キー1個</span><span>鍛冶屋</span><span>薬屋</span></span></summary>
+<div class="help-body"><ul><li>プレイヤー向け施設HTMLは鍛冶屋と薬屋だけを扱う。宿屋、骨董屋、ギルド、装備強化機能は含めない。</li><li>入力・保存する解放キーは1個だけ。キーが示すエリアまでの商品、作成、素材加工を累積表示する。キー照合と未解放データのマスクはGAS側で行う。</li><li>ランクは性能・難易度の目安であり、解放条件には使わない。</li><li>通常の商品・作成・素材加工は必要エリアに達するまで非表示。</li><li>武器派生は未解放でも派生枠を表示し、派生後の名称、必要素材、効果を「？？？」にする。</li><li>ポーションと上級ポーションの必要素材は従来どおり変更しない。</li><li>公開カタログは閲覧専用とし、コピー機能は付けない。</li></ul></div>
+</details>
+<details class="help-card">
+<summary><span>数値ランク</span><span class="tags"><span>★N</span><span>Rank:N</span><span>解放エリア</span></span></summary>
+<div class="help-body"><ul><li>装備・アイテム・素材・レシピ・術式は、1以上で上限なしの数値ランクを使用する。</li><li>内部データは数値のrankで管理する。</li><li>プレイヤー向け表示は★1、★2の形式。管理画面ではRank:1、Rank:2の形式で表示する。</li><li>旧データは初期・初級・低級→1、中級・普通→2、上級・良質→3、特級・希少→4、最上級・高級→5として読み替える。</li><li>ランクは性能・難易度の目安であり、施設の商品・作成・武器派生の解放判定には使用しない。解放は解放エリアキーと解放施設で管理する。</li><li>素材ランク、道具対応ランク、レシピの必要道具ランクも同じ数値ランクへ統一する。</li><li>強化可能な装備は「強化素材最低ランク」を持ち、その値以上の素材だけを強化に使用できる。初期値は装備自身のランクと同じ。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>1日の行動回数・疲労</span><span class="tags"><span>行動回数</span><span>疲労</span><span>宿屋</span><span>日数</span></span></summary>
-  <div class="help-body"><ul><li>基本行動回数はパーティー共通で1日4回。</li><li>クエストを1段階進行する、またはエリア探索を1回行うたびに1行動を消費する。</li><li>行動回数を使い切ったら、その日の新しい行動は行えず、宿泊するか宿泊せず翌日へ進む。</li><li>宿泊せず一日を終えるたび、疲労度が1増加する。</li><li>疲労度による判定補正は -2×疲労度。</li><li>1日の行動回数は 4-疲労度。最低1回。</li><li>宿屋の休息は30G。1行動を消費してHP・MPを全回復し、日付と疲労度は変化しない。</li><li>宿屋の宿泊は45G。一日を終了してHP・MPを全回復し、疲労度を0にする。</li></ul></div>
+<summary><span>施設</span><span class="tags"><span>鍛冶屋</span><span>薬屋</span><span>宿屋</span><span>NPC</span></span></summary>
+<div class="help-body"><ul><li>基本施設は鍛冶屋、薬屋、宿屋。</li><li>鍛冶屋は武器、盾、防具、バッグ、矢筒、鍛冶素材、戦闘用罠、細工道具、鍛冶・仕掛け製作施設利用を扱う。</li><li>薬屋はポーション系、薬品系調合品、調合素材、調合施設利用を扱う。</li><li>宿屋は宿泊45G、休息30G、噂、クエスト情報を扱う。商品販売は主目的にしない。</li><li>休息は1行動を消費してHP・MPを全回復する。日付と疲労度は変化しない。</li><li>宿泊は一日を終了して翌日へ進み、HP・MPを全回復して疲労度を0にする。</li><li>雑貨屋は現時点では使用しない。</li><li>施設NPCは、リネット、ガルド・ヴェルナー、ミレイユ・オルセーヌ、ロジーナ・エルメル。</li><li>リネットは拠点と工房の案内役。</li><li>ガルド・ヴェルナーは鍛冶屋担当。</li><li>ミレイユ・オルセーヌは薬屋担当。</li><li>ロジーナ・エルメルは宿屋担当。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>状態異常：毒・汚染・呪い</span><span class="tags"><span>毒</span><span>汚染</span><span>呪い</span><span>清めの祈り</span></span></summary>
-  <div class="help-body"><ul><li>毒・汚染・呪いは敵や技ごとの別名を増やさず、共通状態異常として扱う。</li><li>毒：ラウンド終了時に1D3無属性ダメージを受ける。このダメージに防御値は適用しない。</li><li>汚染：HPを回復する時、回復量を2点減らす。最低0。</li><li>呪い：攻撃・術式・祈祷判定に-1。</li><li>同じ状態異常は重複しない。毒・汚染・呪いは別々に同時付与される。</li><li>基本的に戦闘終了まで継続する。</li><li>清めの祈りと浄化水は、対象に付与されている毒・汚染・呪いのうち1つを選んで解除する。</li><li>解毒薬は毒だけを解除する。</li><li>敵ごとの差は状態異常の効果ではなく、付与判定の強さや抵抗の難しさで表現する。</li></ul></div>
+<summary><span>1日の行動回数・疲労</span><span class="tags"><span>行動回数</span><span>疲労</span><span>宿屋</span><span>日数</span></span></summary>
+<div class="help-body"><ul><li>基本行動回数はパーティー共通で1日4回。</li><li>クエストを1段階進行する、またはエリア探索を1回行うたびに1行動を消費する。</li><li>行動回数を使い切ったら、その日の新しい行動は行えず、宿泊するか宿泊せず翌日へ進む。</li><li>宿泊せず一日を終えるたび、疲労度が1増加する。</li><li>疲労度による判定補正は -2×疲労度。</li><li>1日の行動回数は 4-疲労度。最低1回。</li><li>宿屋の休息は30G。1行動を消費してHP・MPを全回復し、日付と疲労度は変化しない。</li><li>宿屋の宿泊は45G。一日を終了してHP・MPを全回復し、疲労度を0にする。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>未鑑定スクロール</span><span class="tags"><span>魔法</span><span>祈祷</span><span>鑑定</span><span>術式</span></span></summary>
-  <div class="help-body"><ul><li>未鑑定スクロールは、未鑑定の魔法スクロールと未鑑定の祈祷スクロールに分ける。</li><li>未鑑定の段階で魔法か祈祷か、およびスクロールランクは判別できる。</li><li>鑑定結果は、スクロールの種別とランクに一致する候補だけから抽選する。</li><li>術式は魔法と祈祷の両方を含む総称なので、鑑定道具の名称は術式鑑定具のままとする。</li></ul></div>
+<summary><span>状態異常：毒・汚染・呪い</span><span class="tags"><span>毒</span><span>汚染</span><span>呪い</span><span>清めの祈り</span></span></summary>
+<div class="help-body"><ul><li>毒・汚染・呪いは敵や技ごとの別名を増やさず、共通状態異常として扱う。</li><li>毒：ラウンド終了時に1D3無属性ダメージを受ける。このダメージに防御値は適用しない。</li><li>汚染：HPを回復する時、回復量を2点減らす。最低0。</li><li>呪い：攻撃・術式・祈祷判定に-1。</li><li>同じ状態異常は重複しない。毒・汚染・呪いは別々に同時付与される。</li><li>基本的に戦闘終了まで継続する。</li><li>清めの祈りと浄化水は、対象に付与されている毒・汚染・呪いのうち1つを選んで解除する。</li><li>解毒薬は毒だけを解除する。</li><li>敵ごとの差は状態異常の効果ではなく、付与判定の強さや抵抗の難しさで表現する。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>倉庫・所持品・バッグ</span><span class="tags"><span>倉庫</span><span>所持品</span><span>バッグ</span></span></summary>
-  <div class="help-body"><ul><li>旧所持品は倉庫。旧携行品は所持品。</li><li>倉庫は保管上限なし。スタック数や枠数を気にせず最大限所持できる。</li><li>冒険中に使用できるのは所持品に入っているアイテムのみ。</li><li>バッグは倉庫内アイテムから選択する。</li><li>バッグに設定された容量に応じて、キャラシート側の所持品枠数が変化する。</li><li>初期バッグは簡素なバッグ。バッグ容量は8。</li><li>採取袋は使用しない。袋カテゴリも使用しない。</li></ul></div>
+<summary><span>未鑑定スクロール</span><span class="tags"><span>魔法</span><span>祈祷</span><span>鑑定</span><span>術式</span></span></summary>
+<div class="help-body"><ul><li>未鑑定スクロールは、未鑑定の魔法スクロールと未鑑定の祈祷スクロールに分ける。</li><li>未鑑定の段階で魔法か祈祷か、およびスクロールランクは判別できる。</li><li>鑑定結果は、スクロールの種別とランクに一致する候補だけから抽選する。</li><li>術式は魔法と祈祷の両方を含む総称なので、鑑定道具の名称は術式鑑定具のままとする。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>道具カテゴリ</span><span class="tags"><span>道具</span><span>調合</span><span>鍛冶</span></span></summary>
-  <div class="help-body"><ul><li>道具カテゴリは戦闘、調合、鍛冶、その他。</li><li>調合道具と鍛冶道具は細かく分割しない。</li><li>調合と鍛冶は施設を借りられる前提。</li><li>採取道具セット、採掘道具セット、探索道具セットは現時点では使用しない。</li><li>武器と防具の破損、修理ルールは現時点では扱わない。</li><li>調合道具と鍛冶道具は素材ランクごとに対応アイテムを登録する。</li><li>素材ランクは低級、普通、良質、希少、高級。</li><li>調合道具は旅薬師の乳鉢具、硝子秤の調合具、晶瓶の調合具、星滴の蒸留具、月環の錬成具。</li><li>鍛冶道具は野鍛冶の槌箱、焼入れ金床具、鋼噛み火ばさみ具、星鉄火ばさみ具、竜炉の鍛冶具。</li><li>各道具は同ランクまでの素材を施設外で扱うための道具。</li><li>施設利用時は道具を必須にしない。</li><li>調合道具は薬屋、鍛冶道具は鍛冶屋で扱う。</li></ul></div>
+<summary><span>倉庫・所持品・バッグ</span><span class="tags"><span>倉庫</span><span>所持品</span><span>バッグ</span></span></summary>
+<div class="help-body"><ul><li>旧所持品は倉庫。旧携行品は所持品。</li><li>倉庫は保管上限なし。スタック数や枠数を気にせず最大限所持できる。</li><li>冒険中に使用できるのは所持品に入っているアイテムのみ。</li><li>バッグは倉庫内アイテムから選択する。</li><li>バッグに設定された容量に応じて、キャラシート側の所持品枠数が変化する。</li><li>初期バッグは簡素なバッグ。バッグ容量は8。</li><li>採取袋は使用しない。袋カテゴリも使用しない。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>店売り・初期販売</span><span class="tags"><span>店売り</span><span>初期武器</span><span>防具</span><span>矢筒</span></span></summary>
-  <div class="help-body"><ul><li>鍛冶屋では、DB上の初期所持品タグ付き武器を購入可能にする。</li><li>初期販売武器はショートダガー、ロングソード、ハンドアックス、ウォーハンマー、ショートスピア、ウッドスタッフ、ショートボウ、クロスボウ、ヘヴィクロスボウ、ロングスピア、グレートソード、グレートハンマー。</li><li>鍛冶屋販売枠としてバトルサイズ、アイアンガントレットも扱う。</li><li>防具の商品名はカテゴリ名をそのまま使わない。</li><li>初期販売防具は、旅風のジャケット、鉄紐のベスト、鋲打ちの胴衣、星糸のケープ、祈り布のストール。</li><li>普段着は0Gの初期装備扱い。店売り防具にはしない。</li><li>矢筒は初期配布しない。鍛冶屋販売品にする。</li></ul></div>
+<summary><span>道具カテゴリ</span><span class="tags"><span>道具</span><span>調合</span><span>鍛冶</span></span></summary>
+<div class="help-body"><ul><li>道具カテゴリは戦闘、調合、鍛冶、その他。</li><li>調合道具と鍛冶道具は細かく分割しない。</li><li>調合と鍛冶は施設を借りられる前提。</li><li>採取道具セット、採掘道具セット、探索道具セットは現時点では使用しない。</li><li>武器と防具の破損、修理ルールは現時点では扱わない。</li><li>調合道具と鍛冶道具は素材ランクごとに対応アイテムを登録する。</li><li>素材ランクは1以上の数値で管理し、表示は★Nとする。</li><li>調合道具は旅薬師の乳鉢具、硝子秤の調合具、晶瓶の調合具、星滴の蒸留具、月環の錬成具。</li><li>鍛冶道具は野鍛冶の槌箱、焼入れ金床具、鋼噛み火ばさみ具、星鉄火ばさみ具、竜炉の鍛冶具。</li><li>各道具は自身の数値ランク以下の素材を施設外で扱うための道具。</li><li>施設利用時は道具を必須にしない。</li><li>調合道具は薬屋、鍛冶道具は鍛冶屋で扱う。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>矢弾・矢筒</span><span class="tags"><span>遠距離武器</span><span>矢弾</span><span>矢筒</span><span>スタック</span></span></summary>
-  <div class="help-body"><ul><li>遠距離武器は通常攻撃でも矢弾を1つ消費する。</li><li>矢弾がない場合、対応する遠距離武器で攻撃できない。</li><li>矢弾は種類ごとに管理する。</li><li>矢弾は種類ごとに最大スタック数を持つ。</li><li>矢弾を矢筒に入れない場合、1種類につき所持品枠を1枠使う。</li><li>初期遠距離武器を選んだ場合、対応する通常矢弾を最大スタック数分だけ初期支給する。</li><li>通常矢は最大20。通常ボルトは最大20。大型ボルトは最大10。</li><li>特殊矢弾の最大スタック数は効果に応じて個別に設定する。</li><li>矢筒は装備枠『矢筒』に装備する。</li><li>矢筒自体は所持品枠を消費しない。</li><li>矢筒に入れた矢弾は所持品枠を消費しない。</li><li>簡素な矢筒は2種類、旅人の矢筒は3種類、狩人の矢筒は4種類の矢弾を収納できる。</li><li>キャラシート側では、矢筒を装備した場合、収納種類数ぶんの矢弾枠を入力する。</li></ul></div>
+<summary><span>店売り・初期販売</span><span class="tags"><span>店売り</span><span>初期武器</span><span>防具</span><span>矢筒</span></span></summary>
+<div class="help-body"><ul><li>鍛冶屋では、DB上の初期所持品タグ付き武器を購入可能にする。</li><li>初期販売武器はショートダガー、ロングソード、ハンドアックス、ウォーハンマー、ショートスピア、ウッドスタッフ、ショートボウ、クロスボウ、ヘヴィクロスボウ、ロングスピア、グレートソード、グレートハンマー。</li><li>鍛冶屋販売枠としてバトルサイズ、アイアンガントレットも扱う。</li><li>防具の商品名はカテゴリ名をそのまま使わない。</li><li>初期販売防具は、旅風のジャケット、鉄紐のベスト、鋲打ちの胴衣、星糸のケープ、祈り布のストール。</li><li>普段着は0Gの初期装備扱い。店売り防具にはしない。</li><li>矢筒は初期配布しない。鍛冶屋販売品にする。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>レシピ・武器派生</span><span class="tags"><span>レシピ</span><span>武器派生</span><span>鍛冶</span></span></summary>
-  <div class="help-body"><ul><li>レシピはDB上では1表で管理する。</li><li>管理HTML上では、調合レシピ、鍛冶レシピ、仕掛け製作、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。</li><li>武器上位化は、初期武器や基礎武器から素材で派生する方式。</li><li>武器派生はモンハンに近い素材派生として扱う。</li><li>武器派生を含む作成可能品には対応レシピを用意する。</li><li>自作では対応レシピ、素材、必要道具、製作判定が必要。施設依頼ではレシピ不要。</li><li>基本レシピの一部は店売りし、それ以外は宝箱から入手する。</li><li>店売りレシピは恒久解放品として高めに設定し、初級消耗品・素材加工は400～700G、初期武器・基礎装備は700～1,200Gを目安とする。</li><li>施設の武器派生は、武器種→基礎武器と各派生系統の起点→系統内の段階、の順に表示する。</li><li>属性派生を全属性分作る方針にはしない。</li><li>属性付与や属性強化は魔物素材の装備強化内容で表現する。</li></ul></div>
+<summary><span>矢弾・矢筒</span><span class="tags"><span>遠距離武器</span><span>矢弾</span><span>矢筒</span><span>スタック</span></span></summary>
+<div class="help-body"><ul><li>遠距離武器は通常攻撃でも矢弾を1つ消費する。</li><li>矢弾がない場合、対応する遠距離武器で攻撃できない。</li><li>矢弾は種類ごとに管理する。</li><li>矢弾は種類ごとに最大スタック数を持つ。</li><li>矢弾を矢筒に入れない場合、1種類につき所持品枠を1枠使う。</li><li>初期遠距離武器を選んだ場合、対応する通常矢弾を最大スタック数分だけ初期支給する。</li><li>通常矢は最大20。通常ボルトは最大20。大型ボルトは最大10。</li><li>特殊矢弾の最大スタック数は効果に応じて個別に設定する。</li><li>矢筒は装備枠『矢筒』に装備する。</li><li>矢筒自体は所持品枠を消費しない。</li><li>矢筒に入れた矢弾は所持品枠を消費しない。</li><li>簡素な矢筒は2種類、旅人の矢筒は3種類、狩人の矢筒は4種類の矢弾を収納できる。</li><li>キャラシート側では、矢筒を装備した場合、収納種類数ぶんの矢弾枠を入力する。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>魔物素材・装備強化</span><span class="tags"><span>魔物素材</span><span>装備強化</span><span>武器</span><span>防具</span><span>equipmentUpgradeEffect</span></span></summary>
-  <div class="help-body"><ul><li>魔物素材には、装備強化に使用した際の強化内容と強化値を設定する。</li><li>魔物素材はすべて何かしらの装備強化内容を持つ。</li><li>魔物素材は装備強化内容・装備強化値・強化対象の3項目を必須とし、特殊効果の場合は特殊能力詳細も必須とする。未設定のまま保存またはDB送信できない。</li><li>効果が複数の素材で重複しても問題ない。</li><li>装備強化内容は選択式の項目『equipmentUpgradeEffect / 装備強化内容』で管理する。</li><li>装備強化値は自由入力の項目『equipmentUpgradeValue / 装備強化値』で管理する。特殊効果の具体的な処理は『equipmentUpgradeDetail / 特殊能力詳細』で管理する。</li><li>装備強化内容の選択肢には、強化分類と対象装備を含める。</li><li>武器用の例：威力(武器)、命中(武器)、防御貫通(武器)、火属性付与(武器)、火属性強化(武器)、特殊効果付与(武器)。</li><li>防具用の例：防御値(防具)、防御行動値(防具)、回避補正(防具)、火耐性付与(防具)、水耐性付与(防具)、特殊効果付与(防具)。</li><li>防具の防御系強化は、キャラシのステータス名に準拠して防御値と防御行動値を分ける。</li><li>防御値(防具)は、通常時から適用されるダメージ軽減値を上げる。</li><li>防御行動値(防具)は、行動として防御した時の追加軽減値を上げる。</li><li>回避補正(防具)は、装備による回避値の補正を上げる。</li><li>防御値(防具)は強力な強化として扱い、低ランク素材では原則付与しない。</li><li>低ランク素材の防具強化は、防御行動値、回避補正、属性耐性付与、特殊効果付与を基本とする。</li><li>硬い甲殻や金属殻など、常時の硬さを明確に表す素材だけ防御値(防具)を持たせる。</li><li>強化内容は、何が上がるのか、何が付与されるのかを表す。</li><li>強化値は、具体的な数値、属性名、耐性名、または特殊効果の内容を表す。</li><li>例：装備強化内容『威力(武器)』、装備強化値『+1』。</li><li>例：装備強化内容『火属性付与(武器)』、装備強化値『火』。</li><li>例：装備強化内容『防御行動値(防具)』、装備強化値『+1』。</li><li>例：装備強化内容『回避補正(防具)』、装備強化値『+1』。</li><li>例：装備強化内容『水耐性付与(防具)』、装備強化値『水』。</li><li>武器は素材による派生や強化に反映する。</li><li>防具は派生式ではなく、購入または作成した防具を後から強化する方式。</li><li>属性として扱う値は、物、火、水、風、雷、光、闇、無。</li><li>採取素材など、魔物素材ではない素材は装備強化内容と装備強化値を空欄にしてよい。</li><li>魔物素材の特徴が装備性能に出るように、素材ごとに装備強化内容と装備強化値を設定する。</li><li>ドロップ判定やドロップ入手の出力では、素材の説明、効果、売値などを表示してよい。</li><li>ドロップ出力では、装備強化内容と装備強化値は表示しない。</li><li>装備強化内容・装備強化値・強化対象は、施設タブの強化項目と素材の情報コピーで確認できる。特殊効果は具体的な能力詳細も表示する。</li><li>鍛冶屋の装備強化では、武器・防具・盾・装飾品・魔導書・祈祷書を選択できる。複数対象の素材は対象名を分解し、該当するすべての装備種別で候補へ表示する。</li><li>装備強化の施設工賃は「素材の基準価格×今回の強化回数×装備ランク倍率」で算出する。ランク倍率は初期・初級×1、中級×2、上級×4、特級×8、最上級×12。</li></ul></div>
+<summary><span>レシピ・武器派生</span><span class="tags"><span>レシピ</span><span>武器派生</span><span>鍛冶</span></span></summary>
+<div class="help-body"><ul><li>レシピはDB上では1表で管理する。</li><li>管理HTML上では、調合レシピ、鍛冶レシピ、仕掛け製作、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。</li><li>武器上位化は、初期武器や基礎武器から素材で派生する方式。</li><li>武器派生を含む作成可能品には対応レシピを用意する。</li><li>自作では対応レシピ、素材、必要道具、製作判定が必要。施設依頼ではレシピ不要。</li><li>基本レシピの一部は店売りし、それ以外は宝箱から入手する。</li><li>店売りレシピは恒久解放品として高めに設定する。</li><li>店売りされる完成品の売値は店頭販売価格と同額にする。</li><li>作成でしか入手できない完成品の売値は、施設へ作成依頼する際の価格と同額にする。</li><li>施設の武器派生は、武器種→基礎武器と各派生系統の起点→系統内の段階、の順に表示する。</li><li>属性派生を全属性分作る方針にはしない。</li><li>属性付与や属性強化は魔物素材の装備強化内容で表現する。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>魔物データ</span><span class="tags"><span>魔物</span><span>属性耐性</span><span>ドロップ</span><span>行動</span></span></summary>
-  <div class="help-body"><ul><li>魔物は物、火、水、風、雷、光、闇、無の8属性に対する相性を持つ。</li><li>属性相性は、通常、耐、無、反、吸、弱で管理する。</li><li>耐はダメージ半減。</li><li>無はダメージ0、属性効果なし。</li><li>反はダメージ0、受けるはずだったダメージを攻撃者へ返す。</li><li>吸はダメージ0、受けるはずだったダメージ分だけHPを回復する。</li><li>弱はダメージ2倍。</li><li>魔物の行動は1行動1行で管理する。</li><li>ドロップはメモ式ではなく行単位で管理する。</li><li>ドロップ素材は魔物素材カテゴリから選択する。</li></ul></div>
+<summary><span>魔物素材・装備強化</span><span class="tags"><span>魔物素材</span><span>装備強化</span><span>武器</span><span>防具</span><span>equipmentUpgradeEffect</span></span></summary>
+<div class="help-body"><ul><li>魔物素材には、装備強化に使用した際の強化内容と強化値を設定する。</li><li>魔物素材はすべて何かしらの装備強化内容を持つ。</li><li>魔物素材は装備強化内容・装備強化値・強化対象の3項目を必須とし、特殊効果の場合は特殊能力詳細も必須とする。未設定のまま保存またはDB送信できない。</li><li>効果が複数の素材で重複しても問題ない。</li><li>装備強化内容は選択式の項目『equipmentUpgradeEffect / 装備強化内容』で管理する。</li><li>装備強化値は自由入力の項目『equipmentUpgradeValue / 装備強化値』で管理する。特殊効果の具体的な処理は『equipmentUpgradeDetail / 特殊能力詳細』で管理する。</li><li>装備強化内容の選択肢には、強化分類と対象装備を含める。</li><li>武器用の例：威力(武器)、命中(武器)、防御貫通(武器)、火属性付与(武器)、火属性強化(武器)、特殊効果付与(武器)。</li><li>防具用の例：防御値(防具)、防御行動値(防具)、回避補正(防具)、火耐性付与(防具)、水耐性付与(防具)、特殊効果付与(防具)。</li><li>防具の防御系強化は、キャラシのステータス名に準拠して防御値と防御行動値を分ける。</li><li>防御値(防具)は、通常時から適用されるダメージ軽減値を上げる。</li><li>防御行動値(防具)は、行動として防御した時の追加軽減値を上げる。</li><li>回避補正(防具)は、装備による回避値の補正を上げる。</li><li>防御値(防具)は強力な強化として扱い、低ランク素材では原則付与しない。</li><li>低ランク素材の防具強化は、防御行動値、回避補正、属性耐性付与、特殊効果付与を基本とする。</li><li>硬い甲殻や金属殻など、常時の硬さを明確に表す素材だけ防御値(防具)を持たせる。</li><li>強化内容は、何が上がるのか、何が付与されるのかを表す。</li><li>強化値は、具体的な数値、属性名、耐性名、または特殊効果の内容を表す。</li><li>例：装備強化内容『威力(武器)』、装備強化値『+1』。</li><li>例：装備強化内容『火属性付与(武器)』、装備強化値『火』。</li><li>例：装備強化内容『防御行動値(防具)』、装備強化値『+1』。</li><li>例：装備強化内容『回避補正(防具)』、装備強化値『+1』。</li><li>例：装備強化内容『水耐性付与(防具)』、装備強化値『水』。</li><li>武器は素材による派生や強化に反映する。</li><li>防具は派生式ではなく、購入または作成した防具を後から強化する方式。</li><li>属性として扱う値は、物、火、水、風、雷、光、闇、無。</li><li>採取素材など、魔物素材ではない素材は装備強化内容と装備強化値を空欄にしてよい。</li><li>魔物素材の特徴が装備性能に出るように、素材ごとに装備強化内容と装備強化値を設定する。</li><li>ドロップ判定やドロップ入手の出力では、素材の説明、効果、売値などを表示してよい。</li><li>ドロップ出力では、装備強化内容と装備強化値は表示しない。</li><li>装備強化内容・装備強化値・強化対象は、施設タブの強化項目と素材の情報コピーで確認できる。特殊効果は具体的な能力詳細も表示する。</li><li>鍛冶屋の装備強化では、武器・防具・盾・装飾品・魔導書・祈祷書を選択できる。複数対象の素材は対象名を分解し、該当するすべての装備種別で候補へ表示する。</li><li>装備強化の施設工賃は「素材の基準価格×今回の強化回数×装備ランク倍率」で算出する。ランク倍率はRank:1×1、Rank:2×2、Rank:3×4、Rank:4×8、Rank:5×12。Rank:6以降は1ランクごとに倍率へ4を加える。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>戦闘の基本</span><span class="tags"><span>戦闘</span><span>行動</span><span>ダメージ</span></span></summary>
-  <div class="help-body"><ul><li>戦闘中の主な行動は、武器攻撃、力業攻撃、術式、祈祷、防御、かばう、妨害、道具使用、技能行動。</li><li>戦闘後処理として、採取やドロップチェックを扱う。</li><li>防御と回避は別処理。</li><li>防御は攻撃を受け止めてダメージを減らす行動。</li><li>回避は攻撃を避ける判定。</li></ul></div>
+<summary><span>魔物データ</span><span class="tags"><span>魔物</span><span>属性耐性</span><span>ドロップ</span><span>行動</span></span></summary>
+<div class="help-body"><ul><li>魔物は物、火、水、風、雷、光、闇、無の8属性に対する相性を持つ。</li><li>属性相性は、通常、耐、無、反、吸、弱で管理する。</li><li>耐はダメージ半減。</li><li>無はダメージ0、属性効果なし。</li><li>反はダメージ0、受けるはずだったダメージを攻撃者へ返す。</li><li>吸はダメージ0、受けるはずだったダメージ分だけHPを回復する。</li><li>弱はダメージ2倍。</li><li>魔物の行動は1行動1行で管理する。</li><li>魔物行動には距離とは別に行動種別を設定する。</li><li>行動種別は、近接攻撃、遠距離攻撃、術式、祈祷、防御、補助、回復、特殊。</li><li>判定欄は命中方法と参照値、行動種別欄はその行動が何に属するかを示す。</li><li>ドロップはメモ式ではなく行単位で管理する。</li><li>ドロップ素材は魔物素材カテゴリから選択する。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>防御</span><span class="tags"><span>防御</span><span>防御値</span><span>防御行動値</span><span>防御技能</span></span></summary>
-  <div class="help-body"><ul><li>防御値は、通常時にも適用されるダメージ軽減値。</li><li>防御行動値は、行動として防御を選んだ時にだけ使う追加軽減値。</li><li>防御行動値が1D6なら、防御行動時に1D6点ダメージを軽減する。</li><li>通常時の最終ダメージは、受けるダメージ - 防御値 - 防御技能ポイント。</li><li>防御技能に振り分けたポイントは、防御行動の有無にかかわらず常時ダメージを軽減する。</li><li>防御行動時の最終ダメージは、受けるダメージ - 防御行動値 - 防御技能ポイント - 防御値。</li><li>防御行動そのものに判定は行わない。</li><li>防御は回避ではない。攻撃を受け止めてダメージを減らす行動。</li><li>最終ダメージは0未満にならない。</li></ul></div>
+<summary><span>戦闘の基本</span><span class="tags"><span>戦闘</span><span>行動</span><span>ダメージ</span></span></summary>
+<div class="help-body"><ul><li>戦闘では移動だけがターンを消費しない。</li><li>通常は移動後に、ターンを消費する行動を1回行う。</li><li>攻撃、力業、術式、祈祷、防御、かばう、妨害、鼓舞、解析、道具使用はターンを消費する。</li><li>装備効果だけで追加の攻撃行動や反撃行動を発生させない。</li><li>戦闘後処理として、採取やドロップチェックを扱う。</li><li>防御と回避は別処理。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>かばう</span><span class="tags"><span>かばう</span><span>防御技能</span><span>先制値</span></span></summary>
-  <div class="help-body"><ul><li>かばうは、味方への攻撃に割り込んで自分が攻撃を引き受ける行動。</li><li>かばう判定は、防御技能 &gt;= 敵の先制値。</li><li>成功した場合、攻撃対象を自分に変更する。</li><li>成功後、自分が防御行動を取ったものとしてダメージを軽減する。</li><li>かばう成功時の最終ダメージは、受けるダメージ - 防御行動値 - 防御技能ポイント - 防御値。</li><li>単体攻撃はかばえる。</li><li>複数対象攻撃は、対象のうち1人分だけかばえる。</li><li>範囲攻撃は状況次第で1人だけかばえる。</li><li>全体攻撃は原則かばえない。</li><li>攻撃行動ごとにかばう難易度は変えない。成功難易度は敵の先制値で決める。</li></ul></div>
+<summary><span>防御</span><span class="tags"><span>防御</span><span>防御値</span><span>防御行動値</span><span>防御技能</span></span></summary>
+<div class="help-body"><ul><li>防御はターン開始時に宣言し、ターンを消費する。</li><li>防御行動中は敵からの攻撃が確実に命中する。</li><li>装備の防御行動値ぶん、1ターンの間だけ常時防御値を上昇させる。</li><li>防御技能に割り振ったポイントと常時防御値は、防御行動の有無にかかわらずダメージを軽減する。</li><li>通常時の最終ダメージは、受けるダメージ－防御技能配分P－常時防御値。</li><li>防御行動時の最終ダメージは、受けるダメージ－防御行動値－防御技能配分P－常時防御値。</li><li>防御行動そのものに判定は行わない。</li><li>最終ダメージは0未満にならない。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>妨害</span><span class="tags"><span>妨害</span><span>先制値</span><span>判定補正</span></span></summary>
-  <div class="help-body"><ul><li>妨害は、敵の攻撃、移動、詠唱、道具使用、逃走などを邪魔する行動。</li><li>妨害判定は、使用技能 &gt;= 敵の先制値。</li><li>使用技能は妨害内容に応じて決める。</li><li>武器で牽制する場合は近接または射撃。</li><li>押さえ込む、突き飛ばす場合は力業。</li><li>詠唱や術式を邪魔する場合は魔法、知識、状況に合う技能。</li><li>注意を引く、挑発する場合は交渉、社交、鼓舞など。</li><li>妨害成功時、攻撃、術式、祈祷などの判定に-2を与える。</li><li>移動、逃走、準備行動、道具使用など、-2しても意味が薄い行動は、GM判断で中断、停止、遅延にする。</li><li>妨害失敗時、敵は通常通り行動する。</li><li>妨害失敗時の追加ペナルティは基本なし。</li></ul></div>
+<summary><span>かばう</span><span class="tags"><span>かばう</span><span>防御技能</span><span>先制値</span></span></summary>
+<div class="help-body"><ul><li>かばうはターンを消費し、味方への攻撃を自分が引き受ける。</li><li>判定は2D6＋防御技能 &gt;= 敵の先制値。</li><li>同じエリアの味方をかばう場合は補正なし。異なるエリアの味方をかばう場合は判定-2。</li><li>成功した場合、攻撃対象を自分に変更する。</li><li>かばった攻撃は確実に命中するが、防御行動値による防御上昇が発生する。</li><li>自身と味方全体を対象とする攻撃に対しては使用できない。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>武器攻撃・力業攻撃</span><span class="tags"><span>武器攻撃</span><span>力業</span><span>近接</span><span>射撃</span></span></summary>
-  <div class="help-body"><ul><li>通常の近接武器攻撃は近接を使う。</li><li>通常の遠距離武器攻撃は射撃を使う。</li><li>力業攻撃は、近接武器攻撃の命中判定で近接の代わりに力業を使う攻撃。</li><li>力業攻撃に命中した場合、武器ダメージのダイスを+1個する。</li><li>力業攻撃のダメージ計算は、通常の武器攻撃と同じ。</li><li>ダメージに加算する技能ポイントは近接を参照する。</li><li>力業ポイントはダメージ加算には使わない。</li><li>力業攻撃を行った場合、成否に関わらず次ターン行動不可。</li><li>さらに次ターン終了まで防御-2。</li><li>このデメリットは、力任せの大振りによって体勢が崩れることを表す。</li></ul></div>
+<summary><span>妨害</span><span class="tags"><span>妨害</span><span>先制値</span><span>判定補正</span></span></summary>
+<div class="help-body"><ul><li>妨害はターンを消費する。</li><li>提案内容に応じて対応技能と適用エリアを決める。</li><li>判定は2D6＋対応技能値 &gt;= 敵の先制値。</li><li>成功すると対象の次の判定値-2。</li><li>攻撃時の回避値などにも影響するため、適用タイミングを確認する。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>術式・祈祷</span><span class="tags"><span>術式</span><span>祈祷</span><span>属性</span><span>防御判定</span></span></summary>
-  <div class="help-body"><ul><li>初期魔法術式は魔力弾のみ。</li><li>初期祈祷は癒しの祈りのみ。</li><li>初期魔法術式と初期祈祷は全員が取得する。</li><li>術式と祈祷には属性を設定する。</li><li>魔導書のセット術式枠は、1 + 魔法に割り振ったポイント。</li><li>祈祷書のセット祈祷枠は、1 + 祈祷に割り振ったポイント。</li><li>セット術式とセット祈祷は、所持している術式データから選択する。</li><li>火球、氷槍、雷撃、光弾、闇弾、爆発範囲などの攻撃・投射・範囲系魔法は回避で防ぐ。</li><li>毒、呪いなどの身体・精神・状態異常系効果は抵抗で防ぐ。</li><li>魔物行動も同じ基準とし、攻撃・投射・範囲攻撃は回避、身体・精神・状態異常系効果は抵抗を達成値にする。</li><li>効果文に「抵抗に失敗」とある魔物行動は、必ず抵抗値を使用する。</li></ul></div>
+<summary><span>武器攻撃・力業攻撃</span><span class="tags"><span>武器攻撃</span><span>力業</span><span>近接</span><span>射撃</span></span></summary>
+<div class="help-body"><ul><li>攻撃判定は2D6＋使用技能値 &gt;= 対象の回避値。成功するとダメージが発生する。</li><li>近接武器は前衛の敵だけを攻撃できる。</li><li>遠距離武器は後衛も攻撃できるが、敵前衛がいる状態で後衛を狙う場合は判定-2。</li><li>魔法は前衛・後衛を同じ条件で対象にできる。</li><li>ダメージには使用技能へ割り振ったポイント分の固定値を加算する。</li><li>武器ダメージ1D6+1、近接配分P+2なら、成功時ダメージは1D6+3。</li><li>力業攻撃は近接攻撃時に近接の代わりに力業で攻撃判定を行う。</li><li>力業攻撃に成功した場合、武器ダメージのダイスを+1個する。</li><li>力業攻撃の固定値は近接に割り振ったポイントを参照する。</li><li>力業攻撃を行った場合、成否にかかわらず次のターン終了時まで行動できず、常時防御値-2。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>技能の戦闘利用</span><span class="tags"><span>採取</span><span>知識</span><span>鼓舞</span><span>魅力</span></span></summary>
-  <div class="help-body"><ul><li>採取は、魔物撃破後の採取判定に成功するとドロップチェックに+1する。</li><li>知識カテゴリは魔物、素材、属性。</li><li>魔物知識に成功した場合、選んだ属性1つの耐性、弱点、無効、反射、吸収などを確認できる。</li><li>魔物知識で全属性を一度に開示しない。</li><li>鼓舞は、成功すると対象の次の判定に+1する。</li><li>鼓舞の対象は、戦闘中または難しい場面の味方。</li><li>魅力系技能は、交渉、共感、社交、鼓舞。</li></ul></div>
+<summary><span>術式・祈祷</span><span class="tags"><span>術式</span><span>祈祷</span><span>属性</span><span>防御判定</span></span></summary>
+<div class="help-body"><ul><li>初期魔法術式は魔力弾のみ。</li><li>初期祈祷は癒しの祈りのみ。</li><li>初期魔法術式と初期祈祷は全員が取得する。</li><li>術式と祈祷には属性を設定する。</li><li>魔導書のセット術式枠は、1 + 魔法に割り振ったポイント。</li><li>祈祷書のセット祈祷枠は、1 + 祈祷に割り振ったポイント。</li><li>セット術式とセット祈祷は、所持している術式データから選択する。</li><li>火球、氷槍、雷撃、光弾、闇弾、爆発範囲などの攻撃・投射・範囲系魔法は回避で防ぐ。</li><li>毒、呪いなどの身体・精神・状態異常系効果は抵抗で防ぐ。</li><li>魔物行動も同じ基準とし、攻撃・投射・範囲攻撃は回避、身体・精神・状態異常系効果は抵抗を達成値にする。</li><li>効果文に「抵抗に失敗」とある魔物行動は、必ず抵抗値を使用する。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>判定式</span><span class="tags"><span>判定</span><span>対抗</span><span>カスタムチェック</span></span></summary>
-  <div class="help-body"><ul><li>対抗式の表記は『○○vs○○』ではなく『○○&gt;=○○』に統一する。</li><li>左側はカテゴリに合う技能を使う。</li><li>右側は任意入力、または選択肢から設定する。</li><li>非術式系のチェックも、必要なものは同じ形式に統一する。</li><li>カスタムチェックは保存と読込を可能にする。</li></ul></div>
+<summary><span>技能の戦闘利用</span><span class="tags"><span>採取</span><span>知識</span><span>鼓舞</span><span>魅力</span></span></summary>
+<div class="help-body"><ul><li>採取は、魔物撃破後の採取判定に成功するとドロップチェックに+1する。</li><li>知識カテゴリは魔物、素材、属性。</li><li>解析は敵の属性を1つ指定し、2D6＋知識技能 &gt;= 対象の抵抗値で判定する。</li><li>解析成功時、指定した属性の耐性を看破する。</li><li>鼓舞はターンを消費し、2D6＋鼓舞技能 &gt;= 10で判定する。</li><li>鼓舞成功時、対象の次の判定+2。</li><li>逃亡は、パーティーの運動技能合計が敵の先制値合計より高い場合に可能。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>キャラクター出力</span><span class="tags"><span>チャットパレット</span><span>ココフォリア</span><span>出力</span></span></summary>
-  <div class="help-body"><ul><li>武器ダメージ出力は、片手武器の場合『【左手(右手)武器ダメージ】』形式にする。</li><li>両手武器のダメージ出力は『【両手武器ダメージ】』形式にする。</li><li>術式の出力名は『【術式名】』形式にする。</li><li>武器ダメージが設定されている武器のみ出力する。</li><li>防御値の出力ラベルは『防御』。</li><li>回避値の出力ラベルは『回避』。</li></ul></div>
+<summary><span>判定式</span><span class="tags"><span>判定</span><span>対抗</span><span>カスタムチェック</span></span></summary>
+<div class="help-body"><ul><li>対抗式の表記は『○○vs○○』ではなく『○○&gt;=○○』に統一する。</li><li>左側はカテゴリに合う技能を使う。</li><li>右側は任意入力、または選択肢から設定する。</li><li>非術式系のチェックも、必要なものは同じ形式に統一する。</li><li>カスタムチェックは保存と読込を可能にする。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>魔物出力</span><span class="tags"><span>魔物</span><span>チャットパレット</span><span>出力</span></span></summary>
-  <div class="help-body"><ul><li>魔物出力はJSONではなく、クリップボードコピー形式にする。</li><li>魔物出力にキャラクターメモは含めない。</li><li>魔物出力にドロップは含めない。</li><li>チャットパレットは『choice[技名1,技名2,…]』から始める。条件付きの技がある場合は、上段に平常時のchoice、下段に条件技を含むchoiceを表示し、条件達成・未達成のラベルは付けない。</li><li>ターン開始時にプレイヤーへ公開するのは行動名だけ。対象・距離・威力・効果は公開しない。</li><li>GM用チャットパレットには対象、距離（近接／遠距離／自身）、ダメージ、効果を表示する。</li><li>状態異常を付与する行動は、状態名だけでなく具体的な効果と継続期間もチャットパレットへ表示する。</li><li>ダイスのない効果も技能セクションに入れる。</li></ul></div>
+<summary><span>キャラクター出力</span><span class="tags"><span>チャットパレット</span><span>ココフォリア</span><span>出力</span></span></summary>
+<div class="help-body"><ul><li>武器ダメージ出力は、片手武器の場合『【左手(右手)武器ダメージ】』形式にする。</li><li>両手武器のダメージ出力は『【両手武器ダメージ】』形式にする。</li><li>術式の出力名は『【術式名】』形式にする。</li><li>武器ダメージが設定されている武器のみ出力する。</li><li>防御値の出力ラベルは『防御』。</li><li>回避値の出力ラベルは『回避』。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>管理HTML</span><span class="tags"><span>管理</span><span>検索</span><span>コピー</span></span></summary>
-  <div class="help-body"><ul><li>アイテム、素材、装備カテゴリなどの一覧では名前検索を常時表示する。</li><li>詳細フィルターとソート情報は折り畳み式の『絞り込み・ソート』にまとめる。</li><li>各行の情報コピーから、プレイヤーに渡すアイテム情報と登録IDをコピーできる。</li><li>情報コピーには、内部ID、管理キー、登録者、解放施設を含めない。魔物素材では装備強化内容・装備強化値・強化対象を表示し、特殊効果なら具体的な能力詳細も表示する。</li><li>情報コピーは、プレイヤーが読んで分かる範囲のアイテム情報と登録IDを出す。</li><li>素材は、名称、登録ID、個数、ランク、分類、売値、説明を基本に出す。魔物素材は装備強化内容・装備強化値・強化対象を追加し、特殊効果なら能力詳細も出す。</li><li>武器、防具、術式、道具、矢弾などは、使用に必要なコスト、対象、判定、属性、威力、最大スタックなどを追加で出す。</li></ul></div>
+<summary><span>魔物出力</span><span class="tags"><span>魔物</span><span>チャットパレット</span><span>出力</span></span></summary>
+<div class="help-body"><ul><li>魔物出力はJSONではなく、クリップボードコピー形式にする。</li><li>魔物出力にキャラクターメモは含めない。</li><li>魔物出力にドロップは含めない。</li><li>チャットパレットは「choice[技名1,技名2,…]」から始める。条件付きの技がある場合は平常時と全技のchoiceを分ける。</li><li>ターン開始時にプレイヤーへ公開するのは行動名だけ。対象・距離・威力・効果は公開しない。</li><li>GM用チャットパレットには行動種別、対象、距離（近接／遠距離／自身）、ダメージ、効果を表示する。</li><li>状態異常を付与する行動は、状態名だけでなく具体的な効果と継続期間も表示する。</li><li>ダイスのない効果も技能セクションに入れる。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>公開ID・貼り付け登録</span><span class="tags"><span>公開ID</span><span>倉庫</span><span>ドロップ</span><span>ネタバレ対策</span></span></summary>
-  <div class="help-body"><ul><li>公開IDは、プレイヤーに渡しても内容を推測しにくい規則性のないID。</li><li>キャラクターシートの倉庫では、貼り付けられた登録IDと個数を読み取り、DBから必要情報を自動登録する。</li><li>プレイヤーは未入手アイテム一覧を検索しない。</li><li>貼り付け登録では装備強化内容と装備強化値を表示・登録しない。</li><li>プレイヤーに渡す情報は、未入手一覧ではなく、入手したアイテムごとの情報と登録IDにする。</li><li>装備強化内容、装備強化値、内部ID、管理キー、登録者、解放施設などの内部管理情報は表示しない。</li></ul></div>
+<summary><span>管理HTML</span><span class="tags"><span>管理</span><span>検索</span><span>コピー</span></span></summary>
+<div class="help-body"><ul><li>アイテム、素材、装備カテゴリなどの一覧では名前検索を常時表示する。</li><li>詳細フィルターとソート情報は折り畳み式の『絞り込み・ソート』にまとめる。</li><li>各行の情報コピーから、プレイヤーに渡すアイテム情報と登録IDをコピーできる。</li><li>情報コピーには、内部ID、管理キー、登録者、解放施設を含めない。魔物素材では装備強化内容・装備強化値・強化対象を表示し、特殊効果なら具体的な能力詳細も表示する。</li><li>情報コピーは、プレイヤーが読んで分かる範囲のアイテム情報と登録IDを出す。</li><li>素材は、名称、登録ID、個数、ランク、分類、売値、説明を基本に出す。魔物素材は装備強化内容・装備強化値・強化対象を追加し、特殊効果なら能力詳細も出す。</li><li>武器、防具、術式、道具、矢弾などは、使用に必要なコスト、対象、判定、属性、威力、最大スタックなどを追加で出す。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>初期矢弾</span><span class="tags"><span>初期所持品</span><span>矢弾</span><span>所持品</span></span></summary>
-  <div class="help-body"><ul><li>初期武器の選択に関係なく、通常矢、通常ボルト、大型ボルトをそれぞれ1スタック分、初期所持品に入れる。</li><li>通常矢と通常ボルトは20個、大型ボルトは10個を1スタックとする。</li><li>矢筒は初期支給しない。矢弾は所持品枠を使用する。</li></ul></div>
+<summary><span>公開ID・貼り付け登録</span><span class="tags"><span>公開ID</span><span>倉庫</span><span>ドロップ</span><span>ネタバレ対策</span></span></summary>
+<div class="help-body"><ul><li>公開IDは、プレイヤーに渡しても内容を推測しにくい規則性のないID。</li><li>キャラクターシートの倉庫では、貼り付けられた登録IDと個数を読み取り、DBから必要情報を自動登録する。</li><li>プレイヤーは未入手アイテム一覧を検索しない。</li><li>貼り付け登録では装備強化内容と装備強化値を表示・登録しない。</li><li>プレイヤーに渡す情報は、未入手一覧ではなく、入手したアイテムごとの情報と登録IDにする。</li><li>装備強化内容、装備強化値、内部ID、管理キー、登録者、解放施設などの内部管理情報は表示しない。</li></ul></div>
 </details><details class="help-card">
-  <summary><span>装備強化</span><span class="tags"><span>装備</span><span>強化</span><span>素材</span></span></summary>
-  <div class="help-body"><ul><li>武器、防具、盾、装飾品、魔導書、祈祷書には強化可能回数を設定する。</li><li>初級/低級の武器・防具・盾は原則2回まで強化可能。</li><li>初級/低級の装飾品は原則1回まで強化可能。</li><li>魔導書と祈祷書は原則2回まで強化可能。</li><li>素手、普段着、バッグ、矢筒、素材、調合品、道具、矢弾、スクロールには強化可能回数を表示しない。</li><li>実際に適用した強化内容はキャラクターシートの装備欄で、1強化1行で記録する。</li></ul></div>
+<summary><span>初期矢弾</span><span class="tags"><span>初期所持品</span><span>矢弾</span><span>所持品</span></span></summary>
+<div class="help-body"><ul><li>初期武器の選択に関係なく、通常矢、通常ボルト、大型ボルトをそれぞれ1スタック分、初期所持品に入れる。</li><li>通常矢と通常ボルトは20個、大型ボルトは10個を1スタックとする。</li><li>矢筒は初期支給しない。矢弾は所持品枠を使用する。</li></ul></div>
+</details><details class="help-card">
+<summary><span>装備強化</span><span class="tags"><span>装備</span><span>強化</span><span>素材</span></span></summary>
+<div class="help-body"><ul><li>武器、防具、盾、装飾品、魔導書、祈祷書には強化可能回数を設定する。</li><li>★1の武器・防具・盾は原則2回まで強化可能。</li><li>★1の装飾品は原則1回まで強化可能。</li><li>魔導書と祈祷書は原則2回まで強化可能。</li><li>素手、普段着、バッグ、矢筒、素材、調合品、道具、矢弾、スクロールには強化可能回数を表示しない。</li><li>実際に適用した強化内容はキャラクターシートの装備欄で、1強化1行で記録する。</li></ul></div>
 </details></div><textarea id="allText">施設
 - 基本施設は鍛冶屋、薬屋、宿屋。
 - 鍛冶屋は武器、盾、防具、バッグ、矢筒、鍛冶素材、戦闘用罠、細工道具、鍛冶・仕掛け製作施設利用を扱う。
@@ -154,19 +158,21 @@ button,.tab,.subtab,.tab-btn{
 - 宿屋の宿泊は45G。一日を終了してHP・MPを全回復し、疲労度を0にする。
 
 状態異常：毒・汚染・呪い
-- 毒・汚染・呪いは共通状態異常として扱う。
-- 毒：ラウンド終了時に1D3無属性ダメージ。防御値は適用しない。
-- 汚染：HP回復量-2。最低0。
-- 呪い：攻撃・術式・祈祷判定-1。
-- 同じ状態異常は重複しない。別種は同時付与される。基本的に戦闘終了まで継続する。
-- 清めの祈りと浄化水は毒・汚染・呪いのうち1つを解除する。解毒薬は毒だけを解除する。
-- 敵ごとの差は付与判定の強さや抵抗の難しさで表現する。
+- 毒・汚染・呪いは敵や技ごとの別名を増やさず、共通状態異常として扱う。
+- 毒：ラウンド終了時に1D3無属性ダメージを受ける。このダメージに防御値は適用しない。
+- 汚染：HPを回復する時、回復量を2点減らす。最低0。
+- 呪い：攻撃・術式・祈祷判定に-1。
+- 同じ状態異常は重複しない。毒・汚染・呪いは別々に同時付与される。
+- 基本的に戦闘終了まで継続する。
+- 清めの祈りと浄化水は、対象に付与されている毒・汚染・呪いのうち1つを選んで解除する。
+- 解毒薬は毒だけを解除する。
+- 敵ごとの差は状態異常の効果ではなく、付与判定の強さや抵抗の難しさで表現する。
 
 未鑑定スクロール
-- 未鑑定の魔法スクロールと未鑑定の祈祷スクロールに分ける。
-- 未鑑定の段階で種別とランクは判別できる。
-- 鑑定結果は種別とランクに一致する候補だけから抽選する。
-- 術式は魔法と祈祷の両方を含む総称なので、術式鑑定具の名称は変更しない。
+- 未鑑定スクロールは、未鑑定の魔法スクロールと未鑑定の祈祷スクロールに分ける。
+- 未鑑定の段階で魔法か祈祷か、およびスクロールランクは判別できる。
+- 鑑定結果は、スクロールの種別とランクに一致する候補だけから抽選する。
+- 術式は魔法と祈祷の両方を含む総称なので、鑑定道具の名称は術式鑑定具のままとする。
 
 倉庫・所持品・バッグ
 - 旧所持品は倉庫。旧携行品は所持品。
@@ -184,10 +190,10 @@ button,.tab,.subtab,.tab-btn{
 - 採取道具セット、採掘道具セット、探索道具セットは現時点では使用しない。
 - 武器と防具の破損、修理ルールは現時点では扱わない。
 - 調合道具と鍛冶道具は素材ランクごとに対応アイテムを登録する。
-- 素材ランクは低級、普通、良質、希少、高級。
+- 素材ランクは1以上の数値で管理し、表示は★Nとする。
 - 調合道具は旅薬師の乳鉢具、硝子秤の調合具、晶瓶の調合具、星滴の蒸留具、月環の錬成具。
 - 鍛冶道具は野鍛冶の槌箱、焼入れ金床具、鋼噛み火ばさみ具、星鉄火ばさみ具、竜炉の鍛冶具。
-- 各道具は同ランクまでの素材を施設外で扱うための道具。
+- 各道具は自身の数値ランク以下の素材を施設外で扱うための道具。
 - 施設利用時は道具を必須にしない。
 - 調合道具は薬屋、鍛冶道具は鍛冶屋で扱う。
 
@@ -219,14 +225,12 @@ button,.tab,.subtab,.tab-btn{
 - レシピはDB上では1表で管理する。
 - 管理HTML上では、調合レシピ、鍛冶レシピ、仕掛け製作、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。
 - 武器上位化は、初期武器や基礎武器から素材で派生する方式。
-- 武器派生はモンハンに近い素材派生として扱う。
-- 基礎武器から複数の派生系統を並列に作ってよい。派生系統の途中から別系統へ分岐してはならない。
-- 同じ系統の段階進化では、段階ごとに別の実装済み魔物素材を要求してよい。
-- 派生ごとに固有効果・補正・役割を変え、単なる数値違いや上位互換を避ける。
 - 武器派生を含む作成可能品には対応レシピを用意する。
 - 自作では対応レシピ、素材、必要道具、製作判定が必要。施設依頼ではレシピ不要。
 - 基本レシピの一部は店売りし、それ以外は宝箱から入手する。
-- 店売りレシピは恒久解放品として高めに設定し、初級消耗品・素材加工は400～700G、初期武器・基礎装備は700～1,200Gを目安とする。
+- 店売りレシピは恒久解放品として高めに設定する。
+- 店売りされる完成品の売値は店頭販売価格と同額にする。
+- 作成でしか入手できない完成品の売値は、施設へ作成依頼する際の価格と同額にする。
 - 施設の武器派生は、武器種→基礎武器と各派生系統の起点→系統内の段階、の順に表示する。
 - 属性派生を全属性分作る方針にはしない。
 - 属性付与や属性強化は魔物素材の装備強化内容で表現する。
@@ -234,6 +238,7 @@ button,.tab,.subtab,.tab-btn{
 魔物素材・装備強化
 - 魔物素材には、装備強化に使用した際の強化内容と強化値を設定する。
 - 魔物素材はすべて何かしらの装備強化内容を持つ。
+- 魔物素材は装備強化内容・装備強化値・強化対象の3項目を必須とし、特殊効果の場合は特殊能力詳細も必須とする。未設定のまま保存またはDB送信できない。
 - 効果が複数の素材で重複しても問題ない。
 - 装備強化内容は選択式の項目『equipmentUpgradeEffect / 装備強化内容』で管理する。
 - 装備強化値は自由入力の項目『equipmentUpgradeValue / 装備強化値』で管理する。特殊効果の具体的な処理は『equipmentUpgradeDetail / 特殊能力詳細』で管理する。
@@ -259,10 +264,11 @@ button,.tab,.subtab,.tab-btn{
 - 属性として扱う値は、物、火、水、風、雷、光、闇、無。
 - 採取素材など、魔物素材ではない素材は装備強化内容と装備強化値を空欄にしてよい。
 - 魔物素材の特徴が装備性能に出るように、素材ごとに装備強化内容と装備強化値を設定する。
-- 素材説明に書いた用途は実装予約として扱い、未実装のまま放置しない。雰囲気文として先に記載してもよいが、後から必ずレシピ・強化・加工などへ反映する。
 - ドロップ判定やドロップ入手の出力では、素材の説明、効果、売値などを表示してよい。
 - ドロップ出力では、装備強化内容と装備強化値は表示しない。
 - 装備強化内容・装備強化値・強化対象は、施設タブの強化項目と素材の情報コピーで確認できる。特殊効果は具体的な能力詳細も表示する。
+- 鍛冶屋の装備強化では、武器・防具・盾・装飾品・魔導書・祈祷書を選択できる。複数対象の素材は対象名を分解し、該当するすべての装備種別で候補へ表示する。
+- 装備強化の施設工賃は「素材の基準価格×今回の強化回数×装備ランク倍率」で算出する。ランク倍率はRank:1×1、Rank:2×2、Rank:3×4、Rank:4×8、Rank:5×12。Rank:6以降は1ランクごとに倍率へ4を加える。
 
 魔物データ
 - 魔物は物、火、水、風、雷、光、闇、無の8属性に対する相性を持つ。
@@ -273,62 +279,56 @@ button,.tab,.subtab,.tab-btn{
 - 吸はダメージ0、受けるはずだったダメージ分だけHPを回復する。
 - 弱はダメージ2倍。
 - 魔物の行動は1行動1行で管理する。
+- 魔物行動には距離とは別に行動種別を設定する。
+- 行動種別は、近接攻撃、遠距離攻撃、術式、祈祷、防御、補助、回復、特殊。
+- 判定欄は命中方法と参照値、行動種別欄はその行動が何に属するかを示す。
 - ドロップはメモ式ではなく行単位で管理する。
 - ドロップ素材は魔物素材カテゴリから選択する。
 
 戦闘の基本
-- 戦闘中の主な行動は、武器攻撃、力業攻撃、術式、祈祷、防御、かばう、妨害、道具使用、技能行動。
+- 戦闘では移動だけがターンを消費しない。
+- 通常は移動後に、ターンを消費する行動を1回行う。
+- 攻撃、力業、術式、祈祷、防御、かばう、妨害、鼓舞、解析、道具使用はターンを消費する。
+- 装備効果だけで追加の攻撃行動や反撃行動を発生させない。
 - 戦闘後処理として、採取やドロップチェックを扱う。
 - 防御と回避は別処理。
-- 防御は攻撃を受け止めてダメージを減らす行動。
-- 回避は攻撃を避ける判定。
 
 防御
-- 防御値は、通常時にも適用されるダメージ軽減値。
-- 防御行動値は、行動として防御を選んだ時にだけ使う追加軽減値。
-- 防御行動値が1D6なら、防御行動時に1D6点ダメージを軽減する。
-- 防御技能に振り分けたポイントは、防御行動の有無にかかわらず常時ダメージを軽減する。
-- 防御行動時の最終ダメージは、受けるダメージ - 防御行動値 - 防御技能ポイント - 防御値。
+- 防御はターン開始時に宣言し、ターンを消費する。
+- 防御行動中は敵からの攻撃が確実に命中する。
+- 装備の防御行動値ぶん、1ターンの間だけ常時防御値を上昇させる。
+- 防御技能に割り振ったポイントと常時防御値は、防御行動の有無にかかわらずダメージを軽減する。
+- 通常時の最終ダメージは、受けるダメージ－防御技能配分P－常時防御値。
+- 防御行動時の最終ダメージは、受けるダメージ－防御行動値－防御技能配分P－常時防御値。
 - 防御行動そのものに判定は行わない。
-- 防御は回避ではない。攻撃を受け止めてダメージを減らす行動。
 - 最終ダメージは0未満にならない。
 
 かばう
-- かばうは、味方への攻撃に割り込んで自分が攻撃を引き受ける行動。
-- かばう判定は、防御技能 &gt;= 敵の先制値。
+- かばうはターンを消費し、味方への攻撃を自分が引き受ける。
+- 判定は2D6＋防御技能 &gt;= 敵の先制値。
+- 同じエリアの味方をかばう場合は補正なし。異なるエリアの味方をかばう場合は判定-2。
 - 成功した場合、攻撃対象を自分に変更する。
-- 成功後、自分が防御行動を取ったものとしてダメージを軽減する。
-- かばう成功時の最終ダメージは、受けるダメージ - 防御行動値 - 防御技能ポイント - 防御値。
-- 単体攻撃はかばえる。
-- 複数対象攻撃は、対象のうち1人分だけかばえる。
-- 範囲攻撃は状況次第で1人だけかばえる。
-- 全体攻撃は原則かばえない。
-- 攻撃行動ごとにかばう難易度は変えない。成功難易度は敵の先制値で決める。
+- かばった攻撃は確実に命中するが、防御行動値による防御上昇が発生する。
+- 自身と味方全体を対象とする攻撃に対しては使用できない。
 
 妨害
-- 妨害は、敵の攻撃、移動、詠唱、道具使用、逃走などを邪魔する行動。
-- 妨害判定は、使用技能 &gt;= 敵の先制値。
-- 使用技能は妨害内容に応じて決める。
-- 武器で牽制する場合は近接または射撃。
-- 押さえ込む、突き飛ばす場合は力業。
-- 詠唱や術式を邪魔する場合は魔法、知識、状況に合う技能。
-- 注意を引く、挑発する場合は交渉、社交、鼓舞など。
-- 妨害成功時、攻撃、術式、祈祷などの判定に-2を与える。
-- 移動、逃走、準備行動、道具使用など、-2しても意味が薄い行動は、GM判断で中断、停止、遅延にする。
-- 妨害失敗時、敵は通常通り行動する。
-- 妨害失敗時の追加ペナルティは基本なし。
+- 妨害はターンを消費する。
+- 提案内容に応じて対応技能と適用エリアを決める。
+- 判定は2D6＋対応技能値 &gt;= 敵の先制値。
+- 成功すると対象の次の判定値-2。
+- 攻撃時の回避値などにも影響するため、適用タイミングを確認する。
 
 武器攻撃・力業攻撃
-- 通常の近接武器攻撃は近接を使う。
-- 通常の遠距離武器攻撃は射撃を使う。
-- 力業攻撃は、近接武器攻撃の命中判定で近接の代わりに力業を使う攻撃。
-- 力業攻撃に命中した場合、武器ダメージのダイスを+1個する。
-- 力業攻撃のダメージ計算は、通常の武器攻撃と同じ。
-- ダメージに加算する技能ポイントは近接を参照する。
-- 力業ポイントはダメージ加算には使わない。
-- 力業攻撃を行った場合、成否に関わらず次ターン行動不可。
-- さらに次ターン終了まで防御-2。
-- このデメリットは、力任せの大振りによって体勢が崩れることを表す。
+- 攻撃判定は2D6＋使用技能値 &gt;= 対象の回避値。成功するとダメージが発生する。
+- 近接武器は前衛の敵だけを攻撃できる。
+- 遠距離武器は後衛も攻撃できるが、敵前衛がいる状態で後衛を狙う場合は判定-2。
+- 魔法は前衛・後衛を同じ条件で対象にできる。
+- ダメージには使用技能へ割り振ったポイント分の固定値を加算する。
+- 武器ダメージ1D6+1、近接配分P+2なら、成功時ダメージは1D6+3。
+- 力業攻撃は近接攻撃時に近接の代わりに力業で攻撃判定を行う。
+- 力業攻撃に成功した場合、武器ダメージのダイスを+1個する。
+- 力業攻撃の固定値は近接に割り振ったポイントを参照する。
+- 力業攻撃を行った場合、成否にかかわらず次のターン終了時まで行動できず、常時防御値-2。
 
 術式・祈祷
 - 初期魔法術式は魔力弾のみ。
@@ -339,18 +339,18 @@ button,.tab,.subtab,.tab-btn{
 - 祈祷書のセット祈祷枠は、1 + 祈祷に割り振ったポイント。
 - セット術式とセット祈祷は、所持している術式データから選択する。
 - 火球、氷槍、雷撃、光弾、闇弾、爆発範囲などの攻撃・投射・範囲系魔法は回避で防ぐ。
-- 毒・汚染・呪いなどの状態異常系効果は抵抗で防ぐ。
+- 毒、呪いなどの身体・精神・状態異常系効果は抵抗で防ぐ。
 - 魔物行動も同じ基準とし、攻撃・投射・範囲攻撃は回避、身体・精神・状態異常系効果は抵抗を達成値にする。
 - 効果文に「抵抗に失敗」とある魔物行動は、必ず抵抗値を使用する。
 
 技能の戦闘利用
 - 採取は、魔物撃破後の採取判定に成功するとドロップチェックに+1する。
 - 知識カテゴリは魔物、素材、属性。
-- 魔物知識に成功した場合、選んだ属性1つの耐性、弱点、無効、反射、吸収などを確認できる。
-- 魔物知識で全属性を一度に開示しない。
-- 鼓舞は、成功すると対象の次の判定に+1する。
-- 鼓舞の対象は、戦闘中または難しい場面の味方。
-- 魅力系技能は、交渉、共感、社交、鼓舞。
+- 解析は敵の属性を1つ指定し、2D6＋知識技能 &gt;= 対象の抵抗値で判定する。
+- 解析成功時、指定した属性の耐性を看破する。
+- 鼓舞はターンを消費し、2D6＋鼓舞技能 &gt;= 10で判定する。
+- 鼓舞成功時、対象の次の判定+2。
+- 逃亡は、パーティーの運動技能合計が敵の先制値合計より高い場合に可能。
 
 判定式
 - 対抗式の表記は『○○vs○○』ではなく『○○&gt;=○○』に統一する。
@@ -371,10 +371,10 @@ button,.tab,.subtab,.tab-btn{
 - 魔物出力はJSONではなく、クリップボードコピー形式にする。
 - 魔物出力にキャラクターメモは含めない。
 - 魔物出力にドロップは含めない。
-- チャットパレットは『choice[技名1,技名2,…]』から始める。条件付きの技がある場合は、上段に平常時のchoice、下段に条件技を含むchoiceを表示し、条件達成・未達成のラベルは付けない。
+- チャットパレットは「choice[技名1,技名2,…]」から始める。条件付きの技がある場合は平常時と全技のchoiceを分ける。
 - ターン開始時にプレイヤーへ公開するのは行動名だけ。対象・距離・威力・効果は公開しない。
-- GM用チャットパレットには対象、距離（近接／遠距離／自身）、ダメージ、効果を表示する。
-- 状態異常を付与する行動は、状態名だけでなく具体的な効果と継続期間もチャットパレットへ表示する。
+- GM用チャットパレットには行動種別、対象、距離（近接／遠距離／自身）、ダメージ、効果を表示する。
+- 状態異常を付与する行動は、状態名だけでなく具体的な効果と継続期間も表示する。
 - ダイスのない効果も技能セクションに入れる。
 
 管理HTML
@@ -401,28 +401,28 @@ button,.tab,.subtab,.tab-btn{
 
 装備強化
 - 武器、防具、盾、装飾品、魔導書、祈祷書には強化可能回数を設定する。
-- 初級/低級の武器・防具・盾は原則2回まで強化可能。
-- 初級/低級の装飾品は原則1回まで強化可能。
+- ★1の武器・防具・盾は原則2回まで強化可能。
+- ★1の装飾品は原則1回まで強化可能。
 - 魔導書と祈祷書は原則2回まで強化可能。
 - 素手、普段着、バッグ、矢筒、素材、調合品、道具、矢弾、スクロールには強化可能回数を表示しない。
 - 実際に適用した強化内容はキャラクターシートの装備欄で、1強化1行で記録する。</textarea></section>
 <section class="help-section" id="dismantle-rule">
-  <h2>魔物討伐後の解体判定</h2>
-  <p><b>判定：</b>採取技能 &gt;= 魔物の解体難易度</p>
-  <p><b>成功：</b>その魔物に設定されたすべてのドロップ率を+10%します。補正後の上限は100%です。</p>
-  <p><b>失敗：</b>ドロップ率への補正はありません。</p>
-  <p><b>難易度の目安：</b>チュートリアル5～6、通常魔物6～9、ボス級10以上。身体が硬い、巨大、素材の切り分けが難しい魔物ほど高く設定します。</p>
-  <p>各ドロップは補正後の確率で個別に判定するため、複数の素材を同時に獲得する場合があります。</p>
+<h2>魔物討伐後の解体判定</h2>
+<p><b>判定：</b>採取技能 &gt;= 魔物の解体難易度</p>
+<p><b>成功：</b>その魔物に設定されたすべてのドロップ率を+10%します。補正後の上限は100%です。</p>
+<p><b>失敗：</b>ドロップ率への補正はありません。</p>
+<p><b>難易度の目安：</b>チュートリアル5～6、通常魔物6～9、ボス級10以上。身体が硬い、巨大、素材の切り分けが難しい魔物ほど高く設定します。</p>
+<p>各ドロップは補正後の確率で個別に判定するため、複数の素材を同時に獲得する場合があります。</p>
 </section>
-<section><h2>魔導書・術式枠・重要クエスト報酬</h2><p>魔導書の術式枠は「1＋魔法に割り振ったポイント＋魔導書に付与された術式枠追加数」、祈祷書の祈祷枠は「1＋祈祷に割り振ったポイント＋祈祷書に付与された術式枠追加数」で計算します。</p><p>重要クエストにはボーナスポイントを設定できます。クリア時の報酬表示・コピーにボーナスポイントを含めます。</p></section><section><h2>スクロール鑑定・クエスト掲示</h2><p>骨董屋で未鑑定スクロールを鑑定すると、「鑑定結果：術式名」と術式の内容を表示します。初級・中級の魔法術式と祈祷を鑑定候補として登録します。</p><p>ギルドでプレイヤーへ提示するクエスト情報は、クエスト名、クエスト説明、エリア、達成条件、報酬の5項目に統一します。進行度何％で起きるかという固定イベント情報はGM用進行欄だけで管理し、掲示やコピーには含めません。</p></section><section><h2>骨董屋・スクロール・素材経路</h2>
+<section><h2>魔導書・術式枠・重要クエスト報酬</h2><p>魔導書の術式枠は「1＋魔法に割り振ったポイント＋魔導書に付与された術式枠追加数」、祈祷書の祈祷枠は「1＋祈祷に割り振ったポイント＋祈祷書に付与された術式枠追加数」で計算します。</p><p>重要クエストにはボーナスポイントを設定できます。クリア時の報酬表示・コピーにボーナスポイントを含めます。</p></section><section><h2>スクロール鑑定・クエスト掲示</h2><p>骨董屋で未鑑定スクロールを鑑定すると、「鑑定結果：術式名」と術式の内容を表示します。★1・★2の魔法術式と祈祷を鑑定候補として登録します。</p><p>ギルドでプレイヤーへ提示するクエスト情報は、クエスト名、クエスト説明、エリア、達成条件、報酬の5項目に統一します。進行度何％で起きるかという固定イベント情報はGM用進行欄だけで管理し、掲示やコピーには含めません。</p></section><section><h2>骨董屋・スクロール・素材経路</h2>
 <p>初期データJSONはGitHub Pages起動時に自動読込します。手動のJSONファイル選択は使用しません。</p>
 <p>骨董屋は解放用重要クエスト「骨董商の頼み事」をクリアすると利用できます。魔導インク、祈祷紙、術式鑑定具、聖印、魔印は常設販売です。術式鑑定具は全ランク共通の再使用可能な1種類です。</p><p>骨董屋の常設商品と、その時点でランダム選出した未鑑定スクロールを、ひとつの販売商品一覧としてコピーできます。スクロールはランクと価格だけを表示し、中身は鑑定まで公開しません。</p>
-<p>術式鑑定具を使う鑑定判定は、初級6・中級9・上級12・特級15です。骨董屋へ依頼する場合は、初級150G・中級400G・上級1000G・特級2000Gを支払えば自動成功します。</p>
+<p>術式鑑定具を使う鑑定判定は、★1は6・★2は9・★3は12・★4は15です。骨董屋へ依頼する場合は、★1は150G・★2は400G・★3は1000G・★4は2000Gを支払えば自動成功します。</p>
 <p>鑑定済みスクロールは消費型アイテムで、使用すると対応術式をコスト消費なしで1回発動します。術式化ではスクロールと対応素材を消費します。</p>
-<p>術式化は鑑定済みスクロールと対応素材を消費し、集中技能でのみ行います。難易度は初級7・中級10・上級13・特級16です。施設への術式化依頼はできません。</p>
-<p>鍛冶屋では販売商品、武器派生、防具製作、鍛冶製作、仕掛け製作、素材加工、装備強化、サービスを別タブで表示します。素材加工には必要道具ランク、作成難易度、施設依頼価格を表示します。</p>
+<p>術式化は鑑定済みスクロールと対応素材を消費し、集中技能でのみ行います。難易度は★1が7・★2が10・★3が13・★4が16です。施設への術式化依頼はできません。</p>
+<p>鍛冶屋では販売商品、武器派生、防具製作、鍛冶製作、仕掛け製作、素材加工、装備強化、サービスを別タブで表示します。素材加工には必要道具ランク、作成難易度、施設依頼価格を表示します。</p><p>施設情報は分類別にコピーします。鍛冶屋は「販売」「武器派生」「武器・防具作成」「仕掛け作成」「素材作成」、薬屋は「販売」「調合作成」、骨董屋は「販売」を個別にコピーできます。宿泊・休息・鑑定などのサービス内容はコピーしません。</p>
 <p><b>制作・購入価格：</b>同じ品を制作と購入の両方で入手できる場合、店頭購入価格は「必要素材の価格合計＋施設制作費」より高く設定します。自作は道具と素材、施設制作は素材と制作費、購入は最も高い代わりに素材や判定を必要としません。</p>
 <p>鉄鉱石は街はずれの草原の「露出した鉄鉱脈」で採取できます。レシピ素材は、エリア採取・魔物ドロップ・施設販売・素材加工のいずれかで入手経路を持たせます。</p>
-</section><section><h2>戦闘用罠・細工道具・鞭</h2><p>戦闘用罠は所持品から道具使用で設置・起動し、使用時に1個消費します。足絡めワイヤー、噛み込み罠、煙幕仕掛け、雷糸罠、炸裂杭を鍛冶屋で購入・作成できます。</p><p>罠の自作は細工技能を使い、携帯細工具（低級）、仕掛け工具箱（普通）、精密仕掛け具（良質）のいずれかを使用します。上位道具は下位要求にも使用できます。新しい施設は増やさず、鍛冶屋の「仕掛け製作」で扱います。</p><p>鞭は片手の位置操作武器です。敵前衛がいる状態でも敵後衛1体へ引き寄せ攻撃を行えます。共通の後衛狙い命中ペナルティを受け、命中時はダメージを与えず対象を前衛へ移動します。対象は自身の手番開始時、味方前衛が残っていれば後衛へ戻るため、その手番までの行動順を利用して近接攻撃を集中できます。引き寄せ不可の対象には無効です。</p><p>チェインウィップ、グラスホーン・アンカー、サンダークラック、ソーンウィップは、引き寄せ命中、移動封印、命中妨害、継続ダメージで役割を分けます。弓・弩は後衛へ直接ダメージを与える武器、鞭は後衛を近接攻撃圏へ引き出す武器として扱います。</p></section><section><h2>素材説明・武器派生の確定ルール</h2><p>素材説明には、雰囲気づくりを兼ねて将来の用途を先に記載して構いません。ただし、説明に書いた用途は実装予約として扱い、レシピ・装備強化・調合・施設加工・道具製作などのどこかで必ず実装します。</p><p>武器派生は基礎武器から複数の系統へ並列に分岐できます。派生系統の途中から別系統を生やすことは禁止します。同じ系統のB1→B2→B3の進化では、段階ごとに別の実装済み魔物素材を要求して構いません。</p><p>派生素材は、実装済みまたは実装が確定している素材だけを使用します。全魔物に専用派生を用意する必要はなく、素材の性質に合う武器種へだけ設定します。</p><p>すべての派生武器は、固有効果・補正値・得意な役割を個別に設定します。単なる数値違いや上位互換、戦闘中に複数効果から選べる万能武器にはしません。</p><p>魔導書はグリモワール（省魔力）とアルカナ・コーデックス（魔法ダメージ増幅）へ並列派生します。祈祷書はサルヴェ・ミサル（回復量強化）とイージス・リタニー（ダメージ軽減強化）へ並列派生します。</p></section><section><h2>魔物の引き寄せ・固有パッシブ</h2><p>魔物データには「引き寄せ可否」「固有パッシブ名」「固有パッシブ効果」を登録します。大型・重量級・地面へ根を張る魔物やボスなど、一部は引き寄せ不可です。</p><p>固有パッシブは全魔物へ付けず、通常魔物は1エリアあたり1～2体程度、ボスは全員へ設定します。単純なHP・命中・回避・防御の常時補正ではなく、登録済み行動の強制発動、次の行動固定、状態異常がない時の自動判定、条件付きHP再生など、具体的な処理を記載します。</p><p>遠距離攻撃だけを持つ魔物でも後衛専用にはしません。マイコニドなども、遭遇編成・護衛の有無・固有パッシブとの相性に応じて前衛または後衛へ配置できます。</p></section><section><h2>人数対応ランダム遭遇・ボス戦</h2><p>通常の魔物遭遇は、エリア別の出現候補、魔物ごとの遭遇値、参加PC人数から種類と数をランダム編成します。遭遇値は魔物単体の強さを表す固定値で、後半エリアだからという理由では上げません。通常魔物は1＝小型・軽量、2＝標準、3＝強敵を目安に設定します。</p><p>編成予算は「参加PC人数＋1」を基準とし、街はずれの草原＋0、近郊の森＋1、水辺の湿地＋2、反照の水庭＋3を一度だけ加算します。最低出現数は1～2人で2体、3～4人で3体、5～6人で4体、7人で5体です。人数が増えた編成の予算が減ったり、最低出現数を下回ったりしないようにします。</p><p>イベント固有の遭遇は固定編成のまま使用できます。デイリークエストは固定編成、完全ランダム編成、指定対象＋ランダム随伴を内容に応じて使い分けます。「指定対象＋ランダム随伴」では、指定対象自身を随伴候補から除外し、同じ強敵だけが重複して敵の手数が減る編成を防ぎます。重要クエスト・デイリークエストの進行画面にもパーティー人数指定を置き、人数対応の編成と出現数をその場で確認できます。</p><p>序盤ボスは装備を整えた4人を基準とし、タンクが前線を維持し、他のPCが回復・後退・集中攻撃を繰り返して攻略する強さにします。直接ダメージだけでなく、継続ダメージや状態異常、大技の予告と使用後の隙を含めて調整します。実装済みボスは、防御7程度のPCにも通常攻撃が少量以上、大技が明確に通る威力へ再調整します。反照の水庭以降の通常魔物は2D6+2前後～3D6を主力とし、フェイズモスの「位相羽刃」は防御値を適用しません。</p></section><section><h2>エリア難易度・魔物配置・フィールド効果</h2><p>探索エリアの難易度は「街はずれの草原（初級・低）→近郊の森（初級・中）→水辺の湿地（初級・高）」の順で上昇します。同じ魔物は生態が合う複数エリアに出現できますが、魔物自身の能力値はエリアごとに変更しません。</p><p>水辺の湿地ではフィールド効果「ぬかるみ」が適用され、戦闘中はPC全員の回避が1低下します。魔物には適用しません。</p><p>エリアボスは序盤でも4人前後のパーティーが役割分担・装備・回復手段を整えて挑む強さを基準とします。</p></section>
+</section><section><h2>戦闘用罠・細工道具・鞭</h2><p>戦闘用罠は所持品から道具使用で設置・起動し、使用時に1個消費します。足絡めワイヤー、噛み込み罠、煙幕仕掛け、雷糸罠、炸裂杭を鍛冶屋で購入・作成できます。</p><p>罠の自作は細工技能を使い、携帯細工具（Rank:1）、仕掛け工具箱（Rank:2）、精密仕掛け具（Rank:3）のいずれかを使用します。上位道具は下位要求にも使用できます。新しい施設は増やさず、鍛冶屋の「仕掛け製作」で扱います。</p><p>鞭は片手の位置操作武器です。敵前衛がいる状態でも敵後衛1体へ引き寄せ攻撃を行えます。共通の後衛狙い命中ペナルティを受け、命中時はダメージを与えず対象を前衛へ移動します。対象は自身の手番開始時、味方前衛が残っていれば後衛へ戻るため、その手番までの行動順を利用して近接攻撃を集中できます。引き寄せ不可の対象には無効です。</p><p>チェインウィップ、グラスホーン・アンカー、サンダークラック、ソーンウィップは、引き寄せ命中、移動封印、命中妨害、継続ダメージで役割を分けます。弓・弩は後衛へ直接ダメージを与える武器、鞭は後衛を近接攻撃圏へ引き出す武器として扱います。</p></section><section><h2>素材説明・武器派生の確定ルール</h2><p>素材説明には、雰囲気づくりを兼ねて将来の用途を先に記載して構いません。ただし、説明に書いた用途は実装予約として扱い、レシピ・装備強化・調合・施設加工・道具製作などのどこかで必ず実装します。</p><p>武器派生は基礎武器から複数の系統へ並列に分岐できます。派生系統の途中から別系統を生やすことは禁止します。同じ系統のB1→B2→B3の進化では、段階ごとに別の実装済み魔物素材を要求して構いません。</p><p>派生素材は、実装済みまたは実装が確定している素材だけを使用します。全魔物に専用派生を用意する必要はなく、素材の性質に合う武器種へだけ設定します。</p><p>すべての派生武器は、固有効果・補正値・得意な役割を個別に設定します。単なる数値違いや上位互換、戦闘中に複数効果から選べる万能武器にはしません。</p><p>魔導書はグリモワール（省魔力）とアルカナ・コーデックス（魔法ダメージ増幅）へ並列派生します。祈祷書はサルヴェ・ミサル（回復量強化）とイージス・リタニー（ダメージ軽減強化）へ並列派生します。</p></section><section><h2>魔物の引き寄せ・固有パッシブ</h2><p>魔物データには「引き寄せ可否」「固有パッシブ名」「固有パッシブ効果」を登録します。大型・重量級・地面へ根を張る魔物やボスなど、一部は引き寄せ不可です。</p><p>固有パッシブは全魔物へ付けず、通常魔物は1エリアあたり1～2体程度、ボスは全員へ設定します。単純なHP・命中・回避・防御の常時補正ではなく、登録済み行動の強制発動、次の行動固定、状態異常がない時の自動判定、条件付きHP再生など、具体的な処理を記載します。</p><p>遠距離攻撃だけを持つ魔物でも後衛専用にはしません。マイコニドなども、遭遇編成・護衛の有無・固有パッシブとの相性に応じて前衛または後衛へ配置できます。</p></section><section><h2>人数対応ランダム遭遇・ボス戦</h2><p>通常の魔物遭遇は、エリア別の出現候補、魔物ごとの遭遇値、参加PC人数から種類と数をランダム編成します。遭遇値は魔物単体の強さを表す固定値で、後半エリアだからという理由では上げません。通常魔物は1＝小型・軽量、2＝標準、3＝強敵を目安に設定します。</p><p>編成予算は「参加PC人数＋1」を基準とし、街はずれの草原＋0、近郊の森＋1、水辺の湿地＋2、反照の水庭＋3を一度だけ加算します。最低出現数は1～2人で2体、3～4人で3体、5～6人で4体、7人で5体です。人数が増えた編成の予算が減ったり、最低出現数を下回ったりしないようにします。</p><p>イベント固有の遭遇は固定編成のまま使用できます。デイリークエストは固定編成、完全ランダム編成、指定対象＋ランダム随伴を内容に応じて使い分けます。「指定対象＋ランダム随伴」では、指定対象自身を随伴候補から除外し、同じ強敵だけが重複して敵の手数が減る編成を防ぎます。重要クエスト・デイリークエストの進行画面にもパーティー人数指定を置き、人数対応の編成と出現数をその場で確認できます。</p><p>序盤ボスは装備を整えた4人を基準とし、タンクが前線を維持し、他のPCが回復・後退・集中攻撃を繰り返して攻略する強さにします。直接ダメージだけでなく、継続ダメージや状態異常、大技の予告と使用後の隙を含めて調整します。実装済みボスは、防御7程度のPCにも通常攻撃が少量以上、大技が明確に通る威力へ再調整します。反照の水庭以降の通常魔物は2D6+2前後～3D6を主力とし、フェイズモスの「位相羽刃」は防御値を適用しません。</p></section><section><h2>エリア難易度・魔物配置・フィールド効果</h2><p>探索エリアの難易度は「街はずれの草原（初級・低）→近郊の森（初級・中）→水辺の湿地（初級・高）」の順で上昇します。同じ魔物は生態が合う複数エリアに出現できますが、魔物自身の能力値はエリアごとに変更しません。</p><p>水辺の湿地ではフィールド効果「ぬかるみ」が適用され、戦闘中はPC全員の回避が1低下します。魔物には適用しません。</p><p>エリアボスは序盤でも4人前後のパーティーが役割分担・装備・回復手段を整えて挑む強さを基準とします。</p></section>
 <details><summary><span>異界：反照の水庭</span><span class="tags"><span>異界</span><span>歪み</span><span>派生</span></span></summary><div class="help-body"><ul><li>水辺の湿地クリア後、湿地奥地の空間の歪みに触れると反照の水庭へ移動する。</li><li>帰還時は異界側の歪みに触れ、水辺の湿地の奥地へ戻る。今後は別エリアのクリア後にも各地へ歪みを追加する。</li><li>異界派生は異界単位でまとめ、異界素材と通常素材を複数種類・合計複数個使用する。反照の水庭では全17武器種に2段階の異界派生を用意する。</li></ul></div></details>
 </main><script>const search=document.getElementById('search');const cards=Array.from(document.querySelectorAll('.help-card'));function filterCards(){const q=(search.value||'').trim().toLowerCase();cards.forEach(card=>{card.hidden=!!q&&!card.textContent.toLowerCase().includes(q);})}search.addEventListener('input',filterCards);document.getElementById('openAll').addEventListener('click',()=>cards.forEach(card=>{if(!card.hidden)card.open=true;}));document.getElementById('closeAll').addEventListener('click',()=>cards.forEach(card=>card.open=false));document.getElementById('copyAll').addEventListener('click',async()=>{const text=document.getElementById('allText').value;try{await navigator.clipboard.writeText(text);}catch(e){const ta=document.getElementById('allText');ta.style.position='fixed';ta.style.left='8px';ta.style.top='8px';ta.style.width='90vw';ta.style.height='60vh';ta.select();}});</script></body></html>

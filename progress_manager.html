@@ -127,13 +127,13 @@ button,.tab-btn,.quest-category-btn{
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.170 / 最終更新日：2026年7月14日</div>
+<div class="ra-build-info">Version：v90.8.181 / 最終更新日：2026年7月15日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.170 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.181 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -381,7 +381,7 @@ button,.tab-btn,.quest-category-btn{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.170';
+const VERSION='v90.8.181';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -960,7 +960,7 @@ function renderMonster(){
 }
 function renderAll(){renderDayStatus(); ensureDailyQuestSelection(); fillQuestSelect($('questSelect')?.value || ''); fillEventTables(); fillRumorSelect(); fillRumorAreas(); fillInnRumorSelect(); fillTreasureTables(); fillAppraisalRules(); fillMonsterSearch($('monsterSelect')?.value || ''); renderQuest(); renderArea(); renderMonster(); renderRumorResult(); renderDailyQuestResult(); renderLog();}
 function getNumFromText(s, fallback=0){const m=String(s||'').match(/[+-]?\d+/); return m?Number(m[0]):fallback;}
-function advanceQuestProgress(){const q=selected($('questSelect'),state.quests); if(!q)return; if(!consumeDailyAction(`クエスト進行：${q.name||q.id}`))return; const p=progressObj('quests',q.id||q.name); const add=questStepAmount(q); const before=clamp(p.value); p.value=clamp(before+add); const fired=triggerQuestSpecificEvents(q,before,p.value); saveState(false); renderQuest(); addLog(`${q.name||q.id} の進行度を +${add}% しました。${before}% → ${p.value}%`); if(fired.length && fired[0].treasureTableId){addLog(`確定入手：未鑑定の魔法または祈祷スクロール：初級×1（${fired[0].eventName||'クエスト固有イベント'}）`);}}
+function advanceQuestProgress(){const q=selected($('questSelect'),state.quests); if(!q)return; if(!consumeDailyAction(`クエスト進行：${q.name||q.id}`))return; const p=progressObj('quests',q.id||q.name); const add=questStepAmount(q); const before=clamp(p.value); p.value=clamp(before+add); const fired=triggerQuestSpecificEvents(q,before,p.value); saveState(false); renderQuest(); addLog(`${q.name||q.id} の進行度を +${add}% しました。${before}% → ${p.value}%`); if(fired.length && fired[0].treasureTableId){addLog(`確定入手：未鑑定の魔法または祈祷スクロール：★1×1（${fired[0].eventName||'クエスト固有イベント'}）`);}}
 function advanceAreaProgress(){const a=selected($('areaSelect'),state.areas); if(!a)return; if(!consumeDailyAction(`エリア探索：${a.name||a.id}`))return; const p=progressObj('areas',a.id||a.name); const add=areaStepAmount(a); const before=clamp(p.value); p.value=clamp(before+add); saveState(false); renderArea(); addLog(`${a.name||a.id} の探索進行度を +${add}% しました。${before}% → ${p.value}%`); if(before<100 && p.value>=100) triggerAreaClearRumorEvent(a);}
 
 function isRumorEvent(row){return String(row && row.eventType || '').trim()==='宿屋の噂';}
@@ -1554,12 +1554,21 @@ function renderTreasureTrapInfo(){
 function trapDetectText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.questFixed)return 'このクエスト固有宝箱では罠感知判定を行いません。'; return `【罠感知判定】\n2D6+{感知}>=${r.trapDetectDifficulty}`;}
 function trapDisarmText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.questFixed)return 'このクエスト固有宝箱では罠解除判定を行いません。'; return r.hasTrap?`【罠解除判定】\n2D6+{細工}>=${r.trapDisarmDifficulty}`:'この宝箱に罠はありません。';}
 function unlockText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.questFixed)return 'このクエスト固有宝箱では解錠判定を行いません。'; return r.hasLock?`【鍵の解除判定】\n2D6+{細工}>=${r.unlockDifficulty}`:'この宝箱に鍵はありません。';}
-const APPRAISAL_FEES={'初級':150,'中級':400,'上級':1000,'特級':2000};
-const TRANSCRIPTION_DIFFICULTIES={'初級':7,'中級':10,'上級':13,'特級':16};
-const TRANSCRIPTION_MATERIAL_COUNTS={'初級':1,'中級':2,'上級':3,'特級':4};
-function appraisalFee(rank='初級'){return APPRAISAL_FEES[String(rank||'初級').trim()]||150;}
-function transcriptionDifficulty(rank='初級'){return TRANSCRIPTION_DIFFICULTIES[String(rank||'初級').trim()]||7;}
-function transcriptionMaterialCount(rank='初級'){return TRANSCRIPTION_MATERIAL_COUNTS[String(rank||'初級').trim()]||1;}
+const LEGACY_PROGRESS_NUMERIC_RANKS={'初期':1,'初級':1,'低級':1,'中級':2,'普通':2,'上級':3,'良質':3,'特級':4,'希少':4,'最上級':5,'高級':5};
+function progressNumericRank(value,fallback=''){
+  if(typeof value==='number'&&Number.isFinite(value)&&value>=1)return Math.floor(value);
+  const raw=String(value??'').trim(); if(!raw)return fallback;
+  if(Object.prototype.hasOwnProperty.call(LEGACY_PROGRESS_NUMERIC_RANKS,raw))return LEGACY_PROGRESS_NUMERIC_RANKS[raw];
+  const m=raw.match(/(?:★|Rank\s*[:：]?\s*)?(\d+)/i),n=m?Number(m[1]):NaN;
+  return Number.isFinite(n)&&n>=1?Math.floor(n):fallback;
+}
+function progressPlayerRank(value){const n=progressNumericRank(value,'');return n?`★${n}`:String(value??'').trim();}
+const APPRAISAL_FEES={1:150,2:400,3:1000,4:2000};
+const TRANSCRIPTION_DIFFICULTIES={1:7,2:10,3:13,4:16};
+const TRANSCRIPTION_MATERIAL_COUNTS={1:1,2:2,3:3,4:4};
+function appraisalFee(rank=1){return APPRAISAL_FEES[progressNumericRank(rank,1)]||150;}
+function transcriptionDifficulty(rank=1){return TRANSCRIPTION_DIFFICULTIES[progressNumericRank(rank,1)]||7;}
+function transcriptionMaterialCount(rank=1){return TRANSCRIPTION_MATERIAL_COUNTS[progressNumericRank(rank,1)]||1;}
 function fillAppraisalRules(){
   const sel=$('appraisalRuleSelect');
   if(!sel)return;
@@ -1571,7 +1580,7 @@ function fillAppraisalRules(){
   rows.forEach((r,i)=>{
     const o=document.createElement('option');
     o.value=String(i);
-    o.textContent=`${r.facilityName||'施設未設定'} / 未鑑定の${r.spellType||'術式'}スクロール：${r.scrollRank||'ランク未設定'} / 道具判定 2D6+鑑定>=${r.difficulty||'?'} / 施設鑑定 ${appraisalFee(r.scrollRank)}G`;
+    o.textContent=`${r.facilityName||'施設未設定'} / 未鑑定の${r.spellType||'術式'}スクロール：${progressPlayerRank(r.scrollRank)||'ランク未設定'} / 道具判定 2D6+鑑定>=${r.difficulty||'?'} / 施設鑑定 ${appraisalFee(r.scrollRank)}G`;
     sel.appendChild(o);
   });
 }
@@ -1613,13 +1622,13 @@ function treasureDetailBlock(row, heading='【宝箱結果】'){
   lines.push(`名称：${row.entryName||row.recipeName||'名称未設定'}`);
   if(row.entryPublicId) lines.push(`登録ID：${row.entryPublicId}`);
   if(row.recipeName) lines.push(`レシピ：${row.recipeName}`);
-  if(row.scrollRank) lines.push(`スクロールランク：${row.scrollRank}`);
+  if(row.scrollRank) lines.push(`スクロールランク：${progressPlayerRank(row.scrollRank)}`);
   lines.push(`数量：${q.text}${q.detail?`（${q.detail}）`:''}`);
   if(row.entryType==='通貨' && currencyMatch){
     const amount=Number(currencyMatch[1]||0)*(Number.isFinite(quantityNumber)?quantityNumber:1);
     lines.push(`獲得金額：${amount}G（即時入手）`);
   }
-  if(item?.rank) lines.push(`ランク：${item.rank}`);
+  if(item?.rank) lines.push(`ランク：${progressPlayerRank(item.rank)}`);
   if(unitPrice>0){
     lines.push(`売却単価：${unitPrice}G`);
     if(Number.isFinite(quantityNumber) && quantityNumber>0) lines.push(`合計売却価値：${unitPrice*quantityNumber}G`);
@@ -1668,7 +1677,7 @@ function spellMatchesRule(spell, rule){
   const type=String(spell.type||'').trim();
   const wantType=String(rule.spellType||'').trim();
   const typeOk=!wantType || type===wantType || (wantType==='魔法術式' && type==='魔法');
-  const rankOk=!rule.spellRank || String(spell.rank||'').trim()===String(rule.spellRank||'').trim();
+  const rankOk=!rule.spellRank || progressNumericRank(spell.rank,'')===progressNumericRank(rule.spellRank,'');
   const tags=String(rule.candidateTags||'').split(/[,\n、]/).map(s=>s.trim()).filter(Boolean);
   const spellTags=String(spell.tags||'');
   const tagOk=!tags.length || tags.every(t=>spellTags.includes(t));
@@ -1683,7 +1692,7 @@ function rollAppraisal(){
   if(!rule){$('appraisalResult').textContent='鑑定ルールがありません。'; return;}
   const candidates=(state.spells||[]).filter(s=>spellMatchesRule(s,rule));
   if(!candidates.length){
-    state.lastAppraisalText=[`【スクロール鑑定】${rule.facilityName||''}`,`対象：未鑑定の${rule.spellType||'術式'}スクロール`,`スクロールランク：${rule.scrollRank||''}`,`道具鑑定：術式鑑定具を使用し、2D6+鑑定技能>=${rule.difficulty||''}`,`施設鑑定：${appraisalFee(rule.scrollRank)}Gで自動成功`,'鑑定結果：候補術式がありません。術式データと鑑定条件を確認してください。'].filter(Boolean).join('\n');
+    state.lastAppraisalText=[`【スクロール鑑定】${rule.facilityName||''}`,`対象：未鑑定の${rule.spellType||'術式'}スクロール`,`スクロールランク：${progressPlayerRank(rule.scrollRank)}`,`道具鑑定：術式鑑定具を使用し、2D6+鑑定技能>=${rule.difficulty||''}`,`施設鑑定：${appraisalFee(rule.scrollRank)}Gで自動成功`,'鑑定結果：候補術式がありません。術式データと鑑定条件を確認してください。'].filter(Boolean).join('\n');
     $('appraisalResult').textContent=state.lastAppraisalText;
     return;
   }
@@ -1692,15 +1701,15 @@ function rollAppraisal(){
   const lines=[];
   lines.push(`【スクロール鑑定】${rule.facilityName||''}`);
   lines.push(`対象：未鑑定の${rule.spellType||'術式'}スクロール`);
-  lines.push(`スクロールランク：${rule.scrollRank||''}`);
+  lines.push(`スクロールランク：${progressPlayerRank(rule.scrollRank)}`);
   lines.push(`道具鑑定：術式鑑定具を使用し、2D6+鑑定技能>=${rule.difficulty||''}`);
   lines.push(`施設鑑定：${appraisalFee(rule.scrollRank)}Gを支払えば自動成功`);
-  lines.push(`鑑定結果：${spell.name}（${spell.type||'術式'}・${spell.rank||rule.scrollRank||'ランク未設定'}）`);
+  lines.push(`鑑定結果：${spell.name}（${spell.type||'術式'}・${progressPlayerRank(spell.rank||rule.scrollRank)||'ランク未設定'}）`);
   if(spell.publicId) lines.push(`術式登録ID：${spell.publicId}`);
   lines.push(`鑑定後スクロール：${spell.name}のスクロール`);
   if(scroll?.publicId) lines.push(`スクロール登録ID：${scroll.publicId}`);
   lines.push(`術式種別：${spell.type||''}`);
-  lines.push(`術式ランク：${spell.rank||''}`);
+  lines.push(`術式ランク：${progressPlayerRank(spell.rank)}`);
   if(spell.element) lines.push(`属性：${spell.element}`);
   if(spell.mpCost) lines.push(`コスト：${spell.mpCost}`);
   if(spell.target) lines.push(`対象：${spell.target}`);
@@ -1711,7 +1720,7 @@ function rollAppraisal(){
   lines.push(`術式化：鑑定済みスクロールと対応素材×${transcriptionMaterialCount(rule.scrollRank)}を消費し、2D6+集中>=${transcriptionDifficulty(rule.scrollRank)}。施設への術式化依頼はできません。`);
   state.lastAppraisalText=lines.filter(Boolean).join('\n');
   $('appraisalResult').textContent=state.lastAppraisalText;
-  addLog(`スクロール鑑定：${rule.scrollRank||''} → ${spell.name}`);
+  addLog(`スクロール鑑定：${progressPlayerRank(rule.scrollRank)} → ${spell.name}`);
 }
 function parseDrops(text){
   return String(text||'').split(/\r?\n/).map(line=>line.trim()).filter(Boolean).map(line=>{
