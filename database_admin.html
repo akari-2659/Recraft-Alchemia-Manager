@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.199</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.201</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -986,7 +986,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.199 / 最終更新日：2026年7月16日</div>
+<div class="ra-build-info">Version：v90.8.201 / 最終更新日：2026年7月16日</div>
 
 <header>
   <div class="title-card">
@@ -1565,7 +1565,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.199';
+const RECRAFT_DB_VERSION = 'v90.8.201';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1636,6 +1636,7 @@ let currentAntiqueRandomArea = '';
 let currentGuildShowHiddenImportant = false;
 let currentGuildDailyCount = 5;
 let currentGuildDailyKeys = [];
+let currentGuildDailyAreaId = '';
 const GUILD_DAILY_STORAGE_KEY = 'recraft_alchemia_guild_daily_selection_v1';
 function loadGuildDailyState(){
   try{
@@ -1644,17 +1645,20 @@ function loadGuildDailyState(){
     const data=JSON.parse(raw);
     currentGuildDailyCount=Math.max(1,Math.min(10,Number(data.count)||5));
     currentGuildDailyKeys=Array.isArray(data.keys)?data.keys.map(String):[];
+    currentGuildDailyAreaId=String(data.areaId||'');
   }catch(e){
     console.warn('guild daily state load failed',e);
     currentGuildDailyCount=5;
     currentGuildDailyKeys=[];
+    currentGuildDailyAreaId='';
   }
 }
 function saveGuildDailyState(){
   try{
     localStorage.setItem(GUILD_DAILY_STORAGE_KEY,JSON.stringify({
       count:currentGuildDailyCount,
-      keys:(currentGuildDailyKeys||[]).map(String)
+      keys:(currentGuildDailyKeys||[]).map(String),
+      areaId:String(currentGuildDailyAreaId||'')
     }));
   }catch(e){console.warn('guild daily state save failed',e);}
 }
@@ -2030,7 +2034,9 @@ const SYSTEM_HELP = [
       "骨董屋は未鑑定スクロールの高額ランダム販売、施設鑑定、魔導インク・祈祷紙・術式鑑定具・聖印・魔印の常設販売を扱う。店頭ではスクロールの中身を公開しない。",
       "ギルドは受注可能クエストを、重要クエストとデイリークエストに分けて掲示する。",
       "重要クエストは有効列がTRUEのものだけ、ギルドの受注可能一覧に表示する。",
-      "デイリークエストは再受注可能な依頼として、ギルドのデイリー欄に表示する。",
+      "デイリークエストは再受注可能な依頼として、選択した最終解放エリア以下の候補だけをギルドのデイリー欄から抽選する。",
+      "重要クエストの戦闘は4人を基準にし、サポートを含む2人相当を下限として出現数を調整する。人数は公開クエスト本文には表示しない。",
+      "戦闘デイリーは1人から受注でき、重要クエストより軽い人数補正を使う。採取・納品・調査などの非戦闘デイリーは人数で条件を増減させない。",
       "スクロール鑑定は鑑定技能で行う。術式化の自力判定は集中で行う。",
       "魔法スクロールの術式化には魔導インクを、祈祷スクロールの術式化には祈祷紙を使う。術式化は集中技能のみで行い、施設へは依頼できない。",
       "雑貨屋は現時点では使用しない。",
@@ -2630,12 +2636,47 @@ function dailyQuestSampleForToday(rows,count=5){
   for(let i=list.length-1;i>0;i--){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const j=seed%(i+1);[list[i],list[j]]=[list[j],list[i]];}
   return list.slice(0,count);
 }
+function guildDailyAreaRows(){
+  return [...(state.exploration_areas||[])].sort((a,b)=>{
+    const ao=Number(a.unlockOrder||999999),bo=Number(b.unlockOrder||999999);
+    if(ao!==bo)return ao-bo;
+    return compareValues(a.name||a.id||'',b.name||b.id||'');
+  });
+}
+function guildDailySelectedArea(){
+  const rows=guildDailyAreaRows();
+  let area=rows.find(a=>String(a.id||a.name||'')===String(currentGuildDailyAreaId||''));
+  if(!area)area=rows[0]||null;
+  if(area && currentGuildDailyAreaId!==String(area.id||area.name||'')){
+    currentGuildDailyAreaId=String(area.id||area.name||'');
+    saveGuildDailyState();
+  }
+  return area;
+}
+function guildDailyCandidateRows(){
+  const maxArea=guildDailySelectedArea();
+  return facilityQuestRows('デイリー').filter(q=>{
+    if(!maxArea)return true;
+    const area=(state.exploration_areas||[]).find(a=>String(a.name||'').trim()===String(q.areaName||'').trim());
+    if(!area)return true;
+    return Number(area.unlockOrder||0)<=Number(maxArea.unlockOrder||0);
+  });
+}
+function guildDailyAreaOptionsHtml(){
+  return guildDailyAreaRows().map(a=>{
+    const id=String(a.id||a.name||'');
+    return `<option value="${escapeHtml(id)}"${id===String(guildDailySelectedArea()?.id||guildDailySelectedArea()?.name||'')?' selected':''}>${escapeHtml(a.name||a.id)}まで</option>`;
+  }).join('');
+}
 function guildDailySelectedRows(){
-  const rows=facilityQuestRows('デイリー');
+  const rows=guildDailyCandidateRows();
   const map=new Map(rows.map(q=>[String(q.id||q.name||''),q]));
   let picked=(currentGuildDailyKeys||[]).map(k=>map.get(String(k))).filter(Boolean).slice(0,currentGuildDailyCount);
-  if(!picked.length && rows.length){
-    picked=dailyQuestSampleForToday(rows,currentGuildDailyCount);
+  const target=Math.min(currentGuildDailyCount,rows.length);
+  if(picked.length<target){
+    const used=new Set(picked.map(q=>String(q.id||q.name||'')));
+    const extra=dailyQuestSampleForToday(rows.filter(q=>!used.has(String(q.id||q.name||''))),target-picked.length);
+    picked=picked.concat(extra);
     currentGuildDailyKeys=picked.map(q=>String(q.id||q.name||''));
     saveGuildDailyState();
   }else{
@@ -2648,7 +2689,7 @@ function guildDailySelectedRows(){
   return picked;
 }
 function rerollGuildDailyQuests(){
-  const rows=facilityQuestRows('デイリー');
+  const rows=guildDailyCandidateRows();
   const current=new Set((currentGuildDailyKeys||[]).map(String));
   let pool=rows.filter(q=>!current.has(String(q.id||q.name||'')));
   if(pool.length<currentGuildDailyCount) pool=[...rows];
@@ -2664,8 +2705,8 @@ function guildQuestSectionHtml(category='重要'){
   const title=category==='重要' ? '重要クエスト' : 'デイリークエスト';
   const note=category==='重要'
     ? '施設やエリアの解放などに必要な受注可能クエストです。非表示の重要クエストは通常表示とコピーから除外します。'
-    : '登録済み候補から抽選された現在のデイリーだけを表示します。再抽選時は候補数が足りる限り現在の選出と重複しません。';
-  const controls=category==='デイリー' ? `<div class="guild-daily-controls"><label>表示件数<select data-guild-daily-count>${[1,2,3,4,5,6,7,8,9,10].map(n=>`<option value="${n}"${n===currentGuildDailyCount?' selected':''}>${n}件</option>`).join('')}</select></label><button class="secondary" type="button" data-guild-daily-reroll>デイリークエストを再抽選</button><button class="ghost" type="button" data-guild-copy-category="デイリー">現在のデイリーをコピー</button></div>` : '';
+    : '選択した最終解放エリアまでの候補から抽選された現在のデイリーだけを表示します。再抽選時は候補数が足りる限り現在の選出と重複しません。';
+  const controls=category==='デイリー' ? `<div class="guild-daily-controls"><label>最終解放エリア<select data-guild-daily-area>${guildDailyAreaOptionsHtml()}</select></label><label>表示件数<select data-guild-daily-count>${[1,2,3,4,5,6,7,8,9,10].map(n=>`<option value="${n}"${n===currentGuildDailyCount?' selected':''}>${n}件</option>`).join('')}</select></label><button class="secondary" type="button" data-guild-daily-reroll>デイリークエストを再抽選</button><button class="ghost" type="button" data-guild-copy-category="デイリー">現在のデイリーをコピー</button></div>` : '';
   return `<section class="guild-quest-section">
     <h4>${escapeHtml(title)} <span class="view-mode-chip">${rows.length}件</span></h4>
     <p class="table-toolbar-note">${escapeHtml(note)}</p>
@@ -6363,6 +6404,7 @@ document.addEventListener('click',e=>{
   }
   const facilityRefresh=e.target.closest('[data-facility-refresh]'); if(facilityRefresh){ renderFacilitiesPanel(); toast('販売商品リストを更新しました'); return; }
   const weaponCategory=e.target.closest('[data-facility-weapon-category]'); if(weaponCategory){ currentFacilityWeaponCategory=weaponCategory.dataset.facilityWeaponCategory||''; renderFacilitiesPanel(); return; }
+  const guildDailyArea=e.target.closest('[data-guild-daily-area]'); if(guildDailyArea){ currentGuildDailyAreaId=String(guildDailyArea.value||''); currentGuildDailyKeys=[]; saveGuildDailyState(); rerollGuildDailyQuests(); return; }
   const guildDailyCount=e.target.closest('[data-guild-daily-count]'); if(guildDailyCount){ currentGuildDailyCount=Math.max(1,Math.min(10,Number(guildDailyCount.value)||5)); saveGuildDailyState(); rerollGuildDailyQuests(); return; }
   const guildDailyReroll=e.target.closest('[data-guild-daily-reroll]'); if(guildDailyReroll){ rerollGuildDailyQuests(); return; }
   const guildHiddenToggle=e.target.closest('[data-guild-toggle-hidden]'); if(guildHiddenToggle){ currentGuildShowHiddenImportant=!currentGuildShowHiddenImportant; renderFacilitiesPanel(); return; }
