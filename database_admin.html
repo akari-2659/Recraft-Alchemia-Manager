@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.201</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.202</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -984,9 +984,119 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
 }
 </style>
 
+
+<style id="raModalLayoutV202">
+/* v90.8.202: 登録・編集モーダルの幅、スクロール、フッター位置を安定化 */
+body.modal-open{overflow:hidden!important}
+#editModal.modal-backdrop{
+  box-sizing:border-box;
+  overflow:hidden;
+  overscroll-behavior:contain;
+}
+#editModal .modal-card{
+  display:flex!important;
+  flex-direction:column!important;
+  width:min(1080px,calc(100vw - 36px))!important;
+  max-width:1080px!important;
+  max-height:calc(100dvh - 36px)!important;
+  overflow:hidden!important;
+  min-width:0!important;
+}
+#editModal .modal-head,
+#editModal .modal-foot{
+  flex:0 0 auto!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+#editModal .modal-head>div{min-width:0;flex:1 1 auto}
+#editModal .modal-head #btnCloseModal{white-space:nowrap!important;overflow-wrap:normal!important;word-break:keep-all!important;flex:0 0 auto!important;min-width:max-content!important;text-align:center!important}
+#editModal .modal-head h2,
+#editModal .modal-head p{overflow-wrap:anywhere;word-break:break-word}
+#editModal .modal-body{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  overscroll-behavior:contain;
+  box-sizing:border-box!important;
+}
+#editModal .quick-form-grid,
+#editModal .form-grid{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+#editModal .form-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  align-items:start;
+}
+#editModal .quick-form-grid{
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr))!important;
+}
+#editModal .field,
+#editModal .field.wide{
+  min-width:0!important;
+  max-width:100%!important;
+  width:auto!important;
+  box-sizing:border-box!important;
+}
+#editModal .field.wide{grid-column:1/-1!important}
+#editModal input,
+#editModal select,
+#editModal textarea,
+#editModal .input-action-row,
+#editModal .check-builder{
+  min-width:0!important;
+  max-width:100%!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+}
+#editModal .modal-foot{
+  display:flex!important;
+  flex-direction:row!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:8px!important;
+}
+#editModal .modal-foot>button{
+  width:auto!important;
+  min-width:120px!important;
+  flex:0 1 auto!important;
+  text-align:center!important;
+}
+@media(max-width:760px){
+  #editModal.modal-backdrop{padding:8px!important;align-items:flex-end!important}
+  #editModal .modal-card{
+    width:100%!important;
+    max-width:none!important;
+    max-height:calc(100dvh - 8px)!important;
+    border-radius:18px 18px 0 0!important;
+  }
+  #editModal .form-grid,
+  #editModal .quick-form-grid{grid-template-columns:1fr!important}
+  #editModal .modal-foot{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  #editModal .modal-foot>button{
+    width:100%!important;
+    min-width:0!important;
+  }
+  #editModal #btnApplyAndSave{grid-column:1/-1}
+}
+@media(max-width:440px){
+  #editModal .modal-head{gap:8px!important}
+  #editModal .modal-head #btnCloseModal{padding:8px 10px!important}
+  #editModal .modal-foot{grid-template-columns:1fr!important}
+  #editModal #btnApplyAndSave{grid-column:auto}
+}
+</style>
+
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.201 / 最終更新日：2026年7月16日</div>
+<div class="ra-build-info">Version：v90.8.202 / 最終更新日：2026年7月16日</div>
 
 <header>
   <div class="title-card">
@@ -1317,7 +1427,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
       <button data-save="event_tables">この表だけDB登録</button>
       <button class="danger" data-replace="event_tables">この表だけDB置換</button>
     </div>
-    <p class="table-toolbar-note">エリアごとのランダムイベント表。出目は使わず、該当エリアに登録された候補からランダム抽選します。<span class="view-mode-chip">エリア別折りたたみ表示</span></p>
+    <p class="table-toolbar-note">エリアごとのイベント表。通常ランダム候補は各エリア40件に統一し、宿屋の噂・噂で追加される候補・クエスト固有イベントは補助データとして別集計します。<span class="view-mode-chip">エリア別折りたたみ表示</span></p>
     <div class="table-wrap"><table id="table-event_tables"></table></div>
   </section>
 
@@ -1565,7 +1675,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.201';
+const RECRAFT_DB_VERSION = 'v90.8.202';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -4146,6 +4256,13 @@ function adminEventConditionText(row={}){
   if(!type || type === 'なし') return 'なし';
   return value ? `${type}：${value}` : type;
 }
+function adminIsBaseRandomEvent(row={}){
+  const eventType=String(row.eventType||'').trim();
+  const conditionType=String(row.conditionType||'').trim()||'なし';
+  if(eventType==='宿屋の噂') return false;
+  if(conditionType==='クエスト固有' || eventType.includes('クエスト固有')) return false;
+  return conditionType==='なし';
+}
 function eventRowCardHtml(row, idx){
   const title = row.eventName || '名称未設定イベント';
   const check = row.checkType ? `${row.checkType}${row.targetValue ? ` / 目標値:${row.targetValue}` : ''}` : '判定なし';
@@ -4195,7 +4312,10 @@ function renderEventAreaCardsTable(key){
   });
   const html = rows.length ? [...groups.entries()].map(([g,items])=>{
     const cards = items.map(({row,idx})=>eventRowCardHtml(row,idx)).join('');
-    return `<details class="monster-card" open><summary><div class="monster-card-head"><div class="monster-title"><b>${escapeHtml(g)}</b><span class="monster-id">${items.length}件</span></div><div class="monster-card-actions"><button type="button" class="secondary" data-add="event_tables">イベント追加</button></div></div><div class="monster-badges"><span class="monster-badge">出目なし / 登録候補からランダム抽選</span></div></summary><div class="monster-card-body"><div class="monster-card-list">${cards}</div></div></details>`;
+    const randomCount=items.filter(({row})=>adminIsBaseRandomEvent(row)).length;
+    const auxiliaryCount=items.length-randomCount;
+    const countText=`通常ランダム候補 ${randomCount}件${auxiliaryCount?` / 補助データ ${auxiliaryCount}件`:''}`;
+    return `<details class="monster-card" open><summary><div class="monster-card-head"><div class="monster-title"><b>${escapeHtml(g)}</b><span class="monster-id">${escapeHtml(countText)}</span></div><div class="monster-card-actions"><button type="button" class="secondary" data-add="event_tables">イベント追加</button></div></div><div class="monster-badges"><span class="monster-badge">通常ランダム候補から均等抽選</span></div></summary><div class="monster-card-body"><div class="monster-card-list">${cards}</div></div></details>`;
   }).join('') : '<div class="monster-empty-note">条件に一致するイベントがありません。</div>';
   table.innerHTML=`<tbody><tr><td class="monster-list-cell"><div class="monster-card-list" aria-label="エリア別イベント一覧">${html}</div></td></tr></tbody>`;
 }
@@ -5300,6 +5420,7 @@ function openForm(key, idx=null, mode='new', defaultDataKind=''){
   $('formDangerZone').classList.toggle('hidden', idx===null);
   $('editModal').classList.remove('hidden');
   $('editModal').setAttribute('aria-hidden','false');
+  document.body.classList.add('modal-open');
   syncAllCheckBuilders($('editModal'));
   setTimeout(()=>{ const first = $('editModal').querySelector('[data-form-field="name"], [data-form-field="dataKind"], input, select, textarea'); if(first) first.focus(); }, 30);
 }
@@ -5310,6 +5431,7 @@ function rerenderCurrentForm(){
 }
 function closeForm(){
   $('editModal').classList.add('hidden'); $('editModal').setAttribute('aria-hidden','true');
+  document.body.classList.remove('modal-open');
   formState={key:null,idx:null,mode:'new',defaultDataKind:''};
 }
 function allRegistrationIds(){
