@@ -1,8 +1,8 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "v90.8.192",
+  "version": "v90.8.194",
   "encoding": "UTF-8",
-  "description": "リクラフト・アルケミア統合初期データ。施設カタログ分類・強化難度差・施設依頼成功率・上限ランク付き強化確定成功アイテムに対応。",
+  "description": "リクラフト・アルケミア統合初期データ。強化回数を強化枠へ統一し、強力な強化の複数枠消費、術式装備への武器強化適用、湿地命中調整、癒しの祈りMP2へ対応。",
   "data": {
     "item_types": [
       {
@@ -1337,7 +1337,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "tool_alchemy_low_mortar",
@@ -1366,7 +1367,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "tool_alchemy_normal_scale",
@@ -1395,7 +1397,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "tool_alchemy_good_vial",
@@ -1424,7 +1427,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_waterside_wetland",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "tool_alchemy_rare_retort",
@@ -1453,7 +1457,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "tool_alchemy_premium_alembic",
@@ -1482,7 +1487,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "tool_smith_low_hammer",
@@ -1511,7 +1517,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "tool_smith_normal_anvil",
@@ -1540,7 +1547,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "tool_smith_good_tongs",
@@ -1569,7 +1577,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_waterside_wetland",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "tool_smith_rare_stariron",
@@ -1598,7 +1607,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "tool_smith_premium_dragonforge",
@@ -1627,7 +1637,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "ammo_arrow_normal",
@@ -1658,7 +1669,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "ammo_bolt_normal",
@@ -1689,7 +1701,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "ammo_heavy_bolt_normal",
@@ -1720,7 +1733,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "quiver_simple",
@@ -1749,7 +1763,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "quiver_traveler",
@@ -1778,7 +1793,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "quiver_hunter",
@@ -1807,7 +1823,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_waterside_wetland",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "bag_simple",
@@ -1838,7 +1855,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_guard_charm",
@@ -1865,7 +1883,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_holy_symbol",
@@ -1896,7 +1915,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_magic_seal_basic",
@@ -1927,7 +1947,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_mana_ring",
@@ -1954,7 +1975,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_power_bracelet",
@@ -1981,7 +2003,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_small_mana_stone",
@@ -2008,7 +2031,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_wind_earring",
@@ -2035,7 +2059,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "ammo_bind_arrow",
@@ -2064,7 +2089,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "ammo_fire_arrow",
@@ -2093,7 +2119,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "ammo_flash",
@@ -2122,7 +2149,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "ammo_piercing",
@@ -2151,7 +2179,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "ammo_poison_arrow",
@@ -2180,7 +2209,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "ammo_purify",
@@ -2209,7 +2239,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "arm_clothes",
@@ -2236,7 +2267,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "arm_heavy",
@@ -2263,7 +2295,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "arm_light",
@@ -2290,7 +2323,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "arm_mage_robe",
@@ -2317,7 +2351,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "arm_medium",
@@ -2344,7 +2379,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "arm_prayer_robe",
@@ -2371,7 +2407,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "bomb_acid",
@@ -2402,7 +2439,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "bomb_flam",
@@ -2433,7 +2471,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "bomb_ice",
@@ -2464,7 +2503,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "bomb_small",
@@ -2495,7 +2535,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "bomb_thunder",
@@ -2526,7 +2567,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_magic",
@@ -2556,7 +2598,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_magic_grimoire",
@@ -2582,7 +2625,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_magic_arcana_codex",
@@ -2608,7 +2652,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_prayer",
@@ -2638,7 +2683,8 @@
         "spellSlots": "1",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "con_antidote",
@@ -2669,7 +2715,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "con_focus_incense",
@@ -2700,7 +2747,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "con_hardening_draught",
@@ -2731,7 +2779,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "con_high_mana_potion",
@@ -2762,7 +2811,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "con_high_potion",
@@ -2793,7 +2843,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "con_mana_potion",
@@ -2824,7 +2875,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "con_potion",
@@ -2855,7 +2907,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "con_purified_water",
@@ -2886,7 +2939,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "con_swift_incense",
@@ -2917,7 +2971,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_magic_ink",
@@ -2946,7 +3001,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_prayer_paper",
@@ -2975,7 +3031,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_high",
@@ -3003,7 +3060,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_magic_basic",
@@ -3031,7 +3089,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_mid",
@@ -3059,7 +3118,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_prayer_basic",
@@ -3087,7 +3147,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "shd_large",
@@ -3114,7 +3175,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "shd_magic",
@@ -3141,7 +3203,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "shd_small",
@@ -3168,7 +3231,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "tool_flash",
@@ -3199,7 +3263,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "tool_smoke",
@@ -3230,7 +3295,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_axe_1h",
@@ -3262,7 +3328,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_bow",
@@ -3293,7 +3360,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_crossbow",
@@ -3324,7 +3392,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_dagger",
@@ -3356,7 +3425,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_gauntlet",
@@ -3394,7 +3464,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_great_hammer",
@@ -3425,7 +3496,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_great_sword",
@@ -3456,7 +3528,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_hammer_1h",
@@ -3488,7 +3561,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_heavy_crossbow",
@@ -3519,7 +3593,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_long_spear",
@@ -3550,7 +3625,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_scythe",
@@ -3588,7 +3664,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_spear_1h",
@@ -3620,7 +3697,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_staff",
@@ -3652,7 +3730,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_sword_1h",
@@ -3684,7 +3763,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_unarmed",
@@ -3715,7 +3795,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_herb",
@@ -3752,7 +3833,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_purifying_grass",
@@ -3789,7 +3871,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_round_mushroom",
@@ -3826,7 +3909,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_clear_water",
@@ -3863,7 +3947,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_small_crystal",
@@ -3900,7 +3985,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_sturdy_branch",
@@ -3937,7 +4023,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_flexible_vine",
@@ -3974,7 +4061,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_gelatin_liquid",
@@ -4012,7 +4100,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_puru_membrane",
@@ -4050,7 +4139,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_small_slime_core",
@@ -4088,7 +4178,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_small_beast_pelt",
@@ -4126,7 +4217,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_small_beast_fang",
@@ -4164,7 +4256,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_small_claw",
@@ -4202,7 +4295,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_hard_carapace",
@@ -4248,7 +4342,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_insect_wing",
@@ -4294,7 +4389,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_spore_powder",
@@ -4340,7 +4436,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_living_root",
@@ -4386,7 +4483,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_muddy_hide",
@@ -4432,7 +4530,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_waterside_wetland",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 2
       },
       {
         "id": "mat_swamp_mucus",
@@ -4478,7 +4577,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_waterside_wetland",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_lord_swamp_core",
@@ -4524,7 +4624,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_waterside_wetland",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "valu_old_copper_coins",
@@ -4570,7 +4671,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "valu_cracked_silverwork",
@@ -4616,7 +4718,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "valu_faded_gem_chip",
@@ -4662,7 +4765,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "valu_old_trade_tag",
@@ -4708,7 +4812,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_unidentified_magic_beginner",
@@ -4754,7 +4859,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_unidentified_prayer_beginner",
@@ -4800,7 +4906,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_unidentified_magic_intermediate",
@@ -4846,7 +4953,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_unidentified_prayer_intermediate",
@@ -4892,7 +5000,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_unidentified_magic_advanced",
@@ -4938,7 +5047,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_unidentified_prayer_advanced",
@@ -4984,7 +5094,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_unidentified_magic_master",
@@ -5030,7 +5141,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_unidentified_prayer_master",
@@ -5076,7 +5188,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_mag_fireball",
@@ -5122,7 +5235,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_mag_ice_needle",
@@ -5168,7 +5282,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_mag_lightning",
@@ -5214,7 +5329,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_mag_wind_blade",
@@ -5260,7 +5376,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_mag_slow",
@@ -5306,7 +5423,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_mag_magic_bolt",
@@ -5352,7 +5470,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_grass_king_horn",
@@ -5399,7 +5518,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_forest_lord_heartwood",
@@ -5446,7 +5566,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 2
       },
       {
         "id": "mat_iron_ore",
@@ -5489,7 +5610,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_forged_iron_ingot",
@@ -5532,7 +5654,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_reinforced_lumber",
@@ -5575,7 +5698,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_tanned_leather",
@@ -5618,7 +5742,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_carapace_plate",
@@ -5661,7 +5786,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_magic_crystal_powder",
@@ -5704,7 +5830,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_stiletto",
@@ -5747,7 +5874,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_broadsword",
@@ -5790,7 +5918,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_shell_hatchet",
@@ -5833,7 +5962,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_shell_mace",
@@ -5876,7 +6006,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_fang_spear",
@@ -5919,7 +6050,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_crystal_staff",
@@ -5962,7 +6094,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_hunter_bow",
@@ -6005,7 +6138,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_crank_crossbow",
@@ -6048,7 +6182,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_siege_crossbow",
@@ -6091,7 +6226,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_iron_pike",
@@ -6134,7 +6270,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_claymore",
@@ -6177,7 +6314,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_war_maul",
@@ -6220,7 +6358,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_thorn_scythe",
@@ -6263,7 +6402,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_beast_claw",
@@ -6306,7 +6446,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_mag_ignis_lance",
@@ -6352,7 +6493,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_mag_aqua_prison",
@@ -6398,7 +6540,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_mag_tempest_burst",
@@ -6444,7 +6587,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_mag_volt_piercer",
@@ -6490,7 +6634,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_mag_lux_ray",
@@ -6536,7 +6681,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_mag_shadow_mire",
@@ -6582,7 +6728,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_pr_greater_heal",
@@ -6628,7 +6775,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_pr_sanctuary",
@@ -6674,7 +6822,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_pr_regeneration",
@@ -6720,7 +6869,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_pr_judgement",
@@ -6766,7 +6916,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_pr_benediction",
@@ -6812,7 +6963,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_pr_silence",
@@ -6858,7 +7010,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "tool_appraisal_kit",
@@ -6888,7 +7041,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_pr_heal",
@@ -6935,7 +7089,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_pr_purify",
@@ -6982,7 +7137,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_pr_guard",
@@ -7029,7 +7185,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_pr_courage",
@@ -7076,7 +7233,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_pr_peace",
@@ -7123,7 +7281,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "scroll_spell_pr_calm",
@@ -7170,7 +7329,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_raffin_tail_tuft",
@@ -7217,7 +7377,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_rapithorn_jump_horn",
@@ -7264,7 +7425,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_vespat_resonant_wing",
@@ -7311,7 +7473,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_carapace_heavy_shell",
@@ -7358,7 +7521,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 2
       },
       {
         "id": "mat_grauworm_digging_jaw",
@@ -7405,7 +7569,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_rascreil_fruit_pouch",
@@ -7452,7 +7617,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_myconid_fungal_core",
@@ -7499,7 +7665,8 @@
         "equipmentUpgradeDetail": "この素材で強化した武器の攻撃が命中した場合、対象が次に抵抗値を参照される判定では抵抗値-1。判定後に解除され、同名効果は重複しない。",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_roothound_wood_fang",
@@ -7546,7 +7713,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_branchling_sprout_core",
@@ -7593,7 +7761,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_bubble_slime_bubble_core",
@@ -7640,7 +7809,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_waterside_wetland",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_mist_mosquito_mist_needle",
@@ -7687,7 +7857,8 @@
         "equipmentUpgradeDetail": "この素材で強化した武器の攻撃が命中した場合、対象が次に抵抗値を参照される判定では抵抗値-1。判定後に解除され、同名効果は重複しない。",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_waterside_wetland",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_dromarl_mud_core",
@@ -7734,7 +7905,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_waterside_wetland",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "dataKind": "アイテム",
@@ -7779,7 +7951,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "dataKind": "アイテム",
@@ -7824,7 +7997,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_waterside_wetland",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "dataKind": "アイテム",
@@ -7869,7 +8043,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "dataKind": "アイテム",
@@ -7914,7 +8089,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "dataKind": "アイテム",
@@ -7959,7 +8135,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "dataKind": "アイテム",
@@ -8004,7 +8181,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "dataKind": "アイテム",
@@ -8049,7 +8227,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "dataKind": "アイテム",
@@ -8095,7 +8274,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "dataKind": "アイテム",
@@ -8141,7 +8321,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "dataKind": "アイテム",
@@ -8186,7 +8367,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "dataKind": "アイテム",
@@ -8232,7 +8414,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "dataKind": "アイテム",
@@ -8278,7 +8461,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "dataKind": "アイテム",
@@ -8324,7 +8508,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_prayer_salve_missal",
@@ -8353,7 +8538,8 @@
         "offhandBonus": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_prayer_aegis_litany",
@@ -8382,7 +8568,8 @@
         "offhandBonus": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_reflection_moss",
@@ -8423,7 +8610,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_inverted_reed",
@@ -8464,7 +8652,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_rift_crystal",
@@ -8505,7 +8694,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_hollow_droplet",
@@ -8546,7 +8736,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_mirror_membrane",
@@ -8587,7 +8778,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 2
       },
       {
         "id": "mat_phase_scale_powder",
@@ -8628,7 +8820,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_glass_fin",
@@ -8669,7 +8862,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_echo_seed",
@@ -8710,7 +8904,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_rift_carapace",
@@ -8751,7 +8946,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 2
       },
       {
         "id": "mat_void_fang",
@@ -8792,7 +8988,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "mat_deep_mirror_core",
@@ -8833,7 +9030,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": 1
       },
       {
         "id": "wpn_mirror_edge",
@@ -8872,7 +9070,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_reflect_saber",
@@ -8911,7 +9110,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_phase_whip",
@@ -8950,7 +9150,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_rift_anchor",
@@ -8989,7 +9190,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_glassray_bow",
@@ -9028,7 +9230,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_void_stringer",
@@ -9067,7 +9270,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_mirror_grimoire",
@@ -9106,7 +9310,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_astral_codex",
@@ -9145,7 +9350,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_mirror_missal",
@@ -9184,7 +9390,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_nereive_litany",
@@ -9223,7 +9430,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_phase_dagger",
@@ -9260,7 +9468,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_void_stinger",
@@ -9297,7 +9506,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_rift_hatchet",
@@ -9334,7 +9544,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_void_cleaver",
@@ -9371,7 +9582,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_echo_mace",
@@ -9408,7 +9620,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_silence_mallet",
@@ -9445,7 +9658,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_glass_lancer",
@@ -9482,7 +9696,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_reflect_partisan",
@@ -9519,7 +9734,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_mist_staff",
@@ -9556,7 +9772,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_phase_rod",
@@ -9593,7 +9810,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_mirror_crossbow",
@@ -9629,7 +9847,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_phase_arbalest",
@@ -9665,7 +9884,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_rift_ballista",
@@ -9701,7 +9921,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_void_scorpion",
@@ -9737,7 +9958,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_mirror_claymore",
@@ -9773,7 +9995,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_reflect_breaker",
@@ -9809,7 +10032,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_rift_maul",
@@ -9845,7 +10069,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_abyss_maul",
@@ -9881,7 +10106,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_phase_pike",
@@ -9917,7 +10143,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_rift_lance",
@@ -9953,7 +10180,8 @@
         "createdBy": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_mirage_scythe",
@@ -9993,7 +10221,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_nereive_reaper",
@@ -10033,7 +10262,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_phase_knuckle",
@@ -10073,7 +10303,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_echo_bracer",
@@ -10113,7 +10344,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "arm_raffinwind_coat",
@@ -10140,7 +10372,8 @@
         "publicId": "RCA-ZKWE-HRB8",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "arm_carapace_shell_vest",
@@ -10167,7 +10400,8 @@
         "publicId": "RCA-6VP9-WJC4",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "arm_dromarl_plate",
@@ -10194,7 +10428,8 @@
         "publicId": "RCA-XZZV-W7XQ",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_waterside_wetland",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "arm_spore_mantle",
@@ -10221,7 +10456,8 @@
         "publicId": "RCA-UEDH-BVTV",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "arm_mist_prayer_veil",
@@ -10248,7 +10484,8 @@
         "publicId": "RCA-73L7-3F5W",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_waterside_wetland",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "shd_carapace_bulwark",
@@ -10275,7 +10512,8 @@
         "publicId": "RCA-VBN9-K277",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "shd_rift_mirror",
@@ -10302,7 +10540,8 @@
         "publicId": "RCA-PBXS-ATFU",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_beast_fang_charm",
@@ -10329,7 +10568,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_resonant_wing_earring",
@@ -10356,7 +10596,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_root_bind_bracelet",
@@ -10383,7 +10624,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_purifying_herb_charm",
@@ -10410,7 +10652,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 1,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_carapace_guard_bangle",
@@ -10437,7 +10680,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_grass_horn_power_bangle",
@@ -10464,7 +10708,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_forest_lord_guard_cord",
@@ -10491,7 +10736,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_phase_ward_charm",
@@ -10518,7 +10764,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_glass_fin_earring",
@@ -10545,7 +10792,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "acc_deep_mirror_observation_ring",
@@ -10572,7 +10820,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 4,
         "unlockAreaKey": "area_reflection_water_garden",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_distilled_water",
@@ -10619,7 +10868,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_herb_powder",
@@ -10666,7 +10916,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_neutralizer",
@@ -10713,7 +10964,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_medicinal_extract",
@@ -10760,7 +11012,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_element_catalyst",
@@ -10807,7 +11060,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_alchemy_oil",
@@ -10854,7 +11108,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_preserving_solution",
@@ -10901,7 +11156,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "mat_toxin_base",
@@ -10948,7 +11204,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_fang_knife",
@@ -10984,7 +11241,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_venom_needle",
@@ -11020,7 +11278,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_carapace_saber",
@@ -11056,7 +11315,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_root_saber",
@@ -11092,7 +11352,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_fang_axe",
@@ -11128,7 +11389,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_branch_hatchet",
@@ -11164,7 +11426,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_crystal_mace",
@@ -11200,7 +11463,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_core_hammer",
@@ -11236,7 +11500,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_wing_spear",
@@ -11272,7 +11537,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_root_lance",
@@ -11308,7 +11574,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_spore_staff",
@@ -11344,7 +11611,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_bubble_rod",
@@ -11380,7 +11648,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_wing_bow",
@@ -11415,7 +11684,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_fur_bow",
@@ -11450,7 +11720,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_carapace_crossbow",
@@ -11485,7 +11756,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_wing_crossbow",
@@ -11520,7 +11792,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_steel_ballista",
@@ -11555,7 +11828,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_core_ballista",
@@ -11590,7 +11864,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_horn_lance",
@@ -11625,7 +11900,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_root_pike",
@@ -11660,7 +11936,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_carapace_greatsword",
@@ -11695,7 +11972,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_fang_claymore",
@@ -11730,7 +12008,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_forge_hammer",
@@ -11765,7 +12044,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_horn_breaker",
@@ -11800,7 +12080,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_spore_scythe",
@@ -11838,7 +12119,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_fang_reaper",
@@ -11876,7 +12158,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_carapace_knuckle",
@@ -11914,7 +12197,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_wing_bracer",
@@ -11952,7 +12236,8 @@
         "toolRank": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_outskirts_grass",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_branch_myco_grimoire",
@@ -11986,7 +12271,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_branch_sylvan_missal",
@@ -12020,7 +12306,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_grasshorn_dagger",
@@ -12066,7 +12353,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_heartwood_dagger",
@@ -12112,7 +12400,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_swampcore_dagger",
@@ -12158,7 +12447,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_grasshorn_sword",
@@ -12204,7 +12494,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_heartwood_sword",
@@ -12250,7 +12541,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_swampcore_sword",
@@ -12296,7 +12588,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_grasshorn_axe",
@@ -12342,7 +12635,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_heartwood_axe",
@@ -12388,7 +12682,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_swampcore_axe",
@@ -12434,7 +12729,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_grasshorn_mace",
@@ -12480,7 +12776,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_heartwood_mace",
@@ -12526,7 +12823,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_swampcore_mace",
@@ -12572,7 +12870,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_grasshorn_spear",
@@ -12618,7 +12917,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_swampcore_spear",
@@ -12664,7 +12964,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_crystal_spear",
@@ -12710,7 +13011,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_grasshorn_staff",
@@ -12756,7 +13058,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_heartwood_staff",
@@ -12802,7 +13105,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_swampcore_staff",
@@ -12848,7 +13152,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_grasshorn_bow",
@@ -12894,7 +13199,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_heartwood_bow",
@@ -12940,7 +13246,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_swampcore_bow",
@@ -12986,7 +13293,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_grasshorn_crossbow",
@@ -13032,7 +13340,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_heartwood_crossbow",
@@ -13078,7 +13387,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_swampcore_crossbow",
@@ -13124,7 +13434,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_grasshorn_heavy_crossbow",
@@ -13170,7 +13481,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_heartwood_heavy_crossbow",
@@ -13216,7 +13528,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_swampcore_heavy_crossbow",
@@ -13262,7 +13575,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_swampcore_lance",
@@ -13308,7 +13622,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_carapace_lance",
@@ -13354,7 +13669,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_crystal_lance",
@@ -13400,7 +13716,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_grasshorn_greatsword",
@@ -13446,7 +13763,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_heartwood_greatsword",
@@ -13492,7 +13810,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_swampcore_greatsword",
@@ -13538,7 +13857,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_heartwood_maul",
@@ -13584,7 +13904,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_swampcore_maul",
@@ -13630,7 +13951,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_magiccore_maul",
@@ -13676,7 +13998,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_heartwood_scythe",
@@ -13722,7 +14045,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_swampcore_scythe",
@@ -13768,7 +14092,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_branch_venom_scythe",
@@ -13814,7 +14139,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_grasshorn_gauntlet",
@@ -13860,7 +14186,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_heartwood_gauntlet",
@@ -13906,7 +14233,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "wpn_boss_swampcore_gauntlet",
@@ -13952,7 +14280,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "dataKind": "アイテム",
@@ -13998,7 +14327,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_nearby_forest",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "dataKind": "アイテム",
@@ -14044,7 +14374,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 3,
         "unlockAreaKey": "area_waterside_wetland",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "dataKind": "アイテム",
@@ -14090,7 +14421,8 @@
         "equipmentUpgradeDetail": "",
         "upgradeMaterialMinRank": 2,
         "unlockAreaKey": "area_waterside_wetland",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_boss_grasshorn_magic_book",
@@ -14121,7 +14453,8 @@
         "createdBy": "",
         "element": "",
         "modifiers": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_boss_heartwood_magic_book",
@@ -14152,7 +14485,8 @@
         "createdBy": "",
         "element": "",
         "modifiers": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_boss_swampcore_magic_book",
@@ -14183,7 +14517,8 @@
         "createdBy": "",
         "element": "",
         "modifiers": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_boss_grasshorn_prayer_book",
@@ -14216,7 +14551,8 @@
         "ownerKey": "",
         "createdBy": "",
         "element": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_boss_swampcore_prayer_book",
@@ -14249,7 +14585,8 @@
         "ownerKey": "",
         "createdBy": "",
         "element": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "book_branch_magiccrystal_prayer_book",
@@ -14282,7 +14619,8 @@
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": "",
-        "guaranteeUpgradeMaxRank": ""
+        "guaranteeUpgradeMaxRank": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "upgrade_seal_3",
@@ -14330,7 +14668,8 @@
         "notes": "現行で入手可能な強化確定成功アイテム。宝箱限定。",
         "updatedAt": "",
         "ownerKey": "",
-        "createdBy": ""
+        "createdBy": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "upgrade_seal_6",
@@ -14378,7 +14717,8 @@
         "notes": "将来解放用。現行の宝箱表・鑑定・ランダム抽選には含めません。",
         "updatedAt": "",
         "ownerKey": "",
-        "createdBy": ""
+        "createdBy": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "upgrade_seal_9",
@@ -14426,7 +14766,8 @@
         "notes": "将来解放用。現行の宝箱表・鑑定・ランダム抽選には含めません。",
         "updatedAt": "",
         "ownerKey": "",
-        "createdBy": ""
+        "createdBy": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "upgrade_seal_12",
@@ -14474,7 +14815,8 @@
         "notes": "将来解放用。現行の宝箱表・鑑定・ランダム抽選には含めません。",
         "updatedAt": "",
         "ownerKey": "",
-        "createdBy": ""
+        "createdBy": "",
+        "equipmentUpgradeSlotCost": ""
       },
       {
         "id": "upgrade_seal_15",
@@ -14522,7 +14864,8 @@
         "notes": "将来解放用。現行の宝箱表・鑑定・ランダム抽選には含めません。",
         "updatedAt": "",
         "ownerKey": "",
-        "createdBy": ""
+        "createdBy": "",
+        "equipmentUpgradeSlotCost": ""
       }
     ],
     "recipes": [
@@ -20978,7 +21321,7 @@
         "type": "祈祷",
         "name": "癒しの祈り",
         "rank": 1,
-        "mpCost": 1,
+        "mpCost": 2,
         "target": "味方1人",
         "checkType": "祈祷>=10",
         "element": "光",
@@ -25399,7 +25742,7 @@
         "rank": "初級",
         "hp": "28",
         "mp": "0",
-        "hitValue": "4",
+        "hitValue": 5,
         "evasionValue": "6",
         "resistValue": "7",
         "defenseValue": "1",
@@ -25421,7 +25764,7 @@
         "drops": "魔物素材\t虫・甲殻\tmat_hard_carapace\t硬い甲殻片\t50%\t1個\n採取素材\t木材\tmat_flexible_vine\tしなやかな蔓\t35%\t1個\n魔物素材\t虫・甲殻\tmat_grauworm_digging_jaw\tグラウワームの掘り顎\t20%\t1個",
         "habit": "地中を掘り進み、地表の振動から獲物の位置を探る。足音が近づくと土を割って一気に姿を現す。",
         "description": "草の根や湿った土を食む太い地虫。鈍重だがしぶとい。",
-        "notes": "序盤通常魔物の回避下限調整：回避値6。 行動バランスv90.8.137：エリア難易度に沿って威力・範囲・妨害効果を再調整。",
+        "notes": "序盤通常魔物の回避下限調整：回避値6。 行動バランスv90.8.137：エリア難易度に沿って威力・範囲・妨害効果を再調整。 湿地命中調整v90.8.193：ぬかるみのPC回避-1を前提に、通常魔物は命中+4～+5、ボスは+6へ調整。",
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": ""
@@ -25467,7 +25810,7 @@
         "rank": "初級",
         "hp": "17",
         "mp": "0",
-        "hitValue": "4",
+        "hitValue": 5,
         "evasionValue": "9",
         "resistValue": "6",
         "defenseValue": "0",
@@ -25501,7 +25844,7 @@
         "rank": "初級",
         "hp": "19",
         "mp": "4",
-        "hitValue": "3",
+        "hitValue": 4,
         "evasionValue": "6",
         "resistValue": "8",
         "defenseValue": "1",
@@ -25523,7 +25866,7 @@
         "drops": "魔物素材\t植物魔物\tmat_spore_powder\t胞子粉\t80%\t1個\n採取素材\t茸・果実\tmat_round_mushroom\t丸茸\t45%\t1個\n魔物素材\t植物魔物\tmat_myconid_fungal_core\tマイコニドの菌核\t20%\t1個",
         "habit": "湿った倒木の周囲に群生し、普段はほとんど動かない。傷つけられると胞子を撒き散らしながら周囲の個体も動き始める。",
         "description": "歩く茸のような魔物。驚くと胞子を撒いて相手の動きを鈍らせる。",
-        "notes": "後衛配置時にも使用できる射撃/魔法行動を持つ。 行動バランスv90.8.137：エリア難易度に沿って威力・範囲・妨害効果を再調整。 遠距離行動を持つが、遭遇編成によって前衛・後衛のどちらにも配置できる。",
+        "notes": "後衛配置時にも使用できる射撃/魔法行動を持つ。 行動バランスv90.8.137：エリア難易度に沿って威力・範囲・妨害効果を再調整。 遠距離行動を持つが、遭遇編成によって前衛・後衛のどちらにも配置できる。 湿地命中調整v90.8.193：ぬかるみのPC回避-1を前提に、通常魔物は命中+4～+5、ボスは+6へ調整。",
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": ""
@@ -25535,7 +25878,7 @@
         "rank": "初級",
         "hp": "24",
         "mp": "0",
-        "hitValue": "5",
+        "hitValue": 5,
         "evasionValue": "7",
         "resistValue": "8",
         "defenseValue": "1",
@@ -25569,7 +25912,7 @@
         "rank": "初級",
         "hp": "28",
         "mp": "0",
-        "hitValue": "4",
+        "hitValue": 4,
         "evasionValue": "6",
         "resistValue": "8",
         "defenseValue": "2",
@@ -25603,7 +25946,7 @@
         "rank": "ボス",
         "hp": "148",
         "mp": "12",
-        "hitValue": "8",
+        "hitValue": 6,
         "evasionValue": "12",
         "resistValue": "13",
         "defenseValue": "5",
@@ -25637,7 +25980,7 @@
         "rank": "初級",
         "hp": "18",
         "mp": "0",
-        "hitValue": "4",
+        "hitValue": 6,
         "evasionValue": "8",
         "resistValue": "6",
         "defenseValue": "0",
@@ -25659,7 +26002,7 @@
         "drops": "魔物素材\t獣\tmat_muddy_hide\t泥まみれの皮\t65%\t1個\n採取素材\t水・液体\tmat_clear_water\t澄んだ水\t30%\t1個",
         "habit": "湿地の浅瀬や泥の窪みに潜み、獲物が近づくと勢いよく跳び出す。不利になると深い泥へ潜って距離を取る。",
         "description": "湿地を跳ね回る両生系の魔物。泥を使って相手の視界を奪う。",
-        "notes": "湿地の高威力通常魔物枠。沼跳び蹴りは単体2D6。",
+        "notes": "湿地の高威力通常魔物枠。沼跳び蹴りは単体2D6。 湿地命中調整v90.8.193：ぬかるみのPC回避-1を前提に、通常魔物は命中+4～+5、ボスは+6へ調整。",
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": ""
@@ -25671,7 +26014,7 @@
         "rank": "初級",
         "hp": "21",
         "mp": "0",
-        "hitValue": "3",
+        "hitValue": 5,
         "evasionValue": "6",
         "resistValue": "7",
         "defenseValue": "1",
@@ -25693,7 +26036,7 @@
         "drops": "魔物素材\tスライム\tmat_gelatin_liquid\tゼラチン液\t85%\t1個\n魔物素材\tスライム\tmat_swamp_mucus\t湿地粘液\t55%\t1個\n魔物素材\tスライム\tmat_bubble_slime_bubble_core\tバブルスライムの泡核\t20%\t1個",
         "habit": "湿地の浅瀬や水溜まりに潜み、周囲の水分を取り込んで身体を膨らませる。刺激を受けると泡を撒き散らして逃げようとする。",
         "description": "水泡を体内に抱えた湿地のスライム。粘る泡で足を取る。",
-        "notes": "後衛配置時にも使用できる射撃/魔法行動を持つ。 行動バランスv90.8.137：エリア難易度に沿って威力・範囲・妨害効果を再調整。 遠距離行動を持つが、遭遇編成によって前衛・後衛のどちらにも配置できる。",
+        "notes": "後衛配置時にも使用できる射撃/魔法行動を持つ。 行動バランスv90.8.137：エリア難易度に沿って威力・範囲・妨害効果を再調整。 遠距離行動を持つが、遭遇編成によって前衛・後衛のどちらにも配置できる。 湿地命中調整v90.8.193：ぬかるみのPC回避-1を前提に、通常魔物は命中+4～+5、ボスは+6へ調整。",
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": ""
@@ -25705,7 +26048,7 @@
         "rank": "初級",
         "hp": "13",
         "mp": "0",
-        "hitValue": "4",
+        "hitValue": 6,
         "evasionValue": "9",
         "resistValue": "6",
         "defenseValue": "0",
@@ -25727,7 +26070,7 @@
         "drops": "魔物素材\t虫・甲殻\tmat_insect_wing\t薄虫の羽\t70%\t1個\n魔物素材\t虫・甲殻\tmat_small_claw\t小さな爪\t25%\t1個\n魔物素材\t虫・甲殻\tmat_mist_mosquito_mist_needle\tミストモスキートの霧針\t20%\t1個",
         "habit": "朝夕の霧へ紛れて漂い、体温や吐息を頼りに生き物へ近づく。乾いた風と強い日差しを避ける傾向がある。",
         "description": "湿った霧に紛れて飛ぶ吸血虫型の魔物。とても素早い。",
-        "notes": "後衛配置時にも使用できる射撃/魔法行動を持つ。 行動バランスv90.8.137：エリア難易度に沿って威力・範囲・妨害効果を再調整。 遠距離行動を持つが、遭遇編成によって前衛・後衛のどちらにも配置できる。",
+        "notes": "後衛配置時にも使用できる射撃/魔法行動を持つ。 行動バランスv90.8.137：エリア難易度に沿って威力・範囲・妨害効果を再調整。 遠距離行動を持つが、遭遇編成によって前衛・後衛のどちらにも配置できる。 湿地命中調整v90.8.193：ぬかるみのPC回避-1を前提に、通常魔物は命中+4～+5、ボスは+6へ調整。",
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": ""
@@ -25739,7 +26082,7 @@
         "rank": "初級",
         "hp": "30",
         "mp": "0",
-        "hitValue": "4",
+        "hitValue": 5,
         "evasionValue": "6",
         "resistValue": "8",
         "defenseValue": "2",
@@ -25761,7 +26104,7 @@
         "drops": "魔物素材\tスライム\tmat_swamp_mucus\t湿地粘液\t80%\t1個\n魔物素材\tスライム\tmat_gelatin_liquid\tゼラチン液\t50%\t1個\n魔物素材\tスライム\tmat_dromarl_mud_core\tドロマールの泥核\t20%\t1個",
         "habit": "泥の中をゆっくり流れるように移動し、普段は濁った水溜まりに擬態している。獲物が踏み込むと周囲から包み込む。",
         "description": "泥と粘液が混ざって生まれた鈍重な魔物。水気を吸って体を保つ。",
-        "notes": "行動の判定欄を近接/射撃/魔法/なしで整理。 序盤通常魔物の回避下限調整：回避値6。 行動バランスv90.8.137：エリア難易度に沿って威力・範囲・妨害効果を再調整。",
+        "notes": "行動の判定欄を近接/射撃/魔法/なしで整理。 序盤通常魔物の回避下限調整：回避値6。 行動バランスv90.8.137：エリア難易度に沿って威力・範囲・妨害効果を再調整。 湿地命中調整v90.8.193：ぬかるみのPC回避-1を前提に、通常魔物は命中+4～+5、ボスは+6へ調整。",
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": ""
@@ -25773,7 +26116,7 @@
         "rank": "ボス",
         "hp": "176",
         "mp": "16",
-        "hitValue": "9",
+        "hitValue": 7,
         "evasionValue": "11",
         "resistValue": "12",
         "defenseValue": "5",
@@ -25795,7 +26138,7 @@
         "drops": "魔物素材\tスライム\tmat_lord_swamp_core\t沼主の濁核\t100%\t1個\n魔物素材\tスライム\tmat_swamp_mucus\t湿地粘液\t80%\t2個\n採取素材\t水・液体\tmat_clear_water\t澄んだ水\t50%\t2個",
         "habit": "湿地の深い淀みを縄張りとし、普段は泥と水草に埋もれて動かない。水場を荒らす者が現れると、低い咆哮を響かせて姿を現す。",
         "description": "水辺の湿地を支配するエリアボス。泥と腐泥による継続的な削り、全体攻撃、再生を備え、タンクの維持と回復・解除の判断を要求する。",
-        "notes": "直接ダメージ・継続削り・全体大技の混合型。偶数ラウンド開始時に固有パッシブ「沼霧の脈動」で「沼霧の咆哮」を自動発動する。 継続削りと全体攻撃を考慮しながら、防御7程度へ明確に通る直接火力へ再調整済み。",
+        "notes": "直接ダメージ・継続削り・全体大技の混合型。偶数ラウンド開始時に固有パッシブ「沼霧の脈動」で「沼霧の咆哮」を自動発動する。 継続削りと全体攻撃を考慮しながら、防御7程度へ明確に通る直接火力へ再調整済み。 湿地命中調整v90.8.193：ぬかるみのPC回避-1を前提に、通常魔物は命中+4～+5、ボスは+6へ調整。",
         "updatedAt": "",
         "ownerKey": "",
         "createdBy": ""
@@ -25807,7 +26150,7 @@
         "rank": "中級",
         "hp": "28",
         "mp": "0",
-        "hitValue": "5",
+        "hitValue": 6,
         "evasionValue": "8",
         "resistValue": "10",
         "defenseValue": "1",
@@ -25841,7 +26184,7 @@
         "rank": "中級",
         "hp": "20",
         "mp": "0",
-        "hitValue": "5",
+        "hitValue": 7,
         "evasionValue": "11",
         "resistValue": "8",
         "defenseValue": "0",
@@ -25875,7 +26218,7 @@
         "rank": "中級",
         "hp": "38",
         "mp": "0",
-        "hitValue": "6",
+        "hitValue": 6,
         "evasionValue": "9",
         "resistValue": "10",
         "defenseValue": "2",
@@ -25909,7 +26252,7 @@
         "rank": "中級",
         "hp": "30",
         "mp": "0",
-        "hitValue": "5",
+        "hitValue": 6,
         "evasionValue": "7",
         "resistValue": "11",
         "defenseValue": "1",
@@ -25943,7 +26286,7 @@
         "rank": "中級",
         "hp": "44",
         "mp": "0",
-        "hitValue": "6",
+        "hitValue": 6,
         "evasionValue": "7",
         "resistValue": "10",
         "defenseValue": "3",
@@ -25977,7 +26320,7 @@
         "rank": "強敵",
         "hp": "40",
         "mp": "0",
-        "hitValue": "7",
+        "hitValue": 7,
         "evasionValue": "11",
         "resistValue": "10",
         "defenseValue": "1",
@@ -26011,7 +26354,7 @@
         "rank": "ボス",
         "hp": "232",
         "mp": "0",
-        "hitValue": "10",
+        "hitValue": 8,
         "evasionValue": "15",
         "resistValue": "15",
         "defenseValue": "6",

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.192</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.194</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -986,7 +986,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.192 / 最終更新日：2026年7月16日</div>
+<div class="ra-build-info">Version：v90.8.194 / 最終更新日：2026年7月16日</div>
 
 <header>
   <div class="title-card">
@@ -1397,7 +1397,11 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
               <datalist id="facilityUpgradeMaterialOptions"></datalist>
             </div>
             <div>
-              <label for="facilityUpgradeStepInput">今回の強化回数</label>
+              <label for="facilityUpgradeCountInput">現在の強化回数</label>
+              <select id="facilityUpgradeCountInput"></select>
+            </div>
+            <div>
+              <label for="facilityUpgradeStepInput">現在の使用済み強化枠</label>
               <select id="facilityUpgradeStepInput"></select>
             </div>
             <div>
@@ -1410,7 +1414,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
             </div>
             <button class="secondary" type="button" data-facility-upgrade-check>強化内容を確認</button><button class="ghost" type="button" data-facility-upgrade-reset>選択をやり直す</button>
           </div>
-          <div id="facilityUpgradeResult" class="facility-upgrade-result muted">強化素材・強化回数・使用道具を選択してください。</div>
+          <div id="facilityUpgradeResult" class="facility-upgrade-result muted">強化素材・強化回数・使用済み強化枠・使用道具を選択してください。</div>
         </div>
         <div id="facilityAlchemyWork" class="facility-work-block hidden">
           <div class="input-action-row">
@@ -1561,7 +1565,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.192';
+const RECRAFT_DB_VERSION = 'v90.8.194';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1575,7 +1579,7 @@ const SCHEMA = {
   material_categories: ['id','name','materialType','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   material_ranks: ['id','name','price','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   equipment_categories: ['id','name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
-  items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','power','maxStack','ammoUse','ammoKind','quiverCapacity','bagCapacity','offhandBonus','reloadTurns','spellSlots','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeDetail','equipmentUpgradeTarget','unlockAreaKey','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
+  items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','power','maxStack','ammoUse','ammoKind','quiverCapacity','bagCapacity','offhandBonus','reloadTurns','spellSlots','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeSlotCost','equipmentUpgradeDetail','equipmentUpgradeTarget','unlockAreaKey','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   recipes: ['id','publicId','name','rank','price','recipePrice','recipeSource','craftSkill','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockAreaKey','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   spells: ['id','publicId','type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   quest_rewards: ['id','rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards','notes','updatedAt','ownerKey','createdBy'],
@@ -1587,7 +1591,7 @@ const SCHEMA = {
   monsters: ['id','name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','encounterValue','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule','passiveName','passiveEffect','actions','drops','habit','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', recipePrice:'レシピ価格', recipeSource:'レシピ入手先', craftSkill:'製作技能', rank:'ランク', toolRank:'使用可能上限ランク', guaranteeUpgradeMaxRank:'強化確定上限ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生名（代表素材系統）', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', spellSlots:'術式追加枠', modifiers:'補正値', upgradeLimit:'強化可能回数', upgradeMaterialMinRank:'強化素材最低ランク', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', pullRule:'引き寄せ', passiveName:'固有パッシブ名', passiveEffect:'固有パッシブ効果', habit:'習性', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', equipmentUpgradeDetail:'特殊能力詳細', equipmentUpgradeTarget:'強化対象', unlockAreaKey:'必要解放エリア', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockKey:'エリア解放キー', unlockOrder:'解放順', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知難易度', trapDisarmDifficulty:'罠解除難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'防御値', initiative:'先制値', encounterValue:'遭遇値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ'
+  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', recipePrice:'レシピ価格', recipeSource:'レシピ入手先', craftSkill:'製作技能', rank:'ランク', toolRank:'使用可能上限ランク', guaranteeUpgradeMaxRank:'強化確定上限ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生名（代表素材系統）', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', spellSlots:'術式追加枠', modifiers:'補正値', upgradeLimit:'強化枠上限', upgradeMaterialMinRank:'強化素材最低ランク', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', pullRule:'引き寄せ', passiveName:'固有パッシブ名', passiveEffect:'固有パッシブ効果', habit:'習性', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', equipmentUpgradeSlotCost:'消費強化枠', equipmentUpgradeDetail:'特殊能力詳細', equipmentUpgradeTarget:'強化対象', unlockAreaKey:'必要解放エリア', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockKey:'エリア解放キー', unlockOrder:'解放順', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知難易度', trapDisarmDifficulty:'罠解除難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'防御値', initiative:'先制値', encounterValue:'遭遇値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ'
 };
 
 const FORM_PRIMARY_FIELDS = {
@@ -1597,7 +1601,7 @@ const FORM_PRIMARY_FIELDS = {
   material_categories: ['name','materialType','description','sortOrder','enabled'],
   material_ranks: ['id','name','price','description','sortOrder','enabled'],
   equipment_categories: ['name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled'],
-  items: ['name','publicId','csVisible','itemType','itemCategory','price','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','power','spellSlots','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeDetail','equipmentUpgradeTarget','unlockAreaKey','unlockFacility','tags'],
+  items: ['name','publicId','csVisible','itemType','itemCategory','price','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','power','spellSlots','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeSlotCost','equipmentUpgradeDetail','equipmentUpgradeTarget','unlockAreaKey','unlockFacility','tags'],
   recipes: ['name','publicId','rank','recipePrice','recipeSource','craftSkill','price','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockAreaKey','unlockFacility','tags'],
   materials: ['name','publicId','materialType','materialCategory','rank','price','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeTarget','description','effect','notes'],
   spells: ['type','name','publicId','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags'],
@@ -1612,7 +1616,7 @@ const FORM_PRIMARY_FIELDS = {
 const FORM_LONG_FIELDS = new Set(['habit','description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','rewardItems','unlockResult','mainMaterials','mainMonsters','result','progressEffect','actions','drops','passiveEffect','modifiers','encounterComposition','equipmentUpgradeDetail']);
 const RECORD_CARD_KEYS = new Set(['items','materials','recipes','spells','exploration_areas']);
 const FIELD_PLACEHOLDERS = {
-  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'装備・アイテム・素材・レシピ・術式は1以上の数値。プレイヤー表示は★N', toolRank:'例：6。この道具で使用できるレシピ・素材の上限ランク。画面では★6以下と表示します', guaranteeUpgradeMaxRank:'例：6。このアイテムを使うと★6以下の強化素材を使う装備強化が確定成功になります。', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：甲殻板。実際に使用する代表素材系統を入力します。画面では「甲殻板派生」と表示します。', equipmentUpgradeEffect:'例：威力+1。魔物素材を装備強化に使った時の強化内容を選択します。', equipmentUpgradeDetail:'特殊効果が付く場合、発動条件・対象・補正値・持続や解除条件を具体的に入力します。', upgradeMaterialMinRank:'例：3。この装備を強化できる素材の最低ランク。空欄時は装備ランクを使用します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockKey:'例：7UCX-JAUE-E2TH-GLRG-MEGW。エリア名や順番を推測しにくい文字列を設定', unlockOrder:'例：2。小さい順に累積解放', unlockAreaKey:'例：area_nearby_forest。商品・作成・派生に必要なエリアID', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：低級 / 普通', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定の魔法スクロール：★1', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：1。プレイヤー表示は★1', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：1。プレイヤー表示は★1', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', encounterValue:'1～3。魔物単体の戦闘負荷。エリアではなく能力・行動の強さで設定します。', dismantleDifficulty:'例：7。採取技能>=解体難易度で判定し、成功時は全ドロップ率+10%（上限100%）。目安はチュートリアル5～6、通常6～9、ボス10以上', pullRule:'可 / 不可', passiveName:'例：胞子反応', passiveEffect:'発動条件・処理・回数制限を具体的に入力', habit:'生息場所・群れ方・警戒時の行動などを1～3文で入力', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
+  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'装備・アイテム・素材・レシピ・術式は1以上の数値。プレイヤー表示は★N', toolRank:'例：6。この道具で使用できるレシピ・素材の上限ランク。画面では★6以下と表示します', guaranteeUpgradeMaxRank:'例：6。このアイテムを使うと★6以下の強化素材を使う装備強化が確定成功になります。', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：甲殻板。実際に使用する代表素材系統を入力します。画面では「甲殻板派生」と表示します。', equipmentUpgradeEffect:'例：威力+1。武器対象には魔導書・祈祷書も含みます。', equipmentUpgradeSlotCost:'通常は1。防御+1・消費コスト-1・回復量+1などの強力な効果は2。', equipmentUpgradeDetail:'特殊効果が付く場合、発動条件・対象・補正値・持続や解除条件を具体的に入力します。', upgradeMaterialMinRank:'例：3。この装備を強化できる素材の最低ランク。空欄時は装備ランクを使用します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockKey:'例：7UCX-JAUE-E2TH-GLRG-MEGW。エリア名や順番を推測しにくい文字列を設定', unlockOrder:'例：2。小さい順に累積解放', unlockAreaKey:'例：area_nearby_forest。商品・作成・派生に必要なエリアID', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：低級 / 普通', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定の魔法スクロール：★1', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：1。プレイヤー表示は★1', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：1。プレイヤー表示は★1', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', encounterValue:'1～3。魔物単体の戦闘負荷。エリアではなく能力・行動の強さで設定します。', dismantleDifficulty:'例：7。採取技能>=解体難易度で判定し、成功時は全ドロップ率+10%（上限100%）。目安はチュートリアル5～6、通常6～9、ボス10以上', pullRule:'可 / 不可', passiveName:'例：胞子反応', passiveEffect:'発動条件・処理・回数制限を具体的に入力', habit:'生息場所・群れ方・警戒時の行動などを1～3文で入力', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
 };
 const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','checkType','type','role','setItem','unlockAreaKey','unlockFacility','equipmentUpgradeEffect','equipmentUpgradeTarget','ammoUse','ammoKind','craftSkill','craftType','baseItem','branchType','enabled','hasLock','hasTrap','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','conditionType','conditionValue','treasureTableId','tableId','treasureRank','hasLock','hasTrap','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','facilityName','spellType','spellRank','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule']);
 let formState = { key:null, idx:null, mode:'new', defaultDataKind:'' };
@@ -2154,7 +2158,7 @@ const SYSTEM_HELP = [
       "装備強化内容は選択式の項目『equipmentUpgradeEffect / 装備強化内容』で管理する。",
       "装備強化値は自由入力の項目『equipmentUpgradeValue / 装備強化値』で管理する。特殊効果の具体的な処理は『equipmentUpgradeDetail / 特殊能力詳細』で管理する。",
       "装備強化内容の選択肢には、強化分類と対象装備を含める。",
-      "武器用の例：威力(武器)、命中(武器)、防御貫通(武器)、火属性付与(武器)、火属性強化(武器)、特殊効果付与(武器)。",
+      "武器用の例：威力(武器)、命中(武器)、防御貫通(武器)。武器には魔導書・祈祷書を含む、火属性付与(武器)、火属性強化(武器)、特殊効果付与(武器)。",
       "防具用の例：防御値(防具)、防御行動値(防具)、回避補正(防具)、火付与(防具)、水付与(防具)、特殊効果付与(防具)。",
       "防具の防御系強化は、キャラシのステータス名に準拠して防御値と防御行動値を分ける。",
       "防御値(防具)は、通常時から適用されるダメージ軽減値を上げる。",
@@ -2338,7 +2342,7 @@ const SYSTEM_HELP = [
       "知識カテゴリは魔物、素材、属性。",
       "魔物知識に成功した場合、選んだ属性1つの耐性、弱点、無効、反射、吸収などを確認できる。",
       "魔物知識で全属性を一度に開示しない。",
-      "鼓舞は、成功すると対象の次の判定に+1する。",
+      "鼓舞は、成功すると対象の次の判定に+2する。",
       "鼓舞の対象は、戦闘中または難しい場面の味方。",
       "魅力系技能は、交渉、共感、社交、鼓舞。"
     ]
@@ -2447,11 +2451,11 @@ const SYSTEM_HELP = [
       "素材"
     ],
     "body": [
-      "武器、防具、盾、装飾品、魔導書、祈祷書には強化可能回数を設定する。",
+      "武器、防具、盾、装飾品、魔導書、祈祷書には強化枠上限を設定する。",
       "★1の武器・防具・盾は原則2回まで強化可能。",
       "★1の装飾品は原則1回まで強化可能。",
       "魔導書と祈祷書は原則2回まで強化可能。",
-      "素手、普段着、バッグ、矢筒、素材、調合品、道具、矢弾、スクロールには強化可能回数を表示しない。",
+      "素手、普段着、バッグ、矢筒、素材、調合品、道具、矢弾、スクロールには強化枠上限を表示しない。",
       "実際に適用した強化内容はキャラクターシートの装備欄で、1強化1行で記録する。"
     ]
   }
@@ -2969,7 +2973,7 @@ function buildPlayerItemInfoText(row={}, key='', count='1'){
   if(modifierSummary) useInfo.push(`補正 ${modifierSummary}`);
   if(fieldText(row,'offhandBonus') || fieldText(row,'offhand')) useInfo.push(`副手追撃 ${fieldText(row,'offhandBonus') || fieldText(row,'offhand')}`);
   if(fieldText(row,'reloadTurns')) useInfo.push(`装填 ${fieldText(row,'reloadTurns')}ターン`);
-  if(isUpgradeableEquipmentRow(row,key) && fieldText(row,'upgradeLimit')) useInfo.push(`強化可能回数 ${fieldText(row,'upgradeLimit')}`);
+  if(isUpgradeableEquipmentRow(row,key) && fieldText(row,'upgradeLimit')) useInfo.push(`強化枠上限 ${fieldText(row,'upgradeLimit')}`);
   if(fieldText(row,'mpCost') || fieldText(row,'cost')) useInfo.push(`コスト ${fieldText(row,'mpCost') || fieldText(row,'cost')}`);
   if(fieldText(row,'target')) useInfo.push(`対象 ${fieldText(row,'target')}`);
   if(fieldText(row,'checkType')) useInfo.push(`判定 ${fieldText(row,'checkType')}`);
@@ -3167,12 +3171,20 @@ function dropMaterialOutputBlock(row={}){
 }
 const ITEM_RANKS = []; // 数値ランクは1以上で上限なし。
 const UPGRADE_STEP_RULES = [
-  {step:1, label:'1回目', difficultyMod:0, priceRate:1},
-  {step:2, label:'2回目', difficultyMod:2, priceRate:2},
-  {step:3, label:'3回目', difficultyMod:4, priceRate:3},
-  {step:4, label:'4回目', difficultyMod:6, priceRate:4},
-  {step:5, label:'5回目', difficultyMod:8, priceRate:5},
-  {step:6, label:'6回目以上', difficultyMod:10, priceRate:6}
+  {step:1, usedSlots:0, label:'現在0枠使用'},
+  {step:2, usedSlots:1, label:'現在1枠使用'},
+  {step:3, usedSlots:2, label:'現在2枠使用'},
+  {step:4, usedSlots:3, label:'現在3枠使用'},
+  {step:5, usedSlots:4, label:'現在4枠使用'},
+  {step:6, usedSlots:5, label:'現在5枠以上使用'}
+];
+const UPGRADE_COUNT_RULES = [
+  {value:0,label:'まだ強化していない'},
+  {value:1,label:'現在1回強化済み'},
+  {value:2,label:'現在2回強化済み'},
+  {value:3,label:'現在3回強化済み'},
+  {value:4,label:'現在4回強化済み'},
+  {value:5,label:'現在5回以上強化済み'}
 ];
 function materialRankDifficulty(rank=''){
   const n=numericRankValueIncludingLegacyMaterialGrade(rank,'');
@@ -3227,6 +3239,11 @@ function renderUpgradeStepSelect(selected='1'){
   const current=String(selected||sel.value||'1');
   sel.innerHTML=UPGRADE_STEP_RULES.map(r=>`<option value="${r.step}" ${String(r.step)===current?'selected':''}>${escapeHtml(r.label)}</option>`).join('');
 }
+function renderUpgradeCountSelect(selected='0'){
+  const sel=$('facilityUpgradeCountInput'); if(!sel)return;
+  const current=String(selected??sel.value??'0');
+  sel.innerHTML=UPGRADE_COUNT_RULES.map(r=>`<option value="${r.value}" ${String(r.value)===current?'selected':''}>${escapeHtml(r.label)}</option>`).join('');
+}
 function rankBasePrice(rank=''){
   const n=normalizeToolRank(rank,1);
   const found=(state.material_ranks||[]).find(row=>normalizeToolRank(row.name,'')===n);
@@ -3248,7 +3265,8 @@ function selectedUpgradeEquipment(){
   return (state.items||[]).find(r=>String(r.name||'').trim()===name)||null;
 }
 function upgradeDifficultyPenalty(materialRank,minimumRank){return Math.max(0,Number(materialRank||1)-Number(minimumRank||1));}
-function upgradeTargetValue(equipmentRank,step){return 7+Math.max(1,Number(equipmentRank)||1)+Math.max(0,(Number(step)||1)-1);}
+function upgradeTargetValue(equipmentRank,upgradeCount){return 7+Math.max(1,Number(equipmentRank)||1)+Math.max(0,Number(upgradeCount)||0);}
+function upgradeSlotCostForMaterial(mat={}){const explicit=Math.max(0,Number(mat.equipmentUpgradeSlotCost||0));if(explicit)return explicit;const e=String(mat.equipmentUpgradeEffect||'');return /防御\+1|防御値|消費コスト|回復量/.test(e)?2:1;}
 function facilityUpgradeSuccessRate(target,difficulty){return Math.max(20,Math.min(95,100-Math.max(0,Number(target||8)-8)*5-Math.max(0,Number(difficulty||0))*10));}
 function facilityGuaranteeItems(){return (state.items||[]).filter(r=>Number(r.guaranteeUpgradeMaxRank||0)>0);}
 function renderFacilityGuaranteeSelect(){const sel=$('facilityUpgradeGuaranteeItem');if(!sel)return;const prev=sel.value;sel.innerHTML='<option value="">使用しない</option>'+facilityGuaranteeItems().sort((a,b)=>Number(a.guaranteeUpgradeMaxRank)-Number(b.guaranteeUpgradeMaxRank)).map(r=>`<option value="${escapeHtml(r.name||r.id||'')}">${escapeHtml(r.name||r.id||'名称未設定')}（${escapeHtml(playerRankLabel(r.guaranteeUpgradeMaxRank))}以下）</option>`).join('');if([...sel.options].some(o=>o.value===prev))sel.value=prev;}
@@ -3259,7 +3277,7 @@ function upgradeWorkPrice(material={}, rule=UPGRADE_STEP_RULES[0], equipment=nul
   const base=Number.isFinite(materialPrice)&&materialPrice>0?materialPrice:rankBasePrice(material.rank);
   const rank=numericRankValueIncludingLegacyMaterialGrade(equipment?.rank,'');
   const rankRate=equipmentRankPriceMultiplier(rank);
-  const stepRate=Number(rule.step||rule.priceRate||1);
+  const stepRate=Math.max(1,Number(rule.usedSlots||0)+upgradeSlotCostForMaterial(material));
   if(!base||!rankRate)return {base,total:0,rank,rankRate,stepRate};
   return {base,total:Math.ceil(base*stepRate*rankRate),rank,rankRate,stepRate};
 }
@@ -3590,7 +3608,7 @@ function renderFacilityWorkPanel(){
   if(kind==='smithy'){
     if(title) title.textContent='装備強化';
     if(notice) notice.textContent='自作は鍛冶道具＋素材、施設依頼は素材＋表示価格で行います。';
-    renderFacilityUpgradeEquipmentSelect(); renderFacilityUpgradeLookupList(); renderFacilityGuaranteeSelect(); renderUpgradeStepSelect($('facilityUpgradeStepInput')?.value||'1'); renderToolRankSelect('facilitySmithToolRankInput',$('facilitySmithToolRankInput')?.value||'3'); renderFacilityUpgradeResult($('facilityUpgradeMaterialInput')?.value||'');
+    renderFacilityUpgradeEquipmentSelect(); renderFacilityUpgradeLookupList(); renderFacilityGuaranteeSelect(); renderUpgradeCountSelect($('facilityUpgradeCountInput')?.value||'0'); renderUpgradeStepSelect($('facilityUpgradeStepInput')?.value||'1'); renderToolRankSelect('facilitySmithToolRankInput',$('facilitySmithToolRankInput')?.value||'3'); renderFacilityUpgradeResult($('facilityUpgradeMaterialInput')?.value||'');
   }else if(kind==='alchemy'){
     if(title) title.textContent='調合';
     if(notice) notice.textContent='必要素材・作成ランク・難易度・施設依頼価格を確認します。';
@@ -3635,7 +3653,9 @@ function upgradeMaterialTargetTypes(mat){
 }
 function facilityUpgradeMaterialCompatible(mat){
   const type=String($('facilityUpgradeEquipmentType')?.value||'武器').trim();
-  return upgradeMaterialTargetTypes(mat).includes(type);
+  const targets=upgradeMaterialTargetTypes(mat);
+  if((type==='魔導書'||type==='祈祷書') && targets.includes('武器')) return true;
+  return targets.includes(type);
 }
 function facilityUpgradeMaterials({respectMinimum=true}={}){
   const equipment=selectedUpgradeEquipment();
@@ -3679,14 +3699,20 @@ function renderFacilityUpgradeResult(materialName=''){
   const rankAllowed=materialRank>=minimumRank;
   const rule=upgradeStepRule($('facilityUpgradeStepInput')?.value||'1');
   const difficulty=upgradeDifficultyPenalty(materialRank,minimumRank);
-  const target=upgradeTargetValue(equipmentRank,rule.step);
+  const usedSlots=Math.max(0,Number(rule.usedSlots||0));
+  const upgradeCount=Math.max(0,Number($('facilityUpgradeCountInput')?.value||0));
+  const slotCost=upgradeSlotCostForMaterial(mat);
+  const afterSlots=usedSlots+slotCost;
+  const slotLimit=Math.max(0,Number(equipment.upgradeLimit||0));
+  const capacityAllowed=!slotLimit||afterSlots<=slotLimit;
+  const target=upgradeTargetValue(equipmentRank,upgradeCount);
   const toolMax=normalizeToolRank($('facilitySmithToolRankInput')?.value||'3',3);
   const tool=toolCapabilityCheck(materialRank,toolMax), price=upgradeWorkPrice(mat,rule,equipment);
   const guarantee=selectedFacilityGuaranteeItem();
   const guaranteeCap=Number(guarantee?.guaranteeUpgradeMaxRank||0);
-  const guaranteeUsable=!!guarantee && guaranteeCap>=materialRank && rankAllowed && tool.usable;
+  const guaranteeUsable=!!guarantee && guaranteeCap>=materialRank && rankAllowed && tool.usable && capacityAllowed;
   const successRate=facilityUpgradeSuccessRate(target,difficulty);
-  const usable=rankAllowed&&tool.usable;
+  const usable=rankAllowed&&tool.usable&&capacityAllowed;
   result.classList.remove('muted');
   result.innerHTML=`<div><b>${escapeHtml(mat.name||mat.id||'素材名未設定')}</b></div>
     <div class="facility-product-meta">${[playerRankLabel(materialRank),'対象:'+(upgradeMaterialTarget(mat)||'未設定'),mat.materialCategory||'',mat.price?'素材売値:'+mat.price+'G':''].filter(Boolean).map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>
@@ -3694,13 +3720,15 @@ function renderFacilityUpgradeResult(materialName=''){
     <div><b>必要素材最低ランク：</b>${escapeHtml(playerRankLabel(minimumRank))}以上</div>
     <div><b>選択素材ランク：</b>${escapeHtml(playerRankLabel(materialRank))}${rankAllowed?' / 使用可能':' / ランク不足'}</div>
     <div><b>強化難度：</b>${escapeHtml(String(difficulty))}（素材${escapeHtml(playerRankLabel(materialRank))}－最低${escapeHtml(playerRankLabel(minimumRank))}）</div>
-    <div><b>今回の強化段階：</b>${escapeHtml(rule.label)}</div>
-    <div><b>自作目標値：</b>${escapeHtml(String(target))}（7＋装備ランク${escapeHtml(String(equipmentRank))}＋強化回数補正${escapeHtml(String(Math.max(0,rule.step-1))) }）</div>
+    <div><b>現在の強化回数：</b>${escapeHtml(String(upgradeCount))}回（今回の強化は${escapeHtml(String(upgradeCount+1))}回目）</div>
+    <div><b>現在の使用済み強化枠：</b>${escapeHtml(String(usedSlots))} / ${escapeHtml(String(slotLimit||'上限未設定'))}</div>
+    <div><b>今回消費する強化枠：</b>${escapeHtml(String(slotCost))}（強化後 ${escapeHtml(String(afterSlots))}枠）${capacityAllowed?'':' / 枠不足'}</div>
+    <div><b>自作目標値：</b>${escapeHtml(String(target))}（7＋装備ランク${escapeHtml(String(equipmentRank))}＋現在の強化回数${escapeHtml(String(upgradeCount))}）</div>
     <div><b>自作判定：</b>2D6＋細工－${escapeHtml(String(difficulty))} &gt;= ${escapeHtml(String(target))}</div>
     <div><b>使用道具：</b>${escapeHtml(selectedToolText('facilitySmithToolRankInput'))} / ${tool.usable?'使用可能':'素材ランクが対応上限を超過'}</div>
     <div><b>施設依頼成功率：</b>${usable?(guaranteeUsable?'100%（確定成功アイテム使用）':escapeHtml(String(successRate))+'%'):'強化不可'}</div>
     <div><b>確定成功アイテム：</b>${guarantee?`${escapeHtml(guarantee.name||'名称未設定')}（${escapeHtml(playerRankLabel(guaranteeCap))}以下） / ${guaranteeUsable?'使用可能':'対応上限外または他条件未達'}`:'使用しない'}</div>
-    <div><b>施設依頼価格：</b>${rankAllowed?(price.total?`${escapeHtml(String(price.total))}G`:'未設定'):'素材ランク不足のため算出対象外'}</div>
+    <div><b>施設依頼価格：</b>${rankAllowed&&capacityAllowed?(price.total?`${escapeHtml(String(price.total))}G`:'未設定'):'素材ランク不足または強化枠不足のため算出対象外'}</div>
     <div><b>装備強化内容：</b>${escapeHtml(effect||'未設定')}</div>
     <div><b>装備強化値：</b>${escapeHtml(value||'未設定')}</div>${detail?`<div><b>特殊能力詳細：</b>${escapeHtml(detail)}</div>`:''}`;
 }
@@ -4470,7 +4498,7 @@ function formOptionValues(key, field){
   if(field==='element') ['物','火','水','風','雷','光','闇','無'].forEach(v=>values.add(v));
   if(field==='hasLock' || field==='hasTrap') ['なし','あり'].forEach(v=>values.add(v));
   if(field==='equipmentUpgradeTarget') ['武器','防具','盾','装飾品','魔導書','祈祷書','武器・防具','防具・盾','魔導書・祈祷書','武器・魔導書・祈祷書'].forEach(v=>values.add(v));
-  if(field==='equipmentUpgradeEffect') ['なし','威力','命中','防御貫通','防御値','防御行動値','回避補正','物属性付与','火属性付与','水属性付与','風属性付与','雷属性付与','光属性付与','闇属性付与','無属性付与','物耐性付与','火耐性付与','水耐性付与','風耐性付与','雷耐性付与','光耐性付与','闇耐性付与','無耐性付与','特殊効果付与'].forEach(v=>values.add(v));
+  if(field==='equipmentUpgradeEffect') ['なし','威力','命中','防御貫通','防御値','防御行動値','回避補正','術式枠+1','消費コスト-1','回復量+1','物属性付与','火属性付与','水属性付与','風属性付与','雷属性付与','光属性付与','闇属性付与','無属性付与','物耐性付与','火耐性付与','水耐性付与','風耐性付与','雷耐性付与','光耐性付与','闇耐性付与','無耐性付与','特殊効果付与'].forEach(v=>values.add(v));
   if(field==='craftType') ['調合','鍛冶','細工','武器派生','防具製作','バッグ製作','素材加工'].forEach(v=>values.add(v));
   if(field==='baseItem') (state.items || []).forEach(r=>{ const type=String(r.itemType || '').trim(); const cat=String(r.itemCategory || '').trim(); if(String(r.dataKind || '').trim() !== '素材' && (type==='武器' || (type==='術式装備' && ['魔導書','祈祷書'].includes(cat))) && r.name) values.add(String(r.name)); });
   if(field==='branchType') (state.recipes||[]).forEach(r=>{ const v=String(r.branchType||'').trim(); if(v) values.add(v); });
@@ -5181,7 +5209,7 @@ function currentFormRowSnapshot(){
 function itemFormFields(row){
   const kind = String(row.dataKind || 'アイテム').trim() || 'アイテム';
   if(kind==='素材'){
-    return ['materialType','materialCategory','name','publicId','rank','price','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeDetail','equipmentUpgradeTarget','description','effect','unlockAreaKey','unlockFacility','tags','notes'];
+    return ['materialType','materialCategory','name','publicId','rank','price','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeSlotCost','equipmentUpgradeDetail','equipmentUpgradeTarget','description','effect','unlockAreaKey','unlockFacility','tags','notes'];
   }
   const itemType = String(row.itemType || '').trim();
   if(itemType === '道具') return ['itemType','itemCategory','name','publicId','csVisible','price','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','maxStack','description','effect','unlockAreaKey','unlockFacility','tags','notes'];
@@ -6326,7 +6354,7 @@ document.addEventListener('click',e=>{
   const addMod=e.target.closest('[data-modifier-add]'); if(addMod){ const editor=addMod.closest('[data-modifier-editor]'); const list=editor.querySelector('[data-modifier-list]'); list.querySelector('[data-modifier-empty]')?.remove(); const idx=list.querySelectorAll('[data-modifier-row]').length; list.insertAdjacentHTML('beforeend', modifierEditorRowHtml({}, idx)); syncModifierEditor(editor); return; }
   const remMod=e.target.closest('[data-modifier-remove]'); if(remMod){ const editor=remMod.closest('[data-modifier-editor]'); remMod.closest('[data-modifier-row]')?.remove(); const list=editor.querySelector('[data-modifier-list]'); if(!list.querySelector('[data-modifier-row]')) list.innerHTML='<div class="muted small" data-modifier-empty>補正値はまだありません。</div>'; syncModifierEditor(editor); return; }
   const quickCat=e.target.closest('[data-quick-category-field]'); if(quickCat){ quickCreateCategory(quickCat.dataset.quickCategoryField); return; }
-  const upgradeReset=e.target.closest('[data-facility-upgrade-reset]'); if(upgradeReset){ if($('facilityUpgradeEquipmentSelect')) $('facilityUpgradeEquipmentSelect').value=''; if($('facilityUpgradeMaterialInput')) $('facilityUpgradeMaterialInput').value=''; if($('facilityUpgradeGuaranteeItem')) $('facilityUpgradeGuaranteeItem').value=''; renderFacilityUpgradeResult(''); toast('装備強化の選択をリセットしました'); return; }
+  const upgradeReset=e.target.closest('[data-facility-upgrade-reset]'); if(upgradeReset){ if($('facilityUpgradeEquipmentSelect')) $('facilityUpgradeEquipmentSelect').value=''; if($('facilityUpgradeMaterialInput')) $('facilityUpgradeMaterialInput').value=''; if($('facilityUpgradeGuaranteeItem')) $('facilityUpgradeGuaranteeItem').value=''; if($('facilityUpgradeCountInput')) $('facilityUpgradeCountInput').value='0'; if($('facilityUpgradeStepInput')) $('facilityUpgradeStepInput').value='1'; renderFacilityUpgradeResult(''); toast('装備強化の選択をリセットしました'); return; }
   const facilitySection=e.target.closest('[data-facility-section]'); if(facilitySection){
     currentFacilitySectionByName[currentFacilityView]=facilitySection.dataset.facilitySection||facilitySectionDefs(currentFacilityView)[0][0];
     renderFacilitiesPanel();
@@ -6429,7 +6457,7 @@ document.addEventListener('input',e=>{
   if(e.target.id && e.target.id.startsWith('filter-')) renderTable(e.target.id.replace('filter-',''));
   if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
   if(e.target.id==='facilityWeaponBranchSearch'){ currentFacilityWeaponBranchSearch=e.target.value||''; renderFacilitiesPanel(); const input=$('facilityWeaponBranchSearch'); if(input){input.focus();input.setSelectionRange(input.value.length,input.value.length);} return; }
-  if(['facilityUpgradeMaterialInput','facilityUpgradeStepInput','facilitySmithToolRankInput','facilityUpgradeGuaranteeItem'].includes(e.target.id)) renderFacilityUpgradeResult();
+  if(['facilityUpgradeMaterialInput','facilityUpgradeCountInput','facilityUpgradeStepInput','facilitySmithToolRankInput','facilityUpgradeGuaranteeItem'].includes(e.target.id)) renderFacilityUpgradeResult();
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)) renderFacilityAlchemyResult();
   if(['facilityAppraisalRankInput'].includes(e.target.id)) renderAntiqueAppraisalResult();
   if(['facilityAntiqueStockArea','facilityAntiqueStockCount'].includes(e.target.id)) renderAntiqueRandomStock();
@@ -6445,7 +6473,7 @@ document.addEventListener('change',e=>{
   if(e.target?.id==='facilityUpgradeEquipmentType'){ renderFacilityUpgradeEquipmentSelect(); if($('facilityUpgradeMaterialInput')) $('facilityUpgradeMaterialInput').value=''; renderFacilityUpgradeLookupList(); renderFacilityUpgradeResult(''); return; }
   if(e.target?.id==='facilityUpgradeEquipmentSelect'){ if($('facilityUpgradeMaterialInput'))$('facilityUpgradeMaterialInput').value=''; renderFacilityUpgradeLookupList(); renderFacilityUpgradeResult(''); return; }
   if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
-  if(['facilityUpgradeMaterialInput','facilityUpgradeStepInput','facilitySmithToolRankInput','facilityUpgradeGuaranteeItem'].includes(e.target.id)){ renderFacilityUpgradeResult(); return; }
+  if(['facilityUpgradeMaterialInput','facilityUpgradeCountInput','facilityUpgradeStepInput','facilitySmithToolRankInput','facilityUpgradeGuaranteeItem'].includes(e.target.id)){ renderFacilityUpgradeResult(); return; }
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)){ renderFacilityAlchemyResult(); return; }
   if(['facilityAppraisalRankInput'].includes(e.target.id)){ renderAntiqueAppraisalResult(); return; }
   if(['facilityAntiqueStockArea','facilityAntiqueStockCount'].includes(e.target.id)){ renderAntiqueRandomStock(); return; }
