@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.194</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.199</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -986,7 +986,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.194 / 最終更新日：2026年7月16日</div>
+<div class="ra-build-info">Version：v90.8.199 / 最終更新日：2026年7月16日</div>
 
 <header>
   <div class="title-card">
@@ -1565,7 +1565,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.194';
+const RECRAFT_DB_VERSION = 'v90.8.199';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1579,7 +1579,7 @@ const SCHEMA = {
   material_categories: ['id','name','materialType','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   material_ranks: ['id','name','price','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   equipment_categories: ['id','name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
-  items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','power','maxStack','ammoUse','ammoKind','quiverCapacity','bagCapacity','offhandBonus','reloadTurns','spellSlots','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeSlotCost','equipmentUpgradeDetail','equipmentUpgradeTarget','unlockAreaKey','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
+  items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','power','maxStack','ammoUse','ammoKind','compatibleWeaponTypes','quiverCapacity','bagCapacity','offhandBonus','reloadTurns','spellSlots','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeSlotCost','equipmentUpgradeDetail','equipmentUpgradeTarget','unlockAreaKey','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   recipes: ['id','publicId','name','rank','price','recipePrice','recipeSource','craftSkill','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockAreaKey','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   spells: ['id','publicId','type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   quest_rewards: ['id','rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards','notes','updatedAt','ownerKey','createdBy'],
@@ -1591,7 +1591,7 @@ const SCHEMA = {
   monsters: ['id','name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','encounterValue','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule','passiveName','passiveEffect','actions','drops','habit','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', recipePrice:'レシピ価格', recipeSource:'レシピ入手先', craftSkill:'製作技能', rank:'ランク', toolRank:'使用可能上限ランク', guaranteeUpgradeMaxRank:'強化確定上限ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生名（代表素材系統）', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', spellSlots:'術式追加枠', modifiers:'補正値', upgradeLimit:'強化枠上限', upgradeMaterialMinRank:'強化素材最低ランク', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', pullRule:'引き寄せ', passiveName:'固有パッシブ名', passiveEffect:'固有パッシブ効果', habit:'習性', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', equipmentUpgradeSlotCost:'消費強化枠', equipmentUpgradeDetail:'特殊能力詳細', equipmentUpgradeTarget:'強化対象', unlockAreaKey:'必要解放エリア', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockKey:'エリア解放キー', unlockOrder:'解放順', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知難易度', trapDisarmDifficulty:'罠解除難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'防御値', initiative:'先制値', encounterValue:'遭遇値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ'
+  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', recipePrice:'レシピ価格', recipeSource:'レシピ入手先', craftSkill:'製作技能', rank:'ランク', toolRank:'使用可能上限ランク', guaranteeUpgradeMaxRank:'強化確定上限ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生名（代表素材系統）', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', compatibleWeaponTypes:'対応武器種', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', spellSlots:'術式追加枠', modifiers:'補正値', upgradeLimit:'強化枠上限', upgradeMaterialMinRank:'強化素材最低ランク', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', pullRule:'引き寄せ', passiveName:'固有パッシブ名', passiveEffect:'固有パッシブ効果', habit:'習性', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', equipmentUpgradeSlotCost:'消費強化枠', equipmentUpgradeDetail:'特殊能力詳細', equipmentUpgradeTarget:'強化対象', unlockAreaKey:'必要解放エリア', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockKey:'エリア解放キー', unlockOrder:'解放順', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知難易度', trapDisarmDifficulty:'罠解除難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'防御値', initiative:'先制値', encounterValue:'遭遇値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ'
 };
 
 const FORM_PRIMARY_FIELDS = {
@@ -2137,8 +2137,8 @@ const SYSTEM_HELP = [
       "武器派生はモンハンに近い素材派生として扱う。",
       "武器派生を含む作成可能品には対応レシピを用意する。",
       "自作ではレシピ、素材、道具、製作判定が必要。施設依頼ではレシピ不要。",
-      "属性派生を全属性分作る方針にはしない。",
-      "属性付与や属性強化は魔物素材の装備強化内容で表現する。"
+      "属性派生を全属性分作る方針にはしない。物属性派生は基礎火力を維持し、属性を持つ派生は同格の物属性派生より基礎威力を少し低くする。",
+      "弓・弩・大型弩の攻撃属性は矢弾依存とし、一部の派生だけが特定属性の矢・ボルトへ命中・ダメージ・防御貫通などの適性を持つ。武器の属性は派生武器自体の性能として設定し、魔物素材による後付けの属性付与は行わない。"
     ]
   },
   {
@@ -2158,7 +2158,7 @@ const SYSTEM_HELP = [
       "装備強化内容は選択式の項目『equipmentUpgradeEffect / 装備強化内容』で管理する。",
       "装備強化値は自由入力の項目『equipmentUpgradeValue / 装備強化値』で管理する。特殊効果の具体的な処理は『equipmentUpgradeDetail / 特殊能力詳細』で管理する。",
       "装備強化内容の選択肢には、強化分類と対象装備を含める。",
-      "武器用の例：威力(武器)、命中(武器)、防御貫通(武器)。武器には魔導書・祈祷書を含む、火属性付与(武器)、火属性強化(武器)、特殊効果付与(武器)。",
+      "武器用の例：威力(武器)、命中(武器)、防御貫通(武器)、術式枠+1、消費コスト-1、回復量+1、特殊効果付与(武器)。武器には魔導書・祈祷書を含む。",
       "防具用の例：防御値(防具)、防御行動値(防具)、回避補正(防具)、火付与(防具)、水付与(防具)、特殊効果付与(防具)。",
       "防具の防御系強化は、キャラシのステータス名に準拠して防御値と防御行動値を分ける。",
       "防御値(防具)は、通常時から適用されるダメージ軽減値を上げる。",
@@ -2170,14 +2170,14 @@ const SYSTEM_HELP = [
       "強化内容は、何が上がるのか、何が付与されるのかを表す。",
       "強化値は、具体的な数値、属性名、耐性名、または特殊効果の内容を表す。",
       "例：装備強化内容『威力(武器)』、装備強化値『+1』。",
-      "例：装備強化内容『火属性付与(武器)』、装備強化値『火』。",
+      "武器へ属性を後付けする強化内容は使用しない。",
       "例：装備強化内容『防御行動値(防具)』、装備強化値『+1』。",
       "例：装備強化内容『回避補正(防具)』、装備強化値『+1』。",
       "例：装備強化内容『水付与(防具)』、装備強化値『水』。",
       "武器は素材による派生や強化に反映する。",
       "防具は派生式ではなく、購入または作成した防具を後から強化する方式。",
       "制作と購入の両方が可能な商品は、店頭購入価格を必要素材の価格合計＋施設制作費より高く設定する。",
-      "属性として扱う値は、物、火、水、風、雷、光、闇、無。",
+      "実際の攻撃属性は、物、火、水、風、雷、光、闇、無。武器の表示補助として、攻撃ごとに選ぶ『可変』と、使用する矢・ボルトで決まる『矢弾依存』を使用できる。",
       "採取素材など、魔物素材ではない素材は装備強化内容と装備強化値を空欄にしてよい。",
       "魔物素材の特徴が装備性能に出るように、素材ごとに装備強化内容と装備強化値を設定する。",
       "ドロップ判定やドロップ入手の出力では、素材の説明、効果、売値などを表示してよい。",
@@ -2981,6 +2981,7 @@ function buildPlayerItemInfoText(row={}, key='', count='1'){
   if(fieldText(row,'role')) useInfo.push(`役割 ${fieldText(row,'role')}`);
   if(fieldText(row,'setItem')) useInfo.push(`必要装備 ${fieldText(row,'setItem')}`);
   if(fieldText(row,'ammoKind')) useInfo.push(`矢弾種別 ${fieldText(row,'ammoKind')}`);
+  if(fieldText(row,'compatibleWeaponTypes')) useInfo.push(`対応武器種 ${fieldText(row,'compatibleWeaponTypes')}`);
   if(fieldText(row,'maxStack')) useInfo.push(`最大スタック ${fieldText(row,'maxStack')}`);
   if(fieldText(row,'quiverCapacity')) useInfo.push(`矢筒収納 ${fieldText(row,'quiverCapacity')}種類`);
   if(fieldText(row,'bagCapacity')) useInfo.push(`バッグ容量 ${fieldText(row,'bagCapacity')}`);
@@ -3314,7 +3315,7 @@ function facilityPerformanceRows(item={}){
   if(String(item.power||'').trim()) add(String(item.itemType||'')==='武器'?'ダメージ':'威力',item.power);
   parseModifierEditorRows(item.modifiers||'').forEach(m=>add(adminModifierTargetDisplayName(m.target),m.value));
   add('使用技能',item.skill);add('対象',item.target);add('判定',String(item.checkType||'').replace(/回避値/g,'回避').replace(/抵抗値/g,'抵抗').replace(/常時防御値/g,'防御'));add('属性',item.element);add('副手追撃',item.offhandBonus);
-  add('装填ターン',item.reloadTurns,'ターン');add('最大スタック',item.maxStack);add('矢弾消費',item.ammoUse);add('矢弾種別',item.ammoKind);
+  add('装填ターン',item.reloadTurns,'ターン');add('最大スタック',item.maxStack);add('矢弾消費',item.ammoUse);add('矢弾種別',item.ammoKind);add('対応武器種',item.compatibleWeaponTypes);
   add('矢筒収納種類数',item.quiverCapacity);add('所持品枠',item.bagCapacity);
   if(String(item.toolRank||'').trim()) add('使用可能上限',playerRankLabel(item.toolRank)+'以下');
   if(String(item.guaranteeUpgradeMaxRank||'').trim()) add('強化確定上限',playerRankLabel(item.guaranteeUpgradeMaxRank)+'以下');
@@ -4495,10 +4496,10 @@ function formOptionValues(key, field){
   if(field==='type') ['魔法','祈祷'].forEach(v=>values.add(v));
   if(field==='enabled') ['TRUE','FALSE'].forEach(v=>values.add(v));
   if(field==='checkType') ['近接>=回避値','射撃>=回避値','魔法>=回避値','魔法>=抵抗値','祈祷>=10','祈祷>=回避値','祈祷>=抵抗値','調合>=回避値','採取','なし'].forEach(v=>values.add(v));
-  if(field==='element') ['物','火','水','風','雷','光','闇','無'].forEach(v=>values.add(v));
+  if(field==='element') ['物','火','水','風','雷','光','闇','無','可変','矢弾依存'].forEach(v=>values.add(v));
   if(field==='hasLock' || field==='hasTrap') ['なし','あり'].forEach(v=>values.add(v));
   if(field==='equipmentUpgradeTarget') ['武器','防具','盾','装飾品','魔導書','祈祷書','武器・防具','防具・盾','魔導書・祈祷書','武器・魔導書・祈祷書'].forEach(v=>values.add(v));
-  if(field==='equipmentUpgradeEffect') ['なし','威力','命中','防御貫通','防御値','防御行動値','回避補正','術式枠+1','消費コスト-1','回復量+1','物属性付与','火属性付与','水属性付与','風属性付与','雷属性付与','光属性付与','闇属性付与','無属性付与','物耐性付与','火耐性付与','水耐性付与','風耐性付与','雷耐性付与','光耐性付与','闇耐性付与','無耐性付与','特殊効果付与'].forEach(v=>values.add(v));
+  if(field==='equipmentUpgradeEffect') ['なし','威力','命中','防御貫通','防御値','防御行動値','回避補正','術式枠+1','消費コスト-1','回復量+1','物耐性付与','火耐性付与','水耐性付与','風耐性付与','雷耐性付与','光耐性付与','闇耐性付与','無耐性付与','特殊効果付与'].forEach(v=>values.add(v));
   if(field==='craftType') ['調合','鍛冶','細工','武器派生','防具製作','バッグ製作','素材加工'].forEach(v=>values.add(v));
   if(field==='baseItem') (state.items || []).forEach(r=>{ const type=String(r.itemType || '').trim(); const cat=String(r.itemCategory || '').trim(); if(String(r.dataKind || '').trim() !== '素材' && (type==='武器' || (type==='術式装備' && ['魔導書','祈祷書'].includes(cat))) && r.name) values.add(String(r.name)); });
   if(field==='branchType') (state.recipes||[]).forEach(r=>{ const v=String(r.branchType||'').trim(); if(v) values.add(v); });
