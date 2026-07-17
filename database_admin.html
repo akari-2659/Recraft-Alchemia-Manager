@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.202</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.207</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -986,7 +986,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
 
 
 <style id="raModalLayoutV202">
-/* v90.8.202: 登録・編集モーダルの幅、スクロール、フッター位置を安定化 */
+/* v90.8.207: 登録・編集モーダルの幅、スクロール、フッター位置を安定化 */
 body.modal-open{overflow:hidden!important}
 #editModal.modal-backdrop{
   box-sizing:border-box;
@@ -1096,7 +1096,7 @@ body.modal-open{overflow:hidden!important}
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.202 / 最終更新日：2026年7月16日</div>
+<div class="ra-build-info">Version：v90.8.207 / 最終更新日：2026年7月17日</div>
 
 <header>
   <div class="title-card">
@@ -1675,7 +1675,7 @@ body.modal-open{overflow:hidden!important}
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.202';
+const RECRAFT_DB_VERSION = 'v90.8.207';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1726,7 +1726,7 @@ const FORM_PRIMARY_FIELDS = {
 const FORM_LONG_FIELDS = new Set(['habit','description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','rewardItems','unlockResult','mainMaterials','mainMonsters','result','progressEffect','actions','drops','passiveEffect','modifiers','encounterComposition','equipmentUpgradeDetail']);
 const RECORD_CARD_KEYS = new Set(['items','materials','recipes','spells','exploration_areas']);
 const FIELD_PLACEHOLDERS = {
-  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'装備・アイテム・素材・レシピ・術式は1以上の数値。プレイヤー表示は★N', toolRank:'例：6。この道具で使用できるレシピ・素材の上限ランク。画面では★6以下と表示します', guaranteeUpgradeMaxRank:'例：6。このアイテムを使うと★6以下の強化素材を使う装備強化が確定成功になります。', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：甲殻板。実際に使用する代表素材系統を入力します。画面では「甲殻板派生」と表示します。', equipmentUpgradeEffect:'例：威力+1。武器対象には魔導書・祈祷書も含みます。', equipmentUpgradeSlotCost:'通常は1。防御+1・消費コスト-1・回復量+1などの強力な効果は2。', equipmentUpgradeDetail:'特殊効果が付く場合、発動条件・対象・補正値・持続や解除条件を具体的に入力します。', upgradeMaterialMinRank:'例：3。この装備を強化できる素材の最低ランク。空欄時は装備ランクを使用します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,施設復興', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25%', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 初級', difficulty:'例：チュートリアル', unlockKey:'例：7UCX-JAUE-E2TH-GLRG-MEGW。エリア名や順番を推測しにくい文字列を設定', unlockOrder:'例：2。小さい順に累積解放', unlockAreaKey:'例：area_nearby_forest。商品・作成・派生に必要なエリアID', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：低級 / 普通', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定の魔法スクロール：★1', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：1。プレイヤー表示は★1', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：1。プレイヤー表示は★1', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', encounterValue:'1～3。魔物単体の戦闘負荷。エリアではなく能力・行動の強さで設定します。', dismantleDifficulty:'例：7。採取技能>=解体難易度で判定し、成功時は全ドロップ率+10%（上限100%）。目安はチュートリアル5～6、通常6～9、ボス10以上', pullRule:'可 / 不可', passiveName:'例：胞子反応', passiveEffect:'発動条件・処理・回数制限を具体的に入力', habit:'生息場所・群れ方・警戒時の行動などを1～3文で入力', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
+  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'装備・アイテム・素材・レシピ・術式は1以上の数値。プレイヤー表示は★N', toolRank:'例：6。この道具で使用できるレシピ・素材の上限ランク。画面では★6以下と表示します', guaranteeUpgradeMaxRank:'例：6。このアイテムを使うと★6以下の強化素材を使う装備強化が確定成功になります。', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：甲殻板。実際に使用する代表素材系統を入力します。画面では「甲殻板派生」と表示します。', equipmentUpgradeEffect:'例：装備強化内容「威力」、装備強化値「+1」。武器対象には魔導書・祈祷書も含みます。', equipmentUpgradeSlotCost:'通常は1。防御値・消費コスト軽減・回復量を+1する強力な効果は2。', equipmentUpgradeDetail:'特殊効果が付く場合、発動条件・対象・補正値・持続や解除条件を具体的に入力します。', upgradeMaterialMinRank:'例：3。この装備を強化できる素材の最低ランク。空欄時は装備ランクを使用します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,探索', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25。進行ボタン1回で加算する数値', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 異界', difficulty:'例：★1', unlockKey:'例：7UCX-JAUE-E2TH-GLRG-MEGW。エリア名や順番を推測しにくい文字列を設定', unlockOrder:'例：2。通常エリアは小さい順に累積解放。異界は専用キーで個別解放', unlockAreaKey:'例：area_nearby_forest。商品・作成・派生に必要なエリアID', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：低級 / 普通', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定の魔法スクロール：★1', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：1。プレイヤー表示は★1', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：1。プレイヤー表示は★1', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', encounterValue:'1～3。魔物単体の戦闘負荷。エリアではなく能力・行動の強さで設定します。', dismantleDifficulty:'例：7。採取技能>=解体難易度で判定し、成功時は全ドロップ率+10%（上限100%）。目安はチュートリアル5～6、通常6～9、ボス10以上', pullRule:'可 / 不可', passiveName:'例：胞子反応', passiveEffect:'発動条件・処理・回数制限を具体的に入力', habit:'生息場所・群れ方・警戒時の行動などを1～3文で入力', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
 };
 const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','checkType','type','role','setItem','unlockAreaKey','unlockFacility','equipmentUpgradeEffect','equipmentUpgradeTarget','ammoUse','ammoKind','craftSkill','craftType','baseItem','branchType','enabled','hasLock','hasTrap','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','conditionType','conditionValue','treasureTableId','tableId','treasureRank','hasLock','hasTrap','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','facilityName','spellType','spellRank','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule']);
 let formState = { key:null, idx:null, mode:'new', defaultDataKind:'' };
@@ -2274,7 +2274,7 @@ const SYSTEM_HELP = [
       "装備強化内容は選択式の項目『equipmentUpgradeEffect / 装備強化内容』で管理する。",
       "装備強化値は自由入力の項目『equipmentUpgradeValue / 装備強化値』で管理する。特殊効果の具体的な処理は『equipmentUpgradeDetail / 特殊能力詳細』で管理する。",
       "装備強化内容の選択肢には、強化分類と対象装備を含める。",
-      "武器用の例：威力(武器)、命中(武器)、防御貫通(武器)、術式枠+1、消費コスト-1、回復量+1、特殊効果付与(武器)。武器には魔導書・祈祷書を含む。",
+      "武器用の例：威力、命中補正、防御貫通、術式枠、消費コスト軽減、回復量、特殊効果付与。武器には魔導書・祈祷書を含む。",
       "防具用の例：防御値(防具)、防御行動値(防具)、回避補正(防具)、火付与(防具)、水付与(防具)、特殊効果付与(防具)。",
       "防具の防御系強化は、キャラシのステータス名に準拠して防御値と防御行動値を分ける。",
       "防御値(防具)は、通常時から適用されるダメージ軽減値を上げる。",
@@ -4660,7 +4660,7 @@ function formOptionValues(key, field){
   if(field==='element') ['物','火','水','風','雷','光','闇','無','可変','矢弾依存'].forEach(v=>values.add(v));
   if(field==='hasLock' || field==='hasTrap') ['なし','あり'].forEach(v=>values.add(v));
   if(field==='equipmentUpgradeTarget') ['武器','防具','盾','装飾品','魔導書','祈祷書','武器・防具','防具・盾','魔導書・祈祷書','武器・魔導書・祈祷書'].forEach(v=>values.add(v));
-  if(field==='equipmentUpgradeEffect') ['なし','威力','命中','防御貫通','防御値','防御行動値','回避補正','術式枠+1','消費コスト-1','回復量+1','物耐性付与','火耐性付与','水耐性付与','風耐性付与','雷耐性付与','光耐性付与','闇耐性付与','無耐性付与','特殊効果付与'].forEach(v=>values.add(v));
+  if(field==='equipmentUpgradeEffect') ['なし','威力','命中補正','防御貫通','防御値','防御行動値','回避補正','術式枠','消費コスト軽減','回復量','物耐性付与','火耐性付与','水耐性付与','風耐性付与','雷耐性付与','光耐性付与','闇耐性付与','無耐性付与','特殊効果付与'].forEach(v=>values.add(v));
   if(field==='craftType') ['調合','鍛冶','細工','武器派生','防具製作','バッグ製作','素材加工'].forEach(v=>values.add(v));
   if(field==='baseItem') (state.items || []).forEach(r=>{ const type=String(r.itemType || '').trim(); const cat=String(r.itemCategory || '').trim(); if(String(r.dataKind || '').trim() !== '素材' && (type==='武器' || (type==='術式装備' && ['魔導書','祈祷書'].includes(cat))) && r.name) values.add(String(r.name)); });
   if(field==='branchType') (state.recipes||[]).forEach(r=>{ const v=String(r.branchType||'').trim(); if(v) values.add(v); });
@@ -5057,7 +5057,7 @@ function syncAllQuestFixedEventEditors(){
 const MODIFIER_TARGET_OPTIONS = [
   ['ability:body','能力：体力'], ['ability:dexterity','能力：器用'], ['ability:sense','能力：感覚'], ['ability:intellect','能力：知性'], ['ability:will','能力：意志'], ['ability:charm','能力：魅力'],
   ['hit','命中（装備種別に応じて近接/射撃）'], ['skill:melee','技能：近接'], ['skill:shoot','技能：射撃'], ['skill:guard','技能：防御'], ['skill:evade','技能：回避'], ['skill:resist','技能：抵抗'],
-  ['combat:defense','戦闘：防御値'], ['combat:guardAction','戦闘：防御行動値'], ['combat:evasion','戦闘：回避値'], ['combat:initiative','戦闘：先制値'], ['resource:maxHp','最大HP'], ['resource:maxMp','最大MP']
+  ['combat:defense','戦闘：防御値'], ['combat:guardAction','戦闘：防御行動値'], ['combat:evasion','戦闘：回避値'], ['skill:detect','技能：感知'], ['resource:maxHp','最大HP'], ['resource:maxMp','最大MP']
 ];
 function adminModifierTargetOptions(selected=''){
   const groups=[
@@ -5065,12 +5065,12 @@ function adminModifierTargetOptions(selected=''){
       ['ability:body','体力'], ['ability:dexterity','器用'], ['ability:sense','感覚'], ['ability:intellect','知性'], ['ability:will','意志'], ['ability:charm','魅力']
     ]],
     ['技能', [
-      ['skill:force','力業'], ['skill:melee','近接'], ['skill:guard','防御'], ['skill:shoot','射撃'], ['skill:throw','投擲'], ['skill:evade','回避'], ['skill:resist','抵抗'],
+      ['skill:force','力業'], ['skill:melee','近接'], ['skill:guard','防御'], ['skill:shoot','射撃'], ['skill:throw','投擲'], ['skill:evade','回避'], ['skill:resist','抵抗'], ['skill:detect','感知'],
       ['skill:magic','魔法'], ['skill:prayer','祈祷'], ['skill:alchemy','調合'], ['skill:appraise','鑑定'], ['skill:knowledge','知識'], ['skill:design','設計'], ['skill:blacksmith','鍛冶'],
       ['skill:negotiate','交渉'], ['skill:empathy','共感'], ['skill:social','社交'], ['skill:encourage','鼓舞']
     ]],
     ['戦闘', [
-      ['hit','命中'], ['combat:defense','防御値'], ['combat:guardAction','防御行動値'], ['combat:evasion','回避値'], ['combat:initiative','先制値']
+      ['hit','命中'], ['combat:defense','防御値'], ['combat:guardAction','防御行動値'], ['combat:evasion','回避値']
     ]],
     ['リソース', [
       ['resource:maxHp','最大HP'], ['resource:maxMp','最大MP']
@@ -5088,10 +5088,10 @@ function adminModifierTargetOptions(selected=''){
 function adminModifierTargetDisplayName(target=''){
   const key=normalizeModifierTargetAlias(target);
   const names={
-    'hit':'命中','combat:defense':'防御','combat:guardAction':'防御行動値','combatGuardAction':'防御行動値','guardAction':'防御行動値','combat:evasion':'回避','combat:initiative':'先制値',
+    'hit':'命中','combat:defense':'防御','combat:guardAction':'防御行動値','combatGuardAction':'防御行動値','guardAction':'防御行動値','combat:evasion':'回避','skill:detect':'感知','combat:initiative':'感知',
     'resource:maxHp':'最大HP','resource:maxMp':'最大MP',
     'ability:body':'体力','ability:dexterity':'器用','ability:sense':'感覚','ability:intellect':'知性','ability:will':'意志','ability:charm':'魅力',
-    'skill:force':'力業','skill:melee':'近接','skill:guard':'防御','skill:shoot':'射撃','skill:throw':'投擲','skill:evade':'回避','skill:resist':'抵抗',
+    'skill:force':'力業','skill:melee':'近接','skill:guard':'防御','skill:shoot':'射撃','skill:throw':'投擲','skill:evade':'回避','skill:resist':'抵抗','skill:detect':'感知',
     'skill:magic':'魔法','skill:prayer':'祈祷','skill:alchemy':'調合','skill:appraise':'鑑定','skill:knowledge':'知識','skill:design':'設計','skill:blacksmith':'鍛冶',
     'skill:negotiate':'交渉','skill:empathy':'共感','skill:social':'社交','skill:encourage':'鼓舞'
   };
@@ -5129,7 +5129,7 @@ function normalizeModifierTargetAlias(target=''){
     'monsterKnowledge':'skill:knowledge','materialKnowledge':'skill:knowledge','elementKnowledge':'skill:knowledge',
     'skill:monsterKnowledge':'skill:knowledge','skill:materialKnowledge':'skill:knowledge','skill:elementKnowledge':'skill:knowledge',
     '体力':'ability:body','器用':'ability:dexterity','感覚':'ability:sense','知性':'ability:intellect','意志':'ability:will','魅力':'ability:charm',
-    '最大HP':'resource:maxHp','HP':'resource:maxHp','最大MP':'resource:maxMp','MP':'resource:maxMp','先制':'combat:initiative','先制値':'combat:initiative'
+    '最大HP':'resource:maxHp','HP':'resource:maxHp','最大MP':'resource:maxMp','MP':'resource:maxMp','先制':'skill:detect','先制値':'skill:detect','combat:initiative':'skill:detect'
   };
   if(/^知識[:：]/.test(raw)) return 'skill:knowledge';
   return aliases[raw] || raw;

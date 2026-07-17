@@ -127,13 +127,13 @@ button,.tab-btn,.quest-category-btn{
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.202 / 最終更新日：2026年7月16日</div>
+<div class="ra-build-info">Version：v90.8.207 / 最終更新日：2026年7月17日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.202 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.207 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -384,7 +384,7 @@ button,.tab-btn,.quest-category-btn{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.202';
+const VERSION='v90.8.207';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -536,6 +536,9 @@ function questListMemo(){
 }
 function sortedQuestAreas(){
   return [...(state.areas||[])].sort((a,b)=>{
+    const aOptional=String(a.areaType||'').trim()==='異界';
+    const bOptional=String(b.areaType||'').trim()==='異界';
+    if(aOptional!==bOptional)return aOptional?1:-1;
     const ao=Number(a.unlockOrder||999999), bo=Number(b.unlockOrder||999999);
     if(ao!==bo)return ao-bo;
     return String(a.name||a.id||'').localeCompare(String(b.name||b.id||''),'ja');
@@ -550,7 +553,7 @@ function fillDailyQuestUnlockedAreaSelect(){
   rows.forEach(a=>{
     const o=document.createElement('option');
     o.value=String(a.id||a.name||'');
-    o.textContent=`${a.name||a.id}まで`;
+    o.textContent=String(a.areaType||'').trim()==='異界' ? `${a.name||a.id}（異界・個別解放）` : `${a.name||a.id}まで`;
     sel.appendChild(o);
   });
   if(!rows.length){
@@ -570,7 +573,11 @@ function dailyQuestAreaEligible(q={}){
   if(!maxArea)return true;
   const area=(state.areas||[]).find(a=>String(a.name||'').trim()===String(q.areaName||'').trim());
   if(!area)return true;
-  return Number(area.unlockOrder||0)<=Number(maxArea.unlockOrder||0);
+  const maxIsOptional=String(maxArea.areaType||'').trim()==='異界';
+  const areaIsOptional=String(area.areaType||'').trim()==='異界';
+  if(areaIsOptional)return String(area.id||area.name||'')===String(maxArea.id||maxArea.name||'');
+  const mainOrder=maxIsOptional?Math.floor(Number(maxArea.unlockOrder||0)):Number(maxArea.unlockOrder||0);
+  return Number(area.unlockOrder||0)<=mainOrder;
 }
 function dailyQuestRows(){
   return (state.quests || []).filter(q=>questCategoryFor(q)==='デイリー' && questEnabled(q) && dailyQuestAreaEligible(q));
@@ -752,7 +759,8 @@ function renderDayStatus(){
     }
   }
   const blocked=state.dayState.awaitingEnd || remaining<=0;
-  ['questAdvanceBtn','areaAdvanceBtn','manualActionBtn','innRestBtn'].forEach(id=>{if($(id))$(id).disabled=blocked;});
+  ['manualActionBtn','innRestBtn'].forEach(id=>{if($(id))$(id).disabled=blocked;});
+  ['questAdvanceBtn','areaAdvanceBtn'].forEach(id=>{if($(id))$(id).disabled=false;});
   if($('undoActionBtn')) $('undoActionBtn').disabled=state.dayState.usedActions<=0;
 }
 function consumeDailyAction(label='行動'){
@@ -1019,8 +1027,8 @@ function renderMonster(){
 }
 function renderAll(){renderDayStatus(); fillDailyQuestUnlockedAreaSelect(); ensureDailyQuestSelection(); fillQuestSelect($('questSelect')?.value || ''); fillEventTables(); fillRumorSelect(); fillRumorAreas(); fillInnRumorSelect(); fillTreasureTables(); fillAppraisalRules(); fillMonsterSearch($('monsterSelect')?.value || ''); renderQuest(); renderArea(); renderMonster(); renderRumorResult(); renderDailyQuestResult(); renderLog();}
 function getNumFromText(s, fallback=0){const m=String(s||'').match(/[+-]?\d+/); return m?Number(m[0]):fallback;}
-function advanceQuestProgress(){const q=selected($('questSelect'),state.quests); if(!q)return; if(!consumeDailyAction(`クエスト進行：${q.name||q.id}`))return; const p=progressObj('quests',q.id||q.name); const add=questStepAmount(q); const before=clamp(p.value); p.value=clamp(before+add); const fired=triggerQuestSpecificEvents(q,before,p.value); saveState(false); renderQuest(); addLog(`${q.name||q.id} の進行度を +${add}% しました。${before}% → ${p.value}%`); if(fired.length && fired[0].treasureTableId){addLog(`確定入手：未鑑定の魔法または祈祷スクロール：★1×1（${fired[0].eventName||'クエスト固有イベント'}）`);}}
-function advanceAreaProgress(){const a=selected($('areaSelect'),state.areas); if(!a)return; if(!consumeDailyAction(`エリア探索：${a.name||a.id}`))return; const p=progressObj('areas',a.id||a.name); const add=areaStepAmount(a); const before=clamp(p.value); p.value=clamp(before+add); saveState(false); renderArea(); addLog(`${a.name||a.id} の探索進行度を +${add}% しました。${before}% → ${p.value}%`); if(before<100 && p.value>=100) triggerAreaClearRumorEvent(a);}
+function advanceQuestProgress(){const q=selected($('questSelect'),state.quests); if(!q)return; const p=progressObj('quests',q.id||q.name); const add=questStepAmount(q); const before=clamp(p.value); p.value=clamp(before+add); const fired=triggerQuestSpecificEvents(q,before,p.value); saveState(false); renderQuest(); addLog(`${q.name||q.id} の進行度を +${add}% しました。${before}% → ${p.value}%（行動回数は変更していません）`); if(fired.length && fired[0].treasureTableId){addLog(`確定入手：未鑑定の魔法または祈祷スクロール：★1×1（${fired[0].eventName||'クエスト固有イベント'}）`);}}
+function advanceAreaProgress(){const a=selected($('areaSelect'),state.areas); if(!a)return; const p=progressObj('areas',a.id||a.name); const add=areaStepAmount(a); const before=clamp(p.value); p.value=clamp(before+add); saveState(false); renderArea(); addLog(`${a.name||a.id} の探索進行度を +${add}% しました。${before}% → ${p.value}%（行動回数は変更していません）`); if(before<100 && p.value>=100) triggerAreaClearRumorEvent(a);}
 
 function isRumorEvent(row){return String(row && row.eventType || '').trim()==='宿屋の噂';}
 function eventConditionType(row){return String(row && row.conditionType || '').trim() || 'なし';}
@@ -1251,24 +1259,27 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.202-quest-scale-1';
+const ENCOUNTER_RULE_VERSION='v90.8.207-quest-scale-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
   'マッドホッパー':2,'バブルスライム':2,'ミストモスキート':2,
   'ルートハウンド':3,'ドロマール':3,
-  'ミラースライム':2,'エコーリード':2,'フェイズモス':3,'グラスレイ':3,'リフトクラブ':3,'ヴォイドハウンド':3
+  'ミラースライム':2,'エコーリード':2,'フェイズモス':3,'グラスレイ':3,'リフトクラブ':3,'ヴォイドハウンド':3,
+  'レゾナバット':1,'ピックモール':2,'オアスケイル':2,'ラストマイト':1,'マインゴーレム':3,'ルミナウィスプ':2
 };
 const AREA_ENCOUNTER_POOLS={
   '街はずれの草原':['プチスライム','ラフィンラット','ラピットホーン','ヴェスパット','カラパスビートル','グラウワーム'],
   '近郊の森':['ラフィンラット','ラピットホーン','ヴェスパット','カラパスビートル','ラスクレイル','マイコニド','ルートハウンド','ブランチリング'],
   '水辺の湿地':['プチスライム','グラウワーム','マイコニド','マッドホッパー','バブルスライム','ミストモスキート','ドロマール'],
+  '山麓の旧鉱山':['レゾナバット','ピックモール','オアスケイル','ラストマイト','マインゴーレム','ルミナウィスプ'],
   '反照の水庭':['ミラースライム','フェイズモス','グラスレイ','エコーリード','リフトクラブ','ヴォイドハウンド']
 };
 const ENCOUNTER_BACKLINE_RATE={
   'プチスライム':.15,'ラフィンラット':.10,'ラピットホーン':.10,'ヴェスパット':.60,'カラパスビートル':.10,'グラウワーム':.10,
   'ラスクレイル':.50,'マイコニド':.55,'ルートハウンド':.20,'ブランチリング':.30,'マッドホッパー':.15,'バブルスライム':.50,
   'ミストモスキート':.60,'ドロマール':.10,
+  'レゾナバット':.65,'ピックモール':.15,'オアスケイル':.10,'ラストマイト':.25,'マインゴーレム':.05,'ルミナウィスプ':.65,
   'ミラースライム':.30,'フェイズモス':.55,'グラスレイ':.30,'エコーリード':.50,'リフトクラブ':.15,'ヴォイドハウンド':.35
 };
 // エリア差は魔物自身の遭遇値ではなく、編成全体の予算へ一度だけ加算する。
@@ -1276,6 +1287,7 @@ const AREA_ENCOUNTER_BUDGET_BONUS={
   '街はずれの草原':0,
   '近郊の森':1,
   '水辺の湿地':2,
+  '山麓の旧鉱山':3,
   '反照の水庭':3
 };
 function partyEncounterProfile(size=selectedPartySize()){
@@ -1611,6 +1623,24 @@ const TREASURE_AREA_PROFILES={
       {name:'泥の噴出',effect:'開封者は泥まみれ状態になる。※泥まみれ状態：次の自分のターン終了まで回避－1。'},
       {name:'腐食液',effect:'開封者に1D6ダメージを与え、次のラウンド終了まで防御－1。'},
       {name:'沼ガス',effect:'開封者は視界不良状態になる。※視界不良状態：次の自分のターン終了まで命中－1。'}
+    ]
+  },
+  '山麓の旧鉱山':{
+    lockChance:55, trapChance:50, emptyChance:8, detect:[10,13], disarm:[10,13], unlock:[10,13],
+    traps:[
+      {name:'落石ばね',effect:'開封者に2D6ダメージ。'},
+      {name:'粉塵筒',effect:'開封者は次の自分のターン終了まで命中－1・回避－1。'},
+      {name:'錆びた拘束具',effect:'開封者は次の自分の行動まで回避－2。行動後に解除する。'},
+      {name:'魔晶の閃光',effect:'開封者は抵抗判定を行い、失敗すると次の自分のターン終了まで術式・祈祷判定－2。'}
+    ]
+  },
+  '反照の水庭':{
+    lockChance:60, trapChance:55, emptyChance:8, detect:[11,14], disarm:[11,14], unlock:[11,14],
+    traps:[
+      {name:'反転水鏡',effect:'開封者は次の自分のターン終了まで命中－2。'},
+      {name:'位相の裂け目',effect:'開封者に2D6無属性ダメージ。このダメージに防御値は適用しない。'},
+      {name:'虚ろな手',effect:'開封者は次の自分の行動まで回避－2。行動後に解除する。'},
+      {name:'逆流する術式',effect:'開封者は抵抗判定を行い、失敗するとMPを1D3失う。'}
     ]
   }
 };
