@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.207</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.211</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -986,7 +986,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
 
 
 <style id="raModalLayoutV202">
-/* v90.8.207: 登録・編集モーダルの幅、スクロール、フッター位置を安定化 */
+/* v90.8.211: 登録・編集モーダルの幅、スクロール、フッター位置を安定化 */
 body.modal-open{overflow:hidden!important}
 #editModal.modal-backdrop{
   box-sizing:border-box;
@@ -1096,7 +1096,7 @@ body.modal-open{overflow:hidden!important}
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.207 / 最終更新日：2026年7月17日</div>
+<div class="ra-build-info">Version：v90.8.211 / 最終更新日：2026年7月17日</div>
 
 <header>
   <div class="title-card">
@@ -1675,7 +1675,7 @@ body.modal-open{overflow:hidden!important}
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.207';
+const RECRAFT_DB_VERSION = 'v90.8.211';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1698,10 +1698,10 @@ const SCHEMA = {
   event_tables: ['id','tableId','areaName','eventName','eventType','conditionType','conditionValue','checkType','targetValue','treasureTableId','encounterCountRule','encounterCountMin','encounterCountMax','encounterFormation','encounterComposition','result','progressEffect','notes','updatedAt','ownerKey','createdBy'],
   treasure_tables: ['id','tableId','areaName','treasureRank','chestName','hasLock','unlockDifficulty','hasTrap','trapDetectDifficulty','trapDisarmDifficulty','trapName','trapEffect','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','quantity','weight','description','enabled','notes','updatedAt','ownerKey','createdBy'],
   appraisal_rules: ['id','facilityName','scrollRank','difficulty','spellType','spellRank','candidateTags','description','enabled','notes','updatedAt','ownerKey','createdBy'],
-  monsters: ['id','name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','encounterValue','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule','passiveName','passiveEffect','actions','drops','habit','description','notes','updatedAt','ownerKey','createdBy']
+  monsters: ['id','name','monsterType','monsterTraits','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','encounterValue','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule','passiveName','passiveEffect','actions','drops','habit','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', recipePrice:'レシピ価格', recipeSource:'レシピ入手先', craftSkill:'製作技能', rank:'ランク', toolRank:'使用可能上限ランク', guaranteeUpgradeMaxRank:'強化確定上限ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生名（代表素材系統）', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', compatibleWeaponTypes:'対応武器種', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', spellSlots:'術式追加枠', modifiers:'補正値', upgradeLimit:'強化枠上限', upgradeMaterialMinRank:'強化素材最低ランク', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', pullRule:'引き寄せ', passiveName:'固有パッシブ名', passiveEffect:'固有パッシブ効果', habit:'習性', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', equipmentUpgradeSlotCost:'消費強化枠', equipmentUpgradeDetail:'特殊能力詳細', equipmentUpgradeTarget:'強化対象', unlockAreaKey:'必要解放エリア', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockKey:'エリア解放キー', unlockOrder:'解放順', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知難易度', trapDisarmDifficulty:'罠解除難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'防御値', initiative:'先制値', encounterValue:'遭遇値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ'
+  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', recipePrice:'レシピ価格', recipeSource:'レシピ入手先', craftSkill:'製作技能', rank:'ランク', toolRank:'使用可能上限ランク', guaranteeUpgradeMaxRank:'強化確定上限ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生名（代表素材系統）', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', compatibleWeaponTypes:'対応武器種', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', spellSlots:'術式追加枠', modifiers:'補正値', upgradeLimit:'強化枠上限', upgradeMaterialMinRank:'強化素材最低ランク', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', pullRule:'引き寄せ', passiveName:'固有パッシブ名', passiveEffect:'固有パッシブ効果', habit:'習性', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', equipmentUpgradeSlotCost:'消費強化枠', equipmentUpgradeDetail:'特殊能力詳細', equipmentUpgradeTarget:'強化対象', unlockAreaKey:'必要解放エリア', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockKey:'エリア解放キー', unlockOrder:'解放順', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知難易度', trapDisarmDifficulty:'罠解除難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', monsterTraits:'魔物特性', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'防御値', initiative:'先制値', encounterValue:'遭遇値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ'
 };
 
 const FORM_PRIMARY_FIELDS = {
@@ -1721,12 +1721,12 @@ const FORM_PRIMARY_FIELDS = {
   event_tables: ['tableId','areaName','eventName','eventType','conditionType','conditionValue','checkType','targetValue','treasureTableId','encounterCountRule','encounterCountMin','encounterCountMax','encounterFormation','encounterComposition','result','progressEffect','notes'],
   treasure_tables: ['tableId','areaName','treasureRank','chestName','hasLock','unlockDifficulty','hasTrap','trapDetectDifficulty','trapDisarmDifficulty','trapName','trapEffect','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','quantity','weight','description','enabled','notes'],
   appraisal_rules: ['facilityName','scrollRank','difficulty','spellType','spellRank','candidateTags','description','enabled','notes'],
-  monsters: ['name','monsterType','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','encounterValue','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule','passiveName','passiveEffect','actions','drops','habit','description','notes']
+  monsters: ['name','monsterType','monsterTraits','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','encounterValue','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule','passiveName','passiveEffect','actions','drops','habit','description','notes']
 };
 const FORM_LONG_FIELDS = new Set(['habit','description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','rewardItems','unlockResult','mainMaterials','mainMonsters','result','progressEffect','actions','drops','passiveEffect','modifiers','encounterComposition','equipmentUpgradeDetail']);
 const RECORD_CARD_KEYS = new Set(['items','materials','recipes','spells','exploration_areas']);
 const FIELD_PLACEHOLDERS = {
-  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'装備・アイテム・素材・レシピ・術式は1以上の数値。プレイヤー表示は★N', toolRank:'例：6。この道具で使用できるレシピ・素材の上限ランク。画面では★6以下と表示します', guaranteeUpgradeMaxRank:'例：6。このアイテムを使うと★6以下の強化素材を使う装備強化が確定成功になります。', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：甲殻板。実際に使用する代表素材系統を入力します。画面では「甲殻板派生」と表示します。', equipmentUpgradeEffect:'例：装備強化内容「威力」、装備強化値「+1」。武器対象には魔導書・祈祷書も含みます。', equipmentUpgradeSlotCost:'通常は1。防御値・消費コスト軽減・回復量を+1する強力な効果は2。', equipmentUpgradeDetail:'特殊効果が付く場合、発動条件・対象・補正値・持続や解除条件を具体的に入力します。', upgradeMaterialMinRank:'例：3。この装備を強化できる素材の最低ランク。空欄時は装備ランクを使用します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,探索', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25。進行ボタン1回で加算する数値', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 異界', difficulty:'例：★1', unlockKey:'例：7UCX-JAUE-E2TH-GLRG-MEGW。エリア名や順番を推測しにくい文字列を設定', unlockOrder:'例：2。通常エリアは小さい順に累積解放。異界は専用キーで個別解放', unlockAreaKey:'例：area_nearby_forest。商品・作成・派生に必要なエリアID', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：低級 / 普通', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定の魔法スクロール：★1', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：1。プレイヤー表示は★1', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：1。プレイヤー表示は★1', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'例：スライム / 獣', encounterValue:'1～3。魔物単体の戦闘負荷。エリアではなく能力・行動の強さで設定します。', dismantleDifficulty:'例：7。採取技能>=解体難易度で判定し、成功時は全ドロップ率+10%（上限100%）。目安はチュートリアル5～6、通常6～9、ボス10以上', pullRule:'可 / 不可', passiveName:'例：胞子反応', passiveEffect:'発動条件・処理・回数制限を具体的に入力', habit:'生息場所・群れ方・警戒時の行動などを1～3文で入力', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
+  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'装備・アイテム・素材・レシピ・術式は1以上の数値。プレイヤー表示は★N', toolRank:'例：6。この道具で使用できるレシピ・素材の上限ランク。画面では★6以下と表示します', guaranteeUpgradeMaxRank:'例：6。このアイテムを使うと★6以下の強化素材を使う装備強化が確定成功になります。', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：甲殻板。実際に使用する代表素材系統を入力します。画面では「甲殻板派生」と表示します。', equipmentUpgradeEffect:'例：装備強化内容「威力」、装備強化値「+1」。武器対象には魔導書・祈祷書も含みます。', equipmentUpgradeSlotCost:'通常は1。防御値・消費コスト軽減・回復量を+1する強力な効果は2。', equipmentUpgradeDetail:'特殊効果が付く場合、発動条件・対象・補正値・持続や解除条件を具体的に入力します。', upgradeMaterialMinRank:'例：3。この装備を強化できる素材の最低ランク。空欄時は装備ランクを使用します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,探索', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25。進行ボタン1回で加算する数値', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 異界', difficulty:'例：★1', unlockKey:'例：7UCX-JAUE-E2TH-GLRG-MEGW。エリア名や順番を推測しにくい文字列を設定', unlockOrder:'例：2。通常エリアは小さい順に累積解放。異界は専用キーで個別解放', unlockAreaKey:'例：area_nearby_forest。商品・作成・派生に必要なエリアID', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：低級 / 普通', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定の魔法スクロール：★1', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：1。プレイヤー表示は★1', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：1。プレイヤー表示は★1', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'大分類：粘体 / 獣 / 虫 / 植物 / 爬虫 / 水棲 / 軟体 / 霊体 / 造魔 / 竜 / 異界', monsterTraits:'例：飛行,甲殻,異界。複数指定はカンマ区切り', encounterValue:'1～3。魔物単体の戦闘負荷。エリアではなく能力・行動の強さで設定します。', dismantleDifficulty:'例：7。採取技能>=解体難易度で判定し、成功時は全ドロップ率+10%（上限100%）。目安はチュートリアル5～6、通常6～9、ボス10以上', pullRule:'可 / 不可', passiveName:'例：胞子反応', passiveEffect:'発動条件・処理・回数制限を具体的に入力', habit:'生息場所・群れ方・警戒時の行動などを1～3文で入力', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
 };
 const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','checkType','type','role','setItem','unlockAreaKey','unlockFacility','equipmentUpgradeEffect','equipmentUpgradeTarget','ammoUse','ammoKind','craftSkill','craftType','baseItem','branchType','enabled','hasLock','hasTrap','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','conditionType','conditionValue','treasureTableId','tableId','treasureRank','hasLock','hasTrap','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','facilityName','spellType','spellRank','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule']);
 let formState = { key:null, idx:null, mode:'new', defaultDataKind:'' };
@@ -1800,7 +1800,7 @@ const ADVANCED_FILTERS = {
   event_tables: [{field:'tableId', label:'表ID'},{field:'areaName', label:'エリア'},{field:'eventType', label:'イベント種別'},{field:'conditionType', label:'前提条件'},{field:'conditionValue', label:'条件内容'},{field:'encounterCountRule', label:'出現数'},{field:'treasureTableId', label:'宝箱表'},{field:'checkType', label:'判定'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   treasure_tables: [{field:'tableId', label:'表ID'},{field:'areaName', label:'エリア'},{field:'treasureRank', label:'ランク'},{field:'entryType', label:'中身種別'},{field:'enabled', label:'有効'}],
   appraisal_rules: [{field:'facilityName', label:'施設'},{field:'scrollRank', label:'スクロールランク'},{field:'spellType', label:'術式種別'},{field:'spellRank', label:'術式ランク'},{field:'enabled', label:'有効'}],
-  monsters: [{field:'monsterType', label:'魔物種別'},{field:'rank', label:'ランク'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}]
+  monsters: [{field:'monsterType', label:'魔物種別'},{field:'monsterTraits', label:'魔物特性'},{field:'rank', label:'ランク'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}]
 };
 
 const TABLE_KEYS = [...DATA_KEYS, 'materials'];
@@ -2248,7 +2248,11 @@ const SYSTEM_HELP = [
     ],
     "body": [
       "レシピはDB上では1表で管理する。",
-      "管理HTML上では、調合レシピ、鍛冶レシピ、仕掛け製作、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。管理HTMLとプレイヤー施設の武器派生は、武器カテゴリ別タブ→主素材の分類を象徴する短い名称の「○○派生」→系統内の段階で表示し、元武器は必要素材として扱う。全武器カテゴリの派生系統数は7系統へ統一し、草角・樹心・沼核・反照のボス素材派生を全カテゴリに用意する。",
+      "管理HTML上では、調合レシピ、鍛冶レシピ、仕掛け製作、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。管理HTMLとプレイヤー施設の武器派生は、武器カテゴリ別タブ→主素材の分類を象徴する短い名称の「○○派生」→系統内の段階で表示し、元武器は必要素材として扱う。草角・樹心・沼核・穿王・反照のボス素材派生は、素手を除く全17武器カテゴリへ必ず用意する。",
+      "各エリアボスには、ボス素材を使う防具または装飾品も必ず用意する。通常魔物素材の★2派生は横方向の選択肢として追加し、ボス派生の必須前提にはしない。",
+      "武器派生の魔物素材要求量は、★2で合計1～2個、★3で合計2～3個を目安とする。既存の複合素材派生は維持してよい。",
+      "★3以降は複数の魔物素材を要求してよいが、ボス固有素材は原則1個のままとし、大量周回を前提にしない。",
+      "鉱石を主題とする鉱山鋼派生などは、魔物素材を要求しない例外にしてよい。",
       "武器上位化は、初期武器や基礎武器から素材で派生する方式。",
       "武器派生はモンハンに近い素材派生として扱う。",
       "武器派生を含む作成可能品には対応レシピを用意する。",
@@ -2312,6 +2316,8 @@ const SYSTEM_HELP = [
     ],
     "body": [
       "魔物は物、火、水、風、雷、光、闇、無の8属性に対する相性を持つ。",
+      "魔物種別は粘体・獣・虫・植物・爬虫・水棲・軟体・霊体・造魔・竜・異界の大分類で管理する。飛行・甲殻・異界・鉱質などは魔物特性へ分ける。",
+      "魔物素材カテゴリは魔物種別と同じ大分類を使用し、派生候補を種別から探せるようにする。",
       "属性相性は、通常、耐、無、反、吸、弱で管理する。",
       "耐はダメージ半減。",
       "無はダメージ0、属性効果なし。",
@@ -2319,6 +2325,8 @@ const SYSTEM_HELP = [
       "吸はダメージ0、受けるはずだったダメージ分だけHPを回復する。",
       "弱はダメージ2倍。",
       "魔物の行動は1行動1行で管理する。",
+      "通常魔物は技を必ず3個、ボスは技を必ず4個所持する。固有パッシブは技数に含めない。",
+      "準備と次ターンの大技で構成される予告攻撃は、2段階を1つの技として同じ行に登録する。",
       "魔物行動には距離とは別に行動種別を設定する。種別は近接攻撃、遠距離攻撃、術式、祈祷、防御、補助、回復、特殊。",
       "判定欄は命中方法と参照値、行動種別欄はその行動が何に属するかを示す。",
       "ドロップはメモ式ではなく行単位で管理する。",
@@ -4083,6 +4091,7 @@ function monsterCardHtml(row, idx){
   const id = monsterFieldValue(row, 'id', '');
   const badges = [
     monsterBadge('種別', row.monsterType),
+    monsterBadge('特性', row.monsterTraits),
     monsterBadge('ランク', row.rank),
     monsterBadge('引き寄せ', row.pullRule || '可'),
     monsterBadge('登録者', row.createdBy)
@@ -4689,7 +4698,7 @@ function formOptionValues(key, field){
   if(field==='spellType') ['魔法','祈祷'].forEach(v=>values.add(v));
   if(field==='spellRank') [1,2,3,4].forEach(v=>values.add(String(v)));
   if(field==='tableId') state.event_tables.forEach(r=>{ if(r.tableId) values.add(String(r.tableId)); });
-  if(field==='monsterType') ['スライム','獣','虫・甲殻','植物魔物','魔導人形','霊体・不死','その他'].forEach(v=>values.add(v));
+  if(field==='monsterType') ['粘体','獣','虫','植物','爬虫','水棲','軟体','霊体','造魔','竜','異界'].forEach(v=>values.add(v));
   return [...values].sort((a,b)=>compareValues(a,b));
 }
 function currentFormValue(field){
@@ -4886,7 +4895,7 @@ function monsterDropRowHtml(row={}, idx=0){
 function monsterActionsEditor(value){
   const rows = parseMonsterActions(value);
   const body = rows.length ? rows.map(monsterActionRowHtml).join('') : monsterActionRowHtml({element:'物'});
-  return `<div class="monster-line-editor" data-monster-actions-editor><textarea data-form-field="actions" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(serializeMonsterActions(rows))}</textarea><div class="form-help">行動は1行動ずつ入力します。行動種別は距離とは別に、近接攻撃・遠距離攻撃・術式・祈祷・防御・補助・回復・特殊から選択します。</div><div class="monster-line-head action-head"><span>行動名</span><span>行動種別</span><span>判定</span><span>対象</span><span>属性</span><span>威力</span><span>効果</span><span></span></div><div data-monster-action-list>${body}</div><button type="button" class="secondary" data-monster-action-add>行動を追加</button></div>`;
+  return `<div class="monster-line-editor" data-monster-actions-editor><textarea data-form-field="actions" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(serializeMonsterActions(rows))}</textarea><div class="form-help">行動は1行動ずつ入力します。通常魔物は必ず3個、ボスは必ず4個です。固有パッシブは技数に含めません。行動種別は距離とは別に、近接攻撃・遠距離攻撃・術式・祈祷・防御・補助・回復・特殊から選択します。</div><div class="monster-line-head action-head"><span>行動名</span><span>行動種別</span><span>判定</span><span>対象</span><span>属性</span><span>威力</span><span>効果</span><span></span></div><div data-monster-action-list>${body}</div><button type="button" class="secondary" data-monster-action-add>行動を追加</button></div>`;
 }
 function monsterDropsEditor(value){
   const rows = parseMonsterDrops(value);
@@ -5263,6 +5272,8 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='unlockOrder') help += '<div class="form-help">小さい順に累積解放します。プレイヤーのキーが示す順番以下を公開します。</div>';
   if(field==='upgradeMaterialMinRank') help += '<div class="form-help">この装備へ使用できる強化素材の最低ランクです。未設定時は装備自身のランクを自動設定します。</div>';
   if(field==='bagCapacity') help += '<div class="form-help">バッグ専用の所持品枠数です。倉庫のスタック数や1枠数とは別項目です。</div>';
+  if(field==='monsterType') help += '<div class="form-help">素材派生へ流用しやすい大分類です。粘体・獣・虫・植物・爬虫・水棲・軟体・霊体・造魔・竜・異界から選びます。</div>';
+  if(field==='monsterTraits') help += '<div class="form-help">飛行・甲殻・異界・鉱質など、大分類だけでは表せない特徴をカンマ区切りで入力します。</div>';
   if(field==='encounterValue') help += '<div class="form-help">通常魔物は1～3で設定します。1＝小型・軽量、2＝標準、3＝強敵。エリアが後半かどうかではなく、その魔物自身の能力と行動で決めます。ボスは通常遭遇から除外されるため空欄で構いません。</div>';
   if(field==='hasLock' || field==='hasTrap') ['なし','あり'].forEach(v=>values.add(v));
   if(field==='equipmentUpgradeTarget') help += '<div class="form-help">この素材で強化できる装備種別です。武器・防具・盾・装飾品・魔導書・祈祷書を指定できます。複数対象は「・」で区切ります。</div>';
@@ -5484,6 +5495,17 @@ function assertMonsterMaterialUpgradeRows(rows=[]){
   const rest=invalid.length>10 ? `\nほか${invalid.length-10}件` : '';
   throw new Error(`魔物素材には装備強化内容・装備強化値・強化対象の設定が必須です。特殊効果の場合は特殊能力詳細も必須です。\n${details}${rest}`);
 }
+function assertMonsterActionCountRows(rows=[]){
+  const invalid=(rows || []).map(row=>{
+    const expected=String(row.rank || '').trim()==='ボス' ? 4 : 3;
+    const actual=parseMonsterActions(row.actions || '').length;
+    return {row,expected,actual};
+  }).filter(x=>x.actual!==x.expected);
+  if(!invalid.length) return;
+  const details=invalid.slice(0,10).map(x=>`・${String(x.row.name || x.row.id || '名称未設定')}：${x.actual}個（必要${x.expected}個）`).join('\n');
+  const rest=invalid.length>10 ? `\nほか${invalid.length-10}件` : '';
+  throw new Error(`通常魔物は技を3個、ボスは技を4個にしてください。固有パッシブは技数に含めません。\n${details}${rest}`);
+}
 function assertNumericRankRows(key,rows=[]){
   const invalid=(rows||[]).filter(row=>{
     if(key==='material_ranks') return !numericRankValueIncludingLegacyMaterialGrade(row.name,'');
@@ -5562,6 +5584,7 @@ function collectFormRow(){
   if(key==='material_ranks') assertNumericRankRows('material_ranks',[clean]);
   if(key==='spells') assertNumericRankRows('spells',[clean]);
   if(key==='recipes'){ assertNumericRankRows('recipes',[clean]); assertWeaponBranchMaterialRows([clean]); }
+  if(key==='monsters') assertMonsterActionCountRows([clean]);
   return clean;
 }
 function applyFormToState(){
@@ -6124,7 +6147,7 @@ const VERIFY_SAVE_FIELDS = {
   items: ['dataKind','itemType','itemCategory','materialType','materialCategory','name','power','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect'],
   spells: ['type','name','mpCost','target','checkType','element','power','description','effect'],
   recipes: ['recipePrice','recipeSource','craftSkill','price','craftType','category','baseItem','branchType','resultItem','requiredMaterials','difficulty','description','effect'],
-  monsters: ['physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','modifiers']
+  monsters: ['monsterType','monsterTraits','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','actions','drops','modifiers']
 };
 function verifyRowKey(row){
   return String(row && row.id || '').trim();
@@ -6219,6 +6242,7 @@ function cloneRowsForSave(baseKey, rows){
   if(['items','recipes','spells','material_ranks'].includes(baseKey)) assertNumericRankRows(baseKey,rows||[]);
   if(baseKey==='items'){ assertEquipmentUpgradeMinimumRows(rows||[]); assertMonsterMaterialUpgradeRows(rows || []); }
   if(baseKey==='recipes') assertWeaponBranchMaterialRows(rows || []);
+  if(baseKey==='monsters') assertMonsterActionCountRows(rows || []);
   return (rows || []).map(src=>{
     const r = {...(src || {})};
     if(baseKey==='material_ranks') r.name=numericRankValueIncludingLegacyMaterialGrade(r.name,1);

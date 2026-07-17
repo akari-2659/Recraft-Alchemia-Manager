@@ -127,13 +127,13 @@ button,.tab-btn,.quest-category-btn{
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.207 / 最終更新日：2026年7月17日</div>
+<div class="ra-build-info">Version：v90.8.211 / 最終更新日：2026年7月17日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.207 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.211 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -384,7 +384,7 @@ button,.tab-btn,.quest-category-btn{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.207';
+const VERSION='v90.8.211';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -663,7 +663,7 @@ function fillMonsterSearch(prefer=''){
   const orderedMonsters=monstersInFirstAppearanceOrder();
   list.innerHTML = orderedMonsters.map(m=>{
     const name=String(m.name || m.id || '').trim();
-    const label=[m.rank ? 'ランク:' + m.rank : '', m.monsterType || '', m.hp ? 'HP:' + m.hp : ''].filter(Boolean).join(' / ');
+    const label=[m.rank ? 'ランク:' + m.rank : '', m.monsterType || '', m.monsterTraits ? '特性:' + m.monsterTraits : '', m.hp ? 'HP:' + m.hp : ''].filter(Boolean).join(' / ');
     return `<option value="${esc(name)}"${label ? ` label="${esc(label)}"` : ''}></option>`;
   }).join('');
   if(prev && findBySearchValue(prev,state.monsters)) input.value=prev;
@@ -1259,7 +1259,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.207-quest-scale-1';
+const ENCOUNTER_RULE_VERSION='v90.8.211-quest-scale-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
