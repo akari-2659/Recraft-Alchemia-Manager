@@ -127,13 +127,13 @@ button,.tab-btn,.quest-category-btn{
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.211 / 最終更新日：2026年7月17日</div>
+<div class="ra-build-info">Version：v90.8.218 / 最終更新日：2026年7月19日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.211 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.218 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -384,7 +384,7 @@ button,.tab-btn,.quest-category-btn{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.211';
+const VERSION='v90.8.218';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -494,7 +494,7 @@ function fillQuestSelect(prefer=''){
     o.value=String(q.id || q.name || '');
     const off = !questEnabled(q) ? ' [OFF]' : '';
     const unlock = q.unlockResult ? ` / ${q.unlockResult}` : '';
-    o.textContent=`${q.name||q.id}${off} / ${q.rank||''}${unlock}`;
+    o.textContent=`${q.name||q.id}${off} / ${progressPlayerRank(q.rank)||''}${unlock}`;
     sel.appendChild(o);
   });
   if(prev && [...sel.options].some(o=>o.value===prev)) sel.value=prev;
@@ -663,7 +663,7 @@ function fillMonsterSearch(prefer=''){
   const orderedMonsters=monstersInFirstAppearanceOrder();
   list.innerHTML = orderedMonsters.map(m=>{
     const name=String(m.name || m.id || '').trim();
-    const label=[m.rank ? 'ランク:' + m.rank : '', m.monsterType || '', m.monsterTraits ? '特性:' + m.monsterTraits : '', m.hp ? 'HP:' + m.hp : ''].filter(Boolean).join(' / ');
+    const label=[m.rank ? 'ランク:' + progressPlayerRank(m.rank) : '', m.monsterType || '', m.monsterTraits ? '特性:' + m.monsterTraits : '', m.hp ? 'HP:' + m.hp : ''].filter(Boolean).join(' / ');
     return `<option value="${esc(name)}"${label ? ` label="${esc(label)}"` : ''}></option>`;
   }).join('');
   if(prev && findBySearchValue(prev,state.monsters)) input.value=prev;
@@ -1011,7 +1011,7 @@ function renderQuest(){
   $('questNote').value=p.note||'';
   $('questBar').style.width=clamp(p.value)+'%';
   $('questLabel').textContent=clamp(p.value)+'%';
-  $('questDetail').innerHTML=`<div class="kv"><b>分類</b><span>${esc(questCategoryFor(q))}${!questEnabled(q)?'<span class="quest-pill off">OFF</span>':'<span class="quest-pill">ON</span>'}</span><b>種別</b><span>${esc(q.questType||'')}</span><b>ランク</b><span>${esc(q.rank||'')}</span><b>エリア</b><span>${esc(q.areaName||'')}</span><b>進行上昇値</b><span>+${questStepAmount(q)}%</span><b>固定イベント数</b><span>${questSpecificEvents(q).length}件</span><b>クエストボス</b><span>${esc(questBossText(q))}</span><b>構成</b><span>${esc(questBossFormationText(q))}</span><b>クリア条件</b><span>${esc(q.clearCondition||'')}</span><b>報酬</b><span>${esc([q.rewardMoney,q.rewardItems,Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / '))}</span></div>${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
+  $('questDetail').innerHTML=`<div class="kv"><b>分類</b><span>${esc(questCategoryFor(q))}${!questEnabled(q)?'<span class="quest-pill off">OFF</span>':'<span class="quest-pill">ON</span>'}</span><b>種別</b><span>${esc(q.questType||'')}</span><b>ランク</b><span>${esc(progressPlayerRank(q.rank)||'')}</span><b>エリア</b><span>${esc(q.areaName||'')}</span><b>進行上昇値</b><span>+${questStepAmount(q)}%</span><b>固定イベント数</b><span>${questSpecificEvents(q).length}件</span><b>クエストボス</b><span>${esc(questBossText(q))}</span><b>構成</b><span>${esc(questBossFormationText(q))}</span><b>クリア条件</b><span>${esc(q.clearCondition||'')}</span><b>報酬</b><span>${esc([q.rewardMoney,q.rewardItems,Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / '))}</span></div>${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
   renderQuestStepInfo(q,p);
   renderQuestEvents();
 }
@@ -1259,7 +1259,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.211-quest-scale-1';
+const ENCOUNTER_RULE_VERSION='v90.8.218-star-rank-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -1307,7 +1307,7 @@ function monsterEncounterValue(name=''){
 function encounterPoolForArea(areaName='', excludeNames=[]){
   const name=String(areaName||'').trim();
   const names=AREA_ENCOUNTER_POOLS[name]||[];
-  const available=new Set((state.monsters||[]).filter(m=>String(m.rank||'')!=='ボス').map(m=>String(m.name||'').trim()));
+  const available=new Set((state.monsters||[]).filter(m=>!String(m.monsterTraits||'').split(/[,、，]/).map(v=>v.trim()).includes('ボス')).map(m=>String(m.name||'').trim()));
   const excluded=new Set((excludeNames||[]).map(v=>String(v||'').trim()).filter(Boolean));
   return names.filter(n=>available.has(n)&&!excluded.has(n));
 }
@@ -1592,7 +1592,7 @@ function fillTreasureTables(prefer=''){
   rows.forEach(r=>{
     const o=document.createElement('option');
     o.value=r.id;
-    o.textContent=`${r.id} / ${r.area||'エリア未設定'} / ${r.rank||'ランク未設定'}（${r.count}件）`;
+    o.textContent=`${r.id} / ${r.area||'エリア未設定'} / ${progressPlayerRank(r.rank)||'ランク未設定'}（${r.count}件）`;
     sel.appendChild(o);
   });
   if(prefer && [...sel.options].some(o=>o.value===prefer)) sel.value=prefer;
@@ -1726,7 +1726,7 @@ function renderTreasureTrapInfo(){
 function trapDetectText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.questFixed)return 'このクエスト固有宝箱では罠感知判定を行いません。'; return `【罠感知判定】\n2D6+{感知}>=${r.trapDetectDifficulty}`;}
 function trapDisarmText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.questFixed)return 'このクエスト固有宝箱では罠解除判定を行いません。'; return r.hasTrap?`【罠解除判定】\n2D6+{細工}>=${r.trapDisarmDifficulty}`:'この宝箱に罠はありません。';}
 function unlockText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.questFixed)return 'このクエスト固有宝箱では解錠判定を行いません。'; return r.hasLock?`【鍵の解除判定】\n2D6+{細工}>=${r.unlockDifficulty}`:'この宝箱に鍵はありません。';}
-const LEGACY_PROGRESS_NUMERIC_RANKS={'初期':1,'初級':1,'低級':1,'中級':2,'普通':2,'上級':3,'良質':3,'特級':4,'希少':4,'最上級':5,'高級':5};
+const LEGACY_PROGRESS_NUMERIC_RANKS={'初期':1,'初級':1,'低級':1,'チュートリアル':1,'小規模':1,'中級':2,'普通':2,'通常':2,'標準':2,'上級':3,'良質':3,'大規模':3,'特級':4,'希少':4,'強敵':4,'ボス':4,'高難度':4,'最上級':5,'高級':5};
 function progressNumericRank(value,fallback=''){
   if(typeof value==='number'&&Number.isFinite(value)&&value>=1)return Math.floor(value);
   const raw=String(value??'').trim(); if(!raw)return fallback;
@@ -1924,7 +1924,7 @@ function findDropMaterial(d={}){
 function dropDetailLines(material, options={}){
   if(!material) return [];
   const lines = [];
-  const rank = String(material.rank || '').trim();
+  const rank = progressPlayerRank(material.rank);
   const cat = String(material.materialCategory || material.itemCategory || '').trim();
   const price = String(material.price ?? '').trim();
   const desc = String(material.description || '').trim();
@@ -1990,7 +1990,7 @@ function rollDrops(){
     all.push(line);
     if(ok) got.push(dropOutputBlock(d));
     const detail=dropDetailHtml(material);
-    const chips=[d.large||material?.materialType,d.small||material?.materialCategory,material?.rank?`ランク:${material.rank}`:'',material?.price?`売値:${material.price}G`:''].filter(Boolean);
+    const chips=[d.large||material?.materialType,d.small||material?.materialCategory,material?.rank?`ランク:${progressPlayerRank(material.rank)}`:'',material?.price?`売値:${material.price}G`:''].filter(Boolean);
     html.push(`<div class="drop-row ${ok?'success':'fail'}"><div><b>${esc(name)}</b><br><span class="muted small">${esc([d.large,d.small,d.id].filter(Boolean).join(' / '))}</span>${detail}</div><span class="pill">${esc(rateText)}</span><span class="pill">${ok?'入手':'なし'} ${r}</span></div>`);
   });
   if(got.length===1) got.push('入手なし');
