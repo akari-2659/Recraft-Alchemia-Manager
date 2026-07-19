@@ -127,13 +127,13 @@ button,.tab-btn,.quest-category-btn{
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.218 / 最終更新日：2026年7月19日</div>
+<div class="ra-build-info">Version：v90.8.221 / 最終更新日：2026年7月19日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.218 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.221 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -384,7 +384,7 @@ button,.tab-btn,.quest-category-btn{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.218';
+const VERSION='v90.8.221';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -1259,7 +1259,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.218-star-rank-1';
+const ENCOUNTER_RULE_VERSION='v90.8.221-star-rank-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -1311,6 +1311,41 @@ function encounterPoolForArea(areaName='', excludeNames=[]){
   const excluded=new Set((excludeNames||[]).map(v=>String(v||'').trim()).filter(Boolean));
   return names.filter(n=>available.has(n)&&!excluded.has(n));
 }
+function normalizeEncounterFrontline(groups=[]){
+  const rows=(groups||[]).map(group=>{
+    const name=String(group?.name||'').trim();
+    const count=Math.max(0,Math.floor(Number(group?.count)||0));
+    const rawPosition=String(group?.formation??group?.position??'').trim();
+    const position=rawPosition.startsWith('後衛')?'後衛':'前衛';
+    return Object.assign({},group,{name,count,formation:position,position});
+  }).filter(group=>group.name&&group.count>0);
+  const total=rows.reduce((sum,group)=>sum+group.count,0);
+  if(total===1){
+    rows.forEach(group=>{group.formation='前衛';group.position='前衛';});
+  }else if(total>=2&&!rows.some(group=>group.formation==='前衛')){
+    const frontIndex=rows.reduce((best,row,index)=>{
+      if(best<0)return index;
+      const rate=ENCOUNTER_BACKLINE_RATE[row.name]??.25;
+      const bestRate=ENCOUNTER_BACKLINE_RATE[rows[best].name]??.25;
+      return rate<bestRate?index:best;
+    },-1);
+    const target=rows[frontIndex];
+    if(target.count>1){
+      target.count-=1;
+      rows.push(Object.assign({},target,{count:1,formation:'前衛',position:'前衛'}));
+    }else{
+      target.formation='前衛';
+      target.position='前衛';
+    }
+  }
+  const merged=new Map();
+  rows.forEach(group=>{
+    const key=`${group.formation}\t${group.name}`;
+    if(!merged.has(key))merged.set(key,Object.assign({},group));
+    else merged.get(key).count+=group.count;
+  });
+  return [...merged.values()];
+}
 function groupEncounterPicks(picks=[]){
   const map=new Map();
   picks.forEach(name=>map.set(name,(map.get(name)||0)+1));
@@ -1319,10 +1354,7 @@ function groupEncounterPicks(picks=[]){
     formation:Math.random()<(ENCOUNTER_BACKLINE_RATE[name]??.25)?'後衛':'前衛',
     cost:monsterEncounterValue(name)
   }));
-  if(groups.length && !groups.some(g=>g.formation==='前衛')){
-    groups[Math.floor(Math.random()*groups.length)].formation='前衛';
-  }
-  return groups;
+  return normalizeEncounterFrontline(groups);
 }
 function enumerateEncounterAdditions(pool=[],maxSlots=0,maxCost=0){
   const rows=[...new Set(pool)].map(name=>({name,cost:monsterEncounterValue(name)})).filter(r=>r.cost>=1).sort((a,b)=>a.cost-b.cost||a.name.localeCompare(b.name,'ja'));
@@ -1434,9 +1466,24 @@ function resolveQuestEncounter(q={},force=false,cacheSuffix='boss'){
 }
 function resolveQuestFixedEncounter(q={},e={},force=false){
   const result=String(e.result||'');
-  if(!/戦闘発生/.test(result)||!/人数対応|ランダム編成/.test(result))return null;
+  if(!/戦闘発生/.test(result))return null;
   const suffix=`fixed-${eventThreshold(e)??''}-${e.eventName||''}`;
-  return resolveQuestEncounter(q,force,suffix);
+  if(/人数対応|ランダム編成/.test(result)){
+    const random=resolveQuestEncounter(q,force,suffix);
+    if(random)return random;
+  }
+  if(Number(eventThreshold(e))!==100)return null;
+  const size=effectiveQuestPartySize(q);
+  const groups=encounterCompositionGroups({encounterComposition:q.questBossComposition},size).map(group=>({
+    name:group.name,count:group.count,formation:group.position,cost:monsterEncounterValue(group.name)
+  }));
+  if(!groups.length)return null;
+  return {
+    areaName:String(q.areaName||''),partySize:size,baseBudget:0,budget:0,
+    spent:groups.reduce((sum,group)=>sum+group.cost*group.count,0),
+    pattern:'固定編成',groups,total:groups.reduce((sum,group)=>sum+group.count,0),
+    minCount:groups.reduce((sum,group)=>sum+group.count,0),maxCount:groups.reduce((sum,group)=>sum+group.count,0)
+  };
 }
 function clampEncounterCount(n, min=1, max=7){
   const lo=Math.max(1,Number(min)||1),hi=Math.min(8,Math.max(lo,Number(max)||8));
@@ -1483,7 +1530,7 @@ function resolveEncounterCountToken(token='',partySize=selectedPartySize()){
 function encounterCompositionGroups(row={},partySize=selectedPartySize()){
   const raw=String(row.encounterComposition||'').trim();
   if(!raw)return [];
-  return raw.split(/\n+|;|；/).map(line=>{
+  const groups=raw.split(/\n+|;|；/).map(line=>{
     const cols=line.split(/\t|,|，|、/).map(v=>String(v||'').trim()).filter(Boolean);
     if(cols.length<3)return null;
     const resolved=resolveEncounterCountToken(cols[2],partySize);
@@ -1491,6 +1538,7 @@ function encounterCompositionGroups(row={},partySize=selectedPartySize()){
     if(!Number.isFinite(count)||count<1)return null;
     return {position:cols[0],name:cols[1],count:Math.floor(count)};
   }).filter(Boolean);
+  return normalizeEncounterFrontline(groups);
 }
 function encounterCompositionText(row={}){
   const groups=encounterCompositionGroups(row);

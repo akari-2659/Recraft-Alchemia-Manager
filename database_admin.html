@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.218</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.221</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1096,7 +1096,7 @@ body.modal-open{overflow:hidden!important}
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.218 / 最終更新日：2026年7月19日</div>
+<div class="ra-build-info">Version：v90.8.221 / 最終更新日：2026年7月19日</div>
 
 <header>
   <div class="title-card">
@@ -1676,7 +1676,7 @@ body.modal-open{overflow:hidden!important}
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.218';
+const RECRAFT_DB_VERSION = 'v90.8.221';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1729,6 +1729,8 @@ const RECORD_CARD_KEYS = new Set(['items','materials','recipes','spells','explor
 const FIELD_PLACEHOLDERS = {
   id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'魔物・素材・装備・道具・レシピ・術式・クエスト・宝箱などは1以上の数値。すべての画面で★N表示', toolRank:'例：6。この道具で扱える上限ランク。道具本体も★6に揃え、飛び番を許可します', guaranteeUpgradeMaxRank:'例：6。このアイテムを使うと★6以下の強化素材を使う装備強化が確定成功になります。', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：甲殻板。実際に使用する代表素材系統を入力します。画面では「甲殻板派生」と表示します。', equipmentUpgradeEffect:'例：装備強化内容「威力」、装備強化値「+1」。武器対象には魔導書・祈祷書も含みます。', equipmentUpgradeSlotCost:'通常は1。防御値・消費コスト軽減・回復量を+1する強力な効果は2。', equipmentUpgradeDetail:'特殊効果が付く場合、発動条件・対象・補正値・持続や解除条件を具体的に入力します。', upgradeMaterialMinRank:'例：3。この装備を強化できる素材の最低ランク。空欄時は装備ランクを使用します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,探索', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', questType:'例：チュートリアル / 採取 / 討伐', areaName:'例：街はずれの草原', progressStep:'例：25。進行ボタン1回で加算する数値', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 異界', difficulty:'例：★1', unlockKey:'例：7UCX-JAUE-E2TH-GLRG-MEGW。エリア名や順番を推測しにくい文字列を設定', unlockOrder:'例：2。通常エリアは小さい順に累積解放。異界は専用キーで個別解放', unlockAreaKey:'例：area_nearby_forest。商品・作成・派生に必要なエリアID', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：1。画面では★1と表示します', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定の魔法スクロール：★1', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：1。画面では★1と表示します', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：1。画面では★1と表示します', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'大分類：粘体 / 獣 / 虫 / 植物 / 爬虫 / 水棲 / 軟体 / 霊体 / 造魔 / 竜 / 異界', monsterTraits:'例：飛行,甲殻,異界。複数指定はカンマ区切り', encounterValue:'1～3。魔物単体の戦闘負荷。エリアではなく能力・行動の強さで設定します。', dismantleDifficulty:'例：7。採取技能>=解体難易度で判定し、成功時は全ドロップ率+10%（上限100%）。目安はチュートリアル5～6、通常6～9、ボス10以上', pullRule:'可 / 不可', passiveName:'例：胞子反応', passiveEffect:'発動条件・処理・回数制限を具体的に入力', habit:'生息場所・群れ方・警戒時の行動などを1～3文で入力', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
 };
+FIELD_PLACEHOLDERS.encounterFormation='1体なら前衛。2体以上も前衛を最低1体置きます。全員前衛は可、全員後衛は不可。';
+FIELD_PLACEHOLDERS.encounterComposition='例：前衛,ルートハウンド,1;後衛,マイコニド,1。人数確定後に前衛不在なら1体を前衛へ自動移動します。';
 const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','checkType','type','role','setItem','unlockAreaKey','unlockFacility','equipmentUpgradeEffect','equipmentUpgradeTarget','ammoUse','ammoKind','craftSkill','craftType','baseItem','branchType','enabled','hasLock','hasTrap','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','conditionType','conditionValue','treasureTableId','tableId','treasureRank','hasLock','hasTrap','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','facilityName','spellType','spellRank','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule']);
 let formState = { key:null, idx:null, mode:'new', defaultDataKind:'' };
 let quickCategoryDirty = false;
@@ -1964,6 +1966,27 @@ function markRowOwnership(row){
   return row;
 }
 
+function normalizeStoredEncounterComposition(raw=''){
+  const text=String(raw||'').trim();
+  if(!text || /^(ランダム編成|指定対象＋ランダム随伴)/.test(text)) return text;
+  const lines=text.split(/\n+|;|；/).map(line=>line.trim()).filter(Boolean);
+  const parsed=lines.map(line=>line.split(/\t|,|，|、/).map(value=>String(value||'').trim()).filter(Boolean));
+  if(!parsed.length || parsed.some(cols=>cols.length<3)) return text;
+  parsed.forEach(cols=>{ cols[0]=String(cols[0]||'').startsWith('後衛')?'後衛':'前衛'; });
+  if(!parsed.some(cols=>cols[0]==='前衛')) parsed[0][0]='前衛';
+  return parsed.map(cols=>cols.join(',')).join(';');
+}
+function normalizeEncounterPlacementRow(key,row={}){
+  if(!row) return row;
+  if(key==='event_tables' && String(row.encounterComposition||'').trim()){
+    row.encounterComposition=normalizeStoredEncounterComposition(row.encounterComposition);
+  }
+  if(key==='quests' && String(row.questBossComposition||'').trim()){
+    row.questBossComposition=normalizeStoredEncounterComposition(row.questBossComposition);
+  }
+  return row;
+}
+
 function normalizeStateData(data){
   const out = data || {};
   // 旧版DBからの移行: material_groups は material_types へ寄せる。
@@ -2040,7 +2063,7 @@ function normalizeStateData(data){
   (out.recipes || []).forEach(row=>{ if(row){ row.rank = numericRankValueIncludingLegacyMaterialGrade(row.rank, 1); } });
   (out.spells || []).forEach(row=>{ if(row) row.rank = numericRankValueIncludingLegacyMaterialGrade(row.rank, 1); });
   (out.quest_rewards || []).forEach(row=>{ if(row) row.rank = numericRankValueIncludingLegacyMaterialGrade(row.rank, 1); });
-  (out.quests || []).forEach(row=>{ if(row) row.rank = numericRankValueIncludingLegacyMaterialGrade(row.rank, 1); });
+  (out.quests || []).forEach(row=>{ if(row){ row.rank = numericRankValueIncludingLegacyMaterialGrade(row.rank, 1); normalizeEncounterPlacementRow('quests',row); } });
   (out.monsters || []).forEach(row=>{ if(row) row.rank = numericRankValueIncludingLegacyMaterialGrade(row.rank, 1); });
   (out.treasure_tables || []).forEach(row=>{ if(!row) return; row.treasureRank = numericRankValueIncludingLegacyMaterialGrade(row.treasureRank, 1); if(String(row.scrollRank ?? '').trim()) row.scrollRank = numericRankValue(row.scrollRank, 1); });
   (out.appraisal_rules || []).forEach(row=>{ if(!row) return; if(String(row.scrollRank ?? '').trim()) row.scrollRank = numericRankValue(row.scrollRank, 1); if(String(row.spellRank ?? '').trim()) row.spellRank = numericRankValue(row.spellRank, 1); });
@@ -2059,7 +2082,7 @@ function normalizeStateData(data){
     if(row.branchType === undefined || row.branchType === null) row.branchType = '';
   });
   (out.spells || []).forEach(row=>{ if(row){ row.power = normalizePowerForDb('spells', row.power); normalizeRowCheckType('spells', row); } });
-  (out.event_tables || []).forEach(row=>{ if(row) normalizeRowCheckType('event_tables', row); });
+  (out.event_tables || []).forEach(row=>{ if(row){ normalizeRowCheckType('event_tables', row); normalizeEncounterPlacementRow('event_tables',row); } });
   (out.monsters || []).forEach(row=>{ if(row && row.actions !== undefined) row.actions = serializeMonsterActions(parseMonsterActions(row.actions)); });
 
   // 最新スキーマにない過去版の分類項目は画面状態から除外する。
@@ -5640,6 +5663,7 @@ function collectFormRow(){
     if(el) base[field] = el.value ?? '';
   });
   if(base.checkType !== undefined) normalizeRowCheckType(key, base);
+  normalizeEncounterPlacementRow(key,base);
   if(key==='equipment_categories' || key==='items') { Object.assign(base, migrateLegacyModifierFields(base)); ensurePhysicalElementForWeapon(base); }
   if(!String(base.id||'').trim()) base.id = `${key}_${Date.now()}`;
   ensurePlayerFacingPublicId(key, base);
@@ -6336,6 +6360,7 @@ function cloneRowsForSave(baseKey, rows){
   if(baseKey==='monsters') assertMonsterActionCountRows(rows || []);
   return (rows || []).map(src=>{
     const r = {...(src || {})};
+    normalizeEncounterPlacementRow(baseKey,r);
     if(baseKey==='material_ranks') r.name=numericRankValueIncludingLegacyMaterialGrade(r.name,1);
     if(baseKey==='items'){ r.rank=numericRankValueIncludingLegacyMaterialGrade(r.rank,1); if(String(r.toolRank??'').trim()){r.toolRank=numericRankValueIncludingLegacyMaterialGrade(r.toolRank,1);r.rank=r.toolRank;} if(String(r.guaranteeUpgradeMaxRank??'').trim())r.guaranteeUpgradeMaxRank=numericRankValueIncludingLegacyMaterialGrade(r.guaranteeUpgradeMaxRank,1); if(isEquipmentItemRow(r))r.upgradeMaterialMinRank=numericRankValueIncludingLegacyMaterialGrade(r.upgradeMaterialMinRank,r.rank); else r.upgradeMaterialMinRank=''; }
     if(baseKey==='recipes'){ r.rank=numericRankValueIncludingLegacyMaterialGrade(r.rank,1); }

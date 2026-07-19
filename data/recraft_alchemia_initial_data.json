@@ -1,8 +1,8 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "v90.8.218",
+  "version": "v90.8.221",
   "encoding": "UTF-8",
-  "description": "Recraft-Alchemia 統合DB初期データ v90.8.218（ランク表示を★Nへ統一し、道具本体ランクを使用上限と一致・エリア別人数遭遇値幅を追記）",
+  "description": "Recraft-Alchemia 統合DB初期データ v90.8.221（魔導インクと祈祷紙の販売価格を各200Gへ調整）",
   "data": {
     "item_types": [
       {
@@ -3796,7 +3796,7 @@
         "materialType": "",
         "materialCategory": "術式素材",
         "name": "魔導インク",
-        "price": 290,
+        "price": 200,
         "rank": 2,
         "effect": "魔法スクロールの術式化に使用する素材。集中技能による術式化の際に消費する。",
         "source": "骨董屋（常設） / 素材加工",
@@ -3827,7 +3827,7 @@
         "materialType": "",
         "materialCategory": "術式素材",
         "name": "祈祷紙",
-        "price": 270,
+        "price": 200,
         "rank": 2,
         "effect": "祈祷スクロールの術式化に使用する素材。集中技能による術式化の際に消費する。",
         "source": "骨董屋（常設） / 素材加工",
@@ -27947,7 +27947,7 @@
         "questType": "デイリー",
         "rank": 1,
         "areaName": "街はずれの草原",
-        "progressStep": 50,
+        "progressStep": 25,
         "fixedEvents": "50%\t魔物の巣跡\t戦闘発生：街はずれの草原の候補から人数対応でランダム編成する。勝利後、出現した各魔物のドロップ判定を行う。\n100%\t草原魔物の追い払い\t戦闘発生：街はずれの草原の候補から人数対応でランダム編成する。勝利後、クエストクリア。",
         "clearCondition": "草原に現れた魔物の群れを討伐する。",
         "bossMonster": "",
@@ -27971,8 +27971,8 @@
         "questType": "デイリー",
         "rank": 1,
         "areaName": "街はずれの草原",
-        "progressStep": 50,
-        "fixedEvents": "50%\t破れた荷袋\t判定：探索>=9。成功：落とし物の手がかり×1を入手し、100%固定イベントの探索判定+2。失敗：補正なし。\n100%\t行商人の荷物回収\t判定：探索>=9。成功：行商人の荷物×1を入手してクエストクリア。失敗：行商人の荷物×1は入手するが、報酬金-20G。",
+        "progressStep": 25,
+        "fixedEvents": "100%\t行商人の荷物回収\t判定：探索>=9。成功：行商人の荷物×1を入手してクエストクリア。失敗：行商人の荷物×1は入手するが、報酬金-20G。",
         "clearCondition": "行商人の荷物を1つ回収する。",
         "bossMonster": "",
         "rewardMoney": "50G",
@@ -27995,8 +27995,8 @@
         "questType": "デイリー",
         "rank": 1,
         "areaName": "街はずれの草原",
-        "progressStep": 50,
-        "fixedEvents": "50%\t新しい足跡\t判定：追跡>=9または感知>=9。成功：100%戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t畑荒らしの追い払い\t戦闘発生：ラピットホーン×1を必ず含み、草原の候補から人数対応の随伴魔物を抽選する。勝利後、小獣の毛皮×1を入手してクエストクリア。",
+        "progressStep": 25,
+        "fixedEvents": "25%\t新しい足跡\t判定：追跡>=9または感知>=9。成功：100%戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t畑荒らしの追い払い\t戦闘発生：ラピットホーン×1を必ず含み、草原の候補から人数対応の随伴魔物を抽選する。勝利後、小獣の毛皮×1を入手してクエストクリア。",
         "clearCondition": "ラピットホーンを含む畑荒らしの魔物群を討伐する。",
         "bossMonster": "ラピットホーン",
         "rewardMoney": "50G",
@@ -28011,7 +28011,7 @@
         "enabled": "TRUE",
         "questBossName": "畑荒らしの小型魔物",
         "questBossFormation": "ラピットホーン×1＋人数対応ランダム随伴",
-        "questBossComposition": "指定対象＋ランダム随伴,ラピットホーン,1,街はずれの草原"
+        "questBossComposition": "前衛,ラピットホーン,1,街はずれの草原"
       },
       {
         "id": "quest_daily_firewood",
@@ -28067,7 +28067,7 @@
         "questType": "デイリー",
         "rank": 1,
         "areaName": "近郊の森",
-        "progressStep": 50,
+        "progressStep": 25,
         "fixedEvents": "50%\t獣の通り道\t判定：追跡>=9または感知>=9。成功：100%戦闘の1ラウンド目に、味方全員が行う最初の判定+2。失敗：補正なし。\n100%\t痕跡の主との遭遇\t戦闘発生：ルートハウンド×1を必ず含み、森の候補から人数対応の随伴魔物を抽選する。勝利後、動く根×1を入手してクエストクリア。",
         "clearCondition": "ルートハウンドを含む魔物群を討伐し、痕跡調査を完了する。",
         "bossMonster": "ルートハウンド",
@@ -28083,7 +28083,7 @@
         "enabled": "TRUE",
         "questBossName": "痕跡の主",
         "questBossFormation": "ルートハウンド×1＋人数対応ランダム随伴",
-        "questBossComposition": "指定対象＋ランダム随伴,ルートハウンド,1,近郊の森"
+        "questBossComposition": "前衛,ルートハウンド,1,近郊の森"
       },
       {
         "id": "quest_daily_stream_water",
@@ -28115,8 +28115,8 @@
         "questType": "デイリー",
         "rank": 1,
         "areaName": "水辺の湿地",
-        "progressStep": 50,
-        "fixedEvents": "50%\t粘液溜まり\t判定：採取>=9。成功：ゼラチン液×1、湿地粘液×1を入手。失敗：戦闘発生：後衛にバブルスライム×1。勝利後、ゼラチン液×1を入手。\n100%\t泡立つ粘液核\t戦闘発生：前衛にドロマール×1、後衛にバブルスライム×人数別[1:1/2:1/3:1/4:1/5:2/6:2]。勝利後、湿地粘液×1を入手してクエストクリア。",
+        "progressStep": 25,
+        "fixedEvents": "50%\t粘液溜まり\t判定：採取>=9。成功：ゼラチン液×1、湿地粘液×1を入手。失敗：戦闘発生：前衛にバブルスライム×1。勝利後、ゼラチン液×1を入手。\n100%\t泡立つ粘液核\t戦闘発生：前衛にドロマール×1、後衛にバブルスライム×人数別[1:1/2:1/3:1/4:1/5:2/6:2]。勝利後、湿地粘液×1を入手してクエストクリア。",
         "clearCondition": "ゼラチン液を1個、湿地粘液を1個入手する。",
         "bossMonster": "",
         "rewardMoney": "70G",
@@ -28139,8 +28139,8 @@
         "questType": "デイリー",
         "rank": 1,
         "areaName": "水辺の湿地",
-        "progressStep": 50,
-        "fixedEvents": "50%\t水草の奥の音\t判定：感知>=9または探索>=9。成功：100%戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：100%戦闘の1ラウンド目のみ味方全員の命中判定-1。\n100%\t異音の主との戦闘\t戦闘発生：水辺の湿地の候補から人数対応でランダム編成する。勝利後、クエストクリア。",
+        "progressStep": 25,
+        "fixedEvents": "75%\t水草の奥の音\t判定：感知>=9または探索>=9。成功：100%戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：100%戦闘の1ラウンド目のみ味方全員の命中判定-1。\n100%\t異音の主との戦闘\t戦闘発生：水辺の湿地の候補から人数対応でランダム編成する。勝利後、クエストクリア。",
         "clearCondition": "湿地の異音の主となった魔物群を討伐する。",
         "bossMonster": "",
         "rewardMoney": "80G",
@@ -28231,7 +28231,7 @@
         "questType": "デイリー",
         "rank": 2,
         "areaName": "反照の水庭",
-        "progressStep": 50,
+        "progressStep": 25,
         "fixedEvents": "50%\tずれた水面の観測\t判定：知識>=11または感知>=11。成功：観測地点を1か所記録し、100%固定イベントの判定+1。失敗：補正なし。\n100%\t反転景色の記録\t判定：知識>=11または探索>=11。成功：2か所目の観測記録を完成させてクエストクリア。失敗：記録は完成するが、報酬金-30G。",
         "clearCondition": "反照の水庭にある2か所の位相異常を観測し、帰還後に報告する。",
         "bossMonster": "",
@@ -28254,7 +28254,7 @@
         "questType": "デイリー",
         "rank": 3,
         "areaName": "反照の水庭",
-        "progressStep": 50,
+        "progressStep": 25,
         "fixedEvents": "50%\t鏡面を渡る魔物群\t戦闘発生：反照の水庭の候補から人数対応でランダム編成する。勝利後、出現した各魔物のドロップ判定を行う。\n100%\t帰路を塞ぐ異界魔物\t戦闘発生：反照の水庭の候補から人数対応でランダム編成する。勝利後、クエストクリア。",
         "clearCondition": "反照の水庭で魔物の群れを2回討伐する。",
         "bossMonster": "",
@@ -28277,8 +28277,8 @@
         "questType": "デイリー",
         "rank": 2,
         "areaName": "反照の水庭",
-        "progressStep": 50,
-        "fixedEvents": "50%\t帰還標の痕跡\t判定：探索>=11または感知>=11。成功：帰還地点までの経路を特定し、100%固定イベントの判定+1。失敗：補正なし。\n100%\t帰路の歪み\t判定：知識>=11または細工>=11。成功：歪みの状態を確認して安全に帰還し、クエストクリア。失敗：帰還はできるが、味方全員の次の判定-1。各自が判定を行った後に解除する。",
+        "progressStep": 25,
+        "fixedEvents": "100%\t帰路の歪み\t判定：知識>=11または細工>=11。成功：歪みの状態を確認して安全に帰還し、クエストクリア。失敗：帰還はできるが、味方全員の次の判定-1。各自が判定を行った後に解除する。",
         "clearCondition": "反照の水庭の帰還地点へ到達し、空間の歪みが使用可能であることを確認する。",
         "bossMonster": "",
         "rewardMoney": "190G",
@@ -28325,8 +28325,8 @@
         "questType": "採取",
         "rank": 2,
         "areaName": "山麓の旧鉱山",
-        "progressStep": 50,
-        "fixedEvents": "50%\t露天掘り跡\t判定：採取>=11。成功：鉄鉱石×2、石炭×1を入手。失敗：鉄鉱石×1を入手。\n100%\t坑道の鉱脈\t判定：採取>=12。成功：銀鉱石×2を入手してクエストクリア。失敗：銀鉱石×1を入手してクエストクリア。",
+        "progressStep": 25,
+        "fixedEvents": "25%\t露天掘り跡\t判定：採取>=11。成功：鉄鉱石×2、石炭×1を入手。失敗：鉄鉱石×1を入手。\n100%\t坑道の鉱脈\t判定：採取>=12。成功：銀鉱石×2を入手してクエストクリア。失敗：銀鉱石×1を入手してクエストクリア。",
         "clearCondition": "100%固定イベントを解決する。",
         "bossMonster": "",
         "rewardMoney": "40G",
@@ -28350,7 +28350,7 @@
         "questType": "討伐",
         "rank": 2,
         "areaName": "山麓の旧鉱山",
-        "progressStep": 50,
+        "progressStep": 25,
         "fixedEvents": "50%\t坑道の縄張り\t戦闘発生：山麓の旧鉱山の候補から人数対応でランダム編成する。勝利後、出現した各魔物のドロップ判定を行う。\n100%\t運搬路を塞ぐ魔物\t戦闘発生：山麓の旧鉱山の候補から人数対応でランダム編成する。勝利後、クエストクリア。",
         "clearCondition": "100%固定イベントを解決する。",
         "bossMonster": "",
@@ -28375,8 +28375,8 @@
         "questType": "調査",
         "rank": 2,
         "areaName": "山麓の旧鉱山",
-        "progressStep": 50,
-        "fixedEvents": "50%\t軋む支柱\t判定：細工>=11または探索>=11。成功：100%固定イベントの判定+1。失敗：味方全員は1D3ダメージを受ける。\n100%\t崩落区画の測量\t判定：探索>=12または知識>=12。成功：安全経路を記録してクエストクリア。失敗：記録は完成するが、報酬金-30G。",
+        "progressStep": 25,
+        "fixedEvents": "100%\t崩落区画の測量\t判定：探索>=12または知識>=12。成功：安全経路を記録してクエストクリア。失敗：記録は完成するが、報酬金-30G。",
         "clearCondition": "100%固定イベントを解決する。",
         "bossMonster": "",
         "rewardMoney": "140G",
@@ -28400,8 +28400,8 @@
         "questType": "探索",
         "rank": 2,
         "areaName": "山麓の旧鉱山",
-        "progressStep": 50,
-        "fixedEvents": "50%\t旧休憩所\t判定：探索>=11。成功：古い鉱具×1を発見し、100%固定イベントの判定+1。失敗：補正なし。\n100%\t崩れた道具庫\t判定：力業>=12または細工>=12。成功：鉱具一式を回収してクエストクリア。失敗：回収はできるが、味方全員は1D3ダメージを受ける。",
+        "progressStep": 25,
+        "fixedEvents": "100%\t崩れた道具庫\t判定：力業>=12または細工>=12。成功：鉱具一式を回収してクエストクリア。失敗：回収はできるが、味方全員は1D3ダメージを受ける。",
         "clearCondition": "100%固定イベントを解決する。",
         "bossMonster": "",
         "rewardMoney": "150G",
@@ -29449,7 +29449,7 @@
         "checkType": "なし",
         "targetValue": "",
         "treasureTableId": "",
-        "result": "戦闘発生：後衛にマイコニド×人数半数切上。1ラウンド目開始時、味方全員は抵抗>=9に失敗すると次の判定-1。",
+        "result": "戦闘発生：前衛にマイコニド×人数半数切上。1ラウンド目開始時、味方全員は抵抗>=9に失敗すると次の判定-1。",
         "progressEffect": "",
         "notes": "植物魔物。",
         "updatedAt": "",
@@ -29458,8 +29458,8 @@
         "encounterCountRule": "半数切上",
         "encounterCountMin": "1",
         "encounterCountMax": "4",
-        "encounterComposition": "後衛,マイコニド,人数半数切上",
-        "encounterFormation": "後衛：マイコニド"
+        "encounterComposition": "前衛,マイコニド,人数半数切上",
+        "encounterFormation": "前衛：マイコニド"
       },
       {
         "id": "evt_forest_16",
@@ -30070,7 +30070,7 @@
         "checkType": "なし",
         "targetValue": "",
         "treasureTableId": "",
-        "result": "戦闘発生：後衛にバブルスライム×人数半数切上。勝利後、ゼラチン液×1を追加で入手。",
+        "result": "戦闘発生：前衛にバブルスライム×人数半数切上。勝利後、ゼラチン液×1を追加で入手。",
         "progressEffect": "",
         "notes": "スライム。",
         "updatedAt": "",
@@ -30079,8 +30079,8 @@
         "encounterCountRule": "半数切上",
         "encounterCountMin": "1",
         "encounterCountMax": "4",
-        "encounterComposition": "後衛,バブルスライム,人数半数切上",
-        "encounterFormation": "後衛：バブルスライム"
+        "encounterComposition": "前衛,バブルスライム,人数半数切上",
+        "encounterFormation": "前衛：バブルスライム"
       },
       {
         "id": "evt_wetland_16",
@@ -30323,7 +30323,7 @@
         "checkType": "なし",
         "targetValue": "",
         "treasureTableId": "",
-        "result": "戦闘発生：後衛にミストモスキート×人数半数切上。勝利後、ミストモスキートのドロップ判定を行う。",
+        "result": "戦闘発生：前衛にミストモスキート×人数半数切上。勝利後、ミストモスキートのドロップ判定を行う。",
         "progressEffect": "",
         "notes": "虫。",
         "updatedAt": "",
@@ -30332,8 +30332,8 @@
         "encounterCountRule": "半数切上",
         "encounterCountMin": "1",
         "encounterCountMax": "4",
-        "encounterComposition": "後衛,ミストモスキート,人数半数切上",
-        "encounterFormation": "後衛：ミストモスキート"
+        "encounterComposition": "前衛,ミストモスキート,人数半数切上",
+        "encounterFormation": "前衛：ミストモスキート"
       },
       {
         "id": "evt_wetland_27",
@@ -30346,7 +30346,7 @@
         "checkType": "採取>=目標値",
         "targetValue": "9",
         "treasureTableId": "",
-        "result": "判定成功：丸茸×1D2を入手。目標値+3以上：清め草×1を追加で入手。失敗：戦闘発生。後衛にマイコニド×1。",
+        "result": "判定成功：丸茸×1D2を入手。目標値+3以上：清め草×1を追加で入手。失敗：戦闘発生。前衛にマイコニド×1。",
         "progressEffect": "",
         "notes": "茸。",
         "updatedAt": "",
@@ -30355,8 +30355,8 @@
         "encounterCountRule": "",
         "encounterCountMin": "1",
         "encounterCountMax": "1",
-        "encounterComposition": "後衛,マイコニド,1",
-        "encounterFormation": "後衛"
+        "encounterComposition": "前衛,マイコニド,1",
+        "encounterFormation": "前衛：マイコニド"
       },
       {
         "id": "evt_wetland_28",
@@ -30944,7 +30944,7 @@
         "checkType": "なし",
         "targetValue": "",
         "treasureTableId": "",
-        "result": "戦闘発生：前衛または後衛にフェイズモス×人数半数切上。勝利後、フェイズモスのドロップ判定を行う。",
+        "result": "戦闘発生：前衛にフェイズモス×人数半数切上。勝利後、フェイズモスのドロップ判定を行う。",
         "progressEffect": "",
         "notes": "遠距離技を持つが後衛固定ではない。",
         "updatedAt": "",
@@ -30954,7 +30954,7 @@
         "encounterCountMin": "1",
         "encounterCountMax": "4",
         "encounterComposition": "前衛,フェイズモス,人数半数切上",
-        "encounterFormation": "前衛または後衛：フェイズモス"
+        "encounterFormation": "前衛：フェイズモス"
       },
       {
         "id": "evt_otherworld_07",
@@ -31726,7 +31726,7 @@
         "checkType": "感知>=目標値",
         "targetValue": "10",
         "treasureTableId": "",
-        "result": "判定成功：上方の気配に先に気づき、安全な位置へ移動する。失敗：後衛にウィスパウル×1、後衛にヴェスパット×1との戦闘が発生する。",
+        "result": "判定成功：上方の気配に先に気づき、安全な位置へ移動する。失敗：前衛にウィスパウル×1、後衛にヴェスパット×1との戦闘が発生する。",
         "progressEffect": "",
         "notes": "羽音を隠す飛行獣を見抜く障害イベント。",
         "updatedAt": "2026-07-17",
@@ -31735,8 +31735,8 @@
         "encounterCountRule": "固定",
         "encounterCountMin": "2",
         "encounterCountMax": "2",
-        "encounterComposition": "後衛,ウィスパウル,1;後衛,ヴェスパット,1",
-        "encounterFormation": "後衛：ウィスパウル / ヴェスパット"
+        "encounterComposition": "前衛,ウィスパウル,1;後衛,ヴェスパット,1",
+        "encounterFormation": "前衛：ウィスパウル / 後衛：ヴェスパット"
       },
       {
         "id": "evt_forest_44",
@@ -31887,7 +31887,7 @@
         "checkType": "採取>=目標値",
         "targetValue": "10",
         "treasureTableId": "",
-        "result": "判定成功：泥中から丸茸×1D2を入手。失敗：前衛または後衛にマイコニド×人数半数切上との戦闘が発生する。",
+        "result": "判定成功：泥中から丸茸×1D2を入手。失敗：前衛にマイコニド×人数半数切上との戦闘が発生する。",
         "progressEffect": "",
         "notes": "採取に失敗すると菌糸を刺激する。",
         "updatedAt": "2026-07-16",
@@ -31896,8 +31896,8 @@
         "encounterCountRule": "半数切上",
         "encounterCountMin": "1",
         "encounterCountMax": "4",
-        "encounterComposition": "後衛,マイコニド,人数半数切上",
-        "encounterFormation": "前衛または後衛：マイコニド"
+        "encounterComposition": "前衛,マイコニド,人数半数切上",
+        "encounterFormation": "前衛：マイコニド"
       },
       {
         "id": "evt_wetland_43",
@@ -32347,7 +32347,7 @@
         "checkType": "感知>=目標値",
         "targetValue": "12",
         "treasureTableId": "",
-        "result": "戦闘発生：後衛にフェイズモス×人数半数切上。判定成功：1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。",
+        "result": "戦闘発生：前衛にフェイズモス×人数半数切上。判定成功：1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。",
         "progressEffect": "",
         "notes": "残像を見破れるかで初動が変わる。",
         "updatedAt": "2026-07-17",
@@ -32356,8 +32356,8 @@
         "encounterCountRule": "半数切上",
         "encounterCountMin": "1",
         "encounterCountMax": "4",
-        "encounterComposition": "後衛,フェイズモス,人数半数切上",
-        "encounterFormation": "後衛：フェイズモス"
+        "encounterComposition": "前衛,フェイズモス,人数半数切上",
+        "encounterFormation": "前衛：フェイズモス"
       },
       {
         "id": "evt_otherworld_34",
@@ -32370,7 +32370,7 @@
         "checkType": "なし",
         "targetValue": "",
         "treasureTableId": "",
-        "result": "戦闘発生：前衛または後衛にグラスレイ×人数半数切上。勝利後、グラスレイのドロップ判定を行う。",
+        "result": "戦闘発生：前衛にグラスレイ×人数半数切上。勝利後、グラスレイのドロップ判定を行う。",
         "progressEffect": "",
         "notes": "水面上を旋回するグラスレイの群れ。",
         "updatedAt": "2026-07-16",
@@ -32380,7 +32380,7 @@
         "encounterCountMin": "1",
         "encounterCountMax": "4",
         "encounterComposition": "前衛,グラスレイ,人数半数切上",
-        "encounterFormation": "前衛または後衛：グラスレイ"
+        "encounterFormation": "前衛：グラスレイ"
       },
       {
         "id": "evt_otherworld_35",
@@ -32393,7 +32393,7 @@
         "checkType": "なし",
         "targetValue": "",
         "treasureTableId": "",
-        "result": "戦闘発生：後衛にエコーリード×人数半数切上。勝利後、エコーリードのドロップ判定を行う。",
+        "result": "戦闘発生：前衛にエコーリード×人数半数切上。勝利後、エコーリードのドロップ判定を行う。",
         "progressEffect": "",
         "notes": "複数のエコーリードが共鳴して現れる。",
         "updatedAt": "2026-07-16",
@@ -32402,8 +32402,8 @@
         "encounterCountRule": "半数切上",
         "encounterCountMin": "1",
         "encounterCountMax": "4",
-        "encounterComposition": "後衛,エコーリード,人数半数切上",
-        "encounterFormation": "後衛：エコーリード"
+        "encounterComposition": "前衛,エコーリード,人数半数切上",
+        "encounterFormation": "前衛：エコーリード"
       },
       {
         "id": "evt_otherworld_36",
@@ -33382,7 +33382,7 @@
         "checkType": "採取>=目標値",
         "targetValue": "12",
         "treasureTableId": "",
-        "result": "成功：魔晶石×2を入手。失敗：後衛にルミナウィスプ×人数半数切上との戦闘。勝利後、魔晶石×1。",
+        "result": "成功：魔晶石×2を入手。失敗：前衛にルミナウィスプ×人数半数切上との戦闘。勝利後、魔晶石×1。",
         "progressEffect": "",
         "notes": "採取失敗から戦闘へ分岐する晶洞。",
         "updatedAt": "2026-07-17",
@@ -33391,8 +33391,8 @@
         "encounterCountRule": "半数切上",
         "encounterCountMin": "",
         "encounterCountMax": "",
-        "encounterComposition": "後衛,ルミナウィスプ,人数半数切上",
-        "encounterFormation": "後衛"
+        "encounterComposition": "前衛,ルミナウィスプ,人数半数切上",
+        "encounterFormation": "前衛：ルミナウィスプ"
       },
       {
         "id": "evt_mine_37",
@@ -33514,7 +33514,7 @@
         "passiveName": "",
         "passiveEffect": "",
         "actions": "体当たり\t近接攻撃\t近接>=回避値\t敵1体\t物\t1D6\t身体ごとぶつかって攻撃する。\nまとわりつき\t近接攻撃\t近接>=回避値\t敵1体\t物\tなし\t対象は次のラウンド終了まで回避値-1。\nぷるぷる防御\t防御\tなし\t自身\t無\tなし\t次の自身のターン開始まで常時防御値+2。",
-        "drops": "魔物素材\t粘体\tmat_gelatin_liquid\tゼラチン液\t100%\t1個\n魔物素材\t粘体\tmat_puru_membrane\tぷるぷる膜\t50%\t1個\n魔物素材\t粘体\tmat_small_slime_core\t水妖の雫核\t15%\t1個",
+        "drops": "魔物素材\t粘体\tmat_gelatin_liquid\tゼラチン液\t100%\t1個\n魔物素材\t粘体\tmat_puru_membrane\tぷるぷる膜\t50%\t1個\n魔物素材\t粘体\tmat_small_slime_core\t水妖の雫核\t20%\t1個",
         "habit": "朝露の残る草むらや浅い水辺に集まり、周囲の水分を取り込んで身体を保つ。驚くと近くの水溜まりへゆっくり逃げ込む。",
         "description": "草むらや水辺に現れる半透明の小型粘体。水分と草木の成分を取り込んで身体を保つ。",
         "notes": "行動バランスv90.8.137：エリア難易度に沿って威力・範囲・妨害効果を再調整。",
@@ -34581,7 +34581,7 @@
         "passiveName": "",
         "passiveEffect": "",
         "actions": "苔角突進\t近接攻撃\t近接>=回避値\t敵1体\t物\t2D6\t苔に覆われた角と肩を押しつけ、正面から突き倒す。\n苔泥飛ばし\t遠距離攻撃\t射撃>=回避値\t敵前衛2体\t水\t1D6\t背の苔を泥ごと振り飛ばす。命中した対象は次に行う運動判定-1。判定後に解除する。\n樹皮受け\t防御\tなし\t自身\t無\tなし\t次の自身のターン開始まで常時防御値+2。",
-        "drops": "魔物素材\t獣\tmat_small_beast_pelt\t小獣の毛皮\t65%\t1個\n採取素材\t木材\tmat_sturdy_branch\t丈夫な枝\t30%\t1個\n魔物素材\t獣\tmat_mossback_hide\t苔背の厚皮\t25%\t1個",
+        "drops": "魔物素材\t獣\tmat_small_beast_pelt\t小獣の毛皮\t65%\t1個\n採取素材\t木材\tmat_sturdy_branch\t丈夫な枝\t30%\t1個\n魔物素材\t獣\tmat_mossback_hide\t苔背の厚皮\t20%\t1個",
         "habit": "湿った林床で苔を背に育てながら根や落ち枝を食べる。縄張りへ入った相手を低い姿勢から一気に押し出す。",
         "description": "背に苔と薄い樹皮をまとった猪型の魔物。鈍重だが正面からの衝撃に強い。",
         "notes": "近郊の森の新規通常魔物。高防御型だが回避は標準帯に留め、火属性を弱点とする。",
@@ -34616,7 +34616,7 @@
         "passiveName": "",
         "passiveEffect": "",
         "actions": "風切羽\t遠距離攻撃\t射撃>=回避値\t敵1体\t物\t1D6+1\t音を立てずに風切羽を飛ばす。\n音無し急降下\t近接攻撃\t近接>=回避値\t敵1体\t物\t1D6+2\t梢の陰から滑り降り、翼爪で切りつける。\n森告げ\t補助\tなし\t味方1体\t無\tなし\t対象が次に行う攻撃・術式判定+1。判定後に解除する。",
-        "drops": "魔物素材\t獣\tmat_whisperowl_feather\t静森の風切羽\t30%\t1個\n採取素材\t木材\tmat_sturdy_branch\t丈夫な枝\t25%\t1個",
+        "drops": "魔物素材\t獣\tmat_small_claw\t小さな爪\t35%\t1個\n採取素材\t木材\tmat_sturdy_branch\t丈夫な枝\t25%\t1個\n魔物素材\t獣\tmat_whisperowl_feather\t静森の風切羽\t20%\t1個",
         "habit": "梢の影へ羽音を隠して留まり、短い鳴き声で周囲の魔物へ侵入者の位置を知らせる。",
         "description": "羽音が囁きほどしか聞こえない梟型の魔物。素早いが打たれ弱い。",
         "notes": "近郊の森の新規通常魔物。回避型としてHP・防御を低くし、高回避・高耐久を同時に持たせていない。",
@@ -34651,7 +34651,7 @@
         "passiveName": "",
         "passiveEffect": "",
         "actions": "水鱗尾\t近接攻撃\t近接>=回避値\t敵前衛2体\t水\t1D6+1\t水をまとった尾で前衛を横薙ぎにする。\n葦裂き牙\t近接攻撃\t近接>=回避値\t敵1体\t物\t2D6\t葦の間から踏み込み、鋸状の牙で噛み裂く。\n水草潜り\t防御\tなし\t自身\t水\tなし\t次の自身のターン開始まで回避値+1。",
-        "drops": "魔物素材\t爬虫\tmat_reed_lizard_scale\t葦蜥蜴の水鱗\t25%\t1個\n採取素材\t水・液体\tmat_clear_water\t澄んだ水\t35%\t1個\n魔物素材\t獣\tmat_small_beast_pelt\t小獣の毛皮\t35%\t1個",
+        "drops": "魔物素材\t爬虫\tmat_reed_lizard_scale\t葦蜥蜴の水鱗\t20%\t1個\n採取素材\t水・液体\tmat_clear_water\t澄んだ水\t35%\t1個\n魔物素材\t獣\tmat_small_beast_pelt\t小獣の毛皮\t35%\t1個",
         "habit": "浅瀬の葦と体色を重ねて獲物を待つ。尾で水面を乱してから側面へ回り込む。",
         "description": "葦色の細長い鱗を持つ湿地性の蜥蜴魔物。攻守の偏りが少ない。",
         "notes": "水辺の湿地の新規通常魔物。ぬかるみによるPC回避-1を前提に命中+6とし、耐久は中程度に設定。",
@@ -34686,7 +34686,7 @@
         "passiveName": "吸血膨張",
         "passiveEffect": "1ラウンドに1回、「吸着噛み」で1点以上のダメージを与えた時、自身のHPを2点回復する。",
         "actions": "吸着噛み\t近接攻撃\t近接>=回避値\t敵1体\t物\t1D6+1\t吸盤状の口器で張りつき、血と魔力を吸う。\n瘴液吐き\t術式\t魔法>=抵抗値\t敵1体\t闇\t1D6\t瘴気を含む液を吐く。命中した対象は次に行う抵抗判定-1。判定後に解除する。\n泥這い\t防御\tなし\t自身\t水\tなし\t次の自身のターン開始まで常時防御値+1、抵抗値+1。",
-        "drops": "魔物素材\t粘体\tmat_swamp_mucus\t湿地粘液\t65%\t1個\n採取素材\t水・液体\tmat_clear_water\t澄んだ水\t20%\t1個\n魔物素材\t軟体\tmat_miasma_leech_sucker\t瘴蛭の吸盤\t25%\t1個",
+        "drops": "魔物素材\t粘体\tmat_swamp_mucus\t湿地粘液\t65%\t1個\n採取素材\t水・液体\tmat_clear_water\t澄んだ水\t20%\t1個\n魔物素材\t軟体\tmat_miasma_leech_sucker\t瘴蛭の吸盤\t20%\t1個",
         "habit": "濁った水底で泥と見分けのつかない姿に縮み、足元を通る生き物へ吸いつく。",
         "description": "瘴気を溜め込む大型の蛭型魔物。遅いが抵抗力が高く、吸血で粘る。",
         "notes": "水辺の湿地の新規通常魔物。固有パッシブは小回復に留め、低回避・防御0で対処しやすくしている。",
