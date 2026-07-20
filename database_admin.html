@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.221</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.222</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1096,7 +1096,7 @@ body.modal-open{overflow:hidden!important}
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.221 / 最終更新日：2026年7月19日</div>
+<div class="ra-build-info">Version：v90.8.222 / 最終更新日：2026年7月19日</div>
 
 <header>
   <div class="title-card">
@@ -1676,7 +1676,7 @@ body.modal-open{overflow:hidden!important}
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.221';
+const RECRAFT_DB_VERSION = 'v90.8.222';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -2279,7 +2279,7 @@ const SYSTEM_HELP = [
     ],
     "body": [
       "レシピはDB上では1表で管理する。",
-      "管理HTML上では、調合レシピ、鍛冶レシピ、仕掛け製作、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。管理HTMLとプレイヤー施設の武器派生は、武器カテゴリ別タブ→主素材の分類を象徴する短い名称の「○○派生」→系統内の段階で表示し、元武器は必要素材として扱う。草角・樹心・沼核・穿王・反照のボス素材派生は、素手を除く全17武器カテゴリへ必ず用意する。",
+      "管理HTML上では、調合レシピ、鍛冶レシピ、仕掛け製作、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。完成武器名は原則カタカナ表記とし、「素手」だけを例外とする。中黒は定着表記または意図的な語間にだけ使用し、武器ごとに個別の由来を持つ名称を設定する。管理HTMLとプレイヤー施設の武器派生は、武器カテゴリ別タブ→主素材の分類を象徴する短い名称の「○○派生」→系統内の段階で表示し、元武器は必要素材として扱う。草角・樹心・沼核・穿王・反照のボス素材派生は、素手を除く全17武器カテゴリへ必ず用意する。",
       "各エリアボスには、ボス素材を使う防具または装飾品も必ず用意する。通常魔物素材の★2派生は横方向の選択肢として追加し、ボス派生の必須前提にはしない。",
       "武器派生の魔物素材要求量は、★2で合計1～2個、★3で合計2～3個を目安とする。既存の複合素材派生は維持してよい。",
       "★3以降は複数の魔物素材を要求してよいが、ボス固有素材は原則1個のままとし、大量周回を前提にしない。",
