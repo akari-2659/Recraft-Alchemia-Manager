@@ -1306,26 +1306,26 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.235-star-rank-1';
+const ENCOUNTER_RULE_VERSION='v90.8.237-area-pool-sync-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
   'マッドホッパー':2,'バブルスライム':2,'ミストモスキート':2,
-  'ルートハウンド':3,'ドロマール':3,
+  'ルートハウンド':3,'モスバック':2,'ウィスパウル':1,'ドロマール':3,'リードリザード':2,'ミアズマリーチ':1,
   'ミラースライム':2,'エコーリード':2,'フェイズモス':3,'グラスレイ':3,'リフトクラブ':3,'ヴォイドハウンド':3,
   'レゾナバット':1,'ピックモール':2,'オアスケイル':2,'ラストマイト':1,'マインゴーレム':3,'ルミナウィスプ':2
 };
 const AREA_ENCOUNTER_POOLS={
   '街はずれの草原':['プチスライム','ラフィンラット','ラピットホーン','ヴェスパット','カラパスビートル','グラウワーム'],
-  '近郊の森':['ラフィンラット','ラピットホーン','ヴェスパット','カラパスビートル','ラスクレイル','マイコニド','ルートハウンド','ブランチリング'],
-  '水辺の湿地':['プチスライム','グラウワーム','マイコニド','マッドホッパー','バブルスライム','ミストモスキート','ドロマール'],
+  '近郊の森':['ラフィンラット','ラピットホーン','ヴェスパット','カラパスビートル','ラスクレイル','マイコニド','ルートハウンド','ブランチリング','モスバック','ウィスパウル'],
+  '水辺の湿地':['プチスライム','グラウワーム','マイコニド','マッドホッパー','バブルスライム','ミストモスキート','ドロマール','リードリザード','ミアズマリーチ'],
   '山麓の旧鉱山':['レゾナバット','ピックモール','オアスケイル','ラストマイト','マインゴーレム','ルミナウィスプ'],
   '反照の水庭':['ミラースライム','フェイズモス','グラスレイ','エコーリード','リフトクラブ','ヴォイドハウンド']
 };
 const ENCOUNTER_BACKLINE_RATE={
   'プチスライム':.15,'ラフィンラット':.10,'ラピットホーン':.10,'ヴェスパット':.60,'カラパスビートル':.10,'グラウワーム':.10,
-  'ラスクレイル':.50,'マイコニド':.55,'ルートハウンド':.20,'ブランチリング':.30,'マッドホッパー':.15,'バブルスライム':.50,
-  'ミストモスキート':.60,'ドロマール':.10,
+  'ラスクレイル':.50,'マイコニド':.55,'ルートハウンド':.20,'ブランチリング':.30,'モスバック':.10,'ウィスパウル':.65,'マッドホッパー':.15,'バブルスライム':.50,
+  'ミストモスキート':.60,'ドロマール':.10,'リードリザード':.15,'ミアズマリーチ':.10,
   'レゾナバット':.65,'ピックモール':.15,'オアスケイル':.10,'ラストマイト':.25,'マインゴーレム':.05,'ルミナウィスプ':.65,
   'ミラースライム':.30,'フェイズモス':.55,'グラスレイ':.30,'エコーリード':.50,'リフトクラブ':.15,'ヴォイドハウンド':.35
 };
@@ -1353,10 +1353,14 @@ function monsterEncounterValue(name=''){
 }
 function encounterPoolForArea(areaName='', excludeNames=[]){
   const name=String(areaName||'').trim();
-  const names=AREA_ENCOUNTER_POOLS[name]||[];
+  const area=(state.areas||[]).find(a=>String(a.name||'').trim()===name || String(a.id||'').trim()===name);
+  // 通常遭遇候補はエリアデータの「主な魔物」を正とする。
+  // 固定配列は旧データや読み込み途中のフォールバックにだけ使用し、エリア追加時の登録漏れを防ぐ。
+  const configured=area?monsterNameTokens(area.mainMonsters):[];
+  const names=configured.length?configured:(AREA_ENCOUNTER_POOLS[name]||[]);
   const available=new Set((state.monsters||[]).filter(m=>!String(m.monsterTraits||'').split(/[,、，]/).map(v=>v.trim()).includes('ボス')).map(m=>String(m.name||'').trim()));
   const excluded=new Set((excludeNames||[]).map(v=>String(v||'').trim()).filter(Boolean));
-  return names.filter(n=>available.has(n)&&!excluded.has(n));
+  return [...new Set(names)].filter(n=>available.has(n)&&!excluded.has(n));
 }
 function normalizeEncounterFrontline(groups=[]){
   const rows=(groups||[]).map(group=>{

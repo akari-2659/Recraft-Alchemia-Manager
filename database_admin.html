@@ -5747,6 +5747,26 @@ function assertMonsterMaterialUpgradeRows(rows=[]){
   const rest=invalid.length>10 ? `\nほか${invalid.length-10}件` : '';
   throw new Error(`魔物素材には装備強化内容・装備強化値・強化対象の設定が必須です。特殊効果の場合は特殊能力詳細も必須です。\n${details}${rest}`);
 }
+function isUniqueMonsterMaterialRow(row={}){
+  const tags=String(row.tags || '').split(/[,、，]/).map(v=>v.trim()).filter(Boolean);
+  return tags.includes('固有素材') || tags.includes('ボス素材') || tags.includes('ボス');
+}
+function monsterProperNamesInMaterialDescription(row={}){
+  const isMonsterMaterial=String(row.dataKind || '').trim()==='素材' && String(row.materialType || '').trim()==='魔物素材';
+  if(!isMonsterMaterial || isUniqueMonsterMaterialRow(row)) return [];
+  const description=String(row.description || '').trim();
+  if(!description) return [];
+  return [...new Set((state.monsters || [])
+    .map(monster=>String(monster.name || '').trim())
+    .filter(name=>name && description.includes(name)))];
+}
+function assertMonsterMaterialDescriptionRows(rows=[]){
+  const invalid=(rows || []).map(row=>({row,names:monsterProperNamesInMaterialDescription(row)})).filter(x=>x.names.length);
+  if(!invalid.length) return;
+  const details=invalid.slice(0,10).map(x=>`・${String(x.row.name || x.row.id || '名称未設定')}：${x.names.join('、')}`).join('\n');
+  const rest=invalid.length>10 ? `\nほか${invalid.length-10}件` : '';
+  throw new Error(`固有素材・ボス素材以外の魔物素材説明には、魔物の固有名を記載しないでください。種族や性質による一般表現へ置き換えてください。\n${details}${rest}`);
+}
 function assertMonsterActionCountRows(rows=[]){
   const invalid=(rows || []).map(row=>{
     const isBoss=String(row.monsterTraits || '').split(/[,、，]/).map(v=>v.trim()).includes('ボス');
@@ -5839,7 +5859,7 @@ function collectFormRow(){
   }
   const clean = {};
   (SCHEMA[key]||[]).forEach(field=>clean[field]=base[field] === undefined || base[field] === null ? '' : base[field]);
-  if(key==='items'){ assertNumericRankRows('items',[clean]); assertEquipmentUpgradeMinimumRows([clean]); assertMonsterMaterialUpgradeRows([clean]); }
+  if(key==='items'){ assertNumericRankRows('items',[clean]); assertEquipmentUpgradeMinimumRows([clean]); assertMonsterMaterialUpgradeRows([clean]); assertMonsterMaterialDescriptionRows([clean]); }
   if(key==='material_ranks') assertNumericRankRows('material_ranks',[clean]);
   if(key==='spells') assertNumericRankRows('spells',[clean]);
   if(key==='recipes'){ assertNumericRankRows('recipes',[clean]); assertWeaponBranchMaterialRows([clean]); }
@@ -6505,7 +6525,7 @@ function rowsForTableForSave(tableKey){
 }
 function cloneRowsForSave(baseKey, rows){
   if(['items','recipes','spells','material_ranks','quest_rewards','quests','treasure_tables','monsters'].includes(baseKey)) assertNumericRankRows(baseKey,rows||[]);
-  if(baseKey==='items'){ assertEquipmentUpgradeMinimumRows(rows||[]); assertMonsterMaterialUpgradeRows(rows || []); }
+  if(baseKey==='items'){ assertEquipmentUpgradeMinimumRows(rows||[]); assertMonsterMaterialUpgradeRows(rows || []); assertMonsterMaterialDescriptionRows(rows || []); }
   if(baseKey==='recipes') assertWeaponBranchMaterialRows(rows || []);
   if(baseKey==='monsters') assertMonsterActionCountRows(rows || []);
   return (rows || []).map(src=>{
