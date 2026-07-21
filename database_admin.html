@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.229</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.231</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -694,6 +694,10 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip{
   padding-bottom:12px!important;
 }
 .toolbar-search-row{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;width:100%;min-width:0}
+.record-action-toolbar{margin-bottom:8px!important}
+.record-list-search{margin:10px 0 7px;padding:10px 11px;border:1px solid #e2d1bc;border-radius:12px;background:rgba(255,253,248,.84)}
+.record-list-search .field{margin:0!important}
+.record-list-search label{font-weight:900}
 .toolbar-search-row>.field,.toolbar-search-row>.field.small{width:100%!important;min-width:0!important;flex:none!important}
 .toolbar-screen-actions,.toolbar-db-actions,.global-db-maintenance,.global-db-write{
   position:relative;
@@ -1099,7 +1103,7 @@ body.modal-open{overflow:hidden!important}
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.229 / 最終更新日：2026年7月21日</div>
+<div class="ra-build-info">Version：v90.8.231 / 最終更新日：2026年7月21日</div>
 
 <header>
   <div class="title-card">
@@ -1687,7 +1691,7 @@ body.modal-open{overflow:hidden!important}
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.229';
+const RECRAFT_DB_VERSION = 'v90.8.231';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -7040,16 +7044,20 @@ document.addEventListener('click', (ev) => {
       if (!isRecordToolbar) return;
       const fields = directChildren(toolbar, '.field');
       const searchRow = document.createElement('div');
-      searchRow.className = 'toolbar-search-row';
+      searchRow.className = 'toolbar-search-row record-list-search';
       fields.forEach(field => searchRow.appendChild(field));
-      const screenGroup = makeGroup('toolbar-screen-actions', '画面操作');
+      const screenGroup = makeGroup('toolbar-screen-actions', '登録・画面操作');
       const dbGroup = makeGroup('toolbar-db-actions', 'DB操作');
       buttons.forEach(btn => {
         if (btn.matches('[data-load],[data-save],[data-replace]')) dbGroup.appendChild(btn);
         else screenGroup.appendChild(btn);
       });
-      toolbar.replaceChildren(searchRow, screenGroup, dbGroup);
-      toolbar.classList.add('record-toolbar');
+      toolbar.replaceChildren(screenGroup, dbGroup);
+      toolbar.classList.add('record-toolbar', 'record-action-toolbar');
+      const scope = toolbar.closest('.category-subpanel, .panel') || toolbar.parentElement;
+      const tableWrap = scope ? Array.from(scope.children).find(el => el.classList?.contains('table-wrap')) : null;
+      if (fields.length && tableWrap) tableWrap.before(searchRow);
+      else if (fields.length) toolbar.after(searchRow);
       toolbar.dataset.raLayoutReady = '1';
     });
   };

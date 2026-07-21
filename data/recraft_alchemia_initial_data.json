@@ -1,8 +1,8 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "v90.8.229",
+  "version": "v90.8.231",
   "encoding": "UTF-8",
-  "description": "Recraft-Alchemia 統合初期データ v90.8.229（倉庫・管理データの小カテゴリ／内部カテゴリ表示、食材独立タブ）",
+  "description": "Recraft-Alchemia 統合初期データ v90.8.231（データ内容はv90.8.229と同一／倉庫・管理一覧の検索配置改善）",
   "data": {
     "item_types": [
       {
