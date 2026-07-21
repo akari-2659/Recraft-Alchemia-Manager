@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.222</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.225</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1096,7 +1096,7 @@ body.modal-open{overflow:hidden!important}
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.222 / 最終更新日：2026年7月19日</div>
+<div class="ra-build-info">Version：v90.8.225 / 最終更新日：2026年7月21日</div>
 
 <header>
   <div class="title-card">
@@ -1198,6 +1198,7 @@ body.modal-open{overflow:hidden!important}
       <button class="subtab" data-main-tab="items">アイテム</button>
       <button class="subtab" data-main-tab="materials">素材</button>
       <button class="subtab" data-main-tab="recipes" data-recipe-view="調合">調合レシピ</button>
+      <button class="subtab" data-main-tab="recipes" data-recipe-view="料理">料理</button>
       <button class="subtab" data-main-tab="recipes" data-recipe-view="鍛冶">鍛冶レシピ</button>
       <button class="subtab" data-main-tab="recipes" data-recipe-view="細工">仕掛け製作</button>
       <button class="subtab" data-main-tab="recipes" data-recipe-view="武器派生">武器派生</button>
@@ -1676,7 +1677,7 @@ body.modal-open{overflow:hidden!important}
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.222';
+const RECRAFT_DB_VERSION = 'v90.8.225';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1779,6 +1780,7 @@ function saveGuildDailyState(){
 loadGuildDailyState();
 const RECIPE_VIEW_META = {
   '調合': {title:'調合レシピ', description:'薬品・爆弾・香など、薬屋/調合施設で作るアイテムを管理します。'},
+  '料理': {title:'料理', description:'食事処へ持ち込む食材、調理代、食事効果を管理します。'},
   '鍛冶': {title:'鍛冶レシピ', description:'装備や金属加工など、鍛冶屋で作る通常の鍛冶データを管理します。'},
   '細工': {title:'仕掛け製作', description:'戦闘中に使う消費型の罠と、細工道具を使う製作データを管理します。'},
   '武器派生': {title:'武器派生', description:'初期武器や基礎武器から素材で上位武器へ派生させるデータです。自作には対応レシピ、必要素材、道具、製作判定が必要です。施設依頼ではレシピ不要です。'},
@@ -2279,7 +2281,7 @@ const SYSTEM_HELP = [
     ],
     "body": [
       "レシピはDB上では1表で管理する。",
-      "管理HTML上では、調合レシピ、鍛冶レシピ、仕掛け製作、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。完成武器名は原則カタカナ表記とし、「素手」だけを例外とする。中黒は定着表記または意図的な語間にだけ使用し、武器ごとに個別の由来を持つ名称を設定する。管理HTMLとプレイヤー施設の武器派生は、武器カテゴリ別タブ→主素材の分類を象徴する短い名称の「○○派生」→系統内の段階で表示し、元武器は必要素材として扱う。草角・樹心・沼核・穿王・反照のボス素材派生は、素手を除く全17武器カテゴリへ必ず用意する。",
+      "管理HTML上では、調合レシピ、鍛冶レシピ、仕掛け製作、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。管理HTMLとプレイヤー施設の武器派生は、武器カテゴリ別タブ→主素材の分類を象徴する短い名称の「○○派生」→系統内の段階で表示し、元武器は必要素材として扱う。草角・樹心・沼核・穿王・反照のボス素材派生は、素手を除く全17武器カテゴリへ必ず用意する。",
       "各エリアボスには、ボス素材を使う防具または装飾品も必ず用意する。通常魔物素材の★2派生は横方向の選択肢として追加し、ボス派生の必須前提にはしない。",
       "武器派生の魔物素材要求量は、★2で合計1～2個、★3で合計2～3個を目安とする。既存の複合素材派生は維持してよい。",
       "★3以降は複数の魔物素材を要求してよいが、ボス固有素材は原則1個のままとし、大量周回を前提にしない。",
@@ -3482,6 +3484,7 @@ const FACILITY_SECTION_DEFS = {
     ['sales','販売商品'],['branches','武器派生'],['armor','防具製作'],['smith','鍛冶製作'],['traps','仕掛け製作'],['materials','素材加工'],['upgrade','装備強化'],['services','サービス']
   ],
   '薬屋':[['sales','販売商品'],['alchemy','調合'],['materials','素材加工'],['services','サービス']],
+  '食事処':[['meals','持ち込み料理'],['recommendations','今日のおすすめ'],['services','サービス']],
   '宿屋':[['services','サービス']],
   '骨董屋':[['sales','常設販売'],['random','未鑑定スクロール'],['appraisal','鑑定'],['transcribe','集中術式化'],['services','サービス']],
   'ギルド':[['important','重要クエスト'],['daily','デイリークエスト'],['services','サービス']]
@@ -3538,6 +3541,7 @@ function renderFacilityRecipeCard(row={}){
 function recipeSkillForCraftType(craftType=''){
   const type=String(craftType||'').trim();
   if(type==='調合') return '調合';
+  if(type==='料理') return 'なし';
   if(type==='細工') return '細工';
   return '鍛冶';
 }
@@ -4758,7 +4762,7 @@ function formOptionValues(key, field){
   }
   if(field==='equipSlot') ['なし','右手/左手','両手','鎧','装飾品','所持品'].forEach(v=>values.add(v));
   if(field==='skill') ['近接','射撃','魔法','祈祷','調合','採取','細工','防御','回避','操作','近接/魔法','射撃または調合'].forEach(v=>values.add(v));
-  if(field==='craftSkill') ['鍛冶','調合','細工'].forEach(v=>values.add(v));
+  if(field==='craftSkill') ['なし','鍛冶','調合','細工'].forEach(v=>values.add(v));
   if(field==='rank'){
     values.clear();
     if(['items','materials','recipes','spells'].includes(key)) knownToolRanks(...(state[baseKeyForTable(key)]||[]).map(r=>r.rank)).forEach(v=>values.add(String(v)));
@@ -4772,7 +4776,7 @@ function formOptionValues(key, field){
   if(field==='hasLock' || field==='hasTrap') ['なし','あり'].forEach(v=>values.add(v));
   if(field==='equipmentUpgradeTarget') ['武器','防具','盾','装飾品','魔導書','祈祷書','武器・防具','防具・盾','魔導書・祈祷書','武器・魔導書・祈祷書'].forEach(v=>values.add(v));
   if(field==='equipmentUpgradeEffect') ['なし','威力','命中補正','防御貫通','防御値','防御行動値','回避補正','術式枠','消費コスト軽減','回復量','物耐性付与','火耐性付与','水耐性付与','風耐性付与','雷耐性付与','光耐性付与','闇耐性付与','無耐性付与','特殊効果付与'].forEach(v=>values.add(v));
-  if(field==='craftType') ['調合','鍛冶','細工','武器派生','防具製作','バッグ製作','素材加工'].forEach(v=>values.add(v));
+  if(field==='craftType') ['調合','料理','鍛冶','細工','武器派生','防具製作','バッグ製作','素材加工'].forEach(v=>values.add(v));
   if(field==='baseItem') (state.items || []).forEach(r=>{ const type=String(r.itemType || '').trim(); const cat=String(r.itemCategory || '').trim(); if(String(r.dataKind || '').trim() !== '素材' && (type==='武器' || (type==='術式装備' && ['魔導書','祈祷書'].includes(cat))) && r.name) values.add(String(r.name)); });
   if(field==='branchType') (state.recipes||[]).forEach(r=>{ const v=String(r.branchType||'').trim(); if(v) values.add(v); });
   if(field==='resultKind') ['アイテム','素材','武器','術式装備','防具','バッグ','調合品'].forEach(v=>values.add(v));
