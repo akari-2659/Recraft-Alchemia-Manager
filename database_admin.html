@@ -2002,7 +2002,21 @@ function normalizeEncounterPlacementRow(key,row={}){
     row.encounterComposition=normalizeStoredEncounterComposition(row.encounterComposition);
   }
   if(key==='quests' && String(row.questBossComposition||'').trim()){
-    row.questBossComposition=normalizeStoredEncounterComposition(row.questBossComposition);
+    const formation=String(row.questBossFormation||'').trim();
+    let composition=String(row.questBossComposition||'').trim();
+    // 表示上「指定対象＋ランダム随伴」なのに固定編成として保存される事故を防ぐ。
+    if(formation.includes('ランダム随伴') && !composition.startsWith('指定対象＋ランダム随伴')){
+      const first=composition.split(/\n+|;|；/).map(v=>v.trim()).filter(Boolean)[0]||'';
+      const cols=first.split(/\t|,|，|、/).map(v=>String(v||'').trim()).filter(Boolean);
+      const target=cols[1]||String(row.bossMonster||'').split('/')[0].trim();
+      const count=Math.max(1,Number(cols[2])||1);
+      const area=cols[3]||String(row.areaName||'').trim();
+      if(target&&area) composition=`指定対象＋ランダム随伴,${target},${count},${area}`;
+    }else if(formation.includes('ランダム編成') && !composition.startsWith('ランダム編成')){
+      const area=String(row.areaName||'').trim();
+      if(area) composition=`ランダム編成,${area}`;
+    }
+    row.questBossComposition=normalizeStoredEncounterComposition(composition);
   }
   return row;
 }

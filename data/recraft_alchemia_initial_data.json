@@ -29276,7 +29276,7 @@
         "enabled": "TRUE",
         "questBossName": "畑荒らしの小型魔物",
         "questBossFormation": "ラピットホーン×1＋人数対応ランダム随伴",
-        "questBossComposition": "前衛,ラピットホーン,1,街はずれの草原"
+        "questBossComposition": "指定対象＋ランダム随伴,ラピットホーン,1,街はずれの草原"
       },
       {
         "id": "quest_daily_firewood",
@@ -29348,7 +29348,7 @@
         "enabled": "TRUE",
         "questBossName": "痕跡の主",
         "questBossFormation": "ルートハウンド×1＋人数対応ランダム随伴",
-        "questBossComposition": "前衛,ルートハウンド,1,近郊の森"
+        "questBossComposition": "指定対象＋ランダム随伴,ルートハウンド,1,近郊の森"
       },
       {
         "id": "quest_daily_stream_water",
