@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.225</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.229</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -669,6 +669,9 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip{
   padding:0!important;
   overflow:visible!important;
 }
+.record-static-subtabs{margin-top:7px!important;padding-top:7px!important;border-top:1px dashed #dfcbb2;}
+#recordInternalCategoryBlock .section-subtabs + .section-subtabs{margin-top:7px!important;padding-top:7px!important;border-top:1px dashed #dfcbb2;}
+#recordInternalCategoryBlock .section-subtabs:empty{display:none!important;}
 .section-subtabs>.subtab{
   width:auto!important;
   min-width:0!important;
@@ -1096,7 +1099,7 @@ body.modal-open{overflow:hidden!important}
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.225 / 最終更新日：2026年7月21日</div>
+<div class="ra-build-info">Version：v90.8.229 / 最終更新日：2026年7月21日</div>
 
 <header>
   <div class="title-card">
@@ -1194,8 +1197,8 @@ body.modal-open{overflow:hidden!important}
 
   <div class="tab-block subnav-block hidden" data-subnav-group="records">
     <div class="tab-label">小カテゴリ</div>
-    <div class="subtabs section-subtabs">
-      <button class="subtab" data-main-tab="items">アイテム</button>
+    <div class="subtabs section-subtabs" id="recordItemTypeTabs"></div>
+    <div class="subtabs section-subtabs record-static-subtabs">
       <button class="subtab" data-main-tab="materials">素材</button>
       <button class="subtab" data-main-tab="recipes" data-recipe-view="調合">調合レシピ</button>
       <button class="subtab" data-main-tab="recipes" data-recipe-view="料理">料理</button>
@@ -1207,6 +1210,12 @@ body.modal-open{overflow:hidden!important}
       <button class="subtab" data-main-tab="recipes" data-recipe-view="素材加工">素材加工</button>
       <button class="subtab" data-main-tab="spells">術式</button>
     </div>
+  </div>
+
+  <div class="tab-block subnav-block hidden" id="recordInternalCategoryBlock">
+    <div class="tab-label" id="recordInternalCategoryLabel">内部カテゴリ</div>
+    <div class="subtabs section-subtabs" id="recordMaterialTypeTabs"></div>
+    <div class="subtabs section-subtabs" id="recordInternalCategoryTabs"></div>
   </div>
 
   <div class="tab-block subnav-block hidden" data-subnav-group="adventure">
@@ -1322,28 +1331,29 @@ body.modal-open{overflow:hidden!important}
   </section>
 
   <section class="panel hidden" id="panel-items">
+    <div class="notice"><b id="itemViewTitle">武器</b><br><span id="itemViewDescription">選択した小カテゴリと内部カテゴリだけを表示します。</span></div>
     <div class="toolbar">
-      <div class="field"><label>名前検索</label><input id="filter-items" placeholder="武器・防具・調合品・効果などで絞り込み"></div>
-      <button class="secondary" data-add-kind="アイテム">アイテム新規登録</button>
+      <div class="field"><label>名前検索</label><input id="filter-items" placeholder="名称・カテゴリ・効果などで絞り込み"></div>
+      <button class="secondary" data-add-current-item-type id="itemViewAddButton">この小カテゴリで新規登録</button>
       <button class="ghost" data-reset="items">初期データに戻す</button>
-      <button class="ghost" data-load="items">この表だけDB読込</button>
-      <button data-save="items">この表だけDB登録</button>
-      <button class="danger" data-replace="items">この表だけDB置換</button>
+      <button class="ghost" data-load="items">アイテム全体をDB読込</button>
+      <button data-save="items">アイテム全体をDB登録</button>
+      <button class="danger" data-replace="items">アイテム全体をDB置換</button>
     </div>
-    <p class="table-toolbar-note">武器・防具・調合品・特殊矢弾・術式装備など、使用/装備するデータだけを表示します。素材は別タブに分離しました。</p>
+    <p class="table-toolbar-note">従来の「アイテム」一括タブは廃止しました。武器・防具・調合品・道具・収納具などを小カテゴリに分け、その中を片手武器・回復・バッグ／矢筒などの内部カテゴリで絞り込みます。食材は素材タブへ統合しています。DB上は従来どおり同じアイテム表を使用します。</p>
     <div class="table-wrap"><table id="table-items"></table></div>
   </section>
 
   <section class="panel hidden" id="panel-materials">
     <div class="toolbar">
       <div class="field"><label>名前検索</label><input id="filter-materials" placeholder="薬草・鉱石・魔物素材・用途タグなどで絞り込み"></div>
-      <button class="secondary" data-add-kind="素材">素材新規登録</button>
+      <button class="secondary" data-add-current-material id="materialViewAddButton">素材を新規登録</button>
       <button class="ghost" data-reset="items">初期データに戻す</button>
       <button class="ghost" data-load="materials">この表だけDB読込</button>
       <button data-save="materials">この表だけDB登録</button>
       <button class="danger" data-replace="materials">この表だけDB置換</button>
     </div>
-    <p class="table-toolbar-note">採取素材・魔物素材・加工素材・特殊素材など、レシピや報酬で増えやすい素材データだけを表示します。</p>
+    <p class="table-toolbar-note">食材・採取素材・魔物素材・加工素材・特殊素材をまとめて表示します。素材種別を選び、その内部カテゴリでさらに絞り込めます。</p>
     <div class="table-wrap"><table id="table-materials"></table></div>
   </section>
 
@@ -1677,7 +1687,7 @@ body.modal-open{overflow:hidden!important}
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.225';
+const RECRAFT_DB_VERSION = 'v90.8.229';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1733,11 +1743,15 @@ const FIELD_PLACEHOLDERS = {
 FIELD_PLACEHOLDERS.encounterFormation='1体なら前衛。2体以上も前衛を最低1体置きます。全員前衛は可、全員後衛は不可。';
 FIELD_PLACEHOLDERS.encounterComposition='例：前衛,ルートハウンド,1;後衛,マイコニド,1。人数確定後に前衛不在なら1体を前衛へ自動移動します。';
 const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','checkType','type','role','setItem','unlockAreaKey','unlockFacility','equipmentUpgradeEffect','equipmentUpgradeTarget','ammoUse','ammoKind','craftSkill','craftType','baseItem','branchType','enabled','hasLock','hasTrap','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','conditionType','conditionValue','treasureTableId','tableId','treasureRank','hasLock','hasTrap','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','facilityName','spellType','spellRank','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule']);
-let formState = { key:null, idx:null, mode:'new', defaultDataKind:'' };
+let formState = { key:null, idx:null, mode:'new', defaultDataKind:'', defaultItemType:'' };
 let quickCategoryDirty = false;
 let currentMainTab = 'categories';
 let currentCategoryTab = 'item_types';
 let currentRecipeView = '調合';
+let currentItemTypeView = '武器';
+let currentItemCategoryView = '全て';
+let currentMaterialTypeView = '全て';
+let currentMaterialCategoryView = '全て';
 let currentFacilityView = '鍛冶屋';
 const currentFacilitySectionByName = {
   '鍛冶屋':'sales','薬屋':'sales','宿屋':'services','骨董屋':'sales','ギルド':'important'
@@ -1796,8 +1810,8 @@ const ADVANCED_FILTERS = {
   material_categories: [{field:'materialType', label:'素材種別'},{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   material_ranks: [{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   equipment_categories: [{field:'itemCategory', label:'分類'},{field:'equipSlot', label:'装備/使用枠'},{field:'skill', label:'使用技能'},{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  items: [{field:'itemType', label:'アイテム種別'},{field:'csVisible', label:'キャラシ表示'},{field:'itemCategory', label:'アイテムカテゴリ'},{field:'rank', label:'ランク'},{field:'toolRank', label:'使用可能上限'},{field:'guaranteeUpgradeMaxRank', label:'強化確定上限'},{field:'equipSlot', label:'装備/使用枠'},{field:'skill', label:'使用技能'},{field:'unlockAreaKey', label:'必要解放エリア'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  materials: [{field:'materialType', label:'素材種別'},{field:'materialCategory', label:'素材カテゴリ'},{field:'rank', label:'ランク'},{field:'source', label:'入手先'},{field:'equipmentUpgradeEffect', label:'装備強化内容'},{field:'equipmentUpgradeTarget', label:'強化対象'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
+  items: [{field:'csVisible', label:'キャラシ表示'},{field:'rank', label:'ランク'},{field:'toolRank', label:'使用可能上限'},{field:'guaranteeUpgradeMaxRank', label:'強化確定上限'},{field:'equipSlot', label:'装備/使用枠'},{field:'skill', label:'使用技能'},{field:'unlockAreaKey', label:'必要解放エリア'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
+  materials: [{field:'rank', label:'ランク'},{field:'source', label:'入手先'},{field:'equipmentUpgradeEffect', label:'装備強化内容'},{field:'equipmentUpgradeTarget', label:'強化対象'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   recipes: [{field:'rank', label:'ランク'},{field:'craftType', label:'製作区分'},{field:'category', label:'分類'},{field:'baseItem', label:'派生元'},{field:'branchType', label:'派生名（代表素材系統）'},{field:'resultKind', label:'完成品種別'},{field:'difficulty', label:'難度'},{field:'unlockAreaKey', label:'必要解放エリア'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   spells: [{field:'type', label:'種別'},{field:'rank', label:'ランク'},{field:'role', label:'役割'},{field:'target', label:'対象'},{field:'setItem', label:'必要装備'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
   quest_rewards: [{field:'rank', label:'ランク'},{field:'scale', label:'規模'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
@@ -1940,7 +1954,7 @@ function isStructuredNumericSubRank(key,field){
     || (key==='items' && field==='guaranteeUpgradeMaxRank');
 }
 function isEquipmentItemRow(row={}){
-  return String(row.dataKind || 'アイテム').trim() !== '素材' && ['武器','防具','盾','装飾品','術式装備'].includes(String(row.itemType || '').trim());
+  return String(row.dataKind || 'アイテム').trim() !== '素材' && ['武器','防具','盾','装飾品'].includes(String(row.itemType || '').trim());
 }
 function equipmentUpgradeMinimumRank(row={}){
   const own=numericRankValueIncludingLegacyMaterialGrade(row.rank,1);
@@ -3061,11 +3075,95 @@ async function copyFacilitySalesList(facilityName=''){
   if(await copyAdminTextDirect(text)) toast(facilityName ? `${facilityName}の販売をコピーしました` : '全施設の販売商品をコピーしました');
 }
 
+const ADMIN_ITEM_TYPE_PREFERRED_ORDER = ['武器','防具','盾','装飾品','調合品','道具','特殊矢弾','収納具','スクロール','換金品','その他'];
+function adminBroadItemType(row={}){
+  const type=String(row.itemType||'').trim();
+  if(type==='バッグ'||type==='矢筒') return '収納具';
+  if(type==='術式装備') return ['魔導書','祈祷書'].includes(String(row.itemCategory||'').trim()) ? '武器' : 'スクロール';
+  return type;
+}
+function adminItemInternalCategory(row={}, view=currentItemTypeView){
+  if(view==='収納具') return String(row.itemType||'').trim() || '収納具';
+  return String(row.itemCategory||'').trim() || '未分類';
+}
+function adminAllItemTypes(){
+  const names = new Set();
+  (state.item_types || []).filter(r=>String(r.enabled ?? 'TRUE') !== 'FALSE').forEach(r=>{ const n=String(r.name||'').trim(); if(n && !['術式装備','バッグ','矢筒','食材'].includes(n)) names.add(n); });
+  (state.items || []).filter(r=>String(r.dataKind||'アイテム').trim()!=='素材' && String(r.itemType||'').trim()!=='食材').forEach(r=>{ const n=adminBroadItemType(r); if(n) names.add(n); });
+  if((state.items||[]).some(r=>['バッグ','矢筒'].includes(String(r.itemType||'').trim()))) names.add('収納具');
+  const ordered=ADMIN_ITEM_TYPE_PREFERRED_ORDER.filter(v=>names.has(v));
+  [...names].filter(v=>!ordered.includes(v)).sort((a,b)=>a.localeCompare(b,'ja',{numeric:true})).forEach(v=>ordered.push(v));
+  return ordered;
+}
+function adminItemCategories(itemType=currentItemTypeView){
+  const names=new Set();
+  if(itemType==='収納具'){
+    (state.items||[]).filter(r=>String(r.dataKind||'アイテム').trim()!=='素材' && ['バッグ','矢筒'].includes(String(r.itemType||'').trim())).forEach(r=>names.add(String(r.itemType).trim()));
+  }else{
+    (state.item_categories||[]).filter(r=>String(r.itemType||'').trim()===itemType && String(r.enabled??'TRUE')!=='FALSE').forEach(r=>{const n=String(r.name||'').trim();if(n)names.add(n);});
+    (state.items||[]).filter(r=>String(r.dataKind||'アイテム').trim()!=='素材' && String(r.itemType||'').trim()!=='食材' && adminBroadItemType(r)===itemType).forEach(r=>{const n=adminItemInternalCategory(r,itemType);if(n)names.add(n);});
+  }
+  return [...names].sort((a,b)=>a.localeCompare(b,'ja',{numeric:true}));
+}
+function adminMaterialTypes(){
+  const names=new Set(['食材']);
+  (state.material_types||[]).filter(r=>String(r.enabled??'TRUE')!=='FALSE').forEach(r=>{const n=String(r.name||'').trim();if(n)names.add(n);});
+  (state.items||[]).filter(r=>String(r.dataKind||'').trim()==='素材').forEach(r=>{const n=String(r.materialType||'').trim();if(n)names.add(n);});
+  return [...names].sort((a,b)=>a.localeCompare(b,'ja',{numeric:true}));
+}
+function adminMaterialCategories(materialType=currentMaterialTypeView){
+  const names=new Set();
+  if(materialType==='食材'){
+    (state.items||[]).filter(r=>String(r.dataKind||'アイテム').trim()!=='素材' && String(r.itemType||'').trim()==='食材').forEach(r=>{const n=String(r.itemCategory||'').trim();if(n)names.add(n);});
+  }else{
+    (state.material_categories||[]).filter(r=>(materialType==='全て'||String(r.materialType||'').trim()===materialType) && String(r.enabled??'TRUE')!=='FALSE').forEach(r=>{const n=String(r.name||'').trim();if(n)names.add(n);});
+    (state.items||[]).filter(r=>String(r.dataKind||'').trim()==='素材' && (materialType==='全て'||String(r.materialType||'').trim()===materialType)).forEach(r=>{const n=String(r.materialCategory||'').trim();if(n)names.add(n);});
+    if(materialType==='全て') (state.items||[]).filter(r=>String(r.itemType||'').trim()==='食材').forEach(r=>{const n=String(r.itemCategory||'').trim();if(n)names.add(n);});
+  }
+  return [...names].sort((a,b)=>a.localeCompare(b,'ja',{numeric:true}));
+}
+function renderRecordItemTypeTabs(){
+  const area=$('recordItemTypeTabs'); if(!area)return;
+  const types=adminAllItemTypes();
+  if(!types.includes(currentItemTypeView)) currentItemTypeView=types[0]||'武器';
+  area.innerHTML=types.map(v=>`<button class="subtab ${currentMainTab==='items'&&currentItemTypeView===v?'active':''}" data-main-tab="items" data-item-type-view="${escapeHtml(v)}">${escapeHtml(v)}</button>`).join('');
+}
+function renderRecordInternalCategoryTabs(){
+  const block=$('recordInternalCategoryBlock');
+  const typeArea=$('recordMaterialTypeTabs');
+  const categoryArea=$('recordInternalCategoryTabs');
+  const label=$('recordInternalCategoryLabel');
+  if(!block||!typeArea||!categoryArea)return;
+  const isItems=currentMainTab==='items';
+  const isMaterials=currentMainTab==='materials';
+  block.classList.toggle('hidden', !(isItems||isMaterials));
+  if(!(isItems||isMaterials)) return;
+  if(isItems){
+    typeArea.innerHTML='';
+    const categories=adminItemCategories(currentItemTypeView);
+    if(currentItemCategoryView!=='全て'&&!categories.includes(currentItemCategoryView))currentItemCategoryView='全て';
+    label.textContent=`${currentItemTypeView}の内部カテゴリ`;
+    categoryArea.innerHTML=['全て',...categories].map(v=>`<button class="subtab ${currentItemCategoryView===v?'active':''}" data-record-item-category="${escapeHtml(v)}">${escapeHtml(v)}</button>`).join('');
+  }else{
+    const types=adminMaterialTypes();
+    if(currentMaterialTypeView!=='全て'&&!types.includes(currentMaterialTypeView))currentMaterialTypeView='全て';
+    const categories=adminMaterialCategories(currentMaterialTypeView);
+    if(currentMaterialCategoryView!=='全て'&&!categories.includes(currentMaterialCategoryView))currentMaterialCategoryView='全て';
+    label.textContent='素材種別・素材カテゴリ';
+    typeArea.innerHTML=['全て',...types].map(v=>`<button class="subtab ${currentMaterialTypeView===v?'active':''}" data-record-material-type="${escapeHtml(v)}">${escapeHtml(v)}</button>`).join('');
+    categoryArea.innerHTML=['全て',...categories].map(v=>`<button class="subtab ${currentMaterialCategoryView===v?'active':''}" data-record-material-category="${escapeHtml(v)}">${escapeHtml(v)}</button>`).join('');
+  }
+}
+function updateItemViewUi(){
+  const title=$('itemViewTitle'); if(title) title.textContent=currentItemTypeView||'未分類';
+  const desc=$('itemViewDescription'); if(desc) desc.textContent=currentItemCategoryView==='全て' ? `${currentItemTypeView}をすべて表示しています。` : `${currentItemTypeView} / ${currentItemCategoryView}だけを表示しています。`;
+  const add=$('itemViewAddButton'); if(add) add.textContent=`${currentItemTypeView}を新規登録`;
+}
 function updateCounts(){
   const it=state.item_types.length, ic=state.item_categories.length, mt=state.material_types.length, mc=state.material_categories.length, mr=state.material_ranks.length;
   const ec=state.equipment_categories.length;
-  const itemCount=state.items.filter(r=>String(r.dataKind||'アイテム').trim()!=='素材').length;
-  const materialCount=state.items.filter(r=>String(r.dataKind||'').trim()==='素材').length;
+  const itemCount=state.items.filter(r=>String(r.dataKind||'アイテム').trim()!=='素材' && String(r.itemType||'').trim()!=='食材').length;
+  const materialCount=state.items.filter(r=>String(r.dataKind||'').trim()==='素材' || String(r.itemType||'').trim()==='食材').length;
   const rc=(state.recipes||[]).length, sp=state.spells.length, qr=state.quest_rewards.length;
   const q=(state.quests||[]).length, ar=(state.exploration_areas||[]).length, ev=(state.event_tables||[]).length, mo=(state.monsters||[]).length;
   $('countItemTypes').textContent=it; $('countItemCategories').textContent=ic; $('countMaterialTypes').textContent=mt; $('countMaterialCategories').textContent=mc; if($('countMaterialRanks')) $('countMaterialRanks').textContent=mr;
@@ -3073,7 +3171,7 @@ function updateCounts(){
   if($('countQuests')) $('countQuests').textContent=q; if($('countAreas')) $('countAreas').textContent=ar; if($('countEvents')) $('countEvents').textContent=ev; if($('countMonsters')) $('countMonsters').textContent=mo;
   $('countTotal').textContent=it+ic+mt+mc+mr+ec+itemCount+materialCount+rc+sp+qr+q+ar+ev+mo;
 }
-function renderAll(){ DATA_KEYS.forEach(key=>{ if(key!=='items') renderTable(key); }); renderTable('items'); renderTable('materials'); renderFacilitiesPanel(); renderHelpPanel(); updateCounts(); updateJsonBox(); }
+function renderAll(){ renderRecordItemTypeTabs(); DATA_KEYS.forEach(key=>{ if(key!=='items') renderTable(key); }); renderTable('items'); renderTable('materials'); renderRecordInternalCategoryTabs(); updateItemViewUi(); updateMaterialViewUi(); renderFacilitiesPanel(); renderHelpPanel(); updateCounts(); updateJsonBox(); }
 function normalizeCellValue(v){ return String(v ?? '').trim(); }
 function compareValues(a,b){
   const av=normalizeCellValue(a), bv=normalizeCellValue(b);
@@ -3091,11 +3189,21 @@ function indexedRowsForTable(key){
   return (state[base]||[]).map((row,idx)=>({row,idx})).filter(({row})=>{
     if(!want) return true;
     const kind=String(row.dataKind||'アイテム').trim() || 'アイテム';
-    return want==='素材' ? kind==='素材' : kind!=='素材';
+    if(want==='素材'){
+      const isMaterial=kind==='素材';
+      const isFood=kind!=='素材' && String(row.itemType||'').trim()==='食材';
+      if(!isMaterial && !isFood) return false;
+      if(currentMaterialTypeView==='食材') return isFood;
+      if(currentMaterialTypeView!=='全て') return isMaterial && String(row.materialType||'').trim()===currentMaterialTypeView;
+      return true;
+    }
+    if(kind==='素材' || String(row.itemType||'').trim()==='食材') return false;
+    if(currentItemTypeView && adminBroadItemType(row)!==currentItemTypeView) return false;
+    return true;
   });
 }
 function rerenderTableGroup(key){
-  if(baseKeyForTable(key)==='items'){ renderTable('items'); renderTable('materials'); renderFacilitiesPanel(); }
+  if(baseKeyForTable(key)==='items'){ renderRecordItemTypeTabs(); renderTable('items'); renderTable('materials'); renderRecordInternalCategoryTabs(); updateItemViewUi(); updateMaterialViewUi(); renderFacilitiesPanel(); }
   else renderTable(key);
 }
 function uniqueOptions(key, field){
@@ -3122,7 +3230,7 @@ function warehouseKindForRow(row={}, key=''){
   if(['防具','盾','装飾品'].includes(itemType)) return itemType;
   if(itemType === 'バッグ') return 'バッグ';
   if(itemType === '矢筒') return '矢筒';
-  if(itemType === '術式装備') return '術式';
+  if(itemType === '術式装備') return ['魔導書','祈祷書'].includes(String(row.itemCategory||'')) ? '武器' : 'スクロール';
   if(itemType === '調合品' || itemType === '道具' || itemType === '特殊矢弾') return 'アイテム';
   return dataKind || itemType || 'アイテム';
 }
@@ -3616,7 +3724,7 @@ function renderFacilityWeaponBranches(rows=[]){
 function facilityRecipeCategoryLabel(row={}){
   const item=facilityItemByName(row.resultItem||row.name||'')||{};
   const type=String(item.itemType||row.itemType||'').trim(), cat=String(item.itemCategory||row.category||'').trim();
-  if(type==='武器'||type==='術式装備')return '武器・術式装備';
+  if(type==='武器'||type==='術式装備')return '武器';
   if(type==='防具'||type==='盾')return '防具・盾';
   if(type==='装飾品')return '装飾品';
   if(type==='バッグ'||type==='矢筒')return 'バッグ・矢筒';
@@ -3897,7 +4005,7 @@ function facilityUpgradeEquipmentRows(){
     if(Number(r.upgradeLimit||0)<=0) return false;
     const itemType=String(r.itemType||'').trim();
     const itemCategory=String(r.itemCategory||'').trim();
-    if(type==='魔導書'||type==='祈祷書') return itemType==='術式装備' && itemCategory===type;
+    if(type==='魔導書'||type==='祈祷書') return (itemType==='武器'||itemType==='術式装備') && itemCategory===type;
     return itemType===type;
   });
 }
@@ -4520,7 +4628,9 @@ function renderRecordCardsTable(key){
   let rows=totalRows.filter(({row})=>{
     const textOk=!filter || JSON.stringify(row).toLowerCase().includes(filter);
     const recipeOk = key !== 'recipes' || rowMatchesRecipeView(row);
-    return textOk && recipeOk && rowMatchesAdvancedFilters(key,row);
+    const itemCategoryOk = key!=='items' || currentItemCategoryView==='全て' || adminItemInternalCategory(row,currentItemTypeView)===currentItemCategoryView;
+    const materialCategoryOk = key!=='materials' || currentMaterialCategoryView==='全て' || (String(row.itemType||'').trim()==='食材' ? String(row.itemCategory||'').trim() : String(row.materialCategory||'').trim())===currentMaterialCategoryView;
+    return textOk && recipeOk && itemCategoryOk && materialCategoryOk && rowMatchesAdvancedFilters(key,row);
   });
   const {sortField, sortDir}=tableUiState[key];
   if(sortField){
@@ -4596,6 +4706,16 @@ function newBlankRow(key){
 }
 function addRow(key){ openForm(key, null, 'new'); }
 function addRowWithKind(kind){ openForm('items', null, 'new', kind); }
+function addCurrentItemType(){ const type=currentItemTypeView==='収納具' ? (['バッグ','矢筒'].includes(currentItemCategoryView)?currentItemCategoryView:'バッグ') : currentItemTypeView; openForm('items', null, 'new', 'アイテム', type); }
+function updateMaterialViewUi(){
+  const add=$('materialViewAddButton');
+  if(add) add.textContent=currentMaterialTypeView==='食材' ? '食材を新規登録' : '素材を新規登録';
+}
+function addCurrentMaterial(){
+  if(currentMaterialTypeView==='食材') openForm('items', null, 'new', 'アイテム', '食材');
+  else openForm('items', null, 'new', '素材', '');
+}
+
 function addRecipeWithCraft(craftType){
   currentRecipeView = craftType || activeRecipeCraftType();
   openForm('recipes', null, 'new', currentRecipeView);
@@ -4777,9 +4897,9 @@ function formOptionValues(key, field){
   if(field==='equipmentUpgradeTarget') ['武器','防具','盾','装飾品','魔導書','祈祷書','武器・防具','防具・盾','魔導書・祈祷書','武器・魔導書・祈祷書'].forEach(v=>values.add(v));
   if(field==='equipmentUpgradeEffect') ['なし','威力','命中補正','防御貫通','防御値','防御行動値','回避補正','術式枠','消費コスト軽減','回復量','物耐性付与','火耐性付与','水耐性付与','風耐性付与','雷耐性付与','光耐性付与','闇耐性付与','無耐性付与','特殊効果付与'].forEach(v=>values.add(v));
   if(field==='craftType') ['調合','料理','鍛冶','細工','武器派生','防具製作','バッグ製作','素材加工'].forEach(v=>values.add(v));
-  if(field==='baseItem') (state.items || []).forEach(r=>{ const type=String(r.itemType || '').trim(); const cat=String(r.itemCategory || '').trim(); if(String(r.dataKind || '').trim() !== '素材' && (type==='武器' || (type==='術式装備' && ['魔導書','祈祷書'].includes(cat))) && r.name) values.add(String(r.name)); });
+  if(field==='baseItem') (state.items || []).forEach(r=>{ const type=String(r.itemType || '').trim(); const cat=String(r.itemCategory || '').trim(); if(String(r.dataKind || '').trim() !== '素材' && ((type==='武器' && ['魔導書','祈祷書'].includes(cat)) || type==='武器' || (type==='術式装備' && ['魔導書','祈祷書'].includes(cat))) && r.name) values.add(String(r.name)); });
   if(field==='branchType') (state.recipes||[]).forEach(r=>{ const v=String(r.branchType||'').trim(); if(v) values.add(v); });
-  if(field==='resultKind') ['アイテム','素材','武器','術式装備','防具','バッグ','調合品'].forEach(v=>values.add(v));
+  if(field==='resultKind') ['アイテム','素材','武器','防具','バッグ','矢筒','調合品','食材','スクロール'].forEach(v=>values.add(v));
   if(['physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity'].includes(field)) ['-','耐','無','反','吸','弱'].forEach(v=>values.add(v));
   if(field==='pullRule') ['可','不可'].forEach(v=>values.add(v));
   if(field==='scale') ['1PCあたり','パーティ全体','小規模','標準','大規模','高難度'].forEach(v=>values.add(v));
@@ -5482,6 +5602,7 @@ function currentFormRowSnapshot(){
   syncAllModifierEditors();
   const row = formState.key ? (formState.idx===null ? newBlankRow(formState.key) : {...state[formState.key][formState.idx]}) : {};
   if(formState.key==='items' && !row.dataKind) row.dataKind = formState.defaultDataKind || 'アイテム';
+  if(formState.key==='items' && row.dataKind!=='素材' && !row.itemType) row.itemType = formState.defaultItemType || currentItemTypeView || '';
   $('editModal')?.querySelectorAll('[data-form-field]').forEach(el=>{ row[el.dataset.formField]=el.value ?? ''; });
   return row;
 }
@@ -5494,6 +5615,12 @@ function itemFormFields(row){
   if(itemType === '道具') return ['itemType','itemCategory','name','publicId','csVisible','price','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','maxStack','description','effect','unlockAreaKey','unlockFacility','tags','notes'];
   if(itemType === 'バッグ'){
     return ['itemType','itemCategory','name','publicId','csVisible','price','rank','bagCapacity','description','effect','unlockAreaKey','unlockFacility','tags','notes'];
+  }
+  if(itemType === '矢筒'){
+    return ['itemType','itemCategory','name','publicId','csVisible','price','rank','quiverCapacity','description','effect','unlockAreaKey','unlockFacility','tags','notes'];
+  }
+  if(itemType === '食材'){
+    return ['itemType','itemCategory','name','publicId','csVisible','price','rank','maxStack','description','effect','unlockAreaKey','unlockFacility','tags','notes'];
   }
   return ['itemType','itemCategory','name','publicId','csVisible','price','rank','equipSlot','skill','power','maxStack','offhandBonus','reloadTurns','spellSlots','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect','unlockAreaKey','unlockFacility','tags','notes'];
 }
@@ -5514,11 +5641,12 @@ function formFieldsFor(key,row){
   const hiddenButEditable = ['id','ownerKey','createdBy','updatedAt'].filter(f=>SCHEMA[key].includes(f));
   return [...new Set([...hiddenButEditable, ...primary, ...SCHEMA[key].filter(f=>!hiddenButEditable.includes(f) && !primary.includes(f))])];
 }
-function openForm(key, idx=null, mode='new', defaultDataKind=''){
-  formState={key,idx,mode,defaultDataKind};
+function openForm(key, idx=null, mode='new', defaultDataKind='', defaultItemType=''){
+  formState={key,idx,mode,defaultDataKind,defaultItemType};
   const row = idx===null ? newBlankRow(key) : {...state[key][idx]};
   if(key==='recipes' && idx===null && defaultDataKind){ row.craftType = defaultDataKind; }
   if(key==='items' && !row.dataKind) row.dataKind = defaultDataKind || 'アイテム';
+  if(key==='items' && row.dataKind !== '素材' && !String(row.itemType || '').trim()) row.itemType = defaultItemType || currentItemTypeView || '';
   if(key==='items' && row.dataKind !== '素材' && !String(row.csVisible || '').trim()) row.csVisible = 'TRUE';
   if(!row.ownerKey) row.ownerKey=currentAdminKey();
   if(!row.createdBy) row.createdBy=currentCreatedBy();
@@ -5543,7 +5671,7 @@ function openForm(key, idx=null, mode='new', defaultDataKind=''){
 }
 function rerenderCurrentForm(){
   const snap=currentFormRowSnapshot();
-  openForm(formState.key, formState.idx, formState.mode, snap.dataKind || formState.defaultDataKind || '');
+  openForm(formState.key, formState.idx, formState.mode, snap.dataKind || formState.defaultDataKind || '', snap.itemType || formState.defaultItemType || '');
   $('editModal')?.querySelectorAll('[data-form-field]').forEach(el=>{ if(snap[el.dataset.formField] !== undefined) el.value = snap[el.dataset.formField]; });
 }
 function closeForm(){
@@ -6604,7 +6732,7 @@ async function loadAll(){
     renderAll(); toast('DBから分割読み込みしました');
   }catch(e){toast(e.message,'error')}
 }
-function labelKey(key){return {item_types:'アイテム種別',item_categories:'アイテムカテゴリ',material_types:'素材種別',material_categories:'素材カテゴリ',material_ranks:'素材ランク',equipment_categories:'装備カテゴリ',items:'アイテム',materials:'素材',recipes:'レシピ',spells:'術式',quest_rewards:'依頼報酬', quests:'クエスト', exploration_areas:'探索エリア', event_tables:'イベント表', treasure_tables:'宝箱表', appraisal_rules:'鑑定ルール', monsters:'魔物'}[key]||key}
+function labelKey(key){ if(key==='items') return currentItemTypeView || '登録データ'; return {item_types:'アイテム種別',item_categories:'アイテムカテゴリ',material_types:'素材種別',material_categories:'素材カテゴリ',material_ranks:'素材ランク',equipment_categories:'装備カテゴリ',materials:'素材',recipes:'レシピ',spells:'術式',quest_rewards:'依頼報酬', quests:'クエスト', exploration_areas:'探索エリア', event_tables:'イベント表', treasure_tables:'宝箱表', appraisal_rules:'鑑定ルール', monsters:'魔物'}[key]||key}
 function downloadJson(){
   const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
@@ -6613,6 +6741,7 @@ function downloadJson(){
 function setGroupActive(group){
   document.querySelectorAll('[data-tab-group]').forEach(b=>b.classList.toggle('active',b.dataset.tabGroup===group));
   document.querySelectorAll('[data-subnav-group]').forEach(n=>n.classList.toggle('hidden',n.dataset.subnavGroup!==group));
+  if(group!=='records') $('recordInternalCategoryBlock')?.classList.add('hidden');
 }
 function showPanel(key){
   currentMainTab=key;
@@ -6623,11 +6752,16 @@ function showPanel(key){
       ? b.dataset.recipeView === activeRecipeCraftType()
       : key === 'facilities' && b.dataset.mainTab === 'facilities' && b.dataset.facilityView !== undefined
         ? b.dataset.facilityView === currentFacilityView
-        : b.dataset.mainTab === key;
+        : key === 'items' && b.dataset.mainTab === 'items' && b.dataset.itemTypeView !== undefined
+          ? b.dataset.itemTypeView === currentItemTypeView
+          : b.dataset.mainTab === key;
     b.classList.toggle('active', isActive);
   });
   if (group !== 'categories') document.querySelectorAll('[data-category-subtab]').forEach(b=>b.classList.remove('active'));
   MAIN_PANELS.forEach(k=>$('panel-'+k).classList.toggle('hidden',k!==key));
+  renderRecordItemTypeTabs();
+  renderRecordInternalCategoryTabs();
+  if(key==='items') updateItemViewUi();
 }
 function showCategorySubpanel(key){
   setGroupActive('categories');
@@ -6723,6 +6857,7 @@ document.addEventListener('click',e=>{
   if(mainTab){
     const key=mainTab.dataset.mainTab;
     if(mainTab.dataset.recipeView !== undefined) currentRecipeView = mainTab.dataset.recipeView || '調合';
+    if(mainTab.dataset.itemTypeView !== undefined){ currentItemTypeView = mainTab.dataset.itemTypeView || currentItemTypeView; currentItemCategoryView='全て'; }
     if(mainTab.dataset.facilityView !== undefined) currentFacilityView = mainTab.dataset.facilityView || '鍛冶屋';
     setGroupActive(inferGroupFromPanel(key));
     showPanel(key);
@@ -6735,6 +6870,11 @@ document.addEventListener('click',e=>{
     setGroupActive('categories');
     showCategorySubpanel(catTab.dataset.categorySubtab);
   }
+  const recordItemCategory=e.target.closest('[data-record-item-category]'); if(recordItemCategory){ currentItemCategoryView=recordItemCategory.dataset.recordItemCategory||'全て'; renderRecordInternalCategoryTabs(); updateItemViewUi(); renderTable('items'); return; }
+  const recordMaterialType=e.target.closest('[data-record-material-type]'); if(recordMaterialType){ currentMaterialTypeView=recordMaterialType.dataset.recordMaterialType||'全て'; currentMaterialCategoryView='全て'; renderRecordInternalCategoryTabs(); updateMaterialViewUi(); renderTable('materials'); return; }
+  const recordMaterialCategory=e.target.closest('[data-record-material-category]'); if(recordMaterialCategory){ currentMaterialCategoryView=recordMaterialCategory.dataset.recordMaterialCategory||'全て'; renderRecordInternalCategoryTabs(); renderTable('materials'); return; }
+  const addCurrentType=e.target.closest('[data-add-current-item-type]'); if(addCurrentType){ addCurrentItemType(); return; }
+  const addCurrentMaterialBtn=e.target.closest('[data-add-current-material]'); if(addCurrentMaterialBtn){ addCurrentMaterial(); return; }
   const copyUnlockKey=e.target.closest('[data-copy-unlock-key]'); if(copyUnlockKey){ copyExplorationUnlockKey(copyUnlockKey.dataset.copyUnlockKey); return; }
   const copyFormUnlock=e.target.closest('[data-copy-form-unlock-key]'); if(copyFormUnlock){ copyFormExplorationUnlockKey(); return; }
   const generateFormUnlock=e.target.closest('[data-generate-form-unlock-key]'); if(generateFormUnlock){ generateFormExplorationUnlockKey(); return; }
@@ -6896,7 +7036,7 @@ document.addEventListener('click', (ev) => {
     document.querySelectorAll('.panel .toolbar').forEach(toolbar => {
       if (toolbar.dataset.raLayoutReady === '1') return;
       const buttons = directChildren(toolbar, 'button');
-      const isRecordToolbar = buttons.some(btn => btn.matches('[data-add],[data-add-kind],[data-add-recipe-craft],[data-reset],[data-load],[data-save],[data-replace]'));
+      const isRecordToolbar = buttons.some(btn => btn.matches('[data-add],[data-add-kind],[data-add-current-item-type],[data-add-recipe-craft],[data-reset],[data-load],[data-save],[data-replace]'));
       if (!isRecordToolbar) return;
       const fields = directChildren(toolbar, '.field');
       const searchRow = document.createElement('div');
