@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.231</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.238</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1103,7 +1103,7 @@ body.modal-open{overflow:hidden!important}
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.231 / 最終更新日：2026年7月21日</div>
+<div class="ra-build-info">Version：v90.8.238 / 最終更新日：2026年7月22日</div>
 
 <header>
   <div class="title-card">
@@ -1691,7 +1691,7 @@ body.modal-open{overflow:hidden!important}
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.231';
+const RECRAFT_DB_VERSION = 'v90.8.238';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -3094,6 +3094,7 @@ async function copyFacilitySalesList(facilityName=''){
 }
 
 const ADMIN_ITEM_TYPE_PREFERRED_ORDER = ['武器','防具','盾','装飾品','調合品','道具','特殊矢弾','収納具','スクロール','換金品','その他'];
+const ADMIN_MATERIAL_TYPE_PREFERRED_ORDER = ['食材','魔物素材','採取素材','加工素材','特殊素材'];
 function adminBroadItemType(row={}){
   const type=String(row.itemType||'').trim();
   if(type==='バッグ'||type==='矢筒') return '収納具';
@@ -3127,7 +3128,9 @@ function adminMaterialTypes(){
   const names=new Set(['食材']);
   (state.material_types||[]).filter(r=>String(r.enabled??'TRUE')!=='FALSE').forEach(r=>{const n=String(r.name||'').trim();if(n)names.add(n);});
   (state.items||[]).filter(r=>String(r.dataKind||'').trim()==='素材').forEach(r=>{const n=String(r.materialType||'').trim();if(n)names.add(n);});
-  return [...names].sort((a,b)=>a.localeCompare(b,'ja',{numeric:true}));
+  const ordered=ADMIN_MATERIAL_TYPE_PREFERRED_ORDER.filter(v=>names.has(v));
+  [...names].filter(v=>!ordered.includes(v)).sort((a,b)=>a.localeCompare(b,'ja',{numeric:true})).forEach(v=>ordered.push(v));
+  return ordered;
 }
 function adminMaterialCategories(materialType=currentMaterialTypeView){
   const names=new Set();
@@ -3158,6 +3161,7 @@ function renderRecordInternalCategoryTabs(){
   if(!(isItems||isMaterials)) return;
   if(isItems){
     typeArea.innerHTML='';
+    categoryArea.classList.remove('hidden');
     const categories=adminItemCategories(currentItemTypeView);
     if(currentItemCategoryView!=='全て'&&!categories.includes(currentItemCategoryView))currentItemCategoryView='全て';
     label.textContent=`${currentItemTypeView}の内部カテゴリ`;
@@ -3165,11 +3169,11 @@ function renderRecordInternalCategoryTabs(){
   }else{
     const types=adminMaterialTypes();
     if(currentMaterialTypeView!=='全て'&&!types.includes(currentMaterialTypeView))currentMaterialTypeView='全て';
-    const categories=adminMaterialCategories(currentMaterialTypeView);
-    if(currentMaterialCategoryView!=='全て'&&!categories.includes(currentMaterialCategoryView))currentMaterialCategoryView='全て';
-    label.textContent='素材種別・素材カテゴリ';
+    currentMaterialCategoryView='全て';
+    label.textContent='素材種別';
     typeArea.innerHTML=['全て',...types].map(v=>`<button class="subtab ${currentMaterialTypeView===v?'active':''}" data-record-material-type="${escapeHtml(v)}">${escapeHtml(v)}</button>`).join('');
-    categoryArea.innerHTML=['全て',...categories].map(v=>`<button class="subtab ${currentMaterialCategoryView===v?'active':''}" data-record-material-category="${escapeHtml(v)}">${escapeHtml(v)}</button>`).join('');
+    categoryArea.innerHTML='';
+    categoryArea.classList.add('hidden');
   }
 }
 function updateItemViewUi(){
@@ -5729,6 +5733,32 @@ function ensurePlayerFacingPublicId(key,row){
   row.publicId=pid;
   return row;
 }
+function assertItemClassificationRows(rows=[]){
+  const invalid=[];
+  for(const row of rows || []){
+    const name=String(row.name || row.id || '名称未設定');
+    const dataKind=String(row.dataKind || 'アイテム').trim() || 'アイテム';
+    const itemType=String(row.itemType || '').trim();
+    const materialType=String(row.materialType || '').trim();
+    if(dataKind==='素材'){
+      if(!materialType) invalid.push(`・${name}：素材種別が未設定`);
+      if(itemType) invalid.push(`・${name}：素材なのにアイテム種別「${itemType}」が設定されています`);
+    }else{
+      if(!itemType) invalid.push(`・${name}：アイテム種別が未設定`);
+      if(materialType) invalid.push(`・${name}：アイテムなのに素材種別「${materialType}」が設定されています`);
+    }
+  }
+  if(invalid.length) throw new Error(`アイテム／素材の分類に不整合があります。\n${invalid.slice(0,15).join('\n')}${invalid.length>15?`\nほか${invalid.length-15}件`:''}`);
+}
+function assertWeaponKatakanaNames(rows=[]){
+  const invalid=(rows || []).filter(row=>String(row.dataKind || 'アイテム').trim()!=='素材' && String(row.itemType || '').trim()==='武器').filter(row=>{
+    const name=String(row.name || '').trim();
+    return name!=='素手' && !/^[ァ-ヶー]+$/.test(name);
+  });
+  if(!invalid.length) return;
+  const details=invalid.slice(0,15).map(row=>`・${String(row.name || row.id || '名称未設定')}`).join('\n');
+  throw new Error(`武器名は「素手」を除き、記号を含まないカタカナ名で登録してください。\n${details}${invalid.length>15?`\nほか${invalid.length-15}件`:''}`);
+}
 function monsterMaterialUpgradeMissingFields(row={}){
   const isMonsterMaterial = String(row.dataKind || '').trim()==='素材' && String(row.materialType || '').trim()==='魔物素材';
   if(!isMonsterMaterial) return [];
@@ -5859,7 +5889,7 @@ function collectFormRow(){
   }
   const clean = {};
   (SCHEMA[key]||[]).forEach(field=>clean[field]=base[field] === undefined || base[field] === null ? '' : base[field]);
-  if(key==='items'){ assertNumericRankRows('items',[clean]); assertEquipmentUpgradeMinimumRows([clean]); assertMonsterMaterialUpgradeRows([clean]); assertMonsterMaterialDescriptionRows([clean]); }
+  if(key==='items'){ assertNumericRankRows('items',[clean]); assertItemClassificationRows([clean]); assertWeaponKatakanaNames([clean]); assertEquipmentUpgradeMinimumRows([clean]); assertMonsterMaterialUpgradeRows([clean]); assertMonsterMaterialDescriptionRows([clean]); }
   if(key==='material_ranks') assertNumericRankRows('material_ranks',[clean]);
   if(key==='spells') assertNumericRankRows('spells',[clean]);
   if(key==='recipes'){ assertNumericRankRows('recipes',[clean]); assertWeaponBranchMaterialRows([clean]); }
@@ -6525,7 +6555,7 @@ function rowsForTableForSave(tableKey){
 }
 function cloneRowsForSave(baseKey, rows){
   if(['items','recipes','spells','material_ranks','quest_rewards','quests','treasure_tables','monsters'].includes(baseKey)) assertNumericRankRows(baseKey,rows||[]);
-  if(baseKey==='items'){ assertEquipmentUpgradeMinimumRows(rows||[]); assertMonsterMaterialUpgradeRows(rows || []); assertMonsterMaterialDescriptionRows(rows || []); }
+  if(baseKey==='items'){ assertItemClassificationRows(rows||[]); assertWeaponKatakanaNames(rows||[]); assertEquipmentUpgradeMinimumRows(rows||[]); assertMonsterMaterialUpgradeRows(rows || []); assertMonsterMaterialDescriptionRows(rows || []); }
   if(baseKey==='recipes') assertWeaponBranchMaterialRows(rows || []);
   if(baseKey==='monsters') assertMonsterActionCountRows(rows || []);
   return (rows || []).map(src=>{
