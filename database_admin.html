@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.238</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.241</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -264,7 +264,7 @@
   .modal-head{position:sticky;top:0;z-index:2;background:rgba(255,250,242,.96);border-bottom:1px solid var(--line);padding:16px 18px;display:flex;gap:12px;align-items:flex-start;justify-content:space-between;backdrop-filter:blur(8px)}
   .modal-head h2{margin:0;font-size:20px}.modal-head p{margin:4px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
   .modal-body{padding:16px 18px}.modal-foot{position:sticky;bottom:0;background:rgba(255,250,242,.96);border-top:1px solid var(--line);padding:14px 18px;display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;backdrop-filter:blur(8px)}
-  .form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.form-grid .wide{grid-column:1/-1}.form-grid textarea{min-height:90px;resize:vertical}.form-help{color:var(--muted);font-size:12px;line-height:1.5;margin-top:4px}
+  .form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.form-grid .wide{grid-column:1/-1}.form-grid textarea{min-height:90px;resize:vertical}.form-help{color:var(--muted);font-size:12px;line-height:1.5;margin-top:4px}.meal-material-candidate-list{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px}.meal-material-candidate-list .ghost{padding:5px 8px;min-height:auto;font-size:12px}
   .quick-form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-bottom:10px;padding:12px;border:1px dashed #dccbb4;border-radius:16px;background:rgba(245,234,219,.55)}
   .modal-foot button{min-width:120px}
   .danger-zone{margin-top:12px;padding:12px;border:1px solid rgba(183,90,74,.35);border-radius:16px;background:rgba(183,90,74,.06)}
@@ -1103,7 +1103,7 @@ body.modal-open{overflow:hidden!important}
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.238 / 最終更新日：2026年7月22日</div>
+<div class="ra-build-info">Version：v90.8.241 / 最終更新日：2026年7月22日</div>
 
 <header>
   <div class="title-card">
@@ -1240,6 +1240,7 @@ body.modal-open{overflow:hidden!important}
     <div class="subtabs section-subtabs">
       <button class="subtab" data-main-tab="facilities" data-facility-view="鍛冶屋">鍛冶屋</button>
       <button class="subtab" data-main-tab="facilities" data-facility-view="薬屋">薬屋</button>
+      <button class="subtab" data-main-tab="facilities" data-facility-view="食事処">食事処</button>
       <button class="subtab" data-main-tab="facilities" data-facility-view="宿屋">宿屋</button>
       <button class="subtab" data-main-tab="facilities" data-facility-view="骨董屋">骨董屋</button>
       <button class="subtab" data-main-tab="facilities" data-facility-view="ギルド">ギルド</button>
@@ -1489,10 +1490,10 @@ body.modal-open{overflow:hidden!important}
   <section class="panel hidden" id="panel-facilities">
     <div class="toolbar">
       <div class="field compact-field"><label for="facilityRankLimitSelect">表示ランク上限（確認用）</label><input id="facilityRankLimitSelect" type="number" min="1" step="1" inputmode="numeric" placeholder="空欄なら全ランク"></div>
-      <button class="ghost" data-facility-refresh>販売商品リストを更新</button>
+      <button class="ghost" data-facility-refresh>施設内容を更新</button>
       <button class="secondary" data-facility-copy-all>全施設の販売商品をコピー</button>
     </div>
-    <p class="notice">施設ごとの販売商品・製作分類・サービスを確認する管理タブです。コピーは販売・武器派生・作成分類ごとに行い、サービス内容はコピーしません。販売商品は、各アイテム/素材の「入手先」または「解放施設」に施設名が含まれるものを自動で集めます。</p>
+    <p class="notice">施設ごとの販売商品・製作分類・食事・サービスを確認する管理タブです。食事処ではパーティーの最高解放エリアを選び、今日のおすすめ3品を表示・再抽選できます。施設カタログへ表示する料理は持ち込み料理のみです。</p>
     <div class="facility-layout">
       <div class="facility-summary" id="facilitySummary"></div>
       <div id="facilityCards"></div>
@@ -1691,7 +1692,7 @@ body.modal-open{overflow:hidden!important}
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.238';
+const RECRAFT_DB_VERSION = 'v90.8.241';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1758,7 +1759,7 @@ let currentMaterialTypeView = '全て';
 let currentMaterialCategoryView = '全て';
 let currentFacilityView = '鍛冶屋';
 const currentFacilitySectionByName = {
-  '鍛冶屋':'sales','薬屋':'sales','宿屋':'services','骨董屋':'sales','ギルド':'important'
+  '鍛冶屋':'sales','薬屋':'sales','食事処':'recommendations','宿屋':'services','骨董屋':'sales','ギルド':'important'
 };
 let currentFacilityRankLimit = '';
 let currentFacilityWeaponCategory = '';
@@ -1771,6 +1772,27 @@ let currentGuildDailyCount = 5;
 let currentGuildDailyKeys = [];
 let currentGuildDailyAreaId = '';
 const GUILD_DAILY_STORAGE_KEY = 'recraft_alchemia_guild_daily_selection_v1';
+const MEAL_RECOMMEND_STORAGE_KEY = 'recraft_alchemia_meal_recommendation_v1';
+let currentMealRecommendationAreaId = '';
+let currentMealRecommendationIds = [];
+function loadMealRecommendationState(){
+  try{
+    const raw=localStorage.getItem(MEAL_RECOMMEND_STORAGE_KEY);
+    if(!raw)return;
+    const data=JSON.parse(raw);
+    currentMealRecommendationAreaId=String(data.areaId||'');
+    currentMealRecommendationIds=Array.isArray(data.ids)?data.ids.map(String):[];
+  }catch(e){ console.warn('meal recommendation state load failed',e); }
+}
+function saveMealRecommendationState(){
+  try{
+    localStorage.setItem(MEAL_RECOMMEND_STORAGE_KEY,JSON.stringify({
+      areaId:currentMealRecommendationAreaId,
+      ids:currentMealRecommendationIds
+    }));
+  }catch(e){ console.warn('meal recommendation state save failed',e); }
+}
+loadMealRecommendationState();
 function loadGuildDailyState(){
   try{
     const raw=localStorage.getItem(GUILD_DAILY_STORAGE_KEY);
@@ -2166,6 +2188,14 @@ const FACILITY_DEFS = [
     ]
   },
   {
+    id:'eatery', name:'食事処',
+    role:'店主マリエッタが、解放エリアに応じた今日のおすすめ3品と、食材持ち込み料理を提供する。',
+    services:[
+      {name:'今日のおすすめ', price:'料理別', description:'パーティーの解放エリアに応じて3品を抽選する。食材は不要で、おすすめ価格を支払う。'},
+      {name:'食材持ち込み調理', price:'料理別', description:'必要食材を持ち込み、軽めの調理代を支払って指定料理を作ってもらう。'}
+    ]
+  },
+  {
     id:'inn', name:'宿屋',
     role:'宿泊・休息・噂やクエスト情報を担当。商品販売ではなくサービス中心。',
     services:[
@@ -2202,9 +2232,12 @@ const SYSTEM_HELP = [
       "NPC"
     ],
     "body": [
-      "基本施設は鍛冶屋、薬屋、宿屋、骨董屋、ギルド。",
+      "基本施設は鍛冶屋、薬屋、食事処、宿屋、骨董屋、ギルド。",
       "鍛冶屋は武器、盾、防具、バッグ、矢筒、鍛冶素材、戦闘用罠、細工道具、鍛冶・仕掛け製作施設利用を扱う。",
       "薬屋はポーション系、薬品系調合品、調合素材、調合施設利用を扱う。",
+      "食事処は、パーティーの解放エリアに応じた今日のおすすめ3品と、必要食材を持ち込んで作る料理を扱う。今日のおすすめは食材不要で、管理HTMLから再抽選できる。",
+      "料理は各エリア5品を基本とし、その5品を持ち込み料理と今日のおすすめ候補の両方に使用する。",
+      "料理材料は食材カテゴリに限定せず、丸茸など用途タグが「食用可能」の採取素材・魔物素材も使用できる。",
       "宿屋は宿泊45G、休息30G、噂、クエスト情報を扱う。休息は1行動を消費してHP/MPを全回復し、宿泊は一日を終了してHP/MP全回復・疲労度0にする。",
       "骨董屋は未鑑定スクロールの高額ランダム販売、施設鑑定、魔導インク・祈祷紙・術式鑑定具・聖印・魔印の常設販売を扱う。店頭ではスクロールの中身を公開しない。",
       "ギルドは受注可能クエストを、重要クエストとデイリークエストに分けて掲示する。",
@@ -2215,7 +2248,7 @@ const SYSTEM_HELP = [
       "スクロール鑑定は鑑定技能で行う。術式化の自力判定は集中で行う。",
       "魔法スクロールの術式化には魔導インクを、祈祷スクロールの術式化には祈祷紙を使う。術式化は集中技能のみで行い、施設へは依頼できない。",
       "雑貨屋は現時点では使用しない。",
-      "施設NPCは、リネット、ガルド・ヴェルナー、ミレイユ・オルセーヌ、ロジーナ・エルメル。",
+      "施設NPCは、リネット、ガルド・ヴェルナー、マリエッタ・ロゼル、ミレイユ・オルセーヌ、ロジーナ・エルメル。",
       "リネットは拠点と工房の案内役。",
       "ガルド・ヴェルナーは鍛冶屋担当。",
       "ミレイユ・オルセーヌは薬屋担当。",
@@ -2936,10 +2969,14 @@ function setGuildImportantVisibility(questKey='', visible=true){
   return true;
 }
 function facilityDisplayCount(facilityName){
-  return facilityName==='ギルド' ? facilityQuestRows().length : facilityProducts(facilityName).length;
+  if(facilityName==='ギルド')return facilityQuestRows().length;
+  if(facilityName==='食事処')return mealRecipeRowsAll().length;
+  return facilityProducts(facilityName).length;
 }
 function facilityDisplayLabel(facilityName){
-  return facilityName==='ギルド' ? '受注可能クエスト' : '販売商品';
+  if(facilityName==='ギルド')return '受注可能クエスト';
+  if(facilityName==='食事処')return '料理';
+  return '販売商品';
 }
 
 function antiqueRandomStockLines(){
@@ -2962,6 +2999,10 @@ const FACILITY_COPY_DEFS = {
     ['sales','販売'],
     ['alchemy','調合作成'],
     ['materials','素材作成']
+  ],
+  '食事処':[
+    ['recommendations','今日のおすすめ'],
+    ['meals','持ち込み料理']
   ],
   '骨董屋':[
     ['sales','販売']
@@ -3015,6 +3056,8 @@ function buildFacilityCategoryText(facilityName='', category='sales'){
   if(facilityName==='薬屋' && category==='materials'){
     return [`【薬屋・素材作成】`,facilityRecipeSectionText('素材作成',['素材加工'])].join('\n');
   }
+  if(facilityName==='食事処' && category==='recommendations') return mealRecommendationsText();
+  if(facilityName==='食事処' && category==='meals') return mealCarryInText();
   return `【${facilityName}】\n- コピー対象がありません`;
 }
 function facilityCopyButtonsHtml(facilityName=''){
@@ -3033,7 +3076,7 @@ async function copyFacilityCategory(facilityName='', category='sales'){
 function buildFacilitySalesText(targetFacilityName=''){
   const defs = targetFacilityName
     ? FACILITY_DEFS.filter(f=>f.name===targetFacilityName)
-    : FACILITY_DEFS.filter(f=>!['宿屋','ギルド'].includes(f.name));
+    : FACILITY_DEFS.filter(f=>!['食事処','宿屋','ギルド'].includes(f.name));
   return defs.map(f=>facilitySalesCategoryText(f.name)).filter(Boolean).join('\n\n');
 }
 function renderFacilityProductDetails(row){
@@ -3069,7 +3112,9 @@ function renderFacilitiesPanel(){
     if(active==='sales'){
       const rows=facilityProducts(f.name);
       body=rows.length?`<div class="facility-product-list">${rows.map(renderFacilityProductDetails).join('')}</div>`:'<p class="notice">この条件に一致する常設販売商品はありません。</p>';
-    }else if(active==='branches') body=renderFacilityRecipeGroup('武器派生');
+    }else if(active==='recommendations') body=renderFacilityMealRecommendations();
+    else if(active==='meals') body=renderFacilityMealRows();
+    else if(active==='branches') body=renderFacilityRecipeGroup('武器派生');
     else if(active==='armor') body=renderFacilityRecipeGroup('防具製作');
     else if(active==='smith') body=renderFacilityRecipeGroup('鍛冶');
     else if(active==='traps') body=renderFacilityRecipeGroup('細工');
@@ -3614,12 +3659,176 @@ const FACILITY_SECTION_DEFS = {
     ['sales','販売商品'],['branches','武器派生'],['armor','防具製作'],['smith','鍛冶製作'],['traps','仕掛け製作'],['materials','素材加工'],['upgrade','装備強化'],['services','サービス']
   ],
   '薬屋':[['sales','販売商品'],['alchemy','調合'],['materials','素材加工'],['services','サービス']],
-  '食事処':[['meals','持ち込み料理'],['recommendations','今日のおすすめ'],['services','サービス']],
+  '食事処':[['recommendations','今日のおすすめ'],['meals','持ち込み料理'],['services','サービス']],
   '宿屋':[['services','サービス']],
   '骨董屋':[['sales','常設販売'],['random','未鑑定スクロール'],['appraisal','鑑定'],['transcribe','集中術式化'],['services','サービス']],
   'ギルド':[['important','重要クエスト'],['daily','デイリークエスト'],['services','サービス']]
 };
 function facilitySectionDefs(name=currentFacilityView){ return FACILITY_SECTION_DEFS[name] || [['services','サービス']]; }
+function mealAreaRows(){
+  return (state.exploration_areas||[]).filter(row=>String(row.enabled??'TRUE')!=='FALSE').slice().sort((a,b)=>{
+    const ao=Number(a.unlockOrder),bo=Number(b.unlockOrder);
+    if(Number.isFinite(ao)&&Number.isFinite(bo)&&ao!==bo)return ao-bo;
+    return compareValues(a.name||a.id||'',b.name||b.id||'');
+  });
+}
+function mealAreaId(row={}){ return String(row.id||row.unlockKey||row.name||'').trim(); }
+function ensureMealRecommendationArea(){
+  const areas=mealAreaRows();
+  if(!areas.length){currentMealRecommendationAreaId='';return null;}
+  let area=areas.find(row=>mealAreaId(row)===currentMealRecommendationAreaId);
+  if(!area){area=areas[areas.length-1];currentMealRecommendationAreaId=mealAreaId(area);currentMealRecommendationIds=[];saveMealRecommendationState();}
+  return area;
+}
+function mealMaterialCandidateRows(){
+  return (state.items||[]).filter(row=>{
+    const name=String(row.name||'').trim();
+    if(!name)return false;
+    if(String(row.dataKind||'').trim()==='アイテム' && String(row.itemType||'').trim()==='食材')return true;
+    if(String(row.dataKind||'').trim()!=='素材')return false;
+    const marker=[row.usageTags,row.tags].filter(Boolean).join(',');
+    return /(?:^|[,、\s])(食用可能|食材|料理)(?:$|[,、\s])/.test(marker);
+  }).slice().sort((a,b)=>{
+    const ar=numericRankValueIncludingLegacyMaterialGrade(a.rank,999),br=numericRankValueIncludingLegacyMaterialGrade(b.rank,999);
+    if(ar!==br)return ar-br;
+    return compareValues(a.name||'',b.name||'');
+  });
+}
+function renderMealMaterialCandidateButtons(){
+  const rows=mealMaterialCandidateRows();
+  if(!rows.length)return '<div class="form-help">料理材料候補がありません。食材、または素材の用途タグへ「食用可能」を設定してください。</div>';
+  return `<div class="form-help">料理材料候補：食材と、用途タグが「食用可能」の素材を表示しています。クリックすると必要素材へ×1で追加します。<div class="meal-material-candidate-list">${rows.map(row=>`<button type="button" class="ghost" data-add-meal-material="${escapeHtml(row.name)}">${escapeHtml(row.name)}</button>`).join('')}</div></div>`;
+}
+function mealRecipeRowsAll(){
+  return (state.recipes||[]).filter(row=>
+    String(row.craftType||'').trim()==='料理' &&
+    (!String(row.unlockFacility||'').trim() || textHasFacility(row,'食事処')) &&
+    facilityRankVisible(row)
+  ).slice().sort((a,b)=>{
+    const ao=mealRecipeUnlockOrder(a),bo=mealRecipeUnlockOrder(b);
+    if(ao!==bo)return ao-bo;
+    return compareValues(a.resultItem||a.name||'',b.resultItem||b.name||'');
+  });
+}
+function mealRecipeArea(row={}){
+  const key=String(row.unlockAreaKey||'').trim();
+  return mealAreaRows().find(area=>[area.id,area.unlockKey,area.name].map(v=>String(v||'').trim()).includes(key))||null;
+}
+function mealRecipeUnlockOrder(row={}){
+  const area=mealRecipeArea(row);
+  const order=Number(area?.unlockOrder);
+  if(Number.isFinite(order))return order;
+  return numericRankValueIncludingLegacyMaterialGrade(row.rank,999);
+}
+function mealRecommendedPrice(row={}){
+  const match=String(row.tags||'').match(/おすすめ価格[:：](\d+)/);
+  return match?Number(match[1]):Math.max(40,(Number(row.price)||0)+25);
+}
+function mealCandidateRows(){
+  const selected=ensureMealRecommendationArea();
+  if(!selected)return [];
+  const maxOrder=Number(selected.unlockOrder);
+  const all=mealRecipeRowsAll();
+  const unlocked=all.filter(row=>!Number.isFinite(maxOrder)||mealRecipeUnlockOrder(row)<=maxOrder);
+  const marked=unlocked.filter(row=>String(row.tags||'').includes('おすすめ候補'));
+  return marked.length?marked:unlocked;
+}
+function shuffledRows(rows=[]){
+  const copy=rows.slice();
+  for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]];}
+  return copy;
+}
+function drawMealRecommendations(){
+  const selected=ensureMealRecommendationArea();
+  const rows=mealCandidateRows();
+  if(!selected||!rows.length){currentMealRecommendationIds=[];saveMealRecommendationState();return [];}
+  const selectedId=mealAreaId(selected);
+  let latest=rows.filter(row=>String(row.unlockAreaKey||'').trim()===selectedId);
+  if(!latest.length){
+    const newestOrder=Math.max(...rows.map(mealRecipeUnlockOrder));
+    latest=rows.filter(row=>mealRecipeUnlockOrder(row)===newestOrder);
+  }
+  const previous=currentMealRecommendationIds.join('|');
+  let chosen=[];
+  for(let attempt=0;attempt<12;attempt++){
+    chosen=[];
+    const newest=shuffledRows(latest);
+    if(newest.length)chosen.push(newest[0]);
+    const rest=shuffledRows(rows.filter(row=>!chosen.includes(row)));
+    const categories=new Set(chosen.map(row=>String(row.category||'').trim()));
+    rest.forEach(row=>{
+      if(chosen.length>=3)return;
+      const category=String(row.category||'').trim();
+      if(category&&!categories.has(category)){chosen.push(row);categories.add(category);}
+    });
+    rest.forEach(row=>{if(chosen.length<3&&!chosen.includes(row))chosen.push(row);});
+    const next=chosen.slice(0,3).map(row=>String(row.id||row.name||row.resultItem||'')).join('|');
+    if(next!==previous||rows.length<=3)break;
+  }
+  currentMealRecommendationIds=chosen.slice(0,3).map(row=>String(row.id||row.name||row.resultItem||''));
+  saveMealRecommendationState();
+  return chosen.slice(0,3);
+}
+function currentMealRecommendations(){
+  const candidates=mealCandidateRows();
+  const byId=new Map(candidates.map(row=>[String(row.id||row.name||row.resultItem||''),row]));
+  const rows=currentMealRecommendationIds.map(id=>byId.get(String(id))).filter(Boolean);
+  const selected=ensureMealRecommendationArea();
+  const selectedId=mealAreaId(selected||{});
+  const includesLatest=rows.some(row=>String(row.unlockAreaKey||'').trim()===selectedId);
+  if(rows.length!==3||!includesLatest)return drawMealRecommendations();
+  return rows;
+}
+function mealAreaName(row={}){return mealRecipeArea(row)?.name||row.unlockAreaKey||'解放エリア未設定';}
+function renderFacilityMealCard(row={},recommended=false){
+  const name=row.resultItem||row.name||'名称未設定';
+  const price=recommended?mealRecommendedPrice(row):Number(row.price)||0;
+  const materials=recommended?'食材不要':(row.requiredMaterials||'未設定');
+  const priceLabel=recommended?'おすすめ価格':'調理代';
+  const chips=[row.rank?playerRankLabel(row.rank):'',row.category||'',mealAreaName(row)].filter(Boolean);
+  return `<div class="facility-recipe-card">
+    <h5>${escapeHtml(name)}</h5>
+    <div class="facility-product-meta">${chips.map(v=>`<span class="facility-chip">${escapeHtml(v)}</span>`).join('')}</div>
+    <div><b>必要食材：</b>${escapeHtml(materials)}</div>
+    <div><b>${escapeHtml(priceLabel)}：</b>${price?`${escapeHtml(String(price))}G`:'価格未設定'}</div>
+    ${row.effect?`<div><b>食事効果：</b>${escapeHtml(row.effect)}</div>`:''}
+    ${row.description?`<div><b>説明：</b>${escapeHtml(row.description)}</div>`:''}
+  </div>`;
+}
+function renderFacilityMealRows(){
+  const rows=mealRecipeRowsAll();
+  if(!rows.length)return '<p class="notice">持ち込み料理の登録データはありません。</p>';
+  const groups=new Map();
+  rows.forEach(row=>{const key=mealAreaName(row);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(row);});
+  return `<p class="notice">施設一覧に載せるのは、食材持ち込みで作れる料理だけです。必要食材と調理代を確認できます。</p><div class="facility-recipe-grid">${[...groups.entries()].map(([area,list],idx)=>`<details class="facility-product" ${idx===0?'open':''}><summary><span class="facility-product-title"><span>${escapeHtml(area)}</span><span class="facility-chip">${list.length}品</span></span></summary><div class="facility-product-body"><div class="facility-recipe-grid">${list.map(row=>renderFacilityMealCard(row,false)).join('')}</div></div></details>`).join('')}</div>`;
+}
+function renderFacilityMealRecommendations(){
+  const areas=mealAreaRows();
+  const selected=ensureMealRecommendationArea();
+  if(!areas.length||!selected)return '<p class="notice">探索エリアが登録されていないため、おすすめを抽選できません。</p>';
+  const rows=currentMealRecommendations();
+  const options=areas.map(area=>`<option value="${escapeHtml(mealAreaId(area))}" ${mealAreaId(area)===currentMealRecommendationAreaId?'selected':''}>${escapeHtml(area.name||mealAreaId(area))}</option>`).join('');
+  return `<div class="input-action-row">
+    <div><label for="facilityMealAreaSelect">パーティーの最高解放エリア</label><select id="facilityMealAreaSelect" data-meal-area>${options}</select></div>
+    <button class="secondary" type="button" data-meal-reroll>おすすめ3品を再抽選</button>
+  </div>
+  <p class="notice">選択したエリアまでの料理から3品を抽選します。最高解放エリアの料理を最低1品含み、可能な限り効果分類が重複しないようにします。</p>
+  <div class="facility-recipe-grid">${rows.map(row=>renderFacilityMealCard(row,true)).join('')}</div>`;
+}
+function mealRecommendationsText(){
+  const area=ensureMealRecommendationArea();
+  const rows=currentMealRecommendations();
+  return [
+    '【食事処・今日のおすすめ】',
+    `最高解放エリア：${area?.name||'未設定'}`,
+    '',
+    ...(rows.length?rows.map(row=>`- ${row.resultItem||row.name||'名称未設定'}（${mealRecommendedPrice(row)}G / ${row.category||'分類未設定'}）\n  効果：${row.effect||'未設定'}`):['- おすすめ料理なし'])
+  ].join('\n');
+}
+function mealCarryInText(){
+  const rows=mealRecipeRowsAll();
+  return ['【食事処・持ち込み料理】','',...(rows.length?rows.map(row=>`- ${row.resultItem||row.name||'名称未設定'}（調理代 ${Number(row.price)||0}G）\n  必要食材：${String(row.requiredMaterials||'未設定').replace(/\n/g,' / ')}\n  効果：${row.effect||'未設定'}`):['- 持ち込み料理なし'])].join('\n');
+}
 function activeFacilitySection(name=currentFacilityView){
   const defs=facilitySectionDefs(name);
   const current=currentFacilitySectionByName[name];
@@ -5533,6 +5742,7 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='offhandBonus') help += '<div class="form-help">二刀攻撃で副手にした時に追加する固定値。短剣/片手剣/槌/片手槍は2、片手斧は3、杖は1が目安です。</div>';
   if(field==='checkType') help += '<div class="form-help">左側は対応技能、右側は目標値です。右側は候補から選ぶほか、数値や任意の名称を直接入力できます。</div>';
   if(field==='fixedEvents') help += '<div class="form-help">固定イベント欄の「追加」から、発生%・イベント名・内容を1件ずつ登録します。</div>';
+  if(field==='requiredMaterials' && key==='recipes' && String(rowContext.craftType || activeRecipeCraftType()).trim()==='料理') help += renderMealMaterialCandidateButtons();
   if(shouldShowQuickCategoryButton(key, field)) help += '<div class="field-inline-help">候補にない場合は横のボタンから作成できます。</div>';
   return `<div class="field ${isWide?'wide':''} ${shouldShowQuickCategoryButton(key, field)?'with-action':''}"><label>${escapeHtml(label)}</label>${input}${help}</div>`;
 }
@@ -6850,6 +7060,19 @@ function inferGroupFromPanel(key){
 }
 
 document.addEventListener('click',e=>{
+  const addMealMaterial=e.target.closest('[data-add-meal-material]');
+  if(addMealMaterial){
+    const target=$('editModal')?.querySelector('[data-form-field="requiredMaterials"]');
+    if(!target)return;
+    const name=String(addMealMaterial.dataset.addMealMaterial||'').trim();
+    if(!name)return;
+    const lines=String(target.value||'').split(/\n+/).map(v=>v.trim()).filter(Boolean);
+    if(!lines.some(line=>line.replace(/×\s*\d+.*$/,'').trim()===name)) lines.push(`${name}×1`);
+    target.value=lines.join('\n');
+    target.dispatchEvent(new Event('input',{bubbles:true}));
+    toast(`${name}を必要素材へ追加しました`);
+    return;
+  }
   const monsterCardActionButton=e.target.closest('.monster-card-actions button');
   if(monsterCardActionButton) e.preventDefault();
   const monsterToken=e.target.closest('[data-monster-token]'); if(monsterToken){ outputMonsterToken(+monsterToken.dataset.monsterToken); return; }
@@ -6872,7 +7095,8 @@ document.addEventListener('click',e=>{
     renderFacilitiesPanel();
     return;
   }
-  const facilityRefresh=e.target.closest('[data-facility-refresh]'); if(facilityRefresh){ renderFacilitiesPanel(); toast('販売商品リストを更新しました'); return; }
+  const facilityRefresh=e.target.closest('[data-facility-refresh]'); if(facilityRefresh){ renderFacilitiesPanel(); toast('施設内容を更新しました'); return; }
+  const mealReroll=e.target.closest('[data-meal-reroll]'); if(mealReroll){ drawMealRecommendations(); renderFacilitiesPanel(); toast('今日のおすすめ3品を再抽選しました'); return; }
   const weaponCategory=e.target.closest('[data-facility-weapon-category]'); if(weaponCategory){ currentFacilityWeaponCategory=weaponCategory.dataset.facilityWeaponCategory||''; renderFacilitiesPanel(); return; }
   const guildDailyArea=e.target.closest('[data-guild-daily-area]'); if(guildDailyArea){ currentGuildDailyAreaId=String(guildDailyArea.value||''); currentGuildDailyKeys=[]; saveGuildDailyState(); rerollGuildDailyQuests(); return; }
   const guildDailyCount=e.target.closest('[data-guild-daily-count]'); if(guildDailyCount){ currentGuildDailyCount=Math.max(1,Math.min(10,Number(guildDailyCount.value)||5)); saveGuildDailyState(); rerollGuildDailyQuests(); return; }
@@ -6994,6 +7218,14 @@ document.addEventListener('input',e=>{
   if(e.target.closest('[data-modifier-editor]')) syncModifierEditor(e.target.closest('[data-modifier-editor]'));
 });
 document.addEventListener('change',e=>{
+  if(e.target?.matches?.('[data-meal-area]')){
+    currentMealRecommendationAreaId=String(e.target.value||'');
+    currentMealRecommendationIds=[];
+    drawMealRecommendations();
+    renderFacilitiesPanel();
+    toast('解放エリアに合わせて今日のおすすめを抽選しました');
+    return;
+  }
   if(e.target?.id==='facilityUpgradeEquipmentType'){ renderFacilityUpgradeEquipmentSelect(); if($('facilityUpgradeMaterialInput')) $('facilityUpgradeMaterialInput').value=''; renderFacilityUpgradeLookupList(); renderFacilityUpgradeResult(''); return; }
   if(e.target?.id==='facilityUpgradeEquipmentSelect'){ if($('facilityUpgradeMaterialInput'))$('facilityUpgradeMaterialInput').value=''; renderFacilityUpgradeLookupList(); renderFacilityUpgradeResult(''); return; }
   if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
