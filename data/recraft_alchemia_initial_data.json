@@ -1,6 +1,6 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "v90.8.241",
+  "version": "90.8.242",
   "encoding": "UTF-8",
   "description": "Recraft-Alchemia 統合初期データ v90.8.241（管理HTML食事処・おすすめ再抽選・各エリア料理5品）",
   "data": {
@@ -8643,7 +8643,7 @@
         "target": "",
         "checkType": "",
         "element": "",
-        "description": "カラパスビートルの背から切り出した厚い外殻。重いが、★1素材としては高い耐久性を持つ。",
+        "description": "カラパスビートルの背から切り出した厚い外殻。重く加工には手間がかかるが、衝撃や圧力に強く、防具や盾の補強材として重宝される。",
         "effect": "防具強化に使うと、防御+1の強化素材になる。",
         "source": "カラパスビートル",
         "usageTags": "防具,盾,補強",
@@ -8653,7 +8653,7 @@
         "unlockFacility": "",
         "tags": "素材,固有素材,虫",
         "notes": "説明文に記載した用途は、既存または今後のレシピ・強化・加工のいずれかで必ず実装する。\n読み：よろいむしのけんかく",
-        "updatedAt": "2026-07-21",
+        "updatedAt": "2026-07-22",
         "ownerKey": "",
         "createdBy": "",
         "equipmentUpgradeDetail": "",
