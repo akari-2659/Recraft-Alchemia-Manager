@@ -3,8 +3,8 @@
   "version": "90.8.250",
   "updatedAt": "2026-07-23",
   "master": "recraft_alchemia_master.v90.8.250.json",
-  "sha256": "73c3e68e9e112e3049f953f0da1f7d06cf92242f4ae2b3e120ed0e6d966cb891",
-  "bytes": 1764912,
+  "sha256": "49b4d3d4f207f21bbc3064b90f7b68f9665d71bb099a5a77f58d48f9a6846579",
+  "bytes": 1887162,
   "recordCount": 1557,
   "dataKeys": [
     "item_types",
@@ -20,9 +20,9 @@
     "quests",
     "exploration_areas",
     "event_tables",
-    "monsters",
+    "treasure_tables",
     "appraisal_rules",
-    "treasure_tables"
+    "monsters"
   ],
   "publicBaseUrl": "https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/"
 }
