@@ -1114,11 +1114,57 @@ body.modal-open{overflow:hidden!important}
   #editModal .modal-foot{grid-template-columns:1fr!important}
   #editModal #btnApplyAndSave{grid-column:auto}
 }
+
+.github-public-db-panel{
+  display:grid;
+  gap:10px;
+  margin:12px 0;
+  padding:14px;
+  border:1px solid #b9cdbc;
+  border-radius:14px;
+  background:linear-gradient(135deg,#f5fbf6,#fffaf2);
+}
+.github-public-db-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.github-public-db-title{
+  margin:0;
+  font-size:1.02rem;
+  color:#355f4e;
+}
+.github-public-db-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.github-public-db-path{
+  padding:8px 10px;
+  border-radius:10px;
+  background:#fff;
+  border:1px solid #d7e2d8;
+  font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+  font-size:.83rem;
+  overflow-wrap:anywhere;
+}
+.github-public-db-status{
+  margin:0;
+  min-height:1.5em;
+  color:#66594b;
+  white-space:pre-wrap;
+}
+.github-public-db-status.is-saving{color:#376f8f}
+.github-public-db-status.is-ok{color:#2f7448}
+.github-public-db-status.is-error{color:#a43c35}
+
 </style>
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.245 / 最終更新日：2026年7月23日</div>
+<div class="ra-build-info">Version：v90.8.250 / 最終更新日：2026年7月23日</div>
 
 <header>
   <div class="title-card">
@@ -1162,6 +1208,24 @@ body.modal-open{overflow:hidden!important}
       </div>
       <button class="ghost" id="btnClearWorkingData">画面データを空にする</button>
     </div>
+
+    <section class="github-public-db-panel" aria-labelledby="githubPublicDbTitle">
+      <div class="github-public-db-head">
+        <div>
+          <h2 id="githubPublicDbTitle" class="github-public-db-title">GitHub共通DB公開</h2>
+          <div class="small">現在この管理画面へ読み込まれている全マスターデータから、管理用キーを除外した公開JSON一式を生成します。</div>
+        </div>
+        <div class="github-public-db-actions">
+          <button class="secondary" id="btnExportGithubPublicDb">GitHub共通DB一式を書き出す</button>
+        </div>
+      </div>
+      <div class="github-public-db-path">配置先：Recraft-Alchemia-Manager / data / public /</div>
+      <p id="githubPublicDbStatus" class="github-public-db-status">未出力。先にDBまたは同梱初期データを管理画面へ読み込んでください。</p>
+      <div class="small">
+        出力ZIP内の <b>data/public</b> フォルダを、管理GitHubの同じ場所へアップロードします。
+        キャラクター・進行状況・プレイヤーキーはこの共通DBへ含めません。
+      </div>
+    </section>
     <div id="uploadProgressPanel" class="upload-progress-panel hidden">
       <div class="upload-progress-head">
         <div class="upload-progress-title" id="uploadProgressTitle">DB送信待機中</div>
@@ -1707,7 +1771,7 @@ body.modal-open{overflow:hidden!important}
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.245';
+const RECRAFT_DB_VERSION = 'v90.8.250';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -7333,6 +7397,210 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
+const GITHUB_PUBLIC_DB_VERSION = '90.8.250';
+const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-07-23';
+const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.v90.8.250.json';
+const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([
+  'ownerKey','createdBy','adminKey','playerKey','masterKey',
+  'managementKey','githubToken','accessToken','apiToken',
+  'password','secret'
+]);
+
+function setGithubPublicDbStatus(message='', stateName=''){
+  const el=$('githubPublicDbStatus');
+  if(!el)return;
+  el.className='github-public-db-status'+(stateName?` is-${stateName}`:'');
+  el.textContent=message;
+}
+
+function sanitizeGithubPublicValue(value){
+  if(Array.isArray(value)) return value.map(sanitizeGithubPublicValue);
+  if(value && typeof value==='object'){
+    const out={};
+    Object.entries(value).forEach(([key,rowValue])=>{
+      if(GITHUB_PUBLIC_DB_OMIT_FIELDS.has(key))return;
+      out[key]=sanitizeGithubPublicValue(rowValue);
+    });
+    return out;
+  }
+  return value;
+}
+
+function buildGithubPublicMaster(){
+  const source=normalizeStateData(structuredClone(state||{}));
+  const data={};
+  DATA_KEYS.forEach(key=>{
+    data[key]=sanitizeGithubPublicValue(Array.isArray(source[key])?source[key]:[]);
+  });
+  return {
+    format:'recraft-alchemia-github-master',
+    version:GITHUB_PUBLIC_DB_VERSION,
+    updatedAt:GITHUB_PUBLIC_DB_UPDATED_AT,
+    encoding:'UTF-8',
+    sourceRepository:'akari-2659/Recraft-Alchemia-Manager',
+    description:'Recraft-Alchemiaのキャラシ・施設・管理画面で共通参照する静的マスターデータ。',
+    recordCount:DATA_KEYS.reduce((sum,key)=>sum+(data[key]?.length||0),0),
+    data
+  };
+}
+
+async function githubPublicSha256Hex(textValue=''){
+  if(!globalThis.crypto?.subtle)return '';
+  const bytes=new TextEncoder().encode(String(textValue));
+  const digest=await crypto.subtle.digest('SHA-256',bytes);
+  return Array.from(new Uint8Array(digest)).map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+
+function githubZipCrc32(bytes){
+  if(!githubZipCrc32.table){
+    githubZipCrc32.table=Array.from({length:256},(_,n)=>{
+      let c=n;
+      for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);
+      return c>>>0;
+    });
+  }
+  let crc=0xFFFFFFFF;
+  for(const b of bytes)crc=githubZipCrc32.table[(crc^b)&0xFF]^(crc>>>8);
+  return (crc^0xFFFFFFFF)>>>0;
+}
+
+function githubZipU16(value){
+  return new Uint8Array([value&255,(value>>>8)&255]);
+}
+function githubZipU32(value){
+  return new Uint8Array([value&255,(value>>>8)&255,(value>>>16)&255,(value>>>24)&255]);
+}
+function githubZipConcat(parts){
+  const size=parts.reduce((sum,p)=>sum+p.length,0);
+  const out=new Uint8Array(size);
+  let offset=0;
+  parts.forEach(p=>{out.set(p,offset);offset+=p.length;});
+  return out;
+}
+function githubZipDosDateTime(date=new Date()){
+  const year=Math.max(1980,date.getFullYear());
+  return {
+    time:((date.getHours()&31)<<11)|((date.getMinutes()&63)<<5)|((Math.floor(date.getSeconds()/2))&31),
+    date:(((year-1980)&127)<<9)|(((date.getMonth()+1)&15)<<5)|(date.getDate()&31)
+  };
+}
+function createGithubStoredZip(files=[]){
+  const encoder=new TextEncoder();
+  const localParts=[];
+  const centralParts=[];
+  let offset=0;
+  const stamp=githubZipDosDateTime(new Date());
+
+  files.forEach(file=>{
+    const nameBytes=encoder.encode(file.name);
+    const dataBytes=typeof file.content==='string'?encoder.encode(file.content):file.content;
+    const crc=githubZipCrc32(dataBytes);
+
+    const local=githubZipConcat([
+      githubZipU32(0x04034b50),
+      githubZipU16(20),githubZipU16(0x0800),githubZipU16(0),
+      githubZipU16(stamp.time),githubZipU16(stamp.date),
+      githubZipU32(crc),githubZipU32(dataBytes.length),githubZipU32(dataBytes.length),
+      githubZipU16(nameBytes.length),githubZipU16(0),
+      nameBytes,dataBytes
+    ]);
+    localParts.push(local);
+
+    const central=githubZipConcat([
+      githubZipU32(0x02014b50),
+      githubZipU16(20),githubZipU16(20),githubZipU16(0x0800),githubZipU16(0),
+      githubZipU16(stamp.time),githubZipU16(stamp.date),
+      githubZipU32(crc),githubZipU32(dataBytes.length),githubZipU32(dataBytes.length),
+      githubZipU16(nameBytes.length),githubZipU16(0),githubZipU16(0),
+      githubZipU16(0),githubZipU16(0),githubZipU32(0),githubZipU32(offset),
+      nameBytes
+    ]);
+    centralParts.push(central);
+    offset+=local.length;
+  });
+
+  const localData=githubZipConcat(localParts);
+  const centralData=githubZipConcat(centralParts);
+  const end=githubZipConcat([
+    githubZipU32(0x06054b50),githubZipU16(0),githubZipU16(0),
+    githubZipU16(files.length),githubZipU16(files.length),
+    githubZipU32(centralData.length),githubZipU32(localData.length),
+    githubZipU16(0)
+  ]);
+  return new Blob([localData,centralData,end],{type:'application/zip'});
+}
+
+function downloadGithubBlob(blob,filename){
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+
+async function exportGithubPublicDb(){
+  const button=$('btnExportGithubPublicDb');
+  if(button)button.disabled=true;
+  setGithubPublicDbStatus('公開JSONを生成しています…','saving');
+  try{
+    const master=buildGithubPublicMaster();
+    if(!master.recordCount)throw new Error('管理画面にデータが読み込まれていません。');
+    const masterText=JSON.stringify(master,null,2)+'\n';
+    const masterBytes=new TextEncoder().encode(masterText);
+    const sha256=await githubPublicSha256Hex(masterText);
+    const manifest={
+      format:'recraft-alchemia-github-master-manifest',
+      version:GITHUB_PUBLIC_DB_VERSION,
+      updatedAt:GITHUB_PUBLIC_DB_UPDATED_AT,
+      master:GITHUB_PUBLIC_DB_MASTER_FILENAME,
+      sha256,
+      bytes:masterBytes.length,
+      recordCount:master.recordCount,
+      dataKeys:[...DATA_KEYS],
+      publicBaseUrl:'https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/'
+    };
+    const manifestText=JSON.stringify(manifest,null,2)+'\n';
+    const instructions=[
+      'Recraft-Alchemia GitHub共通DB 配置手順',
+      '',
+      '1. このZIPを展開します。',
+      '2. Recraft-Alchemia-Managerリポジトリを開きます。',
+      '3. ZIP内の data/public/ にある2ファイルを、リポジトリの data/public/ へアップロードします。',
+      '4. 既存のmanifest.jsonは上書きします。',
+      '5. GitHub Pages反映後、次のURLを開いてversionを確認します。',
+      '   https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/manifest.json',
+      '',
+      `公開DBバージョン: ${GITHUB_PUBLIC_DB_VERSION}`,
+      `収録件数: ${master.recordCount}件`,
+      '',
+      '注意:',
+      '- このZIPは、ボタンを押した時点で管理画面に読み込まれていたデータから生成されます。',
+      '- DBを変更した後は、スプレへ保存したうえで再度書き出してください。',
+      '- キャラクターデータ、プレイヤーキー、管理キーは収録しません。'
+    ].join('\n')+'\n';
+
+    const zip=createGithubStoredZip([
+      {name:'data/public/manifest.json',content:manifestText},
+      {name:`data/public/${GITHUB_PUBLIC_DB_MASTER_FILENAME}`,content:masterText},
+      {name:'UPLOAD_INSTRUCTIONS.txt',content:instructions}
+    ]);
+    downloadGithubBlob(zip,`recraft_alchemia_github_public_db_v${GITHUB_PUBLIC_DB_VERSION}.zip`);
+    setGithubPublicDbStatus(
+      `書き出しました：v${GITHUB_PUBLIC_DB_VERSION} / ${master.recordCount}件\n管理GitHubの data/public/ へアップロードしてください。`,
+      'ok'
+    );
+    toast('GitHub共通DB一式を書き出しました');
+  }catch(e){
+    setGithubPublicDbStatus(`書き出しに失敗しました：${e.message||e}`,'error');
+    toast(e.message||String(e),'error');
+  }finally{
+    if(button)button.disabled=false;
+  }
+}
+
 function setGroupActive(group){
   document.querySelectorAll('[data-tab-group]').forEach(b=>b.classList.toggle('active',b.dataset.tabGroup===group));
   document.querySelectorAll('[data-subnav-group]').forEach(n=>n.classList.toggle('hidden',n.dataset.subnavGroup!==group));
@@ -7612,6 +7880,7 @@ $('btnDedupeAll').addEventListener('click',dedupeAll);
 $('btnExportJson').addEventListener('click',()=>{updateJsonBox();toast('JSONを更新しました')});
 $('btnImportJson').addEventListener('click',()=>{try{fromJsonBox()}catch(e){toast(e.message,'error')}});
 $('btnDownloadJson').addEventListener('click',downloadJson);
+if($('btnExportGithubPublicDb')) $('btnExportGithubPublicDb').addEventListener('click',exportGithubPublicDb);
 if($('btnClearWorkingData')) $('btnClearWorkingData').addEventListener('click',clearWorkingData);
 $('schemaPreview').textContent=JSON.stringify(SCHEMA,null,2);
 renderAll();
