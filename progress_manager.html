@@ -127,13 +127,13 @@ button,.tab-btn,.quest-category-btn{
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.263 / 最終更新日：2026年7月25日</div>
+<div class="ra-build-info">Version：v90.8.267 / 最終更新日：2026年7月25日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.263 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.267 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -141,15 +141,9 @@ button,.tab-btn,.quest-category-btn{
 <main>
   <section class="panel wide">
     <h2>DB接続</h2>
-    <div class="row">
-      <div>
-        <label>管理キー（任意）</label>
-        <input id="adminKey" placeholder="ownerKey付きデータを読む場合だけ入力">
-      </div>
-      <div>
-        <label>読み込み状態</label>
-        <div id="dbStatus" class="status">DB未読み込みです。</div>
-      </div>
+    <div>
+      <label>読み込み状態</label>
+      <div id="dbStatus" class="status">DB未読み込みです。</div>
     </div>
     <div class="buttons">
       <button id="loadDbBtn">DB読込</button>
@@ -393,7 +387,7 @@ button,.tab-btn,.quest-category-btn{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.263';
+const VERSION='v90.8.267';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -406,13 +400,13 @@ function addLog(text){state.log.unshift(`[${now()}] ${text}`); state.log=state.l
 function renderLog(){ $('log').innerHTML = state.log.length ? state.log.map(x=>`<div>${esc(x)}</div>`).join('') : '<div class="muted">ログはまだありません。</div>'; }
 function setStatus(type,msg){const el=$('dbStatus'); el.className='status '+(type||''); el.textContent=msg;}
 function saveState(show=true){
-  localStorage.setItem(STORE_KEY, JSON.stringify({progress:state.progress, log:state.log, adminKey:$('adminKey').value||'', lastDailyQuestText:state.lastDailyQuestText||'', lastDailyQuestKeys:state.lastDailyQuestKeys||[], dailyQuestUnlockedAreaId:String($('dailyQuestUnlockedArea')?.value||state.dailyQuestUnlockedAreaId||''), questEncounterCache:state.questEncounterCache||{}, areaBossEncountered:state.areaBossEncountered||{}, dailyQuestCount:Number($('dailyQuestCount')?.value||3)||3, partySize:selectedPartySize(), lastQuestFixedEventText:state.lastQuestFixedEventText||'', lastQuestFixedEventKey:state.lastQuestFixedEventKey||'', triggeredQuestEvents:state.triggeredQuestEvents||{}, treasureSetup:state.treasureSetup||null, treasureContext:state.treasureContext||null, dayState:state.dayState||{day:1,fatigue:0,usedActions:0,awaitingEnd:false}}));
+  localStorage.setItem(STORE_KEY, JSON.stringify({progress:state.progress, log:state.log, lastDailyQuestText:state.lastDailyQuestText||'', lastDailyQuestKeys:state.lastDailyQuestKeys||[], dailyQuestUnlockedAreaId:String($('dailyQuestUnlockedArea')?.value||state.dailyQuestUnlockedAreaId||''), questEncounterCache:state.questEncounterCache||{}, areaBossEncountered:state.areaBossEncountered||{}, dailyQuestCount:Number($('dailyQuestCount')?.value||3)||3, partySize:selectedPartySize(), lastQuestFixedEventText:state.lastQuestFixedEventText||'', lastQuestFixedEventKey:state.lastQuestFixedEventKey||'', triggeredQuestEvents:state.triggeredQuestEvents||{}, treasureSetup:state.treasureSetup||null, treasureContext:state.treasureContext||null, dayState:state.dayState||{day:1,fatigue:0,usedActions:0,awaitingEnd:false}}));
   if(show) addLog('進行状態を保存しました。');
 }
 function loadState(){
   // DB読込時の初期ゲージは必ず0%にするため、進行度は自動復元しない。
   // 保存済み進行を使う場合は「保存済み進行を復元」を押す。
-  try{const raw=localStorage.getItem(STORE_KEY); if(!raw)return; const data=JSON.parse(raw); state.log=data.log||[]; state.lastDailyQuestText=data.lastDailyQuestText||''; state.lastDailyQuestKeys=Array.isArray(data.lastDailyQuestKeys)?data.lastDailyQuestKeys:[]; state.dailyQuestUnlockedAreaId=String(data.dailyQuestUnlockedAreaId||''); state.questEncounterCache=(data.questEncounterCache&&typeof data.questEncounterCache==='object')?data.questEncounterCache:{}; state.areaBossEncountered=(data.areaBossEncountered&&typeof data.areaBossEncountered==='object')?data.areaBossEncountered:{}; $('adminKey').value=data.adminKey||''; if($('dailyQuestCount')&&data.dailyQuestCount) $('dailyQuestCount').value=String(data.dailyQuestCount); setPartySize(data.partySize||4); state.treasureSetup=data.treasureSetup||null; state.treasureContext=data.treasureContext||null; state.dayState=normalizeDayState(data.dayState); }catch(e){}
+  try{const raw=localStorage.getItem(STORE_KEY); if(!raw)return; const data=JSON.parse(raw); state.log=data.log||[]; state.lastDailyQuestText=data.lastDailyQuestText||''; state.lastDailyQuestKeys=Array.isArray(data.lastDailyQuestKeys)?data.lastDailyQuestKeys:[]; state.dailyQuestUnlockedAreaId=String(data.dailyQuestUnlockedAreaId||''); state.questEncounterCache=(data.questEncounterCache&&typeof data.questEncounterCache==='object')?data.questEncounterCache:{}; state.areaBossEncountered=(data.areaBossEncountered&&typeof data.areaBossEncountered==='object')?data.areaBossEncountered:{}; if($('dailyQuestCount')&&data.dailyQuestCount) $('dailyQuestCount').value=String(data.dailyQuestCount); setPartySize(data.partySize||4); state.treasureSetup=data.treasureSetup||null; state.treasureContext=data.treasureContext||null; state.dayState=normalizeDayState(data.dayState); }catch(e){}
 }
 function restoreSavedState(){
   try{
@@ -434,7 +428,6 @@ function restoreSavedState(){
     state.dayState=normalizeDayState(data.dayState||state.dayState);
     if($('dailyQuestCount')&&data.dailyQuestCount) $('dailyQuestCount').value=String(data.dailyQuestCount);
     setPartySize(data.partySize||state.partySize||4);
-    $('adminKey').value=data.adminKey||$('adminKey').value||'';
     renderAll();
     addLog('保存済み進行状態を復元しました。');
   }catch(e){addLog('保存済み進行状態の復元に失敗しました：'+e.message);}
@@ -728,12 +721,20 @@ function jsonp(params, timeoutMs=45000){
     script.src=GAS_URL+'?'+q.toString(); document.body.appendChild(script);
   });
 }
-async function loadSheet(sheetKey){return (await jsonp({action:'list', sheetKey, adminKey:$('adminKey').value||''})).rows||[];}
 async function loadDb(){
   setStatus('warn','DB読込を開始します。');
   $('loadDbBtn').disabled=true;
   try{
-    const [quests,areas,events,monsters,items,treasures,appraisalRules,spells,recipes]=await Promise.all(['quests','exploration_areas','event_tables','monsters','items','treasure_tables','appraisal_rules','spells','recipes'].map(loadSheet));
+    const master=await jsonp({action:'progressMaster'});
+    const quests=master.quests||[];
+    const areas=master.exploration_areas||[];
+    const events=master.event_tables||[];
+    const monsters=master.monsters||[];
+    const items=master.items||[];
+    const treasures=master.treasure_tables||[];
+    const appraisalRules=master.appraisal_rules||[];
+    const spells=master.spells||[];
+    const recipes=master.recipes||[];
     state.quests=quests; state.areas=areas; state.events=events; state.monsters=monsters; state.items=items; state.treasures=treasures; state.appraisalRules=appraisalRules; state.spells=spells; state.recipes=recipes;
     state.progress={quests:{},areas:{}};
     state.lastEventText=''; state.lastEventKey=''; state.lastQuestEventText=''; state.lastQuestEventKey=''; state.lastQuestFixedEventText=''; state.lastQuestFixedEventKey=''; state.triggeredQuestEvents={}; state.areaBossEncountered={}; state.lastRumorText=''; state.lastRumorKey=''; state.lastTreasureText=''; state.lastAppraisalText=''; state.lastDropText=''; state.lastDropSuccessText='';
@@ -1308,7 +1309,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.263-random-each-combat-1';
+const ENCOUNTER_RULE_VERSION='v90.8.267-random-each-combat-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
