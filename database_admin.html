@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.262</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.265</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -533,7 +533,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;ov
 
 .skill-admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;align-items:end}
 .skill-admin-status{margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fffaf3;color:var(--muted);white-space:pre-wrap}.skill-admin-status.ok{border-color:#9bc8ad;background:#effaf3;color:#356346}.skill-admin-status.bad{border-color:#deb0aa;background:#fff1ef;color:#9b4038}.skill-admin-status.warn{border-color:#dcc28d;background:#fff8e5;color:#76581a}
-.skill-result-grid,.skill-acquired-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:9px;margin-top:10px}.skill-result-card{border:1px solid var(--line);border-radius:13px;background:#fffdf8;padding:11px}.skill-result-card.new{border-color:#8ebda0;background:#f2fbf5}.skill-result-card.dup{border-color:#d1ac6d;background:#fff8e8}.skill-result-card h5{margin:0 0 5px;font-size:15px}.skill-slot-list{display:grid;gap:8px;margin-top:10px}.skill-slot-row{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px;align-items:center}.skill-fragment-line{font-weight:900;margin-top:10px}.skill-prob-wrap{max-height:360px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:10px}.skill-prob-table{width:100%;border-collapse:collapse;font-size:12px}.skill-prob-table th,.skill-prob-table td{padding:7px 8px;border-bottom:1px solid #eadcc9;text-align:left}.skill-prob-table th{position:sticky;top:0;background:#f7ead7;z-index:1}.crystal-upgrade-list{display:grid;gap:10px}.crystal-upgrade-card{border:1px solid var(--line);border-radius:14px;background:#fffaf3;padding:12px}.crystal-upgrade-card h5{margin:0 0 7px}.crystal-current{font-size:18px;font-weight:900;color:#6a3f25}.crystal-upgrade-card.is-next{border-color:#a9c5ae;background:#f2fbf4}
+.skill-result-grid,.skill-acquired-grid{display:grid;grid-template-columns:1fr;gap:7px;margin-top:10px}.skill-result-card{border:1px solid var(--line);border-radius:11px;background:#fffdf8;padding:0;overflow:hidden}.skill-result-card.new{border-color:#8ebda0;background:#f2fbf5}.skill-result-card.dup{border-color:#d1ac6d;background:#fff8e8}.skill-result-card summary{cursor:pointer;padding:10px 12px;font-size:15px;font-weight:900;list-style-position:inside}.skill-result-detail{display:grid;gap:6px;padding:0 12px 12px;border-top:1px solid var(--line);padding-top:10px;line-height:1.6}.skill-result-effect{white-space:pre-wrap}.skill-slot-list{display:grid;gap:8px;margin-top:10px}.skill-slot-row{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px;align-items:center}.skill-fragment-line{font-weight:900;margin-top:10px}.skill-prob-wrap{max-height:360px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:10px}.skill-prob-table{width:100%;border-collapse:collapse;font-size:12px}.skill-prob-table th,.skill-prob-table td{padding:7px 8px;border-bottom:1px solid #eadcc9;text-align:left}.skill-prob-table th{position:sticky;top:0;background:#f7ead7;z-index:1}.crystal-upgrade-list{display:grid;gap:10px}.crystal-upgrade-card{border:1px solid var(--line);border-radius:14px;background:#fffaf3;padding:12px}.crystal-upgrade-card h5{margin:0 0 7px}.crystal-current{font-size:18px;font-weight:900;color:#6a3f25}.crystal-upgrade-card.is-next{border-color:#a9c5ae;background:#f2fbf4}
 @media(max-width:560px){.skill-slot-row{grid-template-columns:1fr}.skill-admin-grid{grid-template-columns:1fr}}
 </style>
 
@@ -1169,7 +1169,7 @@ body.modal-open{overflow:hidden!important}
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.262 / 最終更新日：2026年7月25日</div>
+<div class="ra-build-info">Version：v90.8.265 / 最終更新日：2026年7月25日</div>
 
 <header>
   <div class="title-card">
@@ -1728,6 +1728,7 @@ body.modal-open{overflow:hidden!important}
               <div><label for="facilitySkillGachaRank">スキルランク</label><select id="facilitySkillGachaRank"><option value="1">★1</option><option value="2">★2</option></select></div>
               <div><label for="facilitySkillGachaCount">抽選回数</label><input id="facilitySkillGachaCount" type="number" min="1" max="10" value="1"></div>
               <button type="button" data-skill-gacha-draw>抽選結果を出す</button>
+              <button class="ghost" type="button" data-skill-gacha-copy>結果をコピー</button>
             </div>
             <div id="facilitySkillGachaStatus" class="skill-admin-status ok">抽選結果だけを表示します。キャラクターの読込・保存は行いません。</div>
             <div id="facilitySkillGachaCost" class="skill-fragment-line">必要★合計：10</div>
@@ -1815,8 +1816,8 @@ body.modal-open{overflow:hidden!important}
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.262';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.262';
+const RECRAFT_DB_VERSION = 'v90.8.265';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.263';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -4707,7 +4708,8 @@ function renderSkillGachaManagement(){
   const pool=RASkillGachaCore?.enabledPool?.(skillMaster(),rank)||[];
   const drawBtn=document.querySelector('[data-skill-gacha-draw]');if(drawBtn)drawBtn.disabled=!skillRankIsUnlocked(rank)||!pool.length;
   const results=$('facilitySkillGachaResults');
-  if(results)results.innerHTML=currentSkillDrawResults.length?currentSkillDrawResults.map(x=>`<div class="skill-result-card new"><h5>${escapeHtml(x.name)} <span class="facility-chip">★${escapeHtml(String(x.rank))}</span></h5><div>${escapeHtml(x.category||'')} / ${escapeHtml(x.weaponType||'')}</div>${x.publicId?`<div class="small">登録ID：${escapeHtml(x.publicId)}</div>`:''}${x.effect?`<div><b>効果：</b>${escapeHtml(x.effect)}</div>`:''}</div>`).join(''):'<div class="skill-result-card">抽選結果はここに表示されます。</div>';
+  if(results)results.innerHTML=currentSkillDrawResults.length?currentSkillDrawResults.map(x=>`<details class="skill-result-card new"><summary>${escapeHtml(x.name||'名称未設定')}</summary><div class="skill-result-detail"><div><b>登録ID：</b>${escapeHtml(x.publicId||'未設定')}</div><div><b>ランク：</b>★${escapeHtml(String(x.rank||''))}</div><div><b>分類：</b>${escapeHtml(x.category||'未設定')}</div><div><b>武器種：</b>${escapeHtml(x.weaponType||'未設定')}</div><div><b>タイミング：</b>${escapeHtml(x.timing||'未設定')}</div><div><b>消費：</b>${escapeHtml(x.cost||'なし')}</div><div><b>CT：</b>${escapeHtml(x.ct||'なし')}</div><div class="skill-result-effect"><b>効果：</b>${escapeHtml(x.effect||'未設定')}</div></div></details>`).join(''):'<div class="skill-result-card"><div class="skill-result-detail">抽選結果はここに表示されます。</div></div>';
+  const copyBtn=document.querySelector('[data-skill-gacha-copy]');if(copyBtn)copyBtn.disabled=!currentSkillDrawResults.length;
   setSkillStatus(skillRankIsUnlocked(rank)?'抽選結果だけを表示します。キャラクターの読込・保存は行いません。':`★${rank}スキルガチャは${skillRankUnlockLabel(rank)}で解放されます。`,skillRankIsUnlocked(rank)?'ok':'warn');
 }
 function renderCrystalManagement(){
@@ -4722,6 +4724,25 @@ function renderCrystalManagement(){
   setSkillStatus('選択した進行段階に応じて、必要素材・金額・解放条件を表示します。キャラクターへの反映は行いません。','ok');
 }
 function renderSkillManagementPanels(){renderSkillGachaManagement();renderCrystalManagement();}
+function skillGachaResultCopyText(){
+  return currentSkillDrawResults.map((x,index)=>[
+    `スキル名：${x.name||'名称未設定'}`,
+    `登録ID：${x.publicId||'未設定'}`,
+    `ランク：★${x.rank||''}`,
+    `分類：${x.category||'未設定'}`,
+    `武器種：${x.weaponType||'未設定'}`,
+    `タイミング：${x.timing||'未設定'}`,
+    `消費：${x.cost||'なし'}`,
+    `CT：${x.ct||'なし'}`,
+    `効果：${x.effect||'未設定'}`
+  ].join('\n')).join('\n\n');
+}
+async function copySkillGachaResults(){
+  if(!currentSkillDrawResults.length){toast('先に抽選結果を出してください');return;}
+  const ok=await copyAdminTextDirect(skillGachaResultCopyText());
+  if(ok)toast('スキルガチャ結果をコピーしました');
+}
+
 function executeSkillGacha(){
   try{
     const rank=selectedSkillGachaRank();
@@ -8033,6 +8054,7 @@ document.addEventListener('click',e=>{
   }
   const facilityTranscribeCheck=e.target.closest('[data-facility-transcribe-check]'); if(facilityTranscribeCheck){ renderAntiqueTranscriptionResult(); return; }
   const skillDraw=e.target.closest('[data-skill-gacha-draw]'); if(skillDraw){ executeSkillGacha(); return; }
+  const skillCopy=e.target.closest('[data-skill-gacha-copy]'); if(skillCopy){ copySkillGachaResults(); return; }
   const helpCopy=e.target.closest('[data-help-copy]'); if(helpCopy){ copySystemHelp(); return; }
   const helpExpand=e.target.closest('[data-help-expand]'); if(helpExpand){ document.querySelectorAll('#helpCards details').forEach(d=>d.open=true); return; }
   const helpCollapse=e.target.closest('[data-help-collapse]'); if(helpCollapse){ document.querySelectorAll('#helpCards details').forEach(d=>d.open=false); return; }
