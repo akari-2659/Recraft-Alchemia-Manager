@@ -1,10 +1,10 @@
 {
   "format": "recraft-alchemia-github-master",
-  "version": "90.8.265",
+  "version": "90.8.266",
   "updatedAt": "2026-07-25T00:00:00.000Z",
   "encoding": "UTF-8",
   "sourceRepository": "akari-2659/Recraft-Alchemia-Manager",
-  "description": "Recraft-Alchemia public fixed master database. v90.8.260 corrects skill-system progression and retains the facility-sales and random-daily-encounter fixes. ★1スキル本文とスキルガチャ表示を更新。",
+  "description": "Recraft-Alchemia public fixed master database. ★1スキル59件の本文を収録し、管理HTMLの共通DB読込キャッシュ不整合に対応。",
   "recordCount": 1627,
   "data": {
     "item_types": [

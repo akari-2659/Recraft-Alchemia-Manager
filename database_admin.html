@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.265</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.266</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1169,7 +1169,7 @@ body.modal-open{overflow:hidden!important}
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.265 / 最終更新日：2026年7月25日</div>
+<div class="ra-build-info">Version：v90.8.266 / 最終更新日：2026年7月25日</div>
 
 <header>
   <div class="title-card">
@@ -1816,7 +1816,7 @@ body.modal-open{overflow:hidden!important}
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.265';
+const RECRAFT_DB_VERSION = 'v90.8.266';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.263';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -2041,8 +2041,13 @@ const tableUiState = Object.fromEntries(TABLE_KEYS.map(key => [key, { sortField:
 const INITIAL_DATA_FORMAT = 'recraft-alchemia-initial-data';
 const GITHUB_COMMON_DATA_FORMAT = 'recraft-alchemia-github-master';
 const INITIAL_DATA_PATH = './data/recraft_alchemia_initial_data.json';
-const GITHUB_COMMON_DB_BASE = 'https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
-const GITHUB_COMMON_DB_MANIFEST_URL = GITHUB_COMMON_DB_BASE + 'manifest.json';
+const GITHUB_COMMON_DB_REMOTE_BASE = 'https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
+function githubCommonDbBaseCandidates(){
+  const bases=[];
+  try{ bases.push(new URL('./data/public/', window.location.href).toString()); }catch(_e){}
+  bases.push(GITHUB_COMMON_DB_REMOTE_BASE);
+  return [...new Set(bases.filter(Boolean))];
+}
 let githubCommonMasterPromise = null;
 let DEFAULTS = createEmptyDataSet();
 let initialDataLoaded = false;
@@ -2097,25 +2102,35 @@ function applyInitialData(raw, sourceLabel='表示用マスター'){
 async function fetchGithubCommonMaster({force=false}={}){
   if(githubCommonMasterPromise && !force) return githubCommonMasterPromise;
   const task = (async()=>{
-    const manifestResponse = await fetch(GITHUB_COMMON_DB_MANIFEST_URL, {cache:'no-store'});
-    if(!manifestResponse.ok) throw new Error(`manifest HTTP ${manifestResponse.status}`);
-    const manifest = await manifestResponse.json();
-    const masterFile = String(manifest.master || '').trim();
-    if(!masterFile || masterFile.includes('..') || masterFile.includes('\\')){
-      throw new Error('manifestのmasterファイル名が不正です');
+    const errors=[];
+    for(const base of githubCommonDbBaseCandidates()){
+      try{
+        const manifestUrl=new URL('manifest.json', base);
+        manifestUrl.searchParams.set('_ra', String(Date.now()));
+        const manifestResponse=await fetch(manifestUrl.toString(), {cache:'no-store'});
+        if(!manifestResponse.ok) throw new Error(`manifest HTTP ${manifestResponse.status}`);
+        const manifest=await manifestResponse.json();
+        const masterFile=String(manifest.master || '').trim();
+        if(!masterFile || masterFile.includes('..') || masterFile.includes(String.fromCharCode(92))){
+          throw new Error('manifestのmasterファイル名が不正です');
+        }
+        const manifestVersion=String(manifest.version || '').trim();
+        const cacheKey=String(manifest.sha256 || manifestVersion || Date.now()).trim();
+        const masterUrl=new URL(masterFile, base);
+        masterUrl.searchParams.set('_ra', cacheKey);
+        const masterResponse=await fetch(masterUrl.toString(), {cache:'no-store'});
+        if(!masterResponse.ok) throw new Error(`master HTTP ${masterResponse.status}`);
+        const master=await masterResponse.json();
+        const masterVersion=String(master.version || '').trim();
+        if(manifestVersion && masterVersion && manifestVersion !== masterVersion){
+          throw new Error(`manifestとmasterのバージョンが一致しません（${manifestVersion} / ${masterVersion}）`);
+        }
+        return {manifest, master, version:manifestVersion || masterVersion, base};
+      }catch(error){
+        errors.push(`${base}: ${error && error.message ? error.message : error}`);
+      }
     }
-    const masterResponse = await fetch(
-      new URL(masterFile, GITHUB_COMMON_DB_BASE).toString(),
-      {cache: force ? 'reload' : 'force-cache'}
-    );
-    if(!masterResponse.ok) throw new Error(`master HTTP ${masterResponse.status}`);
-    const master = await masterResponse.json();
-    const manifestVersion = String(manifest.version || '').trim();
-    const masterVersion = String(master.version || '').trim();
-    if(manifestVersion && masterVersion && manifestVersion !== masterVersion){
-      throw new Error(`manifestとmasterのバージョンが一致しません（${manifestVersion} / ${masterVersion}）`);
-    }
-    return {manifest, master, version:manifestVersion || masterVersion};
+    throw new Error(errors.join(' / ') || 'GitHub共通DBの取得先がありません');
   })();
   githubCommonMasterPromise = task;
   try{
@@ -7723,7 +7738,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.262';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.266';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-07-25';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([

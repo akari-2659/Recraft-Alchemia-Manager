@@ -1,8 +1,8 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "90.8.265",
+  "version": "90.8.266",
   "encoding": "UTF-8",
-  "description": "Recraft-Alchemia bundled master data. v90.8.260 corrects skill-system progression: ★1 begins with the antique shop, ★2 unlocks at the old mine, and the 3rd crystal slot unlocks at the next normal area. ★1スキル本文とスキルガチャ表示を更新。",
+  "description": "Recraft-Alchemia bundled master data. ★1スキル59件の本文を収録し、管理HTMLの共通DB読込キャッシュ不整合に対応。",
   "data": {
     "item_types": [
       {
