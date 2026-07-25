@@ -1,6 +1,6 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "90.8.261",
+  "version": "90.8.262",
   "encoding": "UTF-8",
   "description": "Recraft-Alchemia bundled master data. v90.8.260 corrects skill-system progression: ★1 begins with the antique shop, ★2 unlocks at the old mine, and the 3rd crystal slot unlocks at the next normal area.",
   "data": {
@@ -43207,7 +43207,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "攻撃失敗後の限定的な立て直し。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-3EB3-896F",
         "dataKind": "スキル",
@@ -43217,7 +43217,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_dagger_double_feint",
@@ -43228,7 +43232,7 @@
         "drawWeight": 90,
         "balanceTier": "強力",
         "balanceReason": "短いCTでも攻撃判定の安定性が高い。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.558442,
         "publicId": "RCA-B979-B9EA",
         "dataKind": "スキル",
@@ -43238,7 +43242,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_dagger_fallback_cut",
@@ -43249,7 +43257,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "攻撃後の隊列調整。用途は明確だが万能ではない。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-CC65-6EDB",
         "dataKind": "スキル",
@@ -43259,7 +43267,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_sword_duel_mark",
@@ -43270,7 +43282,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "敵の近接対象を制限し、前衛維持への影響が大きい。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-AA22-5F16",
         "dataKind": "スキル",
@@ -43280,7 +43292,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_sword_safety_return",
@@ -43291,7 +43307,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "失敗時の防御移行。条件付きで安定性を補う。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-7C6A-8A69",
         "dataKind": "スキル",
@@ -43301,7 +43317,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_sword_blade_press",
@@ -43312,7 +43332,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "片手剣の前線制御を伸ばす標準枠。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-4D1F-AFC0",
         "dataKind": "スキル",
@@ -43322,7 +43342,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_sword_escort_edge",
@@ -43333,7 +43357,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "護衛寄りの役割を広げるが、状況依存。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-A882-6373",
         "dataKind": "スキル",
@@ -43343,7 +43367,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_axe_weight_shift",
@@ -43354,7 +43382,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "片手斧の扱いを変える標準的な選択肢。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-AF2D-8070",
         "dataKind": "スキル",
@@ -43364,7 +43392,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_axe_grip_shift",
@@ -43375,7 +43407,7 @@
         "drawWeight": 105,
         "balanceTier": "限定的",
         "balanceReason": "装備・状況への依存がやや強い。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.818182,
         "publicId": "RCA-8D6B-2506",
         "dataKind": "スキル",
@@ -43385,7 +43417,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_axe_graze_chop",
@@ -43396,7 +43432,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "失敗時にも半減ダメージを残せるため結果への影響が大きい。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-CC51-0370",
         "dataKind": "スキル",
@@ -43406,7 +43442,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_hammer_flat_impact",
@@ -43417,7 +43457,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "片手槌の打撃運用を広げる標準枠。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-35F2-23C3",
         "dataKind": "スキル",
@@ -43427,7 +43467,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_hammer_target_break",
@@ -43438,7 +43482,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "攻撃後の戦況への影響が比較的大きい。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-8F2A-5FF6",
         "dataKind": "スキル",
@@ -43448,7 +43492,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_hammer_stock_impact",
@@ -43459,7 +43507,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "発動条件と効果の釣り合いが標準的。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-59BD-D54F",
         "dataKind": "スキル",
@@ -43469,7 +43517,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_spear_guard_thrust",
@@ -43480,7 +43532,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "攻守を両立するが片手槍限定。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-CD5D-8898",
         "dataKind": "スキル",
@@ -43490,7 +43542,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_spear_screen_thrust",
@@ -43501,7 +43557,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "後衛への物理攻撃を封じ、パーティー保護への影響が大きい。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-5A2F-78B0",
         "dataKind": "スキル",
@@ -43511,7 +43567,11 @@
         "ct": "2",
         "effect": "この攻撃に成功し、対象へ1点以上のダメージを与えた場合、対象は次の手番終了まで攻撃の対象に後衛のキャラクターを選べない。術式・祈祷の対象選択には影響しない。このスキルは、ほかのスキルと併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_spear_relief_shift",
@@ -43522,7 +43582,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "味方の前線整理に有効だが場面を選ぶ。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-71E3-65D0",
         "dataKind": "スキル",
@@ -43532,7 +43592,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_staff_resonance_blow",
@@ -43543,7 +43607,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "杖の打撃と術式運用をつなぐ標準枠。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-1A5B-853C",
         "dataKind": "スキル",
@@ -43553,7 +43617,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_staff_word_switch",
@@ -43564,7 +43632,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "選択肢を増やすが、杖装備時に限定される。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-78DD-A2CC",
         "dataKind": "スキル",
@@ -43574,7 +43642,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_staff_recurrent_blow",
@@ -43585,7 +43657,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "再利用・再展開に関わるためやや低め。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-337C-C960",
         "dataKind": "スキル",
@@ -43595,7 +43667,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_whip_snap_drag",
@@ -43606,7 +43682,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "鞭の間合い操作を伸ばす標準枠。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-87DA-5A82",
         "dataKind": "スキル",
@@ -43616,7 +43692,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_whip_twin_reel",
@@ -43627,7 +43707,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "複数の選択肢を同時に扱えるためやや低め。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-EACE-610E",
         "dataKind": "スキル",
@@ -43637,7 +43717,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_whip_watch_reel",
@@ -43648,7 +43732,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "待ち構える運用で状況依存。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-9361-E4AB",
         "dataKind": "スキル",
@@ -43658,7 +43742,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_scythe_link_reap",
@@ -43669,7 +43757,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "大鎌の複数対象運用を広げる標準枠。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-5EC4-AE4D",
         "dataKind": "スキル",
@@ -43679,7 +43767,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_scythe_switch_reap",
@@ -43690,7 +43782,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "対象・位置の選択肢を増やすが万能ではない。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-E30D-8C51",
         "dataKind": "スキル",
@@ -43700,7 +43792,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_scythe_cross_reap",
@@ -43711,7 +43807,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "複数対象への影響が大きいためやや低め。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-EAA8-6B32",
         "dataKind": "スキル",
@@ -43721,7 +43817,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_gauntlet_one_two_rush",
@@ -43732,7 +43832,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "攻撃の安定・圧力が高く、短CTでも強め。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-C6EC-8B0B",
         "dataKind": "スキル",
@@ -43742,7 +43842,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_gauntlet_switch_rush",
@@ -43753,7 +43857,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "前線調整を含む標準的な運用拡張。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-1369-51CF",
         "dataKind": "スキル",
@@ -43763,7 +43867,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_gauntlet_cross_guard",
@@ -43774,7 +43882,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "防御寄りで汎用性はあるが武器限定。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-D862-28DB",
         "dataKind": "スキル",
@@ -43784,7 +43892,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_greatsword_all_or_blade",
@@ -43795,7 +43907,7 @@
         "drawWeight": 90,
         "balanceTier": "強力",
         "balanceReason": "大きな結果を狙える高影響スキル。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.558442,
         "publicId": "RCA-EB2E-0E33",
         "dataKind": "スキル",
@@ -43805,7 +43917,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_greatsword_recut_roll",
@@ -43816,7 +43932,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "ダメージ結果への直接介入ができる。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-835C-79A9",
         "dataKind": "スキル",
@@ -43826,7 +43942,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_greatsword_full_swing",
@@ -43837,7 +43957,7 @@
         "drawWeight": 85,
         "balanceTier": "最上位",
         "balanceReason": "武器ダメージのダイス数2倍。★1内で最も戦況への影響が大きい。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.471861,
         "publicId": "RCA-4C97-3D59",
         "dataKind": "スキル",
@@ -43847,7 +43967,11 @@
         "ct": "戦闘終了",
         "effect": "現在装備している両手剣の武器ダメージダイス数を2倍にする。使用後、次の自分の手番では攻撃できない。このスキルは、ほかのスキルおよび《力業》と併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_greathammer_swing_through",
@@ -43858,7 +43982,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "大槌の高火力を通しやすくするためやや低め。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-F08E-C898",
         "dataKind": "スキル",
@@ -43868,7 +43992,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_greathammer_precharge",
@@ -43879,7 +44007,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "事前準備から大きな結果につながる。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-A625-8E00",
         "dataKind": "スキル",
@@ -43889,7 +44017,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_greathammer_recovery_guard",
@@ -43900,7 +44032,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "攻撃後の隙を補う標準枠。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-EB2B-D460",
         "dataKind": "スキル",
@@ -43910,7 +44042,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_longspear_line_entry",
@@ -43921,7 +44057,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "隊列と間合いを扱う標準枠。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-DE0F-F751",
         "dataKind": "スキル",
@@ -43931,7 +44067,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_longspear_point_guide",
@@ -43942,7 +44082,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "狙いを整えるが長槍限定。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-966F-2B58",
         "dataKind": "スキル",
@@ -43952,7 +44092,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_longspear_first_point",
@@ -43963,7 +44107,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "戦闘序盤の主導権に影響しやすい。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-FEFE-0250",
         "dataKind": "スキル",
@@ -43973,7 +44117,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_bow_safe_nock",
@@ -43984,7 +44132,7 @@
         "drawWeight": 105,
         "balanceTier": "限定的",
         "balanceReason": "特殊矢を使う失敗時のみ。強い節約だが条件が狭い。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.818182,
         "publicId": "RCA-4668-B646",
         "dataKind": "スキル",
@@ -43994,7 +44142,11 @@
         "ct": "1",
         "effect": "使用した特殊矢を消費せず、予備として指定した通常矢を1本消費する。このスキルは、ほかのスキルと併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_bow_dual_nock",
@@ -44005,7 +44157,7 @@
         "drawWeight": 90,
         "balanceTier": "強力",
         "balanceReason": "2種の矢の属性・追加効果を組み合わせられ、応用幅が大きい。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.558442,
         "publicId": "RCA-D875-7592",
         "dataKind": "スキル",
@@ -44015,7 +44167,11 @@
         "ct": "2",
         "effect": "異なる矢を2本消費する。一方の矢から属性とダメージを、もう一方の矢から追加効果だけを適用する。このスキルは、ほかのスキルと併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_bow_reuse_nock",
@@ -44026,7 +44182,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "通常矢の消費を抑えるが対象は限定的。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-26F3-3BCD",
         "dataKind": "スキル",
@@ -44036,7 +44192,11 @@
         "ct": "2",
         "effect": "使用した通常矢を消費せず、矢筒へ戻す。このスキルは、ほかのスキルと併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_crossbow_single_load",
@@ -44047,7 +44207,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "装填状態を無視して攻撃へつなげられる。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-6FBC-CD3B",
         "dataKind": "スキル",
@@ -44057,7 +44217,11 @@
         "ct": "2",
         "effect": "その手番だけ矢弾1発を装填して弩攻撃を行う。攻撃後も装填が必要な状態のままとなる。このスキルは、ほかのスキルおよび《力業》と併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_crossbow_stay_load",
@@ -44068,7 +44232,7 @@
         "drawWeight": 105,
         "balanceTier": "限定的",
         "balanceReason": "移動不可など制約が重く、状況を選ぶ。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.818182,
         "publicId": "RCA-AF17-7C9B",
         "dataKind": "スキル",
@@ -44078,7 +44242,11 @@
         "ct": "戦闘終了",
         "effect": "この手番は移動できない。行動を消費せず装填し、その後は通常どおり行動できる。このスキルは、ほかのスキルと併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_crossbow_guard_load",
@@ -44089,7 +44257,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "装填と防御をまとめるが、その手番の自由度を失う。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-4C5A-E5DA",
         "dataKind": "スキル",
@@ -44099,7 +44267,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_heavycrossbow_reserve_cock",
@@ -44110,7 +44282,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "大型弩の装填管理を補う標準枠。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-3E9A-119B",
         "dataKind": "スキル",
@@ -44120,7 +44292,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_heavycrossbow_hold_trigger",
@@ -44131,7 +44307,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "高威力攻撃の発射時機を制御できる。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-7AB3-B63F",
         "dataKind": "スキル",
@@ -44141,7 +44317,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_heavycrossbow_recock_keep",
@@ -44152,7 +44332,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "装填状態の維持に特化し、武器限定。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-41E5-288D",
         "dataKind": "スキル",
@@ -44162,7 +44342,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_magicbook_redirect_cast",
@@ -44173,7 +44357,7 @@
         "drawWeight": 110,
         "balanceTier": "限定的",
         "balanceReason": "単体術式失敗時かつ別の有効対象が必要。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.904762,
         "publicId": "RCA-205B-76C2",
         "dataKind": "スキル",
@@ -44183,7 +44367,11 @@
         "ct": "2",
         "effect": "その術式の対象を、術式本来の対象条件を満たす別の敵1体へ変更する。術式判定は振り直さず、最初の判定結果を変更後の対象の回避値または抵抗値と比較する。列または複数対象の術式には使用できない。このスキルは、ほかのスキルと併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_magicbook_rewrite_page",
@@ -44194,7 +44382,7 @@
         "drawWeight": 90,
         "balanceTier": "強力",
         "balanceReason": "術式1つを戦闘中失う代わりに失敗判定を振り直せる。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.558442,
         "publicId": "RCA-755C-0619",
         "dataKind": "スキル",
@@ -44204,7 +44392,11 @@
         "ct": "戦闘終了",
         "effect": "使用した魔法術式を戦闘終了まで使用できない状態にし、同じ魔法術式の判定を1回だけ振り直して新しい結果を適用する。MPは追加で消費しない。このスキルは、ほかのスキルと併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_magicbook_page_swap",
@@ -44215,7 +44407,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "戦闘中にセット術式を入れ替え、対応力が大きく上がる。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-B2D5-73E1",
         "dataKind": "スキル",
@@ -44225,7 +44417,11 @@
         "ct": "戦闘終了",
         "effect": "装備している魔導書にセット中の魔法術式1つを、習得済みで現在セットしていない魔法術式1つと入れ替える。入れ替えは戦闘終了まで継続し、術式枠数は増加しない。このスキルは、ほかのスキルと併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_prayerbook_divide_pray",
@@ -44236,7 +44432,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "単体回復を2人へ分配でき、回復の柔軟性が高い。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-796E-6157",
         "dataKind": "スキル",
@@ -44246,7 +44442,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_prayerbook_transfer_bless",
@@ -44257,7 +44457,7 @@
         "drawWeight": 110,
         "balanceTier": "限定的",
         "balanceReason": "移動可能な継続祈祷効果が存在する場面に限定。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.904762,
         "publicId": "RCA-4C4C-CC54",
         "dataKind": "スキル",
@@ -44267,7 +44467,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_prayerbook_overflow_pray",
@@ -44278,7 +44482,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "無駄になる過剰回復を一時保存できる。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-DE80-C5DA",
         "dataKind": "スキル",
@@ -44288,7 +44492,11 @@
         "ct": "",
         "effect": "",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_general_recovery_count",
@@ -44299,7 +44507,7 @@
         "drawWeight": 90,
         "balanceTier": "強力",
         "balanceReason": "残りCT1を即時終了させ、強いスキルの再使用を早められる。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.558442,
         "publicId": "RCA-F747-0028",
         "dataKind": "スキル",
@@ -44309,7 +44517,11 @@
         "ct": "戦闘終了",
         "effect": "このスキル以外の、残りCTが1のスキルを1つ選ぶ。選んだスキルのCTを終了させ、再使用可能にする。このスキルは、ほかのスキルと併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_general_last_reserve",
@@ -44320,7 +44532,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "MP0時のみHP3でMP2回復。条件と代償が重い。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-BC89-0889",
         "dataKind": "スキル",
@@ -44330,7 +44542,11 @@
         "ct": "戦闘終了",
         "effect": "自分のMPを2点回復する。最大MPを超えて回復できない。このスキルは、ほかのスキルと併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_general_item_recover",
@@ -44341,7 +44557,7 @@
         "drawWeight": 110,
         "balanceTier": "限定的",
         "balanceReason": "判定を要する消耗品の失敗時のみ。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.904762,
         "publicId": "RCA-4C3D-FF6C",
         "dataKind": "スキル",
@@ -44351,7 +44567,11 @@
         "ct": "2",
         "effect": "使用した消耗品を消費せず、所持品へ戻す。判定不要の消耗品や、判定成功後に効果が無効化された場合には使用できない。このスキルは、ほかのスキルと併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_general_last_stand",
@@ -44362,7 +44582,7 @@
         "drawWeight": 90,
         "balanceTier": "強力",
         "balanceReason": "戦闘不能を一度だけHP1で踏みとどまる。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.558442,
         "publicId": "RCA-93D9-87A9",
         "dataKind": "スキル",
@@ -44372,7 +44592,11 @@
         "ct": "戦闘終了",
         "effect": "そのダメージを受けた後、自分のHPを1にする。現在MPが2未満の場合は使用できない。このスキルは、ほかのスキルと併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_explore_retrace",
@@ -44383,7 +44607,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "主要探索判定の失敗を振り直せる。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-343F-C59A",
         "dataKind": "スキル",
@@ -44393,7 +44617,11 @@
         "ct": "クエスト終了",
         "effect": "同じ判定を1回だけ振り直し、新しい判定結果を適用する。判定者や使用技能は変更できない。このスキルは、ほかのスキルと併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_explore_harvest_choice",
@@ -44404,7 +44632,7 @@
         "drawWeight": 100,
         "balanceTier": "標準",
         "balanceReason": "採取個数のみを振り直し、前後から選べる。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.731602,
         "publicId": "RCA-F9E4-89FC",
         "dataKind": "スキル",
@@ -44414,7 +44642,11 @@
         "ct": "クエスト終了",
         "effect": "入手個数を決めるダイスをすべて振り直し、振り直す前と後のどちらか一方を選ぶ。達成値や追加報酬は変更しない。このスキルは、ほかのスキルと併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_explore_trail_shift",
@@ -44425,7 +44657,7 @@
         "drawWeight": 95,
         "balanceTier": "やや強力",
         "balanceReason": "ランダム探索イベントそのものを引き直せる。",
-        "enabled": true,
+        "enabled": "TRUE",
         "probability": 1.645022,
         "publicId": "RCA-01DE-2DD6",
         "dataKind": "スキル",
@@ -44435,7 +44667,11 @@
         "ct": "クエスト終了",
         "effect": "決定した探索イベントを一度だけ振り直し、新しく決定したイベントへ変更する。固定イベント、探索度100％イベント、ボスイベントには使用できない。このスキルは、ほかのスキルと併用できない。",
         "unlockAreaKey": "area_nearby_forest",
-        "unlockCondition": "近郊の森で骨董屋を解放後"
+        "unlockCondition": "近郊の森で骨董屋を解放後",
+        "notes": "",
+        "updatedAt": "2026-07-25",
+        "ownerKey": "",
+        "createdBy": ""
       }
     ]
   },
