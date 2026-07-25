@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.255</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.261</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -530,6 +530,11 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;ov
   .unlock-key-input-row button{flex:0 1 auto;white-space:nowrap}
   #panel-exploration_areas .record-field:has(.record-field-label:first-child){min-width:0}
   #panel-exploration_areas .record-field-value{overflow-wrap:anywhere}
+
+.skill-admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;align-items:end}
+.skill-admin-status{margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:#fffaf3;color:var(--muted);white-space:pre-wrap}.skill-admin-status.ok{border-color:#9bc8ad;background:#effaf3;color:#356346}.skill-admin-status.bad{border-color:#deb0aa;background:#fff1ef;color:#9b4038}.skill-admin-status.warn{border-color:#dcc28d;background:#fff8e5;color:#76581a}
+.skill-result-grid,.skill-acquired-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:9px;margin-top:10px}.skill-result-card{border:1px solid var(--line);border-radius:13px;background:#fffdf8;padding:11px}.skill-result-card.new{border-color:#8ebda0;background:#f2fbf5}.skill-result-card.dup{border-color:#d1ac6d;background:#fff8e8}.skill-result-card h5{margin:0 0 5px;font-size:15px}.skill-slot-list{display:grid;gap:8px;margin-top:10px}.skill-slot-row{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px;align-items:center}.skill-fragment-line{font-weight:900;margin-top:10px}.skill-prob-wrap{max-height:360px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:10px}.skill-prob-table{width:100%;border-collapse:collapse;font-size:12px}.skill-prob-table th,.skill-prob-table td{padding:7px 8px;border-bottom:1px solid #eadcc9;text-align:left}.skill-prob-table th{position:sticky;top:0;background:#f7ead7;z-index:1}.crystal-upgrade-list{display:grid;gap:10px}.crystal-upgrade-card{border:1px solid var(--line);border-radius:14px;background:#fffaf3;padding:12px}.crystal-upgrade-card h5{margin:0 0 7px}.crystal-current{font-size:18px;font-weight:900;color:#6a3f25}.crystal-upgrade-card.is-next{border-color:#a9c5ae;background:#f2fbf4}
+@media(max-width:560px){.skill-slot-row{grid-template-columns:1fr}.skill-admin-grid{grid-template-columns:1fr}}
 </style>
 
 <style id="raBuildInfoStyle">
@@ -1164,7 +1169,7 @@ body.modal-open{overflow:hidden!important}
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.255 / 最終更新日：2026年7月23日</div>
+<div class="ra-build-info">Version：v90.8.261 / 最終更新日：2026年7月25日</div>
 
 <header>
   <div class="title-card">
@@ -1625,6 +1630,17 @@ body.modal-open{overflow:hidden!important}
           </div>
           <div id="facilityUpgradeResult" class="facility-upgrade-result muted">強化素材・強化回数・使用済み強化枠・使用道具を選択してください。</div>
         </div>
+        <div id="facilityCrystalWork" class="facility-work-block hidden">
+          <div class="skill-admin-grid">
+            <div><label for="facilityCrystalPlayerKey">プレイヤーキー</label><input id="facilityCrystalPlayerKey" autocomplete="off" placeholder="キャラクター保存先のプレイヤーキー"></div>
+            <div><label for="facilityCrystalCharacterSelect">対象キャラクター</label><select id="facilityCrystalCharacterSelect"><option value="">一覧を読み込んでください</option></select></div>
+            <div><label for="facilityCrystalProgressArea">解放済み通常エリア</label><select id="facilityCrystalProgressArea"></select></div>
+            <button class="secondary" type="button" data-skill-load-characters="crystal">キャラクター一覧を読込</button>
+            <button type="button" data-crystal-apply disabled>素材・G確認後に強化を反映</button>
+          </div>
+          <div id="facilityCrystalStatus" class="skill-admin-status warn">プレイヤーキーを入力してキャラクター一覧を読み込んでください。</div>
+          <div id="facilityCrystalUpgradeSummary" class="crystal-upgrade-list"></div>
+        </div>
         <div id="facilityAlchemyWork" class="facility-work-block hidden">
           <div class="input-action-row">
             <div>
@@ -1694,6 +1710,24 @@ body.modal-open{overflow:hidden!important}
               <button class="secondary" type="button" data-facility-transcribe-check>集中術式化を確認</button>
             </div>
             <div id="facilityTranscribeResult" class="facility-upgrade-result muted">術式種別と階級を選択してください。施設への集中術式化はできません。</div>
+          </div>
+          <div id="facilityAntiqueSkillGachaWork" class="hidden">
+            <div class="skill-admin-grid">
+              <div><label for="facilitySkillGachaPlayerKey">プレイヤーキー</label><input id="facilitySkillGachaPlayerKey" autocomplete="off" placeholder="キャラクター保存先のプレイヤーキー"></div>
+              <div><label for="facilitySkillGachaCharacterSelect">対象キャラクター</label><select id="facilitySkillGachaCharacterSelect"><option value="">一覧を読み込んでください</option></select></div>
+              <button class="secondary" type="button" data-skill-load-characters="gacha">キャラクター一覧を読込</button>
+              <div><label for="facilitySkillGachaProgressArea">解放済み通常エリア</label><select id="facilitySkillGachaProgressArea"></select></div>
+              <div><label for="facilitySkillGachaRank">スキルランク</label><select id="facilitySkillGachaRank"><option value="1">★1</option><option value="2">★2</option></select></div>
+              <div><label for="facilitySkillGachaCount">抽選回数</label><input id="facilitySkillGachaCount" type="number" min="1" max="10" value="1"></div>
+              <button type="button" data-skill-gacha-draw disabled>抽選してキャラクターへ保存</button>
+            </div>
+            <div id="facilitySkillGachaStatus" class="skill-admin-status warn">プレイヤーキーを入力してキャラクター一覧を読み込んでください。</div>
+            <div id="facilitySkillGachaCost" class="skill-fragment-line">必要★合計：10</div>
+            <div id="facilitySkillGachaResults" class="skill-result-grid"></div>
+            <h4>スキルクリスタル</h4><div id="facilitySkillGachaSlots" class="skill-slot-list"></div>
+            <div id="facilitySkillGachaFragments" class="skill-fragment-line">共鳴片：なし</div>
+            <h4>習得済みスキル</h4><div id="facilitySkillGachaAcquired" class="skill-acquired-grid"></div>
+            <details><summary id="facilitySkillGachaRateSummary">★1排出率</summary><div class="skill-prob-wrap"><table class="skill-prob-table"><thead><tr><th>スキル</th><th>分類</th><th>ウェイト</th><th>排出率</th></tr></thead><tbody id="facilitySkillGachaProbBody"></tbody></table></div></details>
           </div>
         </div>
         <div id="facilityNoWork" class="facility-upgrade-result muted hidden">この施設には強化・調合の難易度確認項目はありません。</div>
@@ -1772,10 +1806,11 @@ body.modal-open{overflow:hidden!important}
 </div>
 
 <div class="toast" id="toast"></div>
+<script src="js/ra_skill_gacha_core.js"></script>
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.255';
+const RECRAFT_DB_VERSION = 'v90.8.261';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.184';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1789,7 +1824,7 @@ const SCHEMA = {
   material_categories: ['id','name','materialType','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   material_ranks: ['id','name','price','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   equipment_categories: ['id','name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
-  items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','power','maxStack','ammoUse','ammoKind','compatibleWeaponTypes','quiverCapacity','bagCapacity','offhandBonus','reloadTurns','spellSlots','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeSlotCost','equipmentUpgradeDetail','equipmentUpgradeTarget','unlockAreaKey','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
+  items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','power','maxStack','ammoUse','ammoKind','compatibleWeaponTypes','quiverCapacity','bagCapacity','offhandBonus','reloadTurns','spellSlots','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','enchantTarget','enchantEffectType','enchantValue','enchantDuration','enchantRounds','enchantStackRule','description','effect','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeSlotCost','equipmentUpgradeDetail','equipmentUpgradeTarget','unlockAreaKey','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   recipes: ['id','publicId','name','rank','price','recipePrice','recipeSource','craftSkill','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockAreaKey','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   spells: ['id','publicId','type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   quest_rewards: ['id','rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards','notes','updatedAt','ownerKey','createdBy'],
@@ -1801,7 +1836,7 @@ const SCHEMA = {
   monsters: ['id','name','monsterType','monsterTraits','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','encounterValue','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule','passiveName','passiveEffect','actions','drops','habit','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', recipePrice:'レシピ価格', recipeSource:'レシピ入手先', craftSkill:'製作技能', rank:'ランク', toolRank:'使用可能上限ランク', guaranteeUpgradeMaxRank:'強化確定上限ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生名（代表素材系統）', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', compatibleWeaponTypes:'対応武器種', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', spellSlots:'術式追加枠', modifiers:'補正値', upgradeLimit:'強化枠上限', upgradeMaterialMinRank:'強化素材最低ランク', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', pullRule:'引き寄せ', passiveName:'固有パッシブ名', passiveEffect:'固有パッシブ効果', habit:'習性', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', equipmentUpgradeSlotCost:'消費強化枠', equipmentUpgradeDetail:'特殊能力詳細', equipmentUpgradeTarget:'強化対象', unlockAreaKey:'必要解放エリア', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockKey:'エリア解放キー', unlockOrder:'解放順', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知難易度', trapDisarmDifficulty:'罠解除難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', monsterTraits:'魔物特性', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'防御値', initiative:'先制値', encounterValue:'遭遇値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ'
+  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', recipePrice:'レシピ価格', recipeSource:'レシピ入手先', craftSkill:'製作技能', rank:'ランク', toolRank:'使用可能上限ランク', guaranteeUpgradeMaxRank:'強化確定上限ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生名（代表素材系統）', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', compatibleWeaponTypes:'対応武器種', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', spellSlots:'術式追加枠', modifiers:'補正値', upgradeLimit:'強化枠上限', upgradeMaterialMinRank:'強化素材最低ランク', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', enchantTarget:'エンチャント対象', enchantEffectType:'エンチャント効果種別', enchantValue:'エンチャント値', enchantDuration:'持続期間', enchantRounds:'持続ラウンド', enchantStackRule:'重複ルール', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', pullRule:'引き寄せ', passiveName:'固有パッシブ名', passiveEffect:'固有パッシブ効果', habit:'習性', description:'説明', effect:'効果', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', equipmentUpgradeSlotCost:'消費強化枠', equipmentUpgradeDetail:'特殊能力詳細', equipmentUpgradeTarget:'強化対象', unlockAreaKey:'必要解放エリア', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', questType:'クエスト種別', areaName:'エリア', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockKey:'エリア解放キー', unlockOrder:'解放順', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知難易度', trapDisarmDifficulty:'罠解除難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', monsterTraits:'魔物特性', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'防御値', initiative:'先制値', encounterValue:'遭遇値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ'
 };
 
 const FORM_PRIMARY_FIELDS = {
@@ -1830,7 +1865,7 @@ const FIELD_PLACEHOLDERS = {
 };
 FIELD_PLACEHOLDERS.encounterFormation='1体なら前衛。2体以上も前衛を最低1体置きます。全員前衛は可、全員後衛は不可。';
 FIELD_PLACEHOLDERS.encounterComposition='例：前衛,ルートハウンド,1;後衛,マイコニド,1。人数確定後に前衛不在なら1体を前衛へ自動移動します。';
-const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','checkType','type','role','setItem','unlockAreaKey','unlockFacility','equipmentUpgradeEffect','equipmentUpgradeTarget','ammoUse','ammoKind','craftSkill','craftType','baseItem','branchType','enabled','hasLock','hasTrap','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','conditionType','conditionValue','treasureTableId','tableId','treasureRank','hasLock','hasTrap','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','facilityName','spellType','spellRank','monsterType','resultKind','element','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule']);
+const FORM_SELECT_FIELDS = new Set(['dataKind','csVisible','itemType','itemCategory','materialType','materialCategory','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','checkType','type','role','setItem','unlockAreaKey','unlockFacility','equipmentUpgradeEffect','equipmentUpgradeTarget','ammoUse','ammoKind','craftSkill','craftType','baseItem','branchType','enabled','hasLock','hasTrap','scale','questType','areaName','bossMonster','areaType','difficulty','eventType','conditionType','conditionValue','treasureTableId','tableId','treasureRank','hasLock','hasTrap','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','facilityName','spellType','spellRank','monsterType','resultKind','element','enchantTarget','enchantEffectType','enchantDuration','enchantStackRule','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule']);
 let formState = { key:null, idx:null, mode:'new', defaultDataKind:'', defaultItemType:'' };
 let quickCategoryDirty = false;
 let currentMainTab = 'categories';
@@ -1850,6 +1885,14 @@ let currentFacilityWeaponBranchSearch = '';
 let currentAntiqueRandomRows = [];
 let currentAntiqueRandomArea = '';
 let currentAntiqueAppraisalText = '';
+const SKILL_PLAYER_KEY_STORAGE='recraft_alchemia_skill_player_key_v1';
+let currentSkillPlayerKey=localStorage.getItem(SKILL_PLAYER_KEY_STORAGE)||'';
+let currentSkillCharacters=[];
+let currentSkillCharacter=null;
+let currentSkillCharacterId='';
+let currentSkillDrawResults=[];
+let currentSkillStatusMessage='';
+let currentSkillStatusType='warn';
 let currentGuildShowHiddenImportant = false;
 let currentGuildDailyCount = 5;
 let currentGuildDailyKeys = [];
@@ -2028,6 +2071,10 @@ function updateInitialDataStatus(){
   }
 }
 function applyInitialData(raw, sourceLabel='表示用マスター'){
+  const source = extractInitialDataPayload(raw);
+  window.RA_SKILL_MASTER = {
+    skills: Array.isArray(source.skills) ? source.skills.map(row=>({...row})) : []
+  };
   const loaded = normalizeInitialDataPayload(raw);
   if(initialDataRowCount(loaded) === 0) throw new Error('表示用マスターに登録データがありません');
   DEFAULTS = loaded;
@@ -2369,11 +2416,12 @@ function escapeHtml(s){ return String(s ?? '').replace(/[&<>"]/g, c=>({'&':'&amp
 const FACILITY_DEFS = [
   {
     id:'smithy', name:'鍛冶屋',
-    role:'武器・防具・バッグ・鍛冶素材・戦闘用罠・★3～★9の細工道具の販売、製作、武器派生、素材加工、装備強化を担当。',
+    role:'武器・防具・バッグ・鍛冶素材・戦闘用罠・★3～★9の細工道具の販売、製作、武器派生、素材加工、装備強化、スキルクリスタル強化を担当。',
     services:[
       {name:'鍛冶施設利用', price:'レシピ依存', description:'道具を持たない場合でも、素材と施設依頼費を支払って鍛冶作業を依頼できる。'},
       {name:'仕掛け製作', price:'レシピ依存', description:'細工道具を使って戦闘用罠を自作するか、素材と施設依頼費を支払って製作を依頼できる。'},
-      {name:'装備強化', price:'素材ランク・強化回数依存', description:'自作は鍛冶道具＋素材、施設依頼は素材＋依頼費で行う。'}
+      {name:'装備強化', price:'素材ランク・強化回数依存', description:'自作は鍛冶道具＋素材、施設依頼は素材＋依頼費で行う。'},
+      {name:'クリスタル強化', price:'段階別', description:'素材と依頼費を支払い、進行に応じてスキルクリスタルの装着枠を追加する。'}
     ]
   },
   {
@@ -2402,10 +2450,11 @@ const FACILITY_DEFS = [
   },
   {
     id:'antique', name:'骨董屋',
-    role:'未鑑定スクロールの高額ランダム販売・鑑定と、術式鑑定具・術式用品の販売を担当。',
+    role:'未鑑定スクロールの高額ランダム販売・鑑定、術式用品の販売、スキルガチャを担当。',
     services:[
       {name:'スクロール鑑定', price:'★1 150G〜', description:'術式鑑定具を使う場合は2D6+鑑定技能で判定する。施設へ依頼する場合は料金を支払えば自動成功。'},
-      {name:'集中術式化', price:'施設依頼不可', description:'鑑定済みスクロールと魔導インク/祈祷紙を消費し、ランク別の集中判定で術式化する。'}
+      {name:'集中術式化', price:'施設依頼不可', description:'鑑定済みスクロールと魔導インク/祈祷紙を消費し、ランク別の集中判定で術式化する。'},
+      {name:'スキルガチャ', price:'共鳴用素材の★合計', description:'対象キャラクターへ、同ランクの解放済みスキルから個別ウェイトで抽選する。'}
     ]
   },
   {
@@ -2934,10 +2983,14 @@ function facilityProducts(facilityName){
   const branchResults = new Set((state.recipes||[])
     .filter(r=>String(r.craftType||'').trim()==='武器派生')
     .map(r=>String(r.resultItem||'').trim()).filter(Boolean));
+  const processedMaterialResults = new Set((state.recipes||[])
+    .filter(r=>String(r.craftType||'').trim()==='素材加工')
+    .map(r=>String(r.resultItem||r.name||'').trim()).filter(Boolean));
   const itemRows=(state.items||[])
     .filter(row=>{
       if(!row || !String(row.name||'').trim() || !textHasFacility(row, facilityName) || !facilityRankVisible(row)) return false;
       if(facilityName==='鍛冶屋' && branchResults.has(String(row.name||'').trim())) return false;
+      if(processedMaterialResults.has(String(row.name||'').trim())) return false;
       if(facilityName==='骨董屋' && (String(row.itemCategory||'').includes('未鑑定スクロール') || String(row.tags||'').includes('ランダム販売'))) return false;
       return true;
     })
@@ -2946,7 +2999,7 @@ function facilityProducts(facilityName){
     .filter(row=>{
       const source=String(row.recipeSource||'').trim();
       const price=Number(String(row.recipePrice||'').trim());
-      return source.includes(facilityName) && Number.isFinite(price) && price>0 && facilityRankVisible(row);
+      return String(row.craftType||'').trim()!=='素材加工' && source.includes(facilityName) && Number.isFinite(price) && price>0 && facilityRankVisible(row);
     })
     .map(row=>({...row,__facilityProductType:'recipe'}));
   return itemRows.concat(recipeRows).sort((a,b)=>{
@@ -3429,7 +3482,8 @@ const FACILITY_COPY_DEFS = {
     ['branches','武器派生'],
     ['equipment','武器・防具作成'],
     ['traps','仕掛け作成'],
-    ['materials','素材作成']
+    ['materials','素材作成'],
+    ['crystal','クリスタル強化']
   ],
   '薬屋':[
     ['sales','販売'],
@@ -3485,6 +3539,7 @@ function buildFacilityCategoryText(facilityName='', category='sales'){
     if(category==='equipment') return [`【鍛冶屋・武器・防具作成】`,facilityRecipeSectionText('武器・防具作成',['鍛冶','防具製作','バッグ製作'])].join('\n');
     if(category==='traps') return [`【鍛冶屋・仕掛け作成】`,facilityRecipeSectionText('仕掛け作成',['細工'])].join('\n');
     if(category==='materials') return [`【鍛冶屋・素材作成】`,facilityRecipeSectionText('素材作成',['素材加工'])].join('\n');
+    if(category==='crystal') return [`【鍛冶屋・クリスタル強化】`,facilityRecipeSectionText('クリスタル強化',['クリスタル強化'])].join('\n');
   }
   if(facilityName==='薬屋' && category==='alchemy'){
     return [`【薬屋・調合作成】`,facilityRecipeSectionText('調合作成',['調合'])].join('\n');
@@ -3555,6 +3610,8 @@ function renderFacilitiesPanel(){
     else if(active==='smith') body=renderFacilityRecipeGroup('鍛冶');
     else if(active==='traps') body=renderFacilityRecipeGroup('細工');
     else if(active==='materials') body=renderFacilityRecipeGroup('素材加工');
+    else if(active==='crystal') body=renderFacilityCrystalUpgradeCards();
+    else if(active==='skill_gacha') body='<p class="notice">下のスキルガチャ欄で対象キャラクター・抽選回数・スキルクリスタルを管理します。</p>';
     else if(active==='important') body=`<div class="facility-actions"><button class="ghost" data-guild-toggle-hidden>${currentGuildShowHiddenImportant?'非表示の重要クエストを隠す':'非表示の重要クエストも表示'}</button><button class="ghost" data-guild-copy-category="重要">重要クエストをコピー</button></div>${guildQuestSectionHtml('重要')}`;
     else if(active==='daily') body=guildQuestSectionHtml('デイリー');
     else if(active==='support') body=guildSupportPanelHtml();
@@ -4093,12 +4150,12 @@ function facilityActiveDefs(){
 
 const FACILITY_SECTION_DEFS = {
   '鍛冶屋':[
-    ['sales','販売商品'],['branches','武器派生'],['armor','防具製作'],['smith','鍛冶製作'],['traps','仕掛け製作'],['materials','素材加工'],['upgrade','装備強化'],['services','サービス']
+    ['sales','販売商品'],['branches','武器派生'],['armor','防具製作'],['smith','鍛冶製作'],['traps','仕掛け製作'],['materials','素材加工'],['upgrade','装備強化'],['crystal','クリスタル強化'],['services','サービス']
   ],
   '薬屋':[['sales','販売商品'],['alchemy','調合'],['materials','素材加工'],['services','サービス']],
   '食事処':[['recommendations','今日のおすすめ'],['meals','持ち込み料理'],['services','サービス']],
   '宿屋':[['services','サービス']],
-  '骨董屋':[['sales','常設販売'],['random','未鑑定スクロール'],['appraisal','鑑定'],['transcribe','集中術式化'],['services','サービス']],
+  '骨董屋':[['sales','常設販売'],['random','未鑑定スクロール'],['appraisal','鑑定'],['transcribe','集中術式化'],['skill_gacha','スキルガチャ'],['services','サービス']],
   'ギルド':[['important','重要クエスト'],['daily','デイリークエスト'],['support','サポートキャラクター'],['services','サービス']]
 };
 function facilitySectionDefs(name=currentFacilityView){ return FACILITY_SECTION_DEFS[name] || [['services','サービス']]; }
@@ -4595,11 +4652,97 @@ function renderAntiqueRandomStock(){
 }
 
 
+
+function crystalSlotNumber(value){const m=String(value||'').match(/(\d+)/);return m?Math.max(2,Number(m[1])||2):2;}
+function crystalUpgradeRows(){return facilityRecipeRows('クリスタル強化').slice().sort((a,b)=>crystalSlotNumber(a.resultItem)-crystalSlotNumber(b.resultItem));}
+function crystalUnlockAreaName(row={}){if(String(row.unlockCondition||'').trim())return String(row.unlockCondition).trim();const key=String(row.unlockAreaKey||'').trim();const area=(state.exploration_areas||[]).find(a=>[a.id,a.unlockKey,a.name].map(v=>String(v||'').trim()).includes(key));return area?.name||key||'初期';}
+function crystalRequiredOrder(row={}){const explicit=Number(row.unlockOrder);if(Number.isFinite(explicit)&&explicit>0)return explicit;const key=String(row.unlockAreaKey||'').trim();const area=(state.exploration_areas||[]).find(a=>String(a.id||'')===key);return Number(area?.unlockOrder)||1;}
+function renderFacilityCrystalUpgradeCards(){
+  const rows=crystalUpgradeRows();
+  if(!rows.length)return '<p class="notice">クリスタル強化データがありません。</p>';
+  return `<div class="crystal-upgrade-list">${rows.map(row=>`<div class="crystal-upgrade-card"><h5>${escapeHtml(row.name||'クリスタル強化')}</h5><div class="facility-product-meta"><span class="facility-chip">${escapeHtml(row.baseItem||'?')} → ${escapeHtml(row.resultItem||'?')}</span><span class="facility-chip">解放:${escapeHtml(crystalUnlockAreaName(row))}</span><span class="facility-chip">${escapeHtml(String(row.price||0))}G</span></div><div><b>必要素材：</b>${escapeHtml(row.requiredMaterials||'未設定')}</div>${row.effect?`<div><b>効果：</b>${escapeHtml(row.effect)}</div>`:''}</div>`).join('')}</div>`;
+}
+let currentSkillProgressAreaId='area_outskirts_grass';
+function skillProgressAreas(){return (state.exploration_areas||[]).filter(a=>String(a.areaType||'').trim()!=='異界').slice().sort((a,b)=>(Number(a.unlockOrder)||999)-(Number(b.unlockOrder)||999));}
+function syncSkillProgressFields(){const rows=skillProgressAreas();if(!rows.some(a=>String(a.id)===String(currentSkillProgressAreaId)))currentSkillProgressAreaId=String(rows[0]?.id||'area_outskirts_grass');const options=rows.map(a=>`<option value="${escapeHtml(a.id||'')}">${escapeHtml(a.name||'')}（解放順${escapeHtml(String(a.unlockOrder||''))}）</option>`).join('');['facilitySkillGachaProgressArea','facilityCrystalProgressArea'].forEach(id=>{const el=$(id);if(!el)return;el.innerHTML=options;el.value=currentSkillProgressAreaId;});}
+function skillProgressOrder(){const row=skillProgressAreas().find(a=>String(a.id)===String(currentSkillProgressAreaId));return Number(row?.unlockOrder)||1;}
+function skillRankRequiredOrder(rank){return Number(rank)===1?2:Number(rank)===2?4:Infinity;}
+function skillRankUnlockLabel(rank){return Number(rank)===1?'近郊の森（骨董屋解放後）':Number(rank)===2?'山麓の旧鉱山':'未設定';}
+function skillRankIsUnlocked(rank){return skillProgressOrder()>=skillRankRequiredOrder(rank);}
+function skillById(id=''){return (window.RA_SKILL_MASTER?.skills||[]).find(s=>String(s.id)===String(id))||null;}
+function skillPlayerKey(){
+  const visible=[$('facilitySkillGachaPlayerKey'),$('facilityCrystalPlayerKey')].find(el=>el&&!el.closest('.hidden'));
+  const value=String(visible?.value||$('facilitySkillGachaPlayerKey')?.value||$('facilityCrystalPlayerKey')?.value||currentSkillPlayerKey||'').trim();
+  currentSkillPlayerKey=value;localStorage.setItem(SKILL_PLAYER_KEY_STORAGE,value);return value;
+}
+function syncSkillConnectionFields(){
+  syncSkillProgressFields();
+  ['facilitySkillGachaPlayerKey','facilityCrystalPlayerKey'].forEach(id=>{const el=$(id);if(el&&el.value!==currentSkillPlayerKey)el.value=currentSkillPlayerKey;});
+  const opts='<option value="">キャラクターを選択</option>'+currentSkillCharacters.map(row=>`<option value="${escapeHtml(row.id||'')}">${escapeHtml(row.name||'無名のキャラクター')}</option>`).join('');
+  ['facilitySkillGachaCharacterSelect','facilityCrystalCharacterSelect'].forEach(id=>{const el=$(id);if(!el)return;el.innerHTML=opts;if(currentSkillCharacterId&&[...el.options].some(o=>o.value===currentSkillCharacterId))el.value=currentSkillCharacterId;});
+}
+function setSkillStatus(message='',type='warn'){
+  currentSkillStatusMessage=message;currentSkillStatusType=type;
+  ['facilitySkillGachaStatus','facilityCrystalStatus'].forEach(id=>{const el=$(id);if(!el)return;el.textContent=message;el.className='skill-admin-status '+type;});
+}
+function normalizeCurrentSkillState(){if(!currentSkillCharacter||!window.RASkillGachaCore)return null;currentSkillCharacter.skillGacha=RASkillGachaCore.normalizeState(currentSkillCharacter.skillGacha||{});return currentSkillCharacter.skillGacha;}
+async function loadSkillCharacters(){
+  const key=skillPlayerKey();if(!key){setSkillStatus('プレイヤーキーを入力してください。','bad');return;}
+  setSkillStatus('キャラクター一覧を読み込んでいます。','warn');
+  try{const res=await jsonpApi({action:'list',playerKey:key});if(!res?.ok)throw new Error(res?.error||'キャラクター一覧の読込に失敗しました。');currentSkillCharacters=(res.items||[]).filter(x=>x&&x.id);currentSkillCharacter=null;currentSkillCharacterId='';syncSkillConnectionFields();setSkillStatus(`${currentSkillCharacters.length}件のキャラクターを読み込みました。`,'ok');renderSkillManagementPanels();}
+  catch(e){setSkillStatus(String(e?.message||e),'bad');}
+}
+async function loadSkillCharacter(id=''){
+  const key=skillPlayerKey();const target=String(id||'').trim();if(!target){currentSkillCharacter=null;currentSkillCharacterId='';renderSkillManagementPanels();return;}
+  setSkillStatus('キャラクターを読み込んでいます。','warn');
+  try{const res=await jsonpApi({action:'load',id:target,playerKey:key});if(!res?.ok)throw new Error(res?.error||'キャラクター読込に失敗しました。');currentSkillCharacter=res.data;currentSkillCharacterId=target;normalizeCurrentSkillState();syncSkillConnectionFields();setSkillStatus(`${currentSkillCharacter.name||'無名のキャラクター'}を読み込みました。`,'ok');renderSkillManagementPanels();}
+  catch(e){setSkillStatus(String(e?.message||e),'bad');}
+}
+async function saveSkillCharacter(message='キャラクターを更新しました。'){
+  if(!currentSkillCharacter)throw new Error('対象キャラクターが未選択です。');
+  const key=skillPlayerKey();if(!key)throw new Error('プレイヤーキーが未設定です。');
+  currentSkillCharacter.updatedAt=new Date().toISOString();
+  const body=new URLSearchParams();body.set('action','save');body.set('payload',JSON.stringify({data:currentSkillCharacter,playerKey:key,newPlayerKey:''}));
+  await fetch(apiBaseUrl(),{method:'POST',mode:'no-cors',body});setSkillStatus(message+' クラウドへ送信しました。','ok');
+}
+function selectedSkillGachaRank(){return Math.max(1,Math.min(2,Number($('facilitySkillGachaRank')?.value||1)||1));}
+function renderSkillProbabilityTable(){const body=$('facilitySkillGachaProbBody');if(!body||!window.RASkillGachaCore||!window.RA_SKILL_MASTER)return;const rank=selectedSkillGachaRank();const rows=RASkillGachaCore.probabilityRows(RA_SKILL_MASTER,rank).slice().sort((a,b)=>a.drawWeight-b.drawWeight||compareValues(a.name,b.name));body.innerHTML=rows.length?rows.map(s=>`<tr><td>${escapeHtml(s.name)}</td><td>${escapeHtml(s.weaponType||s.category||'')}</td><td>${escapeHtml(String(s.drawWeight))}</td><td>${escapeHtml((s.probability*100).toFixed(4))}%</td></tr>`).join(''):`<tr><td colspan="4">★${rank}スキルはまだ登録されていません。</td></tr>`;if($('facilitySkillGachaRateSummary'))$('facilitySkillGachaRateSummary').textContent=`★${rank}排出率`;}
+function renderSkillGachaManagement(){
+  syncSkillConnectionFields();const rankSel=$('facilitySkillGachaRank');if(rankSel){[...rankSel.options].forEach(o=>o.disabled=!skillRankIsUnlocked(Number(o.value)));if(!skillRankIsUnlocked(Number(rankSel.value)))rankSel.value='1';}renderSkillProbabilityTable();
+  const rank=selectedSkillGachaRank(),count=Math.max(1,Math.min(10,Number($('facilitySkillGachaCount')?.value||1)||1));if($('facilitySkillGachaCount'))$('facilitySkillGachaCount').value=String(count);if($('facilitySkillGachaCost'))$('facilitySkillGachaCost').textContent=`必要★合計：${(RASkillGachaCore?.COST_BY_RANK?.[rank]||0)*count} / 解放：${skillRankUnlockLabel(rank)}`;
+  const state=normalizeCurrentSkillState(),pool=RASkillGachaCore?.enabledPool?.(RA_SKILL_MASTER,rank)||[];const drawBtn=document.querySelector('[data-skill-gacha-draw]');if(drawBtn)drawBtn.disabled=!state||!skillRankIsUnlocked(rank)||!pool.length;
+  const results=$('facilitySkillGachaResults');if(results)results.innerHTML=currentSkillDrawResults.length?currentSkillDrawResults.map(x=>`<div class="skill-result-card ${x.duplicate?'dup':'new'}"><h5>${escapeHtml(x.skill.name)} <span class="facility-chip">★${escapeHtml(String(x.rank))}</span></h5><div>${escapeHtml(x.skill.category)} / ${escapeHtml(x.skill.weaponType)}</div>${x.skill.publicId?`<div class="small">登録ID：${escapeHtml(x.skill.publicId)}</div>`:''}<b>${x.duplicate?`重複：★${x.rank}共鳴片×1`:'新規習得'}</b></div>`).join(''):'<div class="skill-result-card">抽選結果はここに表示されます。</div>';
+  const slots=$('facilitySkillGachaSlots'),acquired=$('facilitySkillGachaAcquired'),fragments=$('facilitySkillGachaFragments');
+  if(!state){if(slots)slots.innerHTML='<div class="skill-result-card">キャラクター未選択</div>';if(acquired)acquired.innerHTML='<div class="skill-result-card">キャラクター未選択</div>';if(fragments)fragments.textContent='共鳴片：なし';return;}
+  const optionRows=state.acquiredSkillIds.map(skillById).filter(Boolean).sort((a,b)=>compareValues(a.weaponType,b.weaponType)||compareValues(a.name,b.name));
+  const options='<option value="">未設定</option>'+optionRows.map(s=>`<option value="${escapeHtml(s.id)}">★${s.rank} ${escapeHtml(s.name)}（${escapeHtml(s.weaponType)}）</option>`).join('');
+  if(slots)slots.innerHTML=state.equippedSkillIds.map((id,i)=>`<div class="skill-slot-row"><b>枠${i+1}</b><select data-skill-slot="${i}">${options}</select></div>`).join('');
+  slots?.querySelectorAll('[data-skill-slot]').forEach((sel,i)=>sel.value=state.equippedSkillIds[i]||'');
+  if(acquired)acquired.innerHTML=optionRows.length?optionRows.map(s=>`<div class="skill-result-card"><h5>${escapeHtml(s.name)} <span class="facility-chip">★${s.rank}</span></h5><div>${escapeHtml(s.category)} / ${escapeHtml(s.weaponType)}</div>${s.publicId?`<div class="small">登録ID：${escapeHtml(s.publicId)}</div>`:''}</div>`).join(''):'<div class="skill-result-card">習得済みスキルはありません。</div>';
+  const fr=Object.entries(state.resonanceFragments||{}).filter(([,v])=>Number(v)>0).map(([r,v])=>`★${r}×${v}`);if(fragments)fragments.textContent='共鳴片：'+(fr.length?fr.join(' / '):'なし');
+}
+function nextCrystalRecipe(slots){return crystalUpgradeRows().find(row=>crystalSlotNumber(row.baseItem)===Number(slots))||null;}
+function renderCrystalManagement(){
+  syncSkillConnectionFields();const box=$('facilityCrystalUpgradeSummary'),button=document.querySelector('[data-crystal-apply]'),state=normalizeCurrentSkillState(),next=state?nextCrystalRecipe(state.crystalSlots):null,unlocked=!!next&&skillProgressOrder()>=crystalRequiredOrder(next);if(button)button.disabled=!state||!next||!unlocked;
+  if(!box)return;if(!state){box.innerHTML='<div class="crystal-upgrade-card">キャラクターを選択すると、現在枠と次の強化を表示します。</div>';return;}
+  box.innerHTML=`<div class="crystal-upgrade-card is-next"><div class="crystal-current">現在 ${state.crystalSlots}枠</div>${next?`<h5>次の強化：${escapeHtml(next.name)}</h5><div class="facility-product-meta"><span class="facility-chip">${escapeHtml(next.baseItem)} → ${escapeHtml(next.resultItem)}</span><span class="facility-chip">${escapeHtml(String(next.price||0))}G</span><span class="facility-chip">解放:${escapeHtml(crystalUnlockAreaName(next))}</span><span class="facility-chip">${unlocked?'利用可能':'未解放'}</span></div><div><b>必要素材：</b>${escapeHtml(next.requiredMaterials||'未設定')}</div><div class="notice">${unlocked?'素材とGの支払いを確認してから「強化を反映」を押してください。自動消費は行いません。':'現在選択中の進行段階では、まだ強化できません。'}</div>`:'<h5>次の強化段階は未登録</h5><div>4枠目以降の解放時期・素材・費用は、今後のエリア追加時に設定します。</div>'}</div>`;
+}
+function renderSkillManagementPanels(){renderSkillGachaManagement();renderCrystalManagement();if(currentSkillStatusMessage)setSkillStatus(currentSkillStatusMessage,currentSkillStatusType);}
+async function executeSkillGacha(){
+  try{const state=normalizeCurrentSkillState();if(!state)throw new Error('対象キャラクターを選択してください。');const rank=selectedSkillGachaRank();if(!skillRankIsUnlocked(rank))throw new Error(`★${rank}スキルガチャは${skillRankUnlockLabel(rank)}で解放されます。`);const count=Math.max(1,Math.min(10,Number($('facilitySkillGachaCount')?.value||1)||1));const out=RASkillGachaCore.draw(RA_SKILL_MASTER,state,rank,count);currentSkillCharacter.skillGacha=out.state;currentSkillDrawResults=out.results;renderSkillManagementPanels();await saveSkillCharacter(`★${rank}スキルガチャ${count}回を反映しました。`);}
+  catch(e){setSkillStatus(String(e?.message||e),'bad');}
+}
+async function applyCrystalUpgrade(){
+  try{const state=normalizeCurrentSkillState();if(!state)throw new Error('対象キャラクターを選択してください。');const row=nextCrystalRecipe(state.crystalSlots);if(!row)throw new Error('次の強化段階は未登録です。');if(skillProgressOrder()<crystalRequiredOrder(row))throw new Error(`この強化は「${crystalUnlockAreaName(row)}」で解放されます。`);const next=crystalSlotNumber(row.resultItem);state.crystalSlots=next;while(state.equippedSkillIds.length<next)state.equippedSkillIds.push('');currentSkillCharacter.skillGacha=state;renderSkillManagementPanels();await saveSkillCharacter(`スキルクリスタルを${next}枠へ強化しました。`);}
+  catch(e){setSkillStatus(String(e?.message||e),'bad');}
+}
+
 function facilityWorkKind(){
   const section=activeFacilitySection();
   if(currentFacilityView==='鍛冶屋' && section==='upgrade') return 'smithy';
+  if(currentFacilityView==='鍛冶屋' && section==='crystal') return 'crystal';
   if(currentFacilityView==='薬屋' && section==='alchemy') return 'alchemy';
-  if(currentFacilityView==='骨董屋' && ['random','appraisal','transcribe'].includes(section)) return `antique-${section}`;
+  if(currentFacilityView==='骨董屋' && ['random','appraisal','transcribe','skill_gacha'].includes(section)) return `antique-${section}`;
   return 'none';
 }
 function facilityRecipeRows(kind='調合'){
@@ -4651,10 +4794,11 @@ function renderFacilityWorkPanel(){
   const kind=facilityWorkKind();
   const panel=$('facilityWorkPanel');
   const title=$('facilityWorkTitle'), notice=$('facilityWorkNotice');
-  const smithy=$('facilitySmithyWork'), alchemy=$('facilityAlchemyWork'), antique=$('facilityAntiqueWork'), none=$('facilityNoWork');
+  const smithy=$('facilitySmithyWork'), crystal=$('facilityCrystalWork'), alchemy=$('facilityAlchemyWork'), antique=$('facilityAntiqueWork'), none=$('facilityNoWork');
   const show=kind!=='none';
   if(panel) panel.classList.toggle('hidden',!show);
   if(smithy) smithy.classList.toggle('hidden',kind!=='smithy');
+  if(crystal) crystal.classList.toggle('hidden',kind!=='crystal');
   if(alchemy) alchemy.classList.toggle('hidden',kind!=='alchemy');
   if(antique) antique.classList.toggle('hidden',!kind.startsWith('antique-'));
   if(none) none.classList.add('hidden');
@@ -4663,19 +4807,25 @@ function renderFacilityWorkPanel(){
     if(title) title.textContent='装備強化';
     if(notice) notice.textContent='自作は鍛冶道具＋素材、施設依頼は素材＋表示価格で行います。';
     renderFacilityUpgradeEquipmentSelect(); renderFacilityUpgradeLookupList(); renderFacilityGuaranteeSelect(); renderUpgradeCountSelect($('facilityUpgradeCountInput')?.value||'0'); renderUpgradeStepSelect($('facilityUpgradeStepInput')?.value||'1'); renderToolRankSelect('facilitySmithToolRankInput',$('facilitySmithToolRankInput')?.value||'3'); renderFacilityUpgradeResult($('facilityUpgradeMaterialInput')?.value||'');
+  }else if(kind==='crystal'){
+    if(title) title.textContent='スキルクリスタル強化';
+    if(notice) notice.textContent='段階ごとの素材とGを確認し、対象キャラクターの装着枠へ反映します。素材・Gは自動消費しません。';
+    renderCrystalManagement();
   }else if(kind==='alchemy'){
     if(title) title.textContent='調合';
     if(notice) notice.textContent='必要素材・作成ランク・難易度・施設依頼価格を確認します。';
     renderFacilityAlchemyLookupList(); renderToolRankSelect('facilityAlchemyToolRankInput',$('facilityAlchemyToolRankInput')?.value||'3'); renderFacilityAlchemyResult($('facilityAlchemyRecipeSelect')?.value||'');
   }else{
     const section=activeFacilitySection();
-    if(title) title.textContent=section==='random'?'未鑑定スクロール':section==='appraisal'?'スクロール鑑定':'集中術式化';
-    if(notice) notice.textContent=section==='random'?'未鑑定スクロールのランダム販売枠を抽選します。':section==='appraisal'?'種別とランクに一致する術式から鑑定結果をランダムに決定します。':'対応素材と集中技能による術式化難易度を確認します。施設依頼はできません。';
+    if(title) title.textContent=section==='random'?'未鑑定スクロール':section==='appraisal'?'スクロール鑑定':section==='transcribe'?'集中術式化':'スキルガチャ';
+    if(notice) notice.textContent=section==='random'?'未鑑定スクロールのランダム販売枠を抽選します。':section==='appraisal'?'種別とランクに一致する術式から鑑定結果をランダムに決定します。':section==='transcribe'?'対応素材と集中技能による術式化難易度を確認します。施設依頼はできません。':'対象キャラクターへ★1スキルを個別ウェイトで抽選し、習得・装着状態を保存します。';
     $('facilityAntiqueStockWork')?.classList.toggle('hidden',section!=='random');
     $('facilityAntiqueAppraisalWork')?.classList.toggle('hidden',section!=='appraisal');
     $('facilityAntiqueTranscribeWork')?.classList.toggle('hidden',section!=='transcribe');
+    $('facilityAntiqueSkillGachaWork')?.classList.toggle('hidden',section!=='skill_gacha');
     if(section==='appraisal') renderAntiqueAppraisalResult();
     if(section==='transcribe') renderAntiqueTranscriptionResult();
+    if(section==='skill_gacha') renderSkillGachaManagement();
   }
 }
 function facilityUpgradeEquipmentRows(){
@@ -5573,6 +5723,10 @@ function formOptionValues(key, field){
   if(field==='enabled') ['TRUE','FALSE'].forEach(v=>values.add(v));
   if(field==='checkType') ['近接>=回避値','射撃>=回避値','魔法>=回避値','魔法>=抵抗値','祈祷>=10','祈祷>=回避値','祈祷>=抵抗値','調合>=回避値','採取','なし'].forEach(v=>values.add(v));
   if(field==='element') ['物','火','水','風','雷','光','闇','無','可変','矢弾依存'].forEach(v=>values.add(v));
+  if(field==='enchantTarget') ['武器','防具・盾','装飾品','装備'].forEach(v=>values.add(v));
+  if(field==='enchantEffectType') ['属性付与','ダメージ補正','防御補正','回避補正','耐性付与','特殊効果'].forEach(v=>values.add(v));
+  if(field==='enchantDuration') ['次の攻撃終了まで','次にダメージを受けるまで','戦闘終了まで','ラウンド制','シーン終了まで','手動解除'].forEach(v=>values.add(v));
+  if(field==='enchantStackRule') ['同じ装備は1つ・新しい効果で上書き','重複可'].forEach(v=>values.add(v));
   if(field==='hasLock' || field==='hasTrap') ['なし','あり'].forEach(v=>values.add(v));
   if(field==='equipmentUpgradeTarget') ['武器','防具','盾','装飾品','魔導書','祈祷書','武器・防具','防具・盾','魔導書・祈祷書','武器・魔導書・祈祷書'].forEach(v=>values.add(v));
   if(field==='equipmentUpgradeEffect') ['なし','威力','命中補正','防御貫通','防御値','防御行動値','回避補正','術式枠','消費コスト軽減','回復量','物耐性付与','火耐性付与','水耐性付与','風耐性付与','雷耐性付与','光耐性付与','闇耐性付与','無耐性付与','特殊効果付与'].forEach(v=>values.add(v));
@@ -6185,6 +6339,11 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='equipmentUpgradeTarget') help += '<div class="form-help">この素材で強化できる装備種別です。武器・防具・盾・装飾品・魔導書・祈祷書を指定できます。複数対象は「・」で区切ります。</div>';
   if(field==='equipmentUpgradeEffect') help += '<div class="form-help">魔物素材を武器強化に使用した時の強化内容です。主に素材種別が「魔物素材」の行で使います。</div>';
   if(field==='equipmentUpgradeDetail') help += '<div class="form-help">装備強化内容が特殊効果の場合、発動条件・対象・補正値・持続期間・解除条件・重複可否まで具体的に入力します。</div>';
+  if(field==='enchantTarget') help += '<div class="form-help">使用時に選べる装備範囲です。武器は右手・左手の通常武器、防具・盾は鎧と盾、装飾品は装飾品枠を対象にします。</div>';
+  if(field==='enchantEffectType') help += '<div class="form-help">属性付与とダメージ補正はチャットパレットへ反映します。その他の効果もキャラシ上で期限付き効果として管理できます。</div>';
+  if(field==='enchantValue') help += '<div class="form-help">属性付与なら火・水など、数値補正なら+1・-1などを入力します。</div>';
+  if(field==='enchantDuration') help += '<div class="form-help">ラウンド制を選んだ場合は「持続ラウンド」も入力します。戦闘終了などはキャラシ側の解除ボタンで管理します。</div>';
+  if(field==='enchantStackRule') help += '<div class="form-help">通常は同じ装備へ1つだけとし、後から使用した効果で上書きします。</div>';
   if(field==='craftType') help += '<div class="form-help">調合・鍛冶・武器派生など、製作データの用途を選びます。管理画面ではこの区分ごとに分割表示します。</div>';
   if(field==='baseItem') help += '<div class="form-help">武器派生の派生元です。武器に加えて、魔導書・祈祷書も候補へ表示します。</div>';
   if(field==='branchType') help += '<div class="form-help">実際に使用する代表素材系統の名称を入力します。プレイヤー施設では末尾へ「派生」を付けて表示します。存在しない素材系統名は作らず、新しい素材系統を追加した時に候補も増やします。同一系統内では派生の派生を段階追加できます。</div>';
@@ -6302,6 +6461,9 @@ function itemFormFields(row){
   }
   if(itemType === '食材'){
     return ['itemType','itemCategory','name','publicId','csVisible','price','rank','maxStack','description','effect','unlockAreaKey','unlockFacility','tags','notes'];
+  }
+  if(itemType === '調合品' && String(row.itemCategory || '').trim() === 'エンチャント'){
+    return ['itemType','itemCategory','name','publicId','csVisible','price','rank','equipSlot','maxStack','target','element','enchantTarget','enchantEffectType','enchantValue','enchantDuration','enchantRounds','enchantStackRule','description','effect','unlockAreaKey','unlockFacility','tags','notes'];
   }
   return ['itemType','itemCategory','name','publicId','csVisible','price','rank','equipSlot','skill','power','maxStack','offhandBonus','reloadTurns','spellSlots','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect','unlockAreaKey','unlockFacility','tags','notes'];
 }
@@ -7534,9 +7696,9 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.250';
-const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-07-23';
-const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.v90.8.250.json';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.261';
+const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-07-25';
+const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([
   'ownerKey','createdBy','adminKey','playerKey','masterKey',
   'managementKey','githubToken','accessToken','apiToken',
@@ -7563,12 +7725,18 @@ function sanitizeGithubPublicValue(value){
   return value;
 }
 
+function githubPublicSkillRows(){
+  const rows=Array.isArray(window.RA_SKILL_MASTER?.skills)?window.RA_SKILL_MASTER.skills:[];
+  return sanitizeGithubPublicValue(rows);
+}
 function buildGithubPublicMaster(){
   const source=normalizeStateData(structuredClone(state||{}));
   const data={};
   DATA_KEYS.forEach(key=>{
     data[key]=sanitizeGithubPublicValue(Array.isArray(source[key])?source[key]:[]);
   });
+  // スキルは管理スプレッドシートとは分離した専用マスターを正とし、公開DBへ必ず同梱する。
+  data.skills=githubPublicSkillRows();
   return {
     format:'recraft-alchemia-github-master',
     version:GITHUB_PUBLIC_DB_VERSION,
@@ -7576,7 +7744,7 @@ function buildGithubPublicMaster(){
     encoding:'UTF-8',
     sourceRepository:'akari-2659/Recraft-Alchemia-Manager',
     description:'Recraft-Alchemiaのキャラシ・施設・管理画面で共通参照する静的マスターデータ。',
-    recordCount:DATA_KEYS.reduce((sum,key)=>sum+(data[key]?.length||0),0),
+    recordCount:Object.values(data).reduce((sum,rows)=>sum+(Array.isArray(rows)?rows.length:0),0),
     data
   };
 }
@@ -7696,7 +7864,7 @@ async function exportGithubPublicDb(){
       sha256,
       bytes:masterBytes.length,
       recordCount:master.recordCount,
-      dataKeys:[...DATA_KEYS],
+      dataKeys:Object.keys(master.data),
       publicBaseUrl:'https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/'
     };
     const manifestText=JSON.stringify(manifest,null,2)+'\n';
@@ -7859,6 +8027,9 @@ document.addEventListener('click',e=>{
     return;
   }
   const facilityTranscribeCheck=e.target.closest('[data-facility-transcribe-check]'); if(facilityTranscribeCheck){ renderAntiqueTranscriptionResult(); return; }
+  const skillLoad=e.target.closest('[data-skill-load-characters]'); if(skillLoad){ loadSkillCharacters(); return; }
+  const skillDraw=e.target.closest('[data-skill-gacha-draw]'); if(skillDraw){ executeSkillGacha(); return; }
+  const crystalApply=e.target.closest('[data-crystal-apply]'); if(crystalApply){ applyCrystalUpgrade(); return; }
   const helpCopy=e.target.closest('[data-help-copy]'); if(helpCopy){ copySystemHelp(); return; }
   const helpExpand=e.target.closest('[data-help-expand]'); if(helpExpand){ document.querySelectorAll('#helpCards details').forEach(d=>d.open=true); return; }
   const helpCollapse=e.target.closest('[data-help-collapse]'); if(helpCollapse){ document.querySelectorAll('#helpCards details').forEach(d=>d.open=false); return; }
@@ -7931,6 +8102,12 @@ document.addEventListener('input',e=>{
   const edit=e.target.dataset.edit;
   if(edit){ const [key,idx,field]=edit.split(':'); state[key][+idx][field]=e.target.textContent; if(baseKeyForTable(key)==='items') renderFacilitiesPanel(); renderHelpPanel(); updateCounts(); updateJsonBox(); }
   if(e.target.id && e.target.id.startsWith('filter-')) renderTable(e.target.id.replace('filter-',''));
+  if(['facilitySkillGachaPlayerKey','facilityCrystalPlayerKey'].includes(e.target.id)){currentSkillPlayerKey=String(e.target.value||'').trim();localStorage.setItem(SKILL_PLAYER_KEY_STORAGE,currentSkillPlayerKey);syncSkillConnectionFields();return;}
+  if(['facilitySkillGachaCharacterSelect','facilityCrystalCharacterSelect'].includes(e.target.id)){loadSkillCharacter(e.target.value);return;}
+  if(['facilitySkillGachaProgressArea','facilityCrystalProgressArea'].includes(e.target.id)){currentSkillProgressAreaId=String(e.target.value||'area_outskirts_grass');syncSkillProgressFields();renderSkillManagementPanels();return;}
+  if(e.target.id==='facilitySkillGachaRank'){renderSkillGachaManagement();return;}
+  if(e.target.id==='facilitySkillGachaCount'){renderSkillGachaManagement();return;}
+  if(e.target.matches('[data-skill-slot]')){const state=normalizeCurrentSkillState();if(!state)return;const index=Number(e.target.dataset.skillSlot);const previous=state.equippedSkillIds[index]||'';const chosen=String(e.target.value||'');if(chosen&&state.equippedSkillIds.some((v,i)=>i!==index&&v===chosen)){e.target.value=previous;setSkillStatus('同じスキルを複数の枠へ設定できません。','bad');return;}state.equippedSkillIds[index]=chosen;currentSkillCharacter.skillGacha=state;saveSkillCharacter('スキルクリスタルの装着を更新しました。').catch(err=>setSkillStatus(String(err?.message||err),'bad'));return;}
   if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
   if(e.target.id==='facilityWeaponBranchSearch'){ currentFacilityWeaponBranchSearch=e.target.value||''; renderFacilitiesPanel(); const input=$('facilityWeaponBranchSearch'); if(input){input.focus();input.setSelectionRange(input.value.length,input.value.length);} return; }
   if(['facilityUpgradeMaterialInput','facilityUpgradeCountInput','facilityUpgradeStepInput','facilitySmithToolRankInput','facilityUpgradeGuaranteeItem'].includes(e.target.id)) renderFacilityUpgradeResult();
@@ -7964,6 +8141,12 @@ document.addEventListener('change',e=>{
   }
   if(e.target?.id==='facilityUpgradeEquipmentType'){ renderFacilityUpgradeEquipmentSelect(); if($('facilityUpgradeMaterialInput')) $('facilityUpgradeMaterialInput').value=''; renderFacilityUpgradeLookupList(); renderFacilityUpgradeResult(''); return; }
   if(e.target?.id==='facilityUpgradeEquipmentSelect'){ if($('facilityUpgradeMaterialInput'))$('facilityUpgradeMaterialInput').value=''; renderFacilityUpgradeLookupList(); renderFacilityUpgradeResult(''); return; }
+  if(['facilitySkillGachaPlayerKey','facilityCrystalPlayerKey'].includes(e.target.id)){currentSkillPlayerKey=String(e.target.value||'').trim();localStorage.setItem(SKILL_PLAYER_KEY_STORAGE,currentSkillPlayerKey);syncSkillConnectionFields();return;}
+  if(['facilitySkillGachaCharacterSelect','facilityCrystalCharacterSelect'].includes(e.target.id)){loadSkillCharacter(e.target.value);return;}
+  if(['facilitySkillGachaProgressArea','facilityCrystalProgressArea'].includes(e.target.id)){currentSkillProgressAreaId=String(e.target.value||'area_outskirts_grass');syncSkillProgressFields();renderSkillManagementPanels();return;}
+  if(e.target.id==='facilitySkillGachaRank'){renderSkillGachaManagement();return;}
+  if(e.target.id==='facilitySkillGachaCount'){renderSkillGachaManagement();return;}
+  if(e.target.matches('[data-skill-slot]')){const state=normalizeCurrentSkillState();if(!state)return;const index=Number(e.target.dataset.skillSlot);const previous=state.equippedSkillIds[index]||'';const chosen=String(e.target.value||'');if(chosen&&state.equippedSkillIds.some((v,i)=>i!==index&&v===chosen)){e.target.value=previous;setSkillStatus('同じスキルを複数の枠へ設定できません。','bad');return;}state.equippedSkillIds[index]=chosen;currentSkillCharacter.skillGacha=state;saveSkillCharacter('スキルクリスタルの装着を更新しました。').catch(err=>setSkillStatus(String(err?.message||err),'bad'));return;}
   if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
   if(['facilityUpgradeMaterialInput','facilityUpgradeCountInput','facilityUpgradeStepInput','facilitySmithToolRankInput','facilityUpgradeGuaranteeItem'].includes(e.target.id)){ renderFacilityUpgradeResult(); return; }
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)){ renderFacilityAlchemyResult(); return; }
@@ -8030,6 +8213,8 @@ if($('btnReloadGithubCommonDb')) $('btnReloadGithubCommonDb').addEventListener('
 });
 if($('btnClearWorkingData')) $('btnClearWorkingData').addEventListener('click',clearWorkingData);
 $('schemaPreview').textContent=JSON.stringify(SCHEMA,null,2);
+syncSkillConnectionFields();
+renderSkillManagementPanels();
 renderAll();
 updateInitialDataStatus();
 loadManagerDisplayData();

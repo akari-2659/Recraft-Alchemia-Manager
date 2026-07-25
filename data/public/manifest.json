@@ -1,0 +1,29 @@
+{
+  "format": "recraft-alchemia-github-master-manifest",
+  "version": "90.8.261",
+  "updatedAt": "2026-07-25T00:00:00.000Z",
+  "master": "recraft_alchemia_master.json",
+  "sha256": "20fc046939226c19e7549f1f909047bd0b49436e6c435ac85158bb2ae89ac263",
+  "bytes": 1833972,
+  "recordCount": 1627,
+  "dataKeys": [
+    "item_types",
+    "item_categories",
+    "material_types",
+    "material_categories",
+    "material_ranks",
+    "equipment_categories",
+    "items",
+    "recipes",
+    "spells",
+    "quest_rewards",
+    "quests",
+    "exploration_areas",
+    "event_tables",
+    "monsters",
+    "appraisal_rules",
+    "treasure_tables",
+    "skills"
+  ],
+  "publicBaseUrl": "https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/"
+}
