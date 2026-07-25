@@ -1,10 +1,10 @@
 {
   "format": "recraft-alchemia-github-master-manifest",
-  "version": "90.8.266",
+  "version": "90.8.268",
   "updatedAt": "2026-07-25T00:00:00.000Z",
   "master": "recraft_alchemia_master.json",
-  "sha256": "e74e903215e5291a2f236c71b1df29ee130394387c52c2cf2a59f48f1cf1bcaf",
-  "bytes": 1857005,
+  "sha256": "6aaad214d666a44f06c8f4d7f7f432ed591f8deabdd14d611e8d92344ac20e31",
+  "bytes": 1856986,
   "recordCount": 1627,
   "dataKeys": [
     "item_types",
@@ -25,5 +25,6 @@
     "treasure_tables",
     "skills"
   ],
-  "publicBaseUrl": "https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/"
+  "publicBaseUrl": "https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/",
+  "generatedAt": "2026-07-25T00:00:00Z"
 }
