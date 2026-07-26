@@ -127,13 +127,13 @@ button,.tab-btn,.quest-category-btn{
 
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.270 / 最終更新日：2026年7月26日</div>
+<div class="ra-build-info">Version：v90.8.277 / 最終更新日：2026年7月26日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.270 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.277 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
     </div>
     <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -387,7 +387,7 @@ button,.tab-btn,.quest-category-btn{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.270';
+const VERSION='v90.8.277';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const $=id=>document.getElementById(id);
@@ -538,11 +538,9 @@ function questListMemo(){
 }
 function sortedQuestAreas(){
   return [...(state.areas||[])].sort((a,b)=>{
-    const aOptional=String(a.areaType||'').trim()==='異界';
-    const bOptional=String(b.areaType||'').trim()==='異界';
-    if(aOptional!==bOptional)return aOptional?1:-1;
-    const ao=Number(a.unlockOrder||999999), bo=Number(b.unlockOrder||999999);
-    if(ao!==bo)return ao-bo;
+    const ao=Number(a.unlockOrder),bo=Number(b.unlockOrder);
+    if(Number.isFinite(ao)&&Number.isFinite(bo)&&ao!==bo)return ao-bo;
+    if(Number.isFinite(ao)!==Number.isFinite(bo))return Number.isFinite(ao)?-1:1;
     return String(a.name||a.id||'').localeCompare(String(b.name||b.id||''),'ja');
   });
 }
@@ -555,7 +553,7 @@ function fillDailyQuestUnlockedAreaSelect(){
   rows.forEach(a=>{
     const o=document.createElement('option');
     o.value=String(a.id||a.name||'');
-    o.textContent=String(a.areaType||'').trim()==='異界' ? `${a.name||a.id}（異界・個別解放）` : `${a.name||a.id}まで`;
+    o.textContent=`${a.name||a.id}まで`;
     sel.appendChild(o);
   });
   if(!rows.length){
@@ -575,11 +573,7 @@ function dailyQuestAreaEligible(q={}){
   if(!maxArea)return true;
   const area=(state.areas||[]).find(a=>String(a.name||'').trim()===String(q.areaName||'').trim());
   if(!area)return true;
-  const maxIsOptional=String(maxArea.areaType||'').trim()==='異界';
-  const areaIsOptional=String(area.areaType||'').trim()==='異界';
-  if(areaIsOptional)return String(area.id||area.name||'')===String(maxArea.id||maxArea.name||'');
-  const mainOrder=maxIsOptional?Math.floor(Number(maxArea.unlockOrder||0)):Number(maxArea.unlockOrder||0);
-  return Number(area.unlockOrder||0)<=mainOrder;
+  return Number(area.unlockOrder||0)<=Number(maxArea.unlockOrder||0);
 }
 function dailyQuestRows(){
   return (state.quests || []).filter(q=>questCategoryFor(q)==='デイリー' && questEnabled(q) && dailyQuestAreaEligible(q));
