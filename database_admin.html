@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.280</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.287</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1167,9 +1167,28 @@ body.modal-open{overflow:hidden!important}
 
 </style>
 
+
+<style id="raMaintenanceV287">
+/* v90.8.287 usability maintenance */
+.ra-build-info{font-size:12px;padding:6px 12px;text-align:right;color:var(--muted);background:rgba(255,253,248,.9);border-bottom:1px solid var(--line)}
+header{padding-top:12px!important;padding-bottom:6px!important}.title-card{padding:14px!important}.title-card h1{font-size:clamp(21px,3vw,30px)!important;margin-bottom:5px!important}.title-card .subtitle{font-size:.84rem;line-height:1.5}.dbid{font-size:.72rem!important}
+main>section.panel:first-of-type{padding:10px!important}
+.ra-admin-fold{border:1px solid var(--line);border-radius:14px;background:rgba(255,253,248,.72);margin:8px 0;overflow:hidden}
+.ra-admin-fold>summary{cursor:pointer;list-style:none;padding:11px 13px;font-weight:900;background:rgba(242,229,209,.76);display:flex;justify-content:space-between;gap:10px}
+.ra-admin-fold>summary::-webkit-details-marker{display:none}.ra-admin-fold>summary::before{content:'▶';color:var(--accent2);margin-right:7px}.ra-admin-fold[open]>summary::before{transform:rotate(90deg)}
+.ra-admin-fold-body{padding:10px}.ra-admin-fold .toolbar{margin:0}.ra-admin-fold .notice{margin:8px 0 0}
+#btnReplacePages,#btnClearWorkingData{box-shadow:inset 0 0 0 2px rgba(145,48,36,.2)}
+.tab-block{background:rgba(247,242,232,.97);backdrop-filter:blur(8px);box-shadow:0 4px 12px rgba(80,50,20,.06)}
+main>.tab-block:first-of-type{position:sticky;top:0;z-index:60;padding-top:7px}
+main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:6px}
+#recordInternalCategoryBlock:not(.hidden){top:116px;z-index:58}
+.tabs,.subtabs{max-height:132px;overflow:auto;scrollbar-width:thin}
+.stats{grid-template-columns:repeat(auto-fit,minmax(96px,1fr))!important}.stat{padding:8px!important}.stat b{font-size:1.1rem!important}
+@media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
+</style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.280 / 最終更新日：2026年7月26日</div>
+<div class="ra-build-info">v90.8.287｜更新：2026年7月27日</div>
 
 <header>
   <div class="title-card">
@@ -1187,12 +1206,8 @@ body.modal-open{overflow:hidden!important}
         <div class="small">クラウド接続先はツール内で固定されています。</div>
       </div>
       <div class="field small">
-        <label>管理キー</label>
-        <input id="adminKey" type="password" placeholder="空欄なら公開データのみ">
-      </div>
-      <div class="field small">
-        <label>登録者名</label>
-        <input id="createdBy" placeholder="例：GM名・制作者名">
+        <label>GAS書込キー</label>
+        <input id="adminKey" type="password" placeholder="Code.gsのADMIN_KEY（未設定なら空欄）">
       </div>
       <button class="secondary" id="btnSetup">統合DBシート作成</button>
       <button class="secondary" id="btnDiagnoseSheets">DB列診断</button>
@@ -1816,7 +1831,7 @@ body.modal-open{overflow:hidden!important}
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.280';
+const RECRAFT_DB_VERSION = 'v90.8.287';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.263';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -2015,28 +2030,44 @@ const RECIPE_VIEW_META = {
 };
 
 const ADVANCED_FILTERS = {
-  item_types: [{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  item_categories: [{field:'itemType', label:'アイテム種別'},{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  material_types: [{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  material_categories: [{field:'materialType', label:'素材種別'},{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  material_ranks: [{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  equipment_categories: [{field:'itemCategory', label:'分類'},{field:'equipSlot', label:'装備/使用枠'},{field:'skill', label:'使用技能'},{field:'enabled', label:'有効'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  items: [{field:'csVisible', label:'キャラシ表示'},{field:'rank', label:'ランク'},{field:'toolRank', label:'使用可能上限'},{field:'guaranteeUpgradeMaxRank', label:'強化確定上限'},{field:'equipSlot', label:'装備/使用枠'},{field:'skill', label:'使用技能'},{field:'unlockAreaKey', label:'必要解放エリア'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  materials: [{field:'rank', label:'ランク'},{field:'source', label:'入手先'},{field:'equipmentUpgradeEffect', label:'装備強化内容'},{field:'equipmentUpgradeTarget', label:'強化対象'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  recipes: [{field:'rank', label:'ランク'},{field:'craftType', label:'製作区分'},{field:'category', label:'分類'},{field:'baseItem', label:'派生元'},{field:'branchType', label:'派生名（代表素材系統）'},{field:'resultKind', label:'完成品種別'},{field:'difficulty', label:'難度'},{field:'unlockAreaKey', label:'必要解放エリア'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  spells: [{field:'type', label:'種別'},{field:'rank', label:'ランク'},{field:'role', label:'役割'},{field:'target', label:'対象'},{field:'setItem', label:'必要装備'},{field:'unlockFacility', label:'解放施設'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  skills: [{field:'rank', label:'ランク'},{field:'category', label:'分類'},{field:'weaponType', label:'武器種'},{field:'balanceTier', label:'強さ区分'},{field:'enabled', label:'有効'},{field:'unlockAreaKey', label:'必要解放エリア'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  quest_rewards: [{field:'rank', label:'ランク'},{field:'scale', label:'規模'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  quests: [{field:'questCategory', label:'クエスト分類'},{field:'enabled', label:'有効'},{field:'questType', label:'クエスト種別'},{field:'rank', label:'ランク'},{field:'areaName', label:'エリア'},{field:'bonusPoints', label:'ボーナスポイント'},{field:'questBossName', label:'クエストボス'},{field:'bossMonster', label:'設定魔物'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  exploration_areas: [{field:'unlockOrder', label:'解放順'},{field:'areaType', label:'エリア種別'},{field:'difficulty', label:'難度'},{field:'eventTableId', label:'イベント表ID'},{field:'progressStep', label:'進行度上昇'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
-  event_tables: [{field:'tableId', label:'表ID'},{field:'areaName', label:'エリア'},{field:'eventType', label:'イベント種別'},{field:'conditionType', label:'前提条件'},{field:'conditionValue', label:'条件内容'},{field:'encounterCountRule', label:'出現数'},{field:'treasureTableId', label:'宝箱表'},{field:'checkType', label:'判定'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}],
+  item_types: [{field:'enabled', label:'有効'}],
+  item_categories: [{field:'itemType', label:'アイテム種別'},{field:'enabled', label:'有効'}],
+  material_types: [{field:'enabled', label:'有効'}],
+  material_categories: [{field:'materialType', label:'素材種別'},{field:'enabled', label:'有効'}],
+  material_ranks: [{field:'enabled', label:'有効'}],
+  equipment_categories: [{field:'itemCategory', label:'分類'},{field:'equipSlot', label:'装備/使用枠'},{field:'skill', label:'使用技能'},{field:'enabled', label:'有効'}],
+  items: [{field:'csVisible', label:'キャラシ表示'},{field:'rank', label:'ランク'},{field:'toolRank', label:'使用可能上限'},{field:'guaranteeUpgradeMaxRank', label:'強化確定上限'},{field:'equipSlot', label:'装備/使用枠'},{field:'skill', label:'使用技能'},{field:'unlockAreaKey', label:'必要解放エリア'},{field:'unlockFacility', label:'解放施設'}],
+  materials: [{field:'rank', label:'ランク'},{field:'source', label:'入手先'},{field:'equipmentUpgradeEffect', label:'装備強化内容'},{field:'equipmentUpgradeTarget', label:'強化対象'}],
+  recipes: [{field:'rank', label:'ランク'},{field:'craftType', label:'製作区分'},{field:'category', label:'分類'},{field:'baseItem', label:'派生元'},{field:'branchType', label:'派生名（代表素材系統）'},{field:'resultKind', label:'完成品種別'},{field:'difficulty', label:'難度'},{field:'unlockAreaKey', label:'必要解放エリア'},{field:'unlockFacility', label:'解放施設'}],
+  spells: [{field:'type', label:'種別'},{field:'rank', label:'ランク'},{field:'role', label:'役割'},{field:'target', label:'対象'},{field:'setItem', label:'必要装備'},{field:'unlockFacility', label:'解放施設'}],
+  skills: [{field:'rank', label:'ランク'},{field:'category', label:'分類'},{field:'weaponType', label:'武器種'},{field:'balanceTier', label:'強さ区分'},{field:'enabled', label:'有効'},{field:'unlockAreaKey', label:'必要解放エリア'}],
+  quest_rewards: [{field:'rank', label:'ランク'},{field:'scale', label:'規模'}],
+  quests: [{field:'questCategory', label:'クエスト分類'},{field:'enabled', label:'有効'},{field:'questType', label:'クエスト種別'},{field:'rank', label:'ランク'},{field:'areaName', label:'エリア'},{field:'bonusPoints', label:'ボーナスポイント'},{field:'questBossName', label:'クエストボス'},{field:'bossMonster', label:'設定魔物'}],
+  exploration_areas: [{field:'unlockOrder', label:'解放順'},{field:'areaType', label:'エリア種別'},{field:'difficulty', label:'難度'},{field:'eventTableId', label:'イベント表ID'},{field:'progressStep', label:'進行度上昇'}],
+  event_tables: [{field:'tableId', label:'表ID'},{field:'areaName', label:'エリア'},{field:'eventType', label:'イベント種別'},{field:'conditionType', label:'前提条件'},{field:'conditionValue', label:'条件内容'},{field:'encounterCountRule', label:'出現数'},{field:'treasureTableId', label:'宝箱表'},{field:'checkType', label:'判定'}],
   treasure_tables: [{field:'tableId', label:'表ID'},{field:'areaName', label:'エリア'},{field:'treasureRank', label:'ランク'},{field:'entryType', label:'中身種別'},{field:'enabled', label:'有効'}],
   appraisal_rules: [{field:'facilityName', label:'施設'},{field:'scrollRank', label:'スクロールランク'},{field:'spellType', label:'術式種別'},{field:'spellRank', label:'術式ランク'},{field:'enabled', label:'有効'}],
-  monsters: [{field:'monsterType', label:'魔物種別'},{field:'monsterTraits', label:'魔物特性'},{field:'rank', label:'ランク'},{field:'createdBy', label:'登録者'},{field:'ownerKey', label:'管理キー'}]
+  monsters: [{field:'monsterType', label:'魔物種別'},{field:'monsterTraits', label:'魔物特性'},{field:'rank', label:'ランク'}]
 };
 
 const TABLE_KEYS = [...DATA_KEYS, 'materials'];
 const tableUiState = Object.fromEntries(TABLE_KEYS.map(key => [key, { sortField: '', sortDir: 'asc', filters: {} }]));
+const SHARED_SEARCH_STORAGE_KEY='recraft_alchemia_admin_shared_search_v1';
+let sharedSearchTerm='';
+try{sharedSearchTerm=String(localStorage.getItem(SHARED_SEARCH_STORAGE_KEY)||'');}catch(_e){}
+function syncSharedSearchInputs(except=null){
+  TABLE_KEYS.forEach(key=>{const input=$('filter-'+key);if(input&&input!==except&&input.value!==sharedSearchTerm)input.value=sharedSearchTerm;});
+}
+function setSharedSearchTerm(value,source=null){
+  sharedSearchTerm=String(value||'');
+  try{localStorage.setItem(SHARED_SEARCH_STORAGE_KEY,sharedSearchTerm);}catch(_e){}
+  syncSharedSearchInputs(source);
+}
+function applySharedSearchToKey(key){
+  if(!TABLE_KEYS.includes(key))return;
+  const input=$('filter-'+key);
+  if(input&&input.value!==sharedSearchTerm)input.value=sharedSearchTerm;
+}
 
 const INITIAL_DATA_FORMAT = 'recraft-alchemia-initial-data';
 const GITHUB_COMMON_DATA_FORMAT = 'recraft-alchemia-github-master';
@@ -2266,12 +2297,12 @@ function normalizePowerForDb(key, value){
   return key === 'spells' ? stripSkillPointTerms(value) : String(value || '').trim();
 }
 function currentAdminKey(){ return ($('adminKey')?.value || '').trim(); }
-function currentCreatedBy(){ return ($('createdBy')?.value || '').trim(); }
+function currentCreatedBy(){ return ''; }
 function markRowOwnership(row){
   if(!row) return row;
-  if(row.ownerKey === undefined || row.ownerKey === null) row.ownerKey = '';
-  if(row.createdBy === undefined || row.createdBy === null) row.createdBy = '';
-  if(row.ownerKey && !row.createdBy && currentCreatedBy()) row.createdBy = currentCreatedBy();
+  // ownerKey / createdBy は旧DB互換列としてのみ残し、管理画面では使用しない。
+  row.ownerKey = '';
+  row.createdBy = '';
   return row;
 }
 
@@ -3971,7 +4002,7 @@ function renderFilterControls(key){
       <div class="filter-actions">
         <button class="ghost" data-clear-filters="${key}">絞り込み解除</button>
         <button class="ghost" data-clear-sort="${key}">ソート解除</button>
-        <span class="notice">名前検索は常時表示。詳細フィルターは必要な時だけ開く。</span>
+        <span class="notice">検索語は全タブ共通。タブ切替後も同じ語で自動検索します。</span>
       </div>
     </div>`;
 }
@@ -4000,7 +4031,7 @@ function updateRecipeViewUi(){
 function visibleHeadersForTable(key){
   const primary = FORM_PRIMARY_FIELDS[key] || FORM_PRIMARY_FIELDS[baseKeyForTable(key)] || [];
   const schema = schemaForTable(key);
-  const fixed = ['id', ...primary, 'ownerKey', 'createdBy', 'updatedAt'];
+  const fixed = ['id', ...primary, 'updatedAt'];
   return [...new Set(fixed)].filter(h=>schema.includes(h));
 }
 
@@ -5178,8 +5209,7 @@ function monsterCardHtml(row, idx){
     monsterBadge('種別', row.monsterType),
     monsterBadge('特性', row.monsterTraits),
     monsterBadge('ランク', playerRankLabel(row.rank)),
-    monsterBadge('引き寄せ', row.pullRule || '可'),
-    monsterBadge('登録者', row.createdBy)
+    monsterBadge('引き寄せ', row.pullRule || '可')
   ].filter(Boolean).join('');
   const statHtml = [
     monsterStat('HP', row.hp), monsterStat('MP', row.mp), monsterStat('命中', row.hitValue), monsterStat('回避', row.evasionValue),
@@ -5572,7 +5602,7 @@ function fromJsonBox(){
 function newBlankRow(key){
   const row={}; SCHEMA[key].forEach(h=>row[h]='');
   row.id = `${key}_${Date.now()}`;
-  row.updatedAt=nowIso(); row.ownerKey=currentAdminKey(); row.createdBy=currentCreatedBy();
+  row.updatedAt=nowIso(); row.ownerKey=''; row.createdBy='';
   if(SCHEMA[key].includes('enabled')) row.enabled='TRUE';
   return row;
 }
@@ -5593,7 +5623,7 @@ function addRecipeWithCraft(craftType){
   openForm('recipes', null, 'new', currentRecipeView);
 }
 function duplicateRow(key, idx){
-  const row={...state[key][idx]}; row.id = `${row.id || key}_${Date.now()}`; row.name = row.name ? row.name+' コピー' : 'コピー'; row.updatedAt=nowIso(); if(!row.ownerKey) row.ownerKey=currentAdminKey(); if(!row.createdBy) row.createdBy=currentCreatedBy();
+  const row={...state[key][idx]}; row.id = `${row.id || key}_${Date.now()}`; row.name = row.name ? row.name+' コピー' : 'コピー'; row.updatedAt=nowIso(); row.ownerKey=''; row.createdBy='';
   state[key].splice(idx+1,0,row); rerenderTableGroup(key); updateCounts(); updateJsonBox();
 }
 function deleteRow(key, idx){
@@ -6498,8 +6528,8 @@ function quickCreateCategory(field){
   row.sortOrder = '';
   row.enabled = 'TRUE';
   row.updatedAt = nowIso();
-  row.ownerKey = currentAdminKey();
-  row.createdBy = currentCreatedBy();
+  row.ownerKey = '';
+  row.createdBy = '';
   state[listKey].push(row);
   quickCategoryDirty = true;
   target.value = cleanName;
@@ -6549,11 +6579,12 @@ function recipeFormFields(row){
   return ['name','publicId','rank','recipePrice','recipeSource','price','craftSkill','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockAreaKey','unlockOrder','unlockCondition','unlockFacility','tags','notes'];
 }
 function formFieldsFor(key,row){
-  if(key==='items') return [...new Set(['id','ownerKey','createdBy','updatedAt', ...itemFormFields(row)])].filter(f=>SCHEMA[key].includes(f));
-  if(key==='recipes') return [...new Set(['id','ownerKey','createdBy','updatedAt', ...recipeFormFields(row)])].filter(f=>SCHEMA[key].includes(f));
+  if(key==='items') return [...new Set(['id','updatedAt', ...itemFormFields(row)])].filter(f=>SCHEMA[key].includes(f));
+  if(key==='recipes') return [...new Set(['id','updatedAt', ...recipeFormFields(row)])].filter(f=>SCHEMA[key].includes(f));
   const primary = FORM_PRIMARY_FIELDS[key] || [];
-  const hiddenButEditable = ['id','ownerKey','createdBy','updatedAt'].filter(f=>SCHEMA[key].includes(f));
-  return [...new Set([...hiddenButEditable, ...primary, ...SCHEMA[key].filter(f=>!hiddenButEditable.includes(f) && !primary.includes(f))])];
+  const hiddenButEditable = ['id','updatedAt'].filter(f=>SCHEMA[key].includes(f));
+  const unusedManagementFields = new Set(['ownerKey','createdBy']);
+  return [...new Set([...hiddenButEditable, ...primary, ...SCHEMA[key].filter(f=>!unusedManagementFields.has(f) && !hiddenButEditable.includes(f) && !primary.includes(f))])];
 }
 function openForm(key, idx=null, mode='new', defaultDataKind='', defaultItemType=''){
   formState={key,idx,mode,defaultDataKind,defaultItemType};
@@ -6562,8 +6593,8 @@ function openForm(key, idx=null, mode='new', defaultDataKind='', defaultItemType
   if(key==='items' && !row.dataKind) row.dataKind = defaultDataKind || 'アイテム';
   if(key==='items' && row.dataKind !== '素材' && !String(row.itemType || '').trim()) row.itemType = defaultItemType || currentItemTypeView || '';
   if(key==='items' && row.dataKind !== '素材' && !String(row.csVisible || '').trim()) row.csVisible = 'TRUE';
-  if(!row.ownerKey) row.ownerKey=currentAdminKey();
-  if(!row.createdBy) row.createdBy=currentCreatedBy();
+  row.ownerKey='';
+  row.createdBy='';
   row.updatedAt = row.updatedAt || nowIso();
   const title = `${labelKey(key)} ${idx===null?'新規登録':'編集'}`;
   $('modalTitle').textContent = title;
@@ -6760,8 +6791,8 @@ function collectFormRow(){
   if(!String(base.id||'').trim()) base.id = `${key}_${Date.now()}`;
   ensurePlayerFacingPublicId(key, base);
   base.updatedAt = nowIso();
-  if(base.ownerKey === undefined) base.ownerKey=currentAdminKey();
-  if(base.createdBy === undefined || !String(base.createdBy).trim()) base.createdBy=currentCreatedBy();
+  base.ownerKey='';
+  base.createdBy='';
   if(isStructuredNumericRankRecord(key,base)) base.rank=numericRankValueIncludingLegacyMaterialGrade(base.rank,1);
   if(key==='material_ranks') base.name=numericRankValueIncludingLegacyMaterialGrade(base.name,1);
   if(key==='items'){
@@ -6811,7 +6842,7 @@ async function applyFormAndSave(){
 }
 
 function payload(action, extra={}){
-  return {action, adminKey:currentAdminKey(), createdBy:currentCreatedBy(), ...extra};
+  return {action, adminKey:currentAdminKey(), ...extra};
 }
 function isGasMode(){ return typeof google !== 'undefined' && google.script && google.script.run; }
 const JSONP_ACTIONS = new Set(['ping','schema','setup','list','listAll','getEquipmentCategories','characterSheetMaster','dedupeAll','dedupe','repairAll','repairSheet','beginUpload','putUploadChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet']);
@@ -7495,68 +7526,11 @@ async function tryVerifyRowsSaved(baseKey, expectedRows, tableKey){
 }
 
 
-const MANAGEMENT_PRIVATE_FIELDS = ['ownerKey','createdBy'];
+const MANAGEMENT_PRIVATE_FIELDS = [];
 
-function managementRowIdentityCandidates(baseKey,row={}){
-  const candidates=[];
-  function add(prefix,value){
-    const clean=String(value??'').trim();
-    if(clean)candidates.push(`${prefix}:${clean}`);
-  }
-  add('id',row.id);
-  add('publicId',row.publicId);
-  add('tableId',row.tableId);
-  if(baseKey==='items'){
-    add('item',`${String(row.dataKind||'アイテム').trim()}|${String(row.itemType||'').trim()}|${String(row.name||'').trim()}`);
-  }else if(baseKey==='recipes'){
-    add('recipe',`${String(row.craftType||'').trim()}|${String(row.baseItem||'').trim()}|${String(row.resultItem||'').trim()}|${String(row.name||'').trim()}`);
-  }else if(baseKey==='spells'){
-    add('spell',`${String(row.type||'').trim()}|${String(row.name||'').trim()}`);
-  }else if(baseKey==='appraisal_rules'){
-    add('appraisal',`${String(row.facilityName||'').trim()}|${String(row.scrollRank||'').trim()}|${String(row.spellType||'').trim()}|${String(row.spellRank||'').trim()}`);
-  }else if(baseKey==='event_tables'){
-    add('event',`${String(row.areaName||'').trim()}|${String(row.progressValue||'').trim()}|${String(row.eventName||row.name||'').trim()}`);
-  }else if(baseKey==='treasure_tables'){
-    add('treasure',`${String(row.tableId||'').trim()}|${String(row.entryType||'').trim()}|${String(row.entryName||'').trim()}`);
-  }else if(baseKey==='quest_rewards'){
-    add('reward',`${String(row.rank||'').trim()}|${String(row.scale||'').trim()}`);
-  }
-  add('name',row.name);
-  add('eventName',row.eventName);
-  add('areaName',row.areaName);
-  add('facilityName',row.facilityName);
-  return [...new Set(candidates)];
-}
-function managementPrivateFieldMap(baseKey,rows=[]){
-  const map=new Map();
-  (rows||[]).forEach(row=>{
-    managementRowIdentityCandidates(baseKey,row).forEach(key=>{
-      if(!map.has(key))map.set(key,row);
-    });
-  });
-  return map;
-}
 async function hydratePrivateFieldsForWrite(baseKey,rows=[]){
-  const result=await callApi(payload('list',{sheetKey:baseKey}));
-  if(!result||!result.ok){
-    throw new Error((result&&result.error)||`${labelKey(baseKey)}の管理用情報をDBから確認できませんでした。安全のため書き込みを中止しました。`);
-  }
-  const privateMap=managementPrivateFieldMap(baseKey,result.rows||[]);
-  return (rows||[]).map(source=>{
-    const row={...(source||{})};
-    let remote=null;
-    for(const candidate of managementRowIdentityCandidates(baseKey,row)){
-      if(privateMap.has(candidate)){remote=privateMap.get(candidate);break;}
-    }
-    MANAGEMENT_PRIVATE_FIELDS.forEach(field=>{
-      if(!String(row[field]??'').trim() && remote && String(remote[field]??'').trim()){
-        row[field]=remote[field];
-      }
-    });
-    if(!String(row.ownerKey??'').trim() && currentAdminKey())row.ownerKey=currentAdminKey();
-    if(!String(row.createdBy??'').trim() && currentCreatedBy())row.createdBy=currentCreatedBy();
-    return row;
-  });
+  // ownerKey / createdBy は廃止。旧シート列との互換性のため空欄で送る。
+  return (rows||[]).map(source=>({...source, ownerKey:'', createdBy:''}));
 }
 
 function applySavedRowsToState(tableKey, rows, mode){
@@ -8001,6 +7975,7 @@ function showPanel(key){
   renderRecordItemTypeTabs();
   renderRecordInternalCategoryTabs();
   if(key==='items') updateItemViewUi();
+  if(TABLE_KEYS.includes(key)){ applySharedSearchToKey(key); renderTable(key); }
 }
 function showCategorySubpanel(key){
   setGroupActive('categories');
@@ -8010,6 +7985,7 @@ function showCategorySubpanel(key){
   document.querySelectorAll('[data-category-subtab]').forEach(b=>b.classList.toggle('active',b.dataset.categorySubtab===key));
   MAIN_PANELS.forEach(k=>$('panel-'+k).classList.toggle('hidden',k!=='categories'));
   CATEGORY_KEYS.forEach(k=>$('panel-'+k).classList.toggle('hidden',k!==key));
+  if(TABLE_KEYS.includes(key)){ applySharedSearchToKey(key); renderTable(key); }
 }
 function inferGroupFromPanel(key){
   if(key==='categories' || key==='equipment_categories') return 'categories';
@@ -8159,6 +8135,7 @@ document.addEventListener('click',e=>{
   const clearFilters=e.target.closest('[data-clear-filters]'); if(clearFilters){
     const key=clearFilters.dataset.clearFilters;
     tableUiState[key].filters={};
+    setSharedSearchTerm('');
     const f=$('filter-'+key); if(f) f.value='';
     renderTable(key);
   }
@@ -8171,7 +8148,13 @@ document.addEventListener('click',e=>{
 document.addEventListener('input',e=>{
   const edit=e.target.dataset.edit;
   if(edit){ const [key,idx,field]=edit.split(':'); state[key][+idx][field]=e.target.textContent; if(baseKeyForTable(key)==='items') renderFacilitiesPanel(); renderHelpPanel(); updateCounts(); updateJsonBox(); }
-  if(e.target.id && e.target.id.startsWith('filter-')) renderTable(e.target.id.replace('filter-',''));
+  if(e.target.id && e.target.id.startsWith('filter-')){
+    const key=e.target.id.replace('filter-','');
+    if(TABLE_KEYS.includes(key)){
+      setSharedSearchTerm(e.target.value,e.target);
+      renderTable(key);
+    }
+  }
   if(['facilitySkillGachaProgressArea','facilityCrystalProgressArea'].includes(e.target.id)){currentSkillProgressAreaId=String(e.target.value||'area_outskirts_grass');syncSkillProgressFields();renderSkillManagementPanels();return;}
   if(e.target.id==='facilitySkillGachaRank'){renderSkillGachaManagement();return;}
   if(e.target.id==='facilitySkillGachaCount'){renderSkillGachaManagement();return;}
@@ -8296,6 +8279,7 @@ if($('btnClearWorkingData')) $('btnClearWorkingData').addEventListener('click',c
 $('schemaPreview').textContent=JSON.stringify(SCHEMA,null,2);
 syncSkillProgressFields();
 renderSkillManagementPanels();
+syncSharedSearchInputs();
 renderAll();
 updateInitialDataStatus();
 loadManagerDisplayData();
@@ -8397,5 +8381,31 @@ document.addEventListener('click', (ev) => {
 })();
 </script>
 
+
+<script id="raMaintenanceV287Script">
+(function(){
+  function fold(elements,title,open=false){
+    const valid=elements.filter(Boolean);if(!valid.length)return null;
+    const first=valid[0], parent=first.parentNode;
+    const details=document.createElement('details');details.className='ra-admin-fold';details.open=open;
+    const summary=document.createElement('summary');summary.textContent=title;
+    const body=document.createElement('div');body.className='ra-admin-fold-body';
+    parent.insertBefore(details,first);details.append(summary,body);valid.forEach(el=>body.appendChild(el));return details;
+  }
+  document.addEventListener('DOMContentLoaded',()=>{
+    const firstPanel=document.querySelector('main>section.panel');if(!firstPanel)return;
+    const direct=Array.from(firstPanel.children);
+    const firstToolbar=direct.find(el=>el.classList?.contains('toolbar')&&!el.classList.contains('initial-data-toolbar'));
+    const firstNotice=direct.find(el=>el.classList?.contains('notice'));
+    fold([firstToolbar,firstNotice],'接続・DB保守・全体操作',false);
+    fold([firstPanel.querySelector('.initial-data-toolbar')],'表示データ・再読込',false);
+    fold([firstPanel.querySelector('.github-public-db-panel')],'GitHub共通DB公開',false);
+    fold([firstPanel.querySelector('.stats')],'登録件数',false);
+    document.querySelectorAll('[data-tab-group],[data-main-tab],[data-category-subtab]').forEach(btn=>btn.addEventListener('click',()=>{
+      requestAnimationFrame(()=>document.querySelector('main>.tab-block')?.scrollIntoView({block:'start'}));
+    }));
+  });
+})();
+</script>
 </body>
 </html>

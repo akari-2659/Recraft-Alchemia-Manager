@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.287</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -125,28 +125,38 @@ button,.tab-btn,.quest-category-btn{
 @media(max-width:380px){.day-status-grid{grid-template-columns:1fr}.tab-nav,.quest-category-bar,.buttons,.quest-tools{grid-template-columns:1fr!important}}
 </style>
 
+
+<style id="raMaintenanceV287">
+.ra-build-info{font-size:12px;padding:6px 12px;text-align:right;color:var(--muted);background:rgba(255,253,248,.9);border-bottom:1px solid var(--line)}
+header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{font-size:clamp(20px,3vw,29px)!important;margin-bottom:3px!important}.header-inner .version{font-size:.78rem}.fixed-url{font-size:.72rem!important}
+.ra-progress-load-fold{padding:0!important;overflow:hidden}.ra-progress-load-fold>summary{cursor:pointer;list-style:none;padding:12px 14px;font-weight:900;background:rgba(242,229,209,.76);display:flex;align-items:center;gap:8px}.ra-progress-load-fold>summary::-webkit-details-marker{display:none}.ra-progress-load-fold>summary::before{content:'▶';color:var(--accent2)}.ra-progress-load-fold[open]>summary::before{transform:rotate(90deg)}.ra-progress-load-body{padding:12px}
+#progressTabNav{position:sticky;top:0;z-index:50;padding:8px;background:rgba(247,242,232,.97);border:1px solid var(--line);border-radius:14px;box-shadow:0 5px 14px rgba(80,50,20,.08);backdrop-filter:blur(8px)}
+.day-status-grid{grid-template-columns:repeat(4,minmax(110px,1fr))!important}.day-stat{padding:9px!important}.day-stat strong{font-size:1.08rem!important}
+.tab-panel{scroll-margin-top:76px}
+@media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+</style>
 </head>
 <body>
-<div class="ra-build-info">Version：v90.8.280 / 最終更新日：2026年7月26日</div>
+<div class="ra-build-info">v90.8.287｜更新：2026年7月27日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.280 / クエスト・エリア進行、宿屋の噂、ドロップ、ランダムイベント用</div>
+      <div class="version">v90.8.287｜更新：2026年7月27日｜クエスト・エリア進行管理</div>
     </div>
-    <div class="fixed-url">固定DB：<span id="fixedUrlLabel"></span></div>
+    <div class="fixed-url">読込元：<span id="fixedUrlLabel"></span></div>
   </div>
 </header>
 <main>
   <section class="panel wide">
-    <h2>DB接続</h2>
+    <h2>データ読込</h2>
     <div>
       <label>読み込み状態</label>
-      <div id="dbStatus" class="status">DB未読み込みです。</div>
+      <div id="dbStatus" class="status warn">GitHub共通DBを自動読込しています。</div>
     </div>
     <div class="buttons">
-      <button id="loadDbBtn">DB読込</button>
+      <button id="loadDbBtn">共通DBを再読込</button>
       <button class="secondary" id="saveStateBtn">進行状態を保存</button>
       <button class="secondary" id="restoreStateBtn">保存済み進行を復元</button>
       <button class="ghost" id="clearStateBtn">進行状態を初期化</button>
@@ -387,9 +397,12 @@ button,.tab-btn,.quest-category-btn{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.280';
+const VERSION='v90.8.287';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
+const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
+const GITHUB_COMMON_DB_MANIFEST_URL=GITHUB_COMMON_DB_BASE+'manifest.json';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
+const MASTER_CACHE_KEY=STORE_KEY+'_master_cache_v1';
 const $=id=>document.getElementById(id);
 const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},dayState:{day:1,fatigue:0,usedActions:0,awaitingEnd:false},lastEventText:'',lastEventKey:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',triggeredQuestEvents:{},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastAppraisalText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],dailyQuestUnlockedAreaId:'',questEncounterCache:{},partySize:4,areaBossEncountered:{},treasureSetup:null,treasureContext:null,log:[]};
 let currentQuestCategory='重要';
@@ -715,38 +728,107 @@ function jsonp(params, timeoutMs=45000){
     script.src=GAS_URL+'?'+q.toString(); document.body.appendChild(script);
   });
 }
-async function loadDb(){
-  setStatus('warn','DB読込を開始します。');
+function progressGithubDelay(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
+async function progressFetchJson(url){
+  const response=await fetch(url,{cache:'no-store'});
+  if(!response.ok)throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}
+function normalizeProgressMaster(document,manifest={}){
+  const data=document&&document.data&&typeof document.data==='object'?document.data:document;
+  const required=['quests','exploration_areas','event_tables','monsters','items','treasure_tables','appraisal_rules','spells','recipes'];
+  const missing=required.filter(key=>!Array.isArray(data&&data[key]));
+  if(missing.length)throw new Error(`共通DBに必要な表がありません：${missing.join(', ')}`);
+  const manifestVersion=String(manifest.version||'').trim();
+  const masterVersion=String(document&&document.version||'').trim();
+  return {data,version:masterVersion||manifestVersion,versionWarning:manifestVersion&&masterVersion&&manifestVersion!==masterVersion?`manifest ${manifestVersion} / master ${masterVersion}`:''};
+}
+async function fetchGithubProgressMaster(){
+  let lastError=null, usableMismatch=null;
+  for(let attempt=0;attempt<4;attempt++){
+    const token=`${Date.now()}_${attempt}_${Math.random().toString(36).slice(2)}`;
+    try{
+      const manifestUrl=new URL(GITHUB_COMMON_DB_MANIFEST_URL);
+      manifestUrl.searchParams.set('_ra',token);
+      const manifest=await progressFetchJson(manifestUrl.toString());
+      const masterFile=String(manifest.master||'').trim();
+      if(!masterFile||masterFile.includes('..')||masterFile.includes('\\'))throw new Error('共通DBのmasterファイル名が不正です。');
+      const masterUrl=new URL(masterFile,GITHUB_COMMON_DB_BASE);
+      masterUrl.searchParams.set('_ra',`${String(manifest.sha256||manifest.version||'master')}_${token}`);
+      const result=normalizeProgressMaster(await progressFetchJson(masterUrl.toString()),manifest);
+      if(!result.versionWarning)return result;
+      usableMismatch=result;
+      lastError=new Error(`共通DBの更新反映待ちです（${result.versionWarning}）`);
+    }catch(error){lastError=error;}
+    if(attempt<3)await progressGithubDelay(300*(attempt+1));
+  }
+  try{
+    const directUrl=new URL('recraft_alchemia_master.json',GITHUB_COMMON_DB_BASE);
+    directUrl.searchParams.set('_ra',`${Date.now()}_direct_${Math.random().toString(36).slice(2)}`);
+    return normalizeProgressMaster(await progressFetchJson(directUrl.toString()),{master:'recraft_alchemia_master.json'});
+  }catch(directError){
+    if(usableMismatch)return usableMismatch;
+    throw new Error([lastError&&lastError.message,directError&&directError.message].filter(Boolean).join(' / ')||'GitHub共通DBを取得できませんでした。');
+  }
+}
+function saveMasterCache(data,version=''){
+  try{localStorage.setItem(MASTER_CACHE_KEY,JSON.stringify({savedAt:Date.now(),version,data}));}catch(_e){}
+}
+function loadMasterCache(){
+  try{
+    const raw=localStorage.getItem(MASTER_CACHE_KEY);if(!raw)return null;
+    const cache=JSON.parse(raw);return normalizeProgressMaster(cache.data||cache,{});
+  }catch(_e){return null;}
+}
+async function acquireProgressMaster(){
+  try{
+    const github=await fetchGithubProgressMaster();
+    saveMasterCache(github.data,github.version);
+    return {...github,source:'GitHub共通DB'};
+  }catch(githubError){
+    console.warn('GitHub共通DBを利用できないためGASへ切り替えます。',githubError);
+    try{
+      const gas=await jsonp({action:'progressMaster'});
+      const normalized=normalizeProgressMaster(gas,{});
+      saveMasterCache(normalized.data,gas.version||'');
+      return {...normalized,version:String(gas.version||''),source:'GASフォールバック',warning:githubError.message||String(githubError)};
+    }catch(gasError){
+      const cached=loadMasterCache();
+      if(cached)return {...cached,source:'前回キャッシュ',warning:[githubError.message,gasError.message].filter(Boolean).join(' / ')};
+      throw new Error(`共通DBの自動読込に失敗しました：${[githubError.message,gasError.message].filter(Boolean).join(' / ')}`);
+    }
+  }
+}
+function applyProgressMaster(master){
+  const data=master.data||master;
+  const quests=data.quests||[];
+  const areas=data.exploration_areas||[];
+  const events=data.event_tables||[];
+  const monsters=data.monsters||[];
+  const items=data.items||[];
+  const treasures=data.treasure_tables||[];
+  const appraisalRules=data.appraisal_rules||[];
+  const spells=data.spells||[];
+  const recipes=data.recipes||[];
+  state.quests=quests; state.areas=areas; state.events=events; state.monsters=monsters; state.items=items; state.treasures=treasures; state.appraisalRules=appraisalRules; state.spells=spells; state.recipes=recipes;
+  fillDailyQuestUnlockedAreaSelect();
+  fillQuestSelect();
+  fillSelect($('areaSelect'),areas,r=>`${r.name||r.id} / ${r.areaType||''}`);
+  fillSelect($('eventAreaSelect'),areas,r=>`${r.name||r.id} / 表:${r.eventTableId||'未設定'}`);
+  fillEventTables(); fillRumorSelect(); fillRumorAreas(); fillInnRumorSelect(); fillTreasureTables(); fillAppraisalRules(); fillDropAreaSelect(); fillMonsterSearch();
+  renderAll();
+  return {quests,areas,events,monsters,items,treasures,appraisalRules};
+}
+async function loadDb(options={}){
+  const auto=!!options.auto;
+  setStatus('warn',auto?'GitHub共通DBを自動読込しています。':'共通DBを再読込しています。');
   $('loadDbBtn').disabled=true;
   try{
-    const master=await jsonp({action:'progressMaster'});
-    const quests=master.quests||[];
-    const areas=master.exploration_areas||[];
-    const events=master.event_tables||[];
-    const monsters=master.monsters||[];
-    const items=master.items||[];
-    const treasures=master.treasure_tables||[];
-    const appraisalRules=master.appraisal_rules||[];
-    const spells=master.spells||[];
-    const recipes=master.recipes||[];
-    state.quests=quests; state.areas=areas; state.events=events; state.monsters=monsters; state.items=items; state.treasures=treasures; state.appraisalRules=appraisalRules; state.spells=spells; state.recipes=recipes;
-    state.progress={quests:{},areas:{}};
-    state.lastEventText=''; state.lastEventKey=''; state.lastQuestEventText=''; state.lastQuestEventKey=''; state.lastQuestFixedEventText=''; state.lastQuestFixedEventKey=''; state.triggeredQuestEvents={}; state.areaBossEncountered={}; state.lastRumorText=''; state.lastRumorKey=''; state.lastTreasureText=''; state.lastAppraisalText=''; state.lastDropText=''; state.lastDropSuccessText='';
-    fillDailyQuestUnlockedAreaSelect();
-    fillQuestSelect();
-    fillSelect($('areaSelect'),areas,r=>`${r.name||r.id} / ${r.areaType||''}`);
-    fillSelect($('eventAreaSelect'),areas,r=>`${r.name||r.id} / 表:${r.eventTableId||'未設定'}`);
-    fillEventTables();
-    fillRumorSelect();
-    fillRumorAreas();
-    fillInnRumorSelect();
-    fillTreasureTables();
-    fillAppraisalRules();
-    fillDropAreaSelect();
-    fillMonsterSearch();
-    setStatus('good',`DB読込完了：クエスト${quests.length}件 / エリア${areas.length}件 / イベント${events.length}件 / 宝箱${treasures.length}件 / 鑑定${appraisalRules.length}件 / 魔物${monsters.length}件 / アイテム・素材${items.length}件`);
-    addLog('DBを読み込みました。');
-    renderAll();
+    const master=await acquireProgressMaster();
+    const counts=applyProgressMaster(master);
+    const warning=master.warning?` / ${master.source}を使用`:'';
+    setStatus(master.source==='GitHub共通DB'&&!master.versionWarning?'good':'warn',`${master.source}${master.version?' '+master.version:''}：クエスト${counts.quests.length}件 / エリア${counts.areas.length}件 / イベント${counts.events.length}件 / 宝箱${counts.treasures.length}件 / 鑑定${counts.appraisalRules.length}件 / 魔物${counts.monsters.length}件 / アイテム・素材${counts.items.length}件${warning}`);
+    addLog(`${master.source}からDBを読み込みました。`);
   }catch(e){setStatus('bad',e.message||String(e));}
   finally{$('loadDbBtn').disabled=false;}
 }
@@ -2129,7 +2211,7 @@ function bindTabs(){
   switchProgressTab(localStorage.getItem(STORE_KEY+'_tab') || 'quest');
 }
 function bind(){
-  $('fixedUrlLabel').textContent=GAS_URL; bindTabs(); setPartySize(state.partySize||4); setQuestCategory('重要'); $('loadDbBtn').addEventListener('click',loadDb); $('saveStateBtn').addEventListener('click',()=>saveState(true)); $('restoreStateBtn').addEventListener('click',restoreSavedState); $('clearStateBtn').addEventListener('click',()=>{if(confirm('進行状態を初期化しますか？')){localStorage.removeItem(STORE_KEY); state.progress={quests:{},areas:{}}; state.dayState={day:1,fatigue:0,usedActions:0,awaitingEnd:false}; state.log=[]; renderAll(); addLog('進行状態を初期化しました。');}});
+  $('fixedUrlLabel').textContent='GitHub共通DB（失敗時のみGAS）'; bindTabs(); setPartySize(state.partySize||4); setQuestCategory('重要'); $('loadDbBtn').addEventListener('click',()=>loadDb({auto:false})); $('saveStateBtn').addEventListener('click',()=>saveState(true)); $('restoreStateBtn').addEventListener('click',restoreSavedState); $('clearStateBtn').addEventListener('click',()=>{if(confirm('進行状態を初期化しますか？')){localStorage.removeItem(STORE_KEY); state.progress={quests:{},areas:{}}; state.dayState={day:1,fatigue:0,usedActions:0,awaitingEnd:false}; state.log=[]; renderAll(); addLog('進行状態を初期化しました。');}});
   document.querySelectorAll('[data-quest-category]').forEach(btn=>btn.addEventListener('click',()=>setQuestCategory(btn.dataset.questCategory)));
   $('questShowDisabledImportant')?.addEventListener('change',()=>{fillQuestSelect(); renderQuest();});
   $('questSelect').addEventListener('change',()=>{state.lastQuestEventText=''; state.lastQuestEventKey=''; const q=selected($('questSelect'),state.quests); if(q&&questUsesRandomEncounter(q))resolveQuestEncounter(q,true); renderQuest();}); $('areaSelect').addEventListener('change',renderArea); $('dropAreaSelect').addEventListener('change',()=>refreshDropMonsterSelection('')); $('monsterSelect').addEventListener('input',()=>{openMonsterMenu($('monsterSelect').value);renderMonster();}); $('monsterSelect').addEventListener('focus',()=>openMonsterMenu('')); $('monsterSelect').addEventListener('pointerdown',()=>setTimeout(()=>{openMonsterMenu('');$('monsterSelect').select();},0)); $('eventAreaSelect').addEventListener('change',fillEventTables); $('rumorAreaSelect').addEventListener('change',()=>{fillInnRumorSelect(); renderRumorResult();}); $('rumorSelectForInn').addEventListener('change',()=>applyRumorIndex($('rumorSelectForInn').value,true)); $('rumorSelect').addEventListener('change',()=>{state.lastEventText=''; state.lastEventKey=''; renderRumorDetail(); fillInnRumorSelect(); renderRumorResult(selectedRumor(),'apply');}); $('partySizeSelect')?.addEventListener('change',e=>handlePartySizeChange(e.target.value)); $('questPartySizeSelect')?.addEventListener('change',e=>handlePartySizeChange(e.target.value));
@@ -2156,7 +2238,24 @@ function bind(){
   $('rollDropBtn').addEventListener('click',rollDrops); $('copyDropBtn').addEventListener('click',()=>copyText(state.lastDropText,'dropCopyNote')); $('copyDropSuccessBtn').addEventListener('click',()=>copyText(state.lastDropSuccessText,'dropCopyNote'));
   $('copyLogBtn').addEventListener('click',()=>copyText(state.log.slice().reverse().join('\n'))); $('clearLogBtn').addEventListener('click',()=>{state.log=[]; renderLog(); saveState(false);});
 }
-loadState(); bind(); renderDayStatus(); renderLog(); setStatus('', 'DB未読み込みです。DB読込を押してください。');
+loadState(); bind(); renderDayStatus(); renderLog(); setStatus('warn', 'GitHub共通DBを自動読込しています。'); loadDb({auto:true});
+</script>
+
+<script id="raMaintenanceV287Script">
+(function(){
+  document.addEventListener('DOMContentLoaded',()=>{
+    const section=document.querySelector('main>section.panel.wide');
+    if(section&&!section.classList.contains('ra-progress-load-fold')){
+      const details=document.createElement('details');details.className=section.className+' ra-progress-load-fold';details.open=true;
+      const summary=document.createElement('summary');summary.textContent='データ・進行状態';
+      const body=document.createElement('div');body.className='ra-progress-load-body';
+      section.parentNode.insertBefore(details,section);Array.from(section.childNodes).forEach(n=>body.appendChild(n));details.append(summary,body);section.remove();
+      const status=document.getElementById('dbStatus');
+      if(status){new MutationObserver(()=>{if(status.classList.contains('good'))details.open=false;else if(status.classList.contains('bad'))details.open=true;}).observe(status,{attributes:true,childList:true,subtree:true});}
+    }
+    document.querySelectorAll('#progressTabNav [data-tab-target]').forEach(btn=>btn.addEventListener('click',()=>requestAnimationFrame(()=>document.querySelector(`[data-progress-tab="${btn.dataset.tabTarget}"]`)?.scrollIntoView({block:'start'}))));
+  });
+})();
 </script>
 </body>
 </html>
