@@ -1,9 +1,9 @@
 {
   "format": "recraft-alchemia-github-master-manifest",
-  "version": "90.8.289",
-  "updatedAt": "2026-07-27T23:45:00+09:00",
+  "version": "90.8.291",
+  "updatedAt": "2026-07-27T14:04:47+09:00",
   "master": "recraft_alchemia_master.json",
-  "sha256": "4ded74139c943f5fcfbfb5e982fd70d138a247b408065d343821de8d2331fbac",
+  "sha256": "0fc51682e06df60b70cdff05fd7596cdbb76ebc41a429a8453418e161e60fb8e",
   "bytes": 1898215,
   "recordCount": 1655,
   "dataKeys": [
@@ -26,5 +26,5 @@
     "skills"
   ],
   "publicBaseUrl": "https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/",
-  "generatedAt": "2026-07-27T23:45:00+09:00"
+  "generatedAt": "2026-07-27T14:04:47+09:00"
 }

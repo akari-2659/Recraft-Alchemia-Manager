@@ -1,8 +1,8 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "90.8.289",
+  "version": "90.8.291",
   "encoding": "UTF-8",
-  "description": "Recraft-Alchemia fixed master database v90.8.285. manifest/master versions are synchronized.",
+  "description": "Recraft-Alchemia fixed master database v90.8.291. manifest/master versions are synchronized.",
   "data": {
     "item_types": [
       {
@@ -45411,6 +45411,6 @@
       }
     ]
   },
-  "updatedAt": "2026-07-27T23:45:00+09:00",
-  "generatedAt": "2026-07-27T23:45:00+09:00"
+  "updatedAt": "2026-07-27T14:04:47+09:00",
+  "generatedAt": "2026-07-27T14:04:47+09:00"
 }
