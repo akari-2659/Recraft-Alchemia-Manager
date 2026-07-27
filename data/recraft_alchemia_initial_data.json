@@ -1,6 +1,6 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "90.8.287",
+  "version": "90.8.289",
   "encoding": "UTF-8",
   "description": "Recraft-Alchemia fixed master database v90.8.285. manifest/master versions are synchronized.",
   "data": {
@@ -45088,7 +45088,7 @@
         "id": "skill_magicbook_redirect_cast",
         "name": "リダイレクトキャスト",
         "rank": 1,
-        "category": "魔導書専用",
+        "category": "武器専用",
         "weaponType": "魔導書",
         "drawWeight": 110,
         "balanceTier": "限定的",
@@ -45105,7 +45105,7 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森で骨董屋を解放後",
         "notes": "",
-        "updatedAt": "2026-07-26",
+        "updatedAt": "2026-07-27",
         "ownerKey": "",
         "createdBy": ""
       },
@@ -45113,7 +45113,7 @@
         "id": "skill_magicbook_rewrite_page",
         "name": "リライトページ",
         "rank": 1,
-        "category": "魔導書専用",
+        "category": "武器専用",
         "weaponType": "魔導書",
         "drawWeight": 90,
         "balanceTier": "強力",
@@ -45130,7 +45130,7 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森で骨董屋を解放後",
         "notes": "",
-        "updatedAt": "2026-07-26",
+        "updatedAt": "2026-07-27",
         "ownerKey": "",
         "createdBy": ""
       },
@@ -45138,7 +45138,7 @@
         "id": "skill_magicbook_page_swap",
         "name": "ページスワップ",
         "rank": 1,
-        "category": "魔導書専用",
+        "category": "武器専用",
         "weaponType": "魔導書",
         "drawWeight": 95,
         "balanceTier": "やや強力",
@@ -45155,7 +45155,7 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森で骨董屋を解放後",
         "notes": "",
-        "updatedAt": "2026-07-26",
+        "updatedAt": "2026-07-27",
         "ownerKey": "",
         "createdBy": ""
       },
@@ -45163,7 +45163,7 @@
         "id": "skill_prayerbook_divide_pray",
         "name": "ディバイドプレイ",
         "rank": 1,
-        "category": "祈祷書専用",
+        "category": "武器専用",
         "weaponType": "祈祷書",
         "drawWeight": 95,
         "balanceTier": "やや強力",
@@ -45180,7 +45180,7 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森で骨董屋を解放後",
         "notes": "",
-        "updatedAt": "2026-07-26",
+        "updatedAt": "2026-07-27",
         "ownerKey": "",
         "createdBy": ""
       },
@@ -45188,7 +45188,7 @@
         "id": "skill_prayerbook_transfer_bless",
         "name": "トランスファーブレス",
         "rank": 1,
-        "category": "祈祷書専用",
+        "category": "武器専用",
         "weaponType": "祈祷書",
         "drawWeight": 110,
         "balanceTier": "限定的",
@@ -45205,7 +45205,7 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森で骨董屋を解放後",
         "notes": "",
-        "updatedAt": "2026-07-26",
+        "updatedAt": "2026-07-27",
         "ownerKey": "",
         "createdBy": ""
       },
@@ -45213,7 +45213,7 @@
         "id": "skill_prayerbook_overflow_pray",
         "name": "オーバーフロープレイ",
         "rank": 1,
-        "category": "祈祷書専用",
+        "category": "武器専用",
         "weaponType": "祈祷書",
         "drawWeight": 95,
         "balanceTier": "やや強力",
@@ -45230,7 +45230,7 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森で骨董屋を解放後",
         "notes": "",
-        "updatedAt": "2026-07-26",
+        "updatedAt": "2026-07-27",
         "ownerKey": "",
         "createdBy": ""
       },
@@ -45411,6 +45411,6 @@
       }
     ]
   },
-  "updatedAt": "2026-07-27T22:00:00.000+09:00",
-  "generatedAt": "2026-07-27T00:07:07+09:00"
+  "updatedAt": "2026-07-27T23:45:00+09:00",
+  "generatedAt": "2026-07-27T23:45:00+09:00"
 }

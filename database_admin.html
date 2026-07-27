@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.287</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.289</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1169,7 +1169,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.287 usability maintenance */
+/* v90.8.289 usability maintenance */
 .ra-build-info{font-size:12px;padding:6px 12px;text-align:right;color:var(--muted);background:rgba(255,253,248,.9);border-bottom:1px solid var(--line)}
 header{padding-top:12px!important;padding-bottom:6px!important}.title-card{padding:14px!important}.title-card h1{font-size:clamp(21px,3vw,30px)!important;margin-bottom:5px!important}.title-card .subtitle{font-size:.84rem;line-height:1.5}.dbid{font-size:.72rem!important}
 main>section.panel:first-of-type{padding:10px!important}
@@ -1188,7 +1188,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 </style>
 </head>
 <body>
-<div class="ra-build-info">v90.8.287｜更新：2026年7月27日</div>
+<div class="ra-build-info">v90.8.289｜更新：2026年7月27日</div>
 
 <header>
   <div class="title-card">
@@ -1204,10 +1204,6 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
         <label>Web App URL</label>
         <div class="status-box ok">固定URLを使用中です。</div>
         <div class="small">クラウド接続先はツール内で固定されています。</div>
-      </div>
-      <div class="field small">
-        <label>GAS書込キー</label>
-        <input id="adminKey" type="password" placeholder="Code.gsのADMIN_KEY（未設定なら空欄）">
       </div>
       <button class="secondary" id="btnSetup">統合DBシート作成</button>
       <button class="secondary" id="btnDiagnoseSheets">DB列診断</button>
@@ -1693,10 +1689,11 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
               <div>
                 <label for="facilityAntiqueStockArea">解放済みエリア</label>
                 <select id="facilityAntiqueStockArea">
-                  <option value="街はずれの草原">街はずれの草原（★1まで）</option>
+                  <option value="街はずれの草原">街はずれの草原（骨董屋未解放）</option>
                   <option value="近郊の森">近郊の森（★1まで）</option>
                   <option value="水辺の湿地">水辺の湿地（★2まで）</option>
-                  <option value="★4解放済み">★4解放済み</option>
+                  <option value="反照の水庭">反照の水庭（★2まで）</option>
+                  <option value="山麓の旧鉱山">山麓の旧鉱山（★3まで）</option>
                 </select>
               </div>
               <button class="secondary" type="button" data-facility-antique-random>未鑑定スクロールをランダム選出</button>
@@ -1831,7 +1828,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.287';
+const RECRAFT_DB_VERSION = 'v90.8.289';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.263';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -2296,7 +2293,7 @@ function stripSkillPointTerms(value){
 function normalizePowerForDb(key, value){
   return key === 'spells' ? stripSkillPointTerms(value) : String(value || '').trim();
 }
-function currentAdminKey(){ return ($('adminKey')?.value || '').trim(); }
+function currentAdminKey(){ return ''; }
 function currentCreatedBy(){ return ''; }
 function markRowOwnership(row){
   if(!row) return row;
@@ -2932,7 +2929,7 @@ const SYSTEM_HELP = [
       "アイテム、素材、装備カテゴリなどの一覧では名前検索を常時表示する。",
       "詳細フィルターとソート情報は折り畳み式の『絞り込み・ソート』にまとめる。",
       "各行の情報コピーから、プレイヤーに渡すアイテム情報と登録IDをコピーできる。",
-      "情報コピーには、内部ID、管理キー、登録者、解放施設を含めない。魔物素材では装備強化内容・装備強化値・強化対象を表示し、特殊効果なら具体的な能力詳細も表示する。",
+      "情報コピーには、内部ID、登録者、解放施設を含めない。魔物素材では装備強化内容・装備強化値・強化対象を表示し、特殊効果なら具体的な能力詳細も表示する。",
       "情報コピーは、プレイヤーが読んで分かる範囲のアイテム情報と登録IDを出す。",
       "素材は、名称、登録ID、個数、ランク、分類、売値、説明を基本に出す。魔物素材は装備強化内容・装備強化値・強化対象を追加し、特殊効果なら能力詳細も出す。",
       "武器、防具、術式、道具、矢弾などは、使用に必要なコスト、対象、判定、属性、威力、最大スタックなどを追加で出す。"
@@ -2952,7 +2949,7 @@ const SYSTEM_HELP = [
       "プレイヤーは未入手アイテム一覧を検索しない。",
       "貼り付け登録では装備強化内容と装備強化値を表示・登録しない。",
       "プレイヤーに渡す情報は、未入手一覧ではなく、入手したアイテムごとの情報と登録IDにする。",
-      "装備強化内容、装備強化値、内部ID、管理キー、登録者、解放施設などの内部管理情報は表示しない。"
+      "装備強化内容、装備強化値、内部ID、登録者、解放施設などの内部管理情報は表示しない。"
     ]
   },
   {
@@ -4553,21 +4550,14 @@ const TRANSCRIPTION_DIFFICULTIES = {1:7,2:10,3:13,4:16};
 const TRANSCRIPTION_MATERIAL_COUNTS = {1:1,2:2,3:3,4:4};
 const SCROLL_RANK_DIFFICULTIES = {1:6,2:9,3:12,4:15};
 const SCROLL_RANK_ORDER = [1,2,3,4];
-const AREA_UNLOCK_ORDER = ['街はずれの草原','近郊の森','水辺の湿地'];
-const AREA_SCROLL_FALLBACK = {'街はずれの草原':1,'近郊の森':1,'水辺の湿地':2,'★4解放済み':4};
+const AREA_SCROLL_MAX_RANK = {'街はずれの草原':0,'近郊の森':1,'水辺の湿地':2,'反照の水庭':2,'山麓の旧鉱山':3};
 function appraisalFee(rank=1){ return APPRAISAL_FEES[numericRankValue(rank,1)] || 150; }
 function transcriptionDifficulty(rank=1){ return TRANSCRIPTION_DIFFICULTIES[numericRankValue(rank,1)] || 7; }
 function transcriptionMaterialCount(rank=1){ return TRANSCRIPTION_MATERIAL_COUNTS[numericRankValue(rank,1)] || 1; }
 function scrollRankDifficulty(rank=1){ return SCROLL_RANK_DIFFICULTIES[numericRankValue(rank,1)] || 6; }
 function maxScrollRankForUnlockedArea(area='街はずれの草原'){
   const selected=String(area||'').trim();
-  if(selected==='★4解放済み') return 4;
-  const end=AREA_UNLOCK_ORDER.indexOf(selected);
-  const allowedAreas=new Set(AREA_UNLOCK_ORDER.slice(0,end>=0?end+1:1));
-  const tableIds=new Set((state.event_tables||[]).filter(e=>allowedAreas.has(String(e.areaName||'').trim())).map(e=>String(e.treasureTableId||'').trim()).filter(Boolean));
-  const ranks=(state.treasure_tables||[]).filter(t=>tableIds.has(String(t.tableId||'').trim()) && String(t.entryType||'').trim()==='未鑑定スクロール').map(t=>numericRankValue(t.scrollRank,'')).filter(r=>SCROLL_RANK_ORDER.includes(r));
-  if(!ranks.length) return AREA_SCROLL_FALLBACK[selected]||1;
-  return ranks.sort((a,b)=>b-a)[0];
+  return Object.prototype.hasOwnProperty.call(AREA_SCROLL_MAX_RANK,selected)?AREA_SCROLL_MAX_RANK[selected]:0;
 }
 function scrollRankAllowed(rank=1,area='街はずれの草原'){
   const maxRank=maxScrollRankForUnlockedArea(area);
@@ -5797,7 +5787,7 @@ function formOptionValues(key, field){
   }
   if(['toolRank','upgradeMaterialMinRank'].includes(field)) knownToolRanks().forEach(v=>values.add(String(v)));
   if(field==='type') ['魔法','祈祷'].forEach(v=>values.add(v));
-  if(key==='skills' && field==='category') ['武器専用','魔導書専用','祈祷書専用','汎用戦闘','探索系'].forEach(v=>values.add(v));
+  if(key==='skills' && field==='category') ['武器専用','汎用戦闘','探索系'].forEach(v=>values.add(v));
   if(key==='skills' && field==='weaponType') ['短剣','片手剣','片手斧','片手槌','片手槍','杖','鞭','大鎌','ガントレット','両手剣','大槌','長槍','弓','弩','大型弩','魔導書','祈祷書','汎用','探索'].forEach(v=>values.add(v));
   if(key==='skills' && field==='balanceTier') ['限定的','標準','強め','強力','最上位'].forEach(v=>values.add(v));
   if(field==='enabled') ['TRUE','FALSE'].forEach(v=>values.add(v));
@@ -6842,7 +6832,7 @@ async function applyFormAndSave(){
 }
 
 function payload(action, extra={}){
-  return {action, adminKey:currentAdminKey(), ...extra};
+  return {action, ...extra};
 }
 function isGasMode(){ return typeof google !== 'undefined' && google.script && google.script.run; }
 const JSONP_ACTIONS = new Set(['ping','schema','setup','list','listAll','getEquipmentCategories','characterSheetMaster','dedupeAll','dedupe','repairAll','repairSheet','beginUpload','putUploadChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet']);
@@ -7108,7 +7098,7 @@ function splitTextForJsonpUpload(token, chunkIndex, text){
       part = s.slice(pos, pos + size);
     }
     if(size <= 1 && !isUploadPartUrlSafe(token, chunkIndex, parts.length, part)){
-      throw new Error('1文字でも送信URLが長すぎます。WebアプリURLまたは管理キーが異常に長い可能性があります。');
+      throw new Error('1文字でも送信URLが長すぎます。WebアプリURLが異常に長い可能性があります。');
     }
     parts.push(part);
     pos += size;
@@ -7128,7 +7118,7 @@ function splitGzipBase64ForJsonpUpload(token, chunkIndex, gzipBase64){
       part = s.slice(pos, pos + size);
     }
     if(size <= 1 && !isGzipPartUrlSafe(token, chunkIndex, parts.length, part)){
-      throw new Error('圧縮済みデータ1文字分でも送信URLが長すぎます。WebアプリURLまたは管理キーが異常に長い可能性があります。');
+      throw new Error('圧縮済みデータ1文字分でも送信URLが長すぎます。WebアプリURLが異常に長い可能性があります。');
     }
     parts.push(part);
     pos += size;
