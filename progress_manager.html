@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.298</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.299</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -137,13 +137,13 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </style>
 </head>
 <body>
-<div class="ra-build-info">v90.8.298｜更新：2026年7月29日</div>
+<div class="ra-build-info">v90.8.299｜更新：2026年7月29日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.298｜更新：2026年7月29日｜クエスト・エリア進行管理</div>
+      <div class="version">v90.8.299｜更新：2026年7月29日｜クエスト・エリア進行管理</div>
     </div>
     <div class="fixed-url">読込元：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -387,7 +387,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.298';
+const VERSION='v90.8.299';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 const GITHUB_COMMON_DB_MANIFEST_URL=GITHUB_COMMON_DB_BASE+'manifest.json';
@@ -1806,6 +1806,15 @@ const TREASURE_AREA_PROFILES={
       {name:'虚ろな手',effect:'開封者は次の自分の行動まで回避－2。行動後に解除する。'},
       {name:'逆流する術式',effect:'開封者は抵抗判定を行い、失敗するとMPを1D3失う。'}
     ]
+  },
+  '風渡りの高原':{
+    lockChance:60, trapChance:55, emptyChance:8, detect:[13,15], disarm:[13,15], unlock:[12,15],
+    traps:[
+      {name:'風刃の封',effect:'開封者に2D6風属性ダメージ。'},
+      {name:'雷糸の留め金',effect:'開封者は次の自分のターン終了まで命中－2。'},
+      {name:'浮石の崩落',effect:'開封者に2D6ダメージ。'},
+      {name:'逆巻く気流',effect:'開封者は次の自分の行動まで回避－2。行動後に解除する。'}
+    ]
   }
 };
 function selectedTreasureMeta(){ return treasureRows($('treasureTableSelect')?.value||'')[0]||null; }
@@ -1818,6 +1827,21 @@ function treasureAreaName(tableId, explicit=''){
 }
 function treasureProfile(areaName){
   return TREASURE_AREA_PROFILES[areaName] || TREASURE_AREA_PROFILES['街はずれの草原'];
+}
+function positiveTreasureDifficulty(value,fallback=1){
+  const n=Number(String(value??'').trim());
+  return Number.isInteger(n)&&n>=1?n:Math.max(1,Number(fallback)||1);
+}
+function configuredTrapDetectDifficulty(row,profile){
+  const fallback=Math.round((Number(profile?.detect?.[0])||1)+(Number(profile?.detect?.[1])||Number(profile?.detect?.[0])||1))/2;
+  return positiveTreasureDifficulty(row?.trapDetectDifficulty,fallback);
+}
+function normalizeTreasureSetup(setup){
+  if(!setup)return setup;
+  const row=treasureRows(setup.tableId||'')[0]||{};
+  const profile=treasureProfile(setup.areaName||row.areaName||'');
+  setup.trapDetectDifficulty=positiveTreasureDifficulty(setup.trapDetectDifficulty,configuredTrapDetectDifficulty(row,profile));
+  return setup;
 }
 function setTreasureContext(tableId, areaName='', mode='normal'){
   const id=String(tableId||'').trim();
@@ -1835,20 +1859,20 @@ function buildTreasureSetup(tableId, areaName='', questFixed=false){
   if(!row)return null;
   const area=treasureAreaName(tableId,areaName);
   if(questFixed){
-    return {tableId:String(tableId||''),areaName:area,chestName:row.chestName||row.tableId||'クエスト固有宝箱',questFixed:true,hasLock:false,hasTrap:false};
+    return normalizeTreasureSetup({tableId:String(tableId||''),areaName:area,chestName:row.chestName||row.tableId||'クエスト固有宝箱',questFixed:true,hasLock:false,hasTrap:false,trapDetectDifficulty:configuredTrapDetectDifficulty(row,treasureProfile(area))});
   }
   const profile=treasureProfile(area);
   const hasLock=Math.random()*100<profile.lockChance;
   const hasTrap=Math.random()*100<profile.trapChance;
   const trap=hasTrap?profile.traps[Math.floor(Math.random()*profile.traps.length)]:null;
-  return {
+  return normalizeTreasureSetup({
     tableId:String(tableId||''),areaName:area,chestName:row.chestName||row.tableId||'宝箱',
     hasLock,hasTrap,questFixed:false,
     unlockDifficulty:hasLock?randomInt(...profile.unlock):'',
-    trapDetectDifficulty:hasTrap?randomInt(...profile.detect):'',
+    trapDetectDifficulty:configuredTrapDetectDifficulty(row,profile),
     trapDisarmDifficulty:hasTrap?randomInt(...profile.disarm):'',
     trapName:trap?.name||'',trapEffect:trap?.effect||''
-  };
+  });
 }
 function generateTreasureSetup(tableId, areaName=''){
   state.treasureSetup=buildTreasureSetup(tableId,areaName,false);
@@ -1857,7 +1881,8 @@ function generateTreasureSetup(tableId, areaName=''){
 function currentTreasureSetup(){
   const tableId=$('treasureTableSelect')?.value||'';
   if(!tableId || !state.treasureSetup)return null;
-  return String(state.treasureSetup.tableId||'')===String(tableId)?state.treasureSetup:null;
+  if(String(state.treasureSetup.tableId||'')!==String(tableId))return null;
+  return normalizeTreasureSetup(state.treasureSetup);
 }
 function prepareTreasureEvent(tableId, areaName=''){
   fillTreasureTables(tableId);
@@ -1882,7 +1907,7 @@ function treasureSetupLines(setup={}){
     `鍵：${setup.hasLock?'あり':'なし'}`,
     `解錠難易度（細工）：${setup.hasLock?setup.unlockDifficulty:'—'}`,
     `罠：${setup.hasTrap?'あり':'なし'}`,
-    `罠感知難易度（感知）：${setup.hasTrap?setup.trapDetectDifficulty:'—'}`,
+    `罠感知難易度（感知）：${positiveTreasureDifficulty(setup.trapDetectDifficulty,1)}`,
     `罠解除難易度（細工）：${setup.hasTrap?setup.trapDisarmDifficulty:'—'}`
   ];
   if(setup.hasTrap){

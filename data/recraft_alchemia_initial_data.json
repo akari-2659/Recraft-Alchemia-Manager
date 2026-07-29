@@ -1,8 +1,8 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "90.8.298",
+  "version": "90.8.299",
   "encoding": "UTF-8",
-  "description": "Recraft-Alchemia fixed master database v90.8.298. All 17 weapon categories contain exactly 18 area branches; crafting skills are normalized to trap=設計, weapon work=細工, and alchemy=調合.",
+  "description": "Recraft-Alchemia fixed master database v90.8.299. All treasure-table rows have a required trap-detection difficulty; weapon crafting and branching use 細工, trap work uses 設計, and alchemy uses 調合.",
   "data": {
     "item_types": [
       {
@@ -47883,7 +47883,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -47908,7 +47908,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -47933,7 +47933,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -47958,7 +47958,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -47983,7 +47983,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48008,7 +48008,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48033,7 +48033,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48058,7 +48058,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48083,7 +48083,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48108,7 +48108,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48133,7 +48133,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48158,7 +48158,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48183,7 +48183,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48208,7 +48208,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48233,7 +48233,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48258,7 +48258,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48283,7 +48283,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48308,7 +48308,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48333,7 +48333,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48358,7 +48358,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48383,7 +48383,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48408,7 +48408,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48433,7 +48433,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48458,7 +48458,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48483,7 +48483,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48508,7 +48508,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48533,7 +48533,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48558,7 +48558,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48583,7 +48583,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48608,7 +48608,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48633,7 +48633,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48658,7 +48658,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48683,7 +48683,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48708,7 +48708,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48733,7 +48733,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48758,7 +48758,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48783,7 +48783,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48808,7 +48808,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48833,7 +48833,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48858,7 +48858,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48883,7 +48883,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48908,7 +48908,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48933,7 +48933,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48958,7 +48958,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -48983,7 +48983,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49008,7 +49008,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49033,7 +49033,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49058,7 +49058,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49083,7 +49083,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49108,7 +49108,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49133,7 +49133,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49158,7 +49158,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49183,7 +49183,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49208,7 +49208,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49233,7 +49233,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49258,7 +49258,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49283,7 +49283,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49308,7 +49308,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49333,7 +49333,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49358,7 +49358,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49383,7 +49383,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49408,7 +49408,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49433,7 +49433,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49458,7 +49458,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49483,7 +49483,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49558,7 +49558,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49583,7 +49583,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49608,7 +49608,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49633,7 +49633,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49658,7 +49658,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49683,7 +49683,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49708,7 +49708,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49733,7 +49733,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49747,7 +49747,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": "",
@@ -49783,7 +49783,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49808,7 +49808,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49833,7 +49833,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49858,7 +49858,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49883,7 +49883,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49908,7 +49908,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49933,7 +49933,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49958,7 +49958,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -49983,7 +49983,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50008,7 +50008,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50033,7 +50033,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50058,7 +50058,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50083,7 +50083,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50108,7 +50108,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50133,7 +50133,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50158,7 +50158,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50183,7 +50183,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50208,7 +50208,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50233,7 +50233,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50258,7 +50258,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50283,7 +50283,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50308,7 +50308,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50333,7 +50333,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50358,7 +50358,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50383,7 +50383,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50408,7 +50408,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50433,7 +50433,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50458,7 +50458,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50483,7 +50483,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50508,7 +50508,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50533,7 +50533,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50558,7 +50558,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50583,7 +50583,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50608,7 +50608,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50633,7 +50633,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50658,7 +50658,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50683,7 +50683,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50708,7 +50708,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50733,7 +50733,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50758,7 +50758,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50783,7 +50783,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50808,7 +50808,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50833,7 +50833,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50858,7 +50858,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50883,7 +50883,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50908,7 +50908,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50933,7 +50933,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50958,7 +50958,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -50983,7 +50983,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51008,7 +51008,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51033,7 +51033,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51058,7 +51058,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51083,7 +51083,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51108,7 +51108,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51133,7 +51133,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51158,7 +51158,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51183,7 +51183,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51208,7 +51208,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51233,7 +51233,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51258,7 +51258,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51283,7 +51283,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51308,7 +51308,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51333,7 +51333,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51358,7 +51358,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51383,7 +51383,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51408,7 +51408,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51433,7 +51433,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51458,7 +51458,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51483,7 +51483,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51508,7 +51508,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51533,7 +51533,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51558,7 +51558,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51583,7 +51583,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51608,7 +51608,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51633,7 +51633,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51658,7 +51658,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51683,7 +51683,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51708,7 +51708,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51733,7 +51733,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51758,7 +51758,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51783,7 +51783,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51808,7 +51808,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51833,7 +51833,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51858,7 +51858,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51883,7 +51883,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51908,7 +51908,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51933,7 +51933,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51958,7 +51958,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -51983,7 +51983,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52008,7 +52008,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52033,7 +52033,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52058,7 +52058,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52083,7 +52083,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52108,7 +52108,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52133,7 +52133,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52158,7 +52158,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52183,7 +52183,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52208,7 +52208,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52233,7 +52233,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52258,7 +52258,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52283,7 +52283,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52308,7 +52308,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52333,7 +52333,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52358,7 +52358,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52383,7 +52383,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52408,7 +52408,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52433,7 +52433,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52458,7 +52458,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52483,7 +52483,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52508,7 +52508,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52533,7 +52533,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52558,7 +52558,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52583,7 +52583,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52608,7 +52608,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52633,7 +52633,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52658,7 +52658,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52683,7 +52683,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52708,7 +52708,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52733,7 +52733,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52758,7 +52758,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "12",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52783,7 +52783,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52808,7 +52808,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52833,7 +52833,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52858,7 +52858,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52883,7 +52883,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52908,7 +52908,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52933,7 +52933,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52958,7 +52958,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -52983,7 +52983,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53008,7 +53008,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53033,7 +53033,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53058,7 +53058,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53083,7 +53083,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53108,7 +53108,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53133,7 +53133,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53158,7 +53158,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53183,7 +53183,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53208,7 +53208,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53233,7 +53233,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53258,7 +53258,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53283,7 +53283,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53308,7 +53308,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53333,7 +53333,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53358,7 +53358,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53383,7 +53383,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53408,7 +53408,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53433,7 +53433,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53458,7 +53458,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53483,7 +53483,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53508,7 +53508,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53533,7 +53533,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53558,7 +53558,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53583,7 +53583,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53608,7 +53608,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53633,7 +53633,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53658,7 +53658,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53683,7 +53683,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53708,7 +53708,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53733,7 +53733,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53758,7 +53758,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53783,7 +53783,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53808,7 +53808,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53833,7 +53833,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53858,7 +53858,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53883,7 +53883,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53908,7 +53908,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53933,7 +53933,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53958,7 +53958,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -53983,7 +53983,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54008,7 +54008,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54033,7 +54033,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54058,7 +54058,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54083,7 +54083,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54108,7 +54108,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54133,7 +54133,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54158,7 +54158,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54183,7 +54183,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54208,7 +54208,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54233,7 +54233,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54258,7 +54258,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54283,7 +54283,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54308,7 +54308,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54333,7 +54333,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54358,7 +54358,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54383,7 +54383,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54408,7 +54408,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54433,7 +54433,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54458,7 +54458,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54483,7 +54483,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54508,7 +54508,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54533,7 +54533,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54558,7 +54558,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54583,7 +54583,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54608,7 +54608,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54633,7 +54633,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54658,7 +54658,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54683,7 +54683,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54708,7 +54708,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54733,7 +54733,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54758,7 +54758,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54783,7 +54783,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54808,7 +54808,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54833,7 +54833,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54858,7 +54858,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54883,7 +54883,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54908,7 +54908,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54933,7 +54933,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54958,7 +54958,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -54983,7 +54983,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55008,7 +55008,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55033,7 +55033,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55058,7 +55058,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55083,7 +55083,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55108,7 +55108,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55133,7 +55133,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55158,7 +55158,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55183,7 +55183,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55208,7 +55208,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55233,7 +55233,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55258,7 +55258,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55283,7 +55283,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55308,7 +55308,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55333,7 +55333,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55358,7 +55358,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55383,7 +55383,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55408,7 +55408,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55433,7 +55433,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55458,7 +55458,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55483,7 +55483,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55508,7 +55508,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55533,7 +55533,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55558,7 +55558,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55583,7 +55583,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55608,7 +55608,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55633,7 +55633,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55658,7 +55658,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55683,7 +55683,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55708,7 +55708,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55733,7 +55733,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55758,7 +55758,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55783,7 +55783,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55808,7 +55808,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55833,7 +55833,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55858,7 +55858,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55883,7 +55883,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55908,7 +55908,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55933,7 +55933,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55958,7 +55958,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -55983,7 +55983,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56008,7 +56008,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56033,7 +56033,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56058,7 +56058,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56083,7 +56083,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56108,7 +56108,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56133,7 +56133,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56158,7 +56158,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56183,7 +56183,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56208,7 +56208,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56233,7 +56233,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56258,7 +56258,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56283,7 +56283,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56308,7 +56308,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56333,7 +56333,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56358,7 +56358,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56383,7 +56383,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56408,7 +56408,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56433,7 +56433,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56458,7 +56458,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56483,7 +56483,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56508,7 +56508,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56533,7 +56533,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56558,7 +56558,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56583,7 +56583,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56608,7 +56608,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56633,7 +56633,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56658,7 +56658,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56683,7 +56683,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56708,7 +56708,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56733,7 +56733,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56758,7 +56758,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56783,7 +56783,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56808,7 +56808,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56833,7 +56833,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56858,7 +56858,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56883,7 +56883,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56908,7 +56908,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56933,7 +56933,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56958,7 +56958,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -56983,7 +56983,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57008,7 +57008,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57033,7 +57033,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57058,7 +57058,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57083,7 +57083,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57108,7 +57108,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57133,7 +57133,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57158,7 +57158,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57183,7 +57183,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57208,7 +57208,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57233,7 +57233,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57258,7 +57258,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57283,7 +57283,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57308,7 +57308,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57333,7 +57333,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57358,7 +57358,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57383,7 +57383,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57408,7 +57408,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57433,7 +57433,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57458,7 +57458,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57483,7 +57483,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57508,7 +57508,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57533,7 +57533,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57558,7 +57558,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57583,7 +57583,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57608,7 +57608,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57633,7 +57633,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57658,7 +57658,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57683,7 +57683,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57708,7 +57708,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57733,7 +57733,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "14",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57758,7 +57758,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57783,7 +57783,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57808,7 +57808,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57833,7 +57833,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57858,7 +57858,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57883,7 +57883,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57908,7 +57908,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57933,7 +57933,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57958,7 +57958,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -57983,7 +57983,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58008,7 +58008,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58033,7 +58033,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58058,7 +58058,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58083,7 +58083,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58108,7 +58108,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58133,7 +58133,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58158,7 +58158,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58183,7 +58183,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58208,7 +58208,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58233,7 +58233,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58258,7 +58258,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58283,7 +58283,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "15",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58308,7 +58308,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58333,7 +58333,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "6",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58358,7 +58358,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58383,7 +58383,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58408,7 +58408,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58433,7 +58433,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58458,7 +58458,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58483,7 +58483,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58508,7 +58508,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58533,7 +58533,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58558,7 +58558,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58583,7 +58583,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58608,7 +58608,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58633,7 +58633,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58658,7 +58658,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58683,7 +58683,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58708,7 +58708,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58733,7 +58733,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58758,7 +58758,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58783,7 +58783,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58808,7 +58808,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58833,7 +58833,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58858,7 +58858,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58883,7 +58883,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58908,7 +58908,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58933,7 +58933,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58958,7 +58958,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "8",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -58983,7 +58983,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59008,7 +59008,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59033,7 +59033,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59058,7 +59058,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59083,7 +59083,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59108,7 +59108,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59133,7 +59133,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59158,7 +59158,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59183,7 +59183,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59208,7 +59208,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59233,7 +59233,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59258,7 +59258,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59283,7 +59283,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59308,7 +59308,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59333,7 +59333,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59358,7 +59358,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59383,7 +59383,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59408,7 +59408,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59433,7 +59433,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59458,7 +59458,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59483,7 +59483,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "10",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59508,7 +59508,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59533,7 +59533,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59558,7 +59558,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59583,7 +59583,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59608,7 +59608,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59633,7 +59633,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59658,7 +59658,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59683,7 +59683,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59708,7 +59708,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59733,7 +59733,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59758,7 +59758,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59783,7 +59783,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59808,7 +59808,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59833,7 +59833,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59858,7 +59858,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59883,7 +59883,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59908,7 +59908,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59933,7 +59933,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59958,7 +59958,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -59983,7 +59983,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -60008,7 +60008,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -60033,7 +60033,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -60058,7 +60058,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -60083,7 +60083,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -60108,7 +60108,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -60133,7 +60133,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -60158,7 +60158,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -60183,7 +60183,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -60208,7 +60208,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -60233,7 +60233,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -60258,7 +60258,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -60283,7 +60283,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -60308,7 +60308,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -60333,7 +60333,7 @@
         "hasLock": "",
         "unlockDifficulty": "",
         "hasTrap": "",
-        "trapDetectDifficulty": "",
+        "trapDetectDifficulty": "13",
         "trapDisarmDifficulty": "",
         "trapName": "",
         "trapEffect": ""
@@ -61818,5 +61818,5 @@
     ]
   },
   "updatedAt": "2026-07-29",
-  "generatedAt": "2026-07-29T14:08:00+09:00"
+  "generatedAt": "2026-07-29T15:26:00+09:00"
 }

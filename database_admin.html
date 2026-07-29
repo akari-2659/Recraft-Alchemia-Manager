@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.298</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.299</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1169,7 +1169,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.298 usability maintenance */
+/* v90.8.299 usability maintenance */
 .ra-build-info{font-size:12px;padding:6px 12px;text-align:right;color:var(--muted);background:rgba(255,253,248,.9);border-bottom:1px solid var(--line)}
 header{padding-top:12px!important;padding-bottom:6px!important}.title-card{padding:14px!important}.title-card h1{font-size:clamp(21px,3vw,30px)!important;margin-bottom:5px!important}.title-card .subtitle{font-size:.84rem;line-height:1.5}.dbid{font-size:.72rem!important}
 main>section.panel:first-of-type{padding:10px!important}
@@ -1188,7 +1188,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 </style>
 </head>
 <body>
-<div class="ra-build-info">v90.8.298｜更新：2026年7月29日</div>
+<div class="ra-build-info">v90.8.299｜更新：2026年7月29日</div>
 
 <header>
   <div class="title-card">
@@ -1828,7 +1828,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.298';
+const RECRAFT_DB_VERSION = 'v90.8.299';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.263';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -6459,6 +6459,9 @@ function buildFieldInput(key, field, value, rowContext={}){
     input = `<textarea ${common} placeholder="${escapeHtml(ph)}">${escapeHtml(value ?? '')}</textarea>`;
   }else if(key==='skills' && field==='probability'){
     input = `<input ${common} value="${escapeHtml(value ?? '')}" readonly title="排出ウェイトから自動計算">`;
+  }else if(key==='treasure_tables' && field==='trapDetectDifficulty'){
+    const difficultyValue=numericRankValue(value,'');
+    input = `<input type="number" min="1" step="1" inputmode="numeric" required ${common} value="${escapeHtml(difficultyValue)}" placeholder="必須・1以上">`;
   }else if((field==='rank' && isStructuredNumericRankRecord(key,rowContext)) || isStructuredNumericSubRank(key,field) || ['toolRank','upgradeMaterialMinRank','guaranteeUpgradeMaxRank'].includes(field) || (key==='material_ranks' && field==='name') || field==='unlockOrder'){
     const rankValue=numericRankValueIncludingLegacyMaterialGrade(value,1);
     input = `<input type="number" min="1" step="1" inputmode="numeric" ${common} value="${escapeHtml(rankValue)}" placeholder="1以上">`;
@@ -6493,6 +6496,7 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='unlockOrder') help += '<div class="form-help">小さい順に累積解放します。プレイヤーのキーが示す順番以下を公開します。</div>';
   if(field==='upgradeMaterialMinRank') help += '<div class="form-help">この装備へ使用できる強化素材の最低ランクです。未設定時は装備自身のランクを自動設定します。</div>';
   if(field==='bagCapacity') help += '<div class="form-help">バッグ専用の所持品枠数です。倉庫のスタック数や1枠数とは別項目です。</div>';
+  if(key==='treasure_tables' && field==='trapDetectDifficulty') help += '<div class="form-help">必須項目です。罠の有無にかかわらず、1以上の罠感知難易度を設定してください。</div>';
   if(field==='monsterType') help += '<div class="form-help">素材派生へ流用しやすい大分類です。粘体・獣・虫・植物・爬虫・水棲・軟体・霊体・造魔・竜・異界から選びます。</div>';
   if(field==='monsterTraits') help += '<div class="form-help">飛行・甲殻・異界・鉱質など、大分類だけでは表せない特徴をカンマ区切りで入力します。</div>';
   if(field==='encounterValue') help += '<div class="form-help">通常魔物は1～3で設定します。1＝小型・軽量、2＝標準、3＝強敵。エリアが後半かどうかではなく、その魔物自身の能力と行動で決めます。ボスは通常遭遇から除外されるため空欄で構いません。</div>';
@@ -6804,6 +6808,17 @@ function assertNumericRankRows(key,rows=[]){
   const details=invalid.slice(0,10).map(row=>`・${String(row.name||row.id||'名称未設定')}`).join('\n');
   throw new Error(`ランクは1以上の数値で設定してください。\n${details}`);
 }
+function assertTreasureTrapDetectDifficultyRows(rows=[]){
+  const invalid=(rows||[]).filter(row=>{
+    const raw=String(row?.trapDetectDifficulty??'').trim();
+    const n=Number(raw);
+    return !raw || !Number.isInteger(n) || n<1;
+  });
+  if(!invalid.length)return;
+  const details=invalid.slice(0,10).map(row=>`・${String(row.chestName||row.tableId||row.id||'宝箱名未設定')}`).join('\n');
+  const rest=invalid.length>10?`\nほか${invalid.length-10}件`:'';
+  throw new Error(`すべての宝箱に、1以上の罠感知難易度を設定してください。\n${details}${rest}`);
+}
 function assertEquipmentUpgradeMinimumRows(rows=[]){
   const invalid=(rows||[]).filter(row=>isEquipmentItemRow(row)&&Number(row.upgradeLimit||0)>0&&!numericRankValueIncludingLegacyMaterialGrade(row.upgradeMaterialMinRank,''));
   if(!invalid.length)return;
@@ -6865,6 +6880,7 @@ function collectFormRow(){
   }
   if(key==='treasure_tables'){
     base.treasureRank=numericRankValueIncludingLegacyMaterialGrade(base.treasureRank,1);
+    base.trapDetectDifficulty=numericRankValue(base.trapDetectDifficulty,'');
     if(String(base.scrollRank ?? '').trim()) base.scrollRank=numericRankValue(base.scrollRank,1);
   }
   if(key==='appraisal_rules'){
@@ -6879,7 +6895,7 @@ function collectFormRow(){
   if(key==='recipes'){ assertNumericRankRows('recipes',[clean]); assertWeaponBranchMaterialRows([clean]); }
   if(key==='quest_rewards') assertNumericRankRows('quest_rewards',[clean]);
   if(key==='quests') assertNumericRankRows('quests',[clean]);
-  if(key==='treasure_tables') assertNumericRankRows('treasure_tables',[clean]);
+  if(key==='treasure_tables'){ assertNumericRankRows('treasure_tables',[clean]); assertTreasureTrapDetectDifficultyRows([clean]); }
   if(key==='monsters'){ assertNumericRankRows('monsters',[clean]); assertMonsterActionCountRows([clean]); }
   return clean;
 }
@@ -7540,6 +7556,7 @@ function rowsForTableForSave(tableKey){
 function cloneRowsForSave(baseKey, rows){
   if(baseKey==='skills') recalculateSkillProbabilities();
   if(['items','recipes','spells','skills','material_ranks','quest_rewards','quests','treasure_tables','monsters'].includes(baseKey)) assertNumericRankRows(baseKey,rows||[]);
+  if(baseKey==='treasure_tables') assertTreasureTrapDetectDifficultyRows(rows||[]);
   if(baseKey==='items'){ assertItemClassificationRows(rows||[]); assertWeaponKatakanaNames(rows||[]); assertEquipmentUpgradeMinimumRows(rows||[]); assertMonsterMaterialUpgradeRows(rows || []); assertMonsterMaterialDescriptionRows(rows || []); }
   if(baseKey==='recipes') assertWeaponBranchMaterialRows(rows || []);
   if(baseKey==='monsters') assertMonsterActionCountRows(rows || []);
@@ -7551,7 +7568,7 @@ function cloneRowsForSave(baseKey, rows){
     if(baseKey==='recipes'){ r.rank=numericRankValueIncludingLegacyMaterialGrade(r.rank,1); }
     if(baseKey==='spells' || baseKey==='skills') r.rank=numericRankValueIncludingLegacyMaterialGrade(r.rank,1);
     if(['quest_rewards','quests','monsters'].includes(baseKey)) r.rank=numericRankValueIncludingLegacyMaterialGrade(r.rank,1);
-    if(baseKey==='treasure_tables'){ r.treasureRank=numericRankValueIncludingLegacyMaterialGrade(r.treasureRank,1); if(String(r.scrollRank??'').trim())r.scrollRank=numericRankValue(r.scrollRank,1); }
+    if(baseKey==='treasure_tables'){ r.treasureRank=numericRankValueIncludingLegacyMaterialGrade(r.treasureRank,1); r.trapDetectDifficulty=numericRankValue(r.trapDetectDifficulty,''); if(String(r.scrollRank??'').trim())r.scrollRank=numericRankValue(r.scrollRank,1); }
     if((baseKey === 'items' || baseKey === 'spells' || baseKey === 'equipment_categories')){
       r.power = normalizePowerForDb(baseKey, r.power);
     }
@@ -7803,7 +7820,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.298';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.299';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-07-26';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([
