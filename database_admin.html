@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.296</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.298</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1169,7 +1169,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.296 usability maintenance */
+/* v90.8.298 usability maintenance */
 .ra-build-info{font-size:12px;padding:6px 12px;text-align:right;color:var(--muted);background:rgba(255,253,248,.9);border-bottom:1px solid var(--line)}
 header{padding-top:12px!important;padding-bottom:6px!important}.title-card{padding:14px!important}.title-card h1{font-size:clamp(21px,3vw,30px)!important;margin-bottom:5px!important}.title-card .subtitle{font-size:.84rem;line-height:1.5}.dbid{font-size:.72rem!important}
 main>section.panel:first-of-type{padding:10px!important}
@@ -1188,7 +1188,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 </style>
 </head>
 <body>
-<div class="ra-build-info">v90.8.296｜更新：2026年7月29日</div>
+<div class="ra-build-info">v90.8.298｜更新：2026年7月29日</div>
 
 <header>
   <div class="title-card">
@@ -1828,7 +1828,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.296';
+const RECRAFT_DB_VERSION = 'v90.8.298';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.263';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -2297,15 +2297,16 @@ function adminCraftingToolName(craftSkill='',craftType=''){
   const skill=String(craftSkill||'').trim();
   const type=String(craftType||'').trim();
   if(skill==='調合'||type==='調合') return '調合道具';
-  if(skill==='細工'||type==='細工'||type==='仕掛け製作') return '細工道具';
-  if(skill==='設計'||skill==='鍛冶'||['武器派生','防具製作','盾製作','装飾品製作','バッグ製作','矢筒製作','素材加工','鍛冶製作'].includes(type)) return '鍛冶道具';
+  if(type==='細工'||type==='仕掛け製作'||skill==='設計') return '細工道具';
+  if(['武器派生','防具製作','盾製作','装飾品製作','バッグ製作','矢筒製作','鍛冶製作','鍛冶'].includes(type)) return '鍛冶道具';
+  if(skill==='細工') return '細工道具';
   return '対応道具';
 }
 function adminCraftingRouteLines(row={}){
   const difficulty=String(row.difficulty??'').trim();
   const rows=adminCraftingDifficultyRows(row.rank,difficulty);
   if(!rows.length) return difficulty ? [`作成難易度：${difficulty}`] : [];
-  const skill=String(row.craftSkill||recipeSkillForCraftType(row.craftType)||'設計').trim();
+  const skill=String(row.craftSkill||recipeSkillForCraftType(row.craftType)||'細工').trim();
   return [
     `使用技能：${skill}`,
     `使用道具：${adminCraftingToolName(skill,row.craftType)}`,
@@ -4515,8 +4516,8 @@ function recipeSkillForCraftType(craftType=''){
   const type=String(craftType||'').trim();
   if(type==='調合') return '調合';
   if(type==='料理') return 'なし';
-  if(type==='細工') return '細工';
-  return '設計';
+  if(type==='細工'||type==='仕掛け製作') return '設計';
+  return '細工';
 }
 const FACILITY_WEAPON_CATEGORY_ORDER=['短剣','片手剣','片手斧','片手槌','片手槍','杖','弓','弩','大型弩','長槍','両手剣','大槌','大鎌','ガントレット','鞭','魔導書','祈祷書'];
 function facilityItemByName(name=''){return (state.items||[]).find(i=>String(i.name||'').trim()===String(name||'').trim())||null;}
@@ -5848,8 +5849,8 @@ function formOptionValues(key, field){
     state.material_categories.forEach(r=>{ if(r.name && String(r.enabled||'TRUE').toUpperCase()!=='FALSE' && (!selectedType || String(r.materialType||'')===selectedType)) values.add(String(r.name)); });
   }
   if(field==='equipSlot') ['なし','右手/左手','両手','鎧','装飾品','所持品'].forEach(v=>values.add(v));
-  if(field==='skill') ['近接','射撃','魔法','祈祷','調合','採取','細工','防御','回避','操作','近接/魔法','射撃または調合'].forEach(v=>values.add(v));
-  if(field==='craftSkill') ['なし','鍛冶','調合','細工'].forEach(v=>values.add(v));
+  if(field==='skill') ['近接','射撃','魔法','祈祷','調合','採取','細工','防御','回避','操作','射撃または調合'].forEach(v=>values.add(v));
+  if(field==='craftSkill') ['なし','調合','細工','設計'].forEach(v=>values.add(v));
   if(field==='rank'){
     values.clear();
     if(['items','materials','recipes','spells','skills'].includes(key)) knownToolRanks(...(state[baseKeyForTable(key)]||[]).map(r=>r.rank)).forEach(v=>values.add(String(v)));
@@ -6384,8 +6385,8 @@ function equipmentCategoryModifierTextForItemRow(row={}, allData=state){
 function canonicalWeaponUsageSkill(row={}){
   const category=String(row.itemCategory || row.category || row.type || '').trim();
   if(['弓','弩','大型弩'].includes(category)) return '射撃';
-  if(category==='杖') return '近接/魔法';
-  if(['魔導書','祈祷書'].includes(category)) return '';
+  if(category==='魔導書') return '魔法';
+  if(category==='祈祷書') return '祈祷';
   return '近接';
 }
 function ensureItemModifierFromCategory(row={}, allData=state){
@@ -7802,7 +7803,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.296';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.298';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-07-26';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([
