@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.299</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.303</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -137,13 +137,13 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </style>
 </head>
 <body>
-<div class="ra-build-info">v90.8.299｜更新：2026年7月29日</div>
+<div class="ra-build-info">v90.8.303｜更新：2026年7月29日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.299｜更新：2026年7月29日｜クエスト・エリア進行管理</div>
+      <div class="version">v90.8.303｜更新：2026年7月29日｜クエスト・エリア進行管理</div>
     </div>
     <div class="fixed-url">読込元：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -387,7 +387,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.299';
+const VERSION='v90.8.303';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 const GITHUB_COMMON_DB_MANIFEST_URL=GITHUB_COMMON_DB_BASE+'manifest.json';
@@ -580,9 +580,14 @@ function syncDailyQuestSelectionFromFacility({render=false,log=false}={}){
   }
   saveState(false);
   if(render){
+    const selectedQuestId=String($('questSelect')?.value||'').trim();
     renderDailyQuestResult();
     if(currentQuestCategory==='デイリー'){
-      fillQuestSelect(state.lastDailyQuestKeys[0]||'');
+      const availableKeys=new Set((state.lastDailyQuestKeys||[]).map(String));
+      const preferredQuestId=selectedQuestId && availableKeys.has(selectedQuestId)
+        ? selectedQuestId
+        : String(state.lastDailyQuestKeys[0]||'');
+      fillQuestSelect(preferredQuestId);
       renderQuest();
     }
   }
@@ -2036,7 +2041,7 @@ function buildTreasureItemCopyText(row={},count='1'){
   lines.push(treasureCopyLine('登録ID',treasureFieldText(row,'publicId')));
   lines.push(treasureCopyLine('個数',count||'1'));
   lines.push(treasureCopyLine('ランク',progressPlayerRank(row.rank)));
-  const categoryLabel=kind==='素材'?(category?`${category}素材`:'素材'):[kind,category].filter(Boolean).join(' / ');
+  const categoryLabel=kind==='素材'?[treasureFieldText(row,'materialType')||'素材',category].filter(Boolean).join(' / '):[kind,category].filter(Boolean).join(' / ');
   lines.push(treasureCopyLine('分類',categoryLabel));
   lines.push(treasureCopyLine('売値',treasureFieldText(row,'price')?treasureFieldText(row,'price')+'G':''));
   const useInfo=[];
