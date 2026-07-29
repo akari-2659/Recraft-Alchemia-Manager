@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.303</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.307</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -137,13 +137,13 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </style>
 </head>
 <body>
-<div class="ra-build-info">v90.8.303｜更新：2026年7月29日</div>
+<div class="ra-build-info">v90.8.307｜更新：2026年7月29日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.303｜更新：2026年7月29日｜クエスト・エリア進行管理</div>
+      <div class="version">v90.8.307｜更新：2026年7月29日｜クエスト・エリア進行管理</div>
     </div>
     <div class="fixed-url">読込元：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -387,7 +387,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.303';
+const VERSION='v90.8.307';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 const GITHUB_COMMON_DB_MANIFEST_URL=GITHUB_COMMON_DB_BASE+'manifest.json';
@@ -1780,7 +1780,7 @@ const TREASURE_AREA_PROFILES={
     lockChance:35, trapChance:30, emptyChance:10, detect:[7,9], disarm:[7,10], unlock:[7,9],
     traps:[
       {name:'毒針',effect:'開封者は毒状態になる。※毒状態：ラウンド終了時に1D3無属性ダメージを受ける。このダメージに防御値は適用しない。同名状態は重複せず、戦闘終了または解毒薬・浄化水・清めの祈りで解除する。'},
-      {name:'絡み蔓',effect:'開封者は拘束状態になる。※拘束状態：次の自分の行動まで回避－2。行動後に解除する。'},
+      {name:'絡み蔓',effect:'開封者は拘束状態になる。※拘束状態：次に行う回避判定－2。判定後に解除する。'},
       {name:'胞子の噴出',effect:'開封者は胞子状態になる。※胞子状態：次の自分のターン終了まで術式・祈祷判定－1。'},
       {name:'粘着樹液',effect:'開封者は粘着状態になる。※粘着状態：次の自分のターン終了まで回避－1。'}
     ]
