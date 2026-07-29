@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.293</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.295</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -137,13 +137,13 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </style>
 </head>
 <body>
-<div class="ra-build-info">v90.8.293｜更新：2026年7月29日</div>
+<div class="ra-build-info">v90.8.295｜更新：2026年7月29日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.293｜更新：2026年7月29日｜クエスト・エリア進行管理</div>
+      <div class="version">v90.8.295｜更新：2026年7月29日｜クエスト・エリア進行管理</div>
     </div>
     <div class="fixed-url">読込元：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -387,7 +387,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.293';
+const VERSION='v90.8.295';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 const GITHUB_COMMON_DB_MANIFEST_URL=GITHUB_COMMON_DB_BASE+'manifest.json';
@@ -785,7 +785,6 @@ function applyProgressMaster(master){
   const spells=data.spells||[];
   const recipes=data.recipes||[];
   state.quests=quests; state.areas=areas; state.events=events; state.monsters=monsters; state.items=items; state.treasures=treasures; state.appraisalRules=appraisalRules; state.spells=spells; state.recipes=recipes;
-  fillDailyQuestUnlockedAreaSelect();
   fillQuestSelect();
   fillSelect($('areaSelect'),areas,r=>`${r.name||r.id} / ${r.areaType||''}`);
   fillSelect($('eventAreaSelect'),areas,r=>`${r.name||r.id} / 表:${r.eventTableId||'未設定'}`);
