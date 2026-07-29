@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.290</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.292</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -137,13 +137,13 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </style>
 </head>
 <body>
-<div class="ra-build-info">v90.8.290｜更新：2026年7月27日</div>
+<div class="ra-build-info">v90.8.292｜更新：2026年7月29日</div>
 
 <header>
   <div class="header-inner">
     <div>
       <h1>リクラフト・アルケミア 進行管理</h1>
-      <div class="version">v90.8.290｜更新：2026年7月27日｜クエスト・エリア進行管理</div>
+      <div class="version">v90.8.292｜更新：2026年7月29日｜クエスト・エリア進行管理</div>
     </div>
     <div class="fixed-url">読込元：<span id="fixedUrlLabel"></span></div>
   </div>
@@ -223,22 +223,10 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
       <p class="muted small">戦闘クエストはここで選んだ人数を使って編成を調整します。重要クエストで1人を選んだ場合は、サポートを加えた2人編成として処理します。非戦闘デイリーの条件は人数で変化しません。</p>
       <div id="dailyQuestTools" class="card daily-tools hidden">
         <div class="quest-tools">
-          <label>最終解放エリア
-            <select id="dailyQuestUnlockedArea"></select>
-          </label>
-          <label>デイリー選出数
-            <select id="dailyQuestCount">
-              <option value="1">1件</option>
-              <option value="2">2件</option>
-              <option value="3" selected>3件</option>
-              <option value="4">4件</option>
-              <option value="5">5件</option>
-            </select>
-          </label>
-          <button class="secondary" type="button" id="rollDailyQuestsBtn">デイリークエストを再抽選</button>
+          <button class="secondary" type="button" id="refreshDailyQuestsBtn">施設側の選出を再読込</button>
           <button class="secondary" type="button" id="copyDailyQuestsBtn">現在のデイリーをコピー</button>
         </div>
-        <div id="dailyQuestResult" class="muted small">選択した最終解放エリアまでの候補からデイリークエストを抽選します。再抽選時は、候補数が足りる限り現在の選出と重複しません。</div>
+        <div id="dailyQuestResult" class="muted small">統合DB管理の「施設→ギルド」で抽選・表示したデイリークエストを、そのまま進行対象として読み込みます。</div>
       </div>
       <label>クエスト</label>
       <select id="questSelect"></select>
@@ -399,11 +387,13 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.290';
+const VERSION='v90.8.292';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 const GITHUB_COMMON_DB_MANIFEST_URL=GITHUB_COMMON_DB_BASE+'manifest.json';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
+const GUILD_DAILY_STORAGE_KEY='recraft_alchemia_guild_daily_selection_v1';
+const GUILD_DAILY_CHANNEL_NAME='recraft_alchemia_guild_daily_channel';
 const MASTER_CACHE_KEY=STORE_KEY+'_master_cache_v1';
 const $=id=>document.getElementById(id);
 const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},dayState:{day:1,fatigue:0,usedActions:0,awaitingEnd:false},lastEventText:'',lastEventKey:'',lastEventTreasureCopyText:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',lastQuestTreasureCopyText:'',triggeredQuestEvents:{},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastTreasureCopyText:'',lastAppraisalText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],dailyQuestUnlockedAreaId:'',questEncounterCache:{},partySize:4,areaBossEncountered:{},treasureSetup:null,treasureContext:null,log:[]};
@@ -415,13 +405,13 @@ function addLog(text){state.log.unshift(`[${now()}] ${text}`); state.log=state.l
 function renderLog(){ $('log').innerHTML = state.log.length ? state.log.map(x=>`<div>${esc(x)}</div>`).join('') : '<div class="muted">ログはまだありません。</div>'; }
 function setStatus(type,msg){const el=$('dbStatus'); el.className='status '+(type||''); el.textContent=msg;}
 function saveState(show=true){
-  localStorage.setItem(STORE_KEY, JSON.stringify({progress:state.progress, log:state.log, lastDailyQuestText:state.lastDailyQuestText||'', lastDailyQuestKeys:state.lastDailyQuestKeys||[], dailyQuestUnlockedAreaId:String($('dailyQuestUnlockedArea')?.value||state.dailyQuestUnlockedAreaId||''), questEncounterCache:state.questEncounterCache||{}, areaBossEncountered:state.areaBossEncountered||{}, dailyQuestCount:Number($('dailyQuestCount')?.value||3)||3, partySize:selectedPartySize(), lastQuestFixedEventText:state.lastQuestFixedEventText||'', lastQuestFixedEventKey:state.lastQuestFixedEventKey||'', triggeredQuestEvents:state.triggeredQuestEvents||{}, treasureSetup:state.treasureSetup||null, treasureContext:state.treasureContext||null, dayState:state.dayState||{day:1,fatigue:0,usedActions:0,awaitingEnd:false}}));
+  localStorage.setItem(STORE_KEY, JSON.stringify({progress:state.progress, log:state.log, questEncounterCache:state.questEncounterCache||{}, areaBossEncountered:state.areaBossEncountered||{}, partySize:selectedPartySize(), lastQuestFixedEventText:state.lastQuestFixedEventText||'', lastQuestFixedEventKey:state.lastQuestFixedEventKey||'', triggeredQuestEvents:state.triggeredQuestEvents||{}, treasureSetup:state.treasureSetup||null, treasureContext:state.treasureContext||null, dayState:state.dayState||{day:1,fatigue:0,usedActions:0,awaitingEnd:false}}));
   if(show) addLog('進行状態を保存しました。');
 }
 function loadState(){
   // DB読込時の初期ゲージは必ず0%にするため、進行度は自動復元しない。
   // 保存済み進行を使う場合は「保存済み進行を復元」を押す。
-  try{const raw=localStorage.getItem(STORE_KEY); if(!raw)return; const data=JSON.parse(raw); state.log=data.log||[]; state.lastDailyQuestText=data.lastDailyQuestText||''; state.lastDailyQuestKeys=Array.isArray(data.lastDailyQuestKeys)?data.lastDailyQuestKeys:[]; state.dailyQuestUnlockedAreaId=String(data.dailyQuestUnlockedAreaId||''); state.questEncounterCache=(data.questEncounterCache&&typeof data.questEncounterCache==='object')?data.questEncounterCache:{}; state.areaBossEncountered=(data.areaBossEncountered&&typeof data.areaBossEncountered==='object')?data.areaBossEncountered:{}; if($('dailyQuestCount')&&data.dailyQuestCount) $('dailyQuestCount').value=String(data.dailyQuestCount); setPartySize(data.partySize||4); state.treasureSetup=data.treasureSetup||null; state.treasureContext=data.treasureContext||null; state.dayState=normalizeDayState(data.dayState); }catch(e){}
+  try{const raw=localStorage.getItem(STORE_KEY); if(!raw)return; const data=JSON.parse(raw); state.log=data.log||[]; state.questEncounterCache=(data.questEncounterCache&&typeof data.questEncounterCache==='object')?data.questEncounterCache:{}; state.areaBossEncountered=(data.areaBossEncountered&&typeof data.areaBossEncountered==='object')?data.areaBossEncountered:{}; setPartySize(data.partySize||4); state.treasureSetup=data.treasureSetup||null; state.treasureContext=data.treasureContext||null; state.dayState=normalizeDayState(data.dayState); }catch(e){}
 }
 function restoreSavedState(){
   try{
@@ -430,9 +420,6 @@ function restoreSavedState(){
     const data=JSON.parse(raw);
     state.progress=data.progress||{quests:{},areas:{}};
     state.log=data.log||state.log||[];
-    state.lastDailyQuestText=data.lastDailyQuestText||state.lastDailyQuestText||'';
-    state.lastDailyQuestKeys=Array.isArray(data.lastDailyQuestKeys)?data.lastDailyQuestKeys:(state.lastDailyQuestKeys||[]);
-    state.dailyQuestUnlockedAreaId=String(data.dailyQuestUnlockedAreaId||state.dailyQuestUnlockedAreaId||'');
     state.questEncounterCache=(data.questEncounterCache&&typeof data.questEncounterCache==='object')?data.questEncounterCache:(state.questEncounterCache||{});
     state.areaBossEncountered=(data.areaBossEncountered&&typeof data.areaBossEncountered==='object')?data.areaBossEncountered:(state.areaBossEncountered||{});
     state.lastQuestFixedEventText=data.lastQuestFixedEventText||state.lastQuestFixedEventText||'';
@@ -441,7 +428,6 @@ function restoreSavedState(){
     state.treasureSetup=data.treasureSetup||state.treasureSetup||null;
     state.treasureContext=data.treasureContext||state.treasureContext||null;
     state.dayState=normalizeDayState(data.dayState||state.dayState);
-    if($('dailyQuestCount')&&data.dailyQuestCount) $('dailyQuestCount').value=String(data.dailyQuestCount);
     setPartySize(data.partySize||state.partySize||4);
     renderAll();
     addLog('保存済み進行状態を復元しました。');
@@ -559,101 +545,87 @@ function sortedQuestAreas(){
     return String(a.name||a.id||'').localeCompare(String(b.name||b.id||''),'ja');
   });
 }
-function fillDailyQuestUnlockedAreaSelect(){
-  const sel=$('dailyQuestUnlockedArea');
-  if(!sel)return;
-  const rows=sortedQuestAreas();
-  const prev=String(state.dailyQuestUnlockedAreaId||sel.value||'').trim();
-  sel.innerHTML='';
-  rows.forEach(a=>{
-    const o=document.createElement('option');
-    o.value=String(a.id||a.name||'');
-    o.textContent=`${a.name||a.id}まで`;
-    sel.appendChild(o);
-  });
-  if(!rows.length){
-    const o=document.createElement('option');o.value='';o.textContent='エリア未登録';sel.appendChild(o);
-    state.dailyQuestUnlockedAreaId='';return;
+function readFacilityDailyQuestState(){
+  try{
+    const raw=localStorage.getItem(GUILD_DAILY_STORAGE_KEY);
+    if(!raw)return null;
+    const data=JSON.parse(raw);
+    return {
+      keys:Array.isArray(data.keys)?data.keys.map(String):[],
+      count:Math.max(1,Math.min(10,Number(data.count)||5)),
+      areaId:String(data.areaId||''),
+      updatedAt:String(data.updatedAt||'')
+    };
+  }catch(e){
+    console.warn('facility daily quest state load failed',e);
+    return null;
   }
-  const valid=[...sel.options].some(o=>o.value===prev);
-  sel.value=valid?prev:String(rows[0].id||rows[0].name||'');
-  state.dailyQuestUnlockedAreaId=sel.value;
 }
-function dailyQuestUnlockedArea(){
-  const id=String($('dailyQuestUnlockedArea')?.value||state.dailyQuestUnlockedAreaId||'').trim();
-  return (state.areas||[]).find(a=>String(a.id||a.name||'')===id) || sortedQuestAreas()[0] || null;
+function facilityDailyQuestArea(){
+  const id=String(state.dailyQuestUnlockedAreaId||'').trim();
+  return (state.areas||[]).find(a=>String(a.id||a.name||'')===id) || null;
 }
-function dailyQuestAreaEligible(q={}){
-  const maxArea=dailyQuestUnlockedArea();
-  if(!maxArea)return true;
-  const area=(state.areas||[]).find(a=>String(a.name||'').trim()===String(q.areaName||'').trim());
-  if(!area)return true;
-  return Number(area.unlockOrder||0)<=Number(maxArea.unlockOrder||0);
-}
-function dailyQuestRows(){
-  return (state.quests || []).filter(q=>questCategoryFor(q)==='デイリー' && questEnabled(q) && dailyQuestAreaEligible(q));
-}
-function shuffledRows(rows=[]){
-  const out=[...rows];
-  for(let i=out.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [out[i],out[j]]=[out[j],out[i]];
+function syncDailyQuestSelectionFromFacility({render=false,log=false}={}){
+  const shared=readFacilityDailyQuestState();
+  state.questEncounterCache={};
+  if(!shared){
+    state.lastDailyQuestKeys=[];
+    state.lastDailyQuestText='【ギルド・デイリークエスト】\n施設側でデイリークエストが選出されていません。';
+    state.dailyQuestUnlockedAreaId='';
+  }else{
+    state.lastDailyQuestKeys=shared.keys;
+    state.dailyQuestUnlockedAreaId=shared.areaId;
+    const picked=selectedFacilityDailyQuestRows();
+    state.lastDailyQuestText=dailyQuestTextFor(picked);
   }
-  return out;
+  saveState(false);
+  if(render){
+    renderDailyQuestResult();
+    if(currentQuestCategory==='デイリー'){
+      fillQuestSelect(state.lastDailyQuestKeys[0]||'');
+      renderQuest();
+    }
+  }
+  if(log)addLog(shared?'施設側のデイリークエスト選出を再読込しました。':'施設側で選出済みのデイリークエストが見つかりません。');
+  return shared;
+}
+function selectedFacilityDailyQuestRows(){
+  const map=new Map((state.quests||[]).filter(q=>questCategoryFor(q)==='デイリー'&&questEnabled(q)).map(q=>[String(q.id||q.name||''),q]));
+  return (state.lastDailyQuestKeys||[]).map(k=>map.get(String(k))).filter(Boolean);
 }
 function dailyQuestTextFor(rows=[]){
-  const area=dailyQuestUnlockedArea();
-  const lines=[`【現在のデイリークエスト：${area?`${area.name||area.id}まで解放`:'解放エリア未設定'}】`];
-  if(!rows.length) lines.push('選出できるデイリークエストがありません。');
+  const area=facilityDailyQuestArea();
+  const lines=['【ギルド・デイリークエスト】'];
+  if(area)lines.push(`最終解放エリア：${area.name||area.id}まで`);
+  if(!rows.length)lines.push('施設側で選出されているデイリークエストはありません。');
   else lines.push(rows.map(q=>questPublicInfoLines(q).join('\n')).join('\n\n'));
   return lines.join('\n');
 }
 function ensureDailyQuestSelection(){
-  const rows=dailyQuestRows();
-  const count=Math.max(1,Math.min(10,Number($('dailyQuestCount')?.value||3)||3));
-  const map=new Map(rows.map(q=>[String(q.id||q.name||''),q]));
-  let picked=(state.lastDailyQuestKeys||[]).map(k=>map.get(String(k))).filter(Boolean).slice(0,count);
-  const target=Math.min(count,rows.length);
-  if(picked.length<target){
-    const used=new Set(picked.map(q=>String(q.id||q.name||'')));
-    const extra=shuffledRows(rows.filter(q=>!used.has(String(q.id||q.name||'')))).slice(0,target-picked.length);
-    picked=picked.concat(extra);
-    state.lastDailyQuestKeys=picked.map(q=>String(q.id||q.name||''));
-    state.lastDailyQuestText=dailyQuestTextFor(picked);
-    saveState(false);
-  }else if(picked.length){
-    state.lastDailyQuestKeys=picked.map(q=>String(q.id||q.name||''));
-    state.lastDailyQuestText=dailyQuestTextFor(picked);
+  const shared=readFacilityDailyQuestState();
+  if(shared){
+    state.lastDailyQuestKeys=shared.keys;
+    state.dailyQuestUnlockedAreaId=shared.areaId;
+  }else{
+    state.lastDailyQuestKeys=[];
+    state.dailyQuestUnlockedAreaId='';
   }
-  return picked;
-}
-function rollDailyQuests(){
-  const rows=dailyQuestRows();
-  state.questEncounterCache={};
-  const count=Math.max(1, Math.min(10, Number($('dailyQuestCount')?.value || 3) || 3));
-  const current=new Set((state.lastDailyQuestKeys||[]).map(String));
-  let pool=rows.filter(q=>!current.has(String(q.id||q.name||'')));
-  if(pool.length<count) pool=rows;
-  const picked=shuffledRows(pool).slice(0, Math.min(count, pool.length));
-  state.lastDailyQuestKeys=picked.map(q=>String(q.id||q.name||''));
+  const picked=selectedFacilityDailyQuestRows();
   state.lastDailyQuestText=dailyQuestTextFor(picked);
-  renderDailyQuestResult();
-  if(currentQuestCategory==='デイリー'){
-    fillQuestSelect(state.lastDailyQuestKeys[0]||'');
-    renderQuest();
-  }
-  saveState(false);
-  addLog(`デイリークエストを${picked.length}件再抽選しました。`);
+  return picked;
 }
 function renderDailyQuestResult(){
   const box=$('dailyQuestResult');
   if(!box)return;
+  const shared=readFacilityDailyQuestState();
   const picked=ensureDailyQuestSelection();
-  if(!picked.length){
-    box.textContent='選出できるデイリークエストがありません。';
+  if(!shared){
+    box.innerHTML='<b>施設側で未選出です。</b><br>統合DB管理の「施設→ギルド→デイリークエスト」で抽選してください。';
     return;
   }
-  box.innerHTML=esc(state.lastDailyQuestText).replace(/\n/g,'<br>');
+  const area=facilityDailyQuestArea();
+  const synced=shared.updatedAt ? `<br><span class="muted">施設側更新：${esc(new Date(shared.updatedAt).toLocaleString('ja-JP',{hour12:false}))}</span>` : '';
+  box.innerHTML=`<b>施設側の選出を共有中</b><br>${esc(area?`${area.name||area.id}まで／${picked.length}件`:`${picked.length}件`)}${synced}<hr>${esc(state.lastDailyQuestText).replace(/\n/g,'<br>')}`;
 }
 
 
@@ -1147,7 +1119,7 @@ function renderMonster(){
   const m=selected($('monsterSelect'),dropAreaMonsterRows()); if(!m){$('monsterDetail').textContent='このエリアで選択できる魔物がありません。'; return;}
   $('monsterDetail').innerHTML=`<div class="kv"><b>HP</b><span>${esc(m.hp||'')}</span><b>命中</b><span>${esc(m.hitValue||'')}</span><b>回避</b><span>${esc(m.evasionValue||'')}</span><b>抵抗</b><span>${esc(m.resistValue||'')}</span><b>防御</b><span>${esc(m.defenseValue||'')}</span><b>先制</b><span>${esc(m.initiative||'')}</span><b>解体難易度</b><span>${esc(m.dismantleDifficulty||'未設定')}</span><b>解体判定</b><span>採取技能 &gt;= ${esc(m.dismantleDifficulty||'解体難易度')}</span></div>${m.habit?`<p class="muted"><b>習性：</b>${esc(m.habit)}</p>`:''}`;
 }
-function renderAll(){renderDayStatus(); fillDailyQuestUnlockedAreaSelect(); fillDropAreaSelect($('dropAreaSelect')?.value||''); ensureDailyQuestSelection(); fillQuestSelect($('questSelect')?.value || ''); fillEventTables(); fillRumorSelect(); fillRumorAreas(); fillInnRumorSelect(); fillTreasureTables(); fillAppraisalRules(); fillMonsterSearch($('monsterSelect')?.value || ''); renderQuest(); renderArea(); renderMonster(); renderRumorResult(); renderDailyQuestResult(); renderLog();}
+function renderAll(){renderDayStatus(); syncDailyQuestSelectionFromFacility(); fillDropAreaSelect($('dropAreaSelect')?.value||''); ensureDailyQuestSelection(); fillQuestSelect($('questSelect')?.value || ''); fillEventTables(); fillRumorSelect(); fillRumorAreas(); fillInnRumorSelect(); fillTreasureTables(); fillAppraisalRules(); fillMonsterSearch($('monsterSelect')?.value || ''); renderQuest(); renderArea(); renderMonster(); renderRumorResult(); renderDailyQuestResult(); renderLog();}
 function getNumFromText(s, fallback=0){const m=String(s||'').match(/[+-]?\d+/); return m?Number(m[0]):fallback;}
 function advanceQuestProgress(){const q=selected($('questSelect'),state.quests); if(!q)return; const p=progressObj('quests',q.id||q.name); const add=questStepAmount(q); const before=clamp(p.value); p.value=clamp(before+add); const fired=triggerQuestSpecificEvents(q,before,p.value); saveState(false); renderQuest(); addLog(`${q.name||q.id} の進行度を +${add}% しました。${before}% → ${p.value}%（行動回数は変更していません）`); if(fired.length && fired[0].treasureTableId){addLog(`確定入手：未鑑定の魔法または祈祷スクロール：★1×1（${fired[0].eventName||'クエスト固有イベント'}）`);}}
 function advanceAreaProgress(){const a=selected($('areaSelect'),state.areas); if(!a)return; const p=progressObj('areas',a.id||a.name); const add=areaStepAmount(a); const before=clamp(p.value); p.value=clamp(before+add); saveState(false); renderArea(); addLog(`${a.name||a.id} の探索進行度を +${add}% しました。${before}% → ${p.value}%（行動回数は変更していません）`); if(before<100 && p.value>=100) triggerAreaClearRumorEvent(a);}
@@ -2392,12 +2364,19 @@ function bind(){
   $('questAdvanceBtn').addEventListener('click',advanceQuestProgress); $('areaAdvanceBtn').addEventListener('click',advanceAreaProgress); $('manualActionBtn')?.addEventListener('click',()=>consumeDailyAction('その他の行動')); $('undoActionBtn')?.addEventListener('click',undoDailyAction); $('innRestBtn')?.addEventListener('click',restAtInn); $('innStayBtn')?.addEventListener('click',()=>advanceToNextDay(true)); $('endDayWithoutInnBtn')?.addEventListener('click',()=>{if(confirm('宿泊せず一日を終了しますか？ 疲労度が1増加します。'))advanceToNextDay(false);});
   $('questResetBtn').addEventListener('click',()=>{const q=selected($('questSelect'),state.quests); if(q){const qkey=String(q.id||q.name||''); progressObj('quests',qkey).value=0; Object.keys(state.triggeredQuestEvents||{}).forEach(k=>{if(k.startsWith(qkey+':')) delete state.triggeredQuestEvents[k];}); state.lastQuestFixedEventText=''; state.lastQuestFixedEventKey=''; state.lastQuestTreasureCopyText=''; updateTreasureCopyButtons(); saveState(false); renderQuest();}}); $('areaResetBtn').addEventListener('click',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).value=0; delete state.areaBossEncountered[areaEventKey(a)]; state.lastEventText=''; state.lastEventKey=''; state.lastEventTreasureCopyText=''; updateTreasureCopyButtons(); saveState(false); renderArea();}});
   $('questNote').addEventListener('input',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).note=$('questNote').value; saveState(false);}}); $('areaNote').addEventListener('input',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).note=$('areaNote').value; saveState(false);}});
-  $('questCopyBtn').addEventListener('click',()=>copyText(questMemo(),'questCopyNote')); $('questInfoCopyBtn').addEventListener('click',()=>copyText(questInfoMemo(),'questCopyNote')); $('copyImportantQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('重要'),'questCopyNote')); $('copyDailyQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('デイリー'),'questCopyNote')); $('rollDailyQuestsBtn')?.addEventListener('click',rollDailyQuests); $('dailyQuestCount')?.addEventListener('change',rollDailyQuests); $('dailyQuestUnlockedArea')?.addEventListener('change',()=>{state.dailyQuestUnlockedAreaId=$('dailyQuestUnlockedArea').value;state.lastDailyQuestKeys=[];rollDailyQuests();}); $('copyDailyQuestsBtn')?.addEventListener('click',()=>copyText(state.lastDailyQuestText,'questCopyNote')); $('areaCopyBtn').addEventListener('click',()=>copyText(areaMemo(),'areaCopyNote'));
+  $('questCopyBtn').addEventListener('click',()=>copyText(questMemo(),'questCopyNote')); $('questInfoCopyBtn').addEventListener('click',()=>copyText(questInfoMemo(),'questCopyNote')); $('copyImportantQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('重要'),'questCopyNote')); $('copyDailyQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('デイリー'),'questCopyNote')); $('refreshDailyQuestsBtn')?.addEventListener('click',()=>syncDailyQuestSelectionFromFacility({render:true,log:true})); $('copyDailyQuestsBtn')?.addEventListener('click',()=>copyText(state.lastDailyQuestText,'questCopyNote')); $('areaCopyBtn').addEventListener('click',()=>copyText(areaMemo(),'areaCopyNote'));
   $('rollQuestEventBtn').addEventListener('click',rollQuestEvent); $('copyQuestEventBtn').addEventListener('click',()=>copyText(state.lastQuestEventText,'questCopyNote')); $('copyQuestTreasureBtn').addEventListener('click',()=>copyText(state.lastQuestTreasureCopyText,'questCopyNote'));
   $('rollRumorBtn').addEventListener('click',rollRumor); $('applyRumorBtn').addEventListener('click',()=>applyRumorIndex($('rumorSelectForInn').value,true)); $('clearRumorBtn').addEventListener('click',clearRumor); $('copyRumorBtn').addEventListener('click',()=>copyText(state.lastRumorText,'rumorCopyNote'));
   $('rollEventBtn').addEventListener('click',rollEvent); $('copyEventBtn').addEventListener('click',()=>copyText(state.lastEventText,'eventCopyNote')); $('copyEventTreasureBtn').addEventListener('click',()=>copyText(state.lastEventTreasureCopyText,'eventCopyNote'));
   $('treasureTableSelect').addEventListener('change',()=>{const tableId=$('treasureTableSelect').value; setTreasureContext(tableId,treasureAreaName(tableId),'normal'); $('treasureResult').textContent='「宝箱の中身を決定」を押すと、鍵・罠・各難易度・中身をまとめて決定します。';}); $('copyTrapDetectBtn').addEventListener('click',()=>copyText(trapDetectText(),'treasureCopyNote')); $('copyTrapDisarmBtn').addEventListener('click',()=>copyText(trapDisarmText(),'treasureCopyNote')); $('copyUnlockBtn').addEventListener('click',()=>copyText(unlockText(),'treasureCopyNote')); $('rollTreasureBtn').addEventListener('click',rollTreasure); $('copyTreasureBtn').addEventListener('click',()=>copyText(state.lastTreasureCopyText,'treasureCopyNote'));
   $('rollAppraisalBtn').addEventListener('click',rollAppraisal); $('copyAppraisalBtn').addEventListener('click',()=>copyText(state.lastAppraisalText,'appraisalCopyNote')); updateTreasureCopyButtons();
+
+  window.addEventListener('storage',e=>{if(e.key===GUILD_DAILY_STORAGE_KEY)syncDailyQuestSelectionFromFacility({render:true});});
+  window.addEventListener('focus',()=>syncDailyQuestSelectionFromFacility({render:true}));
+  try{
+    const dailyChannel=new BroadcastChannel(GUILD_DAILY_CHANNEL_NAME);
+    dailyChannel.addEventListener('message',()=>syncDailyQuestSelectionFromFacility({render:true}));
+  }catch(_e){}
 
   $('monsterSelectMenu').addEventListener('pointerdown',e=>{
     const choice=e.target.closest('[data-monster-choice]');

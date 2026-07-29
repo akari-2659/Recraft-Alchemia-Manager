@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.290</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.292</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1169,7 +1169,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.290 usability maintenance */
+/* v90.8.292 usability maintenance */
 .ra-build-info{font-size:12px;padding:6px 12px;text-align:right;color:var(--muted);background:rgba(255,253,248,.9);border-bottom:1px solid var(--line)}
 header{padding-top:12px!important;padding-bottom:6px!important}.title-card{padding:14px!important}.title-card h1{font-size:clamp(21px,3vw,30px)!important;margin-bottom:5px!important}.title-card .subtitle{font-size:.84rem;line-height:1.5}.dbid{font-size:.72rem!important}
 main>section.panel:first-of-type{padding:10px!important}
@@ -1188,7 +1188,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 </style>
 </head>
 <body>
-<div class="ra-build-info">v90.8.290｜更新：2026年7月27日</div>
+<div class="ra-build-info">v90.8.292｜更新：2026年7月29日</div>
 
 <header>
   <div class="title-card">
@@ -1645,7 +1645,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
               <select id="facilityUpgradeStepInput"></select>
             </div>
             <div>
-              <label for="facilitySmithToolRankInput">使用道具</label>
+              <label for="facilitySmithToolRankInput">使用する細工道具</label>
               <select id="facilitySmithToolRankInput"></select>
             </div>
             <div>
@@ -1670,7 +1670,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
               <select id="facilityAlchemyRecipeSelect"></select>
             </div>
             <div>
-              <label for="facilityAlchemyToolRankInput">使用道具</label>
+              <label for="facilityAlchemyToolRankInput">使用する調合道具</label>
               <select id="facilityAlchemyToolRankInput"></select>
             </div>
             <button class="secondary" type="button" data-facility-alchemy-check>調合難易度を確認</button>
@@ -1828,7 +1828,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.290';
+const RECRAFT_DB_VERSION = 'v90.8.292';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.263';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1958,11 +1958,19 @@ function loadGuildDailyState(){
 }
 function saveGuildDailyState(){
   try{
-    localStorage.setItem(GUILD_DAILY_STORAGE_KEY,JSON.stringify({
+    const payload={
       count:currentGuildDailyCount,
       keys:(currentGuildDailyKeys||[]).map(String),
-      areaId:String(currentGuildDailyAreaId||'')
-    }));
+      areaId:String(currentGuildDailyAreaId||''),
+      updatedAt:new Date().toISOString(),
+      source:'database_admin_facility'
+    };
+    localStorage.setItem(GUILD_DAILY_STORAGE_KEY,JSON.stringify(payload));
+    try{
+      const channel=new BroadcastChannel('recraft_alchemia_guild_daily_channel');
+      channel.postMessage(payload);
+      channel.close();
+    }catch(_e){}
   }catch(e){console.warn('guild daily state save failed',e);}
 }
 loadGuildDailyState();
@@ -2265,6 +2273,54 @@ function numericRankValueIncludingLegacyMaterialGrade(value, fallback=''){
   return numericRankValue(value, fallback);
 }
 function playerRankLabel(value){ const n=numericRankValue(value,''); return n ? `★${n}` : String(value ?? '').trim(); }
+
+function adminCraftingRequiredToolRank(rank){
+  const n=Math.max(1,Number(rank)||1);
+  return Math.ceil(n/3)*3;
+}
+function adminCraftingDifficultyRows(rank,difficulty){
+  const base=Number(String(difficulty??'').trim());
+  if(!Number.isFinite(base)) return [];
+  const required=adminCraftingRequiredToolRank(rank);
+  return [0,1,2].map(step=>({
+    toolRank:required+step*3,
+    reduction:step*2,
+    finalDifficulty:base-step*2
+  }));
+}
+function adminCraftingDifficultySummary(rank,difficulty){
+  const rows=adminCraftingDifficultyRows(rank,difficulty);
+  if(!rows.length) return String(difficulty||'未設定');
+  return rows.map((r,i)=>`★${r.toolRank}対応：${r.finalDifficulty}${i?`（－${r.reduction}）`:'（基礎）'}`).join(' / ')+' / 以降1段階ごとに－2';
+}
+function adminCraftingToolName(craftSkill='',craftType=''){
+  const skill=String(craftSkill||'').trim();
+  const type=String(craftType||'').trim();
+  if(skill==='調合'||type==='調合') return '調合道具';
+  if(skill==='細工'||type==='細工'||type==='仕掛け製作') return '細工道具';
+  if(skill==='設計'||skill==='鍛冶'||['武器派生','防具製作','盾製作','装飾品製作','バッグ製作','矢筒製作','素材加工','鍛冶製作'].includes(type)) return '鍛冶道具';
+  return '対応道具';
+}
+function adminCraftingRouteLines(row={}){
+  const difficulty=String(row.difficulty??'').trim();
+  const rows=adminCraftingDifficultyRows(row.rank,difficulty);
+  if(!rows.length) return difficulty ? [`作成難易度：${difficulty}`] : [];
+  const skill=String(row.craftSkill||recipeSkillForCraftType(row.craftType)||'設計').trim();
+  return [
+    `使用技能：${skill}`,
+    `使用道具：${adminCraftingToolName(skill,row.craftType)}`,
+    `基礎作成難易度：${difficulty}`,
+    `道具使用時：${adminCraftingDifficultySummary(row.rank,difficulty)}`
+  ];
+}
+function adminCraftingRouteHtml(row={}){
+  return adminCraftingRouteLines(row).map(line=>{
+    const idx=line.indexOf('：');
+    const k=idx>=0?line.slice(0,idx):'';
+    const v=idx>=0?line.slice(idx+1):line;
+    return `<div><b>${escapeHtml(k)}：</b>${escapeHtml(v)}</div>`;
+  }).join('');
+}
 function adminRankLabel(value){ return playerRankLabel(value); }
 function isStructuredNumericRankRecord(key,row={}){
   return ['items','recipes','spells','quest_rewards','quests','monsters'].includes(key);
@@ -3560,7 +3616,7 @@ function facilityRecipeCopyLine(r={}){
   return [
     `- ${r.resultItem||r.name||'名称未設定'}（${playerRankLabel(r.rank)||'ランク未設定'} / ${String(r.price||0)}G）`,
     `  必要素材：${r.requiredMaterials||'未設定'}`,
-    `  作成難易度：${r.difficulty||'未設定'}`
+    ...adminCraftingRouteLines(r).map(line=>`  ${line}`)
   ].join('\n');
 }
 function facilityRecipeSectionText(title='', craftTypes=[]){
@@ -3628,7 +3684,7 @@ function buildFacilitySalesText(targetFacilityName=''){
 function renderFacilityProductDetails(row){
   if(facilityProductType(row)==='recipe'){
     const chips=['レシピ',row.rank?playerRankLabel(row.rank):'',row.craftType||'',row.craftSkill?`技能:${row.craftSkill}`:''].filter(Boolean);
-    return `<details class="facility-product"><summary><span class="facility-product-title"><span>${escapeHtml(facilityProductDisplayName(row))}</span>${chips.slice(0,2).map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</span><span class="facility-product-price">${escapeHtml(productPriceText(row))}</span></summary><div class="facility-product-body"><div class="facility-product-meta">${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div><div><b>完成品：</b>${escapeHtml(row.resultItem||row.name||'未設定')}</div><div><b>必要素材：</b>${escapeHtml(row.requiredMaterials||'未設定')}</div><div><b>対応道具：</b>${escapeHtml(playerRankLabel(row.rank))}以下を扱える道具</div><div><b>作成難易度：</b>${escapeHtml(row.difficulty||'未設定')}</div><div><b>入手先：</b>${escapeHtml(row.recipeSource||'未設定')}</div></div></details>`;
+    return `<details class="facility-product"><summary><span class="facility-product-title"><span>${escapeHtml(facilityProductDisplayName(row))}</span>${chips.slice(0,2).map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</span><span class="facility-product-price">${escapeHtml(productPriceText(row))}</span></summary><div class="facility-product-body"><div class="facility-product-meta">${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div><div><b>完成品：</b>${escapeHtml(row.resultItem||row.name||'未設定')}</div><div><b>必要素材：</b>${escapeHtml(row.requiredMaterials||'未設定')}</div>${adminCraftingRouteHtml(row)}<div><b>入手先：</b>${escapeHtml(row.recipeSource||'未設定')}</div></div></details>`;
   }
   const chips=[productKindText(row), row.rank ? playerRankLabel(row.rank) : '', row.equipSlot ? `枠:${row.equipSlot}` : '', row.bagCapacity ? `バッグ容量:${row.bagCapacity}` : '', row.maxStack ? `1枠数:${row.maxStack}` : ''].filter(Boolean);
   const desc=String(row.description||'').trim();
@@ -3942,7 +3998,7 @@ function buildRecipeInfoText(row={}){
   lines.push(warehouseCopyLine('分類', [resultKind, category].filter(Boolean).join(' / ')));
   lines.push(warehouseCopyLine('使用技能', fieldText(row,'craftSkill') || recipeSkillForCraftType(fieldText(row,'craftType'))));
   lines.push(warehouseCopyLine('素材', fieldText(row,'requiredMaterials')));
-  lines.push(warehouseCopyLine('難度', fieldText(row,'difficulty')));
+  adminCraftingRouteLines(row).forEach(line=>lines.push(line));
   lines.push('自作：レシピ必須');
   lines.push(warehouseCopyLine('施設依頼', fieldText(row,'price') ? `レシピ不要 / ${fieldText(row,'price')}G` : 'レシピ不要'));
   lines.push(warehouseCopyLine('説明', fieldText(row,'description')));
@@ -4129,7 +4185,7 @@ function normalizeToolRank(value='', fallback=3){
   return numericRankValueIncludingLegacyMaterialGrade(value,fallback);
 }
 function toolRowsForSelect(id=''){
-  const category=String(id).includes('Alchemy')?'調合':String(id).includes('Smith')?'鍛冶':'';
+  const category=String(id).includes('Alchemy')?'調合':id==='facilitySmithToolRankInput'?'細工':String(id).includes('Smith')?'鍛冶':'';
   return (state.items||[]).filter(r=>String(r.itemType||'').trim()==='道具' && (!category || String(r.itemCategory||'').trim()===category) && String(r.toolRank??'').trim()).sort((a,b)=>normalizeToolRank(a.toolRank,999)-normalizeToolRank(b.toolRank,999));
 }
 function toolRankOptionsHtml(selected=3,id=''){
@@ -4150,6 +4206,12 @@ function selectedToolText(id=''){
 function toolCapabilityCheck(targetRank=1, toolMaxRank=3){
   const target=normalizeToolRank(targetRank,1), max=normalizeToolRank(toolMaxRank,3);
   return {usable:max>=target,targetRank:target,maxRank:max};
+}
+function toolDifficultyReduction(targetRank=1,toolMaxRank=3){
+  const required=adminCraftingRequiredToolRank(targetRank);
+  const max=normalizeToolRank(toolMaxRank,3);
+  if(max<required) return {usable:false,requiredRank:required,maxRank:max,reduction:0};
+  return {usable:true,requiredRank:required,maxRank:max,reduction:Math.max(0,Math.floor((max-required)/3)*2)};
 }
 function finalDifficultyText(baseDifficulty='', ...mods){
   const raw=String(baseDifficulty||'').trim(), base=Number(raw);
@@ -4444,7 +4506,7 @@ function renderFacilityRecipeCard(row={}){
     ${row.baseItem && String(row.craftType||'').trim()!=='武器派生'?`<div><b>派生元：</b>${escapeHtml(row.baseItem)}</div>`:''}
     <div><b>必要素材：</b>${escapeHtml(row.requiredMaterials||'未設定')}</div>
     ${String(row.resultCount||'').trim()?`<div><b>完成数：</b>${escapeHtml(row.resultCount)}</div>`:''}
-    <div class="facility-work-route"><b>自作</b><span>レシピ必須</span><span>技能:${escapeHtml(skill)}</span><span>使用可能上限が${escapeHtml(playerRankLabel(row.rank))}以上の道具</span><span>難度:${escapeHtml(row.difficulty||'未設定')}</span></div>
+    <div class="facility-work-route"><b>自作</b><span>レシピ必須</span>${adminCraftingRouteLines(row).map(line=>`<span>${escapeHtml(line)}</span>`).join('')}</div>
     <div class="facility-work-route"><b>施設依頼</b><span>レシピ不要</span><span>${price?`${escapeHtml(price)}G`:'価格未設定'}</span></div>
     ${facilityItemDescriptionHtml(item,row)}
   </div>`;
@@ -4454,7 +4516,7 @@ function recipeSkillForCraftType(craftType=''){
   if(type==='調合') return '調合';
   if(type==='料理') return 'なし';
   if(type==='細工') return '細工';
-  return '鍛冶';
+  return '設計';
 }
 const FACILITY_WEAPON_CATEGORY_ORDER=['短剣','片手剣','片手斧','片手槌','片手槍','杖','弓','弩','大型弩','長槍','両手剣','大槌','大鎌','ガントレット','鞭','魔導書','祈祷書'];
 function facilityItemByName(name=''){return (state.items||[]).find(i=>String(i.name||'').trim()===String(name||'').trim())||null;}
@@ -4840,15 +4902,19 @@ function renderFacilityAlchemyResult(recipeKey=''){
     return;
   }
   const recipeRank = numericRankValueIncludingLegacyMaterialGrade(row.rank,1);
-  const tool = toolCapabilityCheck(recipeRank, toolMax);
-  const finalDifficulty = tool.usable ? finalDifficultyText(row.difficulty) : '使用不可';
+  const tool = toolDifficultyReduction(recipeRank, toolMax);
+  const baseDifficulty=Number(String(row.difficulty||'').trim());
+  const numericDifficulty=Number.isFinite(baseDifficulty);
+  const finalDifficulty = tool.usable && numericDifficulty ? baseDifficulty-tool.reduction : (tool.usable ? String(row.difficulty||'未設定') : '使用不可');
   result.classList.remove('muted');
   const chips = [playerRankLabel(recipeRank), row.category ? '分類:' + row.category : '', row.resultCount ? '完成数:' + row.resultCount : '', row.requiredMaterials ? '必要素材あり' : ''].filter(Boolean);
   result.innerHTML = `<div><b>${escapeHtml(row.resultItem || row.name || '名称未設定')}</b></div>
     <div class="facility-product-meta">${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>
     <div><b>作成ランク：</b>${escapeHtml(playerRankLabel(recipeRank))}</div>
     <div><b>使用道具：</b>${escapeHtml(selectedToolText('facilityAlchemyToolRankInput'))} / ${tool.usable ? '使用可能' : '対応上限超過'}</div>
-    <div><b>調合難易度：</b>${escapeHtml(finalDifficulty)}</div>
+    <div><b>基礎作成難易度：</b>${escapeHtml(row.difficulty||'未設定')}</div>
+    <div><b>道具による軽減：</b>${tool.usable&&numericDifficulty?`－${escapeHtml(String(tool.reduction))}`:'適用不可'}</div>
+    <div><b>最終作成難易度：</b>${escapeHtml(finalDifficulty)}</div>
     ${row.requiredMaterials ? `<div><b>必要素材：</b>${escapeHtml(row.requiredMaterials)}</div>` : ''}
     ${row.description ? `<div><b>説明：</b>${escapeHtml(row.description)}</div>` : ''}`;
 }
@@ -4973,11 +5039,13 @@ function renderFacilityUpgradeResult(materialName=''){
   const capacityAllowed=!slotLimit||afterSlots<=slotLimit;
   const target=upgradeTargetValue(equipmentRank,upgradeCount);
   const toolMax=normalizeToolRank($('facilitySmithToolRankInput')?.value||'3',3);
-  const tool=toolCapabilityCheck(materialRank,toolMax), price=upgradeWorkPrice(mat,rule,equipment);
+  const tool=toolDifficultyReduction(materialRank,toolMax), price=upgradeWorkPrice(mat,rule,equipment);
+  const toolReduction=tool.usable?tool.reduction:0;
+  const finalTarget=target-toolReduction;
   const guarantee=selectedFacilityGuaranteeItem();
   const guaranteeCap=Number(guarantee?.guaranteeUpgradeMaxRank||0);
   const guaranteeUsable=!!guarantee && guaranteeCap>=materialRank && rankAllowed && tool.usable && capacityAllowed;
-  const successRate=facilityUpgradeSuccessRate(target,difficulty);
+  const successRate=facilityUpgradeSuccessRate(finalTarget,difficulty);
   const usable=rankAllowed&&tool.usable&&capacityAllowed;
   result.classList.remove('muted');
   result.innerHTML=`<div><b>${escapeHtml(mat.name||mat.id||'素材名未設定')}</b></div>
@@ -4989,9 +5057,11 @@ function renderFacilityUpgradeResult(materialName=''){
     <div><b>現在の強化回数：</b>${escapeHtml(String(upgradeCount))}回（今回の強化は${escapeHtml(String(upgradeCount+1))}回目）</div>
     <div><b>現在の使用済み強化枠：</b>${escapeHtml(String(usedSlots))} / ${escapeHtml(String(slotLimit||'上限未設定'))}</div>
     <div><b>今回消費する強化枠：</b>${escapeHtml(String(slotCost))}（強化後 ${escapeHtml(String(afterSlots))}枠）${capacityAllowed?'':' / 枠不足'}</div>
-    <div><b>自作目標値：</b>${escapeHtml(String(target))}（7＋装備ランク${escapeHtml(String(equipmentRank))}＋現在の強化回数${escapeHtml(String(upgradeCount))}）</div>
-    <div><b>自作判定：</b>2D6＋細工－${escapeHtml(String(difficulty))} &gt;= ${escapeHtml(String(target))}</div>
-    <div><b>使用道具：</b>${escapeHtml(selectedToolText('facilitySmithToolRankInput'))} / ${tool.usable?'使用可能':'素材ランクが対応上限を超過'}</div>
+    <div><b>基礎作成難易度：</b>${escapeHtml(String(target))}（7＋装備ランク${escapeHtml(String(equipmentRank))}＋現在の強化回数${escapeHtml(String(upgradeCount))}）</div>
+    <div><b>道具による軽減：</b>－${escapeHtml(String(toolReduction))}</div>
+    <div><b>最終作成難易度：</b>${escapeHtml(String(finalTarget))}</div>
+    <div><b>自作判定：</b>2D6＋細工－${escapeHtml(String(difficulty))} &gt;= ${escapeHtml(String(finalTarget))}</div>
+    <div><b>使用する細工道具：</b>${escapeHtml(selectedToolText('facilitySmithToolRankInput'))} / ${tool.usable?'使用可能':'素材ランクが対応上限を超過'}</div>
     <div><b>施設依頼成功率：</b>${usable?(guaranteeUsable?'100%（確定成功アイテム使用）':escapeHtml(String(successRate))+'%'):'強化不可'}</div>
     <div><b>確定成功アイテム：</b>${guarantee?`${escapeHtml(guarantee.name||'名称未設定')}（${escapeHtml(playerRankLabel(guaranteeCap))}以下） / ${guaranteeUsable?'使用可能':'対応上限外または他条件未達'}`:'使用しない'}</div>
     <div><b>施設依頼価格：</b>${rankAllowed&&capacityAllowed?(price.total?`${escapeHtml(String(price.total))}G`:'未設定'):'素材ランク不足または強化枠不足のため算出対象外'}</div>
@@ -7732,7 +7802,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.280';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.292';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-07-26';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([
