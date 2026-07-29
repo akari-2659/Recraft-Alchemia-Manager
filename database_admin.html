@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.309</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.310</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1169,7 +1169,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.309 usability maintenance */
+/* v90.8.310 usability maintenance */
 .ra-build-info{font-size:12px;padding:6px 12px;text-align:right;color:var(--muted);background:rgba(255,253,248,.9);border-bottom:1px solid var(--line)}
 header{padding-top:12px!important;padding-bottom:6px!important}.title-card{padding:14px!important}.title-card h1{font-size:clamp(21px,3vw,30px)!important;margin-bottom:5px!important}.title-card .subtitle{font-size:.84rem;line-height:1.5}.dbid{font-size:.72rem!important}
 main>section.panel:first-of-type{padding:10px!important}
@@ -1188,7 +1188,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 </style>
 </head>
 <body>
-<div class="ra-build-info">v90.8.309｜更新：2026年7月30日</div>
+<div class="ra-build-info">v90.8.310｜更新：2026年7月30日</div>
 
 <header>
   <div class="title-card">
@@ -1828,7 +1828,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.309';
+const RECRAFT_DB_VERSION = 'v90.8.310';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.263';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -2703,7 +2703,7 @@ const SYSTEM_HELP = [
     ],
     "body": [
       "レシピはDB上では1表で管理する。",
-      "管理HTML上では、調合レシピ、鍛冶レシピ、仕掛け製作、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。武器派生は武器カテゴリ別タブ→役割を表す「○○派生」→系統内の順当強化で表示する。素材やエリアだけを理由に派生名を増やさず、派生途中から別方向へ分岐する場合は派生元の直下へ配置する。草角・樹心・沼核・穿王・反照のボス素材武器は、素手を除く全17武器カテゴリへ必ず用意する。",
+      "管理HTML上では、調合レシピ、鍛冶レシピ、仕掛け製作、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。武器派生は武器種プルダウンで選択し、素材系統を縦、★ランクを横にした派生図で表示する。順当強化と分岐は派生元から矢印で接続し、素材やエリアだけを理由に派生名を増やさず、分岐は派生元の直下へ配置する。草角・樹心・沼核・穿王・反照のボス素材武器は、素手を除く全17武器カテゴリへ必ず用意する。",
       "各エリアボスには、ボス素材を使う防具または装飾品も必ず用意する。通常魔物素材の★2派生は横方向の選択肢として追加し、ボス派生の必須前提にはしない。",
       "武器派生の魔物素材要求量は、★2で合計1～2個、★3で合計2～3個を目安とする。既存の複合素材派生は維持してよい。",
       "★3以降は複数の魔物素材を要求してよいが、ボス固有素材は原則1個のままとし、大量周回を前提にしない。",
@@ -7822,7 +7822,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.309';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.310';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-07-26';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([
