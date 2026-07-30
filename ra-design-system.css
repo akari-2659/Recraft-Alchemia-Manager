@@ -218,7 +218,7 @@ body.ra-app :is(input,select,textarea):focus {
   outline: none !important;
   border-color: var(--ra-navy) !important;
   box-shadow: 0 0 0 3px rgba(39,62,88,.22) !important;
-  background: #fff !important;
+  background-color: #fff !important;
 }
 body.ra-app :is(input,textarea)::placeholder { color: #737980; opacity: 1; }
 body.ra-app label { color: #3c4650; font-weight: 700 !important; }
@@ -1102,9 +1102,12 @@ body.ra-app :is(input,textarea) {
     linear-gradient(180deg, rgba(255,255,255,.92), rgba(248,241,224,.72)),
     repeating-linear-gradient(0deg, rgba(91,70,36,.018) 0 1px, transparent 1px 20px) !important;
 }
-body.ra-app :is(input,select,textarea):focus {
+body.ra-app :is(input,textarea):focus {
   background-color: #fff !important;
   background-image: none !important;
+}
+body.ra-app select:focus {
+  background-color: #fff !important;
 }
 body.ra-manager :is(.table-wrap,.tabs,.subtabs,.skill-prob-wrap,.log,.help-output) {
   overscroll-behavior-y: auto !important;
