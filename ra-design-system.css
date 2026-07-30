@@ -528,7 +528,7 @@ body.ra-app .toast { color: var(--ra-ink); border-color: #9c8048 !important; bac
   }
 }
 
-/* v90.8.311 legibility + compact weapon tree revision */
+/* v90.8.313 legibility + compact weapon tree revision */
 :root {
   --ra-desk: #e6dfd2;
   --ra-desk-2: #f2ece1;
@@ -832,7 +832,7 @@ body.ra-facility .weapon-modal-header h3 { color: #2a414f !important; }
 }
 
 
-/* v90.8.311 UI performance and spacing pass */
+/* v90.8.313 UI performance and spacing pass */
 /* Large disclosures use a paint-only fade instead of intrinsic-height interpolation. */
 body.ra-app details::details-content {
   block-size: auto !important;
@@ -973,4 +973,62 @@ body.ra-facility .branch-graph-node-locked-label {
   body.ra-character .editor-tab-btn {
     transition: none !important;
   }
+}
+
+
+/* Branch label integrity: keep the full "派生" suffix on one horizontal line. */
+body.ra-facility .branch-graph-canvas {
+  --branch-label-width: 64px !important;
+}
+body.ra-facility .branch-graph-label {
+  width: var(--branch-label-width) !important;
+  min-width: var(--branch-label-width) !important;
+  max-width: var(--branch-label-width) !important;
+  padding: 1px 3px !important;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  line-height: 1.05 !important;
+}
+body.ra-facility .branch-graph-label > span {
+  display: block;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+}
+body.ra-facility .branch-graph-scroll.branch-labels-collapsed .branch-graph-canvas {
+  --branch-label-width: 28px !important;
+}
+body.ra-facility .branch-graph-scroll.branch-labels-collapsed .branch-graph-label {
+  min-width: 28px !important;
+  max-width: 28px !important;
+  width: 28px !important;
+  padding: 0 !important;
+}
+body.ra-facility .branch-graph-scroll.branch-labels-collapsed .branch-graph-label > span {
+  display: none !important;
+}
+@media (max-width: 720px) {
+  body.ra-facility .branch-graph-canvas {
+    --branch-label-width: 60px !important;
+  }
+  body.ra-facility .branch-graph-label {
+    width: var(--branch-label-width) !important;
+    min-width: var(--branch-label-width) !important;
+    max-width: var(--branch-label-width) !important;
+    font-size: 9.5px !important;
+  }
+}
+
+
+/* Branch label inline toggle: placed in the graph's upper-left blank cell. */
+body.ra-facility .branch-label-side-toggle {
+  min-width: 0 !important;
+  width: 100% !important;
+  height: 30px !important;
+  padding: 0 !important;
+  border-radius: 0 8px 8px 0 !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
 }

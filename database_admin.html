@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.311</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.313</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1169,7 +1169,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.311 usability maintenance */
+/* v90.8.313 usability maintenance */
 .ra-build-info{font-size:12px;padding:6px 12px;text-align:right;color:var(--muted);background:rgba(255,253,248,.9);border-bottom:1px solid var(--line)}
 header{padding-top:12px!important;padding-bottom:6px!important}.title-card{padding:14px!important}.title-card h1{font-size:clamp(21px,3vw,30px)!important;margin-bottom:5px!important}.title-card .subtitle{font-size:.84rem;line-height:1.5}.dbid{font-size:.72rem!important}
 main>section.panel:first-of-type{padding:10px!important}
@@ -1187,10 +1187,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.311-perf1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.313-perf1">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.311｜更新：2026年7月30日</div>
+<div class="ra-build-info">v90.8.313｜更新：2026年7月30日</div>
 
 <header>
   <div class="title-card">
@@ -1830,7 +1830,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.311';
+const RECRAFT_DB_VERSION = 'v90.8.313';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.263';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -2304,17 +2304,33 @@ function adminCraftingToolName(craftSkill='',craftType=''){
   if(skill==='細工') return '細工道具';
   return '対応道具';
 }
+const ADMIN_WEAPON_CRAFT_SUPPORT_NAME='武装融和剤';
+function adminWeaponCraftSupportEligible(row={}){
+  const rank=numericRankValueIncludingLegacyMaterialGrade(row.rank,1);
+  if(rank>5)return false;
+  const type=String(row.craftType||'').trim();
+  if(type==='武器派生')return true;
+  if(type!=='鍛冶')return false;
+  const result=String(row.resultItem||row.name||'').trim();
+  const item=(state.items||[]).find(x=>String(x.name||'').trim()===result)||{};
+  return String(item.itemType||'').trim()==='武器';
+}
+function adminWeaponCraftSupportText(){
+  return `${ADMIN_WEAPON_CRAFT_SUPPORT_NAME}×1（自作時のみ・任意）／道具軽減後の作成難易度をさらに－2／1回1個まで`;
+}
 function adminCraftingRouteLines(row={}){
   const difficulty=String(row.difficulty??'').trim();
   const rows=adminCraftingDifficultyRows(row.rank,difficulty);
   if(!rows.length) return difficulty ? [`作成難易度：${difficulty}`] : [];
   const skill=String(row.craftSkill||recipeSkillForCraftType(row.craftType)||'細工').trim();
-  return [
+  const lines=[
     `使用技能：${skill}`,
     `使用道具：${adminCraftingToolName(skill,row.craftType)}`,
     `基礎作成難易度：${difficulty}`,
     `道具使用時：${adminCraftingDifficultySummary(row.rank,difficulty)}`
   ];
+  if(adminWeaponCraftSupportEligible(row))lines.push(`任意の作成補助材：${adminWeaponCraftSupportText()}`);
+  return lines;
 }
 function adminCraftingRouteHtml(row={}){
   return adminCraftingRouteLines(row).map(line=>{
@@ -7824,7 +7840,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.311';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.313';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-07-26';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([
