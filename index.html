@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>リクラフト・アルケミア 管理ハブ v90.8.313</title>
+  <title>リクラフト・アルケミア 管理ハブ v90.8.315</title>
   <style>
     :root{--bg:#f7f2e8;--card:#fffaf0;--ink:#2d241b;--muted:#7b6a58;--line:#d8c7aa;--accent:#8b5e34;--accent2:#c28b45}
     *{box-sizing:border-box} html,body{height:100%} body{margin:0;font-family:"Yu Gothic","Hiragino Sans",system-ui,sans-serif;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;min-height:100svh}
@@ -74,26 +74,25 @@ button,.tabs button{ text-align:center!important; }
 body,.title,.title p,.notice{text-align:left!important}.tabs{justify-content:flex-start!important}.tabs button{text-align:center!important}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.313-perf1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.315-perf1">
 </head>
 <body class="ra-app ra-manager ra-hub">
   <header>
-    <div class="build">v90.8.313｜更新：2026年7月30日</div>
+    <div class="build">v90.8.315｜更新：2026年7月30日</div>
     <div class="top">
       <div class="title"><h1>リクラフト・アルケミア 管理ハブ</h1><p>DB管理、クエスト・エリア進行管理、ヘルプを切り替えます。</p></div>
       <nav class="tabs" aria-label="管理ツール切替">
-        <button type="button" class="active" data-target="database">アイテム・DB管理</button>
+        <button type="button" class="active" data-target="database" aria-current="page">アイテム・DB管理</button>
         <button type="button" data-target="progress">イベント・進行管理</button>
         <button type="button" data-target="help">ヘルプ</button>
       </nav>
     </div>
   </header>
   <main>
-    <div class="notice" id="notice">現在：アイテム・DB管理。</div>
     <div class="framewrap">
-      <iframe id="frame-database" class="toolframe active" src="database_admin.html?v=90.8.313-design1" title="アイテム・DB管理"></iframe>
-      <iframe id="frame-progress" class="toolframe" src="progress_manager.html?v=90.8.313-design1" title="イベント・進行管理"></iframe>
-      <iframe id="frame-help" class="toolframe" src="help.html?v=90.8.313-design1" title="ヘルプ"></iframe>
+      <iframe id="frame-database" class="toolframe active" src="database_admin.html?v=90.8.315-design1" title="アイテム・DB管理"></iframe>
+      <iframe id="frame-progress" class="toolframe" src="progress_manager.html?v=90.8.315-design1" title="イベント・進行管理"></iframe>
+      <iframe id="frame-help" class="toolframe" src="help.html?v=90.8.315-design1" title="ヘルプ"></iframe>
     </div>
   </main>
   <script>
@@ -102,7 +101,7 @@ body,.title,.title p,.notice{text-align:left!important}.tabs{justify-content:fle
       document.querySelectorAll('.tabs button[data-target]').forEach(btn=>btn.classList.toggle('active',btn.dataset.target===key));
       document.querySelectorAll('.toolframe').forEach(frame=>frame.classList.remove('active'));
       const frame=document.getElementById('frame-'+key); if(frame) frame.classList.add('active');
-      const notice=document.getElementById('notice'); if(notice) notice.textContent='現在：'+(labels[key]||key)+'。';
+      document.querySelectorAll('.tabs button[data-target]').forEach(btn=>{if(btn.dataset.target===key)btn.setAttribute('aria-current','page');else btn.removeAttribute('aria-current');});
       try{history.replaceState(null,'','#'+key);}catch(e){}
     }
     document.querySelectorAll('.tabs button[data-target]').forEach(btn=>btn.addEventListener('click',()=>showTool(btn.dataset.target)));
