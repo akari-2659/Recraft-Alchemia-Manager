@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.325</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.326</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1169,7 +1169,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.325 usability maintenance */
+/* v90.8.326 usability maintenance */
 .ra-build-info{font-size:12px;padding:6px 12px;text-align:right;color:var(--muted);background:rgba(255,253,248,.9);border-bottom:1px solid var(--line)}
 header{padding-top:12px!important;padding-bottom:6px!important}.title-card{padding:14px!important}.title-card h1{font-size:clamp(21px,3vw,30px)!important;margin-bottom:5px!important}.title-card .subtitle{font-size:.84rem;line-height:1.5}.dbid{font-size:.72rem!important}
 main>section.panel:first-of-type{padding:10px!important}
@@ -1187,10 +1187,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.325-perf1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.326-perf1">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.325｜更新：2026年7月31日</div>
+<div class="ra-build-info">v90.8.326｜更新：2026年7月31日</div>
 <div id="dirtyStateBadge" class="ra-dirty-state" role="status" aria-live="polite">保存済み</div>
 
 <header>
@@ -1831,8 +1831,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.325';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.263';
+const RECRAFT_DB_VERSION = 'v90.8.326';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.326';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -7008,7 +7008,7 @@ function payload(action, extra={}){
   return {action, ...extra};
 }
 function isGasMode(){ return typeof google !== 'undefined' && google.script && google.script.run; }
-const JSONP_ACTIONS = new Set(['ping','schema','setup','list','listAll','getEquipmentCategories','characterSheetMaster','dedupeAll','dedupe','repairAll','repairSheet','beginUpload','putUploadChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet']);
+const JSONP_ACTIONS = new Set(['ping','schema','setup','list','listAll','getEquipmentCategories','characterSheetMaster','dedupeAll','dedupe','repairAll','repairSheet','dbHashes','beginUpload','putUploadChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet']);
 function apiBaseUrl(){
   return (DEFAULT_GAS_WEB_APP_URL || '').trim();
 }
@@ -7016,7 +7016,7 @@ function jsonpTimeoutMs(action){
   const a = String(action || '').trim();
   if (a === 'commitUpload') return 120000;
   if (['beginUpload','putUploadChunk','putUploadCell','abortUpload','upsert','replaceSheet','repairSheet','repairAll','dedupe','dedupeAll','setup'].includes(a)) return 60000;
-  if (['list','listAll','characterSheetMaster','getEquipmentCategories'].includes(a)) return 45000;
+  if (['list','listAll','characterSheetMaster','getEquipmentCategories','dbHashes'].includes(a)) return 45000;
   return 25000;
 }
 function jsonpActionLabel(action){
@@ -7231,6 +7231,125 @@ function cleanUploadRow(row){
   });
   return out;
 }
+
+const DIRECT_POST_MAX_BODY_BYTES = 4 * 1024 * 1024;
+const DIRECT_POST_TIMEOUT_MS = 180000;
+
+function dbHashScopeCode(scope){
+  const s=String(scope||'').trim();
+  if(s==='素材') return 'materials';
+  if(s==='アイテム') return 'items';
+  return 'all';
+}
+function dbHashPublicKey(mode,key,scope=''){
+  return `${mode||'upsert'}|${key||''}|${dbHashScopeCode(scope)}`;
+}
+async function sha256HexText(text){
+  if(!(window.crypto && crypto.subtle && typeof TextEncoder==='function')) throw new Error('SHA-256を利用できないブラウザです。');
+  const bytes=new TextEncoder().encode(String(text||''));
+  const digest=await crypto.subtle.digest('SHA-256',bytes);
+  return Array.from(new Uint8Array(digest)).map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+function directPostForm(action,payloadObject,timeoutMs=DIRECT_POST_TIMEOUT_MS){
+  return new Promise((resolve,reject)=>{
+    const base=apiBaseUrl();
+    if(!base){reject(new Error('Web App URLが設定されていません。'));return;}
+    const token=String(payloadObject&&payloadObject.token||'');
+    const frame=document.createElement('iframe');
+    const frameName='recraftDbPost_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+    frame.name=frameName;
+    frame.style.display='none';
+    frame.setAttribute('aria-hidden','true');
+    const form=document.createElement('form');
+    form.method='POST';
+    form.action=base;
+    form.target=frameName;
+    form.style.display='none';
+    const add=(name,value)=>{
+      const input=document.createElement('input');
+      input.type='hidden';input.name=name;input.value=String(value??'');form.appendChild(input);
+    };
+    add('action',action);
+    add('responseMode','postMessage');
+    add('token',token);
+    add('payload',JSON.stringify(payloadObject||{}));
+    let settled=false;
+    const timer=setTimeout(()=>finishReject(new Error('一括POST送信の応答がタイムアウトしました。')),timeoutMs);
+    function cleanup(){
+      clearTimeout(timer);
+      window.removeEventListener('message',onMessage);
+      setTimeout(()=>{try{form.remove();frame.remove();}catch(_){}},0);
+    }
+    function finishResolve(value){if(settled)return;settled=true;cleanup();resolve(value);}
+    function finishReject(error){if(settled)return;settled=true;cleanup();reject(error);}
+    function onMessage(event){
+      if(event.source!==frame.contentWindow) return;
+      const data=event.data||{};
+      if(data.type!=='recraft-db-post-result'||String(data.token||'')!==token) return;
+      finishResolve(data.result||{ok:false,error:'DB送信結果が空です。'});
+    }
+    window.addEventListener('message',onMessage);
+    document.body.appendChild(frame);
+    document.body.appendChild(form);
+    try{form.submit();}catch(e){finishReject(e);}
+  });
+}
+function canUseDirectPostUpload(){
+  return typeof TextEncoder==='function'
+    && window.crypto && crypto.subtle
+    && (isGasMode() || (typeof document!=='undefined' && typeof HTMLFormElement!=='undefined'));
+}
+async function uploadRowsByDirectPost(key,rows,mode,dataKindScope='',options={}){
+  if(!canUseDirectPostUpload()){
+    const e=new Error('一括POST送信を利用できない環境です。');e.allowLegacyFallback=true;throw e;
+  }
+  const list=(rows||[]).map(cleanUploadRow);
+  const text=options.serializedRows||JSON.stringify(list);
+  uploadProgressStart(`${labelKey(key)}の一括POST送信`,list.length);
+  uploadProgressUpdate({phase:`${labelKey(key)}を圧縮中`,percent:12,currentRows:0,totalRows:list.length,detail:'1回のPOSTで送るデータを圧縮しています。'});
+  let uploadEncoding='text';
+  let rowsPayload=text;
+  let checksum='';
+  try{
+    if(canUseGzipUpload()){
+      rowsPayload=await withUploadTimeout(gzipBase64FromText(text),30000,'一括POST用データの圧縮がタイムアウトしました。');
+      uploadEncoding='gzipBase64';
+    }
+    checksum=options.checksum||await sha256HexText(text);
+  }catch(e){e.allowLegacyFallback=true;throw e;}
+  const token=uploadToken(mode==='replace'?'postrp':'postup',key);
+  const request=payload('directUpload',{
+    token,sheetKey:key,mode,dataKindScope,uploadEncoding,rowsPayload,
+    rowCount:list.length,checksum
+  });
+  const requestText=JSON.stringify(request);
+  const bodyBytes=new TextEncoder().encode(requestText).length;
+  if(bodyBytes>DIRECT_POST_MAX_BODY_BYTES){
+    const e=new Error(`一括POSTデータが${formatUploadBytes(bodyBytes)}あるため、安全上限${formatUploadBytes(DIRECT_POST_MAX_BODY_BYTES)}を超えました。`);
+    e.allowLegacyFallback=true;
+    uploadProgressLog('サイズ超過のため従来の圧縮分割送信へ切り替えます。');
+    throw e;
+  }
+  uploadProgressUpdate({phase:`${labelKey(key)}を一括送信中`,percent:45,currentRows:list.length,totalRows:list.length,rawChars:text.length,sentChars:bodyBytes,detail:`${formatUploadBytes(bodyBytes)}を1回のPOSTで送信しています。`});
+  let result;
+  try{
+    result=isGasMode()?await callApi(request):await directPostForm('directUpload',request);
+  }catch(e){e.allowLegacyFallback=true;throw e;}
+  if(!result||!result.ok){
+    const e=new Error((result&&result.error)||`${labelKey(key)}の一括POST送信に失敗しました`);
+    e.directUploadFatal=true;
+    throw e;
+  }
+  const out={...result,checksum,hashKey:dbHashPublicKey(mode,key,dataKindScope),sentRows:list.length,sentChunks:1,sentParts:1,rawChars:text.length,bodyBytes};
+  uploadProgressDone(out);
+  return out;
+}
+async function loadServerDbHashes(){
+  const res=await callApi(payload('dbHashes'));
+  if(!res||!res.ok) throw new Error((res&&res.error)||'DBハッシュの取得に失敗しました');
+  return res.hashes||{};
+}
+
 const UPLOAD_JSONP_URL_LIMIT = 2200;
 const UPLOAD_PART_CHAR_STEP = 260;
 const UPLOAD_GZIP_B64_PART_STEP = 1150;
@@ -7464,9 +7583,18 @@ async function uploadRowsByGzipChunks(key, rows, mode, dataKindScope=''){
     throw e;
   }
 }
-async function uploadRowsByChunks(key, rows, mode, dataKindScope=''){
+async function uploadRowsByChunks(key, rows, mode, dataKindScope='', options={}){
   await assertServerVersion();
   const list=rows||[];
+  try{
+    return await uploadRowsByDirectPost(key,list,mode,dataKindScope,options);
+  }catch(directError){
+    if(directError&&directError.directUploadFatal) throw directError;
+    if(!(directError&&directError.allowLegacyFallback)) throw directError;
+    console.warn('direct POST upload failed; fallback to legacy chunks',directError);
+    uploadProgressLog('一括POST送信を利用できなかったため、圧縮分割送信へ切り替えます。');
+    toast(`${labelKey(key)}を従来の圧縮分割送信へ切り替えます。`,'warn');
+  }
   if(canUseGzipUpload()){
     try{return await uploadRowsByGzipChunks(key,list,mode,dataKindScope);}
     catch(gzipError){
@@ -7498,11 +7626,11 @@ async function writeApi(data){
   return callApi(data);
 }
 
-async function upsertSheetRowsByJsonp(key, rows, dataKindScope=''){
-  return uploadRowsByChunks(key, rows || [], 'upsert', dataKindScope);
+async function upsertSheetRowsByJsonp(key, rows, dataKindScope='', options={}){
+  return uploadRowsByChunks(key, rows || [], 'upsert', dataKindScope, options);
 }
-async function replaceSheetRowsByJsonp(key, rows, dataKindScope=''){
-  return uploadRowsByChunks(key, rows || [], 'replace', dataKindScope);
+async function replaceSheetRowsByJsonp(key, rows, dataKindScope='', options={}){
+  return uploadRowsByChunks(key, rows || [], 'replace', dataKindScope, options);
 }
 let __serverVersionChecked = false;
 function parseVersionParts(value){
@@ -7792,22 +7920,31 @@ function showTablePageForOperation(tableKey){
 function fullDbLabel(key){
   return key === 'items' ? 'アイテム・素材' : labelKey(key);
 }
-async function writeFullDbKeyInternal(dbKey, mode){
+async function writeFullDbKeyInternal(dbKey, mode, options={}){
   const preparedRows = cloneRowsForSave(dbKey, state[dbKey] || []);
   const rows = await hydratePrivateFieldsForWrite(dbKey, preparedRows);
-  // 全データ操作では物理DBシートを一度だけ送る。
-  // itemsシートにはアイテムと素材の両方を含め、dataKindScopeを付けず全体登録/置換する。
-  const res = mode === 'replace'
-    ? await replaceSheetRowsByJsonp(dbKey, rows, '')
-    : await upsertSheetRowsByJsonp(dbKey, rows, '');
-  if(!res || !res.ok){
-    throw new Error((res && res.error) || `${fullDbLabel(dbKey)}のDB${mode === 'replace' ? '置換' : '登録'}に失敗しました`);
+  const cleanRows = rows.map(cleanUploadRow);
+  const serializedRows = JSON.stringify(cleanRows);
+  const checksum = await sha256HexText(serializedRows);
+  const uploadMode = mode === 'replace' ? 'replace' : 'upsert';
+  const hashKey = dbHashPublicKey(uploadMode, dbKey, '');
+  const remoteHashes = options.remoteHashes || {};
+  if(remoteHashes[hashKey] === checksum){
+    return {ok:true,skipped:true,sheetKey:dbKey,total:rows.length,checksum,hashKey,message:'変更なし'};
   }
+  const uploadOptions={checksum,serializedRows};
+  const res = uploadMode === 'replace'
+    ? await replaceSheetRowsByJsonp(dbKey, rows, '', uploadOptions)
+    : await upsertSheetRowsByJsonp(dbKey, rows, '', uploadOptions);
+  if(!res || !res.ok){
+    throw new Error((res && res.error) || `${fullDbLabel(dbKey)}のDB${uploadMode === 'replace' ? '置換' : '登録'}に失敗しました`);
+  }
+  remoteHashes[hashKey]=checksum;
   state = normalizeStateData({ ...state, [dbKey]: rows });
   rerenderTableGroup(dbKey);
   updateCounts();
   updateJsonBox();
-  return res;
+  return {...res,checksum,hashKey};
 }
 async function runAllPages(mode){
   if(window.__recraftAllPageRunning){toast('全データ処理中です。','warn');return;}
@@ -7819,17 +7956,29 @@ async function runAllPages(mode){
   if(savedAll && savedAll.mode===mode && Number(savedAll.index||0)<total){
     const resume=confirm(`前回の全データ${actionLabel}が「${fullDbLabel(FULL_DB_KEYS[Number(savedAll.index||0)])}」の途中で停止しています。\n\nOK：続きから再開\nキャンセル：最初からやり直す`);
     if(resume) index=Number(savedAll.index||0); else {allDbResumeClear();uploadResumeClear();}
-  }else if(!confirm(`全データ${actionLabel}を開始します。\n途中で失敗した場合は、続きから再開するか最初からやり直すか選択できます。\nよろしいですか？`)) return;
+  }else if(!confirm(`全データ${actionLabel}を開始します。\n変更のないDBは送信を省略します。\n途中で失敗した場合は、続きから再開できます。\nよろしいですか？`)) return;
   toast(`全データ${actionLabel}${index?'を続きから再開':'を開始'}します`,'warn');
   window.__recraftAllPageRunning=true; setAllPageButtonsDisabled(true);
+  let remoteHashes={};
+  let skipped=0;
   try{
+    try{
+      remoteHashes=await loadServerDbHashes();
+    }catch(hashError){
+      console.warn('DB hash load failed; upload all databases',hashError);
+      toast('変更判定を取得できなかったため、全DBを送信します。','warn');
+    }
     while(index<total){
       const dbKey=FULL_DB_KEYS[index];
       allDbResumeSave({mode,index,dbKey,updatedAt:new Date().toISOString()});
       showTablePageForOperation(dbKey);
-      toast(`${index+1}/${total} ${fullDbLabel(dbKey)}を${actionLabel}中...`,'warn');
+      toast(`${index+1}/${total} ${fullDbLabel(dbKey)}を確認中...`,'warn');
       try{
-        await writeFullDbKeyInternal(dbKey,isReplace?'replace':'upsert');
+        const res=await writeFullDbKeyInternal(dbKey,isReplace?'replace':'upsert',{remoteHashes});
+        if(res&&res.skipped){
+          skipped++;
+          toast(`${index+1}/${total} ${fullDbLabel(dbKey)}は変更なし：送信を省略`);
+        }
         index++; allDbResumeSave({mode,index,dbKey:FULL_DB_KEYS[index]||'',updatedAt:new Date().toISOString()});
       }catch(e){
         const resume=confirm(`${fullDbLabel(dbKey)}の${actionLabel}中に失敗しました。\n${e.message||e}\n\nOK：保存した送信位置から続ける\nキャンセル：この表を最初からやり直す`);
@@ -7840,11 +7989,10 @@ async function runAllPages(mode){
         }
         continue;
       }
-      await sleep(120);
     }
     allDbResumeClear();uploadResumeClear();
     clearDirty('*');
-    toast(`全データ${actionLabel}が完了しました（${total}/${total}）`);
+    toast(`全データ${actionLabel}が完了しました（送信${total-skipped}／省略${skipped}）`);
   }finally{window.__recraftAllPageRunning=false;setAllPageButtonsDisabled(false);}
 }
 async function saveAll(){
@@ -7911,7 +8059,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.325';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.326';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-07-26';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([
