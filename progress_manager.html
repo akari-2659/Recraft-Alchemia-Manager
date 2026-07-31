@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.326</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.327</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -146,10 +146,10 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.326-dropfix4">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.327-dropfix4">
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.326｜更新：2026年7月31日</div>
+<div class="ra-build-info">v90.8.327｜更新：2026年7月31日</div>
 
 <header>
   <div class="header-inner">
@@ -400,16 +400,17 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.326';
+const VERSION='v90.8.327';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 const GITHUB_COMMON_DB_MANIFEST_URL=GITHUB_COMMON_DB_BASE+'manifest.json';
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const GUILD_DAILY_STORAGE_KEY='recraft_alchemia_guild_daily_selection_v1';
 const GUILD_DAILY_CHANNEL_NAME='recraft_alchemia_guild_daily_channel';
+const GUILD_DAILY_REQUEST_KINDS=['拠点内依頼','エリア依頼','納品依頼'];
 const MASTER_CACHE_KEY=STORE_KEY+'_master_cache_v1';
 const $=id=>document.getElementById(id);
-const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},dayState:{day:1,fatigue:0,usedActions:0,awaitingEnd:false},lastEventText:'',lastEventKey:'',lastEventTreasureCopyText:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',lastQuestTreasureCopyText:'',triggeredQuestEvents:{},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastTreasureCopyText:'',lastAppraisalText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],dailyQuestUnlockedAreaId:'',questEncounterCache:{},partySize:4,areaBossEncountered:{},treasureSetup:null,treasureContext:null,log:[]};
+const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},dayState:{day:1,fatigue:0,usedActions:0,awaitingEnd:false},lastEventText:'',lastEventKey:'',lastEventTreasureCopyText:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',lastQuestTreasureCopyText:'',triggeredQuestEvents:{},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastTreasureCopyText:'',lastAppraisalText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],lastDailyQuestKeysByKind:{'拠点内依頼':[],'エリア依頼':[],'納品依頼':[]},dailyQuestUnlockedAreaId:'',questEncounterCache:{},partySize:4,areaBossEncountered:{},treasureSetup:null,treasureContext:null,log:[]};
 let currentQuestCategory='重要';
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function clamp(n){return Math.max(0,Math.min(100,Number(n)||0));}
@@ -558,14 +559,31 @@ function sortedQuestAreas(){
     return String(a.name||a.id||'').localeCompare(String(b.name||b.id||''),'ja');
   });
 }
+function emptyDailyQuestKeysByKind(){
+  return Object.fromEntries(GUILD_DAILY_REQUEST_KINDS.map(kind=>[kind,[]]));
+}
 function readFacilityDailyQuestState(){
   try{
     const raw=localStorage.getItem(GUILD_DAILY_STORAGE_KEY);
     if(!raw)return null;
     const data=JSON.parse(raw);
+    const keysByKind=emptyDailyQuestKeysByKind();
+    if(data.keysByKind&&typeof data.keysByKind==='object'){
+      GUILD_DAILY_REQUEST_KINDS.forEach(kind=>{
+        keysByKind[kind]=Array.isArray(data.keysByKind[kind])?data.keysByKind[kind].map(String):[];
+      });
+    }else{
+      const allKeys=Array.isArray(data.keys)?data.keys.map(String):[];
+      const questMap=new Map((state.quests||[]).map(q=>[String(q.id||q.name||''),q]));
+      allKeys.forEach(key=>{
+        const kind=String(questMap.get(String(key))?.requestKind||'').trim();
+        if(GUILD_DAILY_REQUEST_KINDS.includes(kind))keysByKind[kind].push(String(key));
+      });
+    }
     return {
-      keys:Array.isArray(data.keys)?data.keys.map(String):[],
-      count:Math.max(1,Math.min(10,Number(data.count)||5)),
+      keys:GUILD_DAILY_REQUEST_KINDS.flatMap(kind=>keysByKind[kind]),
+      keysByKind,
+      countsByKind:(data.countsByKind&&typeof data.countsByKind==='object')?data.countsByKind:{},
       areaId:String(data.areaId||''),
       updatedAt:String(data.updatedAt||'')
     };
@@ -574,22 +592,19 @@ function readFacilityDailyQuestState(){
     return null;
   }
 }
-function facilityDailyQuestArea(){
-  const id=String(state.dailyQuestUnlockedAreaId||'').trim();
-  return (state.areas||[]).find(a=>String(a.id||a.name||'')===id) || null;
-}
 function syncDailyQuestSelectionFromFacility({render=false,log=false}={}){
   const shared=readFacilityDailyQuestState();
   state.questEncounterCache={};
   if(!shared){
     state.lastDailyQuestKeys=[];
+    state.lastDailyQuestKeysByKind=emptyDailyQuestKeysByKind();
     state.lastDailyQuestText='【ギルド・デイリークエスト】\n施設側でデイリークエストが選出されていません。';
     state.dailyQuestUnlockedAreaId='';
   }else{
     state.lastDailyQuestKeys=shared.keys;
+    state.lastDailyQuestKeysByKind=shared.keysByKind;
     state.dailyQuestUnlockedAreaId=shared.areaId;
-    const picked=selectedFacilityDailyQuestRows();
-    state.lastDailyQuestText=dailyQuestTextFor(picked);
+    state.lastDailyQuestText=dailyQuestTextFor(selectedFacilityDailyQuestRowsByKind());
   }
   saveState(false);
   if(render){
@@ -607,43 +622,57 @@ function syncDailyQuestSelectionFromFacility({render=false,log=false}={}){
   if(log)addLog(shared?'施設側のデイリークエスト選出を再読込しました。':'施設側で選出済みのデイリークエストが見つかりません。');
   return shared;
 }
-function selectedFacilityDailyQuestRows(){
+function selectedFacilityDailyQuestRowsByKind(){
   const map=new Map((state.quests||[]).filter(q=>questCategoryFor(q)==='デイリー'&&questEnabled(q)).map(q=>[String(q.id||q.name||''),q]));
-  return (state.lastDailyQuestKeys||[]).map(k=>map.get(String(k))).filter(Boolean);
+  const out=emptyDailyQuestKeysByKind();
+  GUILD_DAILY_REQUEST_KINDS.forEach(kind=>{
+    out[kind]=(state.lastDailyQuestKeysByKind?.[kind]||[]).map(k=>map.get(String(k))).filter(Boolean);
+  });
+  return out;
 }
-function dailyQuestTextFor(rows=[]){
-  const area=facilityDailyQuestArea();
+function selectedFacilityDailyQuestRows(){
+  const grouped=selectedFacilityDailyQuestRowsByKind();
+  return GUILD_DAILY_REQUEST_KINDS.flatMap(kind=>grouped[kind]||[]);
+}
+function dailyQuestTextFor(grouped={}){
   const lines=['【ギルド・デイリークエスト】'];
-  if(area)lines.push(`最終解放エリア：${area.name||area.id}まで`);
-  if(!rows.length)lines.push('施設側で選出されているデイリークエストはありません。');
-  else lines.push(rows.map(q=>questPublicInfoLines(q).join('\n')).join('\n\n'));
+  let total=0;
+  GUILD_DAILY_REQUEST_KINDS.forEach(kind=>{
+    const rows=Array.isArray(grouped[kind])?grouped[kind]:[];
+    total+=rows.length;
+    lines.push('',`■${kind}`);
+    lines.push(rows.length?rows.map(q=>questPublicInfoLines(q).join('\n')).join('\n\n'):'選出なし');
+  });
+  if(!total)return '【ギルド・デイリークエスト】\n施設側で選出されているデイリークエストはありません。';
   return lines.join('\n');
 }
 function ensureDailyQuestSelection(){
   const shared=readFacilityDailyQuestState();
   if(shared){
     state.lastDailyQuestKeys=shared.keys;
+    state.lastDailyQuestKeysByKind=shared.keysByKind;
     state.dailyQuestUnlockedAreaId=shared.areaId;
   }else{
     state.lastDailyQuestKeys=[];
+    state.lastDailyQuestKeysByKind=emptyDailyQuestKeysByKind();
     state.dailyQuestUnlockedAreaId='';
   }
-  const picked=selectedFacilityDailyQuestRows();
-  state.lastDailyQuestText=dailyQuestTextFor(picked);
-  return picked;
+  const grouped=selectedFacilityDailyQuestRowsByKind();
+  state.lastDailyQuestText=dailyQuestTextFor(grouped);
+  return GUILD_DAILY_REQUEST_KINDS.flatMap(kind=>grouped[kind]||[]);
 }
 function renderDailyQuestResult(){
   const box=$('dailyQuestResult');
   if(!box)return;
   const shared=readFacilityDailyQuestState();
-  const picked=ensureDailyQuestSelection();
+  ensureDailyQuestSelection();
   if(!shared){
-    box.innerHTML='<b>施設側で未選出です。</b><br>統合DB管理の「施設→ギルド→デイリークエスト」で抽選してください。';
+    box.innerHTML='<b>施設側で未選出です。</b><br>統合DB管理の「施設→ギルド→デイリークエスト」で種別ごとに抽選してください。';
     return;
   }
-  const area=facilityDailyQuestArea();
+  const counts=GUILD_DAILY_REQUEST_KINDS.map(kind=>`${kind} ${state.lastDailyQuestKeysByKind?.[kind]?.length||0}件`).join('／');
   const synced=shared.updatedAt ? `<br><span class="muted">施設側更新：${esc(new Date(shared.updatedAt).toLocaleString('ja-JP',{hour12:false}))}</span>` : '';
-  box.innerHTML=`<b>施設側の選出を共有中</b><br>${esc(area?`${area.name||area.id}まで／${picked.length}件`:`${picked.length}件`)}${synced}<hr>${esc(state.lastDailyQuestText).replace(/\n/g,'<br>')}`;
+  box.innerHTML=`<b>施設側の選出を共有中</b><br>${esc(counts)}${synced}<hr>${esc(state.lastDailyQuestText).replace(/\n/g,'<br>')}`;
 }
 
 
@@ -1160,8 +1189,7 @@ function renderQuest(){
   const important=isImportantQuest(q);
   const kindRow=important?'':`<b>依頼区分</b><span>${esc(q.requestKind||'未設定')}</span>`;
   const skillRow=!delivery&&q.recommendedSkills?`<b>推奨技能</b><span>${esc(q.recommendedSkills)}</span>`:'';
-  const availabilityRow=(q.requestKind==='拠点内依頼'||delivery)?`<b>解放段階</b><span>${esc(q.areaName||'')}</span>`:'';
-  $('questDetail').innerHTML=`<div class="kv"><b>分類</b><span>${esc(questCategoryFor(q))}${!questEnabled(q)?'<span class="quest-pill off">OFF</span>':'<span class="quest-pill">ON</span>'}</span>${kindRow}<b>内容種別</b><span>${esc(q.questType||'')}</span>${skillRow}<b>報酬範囲</b><span>${esc(q.rewardScope||'各PC')}</span>${q.deliveryItems?`<b>納品物</b><span>${esc(q.deliveryItems)}</span>`:''}<b>ランク</b><span>${esc(progressPlayerRank(q.rank)||'')}</span><b>実施場所</b><span>${esc(questLocationText(q))}</span>${availabilityRow}<b>進行上昇値</b><span>${delivery?'納品確認':`+${questStepAmount(q)}%`}</span><b>固定イベント数</b><span>${questSpecificEvents(q).length}件</span><b>クエストボス</b><span>${esc(questBossText(q))}</span><b>構成</b><span>${esc(questBossFormationText(q))}${randomFormation?' <button id="rerollQuestEncounterBtn" type="button" class="secondary" style="margin-left:8px;padding:5px 9px">編成を再抽選</button>':''}</span><b>クリア条件</b><span>${esc(q.clearCondition||'')}</span><b>報酬</b><span>${esc([q.rewardMoney,q.rewardItems,Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / '))}（${esc(q.rewardScope||'各PC')}）</span></div>${randomFormation?'<p class="muted small">表示中の構成はプレビューです。実際の戦闘発生時には、同じ人数条件で改めて再抽選します。</p>':''}${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
+  $('questDetail').innerHTML=`<div class="kv"><b>分類</b><span>${esc(questCategoryFor(q))}${!questEnabled(q)?'<span class="quest-pill off">OFF</span>':'<span class="quest-pill">ON</span>'}</span>${kindRow}<b>内容種別</b><span>${esc(q.questType||'')}</span>${skillRow}<b>報酬範囲</b><span>${esc(q.rewardScope||'各PC')}</span>${q.deliveryItems?`<b>納品物</b><span>${esc(q.deliveryItems)}</span>`:''}<b>ランク</b><span>${esc(progressPlayerRank(q.rank)||'')}</span><b>実施場所</b><span>${esc(questLocationText(q))}</span><b>進行上昇値</b><span>${delivery?'納品確認':`+${questStepAmount(q)}%`}</span><b>固定イベント数</b><span>${questSpecificEvents(q).length}件</span><b>クエストボス</b><span>${esc(questBossText(q))}</span><b>構成</b><span>${esc(questBossFormationText(q))}${randomFormation?' <button id="rerollQuestEncounterBtn" type="button" class="secondary" style="margin-left:8px;padding:5px 9px">編成を再抽選</button>':''}</span><b>クリア条件</b><span>${esc(q.clearCondition||'')}</span><b>報酬</b><span>${esc([q.rewardMoney,q.rewardItems,Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / '))}（${esc(q.rewardScope||'各PC')}）</span></div>${randomFormation?'<p class="muted small">表示中の構成はプレビューです。実際の戦闘発生時には、同じ人数条件で改めて再抽選します。</p>':''}${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
   $('rerollQuestEncounterBtn')?.addEventListener('click',rerollSelectedQuestEncounter);
   renderQuestStepInfo(q,p);
   renderQuestEvents();
@@ -2420,7 +2448,6 @@ function questPublicInfoLines(q={}){
     !isDeliveryQuest(q)&&q.recommendedSkills?`推奨技能：${q.recommendedSkills}`:'',
     `実施場所：${questLocationText(q)}`,
     `クエスト説明：${q.description||'説明未設定'}`,
-    (q.requestKind==='拠点内依頼'||isDeliveryQuest(q))?`解放段階：${q.areaName||'未設定'}`:`エリア：${q.areaName||'未設定'}`,
     q.deliveryItems?`納品物：${q.deliveryItems}`:'',
     `達成条件：${q.clearCondition||'未設定'}`,
     `報酬：${questPublicRewardText(q)||'なし'}（${q.rewardScope||'各PC'}）`
@@ -2459,7 +2486,6 @@ function bind(){
   $('rollAppraisalBtn').addEventListener('click',rollAppraisal); $('copyAppraisalBtn').addEventListener('click',()=>copyText(state.lastAppraisalText,'appraisalCopyNote')); updateTreasureCopyButtons();
 
   window.addEventListener('storage',e=>{if(e.key===GUILD_DAILY_STORAGE_KEY)syncDailyQuestSelectionFromFacility({render:true});});
-  window.addEventListener('focus',()=>syncDailyQuestSelectionFromFacility({render:true}));
   try{
     const dailyChannel=new BroadcastChannel(GUILD_DAILY_CHANNEL_NAME);
     dailyChannel.addEventListener('message',()=>syncDailyQuestSelectionFromFacility({render:true}));

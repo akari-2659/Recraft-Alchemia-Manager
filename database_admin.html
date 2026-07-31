@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.326</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.327</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -420,7 +420,7 @@
 .guild-quest-card-title{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;font-weight:700}
 .guild-quest-meta{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
 .guild-quest-desc{font-size:.92rem;color:var(--muted,#6b6254);line-height:1.55}
-.guild-daily-controls{display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin:8px 0 12px}.guild-daily-controls label{min-width:130px}
+.guild-daily-controls{display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin:8px 0 12px}.guild-daily-controls label{min-width:130px}.guild-daily-kind-list{display:grid;gap:12px}.guild-daily-kind-block{border:1px solid var(--line,#d8d2c4);border-radius:12px;background:#fffaf3;padding:10px}.guild-daily-kind-head{display:flex;gap:10px;align-items:end;justify-content:space-between;flex-wrap:wrap;margin-bottom:8px}.guild-daily-kind-head h5{margin:0;font-size:1rem}.guild-daily-kind-actions{display:flex;gap:8px;align-items:end;flex-wrap:wrap}.guild-daily-kind-actions label{min-width:110px}.guild-daily-kind-actions button{min-width:170px}
 .guild-support-controls{display:flex;gap:8px;align-items:end;flex-wrap:wrap;margin:8px 0 12px}
 .guild-support-controls label{min-width:150px}
 .guild-support-controls .guild-support-key-field{min-width:min(360px,100%);flex:1 1 280px}
@@ -1169,7 +1169,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.326 usability maintenance */
+/* v90.8.327 usability maintenance */
 .ra-build-info{font-size:12px;padding:6px 12px;text-align:right;color:var(--muted);background:rgba(255,253,248,.9);border-bottom:1px solid var(--line)}
 header{padding-top:12px!important;padding-bottom:6px!important}.title-card{padding:14px!important}.title-card h1{font-size:clamp(21px,3vw,30px)!important;margin-bottom:5px!important}.title-card .subtitle{font-size:.84rem;line-height:1.5}.dbid{font-size:.72rem!important}
 main>section.panel:first-of-type{padding:10px!important}
@@ -1187,10 +1187,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.326-perf1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.327-perf1">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.326｜更新：2026年7月31日</div>
+<div class="ra-build-info">v90.8.327｜更新：2026年7月31日</div>
 <div id="dirtyStateBadge" class="ra-dirty-state" role="status" aria-live="polite">保存済み</div>
 
 <header>
@@ -1831,8 +1831,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.326';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.326';
+const RECRAFT_DB_VERSION = 'v90.8.327';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.327';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -1922,8 +1922,13 @@ let currentSkillDrawResults=[];
 let currentSkillStatusMessage='抽選結果だけを表示します。キャラクターの読込・保存は行いません。';
 let currentSkillStatusType='ok';
 let currentGuildShowHiddenImportant = false;
+const GUILD_DAILY_REQUEST_KINDS=['拠点内依頼','エリア依頼','納品依頼'];
+const GUILD_DAILY_DEFAULT_COUNTS={'拠点内依頼':2,'エリア依頼':2,'納品依頼':1};
+let currentGuildDailyCounts={...GUILD_DAILY_DEFAULT_COUNTS};
+let currentGuildDailyKeysByKind=Object.fromEntries(GUILD_DAILY_REQUEST_KINDS.map(kind=>[kind,[]]));
 let currentGuildDailyCount = 5;
 let currentGuildDailyKeys = [];
+let currentGuildDailyLegacyKeys = [];
 let currentGuildDailyAreaId = '';
 const GUILD_DAILY_STORAGE_KEY = 'recraft_alchemia_guild_daily_selection_v1';
 const MEAL_RECOMMEND_STORAGE_KEY = 'recraft_alchemia_meal_recommendation_v1';
@@ -1947,26 +1952,60 @@ function saveMealRecommendationState(){
   }catch(e){ console.warn('meal recommendation state save failed',e); }
 }
 loadMealRecommendationState();
+function normalizeGuildDailyCount(value,fallback=0){
+  const n=Number(value);
+  if(Number.isFinite(n))return Math.max(0,Math.min(10,n));
+  const f=Number(fallback);
+  return Number.isFinite(f)?Math.max(0,Math.min(10,f)):0;
+}
+function emptyGuildDailyKeysByKind(){
+  return Object.fromEntries(GUILD_DAILY_REQUEST_KINDS.map(kind=>[kind,[]]));
+}
+function syncGuildDailyLegacyFields(){
+  currentGuildDailyKeys=GUILD_DAILY_REQUEST_KINDS.flatMap(kind=>(currentGuildDailyKeysByKind[kind]||[]).map(String));
+  currentGuildDailyCount=GUILD_DAILY_REQUEST_KINDS.reduce((sum,kind)=>sum+normalizeGuildDailyCount(currentGuildDailyCounts[kind],GUILD_DAILY_DEFAULT_COUNTS[kind]),0);
+}
 function loadGuildDailyState(){
   try{
     const raw=localStorage.getItem(GUILD_DAILY_STORAGE_KEY);
     if(!raw)return;
     const data=JSON.parse(raw);
-    currentGuildDailyCount=Math.max(1,Math.min(10,Number(data.count)||5));
-    currentGuildDailyKeys=Array.isArray(data.keys)?data.keys.map(String):[];
     currentGuildDailyAreaId=String(data.areaId||'');
+    const savedCounts=(data.countsByKind&&typeof data.countsByKind==='object')?data.countsByKind:{};
+    currentGuildDailyCounts=Object.fromEntries(GUILD_DAILY_REQUEST_KINDS.map(kind=>[
+      kind,
+      normalizeGuildDailyCount(savedCounts[kind],GUILD_DAILY_DEFAULT_COUNTS[kind])
+    ]));
+    const savedKeys=(data.keysByKind&&typeof data.keysByKind==='object')?data.keysByKind:null;
+    currentGuildDailyKeysByKind=emptyGuildDailyKeysByKind();
+    if(savedKeys){
+      GUILD_DAILY_REQUEST_KINDS.forEach(kind=>{
+        currentGuildDailyKeysByKind[kind]=Array.isArray(savedKeys[kind])?savedKeys[kind].map(String):[];
+      });
+    }else{
+      currentGuildDailyCount=Math.max(1,Math.min(10,Number(data.count)||5));
+      currentGuildDailyLegacyKeys=Array.isArray(data.keys)?data.keys.map(String):[];
+      currentGuildDailyKeys=[...currentGuildDailyLegacyKeys];
+    }
+    if(savedKeys) syncGuildDailyLegacyFields();
   }catch(e){
     console.warn('guild daily state load failed',e);
+    currentGuildDailyCounts={...GUILD_DAILY_DEFAULT_COUNTS};
+    currentGuildDailyKeysByKind=emptyGuildDailyKeysByKind();
     currentGuildDailyCount=5;
     currentGuildDailyKeys=[];
+    currentGuildDailyLegacyKeys=[];
     currentGuildDailyAreaId='';
   }
 }
 function saveGuildDailyState(){
   try{
+    syncGuildDailyLegacyFields();
     const payload={
       count:currentGuildDailyCount,
       keys:(currentGuildDailyKeys||[]).map(String),
+      countsByKind:Object.fromEntries(GUILD_DAILY_REQUEST_KINDS.map(kind=>[kind,normalizeGuildDailyCount(currentGuildDailyCounts[kind],GUILD_DAILY_DEFAULT_COUNTS[kind])])),
+      keysByKind:Object.fromEntries(GUILD_DAILY_REQUEST_KINDS.map(kind=>[kind,(currentGuildDailyKeysByKind[kind]||[]).map(String)])),
       areaId:String(currentGuildDailyAreaId||''),
       updatedAt:new Date().toISOString(),
       source:'database_admin_facility'
@@ -2610,7 +2649,7 @@ const FACILITY_DEFS = [
     role:'受注可能クエストの掲示・受付を担当。重要クエストとデイリークエストを分けて表示する。',
     services:[
       {name:'重要クエスト受付', price:'0G', description:'施設やエリアの解放などに必要な一度きりの依頼を掲示する。'},
-      {name:'デイリークエスト掲示', price:'0G', description:'登録済み候補から指定件数を抽選して掲示する。'}
+      {name:'デイリークエスト掲示', price:'0G', description:'拠点内依頼・エリア依頼・納品依頼を種別ごとに抽選して掲示する。'}
     ]
   }
 ];
@@ -2635,7 +2674,7 @@ const SYSTEM_HELP = [
       "骨董屋は未鑑定スクロールの高額ランダム販売、施設鑑定、魔導インク・祈祷紙・術式鑑定具・聖印・魔印の常設販売を扱う。店頭ではスクロールの中身を公開しない。",
       "ギルドは受注可能クエストを、重要クエストとデイリークエストに分けて掲示する。",
       "重要クエストは有効列がTRUEのものだけ、ギルドの受注可能一覧に表示する。",
-      "デイリークエストは再受注可能な依頼として、選択した最終解放エリア以下の候補だけをギルドのデイリー欄から抽選する。",
+      "デイリークエストは再受注可能な依頼として、選択した抽選対象エリア以下の候補から、拠点内依頼・エリア依頼・納品依頼を種別ごとに独立して抽選する。",
       "重要クエストの戦闘は4人を基準にし、サポートを含む2人相当を下限として出現数を調整する。人数は公開クエスト本文には表示しない。",
       "戦闘デイリーは1人から受注でき、重要クエストより軽い人数補正を使う。採取・納品・調査などの非戦闘デイリーは人数で条件を増減させない。",
       "スクロール鑑定は鑑定技能で行う。術式化の自力判定は集中で行う。",
@@ -3242,40 +3281,31 @@ function guildQuestCardHtml(q={}){
     ? `<div class="guild-quest-desc"><b>内容：</b>${escapeHtml(q.questType||'未設定')}</div>`
     : `<div class="guild-quest-desc"><b>依頼区分：</b>${escapeHtml(q.requestKind||'未設定')}／<b>内容：</b>${escapeHtml(q.questType||'未設定')}</div>`;
   const skillLine=!delivery&&q.recommendedSkills?`<div class="guild-quest-desc"><b>推奨技能：</b>${escapeHtml(q.recommendedSkills)}</div>`:'';
-  const availabilityLine=(q.requestKind==='拠点内依頼'||delivery)?`<div class="guild-quest-desc"><b>解放段階：</b>${escapeHtml(q.areaName||'未設定')}</div>`:'';
   return `<div class="guild-quest-card${important&&!isVisible?' is-disabled':''}">
     <div class="guild-quest-card-title"><span>クエスト名：${escapeHtml(q.name||q.id||'名称未設定')}</span><span>${visibilityButton}</span></div>
     ${kindLine}
     ${skillLine}
     <div class="guild-quest-desc"><b>クエスト説明：</b>${escapeHtml(q.description||'説明未設定')}</div>
     <div class="guild-quest-desc"><b>実施場所：</b>${escapeHtml(questFacilityLocation(q))}</div>
-    ${availabilityLine}
     ${q.deliveryItems?`<div class="guild-quest-desc"><b>納品物：</b>${escapeHtml(q.deliveryItems)}</div>`:''}
     <div class="guild-quest-desc"><b>達成条件：</b>${escapeHtml(q.clearCondition||'未設定')}</div>
     <div class="guild-quest-desc"><b>報酬：</b>${escapeHtml(questPublicRewardFacility(q)||'なし')}（${escapeHtml(q.rewardScope||'各PC')}）</div>
   </div>`;
 }
-const GUILD_DAILY_REQUEST_KINDS=['拠点内依頼','エリア依頼','納品依頼'];
-function pickBalancedDailyQuests(rows,count=5){
+function shuffleGuildDailyRows(rows=[]){
   const list=[...(rows||[])];
-  const target=Math.min(Math.max(0,Number(count)||0),list.length);
-  if(target===0)return [];
-  const picked=[];const used=new Set();
-  if(target>=GUILD_DAILY_REQUEST_KINDS.length){
-    GUILD_DAILY_REQUEST_KINDS.forEach(kind=>{
-      const q=list.find(row=>String(row.requestKind||'').trim()===kind&&!used.has(String(row.id||row.name||'')));
-      if(q){picked.push(q);used.add(String(q.id||q.name||''));}
-    });
+  for(let i=list.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [list[i],list[j]]=[list[j],list[i]];
   }
-  list.forEach(q=>{const key=String(q.id||q.name||'');if(picked.length<target&&!used.has(key)){picked.push(q);used.add(key);}});
-  return picked.slice(0,target);
+  return list;
 }
-function dailyQuestSampleForToday(rows,count=5){
+function dailyQuestSampleForToday(rows,count=5,seedSuffix=''){
   const list=[...(rows||[])];
-  const day=new Date().toLocaleDateString('sv-SE');
+  const day=new Date().toLocaleDateString('sv-SE')+'|'+String(seedSuffix||'');
   let seed=0; for(const ch of day) seed=(seed*31+ch.charCodeAt(0))>>>0;
   for(let i=list.length-1;i>0;i--){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const j=seed%(i+1);[list[i],list[j]]=[list[j],list[i]];}
-  return pickBalancedDailyQuests(list,count);
+  return list.slice(0,Math.min(Math.max(0,Number(count)||0),list.length));
 }
 function guildDailyAreaRows(){
   return [...(state.exploration_areas||[])].sort((a,b)=>{
@@ -3290,13 +3320,15 @@ function guildDailySelectedArea(){
   if(!area)area=rows[0]||null;
   if(area && currentGuildDailyAreaId!==String(area.id||area.name||'')){
     currentGuildDailyAreaId=String(area.id||area.name||'');
-    saveGuildDailyState();
+    if(!currentGuildDailyLegacyKeys.length)saveGuildDailyState();
   }
   return area;
 }
-function guildDailyCandidateRows(){
+function guildDailyCandidateRows(kind=''){
   const maxArea=guildDailySelectedArea();
+  const targetKind=String(kind||'').trim();
   return facilityQuestRows('デイリー').filter(q=>{
+    if(targetKind && String(q.requestKind||'').trim()!==targetKind)return false;
     if(!maxArea)return true;
     const area=(state.exploration_areas||[]).find(a=>String(a.name||'').trim()===String(q.areaName||'').trim());
     if(!area)return true;
@@ -3304,49 +3336,70 @@ function guildDailyCandidateRows(){
   });
 }
 function guildDailyAreaOptionsHtml(){
+  const selected=guildDailySelectedArea();
+  const selectedId=String(selected?.id||selected?.name||'');
   return guildDailyAreaRows().map(a=>{
     const id=String(a.id||a.name||'');
-    return `<option value="${escapeHtml(id)}"${id===String(guildDailySelectedArea()?.id||guildDailySelectedArea()?.name||'')?' selected':''}>${escapeHtml(a.name||a.id)}まで</option>`;
+    return `<option value="${escapeHtml(id)}"${id===selectedId?' selected':''}>${escapeHtml(a.name||a.id)}まで</option>`;
   }).join('');
 }
-function guildDailySelectionHasRequiredKinds(picked,rows,target){
-  if(target<GUILD_DAILY_REQUEST_KINDS.length)return true;
-  return GUILD_DAILY_REQUEST_KINDS.every(kind=>{
-    const available=rows.some(q=>String(q.requestKind||'').trim()===kind);
-    return !available||picked.some(q=>String(q.requestKind||'').trim()===kind);
+function migrateGuildDailyLegacyKeys(){
+  if(!currentGuildDailyLegacyKeys.length)return;
+  const map=new Map(guildDailyCandidateRows().map(q=>[String(q.id||q.name||''),q]));
+  const migrated=emptyGuildDailyKeysByKind();
+  currentGuildDailyLegacyKeys.forEach(key=>{
+    const q=map.get(String(key));
+    const kind=String(q?.requestKind||'').trim();
+    if(GUILD_DAILY_REQUEST_KINDS.includes(kind))migrated[kind].push(String(key));
   });
+  const migratedCount=GUILD_DAILY_REQUEST_KINDS.reduce((sum,kind)=>sum+migrated[kind].length,0);
+  if(migratedCount){
+    currentGuildDailyKeysByKind=migrated;
+    GUILD_DAILY_REQUEST_KINDS.forEach(kind=>{
+      if(migrated[kind].length)currentGuildDailyCounts[kind]=migrated[kind].length;
+    });
+  }
+  currentGuildDailyLegacyKeys=[];
 }
-function guildDailySelectedRows(){
-  const rows=guildDailyCandidateRows();
+function guildDailySelectedRowsByKind(kind=''){
+  const targetKind=GUILD_DAILY_REQUEST_KINDS.includes(kind)?kind:GUILD_DAILY_REQUEST_KINDS[0];
+  migrateGuildDailyLegacyKeys();
+  const rows=guildDailyCandidateRows(targetKind);
   const map=new Map(rows.map(q=>[String(q.id||q.name||''),q]));
-  let picked=(currentGuildDailyKeys||[]).map(k=>map.get(String(k))).filter(Boolean).slice(0,currentGuildDailyCount);
-  const target=Math.min(currentGuildDailyCount,rows.length);
+  const target=Math.min(normalizeGuildDailyCount(currentGuildDailyCounts[targetKind],GUILD_DAILY_DEFAULT_COUNTS[targetKind]),rows.length);
+  let picked=(currentGuildDailyKeysByKind[targetKind]||[]).map(k=>map.get(String(k))).filter(Boolean).slice(0,target);
   if(picked.length<target){
     const used=new Set(picked.map(q=>String(q.id||q.name||'')));
-    const extra=dailyQuestSampleForToday(rows.filter(q=>!used.has(String(q.id||q.name||''))),target-picked.length);
-    picked=picked.concat(extra);
-  }
-  if(!guildDailySelectionHasRequiredKinds(picked,rows,target)){
-    picked=dailyQuestSampleForToday(rows,target);
+    picked=picked.concat(dailyQuestSampleForToday(
+      rows.filter(q=>!used.has(String(q.id||q.name||''))),
+      target-picked.length,
+      `${targetKind}|${currentGuildDailyAreaId}`
+    ));
   }
   const validKeys=picked.map(q=>String(q.id||q.name||''));
-  if(JSON.stringify(validKeys)!==JSON.stringify(currentGuildDailyKeys||[])){
-    currentGuildDailyKeys=validKeys;
+  if(JSON.stringify(validKeys)!==JSON.stringify(currentGuildDailyKeysByKind[targetKind]||[])){
+    currentGuildDailyKeysByKind[targetKind]=validKeys;
     saveGuildDailyState();
   }
   return picked;
 }
-function rerollGuildDailyQuests(){
-  const rows=guildDailyCandidateRows();
-  const current=new Set((currentGuildDailyKeys||[]).map(String));
-  const fresh=rows.filter(q=>!current.has(String(q.id||q.name||'')));
-  const repeated=rows.filter(q=>current.has(String(q.id||q.name||'')));
-  [fresh,repeated].forEach(pool=>{for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}});
-  const picked=pickBalancedDailyQuests(fresh.concat(repeated),currentGuildDailyCount);
-  currentGuildDailyKeys=picked.map(q=>String(q.id||q.name||''));
+function guildDailySelectedRows(){
+  return GUILD_DAILY_REQUEST_KINDS.flatMap(kind=>guildDailySelectedRowsByKind(kind));
+}
+function rerollGuildDailyQuests(kind=''){
+  const targetKind=GUILD_DAILY_REQUEST_KINDS.includes(kind)?kind:'';
+  const kinds=targetKind?[targetKind]:GUILD_DAILY_REQUEST_KINDS;
+  kinds.forEach(currentKind=>{
+    const rows=guildDailyCandidateRows(currentKind);
+    const current=new Set((currentGuildDailyKeysByKind[currentKind]||[]).map(String));
+    const fresh=shuffleGuildDailyRows(rows.filter(q=>!current.has(String(q.id||q.name||''))));
+    const repeated=shuffleGuildDailyRows(rows.filter(q=>current.has(String(q.id||q.name||''))));
+    const count=normalizeGuildDailyCount(currentGuildDailyCounts[currentKind],GUILD_DAILY_DEFAULT_COUNTS[currentKind]);
+    currentGuildDailyKeysByKind[currentKind]=fresh.concat(repeated).slice(0,Math.min(count,rows.length)).map(q=>String(q.id||q.name||''));
+  });
   saveGuildDailyState();
   renderFacilitiesPanel();
-  toast(`デイリークエストを${picked.length}件再抽選しました`);
+  toast(targetKind?`${targetKind}を再抽選しました`:'デイリークエストを種別ごとに再抽選しました');
 }
 const GUILD_SUPPORT_SKILL_LABELS = {
   athletics:'運動',force:'力業',melee:'近接',guard:'防御',
@@ -3588,18 +3641,39 @@ function guildSupportListText(){
     rows.length?rows.map(guildSupportCharacterText).join('\n'):'・本日の選出はありません'
   ].join('\n');
 }
+function guildDailyKindSectionHtml(kind='拠点内依頼'){
+  const rows=guildDailySelectedRowsByKind(kind);
+  const count=normalizeGuildDailyCount(currentGuildDailyCounts[kind],GUILD_DAILY_DEFAULT_COUNTS[kind]);
+  const countOptions=[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<option value="${n}"${n===count?' selected':''}>${n}件</option>`).join('');
+  return `<div class="guild-daily-kind-block">
+    <div class="guild-daily-kind-head">
+      <h5>${escapeHtml(kind)} <span class="view-mode-chip">${rows.length}件</span></h5>
+      <div class="guild-daily-kind-actions">
+        <label>表示件数<select data-guild-daily-count="${escapeHtml(kind)}">${countOptions}</select></label>
+        <button class="secondary" type="button" data-guild-daily-reroll="${escapeHtml(kind)}">${escapeHtml(kind)}を再抽選</button>
+      </div>
+    </div>
+    ${rows.length ? rows.map(guildQuestCardHtml).join('') : `<p class="notice">現在の条件で掲示する${escapeHtml(kind)}はありません。</p>`}
+  </div>`;
+}
 function guildQuestSectionHtml(category='重要'){
-  const rows=category==='デイリー' ? guildDailySelectedRows() : facilityQuestRows(category,currentGuildShowHiddenImportant);
-  const title=category==='重要' ? '重要クエスト' : 'デイリークエスト';
-  const note=category==='重要'
-    ? '施設やエリアの解放などに必要な受注可能クエストです。非表示の重要クエストは通常表示とコピーから除外します。'
-    : '選択した最終解放エリアまでの候補から抽選します。3件以上を掲示する場合は、候補が存在する限り拠点内・エリア・納品を各1件以上含めます。再抽選時は現在の選出との重複をできるだけ避けます。';
-  const controls=category==='デイリー' ? `<div class="guild-daily-controls"><label>最終解放エリア<select data-guild-daily-area>${guildDailyAreaOptionsHtml()}</select></label><label>表示件数<select data-guild-daily-count>${[1,2,3,4,5,6,7,8,9,10].map(n=>`<option value="${n}"${n===currentGuildDailyCount?' selected':''}>${n}件</option>`).join('')}</select></label><button class="secondary" type="button" data-guild-daily-reroll>デイリークエストを再抽選</button><button class="ghost" type="button" data-guild-copy-category="デイリー">現在のデイリーをコピー</button></div>` : '';
+  if(category==='デイリー'){
+    const rows=guildDailySelectedRows();
+    return `<section class="guild-quest-section">
+      <h4>デイリークエスト <span class="view-mode-chip">${rows.length}件</span></h4>
+      <p class="table-toolbar-note">抽選対象エリア以下の候補から、拠点内依頼・エリア依頼・納品依頼をそれぞれ独立して抽選します。ある種別を再抽選しても、ほかの種別の選出は変わりません。</p>
+      <div class="guild-daily-controls">
+        <label>抽選対象エリア<select data-guild-daily-area>${guildDailyAreaOptionsHtml()}</select></label>
+        <button class="ghost" type="button" data-guild-copy-category="デイリー">現在のデイリーをコピー</button>
+      </div>
+      <div class="guild-daily-kind-list">${GUILD_DAILY_REQUEST_KINDS.map(guildDailyKindSectionHtml).join('')}</div>
+    </section>`;
+  }
+  const rows=facilityQuestRows(category,currentGuildShowHiddenImportant);
   return `<section class="guild-quest-section">
-    <h4>${escapeHtml(title)} <span class="view-mode-chip">${rows.length}件</span></h4>
-    <p class="table-toolbar-note">${escapeHtml(note)}</p>
-    ${controls}
-    ${rows.length ? rows.map(guildQuestCardHtml).join('') : `<p class="notice">受注可能な${escapeHtml(title)}はありません。</p>`}
+    <h4>重要クエスト <span class="view-mode-chip">${rows.length}件</span></h4>
+    <p class="table-toolbar-note">施設やエリアの解放などに必要な受注可能クエストです。非表示の重要クエストは通常表示とコピーから除外します。</p>
+    ${rows.length ? rows.map(guildQuestCardHtml).join('') : '<p class="notice">受注可能な重要クエストはありません。</p>'}
   </section>`;
 }
 function guildQuestListHtml(){
@@ -3616,16 +3690,21 @@ function questFacilityLine(q={}){
     !delivery&&q.recommendedSkills?`推奨技能：${q.recommendedSkills}`:'',
     `クエスト説明：${q.description||'説明未設定'}`,
     `実施場所：${questFacilityLocation(q)}`,
-    (q.requestKind==='拠点内依頼'||delivery)?`解放段階：${q.areaName||'未設定'}`:'',
     q.deliveryItems?`納品物：${q.deliveryItems}`:'',
     `達成条件：${q.clearCondition||'未設定'}`,
     `報酬：${questPublicRewardFacility(q)||'なし'}（${q.rewardScope||'各PC'}）`
   ].filter(Boolean).join('\n');
 }
 function guildQuestCategoryText(category='重要'){
-  const rows=category==='デイリー' ? guildDailySelectedRows() : facilityQuestRows('重要');
-  const title=category==='デイリー' ? 'デイリークエスト' : '重要クエスト';
-  return [`【ギルド・${title}】`, rows.length ? rows.map(questFacilityLine).join('\n\n') : `- 受注可能な${title}はありません`].join('\n');
+  if(category==='デイリー'){
+    const groups=GUILD_DAILY_REQUEST_KINDS.map(kind=>{
+      const rows=guildDailySelectedRowsByKind(kind);
+      return [`■${kind}`,rows.length?rows.map(questFacilityLine).join('\n\n'):'- 選出なし'].join('\n');
+    });
+    return ['【ギルド・デイリークエスト】',...groups].join('\n\n');
+  }
+  const rows=facilityQuestRows('重要');
+  return ['【ギルド・重要クエスト】',rows.length?rows.map(questFacilityLine).join('\n\n'):'- 受注可能な重要クエストはありません'].join('\n');
 }
 function guildQuestListText(){
   return [
@@ -5467,7 +5546,7 @@ function questCardHtml(row, idx){
   const fixedCount = parseQuestFixedEventsEditor(row.fixedEvents || '').length;
   const important=String(row.questCategory||'').trim()==='重要';
   const location=String(row.questLocation||((row.requestKind==='拠点内依頼'||row.requestKind==='納品依頼')?'拠点':row.areaName)||'').trim();
-  const badges = [monsterBadge('分類', important?'重要クエスト':row.requestKind), monsterBadge('内容', row.questType), monsterBadge('ランク', playerRankLabel(row.rank)), monsterBadge('実施場所', location), (row.requestKind==='拠点内依頼'||row.requestKind==='納品依頼')?monsterBadge('解放段階',row.areaName):null].filter(Boolean).join('');
+  const badges = [monsterBadge('分類', important?'重要クエスト':row.requestKind), monsterBadge('内容', row.questType), monsterBadge('ランク', playerRankLabel(row.rank)), monsterBadge('実施場所', location)].filter(Boolean).join('');
   const summary = [
     monsterStat('進行', row.progressStep || '25%'),
     monsterStat('固定イベント', `${fixedCount}件`),
@@ -7232,7 +7311,6 @@ function cleanUploadRow(row){
   return out;
 }
 
-const DIRECT_POST_MAX_BODY_BYTES = 4 * 1024 * 1024;
 const DIRECT_POST_TIMEOUT_MS = 180000;
 
 function dbHashScopeCode(scope){
@@ -7274,7 +7352,7 @@ function directPostForm(action,payloadObject,timeoutMs=DIRECT_POST_TIMEOUT_MS){
     add('token',token);
     add('payload',JSON.stringify(payloadObject||{}));
     let settled=false;
-    const timer=setTimeout(()=>finishReject(new Error('一括POST送信の応答がタイムアウトしました。')),timeoutMs);
+    const timer=setTimeout(()=>finishReject(new Error('POST送信の応答がタイムアウトしました。')),timeoutMs);
     function cleanup(){
       clearTimeout(timer);
       window.removeEventListener('message',onMessage);
@@ -7298,51 +7376,6 @@ function canUseDirectPostUpload(){
   return typeof TextEncoder==='function'
     && window.crypto && crypto.subtle
     && (isGasMode() || (typeof document!=='undefined' && typeof HTMLFormElement!=='undefined'));
-}
-async function uploadRowsByDirectPost(key,rows,mode,dataKindScope='',options={}){
-  if(!canUseDirectPostUpload()){
-    const e=new Error('一括POST送信を利用できない環境です。');e.allowLegacyFallback=true;throw e;
-  }
-  const list=(rows||[]).map(cleanUploadRow);
-  const text=options.serializedRows||JSON.stringify(list);
-  uploadProgressStart(`${labelKey(key)}の一括POST送信`,list.length);
-  uploadProgressUpdate({phase:`${labelKey(key)}を圧縮中`,percent:12,currentRows:0,totalRows:list.length,detail:'1回のPOSTで送るデータを圧縮しています。'});
-  let uploadEncoding='text';
-  let rowsPayload=text;
-  let checksum='';
-  try{
-    if(canUseGzipUpload()){
-      rowsPayload=await withUploadTimeout(gzipBase64FromText(text),30000,'一括POST用データの圧縮がタイムアウトしました。');
-      uploadEncoding='gzipBase64';
-    }
-    checksum=options.checksum||await sha256HexText(text);
-  }catch(e){e.allowLegacyFallback=true;throw e;}
-  const token=uploadToken(mode==='replace'?'postrp':'postup',key);
-  const request=payload('directUpload',{
-    token,sheetKey:key,mode,dataKindScope,uploadEncoding,rowsPayload,
-    rowCount:list.length,checksum
-  });
-  const requestText=JSON.stringify(request);
-  const bodyBytes=new TextEncoder().encode(requestText).length;
-  if(bodyBytes>DIRECT_POST_MAX_BODY_BYTES){
-    const e=new Error(`一括POSTデータが${formatUploadBytes(bodyBytes)}あるため、安全上限${formatUploadBytes(DIRECT_POST_MAX_BODY_BYTES)}を超えました。`);
-    e.allowLegacyFallback=true;
-    uploadProgressLog('サイズ超過のため従来の圧縮分割送信へ切り替えます。');
-    throw e;
-  }
-  uploadProgressUpdate({phase:`${labelKey(key)}を一括送信中`,percent:45,currentRows:list.length,totalRows:list.length,rawChars:text.length,sentChars:bodyBytes,detail:`${formatUploadBytes(bodyBytes)}を1回のPOSTで送信しています。`});
-  let result;
-  try{
-    result=isGasMode()?await callApi(request):await directPostForm('directUpload',request);
-  }catch(e){e.allowLegacyFallback=true;throw e;}
-  if(!result||!result.ok){
-    const e=new Error((result&&result.error)||`${labelKey(key)}の一括POST送信に失敗しました`);
-    e.directUploadFatal=true;
-    throw e;
-  }
-  const out={...result,checksum,hashKey:dbHashPublicKey(mode,key,dataKindScope),sentRows:list.length,sentChunks:1,sentParts:1,rawChars:text.length,bodyBytes};
-  uploadProgressDone(out);
-  return out;
 }
 async function loadServerDbHashes(){
   const res=await callApi(payload('dbHashes'));
@@ -7583,26 +7616,98 @@ async function uploadRowsByGzipChunks(key, rows, mode, dataKindScope=''){
     throw e;
   }
 }
+async function uploadRowsByGzipPostChunks(key, rows, mode, dataKindScope=''){
+  const list = rows || [];
+  const fingerprint = uploadResumeFingerprint(key,mode,dataKindScope,list);
+  const previous = uploadResumeLoad();
+  const canResume = previous && previous.encoding==='gzipBase64' && previous.fingerprint===fingerprint && previous.token;
+  const token = canResume ? previous.token : uploadToken(mode === 'replace' ? 'gzpostrp' : 'gzpostup', key);
+  uploadProgressStart(`${labelKey(key)}の圧縮分割POST送信${canResume?'（続きから）':''}`, list.length);
+  if(!canResume){
+    const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'gzipBase64', dataKindScope}));
+    if(!begin.ok) throw new Error(begin.error || `${labelKey(key)}のDB圧縮送信準備に失敗しました`);
+  }else uploadProgressLog(`保存済み位置から再開します：チャンク${Number(previous.nextChunk||0)+1}`);
+  const chunks = makeGzipUploadRowChunks(list);
+  let startChunk = Math.min(chunks.length, Number(canResume ? previous.nextChunk||0 : 0));
+  let sentChunks = startChunk;
+  let sentParts = Number(canResume ? previous.sentParts||0 : 0);
+  let rawChars = 0;
+  let gzipBase64Chars = 0;
+  try{
+    uploadProgressLog(`圧縮単位：最大${UPLOAD_GZIP_RAW_CHARS_PER_CHUNK.toLocaleString()}文字。全${chunks.length}チャンクをPOSTで分割送信します。`);
+    let sentRows = chunks.slice(0,startChunk).reduce((n,r)=>n+r.length,0);
+    for(let c=startChunk;c<chunks.length;c++){
+      const text=JSON.stringify(chunks[c]);
+      rawChars+=text.length;
+      uploadProgressUpdate({
+        phase:`${labelKey(key)}を圧縮中`,
+        percent:10+Math.min(20,(c/Math.max(1,chunks.length))*20),
+        currentRows:sentRows,totalRows:list.length,chunks:`${c+1}/${chunks.length}`,parts:sentParts,
+        detail:`チャンク${c+1}を圧縮しています。`
+      });
+      const gzipBase64=await withUploadTimeout(
+        gzipBase64FromText(text),
+        UPLOAD_GZIP_CHUNK_TIMEOUT_MS,
+        `チャンク${c+1}の圧縮がタイムアウトしました。`
+      );
+      gzipBase64Chars+=gzipBase64.length;
+      uploadProgressLog(`チャンク${c+1}/${chunks.length}：${chunks[c].length}行 / ${formatUploadBytes(gzipBase64.length*.75)}をPOST送信`);
+      const res=await directPostForm('putUploadGzipChunk',{
+        token,chunkIndex:c,partIndex:0,valueB64:gzipBase64
+      },90000);
+      if(!res.ok)throw new Error(res.error||`${labelKey(key)}のDB圧縮分割POST送信に失敗しました`);
+      sentChunks=c+1;
+      sentParts++;
+      sentRows+=chunks[c].length;
+      uploadResumeSave({
+        encoding:'gzipBase64',transport:'post',fingerprint,token,key,mode,dataKindScope,
+        sentParts,nextChunk:c+1,nextPart:0,updatedAt:new Date().toISOString()
+      });
+      uploadProgressUpdate({
+        phase:`${labelKey(key)}を圧縮分割POST送信中`,
+        percent:30+Math.min(60,((c+1)/Math.max(1,chunks.length))*60),
+        currentRows:sentRows,totalRows:list.length,chunks:`${c+1}/${chunks.length}`,parts:sentParts,
+        rawChars,sentChars:gzipBase64Chars*.75,
+        detail:`チャンク${c+1}/${chunks.length}を送信しました。`
+      });
+      if(chunks.length>1)await sleep(15);
+    }
+    uploadProgressUpdate({
+      phase:'DB反映中',percent:94,currentRows:list.length,totalRows:list.length,
+      chunks:`${sentChunks}/${chunks.length}`,parts:sentParts,
+      detail:'Apps Script側で復元してDBへ反映しています。'
+    });
+    const commit=await directPostForm('commitUpload',{token},DIRECT_POST_TIMEOUT_MS);
+    if(!commit.ok)throw new Error(commit.error||`${labelKey(key)}のDB反映に失敗しました`);
+    uploadResumeClear();
+    const result={...commit,uploadEncoding:'gzipBase64-post-chunks',sentRows:list.length,sentChunks,sentParts,rawChars,gzipBase64Chars};
+    uploadProgressDone(result);
+    return result;
+  }catch(e){
+    uploadProgressFail(e);
+    uploadProgressLog('送信位置を保存しました。再実行時は未送信チャンクから再開します。');
+    throw e;
+  }
+}
+
 async function uploadRowsByChunks(key, rows, mode, dataKindScope='', options={}){
   await assertServerVersion();
   const list=rows||[];
-  try{
-    return await uploadRowsByDirectPost(key,list,mode,dataKindScope,options);
-  }catch(directError){
-    if(directError&&directError.directUploadFatal) throw directError;
-    if(!(directError&&directError.allowLegacyFallback)) throw directError;
-    console.warn('direct POST upload failed; fallback to legacy chunks',directError);
-    uploadProgressLog('一括POST送信を利用できなかったため、圧縮分割送信へ切り替えます。');
-    toast(`${labelKey(key)}を従来の圧縮分割送信へ切り替えます。`,'warn');
-  }
   if(canUseGzipUpload()){
-    try{return await uploadRowsByGzipChunks(key,list,mode,dataKindScope);}
-    catch(gzipError){
-      const saved=uploadResumeLoad();
-      if(saved) throw gzipError;
-      console.warn('gzip split upload failed; fallback to text chunks',gzipError);
-      toast(`${labelKey(key)}の圧縮分割送信に失敗したため、通常分割送信へ切り替えます。`,'warn');
-      return await uploadRowsByTextChunks(key,list,mode,dataKindScope);
+    try{
+      return await uploadRowsByGzipPostChunks(key,list,mode,dataKindScope);
+    }catch(postChunkError){
+      console.warn('gzip POST chunk upload failed; fallback to JSONP chunks',postChunkError);
+      uploadProgressLog('圧縮分割POST送信を継続できなかったため、保存済み位置から圧縮分割送信へ切り替えます。');
+      toast(`${labelKey(key)}を圧縮分割送信へ切り替えます。`,'warn');
+      try{return await uploadRowsByGzipChunks(key,list,mode,dataKindScope);}
+      catch(gzipError){
+        const saved=uploadResumeLoad();
+        if(saved) throw gzipError;
+        console.warn('gzip split upload failed; fallback to text chunks',gzipError);
+        toast(`${labelKey(key)}の圧縮分割送信に失敗したため、通常分割送信へ切り替えます。`,'warn');
+        return await uploadRowsByTextChunks(key,list,mode,dataKindScope);
+      }
     }
   }
   return await uploadRowsByTextChunks(key,list,mode,dataKindScope);
@@ -8059,7 +8164,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.326';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.327';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-07-26';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([
@@ -8358,9 +8463,7 @@ document.addEventListener('click',e=>{
   const guildSupportLoad=e.target.closest('[data-guild-support-load]'); if(guildSupportLoad){ loadGuildSupportCharacters(true); return; }
   const guildSupportReroll=e.target.closest('[data-guild-support-reroll]'); if(guildSupportReroll){ rerollGuildSupportCharacters(); return; }
   const guildSupportCopy=e.target.closest('[data-guild-support-copy]'); if(guildSupportCopy){ copyAdminTextDirect(guildSupportListText()).then(ok=>{if(ok)toast('本日のサポートキャラクター一覧をコピーしました');}); return; }
-  const guildDailyArea=e.target.closest('[data-guild-daily-area]'); if(guildDailyArea){ currentGuildDailyAreaId=String(guildDailyArea.value||''); currentGuildDailyKeys=[]; saveGuildDailyState(); rerollGuildDailyQuests(); return; }
-  const guildDailyCount=e.target.closest('[data-guild-daily-count]'); if(guildDailyCount){ currentGuildDailyCount=Math.max(1,Math.min(10,Number(guildDailyCount.value)||5)); saveGuildDailyState(); rerollGuildDailyQuests(); return; }
-  const guildDailyReroll=e.target.closest('[data-guild-daily-reroll]'); if(guildDailyReroll){ rerollGuildDailyQuests(); return; }
+  const guildDailyReroll=e.target.closest('[data-guild-daily-reroll]'); if(guildDailyReroll){ rerollGuildDailyQuests(String(guildDailyReroll.dataset.guildDailyReroll||'')); return; }
   const guildHiddenToggle=e.target.closest('[data-guild-toggle-hidden]'); if(guildHiddenToggle){ currentGuildShowHiddenImportant=!currentGuildShowHiddenImportant; renderFacilitiesPanel(); return; }
   const guildToggle=e.target.closest('[data-guild-important-toggle]'); if(guildToggle){
     const key=guildToggle.dataset.guildImportantToggle||'';
@@ -8490,6 +8593,25 @@ document.addEventListener('input',e=>{
   if(e.target.closest('[data-modifier-editor]')) syncModifierEditor(e.target.closest('[data-modifier-editor]'));
 });
 document.addEventListener('change',e=>{
+  if(e.target?.matches?.('[data-guild-daily-area]')){
+    currentGuildDailyAreaId=String(e.target.value||'');
+    currentGuildDailyKeysByKind=emptyGuildDailyKeysByKind();
+    currentGuildDailyLegacyKeys=[];
+    saveGuildDailyState();
+    renderFacilitiesPanel();
+    toast('抽選対象エリアを変更しました');
+    return;
+  }
+  if(e.target?.matches?.('[data-guild-daily-count]')){
+    const kind=String(e.target.dataset.guildDailyCount||'').trim();
+    if(GUILD_DAILY_REQUEST_KINDS.includes(kind)){
+      currentGuildDailyCounts[kind]=normalizeGuildDailyCount(e.target.value,GUILD_DAILY_DEFAULT_COUNTS[kind]);
+      currentGuildDailyKeysByKind[kind]=[];
+      saveGuildDailyState();
+      renderFacilitiesPanel();
+    }
+    return;
+  }
   if(e.target?.matches?.('[data-guild-support-count]')){
     currentGuildSupportCount=Math.max(1,Math.min(10,Number(e.target.value)||3));
     currentGuildSupportIds=[];
