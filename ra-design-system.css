@@ -528,7 +528,7 @@ body.ra-app .toast { color: var(--ra-ink); border-color: #9c8048 !important; bac
   }
 }
 
-/* v90.8.319 legibility + compact weapon tree revision */
+/* v90.8.323 legibility + compact weapon tree revision */
 :root {
   --ra-desk: #e6dfd2;
   --ra-desk-2: #f2ece1;
@@ -832,7 +832,7 @@ body.ra-facility .weapon-modal-header h3 { color: #2a414f !important; }
 }
 
 
-/* v90.8.319 UI performance and spacing pass */
+/* v90.8.323 UI performance and spacing pass */
 /* Large disclosures use a paint-only fade instead of intrinsic-height interpolation. */
 body.ra-app details::details-content {
   block-size: auto !important;
@@ -1034,7 +1034,7 @@ body.ra-facility .branch-label-side-toggle {
 }
 
 
-/* v90.8.319: ledger controls, clear selected hub tab, and natural scroll chaining. */
+/* v90.8.323: ledger controls, clear selected hub tab, and natural scroll chaining. */
 body.ra-hub .tabs {
   padding: 6px !important;
   gap: 7px !important;
@@ -1113,7 +1113,7 @@ body.ra-manager :is(.table-wrap,.tabs,.subtabs,.skill-prob-wrap,.log,.help-outpu
   overscroll-behavior-y: auto !important;
 }
 
-/* v90.8.319: illustrated ledger redesign using generated reusable UI assets. */
+/* v90.8.323: illustrated ledger redesign using generated reusable UI assets. */
 body.ra-app > main,
 body.ra-manager:not(.ra-hub) :is(.panel,.card,.help-card,.tab-panel,.github-public-db-panel),
 body.ra-hub header {
