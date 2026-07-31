@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.323</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.325</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -146,10 +146,10 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.323-dropfix4">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.325-dropfix4">
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.323｜更新：2026年7月31日</div>
+<div class="ra-build-info">v90.8.325｜更新：2026年7月31日</div>
 
 <header>
   <div class="header-inner">
@@ -400,7 +400,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.323';
+const VERSION='v90.8.325';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 const GITHUB_COMMON_DB_MANIFEST_URL=GITHUB_COMMON_DB_BASE+'manifest.json';
@@ -996,7 +996,11 @@ function questRandomEvents(q){
   if(!tableId)return [];
   return state.events.filter(e=>String(e.tableId||'').trim()===tableId && !isRumorEvent(e) && eventConditionType(e)==='なし');
 }
+function isDeliveryQuest(q={}){return String(q.requestKind||'').trim()==='納品依頼';}
+function isImportantQuest(q={}){return questCategoryFor(q)==='重要';}
+function questLocationText(q={}){return String(q.questLocation||((q.requestKind==='拠点内依頼'||q.requestKind==='納品依頼')?'拠点':q.areaName)||'未設定').trim();}
 function questStepAmount(q){
+  if(isDeliveryQuest(q))return 0;
   const n=getNumFromText(q&&q.progressStep,10);
   return Math.max(1, Math.min(100, Number.isFinite(n)?n:10));
 }
@@ -1013,6 +1017,7 @@ function renderQuestStepInfo(q,p){
   if(!q){box.textContent='クエストを選択してください。'; return;}
   const step=questStepAmount(q);
   const current=clamp(p&&p.value);
+  if(isDeliveryQuest(q)){box.innerHTML=`<div class="kv"><b>進行方式</b><span>納品確認で完了</span><b>納品物</b><span>${esc(q.deliveryItems||q.clearCondition||'未設定')}</span><b>現在</b><span>${current>=100?'完了':'未完了'}</span></div><p class="muted small">指定された品を受け取った後、「納品完了にする」を押してください。</p>`;return;}
   const nextValue=clamp(current+step);
   const next=nextQuestEvent(q,current);
   const nextText=next ? `${eventThreshold(next)}%：${next.eventName||'名称未設定'}` : 'なし';
@@ -1038,6 +1043,7 @@ function renderQuestEvents(){
   const box=$('questEventDetail');
   const q=selected($('questSelect'),state.quests);
   if(!box || !q){ if(box) box.textContent='クエストデータがありません。'; return; }
+  if(isDeliveryQuest(q)){box.innerHTML='<div class="muted small">納品依頼には固定イベント・ランダムイベントはありません。指定された品の受け渡しを確認してください。</div>';return;}
   const p=progressObj('quests',q.id||q.name);
   const fixedRows=questSpecificEvents(q);
   const randomRows=questRandomEvents(q);
@@ -1137,15 +1143,26 @@ function renderQuest(){
     $('questDetail').textContent='クエストデータがありません。';
     $('questBar').style.width='0%';
     $('questLabel').textContent='0%';
+    $('questAdvanceBtn').textContent='進行度を進める';
+    $('rollQuestEventBtn').disabled=false;
     renderQuestStepInfo(null,null);
     renderQuestEvents();
     return;
   }
   const p=progressObj('quests',q.id||q.name);
+  const delivery=isDeliveryQuest(q);
   $('questNote').value=p.note||'';
   $('questBar').style.width=clamp(p.value)+'%';
-  $('questLabel').textContent=clamp(p.value)+'%';
-  const randomFormation=questUsesRandomEncounter(q); $('questDetail').innerHTML=`<div class="kv"><b>分類</b><span>${esc(questCategoryFor(q))}${!questEnabled(q)?'<span class="quest-pill off">OFF</span>':'<span class="quest-pill">ON</span>'}</span><b>種別</b><span>${esc(q.questType||'')}</span><b>ランク</b><span>${esc(progressPlayerRank(q.rank)||'')}</span><b>エリア</b><span>${esc(q.areaName||'')}</span><b>進行上昇値</b><span>+${questStepAmount(q)}%</span><b>固定イベント数</b><span>${questSpecificEvents(q).length}件</span><b>クエストボス</b><span>${esc(questBossText(q))}</span><b>構成</b><span>${esc(questBossFormationText(q))}${randomFormation?' <button id="rerollQuestEncounterBtn" type="button" class="secondary" style="margin-left:8px;padding:5px 9px">編成を再抽選</button>':''}</span><b>クリア条件</b><span>${esc(q.clearCondition||'')}</span><b>報酬</b><span>${esc([q.rewardMoney,q.rewardItems,Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / '))}</span></div>${randomFormation?'<p class="muted small">表示中の構成はプレビューです。実際の戦闘発生時には、同じ人数条件で改めて再抽選します。</p>':''}${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`; $('rerollQuestEncounterBtn')?.addEventListener('click',rerollSelectedQuestEncounter);
+  $('questLabel').textContent=delivery?(clamp(p.value)>=100?'完了':'未完了'):clamp(p.value)+'%';
+  $('questAdvanceBtn').textContent=delivery?'納品完了にする':'進行度を進める';
+  $('rollQuestEventBtn').disabled=delivery;
+  const randomFormation=questUsesRandomEncounter(q);
+  const important=isImportantQuest(q);
+  const kindRow=important?'':`<b>依頼区分</b><span>${esc(q.requestKind||'未設定')}</span>`;
+  const skillRow=!delivery&&q.recommendedSkills?`<b>推奨技能</b><span>${esc(q.recommendedSkills)}</span>`:'';
+  const availabilityRow=(q.requestKind==='拠点内依頼'||delivery)?`<b>解放段階</b><span>${esc(q.areaName||'')}</span>`:'';
+  $('questDetail').innerHTML=`<div class="kv"><b>分類</b><span>${esc(questCategoryFor(q))}${!questEnabled(q)?'<span class="quest-pill off">OFF</span>':'<span class="quest-pill">ON</span>'}</span>${kindRow}<b>内容種別</b><span>${esc(q.questType||'')}</span>${skillRow}<b>報酬範囲</b><span>${esc(q.rewardScope||'各PC')}</span>${q.deliveryItems?`<b>納品物</b><span>${esc(q.deliveryItems)}</span>`:''}<b>ランク</b><span>${esc(progressPlayerRank(q.rank)||'')}</span><b>実施場所</b><span>${esc(questLocationText(q))}</span>${availabilityRow}<b>進行上昇値</b><span>${delivery?'納品確認':`+${questStepAmount(q)}%`}</span><b>固定イベント数</b><span>${questSpecificEvents(q).length}件</span><b>クエストボス</b><span>${esc(questBossText(q))}</span><b>構成</b><span>${esc(questBossFormationText(q))}${randomFormation?' <button id="rerollQuestEncounterBtn" type="button" class="secondary" style="margin-left:8px;padding:5px 9px">編成を再抽選</button>':''}</span><b>クリア条件</b><span>${esc(q.clearCondition||'')}</span><b>報酬</b><span>${esc([q.rewardMoney,q.rewardItems,Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / '))}（${esc(q.rewardScope||'各PC')}）</span></div>${randomFormation?'<p class="muted small">表示中の構成はプレビューです。実際の戦闘発生時には、同じ人数条件で改めて再抽選します。</p>':''}${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
+  $('rerollQuestEncounterBtn')?.addEventListener('click',rerollSelectedQuestEncounter);
   renderQuestStepInfo(q,p);
   renderQuestEvents();
 }
@@ -1161,7 +1178,7 @@ function renderMonster(){
 }
 function renderAll(){renderDayStatus(); syncDailyQuestSelectionFromFacility(); fillDropAreaSelect($('dropAreaSelect')?.value||''); ensureDailyQuestSelection(); fillQuestSelect($('questSelect')?.value || ''); fillEventTables(); fillRumorSelect(); fillRumorAreas(); fillInnRumorSelect(); fillTreasureTables(); fillAppraisalRules(); fillMonsterSearch($('monsterSelectValue')?.value || $('monsterSelect')?.value || ''); renderQuest(); renderArea(); renderMonster(); renderRumorResult(); renderDailyQuestResult(); renderLog();}
 function getNumFromText(s, fallback=0){const m=String(s||'').match(/[+-]?\d+/); return m?Number(m[0]):fallback;}
-function advanceQuestProgress(){const q=selected($('questSelect'),state.quests); if(!q)return; const p=progressObj('quests',q.id||q.name); const add=questStepAmount(q); const before=clamp(p.value); p.value=clamp(before+add); const fired=triggerQuestSpecificEvents(q,before,p.value); saveState(false); renderQuest(); addLog(`${q.name||q.id} の進行度を +${add}% しました。${before}% → ${p.value}%（行動回数は変更していません）`); if(fired.length && fired[0].treasureTableId){addLog(`確定入手：未鑑定の魔法または祈祷スクロール：★1×1（${fired[0].eventName||'クエスト固有イベント'}）`);}}
+function advanceQuestProgress(){const q=selected($('questSelect'),state.quests); if(!q)return; const p=progressObj('quests',q.id||q.name); const add=questStepAmount(q); const before=clamp(p.value); if(isDeliveryQuest(q)){p.value=100; saveState(false); renderQuest(); addLog(`${q.name||q.id} の納品を完了しました。`); return;} p.value=clamp(before+add); const fired=triggerQuestSpecificEvents(q,before,p.value); saveState(false); renderQuest(); addLog(`${q.name||q.id} の進行度を +${add}% しました。${before}% → ${p.value}%（行動回数は変更していません）`); if(fired.length && fired[0].treasureTableId){addLog(`確定入手：未鑑定の魔法または祈祷スクロール：★1×1（${fired[0].eventName||'クエスト固有イベント'}）`);}}
 function advanceAreaProgress(){const a=selected($('areaSelect'),state.areas); if(!a)return; const p=progressObj('areas',a.id||a.name); const add=areaStepAmount(a); const before=clamp(p.value); p.value=clamp(before+add); saveState(false); renderArea(); addLog(`${a.name||a.id} の探索進行度を +${add}% しました。${before}% → ${p.value}%（行動回数は変更していません）`); if(before<100 && p.value>=100) triggerAreaClearRumorEvent(a);}
 
 function isRumorEvent(row){return String(row && row.eventType || '').trim()==='宿屋の噂';}
@@ -2391,18 +2408,23 @@ async function copyText(text,noteId){
   try{await navigator.clipboard.writeText(v);}catch(e){const ta=document.createElement('textarea'); ta.value=v; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();}
   if(noteId){const el=$(noteId); el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),1200);} addLog('結果をコピーしました。');
 }
-function questMemo(){const q=selected($('questSelect'),state.quests); if(!q)return ''; const p=progressObj('quests',q.id||q.name); return [`【クエスト進行】${q.name||q.id}`,`進行度：${clamp(p.value)}%`,q.clearCondition?`クリア条件：${q.clearCondition}`:'',q.rewardMoney||q.rewardItems||Number(q.bonusPoints||0)>0?`報酬：${[q.rewardMoney,q.rewardItems,Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / ')}`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
+function questMemo(){const q=selected($('questSelect'),state.quests); if(!q)return ''; const p=progressObj('quests',q.id||q.name); const delivery=isDeliveryQuest(q); return [`【クエスト進行】${q.name||q.id}`,isImportantQuest(q)?'':`依頼区分：${q.requestKind||'未設定'}`,!delivery&&q.recommendedSkills?`推奨技能：${q.recommendedSkills}`:'',`実施場所：${questLocationText(q)}`,delivery?`納品状況：${clamp(p.value)>=100?'完了':'未完了'}`:`進行度：${clamp(p.value)}%`,q.deliveryItems?`納品物：${q.deliveryItems}`:'',q.clearCondition?`クリア条件：${q.clearCondition}`:'',q.rewardMoney||q.rewardItems||Number(q.bonusPoints||0)>0?`報酬：${[q.rewardMoney,q.rewardItems,Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / ')}（${q.rewardScope||'各PC'}）`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
 function questPublicRewardText(q={}){
   return [q.rewardMoney,q.rewardItems,Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'',q.unlockResult?`解放：${q.unlockResult}`:''].filter(Boolean).join(' / ');
 }
 function questPublicInfoLines(q={}){
   return [
     `クエスト名：${q.name||q.id||'名称未設定'}`,
+    isImportantQuest(q)?'':`依頼区分：${q.requestKind||'未設定'}`,
+    `内容種別：${q.questType||'未設定'}`,
+    !isDeliveryQuest(q)&&q.recommendedSkills?`推奨技能：${q.recommendedSkills}`:'',
+    `実施場所：${questLocationText(q)}`,
     `クエスト説明：${q.description||'説明未設定'}`,
-    `エリア：${q.areaName||'未設定'}`,
+    (q.requestKind==='拠点内依頼'||isDeliveryQuest(q))?`解放段階：${q.areaName||'未設定'}`:`エリア：${q.areaName||'未設定'}`,
+    q.deliveryItems?`納品物：${q.deliveryItems}`:'',
     `達成条件：${q.clearCondition||'未設定'}`,
-    `報酬：${questPublicRewardText(q)||'なし'}`
-  ];
+    `報酬：${questPublicRewardText(q)||'なし'}（${q.rewardScope||'各PC'}）`
+  ].filter(Boolean);
 }
 function questInfoMemo(){
   const q=selected($('questSelect'),state.quests);
