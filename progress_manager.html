@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.335</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.338</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -146,10 +146,10 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.335-dropfix4">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.338-dropfix4">
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.335｜更新：2026年8月1日</div>
+<div class="ra-build-info">v90.8.338｜更新：2026年8月1日</div>
 
 <header>
   <div class="header-inner">
@@ -400,7 +400,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.335';
+const VERSION='v90.8.338';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 const GITHUB_COMMON_DB_MANIFEST_URL=GITHUB_COMMON_DB_BASE+'manifest.json';
@@ -1438,28 +1438,31 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.270-random-each-combat-1';
+const ENCOUNTER_RULE_VERSION='v90.8.338-party-scaling-2';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
   'マッドホッパー':2,'バブルスライム':2,'ミストモスキート':2,
   'ルートハウンド':3,'モスバック':2,'ウィスパウル':1,'ドロマール':3,'リードリザード':2,'ミアズマリーチ':1,
   'ミラースライム':2,'エコーリード':2,'フェイズモス':3,'グラスレイ':3,'リフトクラブ':3,'ヴォイドハウンド':3,
-  'レゾナバット':1,'ピックモール':2,'オアスケイル':2,'ラストマイト':1,'マインゴーレム':3,'ルミナウィスプ':2
+  'レゾナバット':1,'ピックモール':2,'オアスケイル':2,'ラストマイト':1,'マインゴーレム':3,'ルミナウィスプ':2,
+  'ブリーズホップ':2,'クラッグラム':3,'カイトビーク':2,'ソノラブルーム':2,'グライドスケイル':3,'ボルトバイソン':3
 };
 const AREA_ENCOUNTER_POOLS={
   '街はずれの草原':['プチスライム','ラフィンラット','ラピットホーン','ヴェスパット','カラパスビートル','グラウワーム'],
   '近郊の森':['ラフィンラット','ラピットホーン','ヴェスパット','カラパスビートル','ラスクレイル','マイコニド','ルートハウンド','ブランチリング','モスバック','ウィスパウル'],
   '水辺の湿地':['プチスライム','グラウワーム','マイコニド','マッドホッパー','バブルスライム','ミストモスキート','ドロマール','リードリザード','ミアズマリーチ'],
   '山麓の旧鉱山':['レゾナバット','ピックモール','オアスケイル','ラストマイト','マインゴーレム','ルミナウィスプ'],
-  '反照の水庭':['ミラースライム','フェイズモス','グラスレイ','エコーリード','リフトクラブ','ヴォイドハウンド']
+  '反照の水庭':['ミラースライム','フェイズモス','グラスレイ','エコーリード','リフトクラブ','ヴォイドハウンド'],
+  '風渡りの高原':['ブリーズホップ','クラッグラム','カイトビーク','ソノラブルーム','グライドスケイル','ボルトバイソン']
 };
 const ENCOUNTER_BACKLINE_RATE={
   'プチスライム':.15,'ラフィンラット':.10,'ラピットホーン':.10,'ヴェスパット':.60,'カラパスビートル':.10,'グラウワーム':.10,
   'ラスクレイル':.50,'マイコニド':.55,'ルートハウンド':.20,'ブランチリング':.30,'モスバック':.10,'ウィスパウル':.65,'マッドホッパー':.15,'バブルスライム':.50,
   'ミストモスキート':.60,'ドロマール':.10,'リードリザード':.15,'ミアズマリーチ':.10,
   'レゾナバット':.65,'ピックモール':.15,'オアスケイル':.10,'ラストマイト':.25,'マインゴーレム':.05,'ルミナウィスプ':.65,
-  'ミラースライム':.30,'フェイズモス':.55,'グラスレイ':.30,'エコーリード':.50,'リフトクラブ':.15,'ヴォイドハウンド':.35
+  'ミラースライム':.30,'フェイズモス':.55,'グラスレイ':.30,'エコーリード':.50,'リフトクラブ':.15,'ヴォイドハウンド':.35,
+  'ブリーズホップ':.10,'クラッグラム':.05,'カイトビーク':.65,'ソノラブルーム':.70,'グライドスケイル':.15,'ボルトバイソン':.05
 };
 // エリア差は魔物自身の遭遇値ではなく、編成全体の予算へ一度だけ加算する。
 const AREA_ENCOUNTER_BUDGET_BONUS={
@@ -1467,7 +1470,8 @@ const AREA_ENCOUNTER_BUDGET_BONUS={
   '近郊の森':1,
   '水辺の湿地':2,
   '山麓の旧鉱山':3,
-  '反照の水庭':3
+  '反照の水庭':3,
+  '風渡りの高原':4
 };
 function partyEncounterProfile(size=selectedPartySize()){
   const n=normalizePartySize(size);
@@ -1618,7 +1622,7 @@ function questEncounterGenerationOptions(q={},size=effectiveQuestPartySize(q)){
   if(questCategoryFor(q)!=='デイリー')return {partySize:size};
   const areaName=String(q.areaName||'').trim();
   const areaBonus=Number(AREA_ENCOUNTER_BUDGET_BONUS[areaName]||0);
-  const minBySize={1:1,2:2,3:2,4:2,5:3,6:3,7:4};
+  const minBySize={1:1,2:2,3:2,4:3,5:3,6:4,7:4};
   const maxBySize={1:2,2:3,3:3,4:4,5:4,6:5,7:5};
   return {
     partySize:size,
@@ -1707,7 +1711,7 @@ function resolveEncounterCountToken(token='',partySize=selectedPartySize()){
   }
   if(raw==='人数同数')return String(clampEncounterCount(partySize,1,7));
   if(raw==='人数半数切上')return String(clampEncounterCount(Math.ceil(partySize/2),1,4));
-  if(raw==='人数半数切捨')return String(clampEncounterCount(Math.floor(partySize/2),1,4));
+  if(raw==='人数半数切捨')return String(Math.max(0,Math.min(4,Math.floor(normalizePartySize(partySize)/2))));
   return raw;
 }
 function encounterCompositionGroups(row={},partySize=selectedPartySize()){
@@ -1758,10 +1762,19 @@ function eventResultTextForDisplay(row={},partySize=selectedPartySize()){
     .replace(/希少宝箱表を1回引く/g,'下記の希少宝箱を確認する')
     .replace(/宝箱表を1回引く/g,'下記の宝箱を確認する');
 }
+function randomEncounterOptionsForEvent(row={},partySize=selectedPartySize()){
+  const size=normalizePartySize(partySize);
+  const profile=partyEncounterProfile(size);
+  const configuredMin=Math.floor(Number(row.encounterCountMin));
+  const configuredMax=Math.floor(Number(row.encounterCountMax));
+  const minCount=Number.isFinite(configuredMin)&&configuredMin>0?Math.max(profile.minCount,configuredMin):profile.minCount;
+  const maxCount=Number.isFinite(configuredMax)&&configuredMax>0?Math.max(minCount,configuredMax):profile.maxCount;
+  return {partySize:size,minCount,maxCount};
+}
 function formatEventOutput(prefix,picked,area,tableId,extraLines=[],partySizeOverride=null){
   const partySize=partySizeOverride===null?selectedPartySize():normalizePartySize(partySizeOverride);
   const condition=eventConditionType(picked)==='なし'?'':`前提：${eventConditionType(picked)}${picked.conditionValue?` / ${picked.conditionValue}`:''}`;
-  const random=String(picked.encounterCountRule||'').trim()==='ランダム編成'?generateRandomEncounter(area?.name||picked.areaName||'',{partySize}):null;
+  const random=String(picked.encounterCountRule||'').trim()==='ランダム編成'?generateRandomEncounter(area?.name||picked.areaName||'',randomEncounterOptionsForEvent(picked,partySize)):null;
   const encounter=encounterCountText(picked,random);
   const composition=random?encounterResolutionBlock(random):encounterCompositionText(picked);
   return [prefix,area?`エリア：${area.name||area.id}`:'',area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'',`表：${tableId}`,picked.eventName?`イベント：${picked.eventName}`:'',picked.eventType?`種別：${picked.eventType}`:'',condition,encounter,composition,picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'',picked.result?`結果：${eventResultTextForDisplay(picked,partySize)}`:'',picked.progressEffect?`補足：${picked.progressEffect}`:'',...extraLines].filter(Boolean).join('\n');
