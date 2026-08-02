@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.363</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.364</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -146,10 +146,10 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.363-dropfix4">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.364-dropfix4">
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.363｜更新：2026年8月2日</div>
+<div class="ra-build-info">v90.8.364｜更新：2026年8月2日</div>
 
 <header>
   <div class="header-inner">
@@ -400,7 +400,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.363';
+const VERSION='v90.8.364';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 const GITHUB_COMMON_DB_MANIFEST_URL=GITHUB_COMMON_DB_BASE+'manifest.json';
@@ -1438,7 +1438,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.363-party-scaling-2';
+const ENCOUNTER_RULE_VERSION='v90.8.364-party-scaling-2';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -2177,6 +2177,7 @@ function eligibleTreasureRows(tableId,areaName=''){
 }
 function treasureFieldText(row={},field){return String(row[field]??'').trim();}
 function treasureCopyLine(label,value){const v=String(value??'').trim();return v?`${label}：${v}`:'';}
+function treasureSellPriceText(value){const raw=String(value??'').trim();if(!raw)return '';const n=Number(raw);return Number.isFinite(n)&&n===0?'売却不可':`${raw}G`;}
 function treasureItemKind(row={}){
   const dataKind=treasureFieldText(row,'dataKind'),itemType=treasureFieldText(row,'itemType'),materialType=treasureFieldText(row,'materialType');
   if(dataKind==='素材'||materialType)return '素材';
@@ -2219,7 +2220,7 @@ function buildTreasureItemCopyText(row={},count='1'){
   lines.push(treasureCopyLine('ランク',progressPlayerRank(row.rank)));
   const categoryLabel=kind==='素材'?[treasureFieldText(row,'materialType')||'素材',category].filter(Boolean).join(' / '):[kind,category].filter(Boolean).join(' / ');
   lines.push(treasureCopyLine('分類',categoryLabel));
-  lines.push(treasureCopyLine('売値',treasureFieldText(row,'price')?treasureFieldText(row,'price')+'G':''));
+  lines.push(treasureCopyLine('売値',treasureSellPriceText(treasureFieldText(row,'price'))));
   const useInfo=[];
   if(['武器','防具','盾','装飾品','バッグ','矢筒','術式'].includes(kind)&&treasureFieldText(row,'equipSlot'))useInfo.push(`装備枠 ${treasureFieldText(row,'equipSlot')}`);
   if(treasureFieldText(row,'power'))useInfo.push(`威力 ${treasureFieldText(row,'power')}`);

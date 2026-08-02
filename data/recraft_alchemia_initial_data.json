@@ -1,8 +1,8 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "90.8.363",
+  "version": "90.8.364",
   "encoding": "UTF-8",
-  "description": "Recraft-Alchemia fixed master database v90.8.363. 基礎武器レシピ17種をすべて店売り・草原宝箱の両方へ統一し、武器派生レシピは宝箱限定を維持。重複レシピ用の売値を追加。",
+  "description": "Recraft-Alchemia fixed master database v90.8.364. アイテム・素材669件の売値を全件監査し、未設定を解消。売却可能品は妥当な正数価格、システム定義は売却不可の0Gを明示。",
   "data": {
     "item_types": [
       {
@@ -10216,7 +10216,7 @@
         "source": "",
         "usageTags": "近接",
         "tags": "近接",
-        "notes": "",
+        "notes": "システム定義のため売却不可（0G）。",
         "description": "武器を持たずに行う素手の攻撃。とっさの抵抗や簡単な打撃に使う。",
         "publicId": "RCA-TA2A-9LQZ",
         "upgradeLimit": "0",
@@ -10230,7 +10230,8 @@
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
-        "equipmentUpgradeTarget": ""
+        "equipmentUpgradeTarget": "",
+        "updatedAt": "2026-08-02"
       },
       {
         "id": "wpn_branch_carapace_lance",
@@ -14507,7 +14508,7 @@
         "materialCategory": "",
         "name": "スキルクリスタル",
         "csVisible": "FALSE",
-        "price": "",
+        "price": 0,
         "rank": 1,
         "equipSlot": "",
         "maxStack": "1",
@@ -14515,7 +14516,7 @@
         "source": "骨董屋解放後（近郊の森）",
         "usageTags": "スキル,スキルクリスタル,システム",
         "tags": "スキル,スキルクリスタル,システム",
-        "notes": "所持品・倉庫には表示しない。近郊の森で骨董屋を解放した段階からスキルガチャと合わせて運用する。キャラクターデータのskillGacha.crystalSlotsで管理する。",
+        "notes": "所持品・倉庫には表示しない。近郊の森で骨董屋を解放した段階からスキルガチャと合わせて運用する。キャラクターデータのskillGacha.crystalSlotsで管理する。 システム定義のため売却不可（0G）。",
         "description": "習得したスキルを定着させ、戦闘や探索で使用可能にするための小型クリスタル。",
         "publicId": "RCA-SKCR-BASE",
         "upgradeLimit": "0",
@@ -14528,7 +14529,8 @@
         "unlockAreaKey": "area_nearby_forest",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
-        "equipmentUpgradeTarget": ""
+        "equipmentUpgradeTarget": "",
+        "updatedAt": "2026-08-02"
       },
       {
         "id": "tool_appraisal_kit",
@@ -15100,7 +15102,7 @@
         "materialCategory": "",
         "name": "境界の定着印",
         "csVisible": false,
-        "price": "",
+        "price": 8000,
         "rank": 5,
         "toolRank": "",
         "guaranteeUpgradeMaxRank": 15,
@@ -15134,7 +15136,7 @@
         "unlockFacility": "",
         "tags": "道具,鍛冶,装備強化,確定成功,★15以下",
         "notes": "将来解放用。現行の宝箱表・鑑定・ランダム抽選には含めません。",
-        "updatedAt": "2026-07-24T00:00:00.000Z",
+        "updatedAt": "2026-08-02",
         "equipmentUpgradeSlotCost": "",
         "enabled": "FALSE"
       },
@@ -15148,7 +15150,7 @@
         "materialCategory": "",
         "name": "星晶の定着印",
         "csVisible": false,
-        "price": "",
+        "price": 1800,
         "rank": 3,
         "toolRank": "",
         "guaranteeUpgradeMaxRank": 9,
@@ -15182,7 +15184,7 @@
         "unlockFacility": "",
         "tags": "道具,鍛冶,装備強化,確定成功,★9以下",
         "notes": "将来解放用。現行の宝箱表・鑑定・ランダム抽選には含めません。",
-        "updatedAt": "2026-07-24T00:00:00.000Z",
+        "updatedAt": "2026-08-02",
         "equipmentUpgradeSlotCost": "",
         "enabled": "FALSE"
       },
@@ -15229,7 +15231,7 @@
         "materialCategory": "",
         "name": "月環の定着印",
         "csVisible": false,
-        "price": "",
+        "price": 4000,
         "rank": 4,
         "toolRank": "",
         "guaranteeUpgradeMaxRank": 12,
@@ -15263,7 +15265,7 @@
         "unlockFacility": "",
         "tags": "道具,鍛冶,装備強化,確定成功,★12以下",
         "notes": "将来解放用。現行の宝箱表・鑑定・ランダム抽選には含めません。",
-        "updatedAt": "2026-07-24T00:00:00.000Z",
+        "updatedAt": "2026-08-02",
         "equipmentUpgradeSlotCost": "",
         "enabled": "FALSE"
       },
@@ -15310,7 +15312,7 @@
         "materialCategory": "",
         "name": "白銀の定着印",
         "csVisible": false,
-        "price": "",
+        "price": 800,
         "rank": 2,
         "toolRank": "",
         "guaranteeUpgradeMaxRank": 6,
@@ -15344,7 +15346,7 @@
         "unlockFacility": "",
         "tags": "道具,鍛冶,装備強化,確定成功,★6以下",
         "notes": "将来解放用。現行の宝箱表・鑑定・ランダム抽選には含めません。",
-        "updatedAt": "2026-07-24T00:00:00.000Z",
+        "updatedAt": "2026-08-02",
         "equipmentUpgradeSlotCost": "",
         "enabled": "FALSE"
       },
@@ -15457,7 +15459,7 @@
         "materialCategory": "",
         "name": "青銅の定着印",
         "csVisible": "TRUE",
-        "price": "",
+        "price": 300,
         "rank": 1,
         "toolRank": "",
         "guaranteeUpgradeMaxRank": 3,
@@ -15491,7 +15493,7 @@
         "unlockFacility": "",
         "tags": "道具,鍛冶,装備強化,確定成功,★3以下",
         "notes": "現行で入手可能な強化確定成功アイテム。宝箱限定。",
-        "updatedAt": "",
+        "updatedAt": "2026-08-02",
         "equipmentUpgradeSlotCost": "",
         "enabled": "TRUE"
       },
@@ -15890,7 +15892,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "普段着",
-        "price": 0,
+        "price": 20,
         "rank": 1,
         "equipSlot": "鎧",
         "effect": "",
@@ -15909,7 +15911,7 @@
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
-        "updatedAt": "2026-07-16",
+        "updatedAt": "2026-08-02",
         "equipmentUpgradeTarget": ""
       },
       {
@@ -67027,6 +67029,6 @@
       }
     ]
   },
-  "updatedAt": "2026-08-02T17:05:00+09:00",
-  "generatedAt": "2026-08-02T17:05:00+09:00"
+  "updatedAt": "2026-08-02T17:46:00+09:00",
+  "generatedAt": "2026-08-02T17:46:00+09:00"
 }
