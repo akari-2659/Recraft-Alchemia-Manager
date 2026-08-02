@@ -1,12 +1,12 @@
 {
   "format": "recraft-alchemia-public-manifest",
-  "version": "90.8.354",
-  "updatedAt": "2026-08-02",
+  "version": "90.8.359",
+  "updatedAt": "2026-08-02T15:25:27+09:00",
   "master": "recraft_alchemia_master.json",
-  "sha256": "6de9e54e8d0ec5503bf7cba5b4cd99cf0f0fcd2c6728cde593b811d95fd2f3c8",
-  "bytes": 2789493,
-  "recordCount": 2264,
+  "sha256": "fb5699b0bab87acc5b229d8283da7dd26604211a2af0b38ef753a4e8f9eace4f",
+  "bytes": 2816677,
+  "recordCount": 2279,
   "dataKeys": 17,
   "publicBaseUrl": "https://raw.githubusercontent.com/akari-2659/Recraft-Alchemia-Manager/main/data/public/",
-  "generatedAt": "2026-08-02T13:08:50+09:00"
+  "generatedAt": "2026-08-02T15:25:27+09:00"
 }
