@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.364</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.366</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1169,7 +1169,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.364 usability maintenance */
+/* v90.8.366 usability maintenance */
 .ra-build-info{font-size:12px;padding:6px 12px;text-align:right;color:var(--muted);background:rgba(255,253,248,.9);border-bottom:1px solid var(--line)}
 header{padding-top:12px!important;padding-bottom:6px!important}.title-card{padding:14px!important}.title-card h1{font-size:clamp(21px,3vw,30px)!important;margin-bottom:5px!important}.title-card .subtitle{font-size:.84rem;line-height:1.5}.dbid{font-size:.72rem!important}
 main>section.panel:first-of-type{padding:10px!important}
@@ -1187,10 +1187,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.364-perf1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.366-perf1">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.364｜更新：2026年8月2日</div>
+<div class="ra-build-info">v90.8.366｜更新：2026年8月2日</div>
 <div id="dirtyStateBadge" class="ra-dirty-state" role="status" aria-live="polite">保存済み</div>
 
 <header>
@@ -1837,8 +1837,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.364';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.364';
+const RECRAFT_DB_VERSION = 'v90.8.366';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.366';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -4620,14 +4620,33 @@ function activeFacilitySection(name=currentFacilityView){
   const current=currentFacilitySectionByName[name];
   return defs.some(([id])=>id===current) ? current : defs[0][0];
 }
+function facilityIsRecipeBasedSpecialProcessing(row={}){return ['recipe_magic_ink','recipe_prayer_paper'].includes(String(row.id||''));}
 function facilityProcessingRows(){
-  return (state.items||[]).filter(row=>
+  const ordinary=(state.items||[]).filter(row=>
     String(row.materialType||'').trim()==='加工素材' &&
     String(row.processingRequiredMaterials||'').trim() &&
     facilityRankVisible(row) && textHasFacility(row,currentFacilityView)
-  ).sort((a,b)=>facilityRankLevel(a.rank)-facilityRankLevel(b.rank)||compareValues(a.name||'',b.name||''));
+  );
+  const special=(state.recipes||[]).filter(row=>facilityIsRecipeBasedSpecialProcessing(row)&&facilityRankVisible(row)&&textHasFacility(row,currentFacilityView))
+    .map(row=>({...row,isProcessingRecipe:true,name:row.resultItem||row.name||'',materialCategory:'術式素材'}));
+  return ordinary.concat(special).sort((a,b)=>facilityRankLevel(a.rank)-facilityRankLevel(b.rank)||compareValues(a.name||'',b.name||''));
 }
 function renderFacilityProcessingCard(row={}){
+  if(row.isProcessingRecipe){
+    const item=facilityItemByName(row.resultItem||row.name||'')||{};
+    return `<div class="facility-recipe-card">
+      <h5>${escapeHtml(row.resultItem||row.name||'名称未設定')}</h5>
+      <div class="facility-product-meta">${[row.rank?playerRankLabel(row.rank):'','素材加工','術式素材'].filter(Boolean).map(v=>`<span class="facility-chip">${escapeHtml(v)}</span>`).join('')}</div>
+      <div><b>レシピ：</b>必要</div>
+      <div><b>必要素材：</b>${escapeHtml(row.requiredMaterials||'未設定')}</div>
+      <div><b>完成数：</b>${escapeHtml(String(row.resultCount||1))}</div>
+      <div><b>施設加工依頼費：</b>${escapeHtml(String(Number(row.price)||0))}G</div>
+      <div><b>施設依頼：</b>レシピ不要・判定不要</div>
+      <div><b>加工技能：</b>${escapeHtml(row.craftSkill||'調合')}</div>
+      <div><b>基礎作成難易度：</b>${escapeHtml(row.difficulty||'未設定')}</div>
+      ${facilityItemDescriptionHtml(item,row)}
+    </div>`;
+  }
   const tool=String(row.processingToolType||'対応道具').trim();
   const toolRank=String(row.processingToolRank||'?').trim();
   return `<div class="facility-recipe-card">
@@ -4646,23 +4665,33 @@ function renderFacilityProcessingCard(row={}){
 }
 function renderFacilityProcessingGroup(){
   const rows=facilityProcessingRows();
-  if(!rows.length) return '<p class="notice">この施設で加工できる加工素材はありません。</p>';
+  if(!rows.length) return '<p class="notice">この施設で加工できる素材はありません。</p>';
   const groups=new Map();rows.forEach(row=>{const key=row.materialCategory||'加工素材';if(!groups.has(key))groups.set(key,[]);groups.get(key).push(row);});
-  return `<p class="notice">加工素材はレシピ不要です。自作は対応道具・必要素材・加工判定が必要で費用0G、施設依頼は必要素材と施設加工依頼費が必要ですが判定不要です。</p><div class="facility-recipe-grid">${[...groups.entries()].map(([label,list],idx)=>`<details class="facility-product" ${idx===0?'open':''}><summary><span class="facility-product-title"><span>${escapeHtml(label)}</span><span class="facility-chip">${list.length}件</span></span></summary><div class="facility-product-body"><div class="facility-recipe-grid">${list.map(renderFacilityProcessingCard).join('')}</div></div></details>`).join('')}</div>`;
+  return `<p class="notice">一般の加工素材はレシピ不要です。薬屋の魔導インク・祈祷紙だけは対応レシピが必要な特殊加工です。施設依頼はいずれもレシピ不要・判定不要です。</p><div class="facility-recipe-grid">${[...groups.entries()].map(([label,list],idx)=>`<details class="facility-product" ${idx===0?'open':''}><summary><span class="facility-product-title"><span>${escapeHtml(label)}</span><span class="facility-chip">${list.length}件</span></span></summary><div class="facility-product-body"><div class="facility-recipe-grid">${list.map(renderFacilityProcessingCard).join('')}</div></div></details>`).join('')}</div>`;
 }
 function facilityProcessingCopyText(facilityName=''){
-  const rows=(state.items||[]).filter(row=>String(row.materialType||'').trim()==='加工素材'&&String(row.processingRequiredMaterials||'').trim()&&textHasFacility(row,facilityName)&&facilityRankVisible(row));
-  return rows.length?rows.map(row=>`- ${row.name||'名称未設定'}（${playerRankLabel(row.rank)} / 施設加工依頼${Number(row.processingFee)||0}G）
+  const ordinary=(state.items||[]).filter(row=>String(row.materialType||'').trim()==='加工素材'&&String(row.processingRequiredMaterials||'').trim()&&textHasFacility(row,facilityName)&&facilityRankVisible(row));
+  const special=(state.recipes||[]).filter(row=>facilityIsRecipeBasedSpecialProcessing(row)&&textHasFacility(row,facilityName)&&facilityRankVisible(row));
+  const lines=[];
+  ordinary.forEach(row=>lines.push(`- ${row.name||'名称未設定'}（${playerRankLabel(row.rank)} / 施設加工依頼${Number(row.processingFee)||0}G）
   レシピ：不要
   必要素材：${row.processingRequiredMaterials||'未設定'}
   完成数：${row.processingResultCount||1}
   加工技能：${row.processingSkill||'未設定'}
   対応道具：${row.processingToolType||'対応道具'}（★${row.processingToolRank||'?'}以上）
-  基礎作成難易度：${row.processingDifficulty||'未設定'}`).join('\n'):'- 加工可能な素材はありません';
+  基礎作成難易度：${row.processingDifficulty||'未設定'}`));
+  special.forEach(row=>lines.push(`- ${row.resultItem||row.name||'名称未設定'}（${playerRankLabel(row.rank)} / 施設加工依頼${Number(row.price)||0}G）
+  レシピ：必要
+  必要素材：${row.requiredMaterials||'未設定'}
+  完成数：${row.resultCount||1}
+  加工技能：${row.craftSkill||'調合'}
+  基礎作成難易度：${row.difficulty||'未設定'}`));
+  return lines.length?lines.join('\n'):'- 加工可能な素材はありません';
 }
 function facilityRecipeRows(craftType){
   return (state.recipes||[]).filter(r=>
     String(r.craftType||'').trim()===craftType &&
+    !facilityIsRecipeBasedSpecialProcessing(r) &&
     facilityRankVisible(r) &&
     (!String(r.unlockFacility||'').trim() || textHasFacility(r,currentFacilityView))
   );
@@ -8338,7 +8367,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.364';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.366';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-07-26';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([

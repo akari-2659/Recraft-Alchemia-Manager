@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.364</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.366</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -146,10 +146,10 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.364-dropfix4">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.366-dropfix4">
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.364｜更新：2026年8月2日</div>
+<div class="ra-build-info">v90.8.366｜更新：2026年8月2日</div>
 
 <header>
   <div class="header-inner">
@@ -400,7 +400,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.364';
+const VERSION='v90.8.366';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 const GITHUB_COMMON_DB_MANIFEST_URL=GITHUB_COMMON_DB_BASE+'manifest.json';
@@ -1438,7 +1438,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.364-party-scaling-2';
+const ENCOUNTER_RULE_VERSION='v90.8.366-party-scaling-2';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -1839,10 +1839,10 @@ function uniqueTreasureTables(){
   (state.treasures||[]).filter(enabledRow).forEach(r=>{
     const id=String(r.tableId||'').trim();
     if(!id)return;
-    if(!map.has(id)) map.set(id,{id, area:r.areaName||'', rank:r.treasureRank||'', count:0, row:r});
+    if(!map.has(id)) map.set(id,{id, area:r.areaName||'', chestName:r.chestName||'', rank:r.treasureRank||'', count:0, row:r});
     map.get(id).count++;
   });
-  return [...map.values()].sort((a,b)=>a.id.localeCompare(b.id,'ja'));
+  return [...map.values()].sort((a,b)=>String(a.area||'').localeCompare(String(b.area||''),'ja')||String(a.chestName||a.id).localeCompare(String(b.chestName||b.id),'ja'));
 }
 function fillTreasureTables(prefer=''){
   const sel=$('treasureTableSelect');
@@ -1855,7 +1855,7 @@ function fillTreasureTables(prefer=''){
   rows.forEach(r=>{
     const o=document.createElement('option');
     o.value=r.id;
-    o.textContent=`${r.id} / ${r.area||'エリア未設定'} / ${progressPlayerRank(r.rank)||'ランク未設定'}（${r.count}件）`;
+    o.textContent=`【${r.area||'エリア未設定'}】${r.chestName||r.id} / ${r.id} / ${progressPlayerRank(r.rank)||'ランク未設定'}（${r.count}件）`;
     sel.appendChild(o);
   });
   if(prefer && [...sel.options].some(o=>o.value===prefer)) sel.value=prefer;
@@ -1863,56 +1863,67 @@ function fillTreasureTables(prefer=''){
 }
 const TREASURE_AREA_PROFILES={
   '街はずれの草原':{
-    lockChance:20, trapChance:15, emptyChance:10, detect:[5,7], disarm:[5,7], unlock:[5,7],
+    lockChance:20, trapChance:20, emptyChance:10, detect:[5,7], disarm:[5,7], unlock:[5,7],
     traps:[
       {name:'飛び出す針',effect:'開封者に1D6ダメージ。'},
       {name:'指挟みのばね',effect:'開封者に1D6ダメージ。'},
-      {name:'粉塵袋',effect:'開封者は次の自分のターン終了まで回避－1。'}
+      {name:'粉塵袋',effect:'開封者は次の自分のターン終了まで回避－1。'},
+      {name:'転倒索',effect:'開封者は次に攻撃を受ける際の回避－2。攻撃の解決後に解除する。'}
     ]
   },
   '近郊の森':{
-    lockChance:35, trapChance:30, emptyChance:10, detect:[7,9], disarm:[7,10], unlock:[7,9],
+    lockChance:35, trapChance:35, emptyChance:10, detect:[7,9], disarm:[7,10], unlock:[7,9],
     traps:[
-      {name:'毒針',effect:'開封者は毒状態になる。※毒状態：ラウンド終了時に1D3無属性ダメージを受ける。このダメージに防御値は適用しない。同名状態は重複せず、戦闘終了または解毒薬・浄化水・清めの祈りで解除する。'},
-      {name:'絡み蔓',effect:'開封者は拘束状態になる。※拘束状態：次に攻撃を受ける際の回避－2。攻撃の解決後に解除する。'},
-      {name:'胞子の噴出',effect:'開封者は胞子状態になる。※胞子状態：次の自分のターン終了まで魔法・祈祷－1。'},
-      {name:'粘着樹液',effect:'開封者は粘着状態になる。※粘着状態：次の自分のターン終了まで回避－1。'}
+      {name:'毒針',effect:'開封者は毒状態になる。毒：この戦闘中、ラウンド終了時に、防御値を適用しない無属性1D3ダメージを受ける。'},
+      {name:'絡み蔓',effect:'開封者は次に攻撃を受ける際の回避－2。攻撃の解決後に解除する。'},
+      {name:'胞子の噴出',effect:'開封者は次の自分のターン終了まで魔法・祈祷判定－1。'},
+      {name:'粘着樹液',effect:'開封者は次の自分のターン終了まで回避－1。'},
+      {name:'胞子煙筒',effect:'開封者は毒状態になる。毒：この戦闘中、ラウンド終了時に、防御値を適用しない無属性1D3ダメージを受ける。'},
+      {name:'樹脂捕縛帯',effect:'開封者は次の自分のターン終了まで回避－2。'}
     ]
   },
   '水辺の湿地':{
-    lockChance:45, trapChance:40, emptyChance:10, detect:[9,11], disarm:[9,12], unlock:[8,11],
+    lockChance:45, trapChance:45, emptyChance:10, detect:[9,11], disarm:[9,12], unlock:[8,11],
     traps:[
-      {name:'毒液噴射',effect:'開封者に1D6+1ダメージを与え、毒状態にする。※毒状態：ラウンド終了時に1D3無属性ダメージを受ける。このダメージに防御値は適用しない。同名状態は重複せず、戦闘終了または解毒薬・浄化水・清めの祈りで解除する。'},
-      {name:'泥の噴出',effect:'開封者は泥まみれ状態になる。※泥まみれ状態：次の自分のターン終了まで回避－1。'},
-      {name:'腐食液',effect:'開封者に1D6ダメージを与え、次のラウンド終了まで防御－1。'},
-      {name:'沼ガス',effect:'開封者は視界不良状態になる。※視界不良状態：次の自分のターン終了まで命中－1。'}
+      {name:'毒液噴射',effect:'開封者に1D6+1ダメージを与え、毒状態にする。毒：この戦闘中、ラウンド終了時に、防御値を適用しない無属性1D3ダメージを受ける。'},
+      {name:'泥の噴出',effect:'開封者は次の自分のターン終了まで回避－1。'},
+      {name:'腐食液',effect:'開封者に1D6ダメージを与え、次のラウンド終了まで防御値－1。'},
+      {name:'沼ガス',effect:'開封者は次の自分のターン終了まで命中－1。'},
+      {name:'腐蝕泥槽',effect:'開封者に1D6+1無属性ダメージを与え、次の自分のターン終了まで防御値－1。'},
+      {name:'霧針散布器',effect:'開封者は毒状態になり、次の自分のターン終了まで命中－1。毒：この戦闘中、ラウンド終了時に、防御値を適用しない無属性1D3ダメージを受ける。'}
     ]
   },
   '山麓の旧鉱山':{
-    lockChance:55, trapChance:50, emptyChance:8, detect:[10,13], disarm:[10,13], unlock:[10,13],
+    lockChance:55, trapChance:60, emptyChance:8, detect:[10,13], disarm:[10,13], unlock:[10,13],
     traps:[
       {name:'落石ばね',effect:'開封者に2D6ダメージ。'},
-      {name:'粉塵筒',effect:'開封者は次の自分のターン終了まで命中－1・回避－1。'},
+      {name:'粉塵筒',effect:'開封者は次の自分のターン終了まで判定－1。'},
       {name:'錆びた拘束具',effect:'開封者は次の自分の行動まで回避－2。行動後に解除する。'},
-      {name:'魔晶の閃光',effect:'開封者は次の自分のターン終了まで魔法・祈祷－2。'}
+      {name:'魔晶の閃光',effect:'開封者は次の自分のターン終了まで魔法・祈祷判定－2。'},
+      {name:'磁着拘束具',effect:'開封者は次の自分のターン終了まで回避－2。'},
+      {name:'鉱震杭',effect:'開封者に2D6+2物属性ダメージ。このダメージは防御値を2点まで無視する。'}
     ]
   },
   '反照の水庭':{
-    lockChance:60, trapChance:55, emptyChance:8, detect:[11,14], disarm:[11,14], unlock:[11,14],
+    lockChance:60, trapChance:60, emptyChance:8, detect:[11,14], disarm:[11,14], unlock:[11,14],
     traps:[
       {name:'反転水鏡',effect:'開封者は次の自分のターン終了まで命中－2。'},
       {name:'位相の裂け目',effect:'開封者に2D6無属性ダメージ。このダメージに防御値は適用しない。'},
       {name:'虚ろな手',effect:'開封者は次の自分の行動まで回避－2。行動後に解除する。'},
-      {name:'逆流する術式',effect:'開封者はMPを1D3失う。'}
+      {name:'逆流する術式',effect:'開封者はMPを1D3失う。'},
+      {name:'鏡返しの印',effect:'開封者の次の攻撃・魔法・祈祷判定－2。'},
+      {name:'裂界刃線',effect:'開封者に2D6無属性ダメージ。このダメージに防御値は適用しない。'}
     ]
   },
   '風渡りの高原':{
-    lockChance:60, trapChance:55, emptyChance:8, detect:[13,15], disarm:[13,15], unlock:[12,15],
+    lockChance:60, trapChance:65, emptyChance:8, detect:[13,15], disarm:[13,15], unlock:[12,15],
     traps:[
       {name:'風刃の封',effect:'開封者に2D6風属性ダメージ。'},
       {name:'雷糸の留め金',effect:'開封者は次の自分のターン終了まで命中－2。'},
       {name:'浮石の崩落',effect:'開封者に2D6ダメージ。'},
-      {name:'逆巻く気流',effect:'開封者は次の自分の行動まで回避－2。行動後に解除する。'}
+      {name:'逆巻く気流',effect:'開封者は次の自分の行動まで回避－2。行動後に解除する。'},
+      {name:'風圧跳弾',effect:'開封者に2D6風属性ダメージを与え、次の自分のターン終了まで回避－1。'},
+      {name:'雷導捕縛網',effect:'開封者に1D6+2雷属性ダメージを与え、次の自分の判定－1。'}
     ]
   }
 };
