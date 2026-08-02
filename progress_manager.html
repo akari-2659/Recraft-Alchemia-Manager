@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.344</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.350</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -146,10 +146,10 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.344-dropfix4">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.350-dropfix4">
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.344｜更新：2026年8月2日</div>
+<div class="ra-build-info">v90.8.350｜更新：2026年8月2日</div>
 
 <header>
   <div class="header-inner">
@@ -400,7 +400,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.344';
+const VERSION='v90.8.350';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 const GITHUB_COMMON_DB_MANIFEST_URL=GITHUB_COMMON_DB_BASE+'manifest.json';
@@ -1438,7 +1438,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.344-party-scaling-2';
+const ENCOUNTER_RULE_VERSION='v90.8.350-party-scaling-2';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -2127,7 +2127,8 @@ function treasureModifierName(target=''){
 }
 function treasureModifierDisplay(value=''){return treasureModifierRows(value).map(row=>`${treasureModifierName(row.target)} ${String(row.value||'')}`).filter(Boolean).join(' / ');}
 function treasureIsUpgradeable(row={}){return ['武器','防具','盾','装飾品'].includes(treasureItemKind(row));}
-function treasureIsSpecialMaterial(row={}){return /^特殊[：:]/.test(treasureFieldText(row,'equipmentUpgradeEffect'));}
+function treasureIsSpecialMaterial(row={}){return treasureFieldText(row,'equipmentUpgradeEffect')==='特殊効果';}
+function treasureUpgradeDisplayName(row={}){const effect=treasureFieldText(row,'equipmentUpgradeEffect'),value=treasureFieldText(row,'equipmentUpgradeValue');return effect==='特殊効果'?`特殊効果：${value||'名称未設定'}`:effect;}
 function buildTreasureItemCopyText(row={},count='1'){
   const name=treasureFieldText(row,'name')||treasureFieldText(row,'id')||'名称未設定';
   const kind=treasureItemKind(row),category=treasureItemCategory(row),lines=[];
@@ -2161,9 +2162,10 @@ function buildTreasureItemCopyText(row={},count='1'){
   const monsterMaterial=kind==='素材'&&treasureFieldText(row,'materialType')==='魔物素材';
   if(monsterMaterial){
     lines.push(treasureCopyLine('強化対象',treasureFieldText(row,'equipmentUpgradeTarget')));
-    lines.push(treasureCopyLine('装備強化内容',treasureFieldText(row,'equipmentUpgradeEffect')));
-    lines.push(treasureCopyLine('装備強化値',treasureFieldText(row,'equipmentUpgradeValue')));
-    if(treasureIsSpecialMaterial(row))lines.push(treasureCopyLine('特殊能力詳細',treasureFieldText(row,'equipmentUpgradeDetail')));
+    lines.push(treasureCopyLine('装備強化内容',treasureUpgradeDisplayName(row)));
+    if(!treasureIsSpecialMaterial(row))lines.push(treasureCopyLine('装備強化値',treasureFieldText(row,'equipmentUpgradeValue')));
+    lines.push(treasureCopyLine('消費強化枠',treasureFieldText(row,'equipmentUpgradeSlotCost')?treasureFieldText(row,'equipmentUpgradeSlotCost')+'枠':''));
+    if(treasureIsSpecialMaterial(row))lines.push(treasureCopyLine('特殊効果詳細',treasureFieldText(row,'equipmentUpgradeDetail')));
   }else lines.push(treasureCopyLine('効果',treasureFieldText(row,'effect')));
   return lines.filter(Boolean).join('\n');
 }
