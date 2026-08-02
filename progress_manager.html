@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.359</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.363</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -146,10 +146,10 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.359-dropfix4">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.363-dropfix4">
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.359｜更新：2026年8月2日</div>
+<div class="ra-build-info">v90.8.363｜更新：2026年8月2日</div>
 
 <header>
   <div class="header-inner">
@@ -400,7 +400,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.359';
+const VERSION='v90.8.363';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 const GITHUB_COMMON_DB_MANIFEST_URL=GITHUB_COMMON_DB_BASE+'manifest.json';
@@ -1438,7 +1438,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.359-party-scaling-2';
+const ENCOUNTER_RULE_VERSION='v90.8.363-party-scaling-2';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -1931,21 +1931,43 @@ function positiveTreasureDifficulty(value,fallback=1){
   const n=Number(String(value??'').trim());
   return Number.isInteger(n)&&n>=1?n:Math.max(1,Number(fallback)||1);
 }
+function treasureDifficultyRange(value,fallbackRange){
+  const nums=(String(value??'').match(/\d+/g)||[]).map(Number).filter(n=>Number.isInteger(n)&&n>=1);
+  if(nums.length>=2)return [Math.min(nums[0],nums[1]),Math.max(nums[0],nums[1])];
+  if(nums.length===1)return [Math.max(1,nums[0]-1),nums[0]+1];
+  const min=positiveTreasureDifficulty(fallbackRange?.[0],1),max=positiveTreasureDifficulty(fallbackRange?.[1],min);
+  return [Math.min(min,max),Math.max(min,max)];
+}
 function configuredTreasureDifficulty(row,field,range){
-  const fallback=Math.round((Number(range?.[0])||1)+(Number(range?.[1])||Number(range?.[0])||1))/2;
-  return positiveTreasureDifficulty(row?.[field],fallback);
+  const [min,max]=treasureDifficultyRange(row?.[field],range);
+  return Math.round((min+max)/2);
+}
+function rolledTreasureDifficulty(row,field,range){
+  const [min,max]=treasureDifficultyRange(row?.[field],range);
+  return randomInt(min,max);
 }
 function configuredTrapDetectDifficulty(row,profile){return configuredTreasureDifficulty(row,'trapDetectDifficulty',profile?.detect);}
 function configuredUnlockDifficulty(row,profile){return configuredTreasureDifficulty(row,'unlockDifficulty',profile?.unlock);}
 function configuredTrapDisarmDifficulty(row,profile){return configuredTreasureDifficulty(row,'trapDisarmDifficulty',profile?.disarm);}
+function rolledTrapDetectDifficulty(row,profile){return rolledTreasureDifficulty(row,'trapDetectDifficulty',profile?.detect);}
+function rolledUnlockDifficulty(row,profile){return rolledTreasureDifficulty(row,'unlockDifficulty',profile?.unlock);}
+function rolledTrapDisarmDifficulty(row,profile){return rolledTreasureDifficulty(row,'trapDisarmDifficulty',profile?.disarm);}
 
 function normalizeTreasureSetup(setup){
   if(!setup)return setup;
   const row=treasureRows(setup.tableId||'')[0]||{};
   const profile=treasureProfile(setup.areaName||row.areaName||'');
-  setup.unlockDifficulty=positiveTreasureDifficulty(setup.unlockDifficulty,configuredUnlockDifficulty(row,profile));
+  if(setup.hasLock) setup.unlockDifficulty=positiveTreasureDifficulty(setup.unlockDifficulty,configuredUnlockDifficulty(row,profile));
+  else setup.unlockDifficulty='';
+  // 罠が実際に存在するかどうかにかかわらず、罠感知判定は必ず行う。
   setup.trapDetectDifficulty=positiveTreasureDifficulty(setup.trapDetectDifficulty,configuredTrapDetectDifficulty(row,profile));
-  setup.trapDisarmDifficulty=positiveTreasureDifficulty(setup.trapDisarmDifficulty,configuredTrapDisarmDifficulty(row,profile));
+  if(setup.hasTrap){
+    setup.trapDisarmDifficulty=positiveTreasureDifficulty(setup.trapDisarmDifficulty,configuredTrapDisarmDifficulty(row,profile));
+  }else{
+    setup.trapDisarmDifficulty='';
+    setup.trapName='';
+    setup.trapEffect='';
+  }
   return setup;
 }
 function setTreasureContext(tableId, areaName='', mode='normal'){
@@ -1963,19 +1985,23 @@ function buildTreasureSetup(tableId, areaName='', questFixed=false){
   const row=treasureRows(tableId)[0]||null;
   if(!row)return null;
   const area=treasureAreaName(tableId,areaName);
-  if(questFixed){
-    return normalizeTreasureSetup({tableId:String(tableId||''),areaName:area,chestName:row.chestName||row.tableId||'クエスト固有宝箱',questFixed:true,hasLock:false,hasTrap:false,trapDetectDifficulty:configuredTrapDetectDifficulty(row,treasureProfile(area))});
-  }
   const profile=treasureProfile(area);
+  if(questFixed){
+    return normalizeTreasureSetup({
+      tableId:String(tableId||''),areaName:area,chestName:row.chestName||row.tableId||'クエスト固有宝箱',
+      questFixed:true,hasLock:false,hasTrap:false,
+      trapDetectDifficulty:rolledTrapDetectDifficulty(row,profile)
+    });
+  }
   const hasLock=Math.random()*100<profile.lockChance;
   const hasTrap=Math.random()*100<profile.trapChance;
   const trap=hasTrap?profile.traps[Math.floor(Math.random()*profile.traps.length)]:null;
   return normalizeTreasureSetup({
     tableId:String(tableId||''),areaName:area,chestName:row.chestName||row.tableId||'宝箱',
     hasLock,hasTrap,questFixed:false,
-    unlockDifficulty:configuredUnlockDifficulty(row,profile),
-    trapDetectDifficulty:configuredTrapDetectDifficulty(row,profile),
-    trapDisarmDifficulty:configuredTrapDisarmDifficulty(row,profile),
+    unlockDifficulty:hasLock?rolledUnlockDifficulty(row,profile):'',
+    trapDetectDifficulty:rolledTrapDetectDifficulty(row,profile),
+    trapDisarmDifficulty:hasTrap?rolledTrapDisarmDifficulty(row,profile):'',
     trapName:trap?.name||'',trapEffect:trap?.effect||''
   });
 }
@@ -2012,14 +2038,14 @@ function treasureSetupLines(setup={}){
     `鍵：${setup.hasLock?'あり':'なし'}`,
     `解錠難易度（細工）：${setup.hasLock?setup.unlockDifficulty:'—'}`,
     `罠：${setup.hasTrap?'あり':'なし'}`,
-    `罠感知難易度（感知）：${positiveTreasureDifficulty(setup.trapDetectDifficulty,1)}`,
+    `罠感知難易度（感知）：${setup.trapDetectDifficulty}`,
     `罠解除難易度（細工）：${setup.hasTrap?setup.trapDisarmDifficulty:'—'}`
   ];
   if(setup.hasTrap){
     if(setup.trapName)lines.push(`罠内容：${setup.trapName}`);
     if(setup.trapEffect)lines.push(`罠の効果：${setup.trapEffect}`);
   }
-  if(setup.questFixed)lines.push('鍵・罠のランダム生成：適用なし');
+  if(setup.questFixed)lines.push('鍵・罠の有無：クエスト固定');
   return lines;
 }
 function renderTreasureTrapInfo(){
@@ -2032,7 +2058,7 @@ function renderTreasureTrapInfo(){
  }
  box.textContent=treasureSetupLines(r).join('\n');
 }
-function trapDetectText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.questFixed)return 'このクエスト固有宝箱では罠感知判定を行いません。'; return r.hasTrap?`【罠感知判定】\n2D6+{感知}>=${r.trapDetectDifficulty}`:'この宝箱に罠はありません。';}
+function trapDetectText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; return `【罠感知判定】\n2D6+{感知}>=${r.trapDetectDifficulty}`;}
 function trapDisarmText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.questFixed)return 'このクエスト固有宝箱では罠解除判定を行いません。'; return r.hasTrap?`【罠解除判定】\n2D6+{細工}>=${r.trapDisarmDifficulty}`:'この宝箱に罠はありません。';}
 function unlockText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.questFixed)return 'このクエスト固有宝箱では解錠判定を行いません。'; return r.hasLock?`【鍵の解除判定】\n2D6+{細工}>=${r.unlockDifficulty}`:'この宝箱に鍵はありません。';}
 const LEGACY_PROGRESS_NUMERIC_RANKS={'初期':1,'初級':1,'低級':1,'チュートリアル':1,'小規模':1,'中級':2,'普通':2,'通常':2,'標準':2,'上級':3,'良質':3,'大規模':3,'特級':4,'希少':4,'強敵':4,'ボス':4,'高難度':4,'最上級':5,'高級':5};
@@ -2099,6 +2125,55 @@ function findRecipeByTreasureRow(row={}){
       || (state.recipes||[]).find(r=>recipeName && String(r.name||'').trim()===recipeName)
       || (state.recipes||[]).find(r=>entryName && String(r.resultItem||'').trim()===entryName)
       || null;
+}
+function treasureAreaOrder(areaName=''){
+  const area=(state.areas||[]).find(a=>String(a.name||'').trim()===String(areaName||'').trim());
+  const n=Number(area?.unlockOrder);
+  return Number.isFinite(n)?n:Infinity;
+}
+function treasureUnlockOrderByKey(key=''){
+  const area=(state.areas||[]).find(a=>String(a.id||'').trim()===String(key||'').trim());
+  const n=Number(area?.unlockOrder);
+  return Number.isFinite(n)?n:0;
+}
+function isBossTreasureTable(tableId=''){return /(?:lord|boss|storm_lord)/i.test(String(tableId||''));}
+function isRareTreasureTable(tableId=''){return /rare/i.test(String(tableId||''));}
+function treasureSourceAreaMatches(source='',areaName=''){
+  const text=String(source||'').trim();
+  if(!text||text==='宝箱')return true;
+  const named=(state.areas||[]).filter(a=>text.includes(String(a.name||''))).map(a=>String(a.name||''));
+  return !named.length||named.includes(String(areaName||''));
+}
+function treasureRowEligible(row={},tableId='',areaName=''){
+  const area=String(areaName||row.areaName||'').trim();
+  const tableOrder=treasureAreaOrder(area);
+  const type=String(row.entryType||'').trim();
+  if(type==='レシピ'){
+    const recipe=findRecipeByTreasureRow(row);
+    if(!recipe||!enabledRow(recipe))return false;
+    const unlockOrder=treasureUnlockOrderByKey(recipe.unlockAreaKey);
+    if(unlockOrder&&unlockOrder>tableOrder)return false;
+    const source=String(recipe.recipeSource||'').trim();
+    const bossRecipe=String(recipe.branchClass||'').trim()==='ボス派生'||/討伐後|戦利品箱|ボス報酬/.test(source);
+    if(bossRecipe&&!isBossTreasureTable(tableId))return false;
+    if(source.includes('希少宝箱')&&!isRareTreasureTable(tableId))return false;
+    if(!treasureSourceAreaMatches(source,area))return false;
+  }else if(type!=='通貨'){
+    const item=findItemByNameOrId(row.entryName,row.entryPublicId);
+    if(item){
+      if(!enabledRow(item))return false;
+      const unlockOrder=treasureUnlockOrderByKey(item.unlockAreaKey);
+      if(unlockOrder&&unlockOrder>tableOrder)return false;
+    }
+  }
+  const scrollRank=progressNumericRank(row.scrollRank,'');
+  if(scrollRank>=3&&tableOrder<5)return false;
+  if(scrollRank>=4)return false;
+  return true;
+}
+function eligibleTreasureRows(tableId,areaName=''){
+  const area=treasureAreaName(tableId,areaName);
+  return treasureRows(tableId).filter(row=>treasureRowEligible(row,tableId,area));
 }
 function treasureFieldText(row={},field){return String(row[field]??'').trim();}
 function treasureCopyLine(label,value){const v=String(value??'').trim();return v?`${label}：${v}`:'';}
@@ -2178,7 +2253,7 @@ function buildTreasureItemCopyText(row={},count='1'){
 function treasureRecipeSkill(craftType=''){const type=String(craftType||'').trim();if(type==='調合')return '調合';if(type==='料理')return 'なし';if(type==='細工')return '細工';return '鍛冶';}
 function buildTreasureRecipeCopyText(row={}){
   const name=treasureFieldText(row,'resultItem')||treasureFieldText(row,'name')||treasureFieldText(row,'id')||'名称未設定';
-  const lines=[`【${name}のレシピ】`,treasureCopyLine('登録ID',treasureFieldText(row,'publicId')),treasureCopyLine('完成数',treasureFieldText(row,'resultCount')||'1'),treasureCopyLine('ランク',progressPlayerRank(row.rank)),treasureCopyLine('レシピ価格',treasureFieldText(row,'recipePrice')?treasureFieldText(row,'recipePrice')+'G':''),treasureCopyLine('レシピ入手先',treasureFieldText(row,'recipeSource')),treasureCopyLine('製作区分',treasureFieldText(row,'craftType')),treasureCopyLine('分類',[treasureFieldText(row,'resultKind'),treasureFieldText(row,'category')].filter(Boolean).join(' / ')),treasureCopyLine('製作技能',treasureFieldText(row,'craftSkill')||treasureRecipeSkill(treasureFieldText(row,'craftType'))),treasureCopyLine('素材',treasureFieldText(row,'requiredMaterials')),treasureCopyLine('難度',treasureFieldText(row,'difficulty')),'自作：レシピ必須',treasureCopyLine('施設依頼',treasureFieldText(row,'price')?`レシピ不要 / ${treasureFieldText(row,'price')}G`:'レシピ不要'),treasureCopyLine('説明',treasureFieldText(row,'description')),treasureCopyLine('効果',treasureFieldText(row,'effect'))];
+  const lines=[`【${name}のレシピ】`,treasureCopyLine('登録ID',treasureFieldText(row,'publicId')),treasureCopyLine('完成数',treasureFieldText(row,'resultCount')||'1'),treasureCopyLine('ランク',progressPlayerRank(row.rank)),treasureCopyLine('レシピ価格',treasureFieldText(row,'recipePrice')?treasureFieldText(row,'recipePrice')+'G':''),treasureCopyLine('レシピ売値',treasureFieldText(row,'recipeSellPrice')?treasureFieldText(row,'recipeSellPrice')+'G':''),treasureCopyLine('レシピ入手先',treasureFieldText(row,'recipeSource')),treasureCopyLine('製作区分',treasureFieldText(row,'craftType')),treasureCopyLine('分類',[treasureFieldText(row,'resultKind'),treasureFieldText(row,'category')].filter(Boolean).join(' / ')),treasureCopyLine('製作技能',treasureFieldText(row,'craftSkill')||treasureRecipeSkill(treasureFieldText(row,'craftType'))),treasureCopyLine('素材',treasureFieldText(row,'requiredMaterials')),treasureCopyLine('難度',treasureFieldText(row,'difficulty')),'自作：レシピ必須',treasureCopyLine('施設依頼',treasureFieldText(row,'price')?`レシピ不要 / ${treasureFieldText(row,'price')}G`:'レシピ不要'),treasureCopyLine('説明',treasureFieldText(row,'description')),treasureCopyLine('効果',treasureFieldText(row,'effect'))];
   return lines.filter(Boolean).join('\n');
 }
 function treasureContentCopyText(row={},quantity='1'){
@@ -2210,8 +2285,8 @@ function treasureContentLines(row={},q={text:'1',detail:''}){
   return lines;
 }
 function resolveTreasureTable(tableId,areaName='',options={}){
-  const rows=treasureRows(tableId),questFixed=!!options.questFixed;
-  if(!rows.length)return {tableId,setup:buildTreasureSetup(tableId,areaName,questFixed),picked:null,isEmpty:true,displayText:`【宝箱】\n宝箱表：${tableId}\n中身候補がありません。`,copyText:'',contentLabel:'中身候補なし'};
+  const rows=eligibleTreasureRows(tableId,areaName),questFixed=!!options.questFixed;
+  if(!rows.length)return {tableId,setup:buildTreasureSetup(tableId,areaName,questFixed),picked:null,isEmpty:true,displayText:`【宝箱】\n宝箱表：${tableId}\nこの解放段階で有効な中身候補がありません。`,copyText:'',contentLabel:'中身候補なし'};
   const setup=buildTreasureSetup(tableId,areaName,questFixed);
   const profile=treasureProfile(setup?.areaName||areaName||'');
   const isEmpty=!questFixed&&Math.random()*100<Number(profile.emptyChance||0);
@@ -2287,7 +2362,7 @@ function updateTreasureCopyButtons(){
 }
 function rollTreasure(){
   const tableId=$('treasureTableSelect')?.value||'';
-  if(!treasureRows(tableId).length){$('treasureResult').textContent='この宝箱表に有効な中身候補がありません。';return;}
+  if(!eligibleTreasureRows(tableId,treasureAreaName(tableId)).length){$('treasureResult').textContent='この解放段階で有効な中身候補がありません。宝箱表の入手時期・ボス区分・公開IDを確認してください。';return;}
   const context=(state.treasureContext&&String(state.treasureContext.tableId||'')===String(tableId))?state.treasureContext:{tableId,areaName:treasureAreaName(tableId),mode:'normal'};
   const result=resolveTreasureTable(tableId,context.areaName||'',{questFixed:context.mode==='quest-fixed'});
   applyTreasureResultToStandalone(result);

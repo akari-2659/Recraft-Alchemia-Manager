@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.359</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.363</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1169,7 +1169,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.359 usability maintenance */
+/* v90.8.363 usability maintenance */
 .ra-build-info{font-size:12px;padding:6px 12px;text-align:right;color:var(--muted);background:rgba(255,253,248,.9);border-bottom:1px solid var(--line)}
 header{padding-top:12px!important;padding-bottom:6px!important}.title-card{padding:14px!important}.title-card h1{font-size:clamp(21px,3vw,30px)!important;margin-bottom:5px!important}.title-card .subtitle{font-size:.84rem;line-height:1.5}.dbid{font-size:.72rem!important}
 main>section.panel:first-of-type{padding:10px!important}
@@ -1187,10 +1187,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.359-perf1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.363-perf1">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.359｜更新：2026年8月2日</div>
+<div class="ra-build-info">v90.8.363｜更新：2026年8月2日</div>
 <div id="dirtyStateBadge" class="ra-dirty-state" role="status" aria-live="polite">保存済み</div>
 
 <header>
@@ -1837,8 +1837,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.359';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.359';
+const RECRAFT_DB_VERSION = 'v90.8.363';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.363';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -1852,7 +1852,7 @@ const SCHEMA = {
   material_ranks: ['id','name','price','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   equipment_categories: ['id','name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','price','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','power','maxStack','ammoUse','ammoKind','compatibleWeaponTypes','quiverCapacity','bagCapacity','offhandBonus','reloadTurns','spellSlots','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','enchantTarget','enchantEffectType','enchantValue','enchantDuration','enchantRounds','enchantStackRule','description','effect','processingSkill','processingToolType','processingToolRank','processingRequiredMaterials','processingResultCount','processingDifficulty','processingFee','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeSlotCost','equipmentUpgradeDetail','equipmentUpgradeTarget','unlockAreaKey','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
-  recipes: ['id','publicId','name','rank','price','recipePrice','recipeSource','craftSkill','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockAreaKey','unlockOrder','unlockCondition','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
+  recipes: ['id','publicId','name','rank','price','recipePrice','recipeSellPrice','recipeSource','craftSkill','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockAreaKey','unlockOrder','unlockCondition','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   spells: ['id','publicId','type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   skills: ['id','publicId','dataKind','name','rank','category','weaponType','timing','cost','ct','effect','description','drawWeight','balanceTier','balanceReason','enabled','probability','unlockAreaKey','unlockCondition','notes','updatedAt','ownerKey','createdBy'],
   quest_rewards: ['id','rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards','notes','updatedAt','ownerKey','createdBy'],
@@ -1864,7 +1864,7 @@ const SCHEMA = {
   monsters: ['id','name','monsterType','monsterTraits','rank','hp','mp','hitValue','evasionValue','resistValue','defenseValue','initiative','encounterValue','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule','passiveName','passiveEffect','actions','drops','habit','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', recipePrice:'レシピ価格', recipeSource:'レシピ入手先', craftSkill:'製作技能', rank:'ランク', toolRank:'使用可能上限ランク', guaranteeUpgradeMaxRank:'強化確定上限ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統名', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', compatibleWeaponTypes:'対応武器種', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', spellSlots:'術式追加枠', modifiers:'補正値', upgradeLimit:'強化枠上限', upgradeMaterialMinRank:'強化素材最低ランク', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', enchantTarget:'エンチャント対象', enchantEffectType:'エンチャント効果種別', enchantValue:'エンチャント値', enchantDuration:'持続期間', enchantRounds:'持続ラウンド', enchantStackRule:'重複ルール', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', pullRule:'引き寄せ', passiveName:'固有パッシブ名', passiveEffect:'固有パッシブ効果', habit:'習性', description:'説明', effect:'効果', processingSkill:'加工技能', processingToolType:'対応道具', processingToolRank:'必要道具ランク', processingRequiredMaterials:'加工に必要な素材', processingResultCount:'加工完成数', processingDifficulty:'加工難易度', processingFee:'施設加工依頼費', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', equipmentUpgradeSlotCost:'消費強化枠', equipmentUpgradeDetail:'特殊効果詳細', equipmentUpgradeTarget:'強化対象', unlockAreaKey:'必要解放エリア', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', requestKind:'依頼区分', questType:'内容種別', areaName:'エリア', questLocation:'実施場所', recommendedSkills:'推奨技能', rewardScope:'報酬範囲', deliveryItems:'納品物', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockKey:'エリア解放キー', unlockOrder:'解放順', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知難易度', trapDisarmDifficulty:'罠解除難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', monsterTraits:'魔物特性', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'防御値', initiative:'先制値', encounterValue:'遭遇値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ', weaponType:'武器種', timing:'タイミング', cost:'消費', ct:'CT', drawWeight:'排出ウェイト', balanceTier:'強さ区分', balanceReason:'バランス評価', probability:'排出率', unlockCondition:'解放条件'
+  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', recipePrice:'レシピ価格', recipeSellPrice:'レシピ売値', recipeSource:'レシピ入手先', craftSkill:'製作技能', rank:'ランク', toolRank:'使用可能上限ランク', guaranteeUpgradeMaxRank:'強化確定上限ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統名', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', hitMod:'命中補正', alwaysDefense:'防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', compatibleWeaponTypes:'対応武器種', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', spellSlots:'術式追加枠', modifiers:'補正値', upgradeLimit:'強化枠上限', upgradeMaterialMinRank:'強化素材最低ランク', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', enchantTarget:'エンチャント対象', enchantEffectType:'エンチャント効果種別', enchantValue:'エンチャント値', enchantDuration:'持続期間', enchantRounds:'持続ラウンド', enchantStackRule:'重複ルール', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', pullRule:'引き寄せ', passiveName:'固有パッシブ名', passiveEffect:'固有パッシブ効果', habit:'習性', description:'説明', effect:'効果', processingSkill:'加工技能', processingToolType:'対応道具', processingToolRank:'必要道具ランク', processingRequiredMaterials:'加工に必要な素材', processingResultCount:'加工完成数', processingDifficulty:'加工難易度', processingFee:'施設加工依頼費', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeValue:'装備強化値', equipmentUpgradeSlotCost:'消費強化枠', equipmentUpgradeDetail:'特殊効果詳細', equipmentUpgradeTarget:'強化対象', unlockAreaKey:'必要解放エリア', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', requestKind:'依頼区分', questType:'内容種別', areaName:'エリア', questLocation:'実施場所', recommendedSkills:'推奨技能', rewardScope:'報酬範囲', deliveryItems:'納品物', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockKey:'エリア解放キー', unlockOrder:'解放順', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠基準難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知基準難易度', trapDisarmDifficulty:'罠解除基準難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', monsterTraits:'魔物特性', hp:'HP', mp:'MP', hitValue:'命中値', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'防御値', initiative:'先制値', encounterValue:'遭遇値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ', weaponType:'武器種', timing:'タイミング', cost:'消費', ct:'CT', drawWeight:'排出ウェイト', balanceTier:'強さ区分', balanceReason:'バランス評価', probability:'排出率', unlockCondition:'解放条件'
 };
 function fieldLabelFor(key='', field=''){
   return baseKeyForTable(key)==='quests' && field==='areaName' ? '解放段階' : (LABELS[field] || field);
@@ -1878,7 +1878,7 @@ const FORM_PRIMARY_FIELDS = {
   material_ranks: ['id','name','price','description','sortOrder','enabled'],
   equipment_categories: ['name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled'],
   items: ['name','publicId','csVisible','itemType','itemCategory','price','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','power','spellSlots','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect','equipmentUpgradeEffect','equipmentUpgradeValue','equipmentUpgradeSlotCost','equipmentUpgradeDetail','equipmentUpgradeTarget','unlockAreaKey','unlockFacility','tags'],
-  recipes: ['name','publicId','rank','recipePrice','recipeSource','craftSkill','price','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockAreaKey','unlockFacility','tags'],
+  recipes: ['name','publicId','rank','recipePrice','recipeSellPrice','recipeSource','craftSkill','price','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockAreaKey','unlockFacility','tags'],
   materials: ['name','publicId','materialType','materialCategory','rank','price','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeTarget','description','effect','notes'],
   spells: ['type','name','publicId','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags'],
   skills: ['name','publicId','rank','category','weaponType','timing','cost','ct','effect','description','drawWeight','balanceTier','balanceReason','enabled','unlockAreaKey','unlockCondition','notes'],
@@ -2027,7 +2027,6 @@ function saveGuildDailyState(){
 loadGuildDailyState();
 const GUILD_SUPPORT_STORAGE_KEY = 'recraft_alchemia_guild_support_selection_v2';
 const GUILD_SUPPORT_PLAYER_KEY = 'akari';
-const GUILD_SUPPORT_FIXED_CHARACTER_NAME = 'リネット・アーレン';
 let currentGuildSupportPlayerKey = GUILD_SUPPORT_PLAYER_KEY;
 let currentGuildSupportCount = 3;
 let currentGuildSupportDate = '';
@@ -3464,37 +3463,23 @@ function guildSupportSeededSample(rows=[],count=3,salt=''){
   }
   return list.slice(0,Math.min(Math.max(0,count),list.length));
 }
-function guildSupportFixedCharacter(rows=[]){
-  return (rows||[]).find(row=>String(row.name||'').trim()===GUILD_SUPPORT_FIXED_CHARACTER_NAME)
-    || (rows||[]).find(row=>String(row.name||'').trim().startsWith('リネット'))
-    || null;
-}
 function guildSupportSelectedCharacters(){
   const rows=currentGuildSupportCharacters||[];
   if(!rows.length)return [];
-  const fixed=guildSupportFixedCharacter(rows);
   const target=Math.min(Math.max(1,currentGuildSupportCount),rows.length);
-  const fixedId=fixed?String(fixed.id||''):'';
   const map=new Map(rows.map(row=>[String(row.id||''),row]));
-  const picked=[];
-  if(fixed)picked.push(fixed);
-
-  const remainingTarget=Math.max(0,target-picked.length);
-  const stored=(currentGuildSupportIds||[])
-    .filter(id=>String(id)!==fixedId)
+  const picked=(currentGuildSupportIds||[])
     .map(id=>map.get(String(id)))
     .filter(Boolean)
-    .slice(0,remainingTarget);
-  picked.push(...stored);
+    .slice(0,target);
 
   if(picked.length<target){
     const used=new Set(picked.map(row=>String(row.id||'')));
-    const extra=guildSupportSeededSample(
+    picked.push(...guildSupportSeededSample(
       rows.filter(row=>!used.has(String(row.id||''))),
       target-picked.length,
       'initial'
-    );
-    picked.push(...extra);
+    ));
   }
 
   const ids=picked.map(row=>String(row.id||''));
@@ -3522,18 +3507,17 @@ function guildSupportCharacterCardHtml(char={}){
 }
 function guildSupportPanelHtml(){
   const selected=guildSupportSelectedCharacters();
-  const fixed=guildSupportFixedCharacter(currentGuildSupportCharacters||[]);
   const status=currentGuildSupportLoading
     ? 'akariキーからキャラクター候補を読み込んでいます。'
     : currentGuildSupportError
       ? currentGuildSupportError
       : currentGuildSupportCharacters.length
-        ? `候補${currentGuildSupportCharacters.length}人から、本日${selected.length}人を選出しています。${fixed?'リネット・アーレンは固定枠です。':'リネット・アーレンが候補内に見つかりません。'}`
+        ? `候補${currentGuildSupportCharacters.length}人から、本日${selected.length}人を選出しています。`
         : 'akariキーから候補を読み込んでください。';
   const disabled=currentGuildSupportLoading?' disabled':'';
   return `<section class="guild-quest-section">
     <h4>本日のサポート可能キャラクター <span class="view-mode-chip">${selected.length}人</span></h4>
-    <p class="table-toolbar-note">キャラクターシートのプレイヤーキー「akari」に保存されている全キャラクターを候補にします。リネット・アーレンは常に選出され、再選出では残りの枠だけを引き直します。選出結果は日付ごとに保存されます。</p>
+    <p class="table-toolbar-note">キャラクターシートのプレイヤーキー「akari」に保存されている全キャラクターを候補にし、指定人数を選出します。選出結果は日付ごとに保存されます。</p>
     <div class="guild-support-controls">
       <label>表示人数
         <select data-guild-support-count>${[1,2,3,4,5,6,7,8,9,10].map(n=>`<option value="${n}"${n===currentGuildSupportCount?' selected':''}>${n}人</option>`).join('')}</select>
@@ -3570,10 +3554,6 @@ async function loadGuildSupportCharacters(showMessage=true){
     currentGuildSupportCharacters=loaded.filter(row=>String(row.id||'').trim()).sort((a,b)=>compareValues(a.name||'',b.name||''));
     const valid=new Set(currentGuildSupportCharacters.map(row=>String(row.id||'')));
     currentGuildSupportIds=(currentGuildSupportIds||[]).filter(id=>valid.has(String(id)));
-    const fixed=guildSupportFixedCharacter(currentGuildSupportCharacters);
-    if(!fixed){
-      currentGuildSupportError='akariキーの候補内にリネット・アーレンが見つかりません。名前または保存先キーを確認してください。';
-    }
     guildSupportSelectedCharacters();
     saveGuildSupportState();
     if(showMessage)toast(`akariキーからサポート候補を${currentGuildSupportCharacters.length}人読み込みました`);
@@ -3592,31 +3572,19 @@ function rerollGuildSupportCharacters(){
     loadGuildSupportCharacters(false);
     return;
   }
-  const fixed=guildSupportFixedCharacter(rows);
   const target=Math.min(Math.max(1,currentGuildSupportCount),rows.length);
-  const picked=[];
-  if(fixed)picked.push(fixed);
-
-  const remainingTarget=Math.max(0,target-picked.length);
-  const fixedId=fixed?String(fixed.id||''):'';
-  const currentRandom=new Set(
-    (currentGuildSupportIds||[])
-      .map(String)
-      .filter(id=>id!==fixedId)
-  );
-  const randomRows=rows.filter(row=>String(row.id||'')!==fixedId);
-  let pool=randomRows.filter(row=>!currentRandom.has(String(row.id||'')));
-  if(pool.length<remainingTarget)pool=[...randomRows];
+  const currentIds=new Set((currentGuildSupportIds||[]).map(String));
+  let pool=rows.filter(row=>!currentIds.has(String(row.id||'')));
+  if(pool.length<target)pool=[...rows];
 
   for(let i=pool.length-1;i>0;i--){
     const j=Math.floor(Math.random()*(i+1));
     [pool[i],pool[j]]=[pool[j],pool[i]];
   }
-  picked.push(...pool.slice(0,remainingTarget));
-  currentGuildSupportIds=picked.map(row=>String(row.id||''));
+  currentGuildSupportIds=pool.slice(0,target).map(row=>String(row.id||''));
   saveGuildSupportState();
   renderFacilitiesPanel();
-  toast(`リネットを固定し、残り${remainingTarget}人を再選出しました`);
+  toast(`本日のサポートキャラクターを${currentGuildSupportIds.length}人再選出しました`);
 }
 function guildSupportWeaponCategories(char={}){
   const eq=char.equipment||{};
@@ -4168,6 +4136,7 @@ function buildRecipeInfoText(row={}){
   lines.push(warehouseCopyLine('完成数', fieldText(row,'resultCount') || '1'));
   lines.push(warehouseCopyLine('ランク', playerRankLabel(row.rank)));
   lines.push(warehouseCopyLine('レシピ価格', fieldText(row,'recipePrice') ? fieldText(row,'recipePrice')+'G' : ''));
+  lines.push(warehouseCopyLine('レシピ売値', fieldText(row,'recipeSellPrice') ? fieldText(row,'recipeSellPrice')+'G' : ''));
   lines.push(warehouseCopyLine('レシピ入手先', fieldText(row,'recipeSource')));
   lines.push(warehouseCopyLine('製作区分', fieldText(row,'craftType')));
   lines.push(warehouseCopyLine('分類', [resultKind, category].filter(Boolean).join(' / ')));
@@ -4659,7 +4628,6 @@ function renderFacilityProcessingCard(row={}){
     <div><b>レシピ：</b>不要</div>
     <div><b>必要素材：</b>${escapeHtml(row.processingRequiredMaterials||'未設定')}</div>
     <div><b>完成数：</b>${escapeHtml(String(row.processingResultCount||1))}</div>
-    <div><b>自作費：</b>0G</div>
     <div><b>施設加工依頼費：</b>${escapeHtml(String(Number(row.processingFee)||0))}G</div>
     <div><b>施設依頼：</b>判定不要</div>
     <div><b>加工技能：</b>${escapeHtml(row.processingSkill||'未設定')}</div>
@@ -4676,7 +4644,7 @@ function renderFacilityProcessingGroup(){
 }
 function facilityProcessingCopyText(facilityName=''){
   const rows=(state.items||[]).filter(row=>String(row.materialType||'').trim()==='加工素材'&&String(row.processingRequiredMaterials||'').trim()&&textHasFacility(row,facilityName)&&facilityRankVisible(row));
-  return rows.length?rows.map(row=>`- ${row.name||'名称未設定'}（${playerRankLabel(row.rank)} / 自作0G / 施設依頼${Number(row.processingFee)||0}G）
+  return rows.length?rows.map(row=>`- ${row.name||'名称未設定'}（${playerRankLabel(row.rank)} / 施設加工依頼${Number(row.processingFee)||0}G）
   レシピ：不要
   必要素材：${row.processingRequiredMaterials||'未設定'}
   完成数：${row.processingResultCount||1}
@@ -5781,7 +5749,7 @@ function recordCardSummary(row={}, key=''){
   const summaryFieldsByKey = {
     items: ['price','equipSlot','power','offhandBonus','reloadTurns','spellSlots','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','maxStack'],
     materials: ['price','rank','materialType','materialCategory','source','equipmentUpgradeEffect','equipmentUpgradeValue','maxStack'],
-    recipes: ['rank','price','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','difficulty'],
+    recipes: ['rank','price','recipeSellPrice','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','difficulty'],
     spells: ['rank','mpCost','target','checkType','element','power','role','scrollPrice','setItem'],
     skills: ['publicId','rank','category','weaponType','timing','cost','ct','drawWeight','balanceTier','enabled'],
     exploration_areas: ['unlockKey','unlockOrder','unlockCondition','areaType','difficulty','progressStep','eventTableId']
@@ -6731,13 +6699,14 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='materialType') help += '<div class="form-help">素材用の親分類です。魔物素材だけが専用の装備強化項目を持ち、ほかの素材には装備強化内容を設定しません。</div>';
   if(field==='materialCategory') help += '<div class="form-help">選んだ素材種別に紐づくカテゴリだけ表示します。</div>';
   if(field==='rank') help += '<div class="form-help">魔物・素材・装備・道具・レシピ・術式・クエストなど、ランクを持つデータは1以上の数値で管理し、すべての画面で★Nと表示します。</div>';
+  if(field==='recipeSellPrice') help += '<div class="form-help">宝箱などで既習レシピと重複した場合に売却できる価格です。レシピ購入価格や施設依頼費とは別に管理します。</div>';
   if(field==='toolRank') help += '<div class="form-help">この道具で扱えるレシピ・素材の上限ランクです。道具本体のランクも同じ値に揃えます。値は飛び番でも構いません。</div>';
   if(field==='unlockAreaKey') help += '<div class="form-help">この商品・作成・派生を公開するために必要な探索エリアIDです。ランクでは解放しません。</div>';
   if(field==='unlockKey') help += '<div class="form-help">プレイヤー施設HTMLへ入力する単一キーです。このエリアまで累積解放します。管理画面だけに表示し、プレイヤーへ渡す時はコピーして使用します。</div>';
   if(field==='unlockOrder') help += '<div class="form-help">小さい順に累積解放します。プレイヤーのキーが示す順番以下を公開します。</div>';
   if(field==='upgradeMaterialMinRank') help += '<div class="form-help">この装備へ使用できる強化素材の最低ランクです。未設定時は装備自身のランクを自動設定します。</div>';
   if(field==='bagCapacity') help += '<div class="form-help">バッグ専用の所持品枠数です。倉庫のスタック数や1枠数とは別項目です。</div>';
-  if(key==='treasure_tables' && ['unlockDifficulty','trapDetectDifficulty','trapDisarmDifficulty'].includes(field)) help += '<div class="form-help">必須項目です。鍵・罠の抽選結果にかかわらず、1以上の難易度を設定してください。</div>';
+  if(key==='treasure_tables' && ['unlockDifficulty','trapDetectDifficulty','trapDisarmDifficulty'].includes(field)) help += '<div class="form-help">宝箱表単位の基準値です。実際の解錠・感知・解除難易度は、中身より先に基準値－1～＋1から個別抽選されます。鍵なしなら解錠難易度は表示せず、罠がなくても感知難易度は必ず表示し、罠なしなら解除難易度だけ表示しません。</div>';
   if(field==='monsterType') help += '<div class="form-help">素材派生へ流用しやすい大分類です。粘体・獣・虫・植物・爬虫・水棲・軟体・霊体・造魔・竜・異界から選びます。</div>';
   if(field==='monsterTraits') help += '<div class="form-help">飛行・甲殻・異界・鉱質など、大分類だけでは表せない特徴をカンマ区切りで入力します。</div>';
   if(field==='encounterValue') help += '<div class="form-help">通常魔物は1～3で設定します。1＝小型・軽量、2＝標準、3＝強敵。エリアが後半かどうかではなく、その魔物自身の能力と行動で決めます。ボスは通常遭遇から除外されるため空欄で構いません。</div>';
@@ -6881,9 +6850,9 @@ function itemFormFields(row){
 function recipeFormFields(row){
   const craftType = String(row.craftType || activeRecipeCraftType() || '調合').trim();
   if(craftType === '武器派生'){
-    return ['name','publicId','rank','recipePrice','recipeSource','price','craftSkill','craftType','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockAreaKey','unlockOrder','unlockCondition','unlockFacility','tags','notes'];
+    return ['name','publicId','rank','recipePrice','recipeSellPrice','recipeSource','price','craftSkill','craftType','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockAreaKey','unlockOrder','unlockCondition','unlockFacility','tags','notes'];
   }
-  return ['name','publicId','rank','recipePrice','recipeSource','price','craftSkill','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockAreaKey','unlockOrder','unlockCondition','unlockFacility','tags','notes'];
+  return ['name','publicId','rank','recipePrice','recipeSellPrice','recipeSource','price','craftSkill','craftType','category','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockAreaKey','unlockOrder','unlockCondition','unlockFacility','tags','notes'];
 }
 function formFieldsFor(key,row){
   if(key==='items') return [...new Set(['id','updatedAt', ...itemFormFields(row)])].filter(f=>SCHEMA[key].includes(f));
@@ -7122,7 +7091,7 @@ function assertTreasureDifficultyRows(rows=[]){
   if(!invalid.length)return;
   const details=invalid.slice(0,12).map(x=>`・${String(x.row.chestName||x.row.tableId||x.row.id||'宝箱名未設定')}：${x.label}`).join('\n');
   const rest=invalid.length>12?`\nほか${invalid.length-12}件`:'';
-  throw new Error(`すべての宝箱に、1以上の解錠・罠感知・罠解除難易度を設定してください。\n${details}${rest}`);
+  throw new Error(`すべての宝箱表に、1以上の解錠・罠感知・罠解除の基準難易度を設定してください。\n${details}${rest}`);
 }
 function assertEquipmentUpgradeMinimumRows(rows=[]){
   const invalid=(rows||[]).filter(row=>isEquipmentItemRow(row)&&Number(row.upgradeLimit||0)>0&&!numericRankValueIncludingLegacyMaterialGrade(row.upgradeMaterialMinRank,''));
@@ -7959,7 +7928,7 @@ const VERIFY_SAVE_FIELDS = {
   equipment_categories: ['element','power','modifiers','description','effect','skill','itemCategory','equipSlot'],
   items: ['dataKind','itemType','itemCategory','materialType','materialCategory','name','rank','toolRank','guaranteeUpgradeMaxRank','power','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect'],
   spells: ['type','name','rank','mpCost','target','checkType','element','power','description','effect'],
-  recipes: ['rank','recipePrice','recipeSource','craftSkill','price','craftType','category','baseItem','branchType','resultItem','requiredMaterials','difficulty','description','effect'],
+  recipes: ['rank','recipePrice','recipeSellPrice','recipeSource','craftSkill','price','craftType','category','baseItem','branchType','resultItem','requiredMaterials','difficulty','description','effect'],
   quest_rewards: ['rank','rewardMin','rewardMax','rewardAvg','scale'],
   quests: ['rank','questCategory','requestKind','questType','areaName','questLocation','recommendedSkills','rewardScope','deliveryItems','progressStep','fixedEvents','clearCondition'],
   treasure_tables: ['treasureRank','scrollRank','entryType','entryName','quantity','weight'],
@@ -8346,7 +8315,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.359';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.363';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-07-26';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([
