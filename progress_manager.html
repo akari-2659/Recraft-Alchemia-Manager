@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.377</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.379</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -146,7 +146,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.377-dropfix4">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.379-dropfix4">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -154,7 +154,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </style>
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.377｜更新：2026年8月3日</div>
+<div class="ra-build-info">v90.8.379｜更新：2026年8月4日</div>
 
 <header>
   <div class="header-inner">
@@ -403,7 +403,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.377';
+const VERSION='v90.8.379';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1462,7 +1462,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.377-party-scaling-2';
+const ENCOUNTER_RULE_VERSION='v90.8.379-party-scaling-3';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -1588,18 +1588,48 @@ function encounterPatternMatches(picks=[],pattern='混成遭遇'){
   const groups=[...new Set(picks)];
   const values=picks.map(monsterEncounterValue);
   if(pattern==='単一種の群れ')return groups.length===1;
-  if(pattern==='強敵＋取り巻き')return groups.length>=2&&Math.max(...values)>=3&&values.some(v=>v<Math.max(...values));
+  if(pattern==='強敵＋取り巻き')return groups.length>=2&&Math.max(...values)>=2&&Math.max(...values)>Math.min(...values);
   return groups.length>=2;
 }
-function chooseEncounterCandidate(candidates=[],pattern='混成遭遇'){
+function weightedEncounterRow(rows=[],weightFn=()=>1){
+  if(!rows.length)return null;
+  const weighted=rows.map(row=>({row,weight:Math.max(0.0001,Number(weightFn(row))||0.0001)}));
+  let roll=Math.random()*weighted.reduce((sum,entry)=>sum+entry.weight,0);
+  for(const entry of weighted){roll-=entry.weight;if(roll<=0)return entry.row;}
+  return weighted.at(-1)?.row||null;
+}
+function chooseEncounterCandidate(candidates=[],pattern='混成遭遇',budget=0,featuredName=''){
   if(!candidates.length)return null;
   const matched=candidates.filter(c=>encounterPatternMatches(c.picks,pattern));
-  const source=matched.length?matched:candidates;
-  const bestSpent=Math.max(...source.map(c=>c.spent));
-  const full=source.filter(c=>c.spent===bestSpent);
-  const mostVaried=Math.max(...full.map(c=>new Set(c.picks).size));
-  const preferred=pattern==='混成遭遇'?full.filter(c=>new Set(c.picks).size===mostVaried):full;
-  return randomRow(preferred.length?preferred:full);
+  let source=matched.length?matched:candidates;
+  // 候補魔物を1種だけ先に均等抽選し、その魔物を含む編成を優先する。低遭遇値魔物だけへ偏るのを防ぐ。
+  const featured=String(featuredName||'').trim();
+  if(featured){
+    const inPattern=source.filter(c=>(c.picks||[]).includes(featured));
+    if(inPattern.length)source=inPattern;
+    else{const any=candidates.filter(c=>(c.picks||[]).includes(featured));if(any.length)source=any;}
+  }
+  // 単一種は遭遇値1の魔物だけが予算を使い切る候補へ偏らないよう、魔物種を先に均等抽選する。
+  if(pattern==='単一種の群れ'){
+    const byMonster=new Map();
+    source.forEach(candidate=>{
+      const name=String(candidate.picks?.[0]||'').trim();
+      if(!name)return;
+      const current=byMonster.get(name);
+      const currentGap=current?Math.abs(Number(budget||0)-Number(current.spent||0)):Infinity;
+      const nextGap=Math.abs(Number(budget||0)-Number(candidate.spent||0));
+      if(!current||nextGap<currentGap||(nextGap===currentGap&&candidate.picks.length>current.picks.length))byMonster.set(name,candidate);
+    });
+    const rows=[...byMonster.values()];
+    if(rows.length)return randomRow(rows);
+  }
+  return weightedEncounterRow(source,candidate=>{
+    const gap=Math.max(0,Number(budget||0)-Number(candidate.spent||0));
+    const diversity=new Set(candidate.picks||[]).size;
+    let weight=(1/(1+gap*.75))*(1+.75*Math.max(0,diversity-1));
+    if(pattern==='強敵＋取り巻き')weight*=1.5;
+    return weight;
+  });
 }
 function generateRandomEncounter(areaName='', options={}){
   const size=normalizePartySize(options.partySize||selectedPartySize());
@@ -1615,24 +1645,35 @@ function generateRandomEncounter(areaName='', options={}){
   const baseBudget=Number.isFinite(requestedBudget)&&requestedBudget>0?Math.floor(requestedBudget):profile.baseBudget+areaBonus;
   const minCount=Math.max(reservedPicks.length,Number(options.minCount)||profile.minCount);
   const maxCount=Math.max(minCount,Math.max(reservedPicks.length,Number(options.maxCount)||profile.maxCount));
+  // 通常エリアのランダム編成では、最低「体数」だけでなく最低「遭遇値」を満たせば高遭遇値の少数編成も候補にする。
+  const minSpent=Math.max(reservedCost,Number(options.minSpent)||0);
   const minPoolCost=pool.length?Math.min(...pool.map(monsterEncounterValue)):0;
   const requiredSlots=Math.max(0,minCount-reservedPicks.length);
-  const budget=Math.max(reservedCost,baseBudget,reservedCost+(requiredSlots*minPoolCost));
+  const budget=Math.max(reservedCost,baseBudget,minSpent,reservedCost+(requiredSlots*minPoolCost));
   if(!pool.length&&!reservedPicks.length)return null;
   const additions=enumerateEncounterAdditions(pool,Math.max(0,maxCount-reservedPicks.length),Math.max(0,budget-reservedCost));
   const candidates=additions.map(a=>({picks:[...reservedPicks,...a.picks],spent:reservedCost+a.cost}))
-    .filter(c=>c.picks.length>=minCount&&c.picks.length<=maxCount&&c.spent<=budget);
+    .filter(c=>(c.picks.length>=minCount||c.spent>=minSpent)&&c.picks.length<=maxCount&&c.spent>=minSpent&&c.spent<=budget);
   const roll=Math.random();
-  const pattern=options.pattern||(roll<.28?'単一種の群れ':roll<.76?'混成遭遇':'強敵＋取り巻き');
-  let chosen=chooseEncounterCandidate(candidates,pattern);
+  let pattern=options.pattern||(roll<.28?'単一種の群れ':roll<.76?'混成遭遇':'強敵＋取り巻き');
+  const featuredName=pool.length?randomRow(pool):(reservedPicks[0]||'');
+  let chosen=chooseEncounterCandidate(candidates,pattern,budget,featuredName);
   if(!chosen){
     const fallback=[...reservedPicks];
-    while(fallback.length<minCount&&pool.length)fallback.push(randomRow(pool));
-    if(!fallback.length&&pool.length)fallback.push(randomRow(pool));
-    chosen={picks:fallback,spent:fallback.reduce((sum,n)=>sum+monsterEncounterValue(n),0)};
+    let fallbackSpent=fallback.reduce((sum,n)=>sum+monsterEncounterValue(n),0);
+    while((fallback.length<minCount||fallbackSpent<minSpent)&&pool.length&&fallback.length<maxCount){
+      const feasible=pool.filter(name=>fallbackSpent+monsterEncounterValue(name)<=budget);
+      if(!feasible.length)break;
+      const picked=randomRow(feasible);fallback.push(picked);fallbackSpent+=monsterEncounterValue(picked);
+    }
+    if(!fallback.length&&pool.length){const picked=randomRow(pool);fallback.push(picked);fallbackSpent=monsterEncounterValue(picked);}
+    chosen={picks:fallback,spent:fallbackSpent};
   }
+  if(encounterPatternMatches(chosen.picks,'単一種の群れ'))pattern='単一種の群れ';
+  else if(encounterPatternMatches(chosen.picks,'強敵＋取り巻き'))pattern='強敵＋取り巻き';
+  else pattern='混成遭遇';
   const groups=groupEncounterPicks(chosen.picks);
-  return {areaName,partySize:size,baseBudget,budget,spent:groups.reduce((s,g)=>s+g.cost*g.count,0),pattern,groups,total:chosen.picks.length,minCount,maxCount};
+  return {areaName,partySize:size,baseBudget,budget,spent:groups.reduce((s,g)=>s+g.cost*g.count,0),pattern,groups,total:chosen.picks.length,minCount,maxCount,minSpent,featuredName};
 }
 function encounterResolutionText(resolution){
   if(!resolution||!resolution.groups?.length)return '';
@@ -1791,9 +1832,10 @@ function randomEncounterOptionsForEvent(row={},partySize=selectedPartySize()){
   const profile=partyEncounterProfile(size);
   const configuredMin=Math.floor(Number(row.encounterCountMin));
   const configuredMax=Math.floor(Number(row.encounterCountMax));
-  const minCount=Number.isFinite(configuredMin)&&configuredMin>0?Math.max(profile.minCount,configuredMin):profile.minCount;
+  const minCount=Number.isFinite(configuredMin)&&configuredMin>0?Math.max(1,configuredMin):profile.minCount;
   const maxCount=Number.isFinite(configuredMax)&&configuredMax>0?Math.max(minCount,configuredMax):profile.maxCount;
-  return {partySize:size,minCount,maxCount};
+  // profile.minCount は従来の人数別最低遭遇値としても使用し、高遭遇値魔物が少数でも候補に入るようにする。
+  return {partySize:size,minCount,maxCount,minSpent:profile.minCount};
 }
 function recordLastEncounter(label='',areaName='',groups=[]){
   const clean=(groups||[]).map(group=>({name:String(group.name||'').trim(),count:Math.max(1,Math.floor(Number(group.count)||1)),formation:String(group.formation||group.position||'').trim()})).filter(group=>group.name);
@@ -2269,6 +2311,7 @@ function treasureItemKind(row={}){
   if(itemType==='バッグ')return 'バッグ';
   if(itemType==='矢筒')return '矢筒';
   if(itemType==='術式装備')return ['魔導書','祈祷書'].includes(String(row.itemCategory||''))?'武器':'スクロール';
+  if(itemType==='食材')return '食材';
   if(itemType==='調合品'||itemType==='道具'||itemType==='特殊矢弾')return 'アイテム';
   return dataKind||itemType||'アイテム';
 }
@@ -2622,7 +2665,13 @@ function eventRewardSelectedItems(scope='event'){
 }
 function eventRewardCopyText(scope='event'){
   const reward=eventRewardState(scope);if(!reward)return'';const rows=eventRewardSelectedItems(scope),lines=[`【イベント入手】${reward.eventName}`];if(!rows.length){lines.push('入手なし');return lines.join('\n');}
-  rows.forEach(item=>lines.push('',dropPlayerInfoBlock({name:item.name,id:item.row?.id||'',publicId:item.row?.publicId||'',count:`${item.count}個`})));return lines.join('\n');
+  rows.forEach(item=>{
+    const count=String(item.count||1);
+    const block=item.row
+      ? buildTreasureItemCopyText(item.row,count)
+      : dropPlayerInfoBlock({name:item.name,id:item.row?.id||'',publicId:item.row?.publicId||'',count:`${count}個`});
+    lines.push('',block);
+  });return lines.join('\n');
 }
 function eventRewardGroupText(group={}){return(group.items||[]).map(item=>`${item.selectedName||item.name}×${item.count}${/D/i.test(item.expr||'')?`（${item.expr}）`:''}`).join('、');}
 function renderEventRewardPanel(scope='event'){
