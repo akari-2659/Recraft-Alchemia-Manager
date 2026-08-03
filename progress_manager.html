@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.374</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.376</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -146,10 +146,15 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.374-dropfix4">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.376-dropfix4">
+
+<style id="raCheckboxSizeFixV375">
+input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
+#questShowOffWrap{display:inline-flex!important;width:auto!important;max-width:100%!important;align-items:center!important;gap:7px!important;margin:0!important;color:var(--ink)!important;line-height:1.45!important;white-space:normal!important}
+</style>
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.374｜更新：2026年8月3日</div>
+<div class="ra-build-info">v90.8.376｜更新：2026年8月3日</div>
 
 <header>
   <div class="header-inner">
@@ -210,7 +215,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
             <option value="7">7人</option>
           </select>
         </label>
-        <label id="questShowOffWrap"><input type="checkbox" id="questShowDisabledImportant"> OFFの重要クエストも表示</label>
+        <label id="questShowOffWrap"><input type="checkbox" id="questShowDisabledImportant"><span>OFFの重要クエストも表示</span></label>
         <button class="secondary" type="button" id="copyImportantQuestListBtn">未クリア重要クエストをコピー</button>
         <button class="secondary" type="button" id="copyDailyQuestListBtn">デイリークエストをコピー</button>
       </div>
@@ -398,7 +403,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.374';
+const VERSION='v90.8.376';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1457,7 +1462,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.374-party-scaling-2';
+const ENCOUNTER_RULE_VERSION='v90.8.376-party-scaling-2';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,

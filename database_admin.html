@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.374</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.376</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -332,8 +332,6 @@
   .facility-upgrade-result .muted{color:var(--muted)}
   .monster-drop-desc{margin-top:6px;color:var(--muted);font-size:12px;line-height:1.6}
   .monster-drop-detail{margin-top:6px;display:grid;gap:3px;color:var(--ink);font-size:12px;line-height:1.6}
-  .facility-output{margin-top:14px;display:grid;gap:8px}
-  .facility-output textarea{width:100%;min-height:180px}
   @media (max-width:760px){.facility-summary{grid-template-columns:1fr}.facility-card-head{display:grid}.facility-actions{justify-content:stretch}.facility-actions button{width:100%}.facility-product summary{grid-template-columns:1fr}.facility-product-price{justify-self:start}}
 
   .help-layout{display:grid;gap:12px;margin-top:12px}
@@ -983,28 +981,14 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn,.facility-chip,.facility-inner-
   justify-self:auto!important;
   box-shadow:none!important;
 }
-.facility-copy-actions{
-  display:flex!important;
-  flex-wrap:wrap!important;
-  align-items:center!important;
-  justify-content:flex-start!important;
-  gap:6px!important;
-}
-.facility-copy-actions button{
-  width:auto!important;
-  min-width:0!important;
-  padding:7px 10px!important;
-  white-space:nowrap!important;
-  text-align:center!important;
-}
 @media(max-width:480px){
-  .responsive-data-table .row-actions,.monster-card-actions,.facility-copy-actions{
+  .responsive-data-table .row-actions,.monster-card-actions{
     display:flex!important;
     flex-direction:row!important;
     flex-wrap:wrap!important;
     gap:5px!important;
   }
-  .responsive-data-table .row-actions>button,.monster-card-actions>button,.facility-copy-actions>button{
+  .responsive-data-table .row-actions>button,.monster-card-actions>button{
     width:auto!important;
     min-height:32px!important;
     padding:6px 8px!important;
@@ -1171,7 +1155,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.374 usability maintenance */
+/* v90.8.376 usability maintenance */
 .ra-build-info{font-size:12px;padding:6px 12px;text-align:right;color:var(--muted);background:rgba(255,253,248,.9);border-bottom:1px solid var(--line)}
 header{padding-top:12px!important;padding-bottom:6px!important}.title-card{padding:14px!important}.title-card h1{font-size:clamp(21px,3vw,30px)!important;margin-bottom:5px!important}.title-card .subtitle{font-size:.84rem;line-height:1.5}.dbid{font-size:.72rem!important}
 main>section.panel:first-of-type{padding:10px!important}
@@ -1189,10 +1173,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.374-perf1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.376-perf1">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.374｜更新：2026年8月3日</div>
+<div class="ra-build-info">v90.8.376｜更新：2026年8月3日</div>
 
 <header>
   <div class="title-card">
@@ -1608,10 +1592,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
   <section class="panel hidden" id="panel-facilities">
     <div class="toolbar">
       <div class="field compact-field"><label for="facilityRankLimitSelect">表示ランク上限（確認用）</label><input id="facilityRankLimitSelect" type="number" min="1" step="1" inputmode="numeric" placeholder="空欄なら全ランク"></div>
-      <button class="ghost" data-facility-refresh>施設内容を更新</button>
-      <button class="secondary" data-facility-copy-all>全施設の販売商品をコピー</button>
     </div>
-    <p class="notice">施設ごとの販売商品・製作分類・食事・日替わりレシピ・サービスを確認する管理タブです。レシピ販売は管理HTMLで解放済みエリアを指定し、指定エリア枠1件＋解放済みエリア全体から5件を完全ランダム選出してコピーします。施設カタログへは日替わり品揃えを表示しません。</p>
+    <p class="notice">施設データの確認と、管理者だけが行う抽選・判定をまとめた管理タブです。常設商品や作成一覧は施設HTMLで確認できるため、管理HTMLからの施設カタログ一括コピーは行いません。レシピ販売は、指定エリア枠1件＋解放済みエリア全体から5件を選出してコピーします。</p>
     <div class="facility-layout">
       <div class="facility-summary" id="facilitySummary"></div>
       <div id="facilityCards"></div>
@@ -1708,7 +1690,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
                 </select>
               </div>
               <button class="secondary" type="button" data-facility-antique-random>未鑑定スクロールをランダム選出</button>
-              <button class="ghost" type="button" data-facility-antique-copy>骨董屋の販売商品一覧をコピー</button>
+              <button class="ghost" type="button" data-facility-antique-random-copy>選出結果をコピー</button>
             </div>
             <div id="facilityAntiqueStockResult" class="facility-upgrade-result muted">未鑑定スクロールのランダム販売枠を選出できます。</div>
           </div>
@@ -1761,10 +1743,6 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
         </div>
         <div id="facilityNoWork" class="facility-upgrade-result muted hidden">この施設には強化・調合の難易度確認項目はありません。</div>
       </section>
-      <div class="facility-output">
-        <label for="facilitySalesText">販売商品リスト出力</label>
-        <textarea id="facilitySalesText" rows="14" readonly placeholder="販売商品リストをコピーすると、ここにも一覧が表示されます。"></textarea>
-      </div>
     </div>
   </section>
 
@@ -1839,8 +1817,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.374';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.374';
+const RECRAFT_DB_VERSION = 'v90.8.376';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.376';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -3908,108 +3886,19 @@ function facilityDisplayLabel(facilityName){
   return '販売商品';
 }
 
-function antiqueRandomStockLines(){
-  if(!(currentAntiqueRandomRows||[]).length) return ['- ランダム販売は未選出'];
-  const lines=[`選出範囲：${currentAntiqueRandomArea||'未設定'}`];
-  currentAntiqueRandomRows.forEach(row=>lines.push(`- ${row.name||`未鑑定の${unidentifiedScrollType(row)||'術式'}スクロール：${playerRankLabel(row.rank)||'ランク未設定'}`} ${row.price?row.price+'G':'価格未設定'}`));
-  return lines;
-}
-
-
-const FACILITY_COPY_DEFS = {
-  '鍛冶屋':[
-    ['sales','販売'],
-    ['branches','武器派生'],
-    ['equipment','武器・防具作成'],
-    ['traps','仕掛け作成'],
-    ['materials','素材加工'],
-    ['crystal','クリスタル強化']
-  ],
-  '薬屋':[
-    ['sales','販売'],
-    ['alchemy','調合作成'],
-    ['materials','素材加工']
-  ],
-  '食事処':[
-    ['recommendations','今日のおすすめ'],
-    ['meals','持ち込み料理']
-  ],
-  '骨董屋':[
-    ['sales','販売']
-  ]
-};
-function facilityCopyDefs(name=''){
-  return FACILITY_COPY_DEFS[name] || [];
-}
-function facilityRecipeCopyLine(r={}){
-  return [
-    `- ${r.resultItem||r.name||'名称未設定'}（${playerRankLabel(r.rank)||'ランク未設定'} / ${String(r.price||0)}G）`,
-    `  必要素材：${r.requiredMaterials||'未設定'}`,
-    ...adminCraftingRouteLines(r).map(line=>`  ${line}`)
-  ].join('\n');
-}
-function facilityRecipeSectionText(title='', craftTypes=[]){
-  const groups=(craftTypes||[]).map(type=>{
-    const rows=facilityRecipeRows(type);
-    return [`〔${type}〕`,rows.length?rows.map(facilityRecipeCopyLine).join('\n'):`- ${type}は未設定`].join('\n');
+function antiqueRandomStockText(){
+  const lines=['【骨董屋・未鑑定スクロール販売】',`選出範囲：${currentAntiqueRandomArea||'未設定'}`,''];
+  if(!(currentAntiqueRandomRows||[]).length){
+    lines.push('- ランダム販売は未選出');
+    return lines.join('\n');
+  }
+  currentAntiqueRandomRows.forEach(row=>{
+    const name=row.name||`未鑑定の${unidentifiedScrollType(row)||'術式'}スクロール：${playerRankLabel(row.rank)||'ランク未設定'}`;
+    lines.push(`- ${name} ${row.price?row.price+'G':'価格未設定'}`);
   });
-  return [title,...groups].join('\n');
-}
-function facilitySalesCategoryText(facilityName=''){
-  const products=facilityProducts(facilityName);
-  const sections=[
-    `【${facilityName}・販売】`,
-    `表示範囲：${facilityRankLimitLabel()}`,
-    '',
-    products.length?products.map(facilityProductLine).join('\n'):'- 販売商品未設定'
-  ];
-  if(facilityName==='骨董屋'){
-    sections.push('','未鑑定スクロール（現在のランダム販売）',...antiqueRandomStockLines());
-  }
-  return sections.join('\n');
-}
-function buildFacilityCategoryText(facilityName='', category='sales'){
-  if(facilityName==='ギルド'){
-    if(category==='important') return guildQuestCategoryText('重要');
-    if(category==='daily') return guildQuestCategoryText('デイリー');
-  }
-  if(category==='sales') return facilitySalesCategoryText(facilityName);
-  if(facilityName==='鍛冶屋'){
-    if(category==='branches') return [`【鍛冶屋・武器派生】`,facilityRecipeSectionText('武器派生',['武器派生'])].join('\n');
-    if(category==='equipment') return [`【鍛冶屋・武器・防具作成】`,facilityRecipeSectionText('武器・防具作成',['鍛冶','防具製作','バッグ製作'])].join('\n');
-    if(category==='traps') return [`【鍛冶屋・仕掛け作成】`,facilityRecipeSectionText('仕掛け作成',['細工'])].join('\n');
-    if(category==='materials') return [`【鍛冶屋・素材加工】`,facilityProcessingCopyText('鍛冶屋')].join('\n');
-    if(category==='crystal') return [`【鍛冶屋・クリスタル強化】`,facilityRecipeSectionText('クリスタル強化',['クリスタル強化'])].join('\n');
-  }
-  if(facilityName==='薬屋' && category==='alchemy'){
-    return [`【薬屋・調合作成】`,facilityRecipeSectionText('調合作成',['調合'])].join('\n');
-  }
-  if(facilityName==='薬屋' && category==='materials'){
-    return [`【薬屋・素材加工】`,facilityProcessingCopyText('薬屋')].join('\n');
-  }
-  if(facilityName==='食事処' && category==='recommendations') return mealRecommendationsText();
-  if(facilityName==='食事処' && category==='meals') return mealCarryInText();
-  return `【${facilityName}】\n- コピー対象がありません`;
-}
-function facilityCopyButtonsHtml(facilityName=''){
-  return facilityCopyDefs(facilityName).map(([id,label])=>
-    `<button class="ghost" type="button" data-facility-copy-category="${escapeHtml(facilityName)}:${escapeHtml(id)}">${escapeHtml(label)}をコピー</button>`
-  ).join('');
-}
-async function copyFacilityCategory(facilityName='', category='sales'){
-  const text=buildFacilityCategoryText(facilityName,category);
-  const out=$('facilitySalesText');
-  if(out) out.value=text;
-  const label=(facilityCopyDefs(facilityName).find(([id])=>id===category)||[])[1] || category;
-  if(await copyAdminTextDirect(text)) toast(`${facilityName}の${label}をコピーしました`);
+  return lines.join('\n');
 }
 
-function buildFacilitySalesText(targetFacilityName=''){
-  const defs = targetFacilityName
-    ? FACILITY_DEFS.filter(f=>f.name===targetFacilityName)
-    : FACILITY_DEFS.filter(f=>!['食事処','宿屋','レシピ販売','ギルド'].includes(f.name));
-  return defs.map(f=>facilitySalesCategoryText(f.name)).filter(Boolean).join('\n\n');
-}
 function renderFacilityProductDetails(row){
   if(facilityProductType(row)==='recipe'){
     const chips=['レシピ',row.rank?playerRankLabel(row.rank):'',row.craftType||'',row.craftSkill?`技能:${row.craftSkill}`:''].filter(Boolean);
@@ -4043,7 +3932,7 @@ function renderFacilitiesPanel(){
     if(active==='sales'){
       const rows=facilityProducts(f.name);
       body=rows.length?`<div class="facility-product-list">${rows.map(renderFacilityProductDetails).join('')}</div>`:'<p class="notice">この条件に一致する常設販売商品はありません。</p>';
-    }else if(active==='recommendations') body=renderFacilityMealRecommendations();
+    }else if(active==='recommendations') body=`<div class="facility-actions"><button class="ghost" type="button" data-meal-recommend-copy>おすすめ3品をコピー</button></div>${renderFacilityMealRecommendations()}`;
     else if(active==='meals') body=renderFacilityMealRows();
     else if(active==='branches') body=renderFacilityRecipeGroup('武器派生');
     else if(active==='armor') body=renderFacilityRecipeGroup('防具製作');
@@ -4059,18 +3948,11 @@ function renderFacilitiesPanel(){
     else if(active==='services') body=`<ul class="facility-service-list">${(f.services||[]).map(s=>`<li><b>${escapeHtml(s.name)}</b> <span class="facility-chip">${escapeHtml(s.price||'価格未設定')}</span><br>${escapeHtml(s.description||'')}</li>`).join('')}</ul>`;
     else body='<p class="notice">下の施設作業欄で内容を確認してください。</p>';
     return `<section class="facility-card">
-      <div class="facility-card-head"><div><h3>${escapeHtml(f.name)}</h3><p class="facility-role">${escapeHtml(f.role)}</p></div><div class="facility-copy-actions">${facilityCopyButtonsHtml(f.name)}</div></div>
+      <div class="facility-card-head"><div><h3>${escapeHtml(f.name)}</h3><p class="facility-role">${escapeHtml(f.role)}</p></div></div>
       ${tabHtml}<div class="facility-tab-panel">${body}</div>
     </section>`;
   }).join('');
-  const out=$('facilitySalesText'); if(out) out.value=buildFacilitySalesText();
   renderFacilityWorkPanel();
-}
-async function copyFacilitySalesList(facilityName=''){
-  const text=buildFacilitySalesText(facilityName);
-  const out=$('facilitySalesText');
-  if(out) out.value=text;
-  if(await copyAdminTextDirect(text)) toast(facilityName ? `${facilityName}の販売をコピーしました` : '全施設の販売商品をコピーしました');
 }
 
 const ADMIN_ITEM_TYPE_PREFERRED_ORDER = ['武器','防具','盾','装飾品','調合品','道具','特殊矢弾','収納具','スクロール','換金品','その他'];
@@ -8570,7 +8452,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.374';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.376';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-03';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([
@@ -8864,8 +8746,8 @@ document.addEventListener('click',e=>{
     }
     return;
   }
-  const facilityRefresh=e.target.closest('[data-facility-refresh]'); if(facilityRefresh){ renderFacilitiesPanel(); toast('施設内容を更新しました'); return; }
   const mealReroll=e.target.closest('[data-meal-reroll]'); if(mealReroll){ drawMealRecommendations(); renderFacilitiesPanel(); toast('今日のおすすめ3品を再抽選しました'); return; }
+  const mealRecommendCopy=e.target.closest('[data-meal-recommend-copy]'); if(mealRecommendCopy){ copyAdminTextDirect(mealRecommendationsText()).then(ok=>{if(ok)toast('今日のおすすめ3品をコピーしました');}); return; }
   const copyistDraw=e.target.closest('[data-copyist-draw]'); if(copyistDraw){ const full=drawCopyistDailyRows(); renderFacilitiesPanel(); toast(full?'レシピ販売の販売する6枠を選出しました':'候補数が不足しているため選出可能な範囲で決定しました'); return; }
   const copyistCopy=e.target.closest('[data-copyist-copy]'); if(copyistCopy){ if(!copyistSelectedRows().length){toast('先に販売品を選出してください');return;} copyAdminTextDirect(copyistDailyText()).then(ok=>{if(ok)toast('レシピ販売の品揃えをコピーしました');}); return; }
   const weaponCategory=e.target.closest('[data-facility-weapon-category]'); if(weaponCategory){ currentFacilityWeaponCategory=weaponCategory.dataset.facilityWeaponCategory||''; renderFacilitiesPanel(); return; }
@@ -8885,17 +8767,14 @@ document.addEventListener('click',e=>{
     copyAdminTextDirect(guildQuestCategoryText(category)).then(ok=>{if(ok) toast(`${category}クエストをコピーしました`);});
     return;
   }
-  const facilityCopyCategory=e.target.closest('[data-facility-copy-category]'); if(facilityCopyCategory){
-    const [facilityName,category]=String(facilityCopyCategory.dataset.facilityCopyCategory||'').split(':');
-    copyFacilityCategory(facilityName,category||'sales');
-    return;
-  }
-  const facilityCopyAll=e.target.closest('[data-facility-copy-all]'); if(facilityCopyAll){ copyFacilitySalesList(); return; }
-  const facilityCopy=e.target.closest('[data-facility-copy]'); if(facilityCopy){ copyFacilitySalesList(facilityCopy.dataset.facilityCopy); return; }
   const facilityUpgradeCheck=e.target.closest('[data-facility-upgrade-check]'); if(facilityUpgradeCheck){ renderFacilityUpgradeResult(); return; }
   const facilityAlchemyCheck=e.target.closest('[data-facility-alchemy-check]'); if(facilityAlchemyCheck){ renderFacilityAlchemyResult(); return; }
   const facilityAntiqueRandom=e.target.closest('[data-facility-antique-random]'); if(facilityAntiqueRandom){ renderAntiqueRandomStock(); return; }
-  const facilityAntiqueCopy=e.target.closest('[data-facility-antique-copy]'); if(facilityAntiqueCopy){ copyFacilityCategory('骨董屋','sales'); return; }
+  const facilityAntiqueRandomCopy=e.target.closest('[data-facility-antique-random-copy]'); if(facilityAntiqueRandomCopy){
+    if(!(currentAntiqueRandomRows||[]).length){ toast('先に未鑑定スクロールを選出してください'); return; }
+    copyAdminTextDirect(antiqueRandomStockText()).then(ok=>{if(ok)toast('未鑑定スクロールの選出結果をコピーしました');});
+    return;
+  }
   const facilityAppraisalCheck=e.target.closest('[data-facility-appraisal-check]'); if(facilityAppraisalCheck){ renderAntiqueAppraisalResult(true); return; }
   const facilityAppraisalCopy=e.target.closest('[data-facility-appraisal-copy]'); if(facilityAppraisalCopy){
     if(!currentAntiqueAppraisalText){ toast('先に鑑定結果を決定してください'); return; }
