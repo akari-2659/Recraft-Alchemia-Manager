@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.371</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.372</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -146,10 +146,10 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.371-dropfix4">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.372-dropfix4">
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.371｜更新：2026年8月3日</div>
+<div class="ra-build-info">v90.8.372｜更新：2026年8月3日</div>
 
 <header>
   <div class="header-inner">
@@ -400,10 +400,20 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.371';
+const VERSION='v90.8.372';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
-const GITHUB_COMMON_DB_MANIFEST_URL=GITHUB_COMMON_DB_BASE+'manifest.json';
+function progressGithubBaseCandidates(){
+  const bases=[];
+  try{bases.push(new URL('./data/public/',window.location.href).toString());}catch(_e){}
+  bases.push(GITHUB_COMMON_DB_BASE);
+  return[...new Set(bases.filter(Boolean))];
+}
+function progressManifestMasterInfo(manifest={}){
+  const nested=manifest&&manifest.files&&manifest.files.master;
+  const nestedObject=nested&&typeof nested==='object'?nested:{};
+  return{file:String(manifest.master||nestedObject.path||(typeof nested==='string'?nested:'')||'').trim(),sha256:String(manifest.sha256||nestedObject.sha256||'').trim()};
+}
 const STORE_KEY='recraft_alchemia_progress_manager_v1';
 const GUILD_DAILY_STORAGE_KEY='recraft_alchemia_guild_daily_selection_v1';
 const GUILD_DAILY_CHANNEL_NAME='recraft_alchemia_guild_daily_channel';
@@ -788,33 +798,37 @@ function normalizeProgressMaster(document,manifest={}){
   return {data,version:masterVersion||manifestVersion,versionWarning:manifestVersion&&masterVersion&&manifestVersion!==masterVersion?`manifest ${manifestVersion} / master ${masterVersion}`:''};
 }
 async function fetchGithubProgressMaster(){
-  let lastError=null, usableMismatch=null;
-  for(let attempt=0;attempt<4;attempt++){
-    const token=`${Date.now()}_${attempt}_${Math.random().toString(36).slice(2)}`;
+  const errors=[];
+  let usableMismatch=null;
+  for(const base of progressGithubBaseCandidates()){
+    let lastError=null;
+    for(let attempt=0;attempt<3;attempt++){
+      const token=`${Date.now()}_${attempt}_${Math.random().toString(36).slice(2)}`;
+      try{
+        const manifestUrl=new URL('manifest.json',base);
+        manifestUrl.searchParams.set('_ra',token);
+        const manifest=await progressFetchJson(manifestUrl.toString());
+        const info=progressManifestMasterInfo(manifest);
+        if(!info.file||info.file.includes('..')||info.file.includes('\\'))throw new Error('共通DBのmasterファイル名が不正です。');
+        const masterUrl=new URL(info.file,base);
+        masterUrl.searchParams.set('_ra',`${info.sha256||String(manifest.version||'master')}_${token}`);
+        const result=normalizeProgressMaster(await progressFetchJson(masterUrl.toString()),manifest);
+        if(!result.versionWarning)return result;
+        usableMismatch=result;
+        lastError=new Error(`共通DBの更新反映待ちです（${result.versionWarning}）`);
+      }catch(error){lastError=error;}
+      if(attempt<2)await progressGithubDelay(250*(attempt+1));
+    }
     try{
-      const manifestUrl=new URL(GITHUB_COMMON_DB_MANIFEST_URL);
-      manifestUrl.searchParams.set('_ra',token);
-      const manifest=await progressFetchJson(manifestUrl.toString());
-      const masterFile=String(manifest.master||'').trim();
-      if(!masterFile||masterFile.includes('..')||masterFile.includes('\\'))throw new Error('共通DBのmasterファイル名が不正です。');
-      const masterUrl=new URL(masterFile,GITHUB_COMMON_DB_BASE);
-      masterUrl.searchParams.set('_ra',`${String(manifest.sha256||manifest.version||'master')}_${token}`);
-      const result=normalizeProgressMaster(await progressFetchJson(masterUrl.toString()),manifest);
-      if(!result.versionWarning)return result;
-      usableMismatch=result;
-      lastError=new Error(`共通DBの更新反映待ちです（${result.versionWarning}）`);
-    }catch(error){lastError=error;}
-    if(attempt<3)await progressGithubDelay(300*(attempt+1));
+      const directUrl=new URL('recraft_alchemia_master.json',base);
+      directUrl.searchParams.set('_ra',`${Date.now()}_direct_${Math.random().toString(36).slice(2)}`);
+      return normalizeProgressMaster(await progressFetchJson(directUrl.toString()),{master:'recraft_alchemia_master.json'});
+    }catch(directError){errors.push(`${base}: ${[lastError&&lastError.message,directError&&directError.message].filter(Boolean).join(' / ')}`);}
   }
-  try{
-    const directUrl=new URL('recraft_alchemia_master.json',GITHUB_COMMON_DB_BASE);
-    directUrl.searchParams.set('_ra',`${Date.now()}_direct_${Math.random().toString(36).slice(2)}`);
-    return normalizeProgressMaster(await progressFetchJson(directUrl.toString()),{master:'recraft_alchemia_master.json'});
-  }catch(directError){
-    if(usableMismatch)return usableMismatch;
-    throw new Error([lastError&&lastError.message,directError&&directError.message].filter(Boolean).join(' / ')||'GitHub共通DBを取得できませんでした。');
-  }
+  if(usableMismatch)return usableMismatch;
+  throw new Error(errors.join(' / ')||'GitHub共通DBを取得できませんでした。');
 }
+
 function saveMasterCache(data,version=''){
   try{localStorage.setItem(MASTER_CACHE_KEY,JSON.stringify({savedAt:Date.now(),version,data}));}catch(_e){}
 }
@@ -1438,7 +1452,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.371-party-scaling-2';
+const ENCOUNTER_RULE_VERSION='v90.8.372-party-scaling-2';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,

@@ -1,6 +1,6 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "90.8.371",
+  "version": "90.8.372",
   "encoding": "UTF-8",
   "description": "Recraft-Alchemia 統合初期データ。宝箱進行監査、異界の任意解放化、施設のプレイヤーキー別・個別解放キー蓄積方式、明るい画像資産レイアウト、管理HTMLでの非ボス宝箱レシピ限定の「レシピ販売」選出に対応。",
   "data": {
