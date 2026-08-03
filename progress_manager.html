@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.366</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.371</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -146,10 +146,10 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.366-dropfix4">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.371-dropfix4">
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.366｜更新：2026年8月2日</div>
+<div class="ra-build-info">v90.8.371｜更新：2026年8月3日</div>
 
 <header>
   <div class="header-inner">
@@ -400,7 +400,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 </main>
 <script>
 'use strict';
-const VERSION='v90.8.366';
+const VERSION='v90.8.371';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 const GITHUB_COMMON_DB_MANIFEST_URL=GITHUB_COMMON_DB_BASE+'manifest.json';
@@ -1438,7 +1438,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.366-party-scaling-2';
+const ENCOUNTER_RULE_VERSION='v90.8.371-party-scaling-2';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -2137,15 +2137,32 @@ function findRecipeByTreasureRow(row={}){
       || (state.recipes||[]).find(r=>entryName && String(r.resultItem||'').trim()===entryName)
       || null;
 }
+function treasureAreaByName(areaName=''){
+  return (state.areas||[]).find(a=>String(a.name||'').trim()===String(areaName||'').trim())||null;
+}
+function treasureAreaById(areaId=''){
+  return (state.areas||[]).find(a=>String(a.id||'').trim()===String(areaId||'').trim())||null;
+}
 function treasureAreaOrder(areaName=''){
-  const area=(state.areas||[]).find(a=>String(a.name||'').trim()===String(areaName||'').trim());
-  const n=Number(area?.unlockOrder);
+  const n=Number(treasureAreaByName(areaName)?.unlockOrder);
   return Number.isFinite(n)?n:Infinity;
 }
-function treasureUnlockOrderByKey(key=''){
-  const area=(state.areas||[]).find(a=>String(a.id||'').trim()===String(key||'').trim());
-  const n=Number(area?.unlockOrder);
-  return Number.isFinite(n)?n:0;
+function treasureAreaIsOtherworld(area={}){
+  return String(area&&area.areaType||'').trim()==='異界';
+}
+function treasureUnlockAreaAllowed(unlockAreaKey='',chestAreaName=''){
+  const key=String(unlockAreaKey||'').trim();
+  if(!key)return true;
+  const required=treasureAreaById(key),chest=treasureAreaByName(chestAreaName);
+  if(!required||!chest)return false;
+  const requiredOtherworld=treasureAreaIsOtherworld(required),chestOtherworld=treasureAreaIsOtherworld(chest);
+  if(requiredOtherworld)return chestOtherworld&&String(required.id||'')===String(chest.id||'');
+  const requiredOrder=Number(required.unlockOrder),chestOrder=Number(chest.unlockOrder);
+  if(chestOtherworld){
+    // 任意異界は自身の固有品と、その分岐元までの通常エリア品だけを再抽選できる。
+    return Number.isFinite(requiredOrder)&&requiredOrder<=3;
+  }
+  return Number.isFinite(requiredOrder)&&Number.isFinite(chestOrder)&&requiredOrder<=chestOrder;
 }
 function isBossTreasureTable(tableId=''){return /(?:lord|boss|storm_lord)/i.test(String(tableId||''));}
 function isRareTreasureTable(tableId=''){return /rare/i.test(String(tableId||''));}
@@ -2155,6 +2172,15 @@ function treasureSourceAreaMatches(source='',areaName=''){
   const named=(state.areas||[]).filter(a=>text.includes(String(a.name||''))).map(a=>String(a.name||''));
   return !named.length||named.includes(String(areaName||''));
 }
+function treasureRecipeMaterialNames(text=''){
+  return String(text||'').split(/[\n,、]+/u).map(part=>String(part||'').trim().replace(/\s*[×xX]\s*\d+.*$/u,'').trim()).filter(Boolean);
+}
+function treasureRecipeMaterialsAvailable(recipe={},areaName=''){
+  return treasureRecipeMaterialNames(recipe.requiredMaterials).every(name=>{
+    const item=(state.items||[]).find(row=>String(row.name||'').trim()===name);
+    return !item||(enabledRow(item)&&treasureUnlockAreaAllowed(item.unlockAreaKey,areaName));
+  });
+}
 function treasureRowEligible(row={},tableId='',areaName=''){
   const area=String(areaName||row.areaName||'').trim();
   const tableOrder=treasureAreaOrder(area);
@@ -2162,8 +2188,8 @@ function treasureRowEligible(row={},tableId='',areaName=''){
   if(type==='レシピ'){
     const recipe=findRecipeByTreasureRow(row);
     if(!recipe||!enabledRow(recipe))return false;
-    const unlockOrder=treasureUnlockOrderByKey(recipe.unlockAreaKey);
-    if(unlockOrder&&unlockOrder>tableOrder)return false;
+    if(!treasureUnlockAreaAllowed(recipe.unlockAreaKey,area))return false;
+    if(!treasureRecipeMaterialsAvailable(recipe,area))return false;
     const source=String(recipe.recipeSource||'').trim();
     const bossRecipe=String(recipe.branchClass||'').trim()==='ボス派生'||/討伐後|戦利品箱|ボス報酬/.test(source);
     if(bossRecipe&&!isBossTreasureTable(tableId))return false;
@@ -2173,8 +2199,7 @@ function treasureRowEligible(row={},tableId='',areaName=''){
     const item=findItemByNameOrId(row.entryName,row.entryPublicId);
     if(item){
       if(!enabledRow(item))return false;
-      const unlockOrder=treasureUnlockOrderByKey(item.unlockAreaKey);
-      if(unlockOrder&&unlockOrder>tableOrder)return false;
+      if(!treasureUnlockAreaAllowed(item.unlockAreaKey,area))return false;
     }
   }
   const scrollRank=progressNumericRank(row.scrollRank,'');
