@@ -1284,7 +1284,7 @@ body.ra-help .title-card::before { background-image:url("assets/ui/alchemy-water
 }
 
 /* ========================================================================== */
-/* v90.8.372 — 工房掲示板 / 錬金術施設レイアウト                              */
+/* v90.8.373 — 工房掲示板 / 錬金術施設レイアウト                              */
 /* 旧「開いた魔導書」型の一枚面を廃止し、画像資産を使った独立パネル構成へ変更。 */
 /* ========================================================================== */
 body.ra-app{
@@ -1488,7 +1488,7 @@ body.ra-app footer{color:#d8cbb8 !important;text-shadow:0 1px 2px rgba(0,0,0,.45
 }
 
 /* ========================================================================== */
-/* v90.8.372 — 明るい工房回廊 / 施設カードレイアウト                           */
+/* v90.8.373 — 明るい工房回廊 / 施設カードレイアウト                           */
 /* 暗い壁面表現を廃止し、紙テクスチャと既存紋章画像を淡い背景へ配置する。       */
 /* ========================================================================== */
 html{background:#f5efe3 !important;color-scheme:light !important}
@@ -1620,7 +1620,7 @@ body.ra-facility .daily-recipe-card::after{content:"";position:absolute;right:10
   body.ra-app .hero::before,body.ra-app .title-card::before,body.ra-app .header-inner::before{opacity:.075 !important}
 }
 
-/* v90.8.372: version information is shown once at the page top, never floating. */
+/* v90.8.373: version information is shown once at the page top, never floating. */
 body.ra-app .ra-build-info{
   position:static !important;inset:auto !important;z-index:auto !important;
   width:min(1180px,calc(100% - 28px));margin:6px auto 0 !important;padding:4px 2px !important;
@@ -1628,3 +1628,58 @@ body.ra-app .ra-build-info{
   color:var(--ra-muted,#70665b) !important;text-align:right !important;backdrop-filter:none !important;
 }
 @media(max-width:720px){body.ra-app .ra-build-info{text-align:left !important;width:min(100% - 20px,1180px)}}
+
+
+/* v90.8.373: fine spacing and edge readability */
+body.ra-app > main{padding:clamp(18px,2.4vw,30px)!important;}
+body.ra-app :is(.panel,.big-section,.tab-panel){padding:clamp(15px,2vw,24px)!important;}
+body.ra-app :is(.card,.mini-card,.status-box,.notice,.result,.facility-summary,.facility-work-block,.facility-product-body,.help-body){padding:clamp(11px,1.5vw,17px)!important;}
+body.ra-app :is(.panel,.card,.notice,.status-box,.result,.facility-product,.facility-upgrade-box,.table-wrap,.modal-card,.weapon-modal-dialog){overflow-clip-margin:8px;}
+body.ra-app :is(.panel,.card,.facility-product-body,.modal-body,.weapon-modal-body)>:first-child{margin-top:0!important;}
+body.ra-app :is(.panel,.card,.facility-product-body,.modal-body,.weapon-modal-body)>:last-child{margin-bottom:0!important;}
+body.ra-app :is(.buttons,.tabs,.subtabs,.tab-nav,.quest-category-bar,.section-actions,.filter-actions,.facility-actions,.help-actions,.monster-output-actions,.modal-foot){gap:10px!important;margin-block:12px!important;padding:2px!important;}
+body.ra-app :is(button,.tab,.subtab,.tab-btn,.quest-category-btn){min-height:40px;padding:8px 13px!important;line-height:1.35;}
+body.ra-app :is(input,select,textarea){min-height:40px;padding:8px 10px!important;}
+body.ra-app :is(label,.field){min-width:0;}
+body.ra-app :is(table th,table td){padding:9px 10px!important;}
+body.ra-app details>summary{padding:10px 12px!important;}
+body.ra-app .facility-product-meta{gap:7px!important;margin-block:8px!important;}
+body.ra-app .facility-chip,body.ra-app .pill{padding:4px 8px!important;line-height:1.35;}
+body.ra-app :is(.modal-body,.weapon-modal-body,.dialog-body){padding:16px!important;}
+body.ra-app :is(.modal-head,.weapon-modal-header,.dialog-head){padding:13px 16px!important;}
+@media(max-width:720px){body.ra-app>main{padding:13px!important}body.ra-app :is(.panel,.big-section,.tab-panel){padding:13px!important}body.ra-app :is(.card,.mini-card,.status-box,.notice,.result,.facility-product-body,.help-body){padding:11px!important}}
+
+/* v90.8.373: recipe sales layout */
+body.ra-app .copyist-manager{display:grid;gap:14px;padding:16px;border:1px solid var(--line);border-radius:14px;background:rgba(255,253,248,.76)}
+body.ra-app .copyist-manager>.notice{margin:0!important}
+body.ra-app .copyist-control-grid{display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(210px,300px) minmax(160px,190px)!important;gap:14px!important;align-items:start!important;margin:0!important}
+body.ra-app .copyist-area-panel,body.ra-app .copyist-specified-field{min-width:0;padding:12px;border:1px solid #dfccb0;border-radius:12px;background:rgba(255,255,255,.72)}
+body.ra-app .copyist-area-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px!important;margin-top:8px!important}
+body.ra-app .copyist-area-check{display:flex!important;width:100%;min-width:0;padding:8px 10px!important;line-height:1.35}
+body.ra-app .copyist-area-check span{overflow-wrap:anywhere}
+body.ra-app .copyist-specified-field{display:grid;gap:8px}
+body.ra-app .copyist-action-stack{display:grid;gap:9px;align-self:stretch}
+body.ra-app .copyist-action-stack button{width:100%!important;min-width:0!important;text-align:center!important;margin:0!important}
+body.ra-app .copyist-stat-row{display:flex;flex-wrap:wrap;gap:7px;padding-inline:2px}
+body.ra-app .copyist-result-grid{gap:12px!important;margin-top:0!important}
+body.ra-app .copyist-result-card{padding:14px!important}
+@media(max-width:980px){body.ra-app .copyist-control-grid{grid-template-columns:minmax(0,1fr) minmax(210px,280px)!important}body.ra-app .copyist-action-stack{grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){body.ra-app .copyist-control-grid{grid-template-columns:1fr!important}body.ra-app .copyist-action-stack{grid-column:auto;grid-template-columns:1fr}body.ra-app .copyist-area-grid{grid-template-columns:1fr}}
+/* v90.8.373: encounter drop UI */
+body.ra-app .drop-mode-switch{display:grid;grid-template-columns:repeat(2,minmax(0,220px));gap:8px;margin:12px 0 14px}
+body.ra-app .drop-mode-btn{width:100%;text-align:center}
+body.ra-app .drop-mode-btn:not(.active){filter:saturate(.55) brightness(.92);opacity:.82}
+body.ra-app .drop-check-card{display:flex!important;align-items:flex-start;gap:10px;margin:12px 0!important;cursor:pointer}
+body.ra-app .drop-check-card input,body.ra-app .encounter-dismantle-check input{width:auto!important;min-height:0;margin-top:3px}
+body.ra-app .encounter-drop-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin:12px 0}
+body.ra-app .encounter-drop-actions button{width:100%!important;min-width:0!important;text-align:center!important}
+body.ra-app .encounter-drop-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin:12px 0}
+body.ra-app .encounter-drop-instance{position:relative;display:grid;gap:7px;padding:13px 14px 14px;border:1px solid var(--line);border-radius:12px;background:rgba(255,253,248,.82);min-width:0}
+body.ra-app .encounter-drop-title{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-right:54px}
+body.ra-app .encounter-dismantle-check{display:flex;align-items:flex-start;gap:8px;padding:8px;border-radius:9px;background:rgba(244,235,217,.78);font-weight:700}
+body.ra-app .encounter-drop-remove{position:absolute;right:10px;top:10px;min-height:30px!important;padding:4px 8px!important;font-size:12px}
+body.ra-app .encounter-drop-result-list{display:grid;gap:14px}
+body.ra-app .encounter-drop-result-group{padding:13px;border:1px solid var(--line);border-radius:12px;background:rgba(255,253,248,.7)}
+body.ra-app .encounter-drop-result-group h4{margin:0 0 5px}
+body.ra-app .drop-copy-actions{margin-top:14px!important}
+@media(max-width:600px){body.ra-app .drop-mode-switch{grid-template-columns:1fr}body.ra-app .encounter-drop-list{grid-template-columns:1fr}}
