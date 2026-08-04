@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.383</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.384</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1155,7 +1155,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.383 usability maintenance */
+/* v90.8.384 usability maintenance */
 .ra-build-info{font-size:12px;padding:6px 12px;text-align:right;color:var(--muted);background:rgba(255,253,248,.9);border-bottom:1px solid var(--line)}
 header{padding-top:12px!important;padding-bottom:6px!important}.title-card{padding:14px!important}.title-card h1{font-size:clamp(21px,3vw,30px)!important;margin-bottom:5px!important}.title-card .subtitle{font-size:.84rem;line-height:1.5}.dbid{font-size:.72rem!important}
 main>section.panel:first-of-type{padding:10px!important}
@@ -1173,10 +1173,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.383-perf1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.384-perf1">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.383｜更新：2026年8月4日</div>
+<div class="ra-build-info">v90.8.384｜更新：2026年8月4日</div>
 
 <header>
   <div class="title-card">
@@ -1817,8 +1817,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.383';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.383';
+const RECRAFT_DB_VERSION = 'v90.8.384';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.384';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -4270,6 +4270,18 @@ async function copyRowCard(key, idx){
   if(await copyAdminTextDirect(text)) toast(`${row.name || 'データ'}のプレイヤー向け情報をコピーしました`);
 }
 
+async function copyRowPublicId(key, idx){
+  const base=baseKeyForTable(key);
+  const row=(state[base]||[])[idx];
+  if(!row){toast('コピー対象が見つかりません','error');return;}
+  const publicId=fieldText(row,'publicId');
+  if(!publicId){toast(`${row.name||'データ'}には登録IDがありません`,'warn');return;}
+  if(await copyAdminTextDirect(publicId))toast(`${row.name||'データ'}の登録IDだけをコピーしました`);
+}
+function idOnlyCopyButtonHtml(key,idx){
+  return ['items','materials'].includes(key)?`<button type="button" class="secondary" data-copy-public-id="${key}:${idx}">IDのみコピー</button>`:'';
+}
+
 
 
 function renderFilterControls(key){
@@ -5909,7 +5921,7 @@ function recordCardHtml(row={}, idx=0, key=''){
       <div class="monster-card-head">
         <div class="monster-title"><b>${escapeHtml(title)}</b>${id ? `<span class="monster-id">${escapeHtml(id)}</span>` : ''}</div>
         <div class="monster-card-actions">
-          ${key==='exploration_areas' ? `<button type="button" class="secondary" data-copy-unlock-key="${idx}">解放キーコピー</button>` : `<button type="button" class="secondary" data-copy-card="${key}:${idx}">情報コピー</button>`}
+          ${key==='exploration_areas' ? `<button type="button" class="secondary" data-copy-unlock-key="${idx}">解放キーコピー</button>` : `<button type="button" class="secondary" data-copy-card="${key}:${idx}">情報コピー</button>${idOnlyCopyButtonHtml(key,idx)}`}
           <button type="button" class="secondary" data-row-save="${key}:${idx}">個別DB登録</button>
           <button type="button" class="danger" data-row-replace="${key}:${idx}">個別DB置換</button>
           <button type="button" class="ghost" data-edit-row="${editKey}:${idx}">編集</button>
@@ -5990,7 +6002,7 @@ function renderTable(key){
   }
   rows.forEach(({row,idx})=>{
     const editKey=baseKeyForTable(key);
-    html+=`<tr><td class="controls" data-label="操作"><div class="row-actions"><button class="secondary" data-copy-card="${key}:${idx}">情報コピー</button><button class="secondary" data-row-save="${key}:${idx}">個別DB登録</button><button class="danger" data-row-replace="${key}:${idx}">個別DB置換</button><button class="ghost" data-edit-row="${editKey}:${idx}">編集</button><button class="ghost" data-dup="${editKey}:${idx}">複製</button><button class="danger" data-del="${editKey}:${idx}">削除</button></div></td>`;
+    html+=`<tr><td class="controls" data-label="操作"><div class="row-actions"><button class="secondary" data-copy-card="${key}:${idx}">情報コピー</button>${idOnlyCopyButtonHtml(key,idx)}<button class="secondary" data-row-save="${key}:${idx}">個別DB登録</button><button class="danger" data-row-replace="${key}:${idx}">個別DB置換</button><button class="ghost" data-edit-row="${editKey}:${idx}">編集</button><button class="ghost" data-dup="${editKey}:${idx}">複製</button><button class="danger" data-del="${editKey}:${idx}">削除</button></div></td>`;
     headers.forEach(h=>{
       const cls = FORM_LONG_FIELDS.has(h) ? 'readonly-cell long' : 'readonly-cell';
       html+=`<td class="${cls}" data-label="${escapeHtml(fieldLabelFor(key,h))}">${escapeHtml(displayFieldValue(row, h))}</td>`;
@@ -8470,7 +8482,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.383';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.384';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-04';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
@@ -8759,6 +8771,7 @@ document.addEventListener('click',e=>{
   const monsterToken=e.target.closest('[data-monster-token]'); if(monsterToken){ outputMonsterToken(+monsterToken.dataset.monsterToken); return; }
   const monsterPalette=e.target.closest('[data-monster-palette]'); if(monsterPalette){ outputMonsterPalette(+monsterPalette.dataset.monsterPalette); return; }
   const copyCard=e.target.closest('[data-copy-card]'); if(copyCard){ const [k,i]=copyCard.dataset.copyCard.split(':'); copyRowCard(k,+i); return; }
+  const copyId=e.target.closest('[data-copy-public-id]'); if(copyId){ const [k,i]=copyId.dataset.copyPublicId.split(':'); copyRowPublicId(k,+i); return; }
   const rowSave=e.target.closest('[data-row-save]'); if(rowSave){ const [k,i]=rowSave.dataset.rowSave.split(':'); saveSingleRow(k,+i,'upsert'); return; }
   const rowReplace=e.target.closest('[data-row-replace]'); if(rowReplace){ const [k,i]=rowReplace.dataset.rowReplace.split(':'); saveSingleRow(k,+i,'replace'); return; }
   const addAction=e.target.closest('[data-monster-action-add]'); if(addAction){ const editor=addAction.closest('[data-monster-actions-editor]'); editor.querySelector('[data-monster-action-list]').insertAdjacentHTML('beforeend', monsterActionRowHtml({element:'物'})); syncMonsterActionEditor(editor); return; }
