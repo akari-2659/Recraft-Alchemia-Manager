@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.379</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.383</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1155,7 +1155,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.379 usability maintenance */
+/* v90.8.383 usability maintenance */
 .ra-build-info{font-size:12px;padding:6px 12px;text-align:right;color:var(--muted);background:rgba(255,253,248,.9);border-bottom:1px solid var(--line)}
 header{padding-top:12px!important;padding-bottom:6px!important}.title-card{padding:14px!important}.title-card h1{font-size:clamp(21px,3vw,30px)!important;margin-bottom:5px!important}.title-card .subtitle{font-size:.84rem;line-height:1.5}.dbid{font-size:.72rem!important}
 main>section.panel:first-of-type{padding:10px!important}
@@ -1173,10 +1173,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.379-perf1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.383-perf1">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.379｜更新：2026年8月4日</div>
+<div class="ra-build-info">v90.8.383｜更新：2026年8月4日</div>
 
 <header>
   <div class="title-card">
@@ -1817,8 +1817,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.379';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.379';
+const RECRAFT_DB_VERSION = 'v90.8.383';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.383';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -2203,51 +2203,68 @@ function applyInitialData(raw, sourceLabel='表示用マスター'){
   updateInitialDataStatus();
   toast(`表示用マスターを読み込みました（${initialDataRowCount(DEFAULTS)}件）`);
 }
+function managerGithubDelay(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
+function managerMasterDataRowCount(master){
+  const data=master&&master.data&&typeof master.data==='object'?master.data:master;
+  if(!data||typeof data!=='object')return 0;
+  return DATA_KEYS.reduce((sum,key)=>sum+(Array.isArray(data[key])?data[key].length:0),0);
+}
 async function fetchGithubCommonMaster({force=false}={}){
   if(githubCommonMasterPromise && !force) return githubCommonMasterPromise;
   const task = (async()=>{
     const errors=[];
+    let usableMismatch=null;
     for(const base of githubCommonDbBaseCandidates()){
-      try{
-        const manifestUrl=new URL('manifest.json', base);
-        manifestUrl.searchParams.set('_ra', String(Date.now()));
-        const manifestResponse=await fetch(manifestUrl.toString(), {cache:'no-store'});
-        if(!manifestResponse.ok) throw new Error(`manifest HTTP ${manifestResponse.status}`);
-        const manifest=await manifestResponse.json();
-        const nestedMaster=manifest&&manifest.files&&manifest.files.master;
-        const nestedMasterObject=nestedMaster&&typeof nestedMaster==='object'?nestedMaster:{};
-        const masterFile=String(manifest.master || nestedMasterObject.path || (typeof nestedMaster==='string'?nestedMaster:'') || '').trim();
-        if(!masterFile || masterFile.includes('..') || masterFile.includes(String.fromCharCode(92))){
-          throw new Error('manifestのmasterファイル名が不正です');
-        }
-        const manifestVersion=String(manifest.version || '').trim();
-        const cacheKey=String(manifest.sha256 || nestedMasterObject.sha256 || manifestVersion || Date.now()).trim();
-        const masterUrl=new URL(masterFile, base);
-        masterUrl.searchParams.set('_ra', cacheKey);
-        const masterResponse=await fetch(masterUrl.toString(), {cache:'no-store'});
-        if(!masterResponse.ok) throw new Error(`master HTTP ${masterResponse.status}`);
-        const master=await masterResponse.json();
-        const masterVersion=String(master.version || '').trim();
-        if(manifestVersion && masterVersion && manifestVersion !== masterVersion){
-          throw new Error(`manifestとmasterのバージョンが一致しません（${manifestVersion} / ${masterVersion}）`);
-        }
-        return {manifest, master, version:manifestVersion || masterVersion, base};
-      }catch(error){
-        errors.push(`${base}: ${error && error.message ? error.message : error}`);
+      let lastError=null;
+      for(let attempt=0;attempt<4;attempt++){
+        const token=`${Date.now()}_${attempt}_${Math.random().toString(36).slice(2)}`;
+        try{
+          const manifestUrl=new URL('manifest.json', base);
+          manifestUrl.searchParams.set('_ra', token);
+          const manifestResponse=await fetch(manifestUrl.toString(), {cache:'no-store',headers:{'Cache-Control':'no-cache'}});
+          if(!manifestResponse.ok) throw new Error(`manifest HTTP ${manifestResponse.status}`);
+          const manifest=await manifestResponse.json();
+          const nestedMaster=manifest&&manifest.files&&manifest.files.master;
+          const nestedMasterObject=nestedMaster&&typeof nestedMaster==='object'?nestedMaster:{};
+          const masterFile=String(manifest.master || nestedMasterObject.path || (typeof nestedMaster==='string'?nestedMaster:'') || '').trim();
+          if(!masterFile || masterFile.includes('..') || masterFile.includes(String.fromCharCode(92))){
+            throw new Error('manifestのmasterファイル名が不正です');
+          }
+          const manifestVersion=String(manifest.version || '').trim();
+          const cacheKey=String(manifest.sha256 || nestedMasterObject.sha256 || manifestVersion || 'master').trim();
+          const masterUrl=new URL(masterFile, base);
+          masterUrl.searchParams.set('_ra', `${cacheKey}_${token}`);
+          const masterResponse=await fetch(masterUrl.toString(), {cache:'no-store',headers:{'Cache-Control':'no-cache'}});
+          if(!masterResponse.ok) throw new Error(`master HTTP ${masterResponse.status}`);
+          const master=await masterResponse.json();
+          const rows=managerMasterDataRowCount(master);
+          if(!rows) throw new Error('共通DBの更新データが空です');
+          const masterVersion=String(master.version || '').trim();
+          const result={manifest,master,version:masterVersion||manifestVersion,base,versionWarning:''};
+          if(manifestVersion && masterVersion && manifestVersion !== masterVersion){
+            result.versionWarning=`manifest ${manifestVersion} / master ${masterVersion}`;
+            usableMismatch=result;
+            lastError=new Error(`共通DBの更新反映待ちです（${result.versionWarning}）`);
+          }else{
+            return result;
+          }
+        }catch(error){lastError=error;}
+        if(attempt<3)await managerGithubDelay(350*(attempt+1));
       }
+      if(lastError)errors.push(`${base}: ${lastError.message||lastError}`);
     }
+    // GitHub Pagesの反映がmanifestとmasterで一時的に前後しても、
+    // 中身が有効なら空データ扱いで画面を止めず、次回再読込で新しい版へ追随する。
+    if(usableMismatch)return usableMismatch;
     throw new Error(errors.join(' / ') || 'GitHub共通DBの取得先がありません');
   })();
   githubCommonMasterPromise = task;
-  try{
-    return await task;
-  }catch(error){
-    if(githubCommonMasterPromise === task) githubCommonMasterPromise = null;
-    throw error;
-  }
+  try{return await task;}
+  catch(error){if(githubCommonMasterPromise === task) githubCommonMasterPromise = null;throw error;}
 }
+
 async function loadBundledInitialData(){
-  const res = await fetch(`${INITIAL_DATA_PATH}?v=${encodeURIComponent(RECRAFT_DB_VERSION)}`, {cache:'no-store'});
+  const url=new URL(INITIAL_DATA_PATH,window.location.href); url.searchParams.set('v',RECRAFT_DB_VERSION); url.searchParams.set('_ra',String(Date.now())); const res = await fetch(url.toString(), {cache:'no-store',headers:{'Cache-Control':'no-cache'}});
   if(!res.ok) throw new Error(`同梱JSON HTTP ${res.status}`);
   return res.json();
 }
@@ -8453,13 +8470,14 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.379';
-const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-03';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.383';
+const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-04';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
+const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
 const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([
   'ownerKey','createdBy','adminKey','playerKey','masterKey',
   'managementKey','githubToken','accessToken','apiToken',
-  'password','secret'
+  'password','secret','unlockKey'
 ]);
 
 function setGithubPublicDbStatus(message='', stateName=''){
@@ -8486,12 +8504,25 @@ function githubPublicSkillRows(){
   const rows=Array.isArray(state.skills)?state.skills:[];
   return sanitizeGithubPublicValue(rows);
 }
-function buildGithubPublicMaster(){
+function normalizeGithubPublicUnlockKey(value=''){
+  return String(value||'').normalize('NFKC').toUpperCase().replace(/[‐‑‒–—―−－]/g,'-').replace(/[\s\u200B-\u200D\uFEFF]/g,'');
+}
+async function buildGithubPublicMaster(){
   const source=normalizeStateData(structuredClone(state||{}));
   const data={};
-  DATA_KEYS.forEach(key=>{
-    data[key]=sanitizeGithubPublicValue(Array.isArray(source[key])?source[key]:[]);
-  });
+  for(const key of DATA_KEYS){
+    const rows=Array.isArray(source[key])?source[key]:[];
+    if(key==='exploration_areas'){
+      data[key]=[];
+      for(const row of rows){
+        const clean=sanitizeGithubPublicValue(row);
+        delete clean.unlockKey;
+        const normalized=normalizeGithubPublicUnlockKey(row.unlockKey||'');
+        if(normalized)clean.unlockKeyHash=await githubPublicSha256Hex(normalized);
+        data[key].push(clean);
+      }
+    }else data[key]=sanitizeGithubPublicValue(rows);
+  }
   data.skills=githubPublicSkillRows();
   return {
     format:'recraft-alchemia-github-master',
@@ -8499,12 +8530,12 @@ function buildGithubPublicMaster(){
     updatedAt:GITHUB_PUBLIC_DB_UPDATED_AT,
     encoding:'UTF-8',
     sourceRepository:'akari-2659/Recraft-Alchemia-Manager',
-    description:'Recraft-Alchemiaのキャラシ・施設・管理画面で共通参照する静的マスターデータ。',
+    description:'Recraft-Alchemiaのキャラシ・施設・管理画面で共通参照する静的マスターデータ。エリア解放キーは平文を含めず、照合用SHA-256のみ収録する。',
+    gmAllUnlockKeyHash:GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH,
     recordCount:Object.values(data).reduce((sum,rows)=>sum+(Array.isArray(rows)?rows.length:0),0),
     data
   };
 }
-
 async function githubPublicSha256Hex(textValue=''){
   if(!globalThis.crypto?.subtle)return '';
   const bytes=new TextEncoder().encode(String(textValue));
@@ -8607,7 +8638,7 @@ async function exportGithubPublicDb(){
   if(button)button.disabled=true;
   setGithubPublicDbStatus('公開JSONを生成しています…','saving');
   try{
-    const master=buildGithubPublicMaster();
+    const master=await buildGithubPublicMaster();
     if(!master.recordCount)throw new Error('管理画面にデータが読み込まれていません。');
     const masterText=JSON.stringify(master,null,2)+'\n';
     const masterBytes=new TextEncoder().encode(masterText);
@@ -8641,7 +8672,8 @@ async function exportGithubPublicDb(){
       '注意:',
       '- このZIPは、ボタンを押した時点で管理画面に読み込まれていたデータから生成されます。',
       '- DBを変更した後は、スプレへ保存したうえで再度書き出してください。',
-      '- キャラクターデータ、プレイヤーキー、管理キーは収録しません。'
+      '- キャラクターデータ、プレイヤーキー、管理キー、平文のエリア解放キーは収録しません。',
+      '- エリア解放キーとGM全エリア解放キーはSHA-256ハッシュだけを収録し、施設HTML内で照合します。'
     ].join('\n')+'\n';
 
     const zip=createGithubStoredZip([
