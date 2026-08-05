@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.395</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.398</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1155,7 +1155,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.395: 管理HTML側の全強化解除料金設定・確認 */
+/* v90.8.398: 管理HTML側の全強化解除料金設定・確認 */
 .facility-upgrade-removal-rule{margin-top:12px;line-height:1.65;}
 .facility-upgrade-removal-rule>div+div{margin-top:5px;}
 .facility-removal-toolbar{display:grid;grid-template-columns:minmax(240px,1fr) auto auto;gap:8px;align-items:end;margin:10px 0;}
@@ -1188,10 +1188,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.395-equipment-readonly1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.398-equipment-readonly1">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.395｜更新：2026年8月5日</div>
+<div class="ra-build-info">v90.8.398｜更新：2026年8月5日</div>
 
 <header>
   <div class="title-card">
@@ -2893,6 +2893,8 @@ const SYSTEM_HELP = [
       "魔物素材はすべて何かしらの装備強化内容を持つ。",
       "魔物素材は装備強化内容・効果説明・強化対象の3項目を必須とし、未設定のまま保存またはDB送信できない。",
       "効果が複数の素材で重複しても問題ない。",
+      "威力強化・命中強化・防御強化などの通常強化は、同名でも同一装備へ複数付与でき、段階数または合計値として累積する。",
+      "同名効果の重複不可は素材固有の特殊効果だけに適用する。",
       "装備強化内容は選択式の項目『equipmentUpgradeEffect / 装備強化内容』で管理する。",
       "装備強化は『equipmentUpgradeEffect / 装備強化内容』へ効果名を、『equipmentUpgradeDetail / 効果説明』へ実際の処理を記録する。独立した数値項目は使用しない。",
       "装備強化内容は、直接補正の名称、属性効果、特殊効果、その他に分類する。",
@@ -6973,7 +6975,7 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='hasLock' || field==='hasTrap') ['なし','あり'].forEach(v=>values.add(v));
   if(field==='equipmentUpgradeTarget') help += '<div class="form-help">この素材で強化できる装備種別です。武器・防具・盾・装飾品・魔導書・祈祷書を指定できます。複数対象は「・」で区切ります。</div>';
   if(field==='equipmentUpgradeEffect') help += '<div class="form-help">効果名だけで内容を判別できる名称を設定します。例：威力強化、威力固定強化、回復量強化、回復量固定強化、水属性軽減、抵抗妨害。独立した数値欄は使用しません。</div>';
-  if(field==='equipmentUpgradeDetail') help += '<div class="form-help">すべての強化で必須です。補正値・対象・条件・持続・解除条件・重複可否まで具体的に入力し、倉庫・施設カタログ・鍛冶屋にも表示します。</div>';
+  if(field==='equipmentUpgradeDetail') help += '<div class="form-help">すべての強化で必須です。補正値・対象・条件・持続・解除条件・重複可否まで具体的に入力します。通常強化は同名でも重複して累積し、同名重複不可は素材固有の特殊効果だけです。</div>';
   if(field==='enchantTarget') help += '<div class="form-help">使用時に選べる装備範囲です。武器は右手・左手の通常武器、防具・盾は鎧と盾、装飾品は装飾品枠を対象にします。</div>';
   if(field==='enchantEffectType') help += '<div class="form-help">属性付与とダメージ補正はチャットパレットへ反映します。その他の効果もキャラシ上で期限付き効果として管理できます。</div>';
   if(field==='enchantValue') help += '<div class="form-help">属性付与なら火・水など、数値補正なら+1・-1などを入力します。</div>';
@@ -9307,6 +9309,50 @@ document.addEventListener('click', (ev) => {
     fold([firstPanel.querySelector('.github-public-db-panel')],'GitHub共通DB公開',false);
     fold([firstPanel.querySelector('.stats')],'登録件数',false);
   });
+})();
+</script>
+
+<!-- RA_PATCH_MANAGER_WEAPON_PICKER_V90_8_398 -->
+<style>
+.ra-manager-picker-button{width:100%;margin-top:6px;display:flex;justify-content:space-between;align-items:center;gap:8px;background:#fffdf8;color:var(--ink);border:1px solid var(--line);box-shadow:none;border-radius:12px;text-align:left}
+.ra-manager-picker-native{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+.ra-manager-picker{width:min(1040px,calc(100vw - 24px));max-height:88vh;border:1px solid var(--line);border-radius:20px;background:var(--paper);color:var(--ink);padding:0;box-shadow:0 24px 70px rgba(35,22,12,.38)}
+.ra-manager-picker::backdrop{background:rgba(28,18,10,.5)}.ra-manager-picker-shell{display:grid;grid-template-rows:auto auto auto minmax(0,1fr);max-height:88vh}
+.ra-manager-picker-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}.ra-manager-picker-head h3{margin:0;color:var(--accent)}
+.ra-manager-picker-search{padding:11px 15px 0}.ra-manager-picker-tabs{display:flex;gap:7px;overflow-x:auto;padding:10px 15px}.ra-manager-picker-tabs button{flex:0 0 auto;background:#fffaf3;color:var(--ink);border:1px solid var(--line);box-shadow:none}.ra-manager-picker-tabs button.active{background:var(--accent);color:white}
+.ra-manager-picker-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);min-height:0;border-top:1px solid var(--line)}.ra-manager-picker-list{overflow:auto;padding:12px;display:grid;align-content:start;gap:8px}.ra-manager-picker-detail{overflow:auto;padding:14px;border-left:1px solid var(--line)}
+.ra-manager-picker-card{border:1px solid var(--line);border-radius:14px;background:#fffdf8;padding:10px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}.ra-manager-picker-name{font-weight:900;color:var(--accent)}.ra-manager-picker-meta{font-size:.8rem;color:var(--muted)}.ra-manager-picker-actions{display:flex;gap:6px}.ra-manager-picker-actions button{padding:7px 10px}
+.ra-manager-picker-detail dl{display:grid;grid-template-columns:auto 1fr;gap:7px 10px}.ra-manager-picker-detail dt{font-weight:900;color:var(--muted)}.ra-manager-picker-detail dd{margin:0;white-space:pre-wrap}
+@media(max-width:720px){.ra-manager-picker-body{grid-template-columns:1fr}.ra-manager-picker-detail{border-left:0;border-top:1px solid var(--line);max-height:42vh}.ra-manager-picker-card{grid-template-columns:1fr}}
+</style>
+<script>
+(()=>{
+'use strict';
+function run(){
+ if(document.documentElement.dataset.raManagerPicker398)return;document.documentElement.dataset.raManagerPicker398='1';
+ const txt=v=>String(v??'').trim(),escHtml=v=>txt(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const dialog=document.createElement('dialog');dialog.className='ra-manager-picker';dialog.innerHTML=`<div class="ra-manager-picker-shell"><header class="ra-manager-picker-head"><div><div class="notice">管理用共通選択</div><h3>武器・武器種を選択</h3></div><button type="button" class="ghost" data-ra-manager-close>×</button></header><div class="ra-manager-picker-search"><input type="search" placeholder="名称・武器種・効果で検索"></div><div class="ra-manager-picker-tabs"></div><div class="ra-manager-picker-body"><div class="ra-manager-picker-list"></div><aside class="ra-manager-picker-detail"><p class="notice">一覧から詳細を選択してください。</p></aside></div></div>`;document.body.appendChild(dialog);
+ const search=dialog.querySelector('input[type=search]'),tabs=dialog.querySelector('.ra-manager-picker-tabs'),list=dialog.querySelector('.ra-manager-picker-list'),detail=dialog.querySelector('.ra-manager-picker-detail');let target=null,mode='item',category='すべて',detailKey='';
+ function stateWeapons(){let rows=[];try{rows=Array.isArray(state?.items)?state.items:[]}catch(_){rows=[]}return rows.filter(r=>{const t=[r.itemType,r.dataKind,r.itemCategory,r.tags].map(txt).join(' ');return /武器|術式装備|短剣|剣|斧|槌|槍|杖|鞭|弓|弩/u.test(t)&&!txt(r.name).includes('レシピ')})}
+ function itemCategory(r){return txt(r.itemCategory||r.category||r.weaponType||'その他')||'その他'}
+ function rows(){
+   if(!target)return[];
+   if(target.tagName==='SELECT')return [...target.options].filter(o=>o.value).map((o,i)=>{const raw=stateWeapons().find(r=>txt(r.id)===txt(o.value)||txt(r.name)===txt(o.textContent))||{};return{key:txt(o.value),value:txt(o.value),name:txt(raw.name)||txt(o.textContent),category:mode==='category'?txt(o.textContent):itemCategory(raw),raw}});
+   if(mode==='category')return [...new Set(stateWeapons().map(itemCategory))].map(c=>({key:c,value:c,name:c,category:c,raw:{}}));
+   return stateWeapons().map((r,i)=>({key:txt(r.id||r.publicId||`${r.name}:${i}`),value:txt(r.name),name:txt(r.name),category:itemCategory(r),raw:r}));
+ }
+ function triggerLabel(el){if(el.tagName==='SELECT')return txt(el.selectedOptions?.[0]?.textContent)||'未選択';return txt(el.value)||'未選択'}
+ function syncButton(el){const btn=el.parentElement?.querySelector(':scope > .ra-manager-picker-button');if(btn)btn.querySelector('[data-ra-manager-label]').textContent=triggerLabel(el)}
+ function choose(x){if(!target||!x)return;if(target.tagName==='SELECT'){target.value=x.value}else target.value=x.value;target.dispatchEvent(new Event('input',{bubbles:true}));target.dispatchEvent(new Event('change',{bubbles:true}));syncButton(target);dialog.close()}
+ function render(){const all=rows(),cats=['すべて',...new Set(all.map(x=>x.category))];if(!cats.includes(category))category='すべて';tabs.innerHTML=cats.map(c=>`<button type="button" data-ra-manager-cat="${escHtml(c)}" class="${c===category?'active':''}">${escHtml(c)}</button>`).join('');const q=txt(search.value).normalize('NFKC').toLocaleLowerCase('ja');const filtered=all.filter(x=>category==='すべて'||x.category===category).filter(x=>!q||[x.name,x.category,x.raw.description,x.raw.effect,x.raw.power].map(txt).join(' ').normalize('NFKC').toLocaleLowerCase('ja').includes(q));list.innerHTML=filtered.length?filtered.map(x=>`<article class="ra-manager-picker-card"><div><div class="ra-manager-picker-name">${escHtml(x.name)}</div><div class="ra-manager-picker-meta">${escHtml([x.category,x.raw.rank?`★${x.raw.rank}`:'',x.raw.power||''].filter(Boolean).join(' / '))}</div></div><div class="ra-manager-picker-actions"><button type="button" class="ghost" data-ra-manager-detail="${escHtml(x.key)}">詳細</button><button type="button" data-ra-manager-choose="${escHtml(x.key)}">選択</button></div></article>`).join(''):'<p class="notice">条件に一致する候補がありません。</p>';const x=all.find(v=>v.key===detailKey);if(x){const r=x.raw||{};const pairs=[['武器種',x.category],['ランク',r.rank?`★${r.rank}`:''],['属性',r.element],['ダメージ',r.power],['命中・補正',r.modifiers],['強化枠',r.upgradeLimit],['説明',r.description],['効果',r.effect]].filter(([,v])=>txt(v));detail.innerHTML=`<h4>${escHtml(x.name)}</h4><dl>${pairs.map(([k,v])=>`<dt>${escHtml(k)}</dt><dd>${escHtml(v)}</dd>`).join('')}</dl><button type="button" data-ra-manager-choose="${escHtml(x.key)}">この候補を選択</button>`}else detail.innerHTML='<p class="notice">一覧から詳細を選択してください。</p>'}
+ function open(el,m){target=el;mode=m;category='すべて';detailKey='';search.value='';render();dialog.showModal();search.focus()}
+ function associatedText(el){const label=el.id?document.querySelector(`label[for="${CSS.escape(el.id)}"]`):null;return [el.id,el.name,el.placeholder,label?.textContent,el.closest('.field,div')?.querySelector(':scope > label')?.textContent].map(txt).join(' ')}
+ function classify(el){const t=associatedText(el);if(el.type==='search'||/検索/u.test(t))return'';if(/武器種|weaponCategory|weaponType/u.test(t))return'category';if(el.id==='facilityUpgradeEquipmentSelect'||/強化する装備|派生元|派生先|結果武器|baseItem|resultItem|武器選択/u.test(t))return'item';return''}
+ function enhance(el){if(el.dataset.raManagerPicker||el.disabled)return;const m=classify(el);if(!m)return;el.dataset.raManagerPicker='1';if(el.tagName==='SELECT')el.classList.add('ra-manager-picker-native');const btn=document.createElement('button');btn.type='button';btn.className='ra-manager-picker-button';btn.innerHTML='<span data-ra-manager-label></span><span>一覧を開く ▾</span>';el.insertAdjacentElement('afterend',btn);btn.addEventListener('click',()=>open(el,m));el.addEventListener('change',()=>syncButton(el));syncButton(el)}
+ function scan(){document.querySelectorAll('select,input[type="text"]').forEach(enhance);document.querySelectorAll('[data-ra-manager-picker]').forEach(syncButton)}
+ dialog.addEventListener('click',e=>{if(e.target===dialog||e.target.closest('[data-ra-manager-close]')){dialog.close();return}const c=e.target.closest('[data-ra-manager-cat]');if(c){category=c.dataset.raManagerCat||'すべて';render();return}const d=e.target.closest('[data-ra-manager-detail]');if(d){detailKey=d.dataset.raManagerDetail||'';render();return}const p=e.target.closest('[data-ra-manager-choose]');if(p){choose(rows().find(x=>x.key===p.dataset.raManagerChoose))}});search.addEventListener('input',render);new MutationObserver(scan).observe(document.body,{childList:true,subtree:true});scan();
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
 })();
 </script>
 </body>
