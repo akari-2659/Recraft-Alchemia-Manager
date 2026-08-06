@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.398</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.403</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -562,6 +562,7 @@ td.controls,th.controls{position:static!important;left:auto!important;min-width:
 .toolbar button{width:100%!important;min-width:0!important;text-align:left!important;white-space:normal!important}
 .tabs,.subtabs,.section-actions,.filter-actions,.facility-actions,.help-actions,.monster-output-actions,.modal-foot{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;width:100%;justify-content:start!important}
 .tabs>button,.subtabs>button,.section-actions>button,.filter-actions>button,.facility-actions>button,.help-actions>button,.monster-output-actions>button,.modal-foot>button{width:100%!important;min-width:0!important;text-align:left!important;white-space:normal!important}
+.table-pagination{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;margin:10px 0;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:#fffaf2}.table-pagination .notice{margin:0 auto 0 0}.table-pagination button{padding:7px 10px}.table-pagination button:disabled{opacity:.45;cursor:default}
 .responsive-data-table{table-layout:fixed}
 .responsive-data-table td,.responsive-data-table th{overflow-wrap:anywhere;word-break:break-word}
 .responsive-data-table .row-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;width:100%}
@@ -1155,7 +1156,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.398: 管理HTML側の全強化解除料金設定・確認 */
+/* v90.8.403: 管理HTML側の全強化解除料金設定・確認 */
 .facility-upgrade-removal-rule{margin-top:12px;line-height:1.65;}
 .facility-upgrade-removal-rule>div+div{margin-top:5px;}
 .facility-removal-toolbar{display:grid;grid-template-columns:minmax(240px,1fr) auto auto;gap:8px;align-items:end;margin:10px 0;}
@@ -1188,10 +1189,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.398-equipment-readonly1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.403-equipment-readonly1">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.398｜更新：2026年8月5日</div>
+<div class="ra-build-info">v90.8.403｜更新：2026年8月6日</div>
 
 <header>
   <div class="title-card">
@@ -1718,7 +1719,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
               <div>
                 <label for="facilityAntiqueStockArea">解放済みエリア</label>
                 <select id="facilityAntiqueStockArea">
-                  <option value="街はずれの草原">街はずれの草原（骨董屋未解放）</option>
+                  <option value="街はずれの草原">街はずれの草原（骨董屋は初期解放）</option>
                   <option value="近郊の森">近郊の森（★1まで）</option>
                   <option value="水辺の湿地">水辺の湿地（★2まで）</option>
                   <option value="反照の水庭">反照の水庭（★2まで）</option>
@@ -1853,8 +1854,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.392';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.392';
+const RECRAFT_DB_VERSION = 'v90.8.403';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.403';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -2161,7 +2162,7 @@ const ADVANCED_FILTERS = {
 };
 
 const TABLE_KEYS = [...DATA_KEYS, 'materials'];
-const tableUiState = Object.fromEntries(TABLE_KEYS.map(key => [key, { sortField: '', sortDir: 'asc', filters: {} }]));
+const tableUiState = Object.fromEntries(TABLE_KEYS.map(key => [key, { sortField: '', sortDir: 'asc', filters: {}, page: 1, pageSize: 100 }]));
 const SHARED_SEARCH_STORAGE_KEY='recraft_alchemia_admin_shared_search_v1';
 let sharedSearchTerm='';
 try{sharedSearchTerm=String(localStorage.getItem(SHARED_SEARCH_STORAGE_KEY)||'');}catch(_e){}
@@ -2270,8 +2271,8 @@ async function fetchGithubCommonMaster({force=false}={}){
           const manifestVersion=String(manifest.version || '').trim();
           const cacheKey=String(manifest.sha256 || nestedMasterObject.sha256 || manifestVersion || 'master').trim();
           const masterUrl=new URL(masterFile, base);
-          masterUrl.searchParams.set('_ra', `${cacheKey}_${token}`);
-          const masterResponse=await fetch(masterUrl.toString(), {cache:'no-store',headers:{'Cache-Control':'no-cache'}});
+          masterUrl.searchParams.set('v', cacheKey);
+          const masterResponse=await fetch(masterUrl.toString(), {cache:'force-cache'});
           if(!masterResponse.ok) throw new Error(`master HTTP ${masterResponse.status}`);
           const master=await masterResponse.json();
           const rows=managerMasterDataRowCount(master);
@@ -2301,7 +2302,9 @@ async function fetchGithubCommonMaster({force=false}={}){
 }
 
 async function loadBundledInitialData(){
-  const url=new URL(INITIAL_DATA_PATH,window.location.href); url.searchParams.set('v',RECRAFT_DB_VERSION); url.searchParams.set('_ra',String(Date.now())); const res = await fetch(url.toString(), {cache:'no-store',headers:{'Cache-Control':'no-cache'}});
+  const url=new URL(INITIAL_DATA_PATH,window.location.href);
+  url.searchParams.set('v',RECRAFT_DB_VERSION);
+  const res = await fetch(url.toString(), {cache:'force-cache'});
   if(!res.ok) throw new Error(`同梱JSON HTTP ${res.status}`);
   return res.json();
 }
@@ -4123,7 +4126,31 @@ function recalculateSkillProbabilities(){
   rows.forEach(row=>{const rank=Math.max(1,Number(row.rank)||1);if(String(row.enabled??'TRUE').toUpperCase()==='FALSE')return;totals[rank]=(totals[rank]||0)+Math.max(0,Number(row.drawWeight)||0);});
   rows.forEach(row=>{const rank=Math.max(1,Number(row.rank)||1);const total=totals[rank]||0;row.probability=total>0?Number(((Math.max(0,Number(row.drawWeight)||0)/total)*100).toFixed(6)):0;});
 }
-function renderAll(){ recalculateSkillProbabilities(); window.RA_SKILL_MASTER={skills:Array.isArray(state.skills)?state.skills:[]}; renderRecordItemTypeTabs(); DATA_KEYS.forEach(key=>{ if(key!=='items') renderTable(key); }); renderTable('items'); renderTable('materials'); renderRecordInternalCategoryTabs(); updateItemViewUi(); updateMaterialViewUi(); renderFacilitiesPanel(); renderHelpPanel(); updateCounts(); updateJsonBox(); }
+function renderCurrentPanel(){
+  if(currentMainTab==='categories'){
+    const key=currentCategoryTab||'item_types';
+    applySharedSearchToKey(key);
+    renderTable(key);
+    return;
+  }
+  if(TABLE_KEYS.includes(currentMainTab)){
+    applySharedSearchToKey(currentMainTab);
+    renderTable(currentMainTab);
+    return;
+  }
+  if(currentMainTab==='facilities'){ renderFacilitiesPanel(); return; }
+  if(currentMainTab==='help'){ renderHelpPanel(); }
+}
+function renderAll(){
+  recalculateSkillProbabilities();
+  window.RA_SKILL_MASTER={skills:Array.isArray(state.skills)?state.skills:[]};
+  renderRecordItemTypeTabs();
+  renderRecordInternalCategoryTabs();
+  updateItemViewUi();
+  updateMaterialViewUi();
+  updateCounts();
+  renderCurrentPanel();
+}
 function normalizeCellValue(v){ return String(v ?? '').trim(); }
 function compareValues(a,b){
   const av=normalizeCellValue(a), bv=normalizeCellValue(b);
@@ -4155,8 +4182,21 @@ function indexedRowsForTable(key){
   });
 }
 function rerenderTableGroup(key){
-  if(baseKeyForTable(key)==='items'){ renderRecordItemTypeTabs(); renderTable('items'); renderTable('materials'); renderRecordInternalCategoryTabs(); updateItemViewUi(); updateMaterialViewUi(); renderFacilitiesPanel(); }
-  else renderTable(key);
+  const base=baseKeyForTable(key);
+  if(base==='items'){
+    renderRecordItemTypeTabs();
+    renderRecordInternalCategoryTabs();
+    updateItemViewUi();
+    updateMaterialViewUi();
+    if(currentMainTab==='items') renderTable('items');
+    else if(currentMainTab==='materials') renderTable('materials');
+    else if(currentMainTab==='facilities') renderFacilitiesPanel();
+  }else{
+    const visibleTable=(currentMainTab==='categories'&&currentCategoryTab===key)||currentMainTab===key;
+    if(visibleTable) renderTable(key);
+    else if(currentMainTab==='facilities' && ['recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules'].includes(key)) renderFacilitiesPanel();
+  }
+  if(currentMainTab==='help') renderHelpPanel();
 }
 function uniqueOptions(key, field){
   const set=new Set();
@@ -4363,6 +4403,34 @@ function renderFilterControls(key){
       </div>
     </div>`;
 }
+function renderTablePagination(key, filteredCount, totalCount){
+  const panel=$('panel-'+key); if(!panel)return;
+  let bar=$('pagination-'+key);
+  if(!bar){
+    bar=document.createElement('div');
+    bar.id='pagination-'+key;
+    bar.className='table-pagination';
+    const wrap=panel.querySelector('.table-wrap');
+    if(wrap)wrap.insertAdjacentElement('beforebegin',bar);
+  }
+  const ui=tableUiState[key];
+  const size=Math.max(1,Number(ui.pageSize)||100);
+  const pages=Math.max(1,Math.ceil(filteredCount/size));
+  ui.page=Math.min(Math.max(1,Number(ui.page)||1),pages);
+  const start=filteredCount?(ui.page-1)*size+1:0;
+  const end=Math.min(filteredCount,ui.page*size);
+  bar.innerHTML=`<span class="notice">表示 ${start}–${end} / ${filteredCount}件（全${totalCount}件）</span><button type="button" class="ghost" data-table-page="${key}:prev" ${ui.page<=1?'disabled':''}>前へ</button><span>${ui.page} / ${pages}</span><button type="button" class="ghost" data-table-page="${key}:next" ${ui.page>=pages?'disabled':''}>次へ</button>`;
+}
+function paginateTableRows(key, rows, totalCount){
+  const ui=tableUiState[key];
+  const size=Math.max(1,Number(ui.pageSize)||100);
+  const pages=Math.max(1,Math.ceil(rows.length/size));
+  ui.page=Math.min(Math.max(1,Number(ui.page)||1),pages);
+  renderTablePagination(key,rows.length,totalCount);
+  const start=(ui.page-1)*size;
+  return rows.slice(start,start+size);
+}
+function resetTablePage(key){ if(tableUiState[key])tableUiState[key].page=1; }
 function rowMatchesAdvancedFilters(key, row){
   const filters=tableUiState[key].filters || {};
   return Object.entries(filters).every(([field,value])=> !value || normalizeCellValue(row[field]) === value);
@@ -5228,8 +5296,8 @@ let currentSkillProgressAreaId='area_outskirts_grass';
 function skillProgressAreas(){return (state.exploration_areas||[]).filter(a=>String(a.enabled??'TRUE')!=='FALSE').slice().sort((a,b)=>{const ao=Number(a.unlockOrder),bo=Number(b.unlockOrder);if(Number.isFinite(ao)&&Number.isFinite(bo)&&ao!==bo)return ao-bo;if(Number.isFinite(ao)!==Number.isFinite(bo))return Number.isFinite(ao)?-1:1;return compareValues(a.name||a.id||'',b.name||b.id||'');});}
 function syncSkillProgressFields(){const rows=skillProgressAreas();if(!rows.some(a=>String(a.id)===String(currentSkillProgressAreaId)))currentSkillProgressAreaId=String(rows[0]?.id||'area_outskirts_grass');const options=rows.map(a=>`<option value="${escapeHtml(a.id||'')}">${escapeHtml(a.name||'')}（解放順${escapeHtml(String(a.unlockOrder||''))}）</option>`).join('');['facilitySkillGachaProgressArea','facilityCrystalProgressArea'].forEach(id=>{const el=$(id);if(!el)return;el.innerHTML=options;el.value=currentSkillProgressAreaId;});}
 function skillProgressOrder(){const row=skillProgressAreas().find(a=>String(a.id)===String(currentSkillProgressAreaId));return Number(row?.unlockOrder)||1;}
-function skillRankRequiredOrder(rank){return Number(rank)===1?2:Number(rank)===2?4:Infinity;}
-function skillRankUnlockLabel(rank){return Number(rank)===1?'近郊の森（骨董屋解放後）':Number(rank)===2?'山麓の旧鉱山':'未設定';}
+function skillRankRequiredOrder(rank){return Number(rank)===1?2:Infinity;}
+function skillRankUnlockLabel(rank){return Number(rank)===1?'近郊の森（★1スキルガチャ解放）':Number(rank)===2?'第3区画3-2通常エリア（未実装）':'未設定';}
 function skillRankIsUnlocked(rank){return skillProgressOrder()>=skillRankRequiredOrder(rank);}
 function skillMaster(){ return {skills:Array.isArray(state.skills)?state.skills:[]}; }
 function skillById(id=''){return (state.skills||[]).find(s=>String(s.id)===String(id))||null;}
@@ -5812,8 +5880,10 @@ function renderMonsterCardsTable(key){
       return sortDir==='asc' ? c : -c;
     });
   }
+  const filteredCount=rows.length;
+  rows=paginateTableRows(key,rows,totalRows.length);
   const count=$('filtered-count-'+key);
-  if(count) count.textContent = `表示 ${rows.length} / ${totalRows.length}`;
+  if(count) count.textContent = `表示 ${rows.length} / ${filteredCount}（全${totalRows.length}）`;
   const sortNote = sortField ? `初回出現エリア別 / 各エリア内: ${escapeHtml(LABELS[sortField]||sortField)} ${sortDir==='asc'?'昇順':'降順'}` : '初回出現エリア順';
   const groups=groupMonsterRowsByFirstArea(rows);
   const cards = groups.length ? groups.map(group=>`<section class="monster-area-group"><div class="monster-area-head"><b>${escapeHtml(group.areaName)}</b><span>${group.items.length}体</span></div><div class="monster-card-list">${group.items.map(({row,idx})=>monsterCardHtml(row,idx)).join('')}</div></section>`).join('') : '<div class="monster-empty-note">条件に一致する魔物がありません。</div>';
@@ -5889,7 +5959,9 @@ function renderQuestCardsTable(key){
   });
   const {sortField, sortDir}=tableUiState[key];
   if(sortField){ rows.sort((a,b)=>{const c=compareValues(a.row[sortField], b.row[sortField]); return sortDir==='asc'?c:-c;}); }
-  const count=$('filtered-count-'+key); if(count) count.textContent=`表示 ${rows.length} / ${totalRows.length}`;
+  const filteredCount=rows.length;
+  rows=paginateTableRows(key,rows,totalRows.length);
+  const count=$('filtered-count-'+key); if(count) count.textContent=`表示 ${rows.length} / ${filteredCount}（全${totalRows.length}）`;
   const cards = rows.length ? rows.map(({row,idx})=>questCardHtml(row,idx)).join('') : '<div class="monster-empty-note">条件に一致するクエストがありません。</div>';
   table.innerHTML = `<tbody><tr><td class="monster-list-cell"><div class="monster-card-list" aria-label="クエスト一覧">${cards}</div></td></tr></tbody>`;
 }
@@ -5950,7 +6022,9 @@ function renderEventAreaCardsTable(key){
   });
   const {sortField, sortDir}=tableUiState[key];
   if(sortField){ rows.sort((a,b)=>{const c=compareValues(a.row[sortField], b.row[sortField]); return sortDir==='asc'?c:-c;}); }
-  const count=$('filtered-count-'+key); if(count) count.textContent=`表示 ${rows.length} / ${totalRows.length}`;
+  const filteredCount=rows.length;
+  rows=paginateTableRows(key,rows,totalRows.length);
+  const count=$('filtered-count-'+key); if(count) count.textContent=`表示 ${rows.length} / ${filteredCount}（全${totalRows.length}）`;
   const groups = new Map();
   rows.forEach(item=>{
     const row=item.row;
@@ -6065,8 +6139,10 @@ function renderRecordCardsTable(key){
       return sortDir==='asc' ? c : -c;
     });
   }
+  const filteredCount=rows.length;
+  rows=paginateTableRows(key,rows,totalRows.length);
   const count=$('filtered-count-'+key);
-  if(count) count.textContent = `表示 ${rows.length} / ${totalRows.length}`;
+  if(count) count.textContent = `表示 ${rows.length} / ${filteredCount}（全${totalRows.length}）`;
   const cards = rows.length ? rows.map(({row,idx})=>recordCardHtml(row,idx,key)).join('') : `<div class="monster-empty-note">条件に一致する${escapeHtml(labelKey(key))}がありません。</div>`;
   table.innerHTML = `<tbody><tr><td class="monster-list-cell"><div class="monster-card-list" aria-label="${escapeHtml(labelKey(key))}一覧">${cards}</div></td></tr></tbody>`;
 }
@@ -6096,8 +6172,10 @@ function renderTable(key){
       return sortDir==='asc' ? c : -c;
     });
   }
+  const filteredCount=rows.length;
+  rows=paginateTableRows(key,rows,totalRows.length);
   const count=$('filtered-count-'+key);
-  if(count) count.textContent = `表示 ${rows.length} / ${totalRows.length}`;
+  if(count) count.textContent = `表示 ${rows.length} / ${filteredCount}（全${totalRows.length}）`;
   let html='<thead><tr><th class="controls">操作</th>'+headers.map(h=>{
     const active=sortField===h;
     const mark=active ? `<span class="sort-mark">${sortDir==='asc'?'▲':'▼'}</span>` : '<span class="sort-mark">↕</span>';
@@ -6117,7 +6195,7 @@ function renderTable(key){
   });
   html+='</tbody>'; table.innerHTML=html;
 }
-function updateJsonBox(){ $('jsonBox').value = JSON.stringify(state, null, 2); }
+function updateJsonBox(force=false){ if(!force)return; const box=$('jsonBox'); if(box)box.value=JSON.stringify(state,null,2); }
 function fromJsonBox(){
   const data=JSON.parse($('jsonBox').value);
   for(const key of DATA_KEYS){ if(!Array.isArray(data[key])) throw new Error(key+' が配列ではありません'); }
@@ -8594,7 +8672,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.392';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.403';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-04';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
@@ -8948,6 +9026,13 @@ document.addEventListener('click',e=>{
   const helpCopy=e.target.closest('[data-help-copy]'); if(helpCopy){ copySystemHelp(); return; }
   const helpExpand=e.target.closest('[data-help-expand]'); if(helpExpand){ document.querySelectorAll('#helpCards details').forEach(d=>d.open=true); return; }
   const helpCollapse=e.target.closest('[data-help-collapse]'); if(helpCollapse){ document.querySelectorAll('#helpCards details').forEach(d=>d.open=false); return; }
+  const pageButton=e.target.closest('[data-table-page]');
+  if(pageButton){
+    const [key,direction]=String(pageButton.dataset.tablePage||'').split(':');
+    const ui=tableUiState[key];
+    if(ui){ ui.page=Math.max(1,(Number(ui.page)||1)+(direction==='next'?1:-1)); renderTable(key); }
+    return;
+  }
   const groupTab=e.target.closest('[data-tab-group]');
   if(groupTab){
     const group=groupTab.dataset.tabGroup;
@@ -8962,12 +9047,11 @@ document.addEventListener('click',e=>{
   const mainTab=e.target.closest('[data-main-tab]');
   if(mainTab){
     const key=mainTab.dataset.mainTab;
-    if(mainTab.dataset.recipeView !== undefined) currentRecipeView = mainTab.dataset.recipeView || '調合';
-    if(mainTab.dataset.itemTypeView !== undefined){ currentItemTypeView = mainTab.dataset.itemTypeView || currentItemTypeView; currentItemCategoryView='全て'; }
+    if(mainTab.dataset.recipeView !== undefined){ currentRecipeView = mainTab.dataset.recipeView || '調合'; resetTablePage('recipes'); }
+    if(mainTab.dataset.itemTypeView !== undefined){ currentItemTypeView = mainTab.dataset.itemTypeView || currentItemTypeView; currentItemCategoryView='全て'; resetTablePage('items'); }
     if(mainTab.dataset.facilityView !== undefined) currentFacilityView = mainTab.dataset.facilityView || '鍛冶屋';
     setGroupActive(inferGroupFromPanel(key));
     showPanel(key);
-    if(key==='recipes') renderTable('recipes');
     if(key==='facilities') renderFacilitiesPanel();
     if(key!=='categories') document.querySelectorAll('[data-category-subtab]').forEach(b=>b.classList.remove('active'));
   }
@@ -8976,9 +9060,9 @@ document.addEventListener('click',e=>{
     setGroupActive('categories');
     showCategorySubpanel(catTab.dataset.categorySubtab);
   }
-  const recordItemCategory=e.target.closest('[data-record-item-category]'); if(recordItemCategory){ currentItemCategoryView=recordItemCategory.dataset.recordItemCategory||'全て'; renderRecordInternalCategoryTabs(); updateItemViewUi(); renderTable('items'); return; }
-  const recordMaterialType=e.target.closest('[data-record-material-type]'); if(recordMaterialType){ currentMaterialTypeView=recordMaterialType.dataset.recordMaterialType||'全て'; currentMaterialCategoryView='全て'; renderRecordInternalCategoryTabs(); updateMaterialViewUi(); renderTable('materials'); return; }
-  const recordMaterialCategory=e.target.closest('[data-record-material-category]'); if(recordMaterialCategory){ currentMaterialCategoryView=recordMaterialCategory.dataset.recordMaterialCategory||'全て'; renderRecordInternalCategoryTabs(); renderTable('materials'); return; }
+  const recordItemCategory=e.target.closest('[data-record-item-category]'); if(recordItemCategory){ currentItemCategoryView=recordItemCategory.dataset.recordItemCategory||'全て'; renderRecordInternalCategoryTabs(); updateItemViewUi(); resetTablePage('items'); renderTable('items'); return; }
+  const recordMaterialType=e.target.closest('[data-record-material-type]'); if(recordMaterialType){ currentMaterialTypeView=recordMaterialType.dataset.recordMaterialType||'全て'; currentMaterialCategoryView='全て'; renderRecordInternalCategoryTabs(); updateMaterialViewUi(); resetTablePage('materials'); renderTable('materials'); return; }
+  const recordMaterialCategory=e.target.closest('[data-record-material-category]'); if(recordMaterialCategory){ currentMaterialCategoryView=recordMaterialCategory.dataset.recordMaterialCategory||'全て'; renderRecordInternalCategoryTabs(); resetTablePage('materials'); renderTable('materials'); return; }
   const addCurrentType=e.target.closest('[data-add-current-item-type]'); if(addCurrentType){ addCurrentItemType(); return; }
   const addCurrentMaterialBtn=e.target.closest('[data-add-current-material]'); if(addCurrentMaterialBtn){ addCurrentMaterial(); return; }
   const copyUnlockKey=e.target.closest('[data-copy-unlock-key]'); if(copyUnlockKey){ copyExplorationUnlockKey(copyUnlockKey.dataset.copyUnlockKey); return; }
@@ -8999,11 +9083,13 @@ document.addEventListener('click',e=>{
     const ui=tableUiState[key];
     if(ui.sortField===field){ ui.sortDir = ui.sortDir==='asc' ? 'desc' : 'asc'; }
     else { ui.sortField=field; ui.sortDir='asc'; }
+    resetTablePage(key);
     renderTable(key);
   }
   const clearFilters=e.target.closest('[data-clear-filters]'); if(clearFilters){
     const key=clearFilters.dataset.clearFilters;
     tableUiState[key].filters={};
+    resetTablePage(key);
     setSharedSearchTerm('');
     const f=$('filter-'+key); if(f) f.value='';
     renderTable(key);
@@ -9011,16 +9097,18 @@ document.addEventListener('click',e=>{
   const clearSort=e.target.closest('[data-clear-sort]'); if(clearSort){
     const key=clearSort.dataset.clearSort;
     tableUiState[key].sortField=''; tableUiState[key].sortDir='asc';
+    resetTablePage(key);
     renderTable(key);
   }
 });
 document.addEventListener('input',e=>{
   const edit=e.target.dataset.edit;
-  if(edit){ const [key,idx,field]=edit.split(':'); state[key][+idx][field]=e.target.textContent; if(baseKeyForTable(key)==='items') renderFacilitiesPanel(); renderHelpPanel(); updateCounts(); updateJsonBox(); }
+  if(edit){ const [key,idx,field]=edit.split(':'); state[key][+idx][field]=e.target.textContent; updateCounts(); updateJsonBox(); }
   if(e.target.id && e.target.id.startsWith('filter-')){
     const key=e.target.id.replace('filter-','');
     if(TABLE_KEYS.includes(key)){
       setSharedSearchTerm(e.target.value,e.target);
+      resetTablePage(key);
       renderTable(key);
     }
   }
@@ -9149,6 +9237,7 @@ document.addEventListener('change',e=>{
   if(adv){
     const [key,field]=adv.split(':');
     tableUiState[key].filters[field]=e.target.value;
+    resetTablePage(key);
     renderTable(key);
   }
 });
@@ -9168,7 +9257,7 @@ if($('btnLoadAll')) $('btnLoadAll').addEventListener('click',loadAll);
 if($('btnSavePages')) $('btnSavePages').addEventListener('click',saveAll);
 if($('btnReplacePages')) $('btnReplacePages').addEventListener('click',replaceAll);
 $('btnDedupeAll').addEventListener('click',dedupeAll);
-$('btnExportJson').addEventListener('click',()=>{updateJsonBox();toast('JSONを更新しました')});
+$('btnExportJson').addEventListener('click',()=>{updateJsonBox(true);toast('JSONを更新しました')});
 $('btnImportJson').addEventListener('click',()=>{try{fromJsonBox()}catch(e){toast(e.message,'error')}});
 $('btnDownloadJson').addEventListener('click',downloadJson);
 if($('btnExportGithubPublicDb')) $('btnExportGithubPublicDb').addEventListener('click',exportGithubPublicDb);
@@ -9185,9 +9274,7 @@ if($('btnReloadGithubCommonDb')) $('btnReloadGithubCommonDb').addEventListener('
 if($('btnClearWorkingData')) $('btnClearWorkingData').addEventListener('click',clearWorkingData);
 $('schemaPreview').textContent=JSON.stringify(SCHEMA,null,2);
 syncSkillProgressFields();
-renderSkillManagementPanels();
 syncSharedSearchInputs();
-renderAll();
 updateInitialDataStatus();
 loadManagerDisplayData();
 

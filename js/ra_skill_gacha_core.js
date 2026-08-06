@@ -8,9 +8,14 @@
     return Number.isFinite(n) ? Math.floor(n) : fallback;
   }
 
+  function enabledLike(value){
+    if(value === false) return false;
+    return String(value ?? 'TRUE').trim().toUpperCase() !== 'FALSE';
+  }
+
   function enabledPool(master, rank){
     const r = asInt(rank, 1);
-    return (master?.skills || []).filter(skill => skill && skill.enabled !== false && asInt(skill.rank, 0) === r && asInt(skill.drawWeight, 0) > 0);
+    return (master?.skills || []).filter(skill => skill && enabledLike(skill.enabled) && asInt(skill.rank, 0) === r && asInt(skill.drawWeight, 0) > 0);
   }
 
   function weightedPick(pool, random=Math.random){
