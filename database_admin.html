@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.403</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.404</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1156,7 +1156,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.403: 管理HTML側の全強化解除料金設定・確認 */
+/* v90.8.404: 管理HTML側の全強化解除料金設定・確認 */
 .facility-upgrade-removal-rule{margin-top:12px;line-height:1.65;}
 .facility-upgrade-removal-rule>div+div{margin-top:5px;}
 .facility-removal-toolbar{display:grid;grid-template-columns:minmax(240px,1fr) auto auto;gap:8px;align-items:end;margin:10px 0;}
@@ -1189,10 +1189,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.403-equipment-readonly1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.404-equipment-readonly1">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.403｜更新：2026年8月6日</div>
+<div class="ra-build-info">v90.8.404｜更新：2026年8月6日</div>
 
 <header>
   <div class="title-card">
@@ -1854,7 +1854,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.403';
+const RECRAFT_DB_VERSION = 'v90.8.404';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.403';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -8672,7 +8672,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.403';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.404';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-04';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
@@ -9443,5 +9443,109 @@ function run(){
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
 })();
 </script>
+
+<style id="raDaggerAtlasPrototypeStyle">
+/* v90.8.404: 短剣のみの仮画像アトラス実装 */
+.ra-dagger-atlas-icon{
+  --ra-atlas-x:0%;
+  --ra-atlas-y:0%;
+  display:inline-block;
+  flex:0 0 auto;
+  width:52px;
+  height:52px;
+  border:1px solid rgba(151,112,70,.30);
+  border-radius:11px;
+  background-image:url("assets/items/weapons/dagger-atlas.webp");
+  background-repeat:no-repeat;
+  background-size:800% 800%;
+  background-position:var(--ra-atlas-x) var(--ra-atlas-y);
+  box-shadow:0 3px 10px rgba(66,43,22,.12);
+  vertical-align:middle;
+}
+.ra-dagger-atlas-icon.ra-atlas-xs{width:38px;height:38px;border-radius:8px}
+.ra-dagger-atlas-icon.ra-atlas-sm{width:48px;height:48px}
+.ra-dagger-atlas-icon.ra-atlas-md{width:78px;height:78px;border-radius:14px}
+.ra-dagger-atlas-icon.ra-atlas-lg{width:min(220px,64vw);height:min(220px,64vw);border-radius:18px}
+.ra-dagger-atlas-preview{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin:0 0 12px;
+}
+</style>
+
+<style id="raDaggerAtlasManagerLayout">
+.monster-title.ra-has-dagger-atlas{display:grid!important;grid-template-columns:50px minmax(0,1fr);column-gap:9px;align-items:center}
+.monster-title.ra-has-dagger-atlas>.ra-dagger-atlas-icon{grid-column:1;grid-row:1/3}
+.monster-title.ra-has-dagger-atlas>b{grid-column:2;grid-row:1}
+.monster-title.ra-has-dagger-atlas>.monster-id{grid-column:2;grid-row:2}
+.facility-recipe-card>.ra-dagger-atlas-preview{margin-bottom:7px}
+</style>
+
+<script id="raDaggerAtlasManagerPrototype">
+(()=>{
+'use strict';
+
+const RA_DAGGER_ATLAS_NAME_SLOTS=Object.freeze({"ショートダガー":1,"スティレット":2,"ファングナイフ":3,"ヴェルデスティング":4,"リーフナイフ":5,"ビーストククリ":6,"シルヴァエッジ":7,"マッドナイフ":8,"ヴェノムニードル":9,"マイアスティング":10,"フェイズダガー":11,"スペクトラナイフ":12,"ヴォイドスティンガー":13,"フェラススティレット":14,"シルバーニードル":15,"グランドファング":16,"ゼファースティング":17,"ボルトニードル":18,"テンペストエッジ":19});
+function raDaggerAtlasSlotByName(value){
+  const text=String(value||'').trim();
+  if(!text)return 0;
+  if(Object.prototype.hasOwnProperty.call(RA_DAGGER_ATLAS_NAME_SLOTS,text))return RA_DAGGER_ATLAS_NAME_SLOTS[text];
+  const names=Object.keys(RA_DAGGER_ATLAS_NAME_SLOTS).sort((a,b)=>b.length-a.length);
+  const hit=names.find(name=>text.includes(name));
+  return hit?RA_DAGGER_ATLAS_NAME_SLOTS[hit]:0;
+}
+function raCreateDaggerAtlasIcon(slot,size='sm',label='短剣画像'){
+  const n=Number(slot)||0;
+  if(n<1||n>64)return null;
+  const col=(n-1)%8,row=Math.floor((n-1)/8);
+  const span=document.createElement('span');
+  span.className=`ra-dagger-atlas-icon ra-atlas-${size}`;
+  span.style.setProperty('--ra-atlas-x',`${(col*100/7).toFixed(6)}%`);
+  span.style.setProperty('--ra-atlas-y',`${(row*100/7).toFixed(6)}%`);
+  span.setAttribute('role','img');
+  span.setAttribute('aria-label',String(label||'短剣画像'));
+  span.dataset.raDaggerSlot=String(n);
+  return span;
+}
+
+function decorateManagerDaggerImages(root=document){
+  root.querySelectorAll('.monster-card').forEach(card=>{
+    const title=card.querySelector(':scope > summary .monster-title b')?.textContent?.trim()||'';
+    const slot=raDaggerAtlasSlotByName(title);
+    const titleHost=card.querySelector(':scope > summary .monster-title');
+    if(!titleHost)return;
+    titleHost.classList.toggle('ra-has-dagger-atlas',!!slot);
+    const old=titleHost.querySelector(':scope > .ra-dagger-atlas-icon');
+    if(!slot){old?.remove();return;}
+    if(old?.dataset.raDaggerSlot===String(slot))return;
+    old?.remove();
+    titleHost.prepend(raCreateDaggerAtlasIcon(slot,'sm',`${title}の画像`));
+  });
+  root.querySelectorAll('.facility-recipe-card h5').forEach(title=>{
+    const name=title.textContent?.trim()||'';
+    const slot=raDaggerAtlasSlotByName(name);
+    const card=title.closest('.facility-recipe-card');
+    if(!card)return;
+    const old=card.querySelector(':scope > .ra-dagger-atlas-preview');
+    if(!slot){old?.remove();return;}
+    if(old?.dataset.raDaggerSlot===String(slot))return;
+    old?.remove();
+    const wrap=document.createElement('div');
+    wrap.className='ra-dagger-atlas-preview';
+    wrap.dataset.raDaggerSlot=String(slot);
+    wrap.appendChild(raCreateDaggerAtlasIcon(slot,'md',`${name}の画像`));
+    card.prepend(wrap);
+  });
+}
+const observer=new MutationObserver(()=>decorateManagerDaggerImages());
+function start(){
+  decorateManagerDaggerImages();
+  observer.observe(document.body,{childList:true,subtree:true,characterData:true});
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
+})();
+</script>
+
 </body>
 </html>
