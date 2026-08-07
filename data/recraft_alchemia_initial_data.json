@@ -1,6 +1,6 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "90.8.413",
+  "version": "90.8.414",
   "encoding": "UTF-8",
   "description": "Recraft Alchemia integrated DB: event reward-item tables, normalized area random-event counts, progress events, cumulative base random events, and modal unlock-area selection UI.",
   "data": {
@@ -47177,6 +47177,27 @@
         "encounterFormation": ""
       },
       {
+        "id": "evt_forest_23",
+        "tableId": "evt_nearby_forest_daily",
+        "areaName": "近郊の森",
+        "eventName": "朽ちた魔導紙片",
+        "eventType": "発見/宝箱",
+        "conditionType": "噂話",
+        "conditionValue": "森で古い魔導紙片が見つかった",
+        "checkType": "知識>=目標値",
+        "targetValue": "10",
+        "treasureTableId": "forest_mage_satchel",
+        "result": "判定成功：宝箱表「forest_mage_satchel」を1回抽選する。失敗：抽選なし。",
+        "progressEffect": "",
+        "notes": "噂条件イベント。",
+        "updatedAt": "",
+        "encounterCountRule": "",
+        "encounterCountMin": "",
+        "encounterCountMax": "",
+        "encounterComposition": "",
+        "encounterFormation": ""
+      },
+      {
         "id": "evt_forest_24",
         "tableId": "evt_nearby_forest_daily",
         "areaName": "近郊の森",
@@ -47768,6 +47789,27 @@
         "progressEffect": "",
         "notes": "噂条件イベント。",
         "updatedAt": "2026-07-17",
+        "encounterCountRule": "",
+        "encounterCountMin": "",
+        "encounterCountMax": "",
+        "encounterComposition": "",
+        "encounterFormation": ""
+      },
+      {
+        "id": "evt_wetland_23",
+        "tableId": "evt_waterside_wetland_daily",
+        "areaName": "水辺の湿地",
+        "eventName": "沈んだ防水箱",
+        "eventType": "発見/宝箱",
+        "conditionType": "噂話",
+        "conditionValue": "湿地の奥で沈んだ箱を見た",
+        "checkType": "細工>=目標値",
+        "targetValue": "11",
+        "treasureTableId": "wetland_sunken_box",
+        "result": "判定成功：宝箱表「wetland_sunken_box」を1回抽選する。失敗：抽選なし。",
+        "progressEffect": "",
+        "notes": "噂条件イベント。",
+        "updatedAt": "",
         "encounterCountRule": "",
         "encounterCountMin": "",
         "encounterCountMax": "",
@@ -71386,5 +71428,5 @@
     ]
   },
   "updatedAt": "2026-08-07",
-  "generatedAt": "2026-08-07T21:17:00+09:00"
+  "generatedAt": "2026-08-07T21:31:00+09:00"
 }
