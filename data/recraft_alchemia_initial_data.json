@@ -1,6 +1,6 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "90.8.415",
+  "version": "90.8.416",
   "encoding": "UTF-8",
   "description": "Recraft Alchemia integrated DB: sparse quest fixed/area-event progression, recipe-merchant area encounters, reward-item tables, base random events, and modal unlock-area selection UI.",
   "data": {
@@ -71578,5 +71578,5 @@
     ]
   },
   "updatedAt": "2026-08-07",
-  "generatedAt": "2026-08-07T21:55:00+09:00"
+  "generatedAt": "2026-08-07T22:17:00+09:00"
 }

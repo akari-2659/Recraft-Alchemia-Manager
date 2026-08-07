@@ -1,7 +1,7 @@
 {
   "format": "recraft-alchemia-github-master",
-  "version": "90.8.415",
-  "updatedAt": "2026-08-07T12:55:00Z",
+  "version": "90.8.416",
+  "updatedAt": "2026-08-07T13:17:00Z",
   "encoding": "UTF-8",
   "sourceRepository": "akari-2659/Recraft-Alchemia-Manager",
   "description": "Recraft-Alchemiaのキャラシ・施設・管理画面で共通参照する静的マスターデータ。エリア解放キーは平文を含めず、照合用SHA-256のみ収録する。",
