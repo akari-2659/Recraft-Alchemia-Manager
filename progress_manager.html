@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.392</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.411</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -39,6 +39,28 @@ label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:0 0
 .daily-tools{margin-top:12px}
 .quest-pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:2px 8px;margin-left:6px;background:#fff}
 .quest-pill.off{background:#eee;color:#777}
+
+.progress-fold{margin-top:12px;border:1px solid var(--line);border-radius:14px;background:#fffdf8;overflow:hidden}
+.progress-fold>summary{cursor:pointer;list-style:none;padding:11px 13px;font-weight:800;color:var(--ink);background:#f5ead8;border-bottom:1px solid transparent}
+.progress-fold[open]>summary{border-bottom-color:var(--line)}
+.progress-fold>summary::-webkit-details-marker{display:none}
+.progress-fold>summary::after{content:"＋";float:right;color:var(--accent);font-weight:900}
+.progress-fold[open]>summary::after{content:"－"}
+.progress-fold-body{padding:0 12px 12px}
+.base-unlock-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin-top:8px}
+.base-unlock-item{display:flex;align-items:flex-start;gap:8px;margin:0;padding:9px 10px;border:1px solid var(--line);border-radius:12px;background:#fffdf8;color:var(--ink);font-weight:700}
+.base-unlock-item input{width:auto;margin:2px 0 0;flex:0 0 auto}
+.base-unlock-item small{display:block;color:var(--muted);font-weight:500;line-height:1.45;margin-top:2px}
+.area-select-control{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:8px 0 10px;padding:11px 12px;border:1px solid var(--line);border-radius:13px;background:#fffdf8}
+.area-select-control-main{min-width:0;flex:1 1 280px}.area-select-summary{margin-top:4px;color:var(--muted);font-size:.9rem;line-height:1.5;overflow-wrap:anywhere}
+.area-select-modal-backdrop{position:fixed;inset:0;z-index:100500;display:flex;align-items:center;justify-content:center;padding:18px;background:rgba(43,31,22,.46);backdrop-filter:blur(3px)}
+.area-select-modal-card{width:min(760px,100%);max-height:min(82vh,760px);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:#fffaf2;box-shadow:0 22px 60px rgba(52,35,20,.3)}
+.area-select-modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:15px 16px;border-bottom:1px solid var(--line);background:rgba(255,250,242,.96)}
+.area-select-modal-head h3{margin:0}.area-select-modal-head p{margin:4px 0 0;color:var(--muted);font-size:.86rem;line-height:1.45}
+.area-select-modal-body{padding:14px 16px;overflow:auto}.area-select-modal-foot{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;padding:12px 16px;border-top:1px solid var(--line);background:rgba(255,250,242,.96)}
+body.area-select-modal-open{overflow:hidden!important}
+@media(max-width:620px){.area-select-modal-backdrop{padding:8px;align-items:flex-end}.area-select-modal-card{max-height:90vh;border-radius:18px 18px 0 0}.area-select-modal-foot{display:grid;grid-template-columns:1fr 1fr}.area-select-modal-foot button{width:100%!important}.area-select-control>button{width:100%!important}}
+.area-event-block{margin-top:14px;padding-top:12px;border-top:1px solid rgba(217,199,168,.7)}
 
 /* v90.8.170: レイアウト安定化・左揃え・ボタン折返し */
 html,body{max-width:100%;overflow-x:hidden}
@@ -146,7 +168,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.392-dropfix4">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.411-progress-events1">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -154,7 +176,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </style>
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.392｜更新：2026年8月4日</div>
+<div class="ra-build-info">v90.8.411｜更新：2026年8月7日</div>
 
 <header>
   <div class="header-inner">
@@ -185,14 +207,14 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
     <h2>進行メニュー</h2>
     <div class="tab-nav" id="progressTabNav">
       <button class="tab-btn active" type="button" data-tab-target="quest">クエスト進行</button>
-      <button class="tab-btn" type="button" data-tab-target="area">エリア進行</button>
+      <button class="tab-btn" type="button" data-tab-target="area">エリア探索</button>
+      <button class="tab-btn" type="button" data-tab-target="base-event">拠点内イベント</button>
       <button class="tab-btn" type="button" data-tab-target="inn">宿屋の噂</button>
-      <button class="tab-btn" type="button" data-tab-target="event">ランダムイベント</button>
       <button class="tab-btn" type="button" data-tab-target="treasure">宝箱抽選</button>
       <button class="tab-btn" type="button" data-tab-target="appraisal">スクロール鑑定</button>
       <button class="tab-btn" type="button" data-tab-target="drop">アイテムドロップ</button>
     </div>
-    <p class="muted small">進行・選出・判定をタブごとに分けています。進行ログは全タブ共通です。</p>
+    <p class="muted small">クエスト進行とエリア探索は、進行度・固定イベント・ランダムイベントを同じ画面で確認できます。進行ログは全タブ共通です。</p>
   </section>
 
   <div class="grid">
@@ -220,13 +242,16 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
         <button class="secondary" type="button" id="copyDailyQuestListBtn">デイリークエストをコピー</button>
       </div>
       <p class="muted small">戦闘クエストはここで選んだ人数を使って編成を調整します。重要クエストで1人を選んだ場合は、サポートを加えた2人編成として処理します。非戦闘デイリーの条件は人数で変化しません。</p>
-      <div id="dailyQuestTools" class="card daily-tools hidden">
-        <div class="quest-tools">
-          <button class="secondary" type="button" id="refreshDailyQuestsBtn">施設側の選出を再読込</button>
-          <button class="secondary" type="button" id="copyDailyQuestsBtn">現在のデイリーをコピー</button>
+      <details id="dailyQuestTools" class="progress-fold daily-tools hidden">
+        <summary>現在のデイリークエスト一覧</summary>
+        <div class="progress-fold-body">
+          <div class="quest-tools">
+            <button class="secondary" type="button" id="refreshDailyQuestsBtn">施設側の選出を再読込</button>
+            <button class="secondary" type="button" id="copyDailyQuestsBtn">現在のデイリーをコピー</button>
+          </div>
+          <div id="dailyQuestResult" class="muted small">統合DB管理の「施設→ギルド」で抽選・表示したデイリークエストを、そのまま進行対象として読み込みます。</div>
         </div>
-        <div id="dailyQuestResult" class="muted small">統合DB管理の「施設→ギルド」で抽選・表示したデイリークエストを、そのまま進行対象として読み込みます。</div>
-      </div>
+      </details>
       <label>クエスト</label>
       <select id="questSelect"></select>
       <div id="questDetail" class="card muted">DB読込後、クエストを選択してください。</div>
@@ -252,20 +277,67 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
     </section>
 
     <section class="panel tab-panel" data-progress-tab="area">
-      <h2>エリア進行 <span class="copy-note" id="areaCopyNote">コピーしました</span></h2>
+      <h2>エリア探索 <span class="copy-note" id="areaCopyNote">コピーしました</span></h2>
       <label>探索エリア</label>
       <select id="areaSelect"></select>
       <div id="areaDetail" class="card muted">DB読込後、エリアを選択してください。</div>
       <h3>探索進行度</h3>
       <div class="progress-wrap"><div id="areaBar" class="progress-bar"></div><div id="areaLabel" class="progress-label">0%</div></div>
-      <div id="areaStepInfo" class="card muted">探索進行上昇値がここに表示されます。</div>
+      <div id="areaStepInfo" class="card muted">探索進行上昇値と次の固定イベントがここに表示されます。</div>
       <div class="buttons">
         <button id="areaAdvanceBtn">探索進行度を進める</button>
         <button class="ghost" id="areaResetBtn">探索進行度をリセット</button>
         <button class="secondary" id="areaCopyBtn">エリアメモコピー</button>
       </div>
-      <label style="margin-top:10px">エリアメモ</label>
+
+      <div class="area-event-block">
+        <h3>探索固定イベント</h3>
+        <div id="areaEventDetail" class="result">0%・各進行区切り・100%の固定イベントがここに表示されます。</div>
+      </div>
+
+      <div class="area-event-block">
+        <h3>探索ランダムイベント <span class="copy-note" id="eventCopyNote">コピーしました</span></h3>
+        <div class="hidden"><label>イベント表</label><select id="eventTableSelect"></select></div>
+        <div class="row">
+          <div>
+            <label for="partySizeSelect">パーティー人数</label>
+            <select id="partySizeSelect">
+              <option value="1">1人</option><option value="2">2人</option><option value="3">3人</option><option value="4" selected>4人</option><option value="5">5人</option><option value="6">6人</option><option value="7">7人</option>
+            </select>
+          </div>
+          <div>
+            <label>今日の噂</label>
+            <select id="rumorSelect"></select>
+          </div>
+        </div>
+        <div id="rumorDetail" class="card muted">DB読込後、宿屋の噂を選択できます。噂はエリア探索中のイベント候補にだけ影響します。</div>
+        <p class="muted small">選択中の探索エリアに登録された候補から抽選します。「なし」のイベントは常時候補、「噂話」は今日の噂と一致した場合だけ候補になります。抽選後は同じボタンで再抽選できます。</p>
+        <div class="buttons">
+          <button id="rollEventBtn">イベント抽選</button>
+          <button class="secondary" id="copyEventBtn">結果コピー</button>
+          <button class="secondary" id="copyEventTreasureBtn" hidden>宝箱の中身コピー</button>
+        </div>
+        <div id="eventResult" class="result">イベント結果がここに表示されます。</div>
+        <div id="eventRewardPanel" class="event-reward-panel hidden"></div>
+      </div>
+
+      <label style="margin-top:14px">エリアメモ</label>
       <textarea id="areaNote" placeholder="探索中のメモ"></textarea>
+    </section>
+
+    <section class="panel tab-panel" data-progress-tab="base-event">
+      <h2>拠点内ランダムイベント <span class="copy-note" id="baseEventCopyNote">コピーしました</span></h2>
+      <p class="muted small">解放済みエリアに応じて、開拓拠点で起こるランダムイベント候補が累積して増えます。噂は使用しません。異界など任意解放のエリアも個別に選択できます。</p>
+      <div class="area-select-control">
+        <div class="area-select-control-main"><b>解放済みエリア</b><div id="baseUnlockedAreaSummary" class="area-select-summary">DB読込後、選択状況を表示します。</div></div>
+        <button id="openBaseAreaModalBtn" class="secondary" type="button">解放エリアを選択</button>
+      </div>
+      <div id="baseEventPoolInfo" class="card muted">DB読込後、候補数を表示します。</div>
+      <div class="buttons">
+        <button id="rollBaseEventBtn">拠点内イベント抽選</button>
+        <button class="secondary" id="copyBaseEventBtn">結果コピー</button>
+      </div>
+      <div id="baseEventResult" class="result">拠点内イベント結果がここに表示されます。</div>
     </section>
 
     <section class="panel tab-panel" data-progress-tab="inn">
@@ -280,7 +352,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
           <select id="rumorSelectForInn"></select>
         </div>
       </div>
-      <p class="muted small">宿屋で聞ける噂をランダム選出します。選出した噂はランダムイベントタブの「今日の噂」にも反映され、エリア探索中のイベント候補にだけ影響します。</p>
+      <p class="muted small">宿屋で聞ける噂をランダム選出します。選出した噂はエリア探索内の「今日の噂」にも反映され、探索ランダムイベントの候補にだけ影響します。</p>
       <div class="buttons">
         <button id="rollRumorBtn">噂をランダム選出</button>
         <button class="secondary" id="applyRumorBtn">選択した噂を適用</button>
@@ -288,41 +360,6 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
         <button class="secondary" id="copyRumorBtn">噂結果コピー</button>
       </div>
       <div id="rumorResult" class="result">宿屋の噂結果がここに表示されます。</div>
-    </section>
-
-    <section class="panel tab-panel" data-progress-tab="event">
-      <h2>ランダムイベント <span class="copy-note" id="eventCopyNote">コピーしました</span></h2>
-      <div class="row">
-        <div><label>対象エリア</label><select id="eventAreaSelect"></select></div>
-        <div class="hidden"><label>イベント表</label><select id="eventTableSelect"></select></div>
-      </div>
-      <div class="row" style="margin-top:10px">
-        <div>
-          <label for="partySizeSelect">パーティー人数</label>
-          <select id="partySizeSelect">
-            <option value="1">1人</option>
-            <option value="2">2人</option>
-            <option value="3">3人</option>
-            <option value="4" selected>4人</option>
-            <option value="5">5人</option>
-            <option value="6">6人</option>
-            <option value="7">7人</option>
-          </select>
-        </div>
-        <div>
-          <label style="margin-top:0">今日の噂</label>
-          <select id="rumorSelect"></select>
-        </div>
-      </div>
-      <div id="rumorDetail" class="card muted">DB読込後、宿屋の噂を選択できます。噂はエリア探索中のイベント候補にだけ影響します。</div>
-      <p class="muted small">選択したエリアに登録されたイベント候補からランダムに抽選します。前提条件が「なし」のイベントは常に候補に入り、「噂話」のイベントは今日の噂と一致した場合だけ候補に入ります。ボス遭遇は任意戦闘で、遭遇後に挑むか離れるかを選べます。</p>
-      <div class="buttons">
-        <button id="rollEventBtn">イベント抽選</button>
-        <button class="secondary" id="copyEventBtn">結果コピー</button>
-        <button class="secondary" id="copyEventTreasureBtn" hidden>宝箱の中身コピー</button>
-      </div>
-      <div id="eventResult" class="result">イベント結果がここに表示されます。</div>
-      <div id="eventRewardPanel" class="event-reward-panel hidden"></div>
     </section>
 
     <section class="panel tab-panel" data-progress-tab="treasure">
@@ -401,9 +438,20 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
     </section>
   </div>
 </main>
+
+<div id="baseAreaModal" class="area-select-modal-backdrop hidden" aria-hidden="true">
+  <div class="area-select-modal-card" role="dialog" aria-modal="true" aria-labelledby="baseAreaModalTitle">
+    <div class="area-select-modal-head">
+      <div><h3 id="baseAreaModalTitle">解放エリア選択</h3><p>拠点内ランダムイベントの抽選候補に含める解放済みエリアを選択します。異界も個別にON/OFFできます。</p></div>
+      <button id="closeBaseAreaModalBtn" class="ghost" type="button">閉じる</button>
+    </div>
+    <div class="area-select-modal-body"><div id="baseUnlockedAreaModalList" class="base-unlock-grid"></div></div>
+    <div class="area-select-modal-foot"><button id="cancelBaseAreaModalBtn" class="ghost" type="button">キャンセル</button><button id="applyBaseAreaModalBtn" type="button">選択を適用</button></div>
+  </div>
+</div>
 <script>
 'use strict';
-const VERSION='v90.8.392';
+const VERSION='v90.8.411';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -423,7 +471,7 @@ const GUILD_DAILY_CHANNEL_NAME='recraft_alchemia_guild_daily_channel';
 const GUILD_DAILY_REQUEST_KINDS=['拠点内依頼','エリア依頼','納品依頼'];
 const MASTER_CACHE_KEY=STORE_KEY+'_master_cache_v1';
 const $=id=>document.getElementById(id);
-const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},dayState:{day:1,fatigue:0,usedActions:0,awaitingEnd:false},lastEventText:'',lastEventKey:'',lastEventTreasureCopyText:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',lastQuestTreasureCopyText:'',triggeredQuestEvents:{},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastTreasureCopyText:'',lastAppraisalText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],lastDailyQuestKeysByKind:{'拠点内依頼':[],'エリア依頼':[],'納品依頼':[]},dailyQuestUnlockedAreaId:'',questEncounterCache:{},partySize:4,areaBossEncountered:{},treasureSetup:null,treasureContext:null,lastEncounter:null,dropEncounterInstances:[],dropMode:'encounter',lastEventRewardState:null,lastQuestEventRewardState:null,log:[]};
+const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},dayState:{day:1,fatigue:0,usedActions:0,awaitingEnd:false},lastEventText:'',lastEventKey:'',lastEventTreasureCopyText:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',lastQuestTreasureCopyText:'',triggeredQuestEvents:{},lastAreaFixedEventText:'',lastAreaFixedEventKey:'',triggeredAreaEvents:{},baseUnlockedAreaIds:[],lastBaseEventText:'',lastBaseEventKey:'',lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastTreasureCopyText:'',lastAppraisalText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],lastDailyQuestKeysByKind:{'拠点内依頼':[],'エリア依頼':[],'納品依頼':[]},dailyQuestUnlockedAreaId:'',questEncounterCache:{},partySize:4,areaBossEncountered:{},treasureSetup:null,treasureContext:null,lastEncounter:null,dropEncounterInstances:[],dropMode:'encounter',lastEventRewardState:null,lastQuestEventRewardState:null,log:[]};
 let currentQuestCategory='重要';
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function clamp(n){return Math.max(0,Math.min(100,Number(n)||0));}
@@ -432,13 +480,13 @@ function addLog(text){state.log.unshift(`[${now()}] ${text}`); state.log=state.l
 function renderLog(){ $('log').innerHTML = state.log.length ? state.log.map(x=>`<div>${esc(x)}</div>`).join('') : '<div class="muted">ログはまだありません。</div>'; }
 function setStatus(type,msg){const el=$('dbStatus'); el.className='status '+(type||''); el.textContent=msg;}
 function saveState(show=true){
-  localStorage.setItem(STORE_KEY, JSON.stringify({progress:state.progress, log:state.log, questEncounterCache:state.questEncounterCache||{}, areaBossEncountered:state.areaBossEncountered||{}, partySize:selectedPartySize(), lastQuestFixedEventText:state.lastQuestFixedEventText||'', lastQuestFixedEventKey:state.lastQuestFixedEventKey||'', triggeredQuestEvents:state.triggeredQuestEvents||{}, treasureSetup:state.treasureSetup||null, treasureContext:state.treasureContext||null, dayState:state.dayState||{day:1,fatigue:0,usedActions:0,awaitingEnd:false}, lastEncounter:state.lastEncounter||null, dropEncounterInstances:state.dropEncounterInstances||[], dropMode:state.dropMode||'single'}));
+  localStorage.setItem(STORE_KEY, JSON.stringify({progress:state.progress, log:state.log, questEncounterCache:state.questEncounterCache||{}, areaBossEncountered:state.areaBossEncountered||{}, partySize:selectedPartySize(), lastQuestFixedEventText:state.lastQuestFixedEventText||'', lastQuestFixedEventKey:state.lastQuestFixedEventKey||'', triggeredQuestEvents:state.triggeredQuestEvents||{}, lastAreaFixedEventText:state.lastAreaFixedEventText||'', lastAreaFixedEventKey:state.lastAreaFixedEventKey||'', triggeredAreaEvents:state.triggeredAreaEvents||{}, baseUnlockedAreaIds:state.baseUnlockedAreaIds||[], lastBaseEventText:state.lastBaseEventText||'', lastBaseEventKey:state.lastBaseEventKey||'', treasureSetup:state.treasureSetup||null, treasureContext:state.treasureContext||null, dayState:state.dayState||{day:1,fatigue:0,usedActions:0,awaitingEnd:false}, lastEncounter:state.lastEncounter||null, dropEncounterInstances:state.dropEncounterInstances||[], dropMode:state.dropMode||'single'}));
   if(show) addLog('進行状態を保存しました。');
 }
 function loadState(){
   // DB読込時の初期ゲージは必ず0%にするため、進行度は自動復元しない。
   // 保存済み進行を使う場合は「保存済み進行を復元」を押す。
-  try{const raw=localStorage.getItem(STORE_KEY); if(!raw)return; const data=JSON.parse(raw); state.log=data.log||[]; state.questEncounterCache=(data.questEncounterCache&&typeof data.questEncounterCache==='object')?data.questEncounterCache:{}; state.areaBossEncountered=(data.areaBossEncountered&&typeof data.areaBossEncountered==='object')?data.areaBossEncountered:{}; setPartySize(data.partySize||4); state.treasureSetup=data.treasureSetup||null; state.treasureContext=data.treasureContext||null; state.lastEncounter=data.lastEncounter||null; state.dropEncounterInstances=Array.isArray(data.dropEncounterInstances)?data.dropEncounterInstances:[]; state.dropMode=data.dropMode==='encounter'?'encounter':'single'; state.dayState=normalizeDayState(data.dayState); }catch(e){}
+  try{const raw=localStorage.getItem(STORE_KEY); if(!raw)return; const data=JSON.parse(raw); state.log=data.log||[]; state.questEncounterCache=(data.questEncounterCache&&typeof data.questEncounterCache==='object')?data.questEncounterCache:{}; state.areaBossEncountered=(data.areaBossEncountered&&typeof data.areaBossEncountered==='object')?data.areaBossEncountered:{}; state.baseUnlockedAreaIds=Array.isArray(data.baseUnlockedAreaIds)?data.baseUnlockedAreaIds:[]; state.lastBaseEventText=data.lastBaseEventText||''; state.lastBaseEventKey=data.lastBaseEventKey||''; setPartySize(data.partySize||4); state.treasureSetup=data.treasureSetup||null; state.treasureContext=data.treasureContext||null; state.lastEncounter=data.lastEncounter||null; state.dropEncounterInstances=Array.isArray(data.dropEncounterInstances)?data.dropEncounterInstances:[]; state.dropMode=data.dropMode==='encounter'?'encounter':'single'; state.dayState=normalizeDayState(data.dayState); }catch(e){}
 }
 function restoreSavedState(){
   try{
@@ -452,6 +500,12 @@ function restoreSavedState(){
     state.lastQuestFixedEventText=data.lastQuestFixedEventText||state.lastQuestFixedEventText||'';
     state.lastQuestFixedEventKey=data.lastQuestFixedEventKey||state.lastQuestFixedEventKey||'';
     state.triggeredQuestEvents=(data.triggeredQuestEvents&&typeof data.triggeredQuestEvents==='object')?data.triggeredQuestEvents:(state.triggeredQuestEvents||{});
+    state.lastAreaFixedEventText=data.lastAreaFixedEventText||state.lastAreaFixedEventText||'';
+    state.lastAreaFixedEventKey=data.lastAreaFixedEventKey||state.lastAreaFixedEventKey||'';
+    state.triggeredAreaEvents=(data.triggeredAreaEvents&&typeof data.triggeredAreaEvents==='object')?data.triggeredAreaEvents:(state.triggeredAreaEvents||{});
+    state.baseUnlockedAreaIds=Array.isArray(data.baseUnlockedAreaIds)?data.baseUnlockedAreaIds:(state.baseUnlockedAreaIds||[]);
+    state.lastBaseEventText=data.lastBaseEventText||state.lastBaseEventText||'';
+    state.lastBaseEventKey=data.lastBaseEventKey||state.lastBaseEventKey||'';
     state.treasureSetup=data.treasureSetup||state.treasureSetup||null;
     state.treasureContext=data.treasureContext||state.treasureContext||null;
     state.lastEncounter=data.lastEncounter||state.lastEncounter||null;
@@ -877,7 +931,8 @@ function applyProgressMaster(master){
   state.quests=quests; state.areas=areas; state.events=events; state.monsters=monsters; state.items=items; state.treasures=treasures; state.appraisalRules=appraisalRules; state.spells=spells; state.recipes=recipes;
   fillQuestSelect();
   fillSelect($('areaSelect'),areas,r=>`${r.name||r.id} / ${r.areaType||''}`);
-  fillSelect($('eventAreaSelect'),areas,r=>`${r.name||r.id} / 表:${r.eventTableId||'未設定'}`);
+  normalizeBaseUnlockedAreaIds();
+  renderBaseEventControls();
   fillEventTables(); fillRumorSelect(); fillRumorAreas(); fillInnRumorSelect(); fillTreasureTables(); fillAppraisalRules(); fillDropAreaSelect(); fillMonsterSearch();
   renderAll();
   return {quests,areas,events,monsters,items,treasures,appraisalRules};
@@ -1070,7 +1125,7 @@ function renderQuestStepInfo(q,p){
   const nextValue=clamp(current+step);
   const next=nextQuestEvent(q,current);
   const nextText=next ? `${eventThreshold(next)}%：${next.eventName||'名称未設定'}` : 'なし';
-  box.innerHTML=`<div class="kv"><b>現在</b><span>${current}%</span><b>1回の進行</b><span>+${step}%</span><b>進行後</b><span>${nextValue}%</span><b>次の固定イベント</b><span>${esc(nextText)}</span></div><p class="muted small">DB読込直後の進行度は0%です。固定イベントはクエスト登録欄の内容を表示します。発生処理は自動では行わず、GMが確認して手動で扱います。</p>`;
+  box.innerHTML=`<div class="kv"><b>現在</b><span>${current}%</span><b>1回の進行</b><span>+${step}%</span><b>進行後</b><span>${nextValue}%</span><b>次の固定イベント</b><span>${esc(nextText)}</span></div><p class="muted small">DB読込直後の進行度は0%です。固定イベントは0%・各進行区切り・100%で登録され、到達時に直近の発生結果へ自動表示します。</p>`;
 }
 function eventDetailText(e,q=null){
   const partySize=q?effectiveQuestPartySize(q):selectedPartySize();
@@ -1092,7 +1147,7 @@ function renderQuestEvents(){
   const box=$('questEventDetail');
   const q=selected($('questSelect'),state.quests);
   if(!box || !q){ if(box) box.textContent='クエストデータがありません。'; return; }
-  if(isDeliveryQuest(q)){box.innerHTML='<div class="muted small">納品依頼には固定イベント・ランダムイベントはありません。指定された品の受け渡しを確認してください。</div>';return;}
+  const delivery=isDeliveryQuest(q);
   const p=progressObj('quests',q.id||q.name);
   const fixedRows=questSpecificEvents(q);
   const randomRows=questRandomEvents(q);
@@ -1113,13 +1168,17 @@ function renderQuestEvents(){
     parts.push('<div class="muted small">このクエストには固定イベントが登録されていません。</div>');
   }
   parts.push('</div>');
-  parts.push(`<div class="event-section"><div class="event-section-title"><span class="badge random">ランダム</span> クエストランダムイベント</div><div class="muted small">選択中クエストの対象エリアに設定されたランダムイベントです。下の「クエストランダムイベント抽選」を押した時だけ結果が出ます。戦闘イベントは登録済みの出現構成をそのまま使用します。候補数：${randomRows.length}件</div>`);
-  if(state.lastQuestEventText){
-    parts.push(`<div class="event-card random"><div class="event-title"><span class="badge random">ランダム</span> 直近の抽選結果</div><div class="muted small">${esc(state.lastQuestEventText).replace(/\n/g,'<br>')}</div></div>`);
+  if(!delivery){
+    parts.push(`<div class="event-section"><div class="event-section-title"><span class="badge random">ランダム</span> クエストランダムイベント</div><div class="muted small">選択中クエストの対象エリアに設定されたランダムイベントです。下の「クエストランダムイベント抽選」を押した時だけ結果が出ます。戦闘イベントは登録済みの出現構成をそのまま使用します。候補数：${randomRows.length}件</div>`);
+    if(state.lastQuestEventText){
+      parts.push(`<div class="event-card random"><div class="event-title"><span class="badge random">ランダム</span> 直近の抽選結果</div><div class="muted small">${esc(state.lastQuestEventText).replace(/\n/g,'<br>')}</div></div>`);
+    }else{
+      parts.push('<div class="muted small">ランダムイベント結果はまだありません。</div>');
+    }
+    parts.push('</div>');
   }else{
-    parts.push('<div class="muted small">ランダムイベント結果はまだありません。</div>');
+    parts.push('<div class="muted small" style="margin-top:10px">納品依頼は0%・100%の固定イベントのみ使用し、ランダムイベント抽選は行いません。</div>');
   }
-  parts.push('</div>');
   box.innerHTML=parts.join('');
   renderEventRewardPanel('quest');
 }
@@ -1154,7 +1213,8 @@ function triggerQuestSpecificEvents(q,before,after){
   const area=areaForQuest(q);
   const rows=questSpecificEvents(q).filter(e=>{
     const th=eventThreshold(e);
-    return Number.isFinite(th) && th>clamp(before) && th<=clamp(after);
+    const from=Number.isFinite(Number(before))?Number(before):-1;
+    return Number.isFinite(th) && th>from && th<=clamp(after);
   });
   const fired=[];
   rows.forEach(e=>{
@@ -1203,6 +1263,7 @@ function renderQuest(){
     return;
   }
   const p=progressObj('quests',q.id||q.name);
+  if(clamp(p.value)===0) triggerQuestSpecificEvents(q,-1,0);
   const delivery=isDeliveryQuest(q);
   $('questNote').value=p.note||'';
   $('questBar').style.width=clamp(p.value)+'%';
@@ -1218,20 +1279,136 @@ function renderQuest(){
   renderQuestStepInfo(q,p);
   renderQuestEvents();
 }
+function areaSpecificEvents(a){
+  return parseQuestFixedEvents(a&&a.fixedEvents).sort((x,y)=>(eventThreshold(x)??999)-(eventThreshold(y)??999));
+}
+function nextAreaFixedEvent(a,current){return areaSpecificEvents(a).find(e=>(eventThreshold(e)??101)>clamp(current));}
+function renderAreaEvents(){
+  const box=$('areaEventDetail');
+  const a=selected($('areaSelect'),state.areas);
+  if(!box||!a){if(box)box.textContent='エリアデータがありません。';return;}
+  const current=clamp(progressObj('areas',a.id||a.name).value);
+  const rows=areaSpecificEvents(a);
+  const parts=[];
+  if(state.lastAreaFixedEventText)parts.push(`<div class="event-card fixed active"><div class="event-title"><span class="badge fixed">固定</span> 直近の発生結果</div><div class="muted small">${esc(state.lastAreaFixedEventText).replace(/\n/g,'<br>')}</div></div>`);
+  if(rows.length)parts.push(rows.map(e=>{const th=eventThreshold(e)??0,cls=th<=current?'active':'next',prefix=th<=current?'到達済み：':'未到達：';return eventDetailHtml(e,cls,prefix,'fixed');}).join(''));
+  else parts.push('<div class="muted small">このエリアには固定イベントが登録されていません。</div>');
+  box.innerHTML=parts.join('');
+}
+function triggerAreaSpecificEvents(a,before,after){
+  if(!a)return [];
+  const from=Number.isFinite(Number(before))?Number(before):-1;
+  const rows=areaSpecificEvents(a).filter(e=>{const th=eventThreshold(e);return Number.isFinite(th)&&th>from&&th<=clamp(after);});
+  const fired=[];
+  rows.forEach(e=>{
+    const key=`${String(a.id||a.name||'')}:${eventUniqueKey(e)}:${eventThreshold(e)??''}`;
+    if(state.triggeredAreaEvents[key])return;
+    state.triggeredAreaEvents[key]=true;
+    state.lastAreaFixedEventKey=key;
+    state.lastAreaFixedEventText=formatEventOutput(`【エリア探索固定イベント】${e.eventName||'名称未設定'}`,e,a,String(a.eventTableId||''),['このイベントは探索進行度による確定発生です。ランダム抽選ではありません。']);
+    addLog(`エリア探索固定イベント：${a.name||a.id} / ${e.eventName||'名称未設定'}`);
+    fired.push(e);
+  });
+  return fired;
+}
+function defaultBaseUnlockedAreaIds(){
+  const initial=(state.areas||[]).filter(a=>String(a.unlockCondition||'').includes('初期解放')).map(a=>String(a.id||a.name||'')).filter(Boolean);
+  if(initial.length)return initial;
+  const first=(state.areas||[])[0];return first?[String(first.id||first.name||'')]:[];
+}
+function normalizeBaseUnlockedAreaIds(){
+  const valid=new Set((state.areas||[]).map(a=>String(a.id||a.name||'')).filter(Boolean));
+  let ids=Array.isArray(state.baseUnlockedAreaIds)?state.baseUnlockedAreaIds.map(String).filter(id=>valid.has(id)):[];
+  const required=defaultBaseUnlockedAreaIds();
+  required.forEach(id=>{if(valid.has(id)&&!ids.includes(id))ids.push(id);});
+  if(!ids.length)ids=required;
+  state.baseUnlockedAreaIds=[...new Set(ids)];
+  return state.baseUnlockedAreaIds;
+}
+let baseAreaModalDraftIds=[];
+function baseEventRows(){
+  const unlocked=new Set(normalizeBaseUnlockedAreaIds());
+  return (state.events||[]).filter(e=>String(e.tableId||'').trim()==='evt_base_random'&&String(e.eventType||'').trim()==='拠点イベント'&&eventConditionType(e)==='解放エリア'&&unlocked.has(String(e.conditionValue||'').trim()));
+}
+function baseAreaNames(ids=[]){
+  const set=new Set((ids||[]).map(String));
+  return (state.areas||[]).filter(a=>set.has(String(a.id||a.name||''))).map(a=>String(a.name||a.id||'')).filter(Boolean);
+}
+function renderBaseAreaModal(){
+  const modal=$('baseAreaModal'),list=$('baseUnlockedAreaModalList');if(!modal||!list)return;
+  const selected=new Set(baseAreaModalDraftIds.map(String));
+  const required=new Set(defaultBaseUnlockedAreaIds());
+  list.innerHTML=(state.areas||[]).map(a=>{
+    const id=String(a.id||a.name||''),checked=selected.has(id)||required.has(id),fixed=required.has(id);
+    return `<label class="base-unlock-item"><input type="checkbox" data-base-area-modal-check="${esc(id)}"${checked?' checked':''}${fixed?' disabled':''}><span>${esc(a.name||id)}<small>${esc(a.areaType||'エリア')} / 解放順 ${esc(a.unlockOrder??'-')}${fixed?' / 初期解放':''}</small></span></label>`;
+  }).join('')||'<div class="muted small">エリアデータがありません。</div>';
+}
+function openBaseAreaModal(){
+  baseAreaModalDraftIds=[...normalizeBaseUnlockedAreaIds()];renderBaseAreaModal();
+  const modal=$('baseAreaModal');if(modal){modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');document.body.classList.add('area-select-modal-open');}
+}
+function closeBaseAreaModal(){
+  const modal=$('baseAreaModal');if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');document.body.classList.remove('area-select-modal-open');}
+}
+function applyBaseAreaModal(){
+  const required=defaultBaseUnlockedAreaIds();const next=[...new Set([...required,...baseAreaModalDraftIds.map(String)])];
+  const before=normalizeBaseUnlockedAreaIds().slice().sort().join('|'),after=next.slice().sort().join('|');
+  state.baseUnlockedAreaIds=next;
+  if(before!==after){state.lastBaseEventText='';state.lastBaseEventKey='';}
+  saveState(false);closeBaseAreaModal();renderBaseEventControls();
+}
+function handleBaseAreaModalCheck(input){
+  const id=String(input?.dataset?.baseAreaModalCheck||'');if(!id)return;
+  const set=new Set(baseAreaModalDraftIds.map(String));if(input.checked)set.add(id);else set.delete(id);
+  defaultBaseUnlockedAreaIds().forEach(v=>set.add(v));baseAreaModalDraftIds=[...set];
+}
+function renderBaseEventControls(){
+  const summary=$('baseUnlockedAreaSummary'),info=$('baseEventPoolInfo'),result=$('baseEventResult');
+  if(!info)return;
+  const unlocked=normalizeBaseUnlockedAreaIds();
+  const rows=baseEventRows();
+  const names=baseAreaNames(unlocked);
+  if(summary)summary.textContent=names.length?`選択中：${names.join('、')}（${names.length}エリア）`:'選択中のエリアはありません。';
+  const sourceNames=[...new Set(rows.map(e=>{const a=(state.areas||[]).find(x=>String(x.id||x.name||'')===String(e.conditionValue||''));return a?.name||e.conditionValue||'';}).filter(Boolean))];
+  info.innerHTML=`<div class="kv"><b>解放済み</b><span>${unlocked.length}エリア</span><b>現在の候補</b><span>${rows.length}件</span><b>候補追加元</b><span>${esc(sourceNames.join('、')||'なし')}</span></div>`;
+  if(result)result.textContent=state.lastBaseEventText||'拠点内イベント結果がここに表示されます。';
+  const btn=$('rollBaseEventBtn');if(btn)btn.textContent=state.lastBaseEventText?'拠点内イベント再抽選':'拠点内イベント抽選';
+}
+function rollBaseEvent(){
+  const rows=baseEventRows();
+  if(!rows.length){state.lastBaseEventText='解放済みエリアに対応する拠点内イベント候補がありません。';renderBaseEventControls();return;}
+  const picked=pickRandomEvent(rows,state.lastBaseEventKey);state.lastBaseEventKey=eventUniqueKey(picked);
+  const source=(state.areas||[]).find(a=>String(a.id||a.name||'')===String(picked.conditionValue||''));
+  state.lastBaseEventText=[
+    '【拠点内ランダムイベント】',
+    source?`追加元エリア：${source.name||source.id}`:'',
+    picked.eventName?`イベント：${picked.eventName}`:'',
+    picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'',
+    picked.result?`結果：${eventResultTextForDisplay(picked)}`:'',
+    picked.progressEffect?`補足：${picked.progressEffect}`:''
+  ].filter(Boolean).join('\n');
+  saveState(false);renderBaseEventControls();addLog(`拠点内ランダムイベント：${picked.eventName||'名称未設定'}${source?` / ${source.name||source.id}解放分`:''}`);
+}
 function renderArea(){
-  const a=selected($('areaSelect'),state.areas); if(!a){$('areaDetail').textContent='エリアデータがありません。'; return;}
-  const p=progressObj('areas',a.id||a.name); $('areaNote').value=p.note||''; $('areaBar').style.width=clamp(p.value)+'%'; $('areaLabel').textContent=clamp(p.value)+'%';
-  $('areaDetail').innerHTML=`<div class="kv"><b>種別</b><span>${esc(a.areaType||'')}</span><b>難度</b><span>${esc(a.difficulty||'')}</span><b>イベント表</b><span>${esc(a.eventTableId||'')}</span><b>探索進行上昇</b><span>+${areaStepAmount(a)}%</span><b>主な素材</b><span>${esc(a.mainMaterials||'')}</span><b>主な魔物</b><span>${esc(a.mainMonsters||'')}</span><b>フィールド効果</b><span>${esc(a.fieldEffect||'なし')}</span></div>${a.description?`<p class="muted">${esc(a.description)}</p>`:''}`;
-  const step=areaStepAmount(a); const current=clamp(p.value); $('areaStepInfo').innerHTML=`<div class="kv"><b>現在</b><span>${current}%</span><b>1回の進行</b><span>+${step}%</span><b>進行後</b><span>${clamp(current+step)}%</span></div><p class="muted small">探索進行はエリア登録側の固定値で上昇します。ランダムイベント結果では進行度を自動変更しません。</p>`;
+  const a=selected($('areaSelect'),state.areas);
+  if(!a){$('areaDetail').textContent='エリアデータがありません。';$('areaBar').style.width='0%';$('areaLabel').textContent='0%';renderAreaEvents();return;}
+  const p=progressObj('areas',a.id||a.name);
+  if(clamp(p.value)===0)triggerAreaSpecificEvents(a,-1,0);
+  $('areaNote').value=p.note||'';$('areaBar').style.width=clamp(p.value)+'%';$('areaLabel').textContent=clamp(p.value)+'%';
+  $('areaDetail').innerHTML=`<div class="kv"><b>種別</b><span>${esc(a.areaType||'')}</span><b>難度</b><span>${esc(a.difficulty||'')}</span><b>イベント表</b><span>${esc(a.eventTableId||'')}</span><b>探索進行上昇</b><span>+${areaStepAmount(a)}%</span><b>固定イベント数</b><span>${areaSpecificEvents(a).length}件</span><b>主な素材</b><span>${esc(a.mainMaterials||'')}</span><b>主な魔物</b><span>${esc(a.mainMonsters||'')}</span><b>フィールド効果</b><span>${esc(a.fieldEffect||'なし')}</span></div>${a.description?`<p class="muted">${esc(a.description)}</p>`:''}`;
+  const step=areaStepAmount(a),current=clamp(p.value),next=nextAreaFixedEvent(a,current),nextText=next?`${eventThreshold(next)}%：${next.eventName||'名称未設定'}`:'なし';
+  $('areaStepInfo').innerHTML=`<div class="kv"><b>現在</b><span>${current}%</span><b>1回の進行</b><span>+${step}%</span><b>進行後</b><span>${clamp(current+step)}%</span><b>次の固定イベント</b><span>${esc(nextText)}</span></div><p class="muted small">固定イベントは0%・各探索進行区切り・100%で登録され、到達時に直近の発生結果へ自動表示します。ランダムイベント結果では進行度を自動変更しません。</p>`;
+  fillEventTables();renderAreaEvents();
+  const roll=$('rollEventBtn');if(roll)roll.textContent=state.lastEventText?'イベント再抽選':'イベント抽選';
 }
 function renderMonster(){
   const m=selectedDropMonster(); if(!m){$('monsterDetail').textContent=dropAreaMonsterRows().length?'候補から魔物を選択してください。':'このエリアで選択できる魔物がありません。'; return;}
   $('monsterDetail').innerHTML=`<div class="kv"><b>HP</b><span>${esc(m.hp||'')}</span><b>命中</b><span>${esc(m.hitValue||'')}</span><b>回避</b><span>${esc(m.evasionValue||'')}</span><b>抵抗</b><span>${esc(m.resistValue||'')}</span><b>防御</b><span>${esc(m.defenseValue||'')}</span><b>先制</b><span>${esc(m.initiative||'')}</span><b>解体難易度</b><span>${esc(m.dismantleDifficulty||'未設定')}</span><b>解体判定</b><span>採取技能 &gt;= ${esc(m.dismantleDifficulty||'解体難易度')}</span></div>${m.habit?`<p class="muted"><b>習性：</b>${esc(m.habit)}</p>`:''}`;
 }
-function renderAll(){renderDayStatus(); syncDailyQuestSelectionFromFacility(); fillDropAreaSelect($('dropAreaSelect')?.value||''); ensureDailyQuestSelection(); fillQuestSelect($('questSelect')?.value || ''); fillEventTables(); fillRumorSelect(); fillRumorAreas(); fillInnRumorSelect(); fillTreasureTables(); fillAppraisalRules(); fillMonsterSearch($('monsterSelectValue')?.value || $('monsterSelect')?.value || ''); renderQuest(); renderArea(); renderMonster(); renderDropMode(); renderEncounterDropList(); renderEventRewardPanel('event'); renderEventRewardPanel('quest'); renderRumorResult(); renderDailyQuestResult(); renderLog();}
+function renderAll(){renderDayStatus(); syncDailyQuestSelectionFromFacility(); fillDropAreaSelect($('dropAreaSelect')?.value||''); ensureDailyQuestSelection(); fillQuestSelect($('questSelect')?.value || ''); fillEventTables(); fillRumorSelect(); fillRumorAreas(); fillInnRumorSelect(); fillTreasureTables(); fillAppraisalRules(); fillMonsterSearch($('monsterSelectValue')?.value || $('monsterSelect')?.value || ''); renderQuest(); renderArea(); renderBaseEventControls(); renderMonster(); renderDropMode(); renderEncounterDropList(); renderEventRewardPanel('event'); renderEventRewardPanel('quest'); renderRumorResult(); renderDailyQuestResult(); renderLog();}
 function getNumFromText(s, fallback=0){const m=String(s||'').match(/[+-]?\d+/); return m?Number(m[0]):fallback;}
-function advanceQuestProgress(){const q=selected($('questSelect'),state.quests); if(!q)return; const p=progressObj('quests',q.id||q.name); const add=questStepAmount(q); const before=clamp(p.value); if(isDeliveryQuest(q)){p.value=100; saveState(false); renderQuest(); addLog(`${q.name||q.id} の納品を完了しました。`); return;} p.value=clamp(before+add); const fired=triggerQuestSpecificEvents(q,before,p.value); saveState(false); renderQuest(); addLog(`${q.name||q.id} の進行度を +${add}% しました。${before}% → ${p.value}%（行動回数は変更していません）`); if(fired.length && fired[0].treasureTableId){addLog(`確定入手：未鑑定の魔法または祈祷スクロール：★1×1（${fired[0].eventName||'クエスト固有イベント'}）`);}}
-function advanceAreaProgress(){const a=selected($('areaSelect'),state.areas); if(!a)return; const p=progressObj('areas',a.id||a.name); const add=areaStepAmount(a); const before=clamp(p.value); p.value=clamp(before+add); saveState(false); renderArea(); addLog(`${a.name||a.id} の探索進行度を +${add}% しました。${before}% → ${p.value}%（行動回数は変更していません）`); if(before<100 && p.value>=100) triggerAreaClearRumorEvent(a);}
+function advanceQuestProgress(){const q=selected($('questSelect'),state.quests); if(!q)return; const p=progressObj('quests',q.id||q.name); const add=questStepAmount(q); const before=clamp(p.value); if(before===0)triggerQuestSpecificEvents(q,-1,0); if(isDeliveryQuest(q)){p.value=100; const fired=triggerQuestSpecificEvents(q,before,p.value); saveState(false); renderQuest(); addLog(`${q.name||q.id} の納品を完了しました。0%・100%固定イベントを反映しました。`); return;} p.value=clamp(before+add); const fired=triggerQuestSpecificEvents(q,before,p.value); saveState(false); renderQuest(); addLog(`${q.name||q.id} の進行度を +${add}% しました。${before}% → ${p.value}%（行動回数は変更していません）`); if(fired.length && fired[0].treasureTableId){addLog(`確定入手：未鑑定の魔法または祈祷スクロール：★1×1（${fired[0].eventName||'クエスト固有イベント'}）`);}}
+function advanceAreaProgress(){const a=selected($('areaSelect'),state.areas); if(!a)return; const p=progressObj('areas',a.id||a.name); const add=areaStepAmount(a); const before=clamp(p.value); if(before===0)triggerAreaSpecificEvents(a,-1,0); p.value=clamp(before+add); triggerAreaSpecificEvents(a,before,p.value); saveState(false); renderArea(); addLog(`${a.name||a.id} の探索進行度を +${add}% しました。${before}% → ${p.value}%（行動回数は変更していません）`); if(before<100 && p.value>=100) triggerAreaClearRumorEvent(a);}
 
 function isRumorEvent(row){return String(row && row.eventType || '').trim()==='宿屋の噂';}
 function eventConditionType(row){return String(row && row.conditionType || '').trim() || 'なし';}
@@ -1462,7 +1639,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.392-party-scaling-3';
+const ENCOUNTER_RULE_VERSION='v90.8.411-party-scaling-3';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -1891,7 +2068,7 @@ function triggerAreaClearRumorEvent(area){
   return true;
 }
 function fillEventTables(){
-  const area=selected($('eventAreaSelect'),state.areas); const prefer=area&&area.eventTableId?String(area.eventTableId):'';
+  const area=selected($('areaSelect'),state.areas); const prefer=area&&area.eventTableId?String(area.eventTableId):'';
   const ids=[...new Set(state.events.map(e=>String(e.tableId||'').trim()).filter(Boolean))];
   const rows=ids.map(id=>{
     const all=state.events.filter(e=>String(e.tableId||'').trim()===id);
@@ -1901,7 +2078,7 @@ function fillEventTables(){
   if(!rows.length){const o=document.createElement('option'); o.value=''; o.textContent='イベント表なし'; sel.appendChild(o);} else if(prefer){sel.value=prefer;}
 }
 function rollEvent(){
-  const area=selected($('eventAreaSelect'),state.areas);
+  const area=selected($('areaSelect'),state.areas);
   const tableId=String((area&&area.eventTableId)||$('eventTableSelect').value||'').trim();
   const rumor=selectedRumor();
   let rows=eventRowsForArea(area,{rumor,includeBoss:false});
@@ -1918,6 +2095,7 @@ function rollEvent(){
   updateTreasureCopyButtons();
   if(isBossEvent(picked)) state.areaBossEncountered[areaEventKey(area)]=true;
   $('eventResult').textContent=state.lastEventText;
+  const rollBtn=$('rollEventBtn');if(rollBtn)rollBtn.textContent='イベント再抽選';
   saveState(false);
   addLog(`イベント抽選：${picked.eventName||'名称未設定'}${treasureBundle.results.length?` / 宝箱${treasureBundle.results.length}件を同時決定`:''}`);
 }
@@ -2775,7 +2953,7 @@ function questInfoMemo(){
   const q=selected($('questSelect'),state.quests);
   return q ? questPublicInfoLines(q).join('\n') : '';
 }
-function areaMemo(){const a=selected($('areaSelect'),state.areas); if(!a)return ''; const p=progressObj('areas',a.id||a.name); return [`【エリア進行】${a.name||a.id}`,`探索進行度：${clamp(p.value)}%`,a.eventTableId?`イベント表：${a.eventTableId}`:'',a.mainMaterials?`主な素材：${a.mainMaterials}`:'',a.mainMonsters?`主な魔物：${a.mainMonsters}`:'',a.fieldEffect&&a.fieldEffect!=='なし'?`フィールド効果：${a.fieldEffect}`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
+function areaMemo(){const a=selected($('areaSelect'),state.areas); if(!a)return ''; const p=progressObj('areas',a.id||a.name); return [`【エリア探索】${a.name||a.id}`,`探索進行度：${clamp(p.value)}%`,a.eventTableId?`イベント表：${a.eventTableId}`:'',a.mainMaterials?`主な素材：${a.mainMaterials}`:'',a.mainMonsters?`主な魔物：${a.mainMonsters}`:'',a.fieldEffect&&a.fieldEffect!=='なし'?`フィールド効果：${a.fieldEffect}`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
 function switchProgressTab(tab){
   let key=String(tab || 'quest');
   const panels=[...document.querySelectorAll('[data-progress-tab]')];
@@ -2789,19 +2967,19 @@ function bindTabs(){
   switchProgressTab(localStorage.getItem(STORE_KEY+'_tab') || 'quest');
 }
 function bind(){
-  $('fixedUrlLabel').textContent='GitHub共通DB（失敗時のみGAS）'; bindTabs(); setPartySize(state.partySize||4); setQuestCategory('重要'); $('loadDbBtn').addEventListener('click',()=>loadDb({auto:false})); $('saveStateBtn').addEventListener('click',()=>saveState(true)); $('restoreStateBtn').addEventListener('click',restoreSavedState); $('clearStateBtn').addEventListener('click',()=>{if(confirm('進行状態を初期化しますか？')){localStorage.removeItem(STORE_KEY); state.progress={quests:{},areas:{}}; state.dayState={day:1,fatigue:0,usedActions:0,awaitingEnd:false}; state.lastEncounter=null; state.dropEncounterInstances=[]; state.dropMode='encounter'; state.log=[]; renderAll(); addLog('進行状態を初期化しました。');}});
+  $('fixedUrlLabel').textContent='GitHub共通DB（失敗時のみGAS）'; bindTabs(); setPartySize(state.partySize||4); setQuestCategory('重要'); $('loadDbBtn').addEventListener('click',()=>loadDb({auto:false})); $('saveStateBtn').addEventListener('click',()=>saveState(true)); $('restoreStateBtn').addEventListener('click',restoreSavedState); $('clearStateBtn').addEventListener('click',()=>{if(confirm('進行状態を初期化しますか？')){localStorage.removeItem(STORE_KEY); state.progress={quests:{},areas:{}}; state.dayState={day:1,fatigue:0,usedActions:0,awaitingEnd:false}; state.triggeredQuestEvents={}; state.triggeredAreaEvents={}; state.lastQuestFixedEventText=''; state.lastAreaFixedEventText=''; state.baseUnlockedAreaIds=defaultBaseUnlockedAreaIds(); state.lastBaseEventText=''; state.lastBaseEventKey=''; state.lastEncounter=null; state.dropEncounterInstances=[]; state.dropMode='encounter'; state.log=[]; renderAll(); addLog('進行状態を初期化しました。');}});
   document.querySelectorAll('[data-quest-category]').forEach(btn=>btn.addEventListener('click',()=>setQuestCategory(btn.dataset.questCategory)));
   $('questShowDisabledImportant')?.addEventListener('change',()=>{fillQuestSelect(); renderQuest();});
-  $('questSelect').addEventListener('change',()=>{state.lastQuestEventText=''; state.lastQuestEventKey=''; state.lastQuestTreasureCopyText=''; state.lastQuestEventRewardState=null; renderEventRewardPanel('quest'); updateTreasureCopyButtons(); const q=selected($('questSelect'),state.quests); if(q&&questUsesRandomEncounter(q))resolveQuestEncounter(q,true); renderQuest();}); $('areaSelect').addEventListener('change',renderArea); $('dropAreaSelect').addEventListener('change',()=>refreshDropMonsterSelection('')); $('monsterSelect').addEventListener('input',()=>{setSelectedDropMonster(null,{clearInput:false});openMonsterMenu($('monsterSelect').value);renderMonster();});
+  $('questSelect').addEventListener('change',()=>{state.lastQuestEventText=''; state.lastQuestEventKey=''; state.lastQuestFixedEventText=''; state.lastQuestFixedEventKey=''; state.lastQuestTreasureCopyText=''; state.lastQuestEventRewardState=null; renderEventRewardPanel('quest'); updateTreasureCopyButtons(); const q=selected($('questSelect'),state.quests); if(q&&questUsesRandomEncounter(q))resolveQuestEncounter(q,true); renderQuest();}); $('areaSelect').addEventListener('change',()=>{state.lastEventText='';state.lastEventKey='';state.lastEventTreasureCopyText='';state.lastEventRewardState=null;state.lastAreaFixedEventText='';state.lastAreaFixedEventKey='';renderEventRewardPanel('event');updateTreasureCopyButtons();fillEventTables();renderArea();}); $('dropAreaSelect').addEventListener('change',()=>refreshDropMonsterSelection('')); $('monsterSelect').addEventListener('input',()=>{setSelectedDropMonster(null,{clearInput:false});openMonsterMenu($('monsterSelect').value);renderMonster();});
   $('markAllDismantleSuccessBtn')?.addEventListener('click',()=>{state.dropEncounterInstances=(state.dropEncounterInstances||[]).map(row=>({...row,dismantleSuccess:true}));renderEncounterDropList();saveState(false);});
   $('markAllDismantleFailBtn')?.addEventListener('click',()=>{state.dropEncounterInstances=(state.dropEncounterInstances||[]).map(row=>({...row,dismantleSuccess:false}));renderEncounterDropList();saveState(false);});
   $('rollEncounterDropBtn')?.addEventListener('click',rollEncounterDrops);
   $('encounterDropList')?.addEventListener('change',e=>{const input=e.target.closest('[data-encounter-dismantle]');if(!input)return;state.dropEncounterInstances=(state.dropEncounterInstances||[]).map(row=>String(row.uid)===String(input.dataset.encounterDismantle)?({...row,dismantleSuccess:input.checked}):row);saveState(false);});
-$('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){suppressMonsterFocusOpen=false;return;} openMonsterMenu('');}); $('monsterSelect').addEventListener('pointerdown',()=>setTimeout(()=>{openMonsterMenu('');$('monsterSelect').select();},0)); $('eventAreaSelect').addEventListener('change',fillEventTables); $('rumorAreaSelect').addEventListener('change',()=>{fillInnRumorSelect(); renderRumorResult();}); $('rumorSelectForInn').addEventListener('change',()=>applyRumorIndex($('rumorSelectForInn').value,true)); $('rumorSelect').addEventListener('change',()=>{state.lastEventText=''; state.lastEventKey=''; state.lastEventTreasureCopyText=''; state.lastEventRewardState=null; renderEventRewardPanel('event'); updateTreasureCopyButtons(); renderRumorDetail(); fillInnRumorSelect(); renderRumorResult(selectedRumor(),'apply');}); $('partySizeSelect')?.addEventListener('change',e=>handlePartySizeChange(e.target.value)); $('questPartySizeSelect')?.addEventListener('change',e=>handlePartySizeChange(e.target.value));
+$('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){suppressMonsterFocusOpen=false;return;} openMonsterMenu('');}); $('monsterSelect').addEventListener('pointerdown',()=>setTimeout(()=>{openMonsterMenu('');$('monsterSelect').select();},0)); $('rumorAreaSelect').addEventListener('change',()=>{fillInnRumorSelect(); renderRumorResult();}); $('rumorSelectForInn').addEventListener('change',()=>applyRumorIndex($('rumorSelectForInn').value,true)); $('rumorSelect').addEventListener('change',()=>{state.lastEventText=''; state.lastEventKey=''; state.lastEventTreasureCopyText=''; state.lastEventRewardState=null; renderEventRewardPanel('event'); updateTreasureCopyButtons(); renderRumorDetail(); fillInnRumorSelect(); renderRumorResult(selectedRumor(),'apply');}); $('partySizeSelect')?.addEventListener('change',e=>handlePartySizeChange(e.target.value)); $('questPartySizeSelect')?.addEventListener('change',e=>handlePartySizeChange(e.target.value));
   $('questAdvanceBtn').addEventListener('click',advanceQuestProgress); $('areaAdvanceBtn').addEventListener('click',advanceAreaProgress); $('manualActionBtn')?.addEventListener('click',()=>consumeDailyAction('その他の行動')); $('undoActionBtn')?.addEventListener('click',undoDailyAction); $('innRestBtn')?.addEventListener('click',restAtInn); $('innStayBtn')?.addEventListener('click',()=>advanceToNextDay(true)); $('endDayWithoutInnBtn')?.addEventListener('click',()=>{if(confirm('宿泊せず一日を終了しますか？ 疲労度が1増加します。'))advanceToNextDay(false);});
-  $('questResetBtn').addEventListener('click',()=>{const q=selected($('questSelect'),state.quests); if(q){const qkey=String(q.id||q.name||''); progressObj('quests',qkey).value=0; Object.keys(state.triggeredQuestEvents||{}).forEach(k=>{if(k.startsWith(qkey+':')) delete state.triggeredQuestEvents[k];}); state.lastQuestFixedEventText=''; state.lastQuestFixedEventKey=''; state.lastQuestTreasureCopyText=''; updateTreasureCopyButtons(); saveState(false); renderQuest();}}); $('areaResetBtn').addEventListener('click',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).value=0; delete state.areaBossEncountered[areaEventKey(a)]; state.lastEventText=''; state.lastEventKey=''; state.lastEventTreasureCopyText=''; updateTreasureCopyButtons(); saveState(false); renderArea();}});
+  $('questResetBtn').addEventListener('click',()=>{const q=selected($('questSelect'),state.quests); if(q){const qkey=String(q.id||q.name||''); progressObj('quests',qkey).value=0; Object.keys(state.triggeredQuestEvents||{}).forEach(k=>{if(k.startsWith(qkey+':')) delete state.triggeredQuestEvents[k];}); state.lastQuestFixedEventText=''; state.lastQuestFixedEventKey=''; state.lastQuestTreasureCopyText=''; updateTreasureCopyButtons(); saveState(false); renderQuest();}}); $('areaResetBtn').addEventListener('click',()=>{const a=selected($('areaSelect'),state.areas); if(a){const akey=String(a.id||a.name||''); progressObj('areas',akey).value=0; delete state.areaBossEncountered[areaEventKey(a)]; Object.keys(state.triggeredAreaEvents||{}).forEach(k=>{if(k.startsWith(akey+':'))delete state.triggeredAreaEvents[k];}); state.lastAreaFixedEventText='';state.lastAreaFixedEventKey='';state.lastEventText=''; state.lastEventKey=''; state.lastEventTreasureCopyText=''; state.lastEventRewardState=null; renderEventRewardPanel('event'); updateTreasureCopyButtons(); saveState(false); renderArea();}});
   $('questNote').addEventListener('input',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).note=$('questNote').value; saveState(false);}}); $('areaNote').addEventListener('input',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).note=$('areaNote').value; saveState(false);}});
-  $('questCopyBtn').addEventListener('click',()=>copyText(questMemo(),'questCopyNote')); $('questInfoCopyBtn').addEventListener('click',()=>copyText(questInfoMemo(),'questCopyNote')); $('copyImportantQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('重要'),'questCopyNote')); $('copyDailyQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('デイリー'),'questCopyNote')); $('refreshDailyQuestsBtn')?.addEventListener('click',()=>syncDailyQuestSelectionFromFacility({render:true,log:true})); $('copyDailyQuestsBtn')?.addEventListener('click',()=>copyText(state.lastDailyQuestText,'questCopyNote')); $('areaCopyBtn').addEventListener('click',()=>copyText(areaMemo(),'areaCopyNote'));
+  $('questCopyBtn').addEventListener('click',()=>copyText(questMemo(),'questCopyNote')); $('questInfoCopyBtn').addEventListener('click',()=>copyText(questInfoMemo(),'questCopyNote')); $('copyImportantQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('重要'),'questCopyNote')); $('copyDailyQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('デイリー'),'questCopyNote')); $('refreshDailyQuestsBtn')?.addEventListener('click',()=>syncDailyQuestSelectionFromFacility({render:true,log:true})); $('copyDailyQuestsBtn')?.addEventListener('click',()=>copyText(state.lastDailyQuestText,'questCopyNote')); $('areaCopyBtn').addEventListener('click',()=>copyText(areaMemo(),'areaCopyNote')); $('rollBaseEventBtn')?.addEventListener('click',rollBaseEvent); $('copyBaseEventBtn')?.addEventListener('click',()=>copyText(state.lastBaseEventText,'baseEventCopyNote')); $('openBaseAreaModalBtn')?.addEventListener('click',openBaseAreaModal); $('closeBaseAreaModalBtn')?.addEventListener('click',closeBaseAreaModal); $('cancelBaseAreaModalBtn')?.addEventListener('click',closeBaseAreaModal); $('applyBaseAreaModalBtn')?.addEventListener('click',applyBaseAreaModal);
   $('rollQuestEventBtn').addEventListener('click',rollQuestEvent); $('copyQuestEventBtn').addEventListener('click',()=>copyText(state.lastQuestEventText,'questCopyNote')); $('copyQuestTreasureBtn').addEventListener('click',()=>copyText(state.lastQuestTreasureCopyText,'questCopyNote'));
   $('rollRumorBtn').addEventListener('click',rollRumor); $('applyRumorBtn').addEventListener('click',()=>applyRumorIndex($('rumorSelectForInn').value,true)); $('clearRumorBtn').addEventListener('click',clearRumor); $('copyRumorBtn').addEventListener('click',()=>copyText(state.lastRumorText,'rumorCopyNote'));
   $('rollEventBtn').addEventListener('click',rollEvent); $('copyEventBtn').addEventListener('click',()=>copyText(state.lastEventText,'eventCopyNote')); $('copyEventTreasureBtn').addEventListener('click',()=>copyText(state.lastEventTreasureCopyText,'eventCopyNote'));
@@ -2815,6 +2993,7 @@ $('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){su
   }catch(_e){}
 
   document.addEventListener('change',e=>{
+    const baseAreaCheck=e.target.closest('[data-base-area-modal-check]');if(baseAreaCheck){handleBaseAreaModalCheck(baseAreaCheck);return;}
     const check=e.target.closest('[data-event-reward-check]');if(check){const panel=check.closest('#questEventRewardPanel,#eventRewardPanel');updateEventRewardSelection(panel?.id==='questEventRewardPanel'?'quest':'event',check.dataset.eventRewardCheck,check.checked);return;}
     const choice=e.target.closest('[data-event-reward-choice]');if(choice){const panel=choice.closest('#questEventRewardPanel,#eventRewardPanel'),scope=panel?.id==='questEventRewardPanel'?'quest':'event',reward=eventRewardState(scope),group=reward?.groups.find(g=>String(g.uid)===String(choice.dataset.eventRewardChoice)),item=group?.items.find(x=>String(x.uid)===String(choice.dataset.eventRewardItem));if(item)item.selectedName=choice.value;renderEventRewardPanel(scope);}
   });
@@ -2834,6 +3013,8 @@ $('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){su
     $('monsterSelect').focus({preventScroll:true});
   });
   document.addEventListener('pointerdown',e=>{if(!e.target.closest('#monsterCombobox'))closeMonsterMenu();});
+  $('baseAreaModal')?.addEventListener('click',e=>{if(e.target===$('baseAreaModal'))closeBaseAreaModal();});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('baseAreaModal')?.classList.contains('hidden'))closeBaseAreaModal();});
   $('monsterSelect').addEventListener('keydown',e=>{
     if(e.key==='Escape'){closeMonsterMenu();e.target.blur();return;}
     if(e.key==='ArrowDown'||e.key==='ArrowUp'){

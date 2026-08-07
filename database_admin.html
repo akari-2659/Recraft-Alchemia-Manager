@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.404</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.411</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -534,7 +534,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;ov
 .skill-result-grid,.skill-acquired-grid{display:grid;grid-template-columns:1fr;gap:7px;margin-top:10px}.skill-result-card{border:1px solid var(--line);border-radius:11px;background:#fffdf8;padding:0;overflow:hidden}.skill-result-card.new{border-color:#8ebda0;background:#f2fbf5}.skill-result-card.dup{border-color:#d1ac6d;background:#fff8e8}.skill-result-card summary{cursor:pointer;padding:10px 12px;font-size:15px;font-weight:900;list-style-position:inside}.skill-result-detail{display:grid;gap:6px;padding:0 12px 12px;border-top:1px solid var(--line);padding-top:10px;line-height:1.6}.skill-result-effect{white-space:pre-wrap}.skill-slot-list{display:grid;gap:8px;margin-top:10px}.skill-slot-row{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px;align-items:center}.skill-fragment-line{font-weight:900;margin-top:10px}.skill-prob-wrap{max-height:360px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:10px}.skill-prob-table{width:100%;border-collapse:collapse;font-size:12px}.skill-prob-table th,.skill-prob-table td{padding:7px 8px;border-bottom:1px solid #eadcc9;text-align:left}.skill-prob-table th{position:sticky;top:0;background:#f7ead7;z-index:1}.crystal-upgrade-list{display:grid;gap:10px}.crystal-upgrade-card{border:1px solid var(--line);border-radius:14px;background:#fffaf3;padding:12px}.crystal-upgrade-card h5{margin:0 0 7px}.crystal-current{font-size:18px;font-weight:900;color:#6a3f25}.crystal-upgrade-card.is-next{border-color:#a9c5ae;background:#f2fbf4}
 @media(max-width:560px){.skill-slot-row{grid-template-columns:1fr}.skill-admin-grid{grid-template-columns:1fr}}
 
-.copyist-control-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(220px,.8fr);gap:16px;align-items:start;margin:14px 0}.copyist-area-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.copyist-area-check{display:inline-flex;align-items:center;gap:7px;padding:8px 10px;border:1px solid #d8c6aa;border-radius:10px;background:rgba(255,255,255,.78);font-weight:800}.copyist-area-check input{width:auto;margin:0}.copyist-result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:12px}.copyist-result-card{padding:13px;background:rgba(255,255,255,.83);border:1px solid #d8c6aa;border-radius:12px}.copyist-result-card h4{margin:8px 0}.copyist-result-head{display:flex;flex-wrap:wrap;gap:6px}@media(max-width:760px){.copyist-control-grid{grid-template-columns:1fr}}
+.copyist-control-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(220px,.8fr) auto;gap:16px;align-items:end;margin:14px 0}.copyist-area-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:8px}.copyist-area-check{display:flex;align-items:flex-start;gap:7px;padding:9px 10px;border:1px solid #d8c6aa;border-radius:10px;background:rgba(255,255,255,.78);font-weight:800}.copyist-area-check input{width:auto;margin:2px 0 0}.copyist-area-summary{margin:5px 0 8px;color:var(--muted);font-size:.88rem;line-height:1.5;overflow-wrap:anywhere}.copyist-area-panel button{margin-top:2px}.copyist-result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:12px}.copyist-result-card{padding:13px;background:rgba(255,255,255,.83);border:1px solid #d8c6aa;border-radius:12px}.copyist-result-card h4{margin:8px 0}.copyist-result-head{display:flex;flex-wrap:wrap;gap:6px}#copyistAreaModal .modal-card{width:min(760px,100%)}#copyistAreaModal .modal-body{overflow:auto}@media(max-width:760px){.copyist-control-grid{grid-template-columns:1fr}.copyist-action-stack{display:flex;gap:8px;flex-wrap:wrap}}
 </style>
 
 <style id="raBuildInfoStyle">
@@ -1156,7 +1156,7 @@ body.modal-open{overflow:hidden!important}
 
 
 <style id="raMaintenanceV287">
-/* v90.8.404: 管理HTML側の全強化解除料金設定・確認 */
+/* v90.8.411: 管理HTML側の全強化解除料金設定・確認 */
 .facility-upgrade-removal-rule{margin-top:12px;line-height:1.65;}
 .facility-upgrade-removal-rule>div+div{margin-top:5px;}
 .facility-removal-toolbar{display:grid;grid-template-columns:minmax(240px,1fr) auto auto;gap:8px;align-items:end;margin:10px 0;}
@@ -1189,10 +1189,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.404-equipment-readonly1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.411-progress-events1">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.404｜更新：2026年8月6日</div>
+<div class="ra-build-info">v90.8.411｜更新：2026年8月7日</div>
 
 <header>
   <div class="title-card">
@@ -1825,6 +1825,14 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
   <option value="10"></option>
 </datalist>
 
+<div class="modal-backdrop hidden" id="copyistAreaModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="copyistAreaModalTitle">
+    <div class="modal-head"><div><h2 id="copyistAreaModalTitle">レシピ販売・解放エリア選択</h2><p>販売候補に含める解放済みエリアをチェックしてください。異界は個別に選択できます。</p></div><button type="button" class="ghost" data-copyist-area-cancel>閉じる</button></div>
+    <div class="modal-body"><div id="copyistAreaModalGrid" class="copyist-area-grid"></div></div>
+    <div class="modal-foot"><button type="button" class="ghost" data-copyist-area-cancel>キャンセル</button><button type="button" data-copyist-area-apply>選択を適用</button></div>
+  </div>
+</div>
+
 <div class="modal-backdrop hidden" id="editModal" aria-hidden="true">
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-head">
@@ -1854,7 +1862,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.404';
+const RECRAFT_DB_VERSION = 'v90.8.411';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.403';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1874,7 +1882,7 @@ const SCHEMA = {
   skills: ['id','publicId','dataKind','name','rank','category','weaponType','timing','cost','ct','effect','description','drawWeight','balanceTier','balanceReason','enabled','probability','unlockAreaKey','unlockCondition','notes','updatedAt','ownerKey','createdBy'],
   quest_rewards: ['id','rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards','notes','updatedAt','ownerKey','createdBy'],
   quests: ['id','name','questCategory','enabled','requestKind','questType','rank','areaName','questLocation','recommendedSkills','rewardScope','deliveryItems','progressStep','fixedEvents','clearCondition','bossMonster','questBossName','questBossFormation','questBossComposition','rewardMoney','rewardItems','bonusPoints','unlockResult','description','notes','updatedAt','ownerKey','createdBy'],
-  exploration_areas: ['id','name','unlockKey','unlockOrder','areaType','difficulty','unlockCondition','mainMaterials','mainMonsters','fieldEffect','eventTableId','progressStep','description','notes','updatedAt','ownerKey','createdBy'],
+  exploration_areas: ['id','name','unlockKey','unlockOrder','areaType','difficulty','unlockCondition','mainMaterials','mainMonsters','fieldEffect','eventTableId','progressStep','fixedEvents','description','notes','updatedAt','ownerKey','createdBy'],
   event_tables: ['id','tableId','areaName','eventName','eventType','conditionType','conditionValue','checkType','targetValue','treasureTableId','encounterCountRule','encounterCountMin','encounterCountMax','encounterFormation','encounterComposition','result','progressEffect','notes','updatedAt','ownerKey','createdBy'],
   treasure_tables: ['id','tableId','areaName','treasureRank','chestName','hasLock','unlockDifficulty','hasTrap','trapDetectDifficulty','trapDisarmDifficulty','trapName','trapEffect','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','quantity','weight','description','enabled','notes','updatedAt','ownerKey','createdBy'],
   appraisal_rules: ['id','facilityName','scrollRank','difficulty','spellType','spellRank','candidateTags','description','enabled','notes','updatedAt','ownerKey','createdBy'],
@@ -1903,7 +1911,7 @@ const FORM_PRIMARY_FIELDS = {
   skills: ['name','publicId','rank','category','weaponType','timing','cost','ct','effect','description','drawWeight','balanceTier','balanceReason','enabled','unlockAreaKey','unlockCondition','notes'],
   quest_rewards: ['rank','rewardMin','rewardMax','rewardAvg','scale','description','extraRewards'],
   quests: ['name','questCategory','enabled','requestKind','questType','rank','areaName','questLocation','recommendedSkills','rewardScope','deliveryItems','progressStep','fixedEvents','clearCondition','bossMonster','questBossName','questBossFormation','questBossComposition','rewardMoney','rewardItems','bonusPoints','unlockResult','description','notes'],
-  exploration_areas: ['name','unlockKey','unlockOrder','areaType','difficulty','unlockCondition','mainMaterials','mainMonsters','fieldEffect','eventTableId','description','notes'],
+  exploration_areas: ['name','unlockKey','unlockOrder','areaType','difficulty','unlockCondition','mainMaterials','mainMonsters','fieldEffect','eventTableId','progressStep','fixedEvents','description','notes'],
   event_tables: ['tableId','areaName','eventName','eventType','conditionType','conditionValue','checkType','targetValue','treasureTableId','encounterCountRule','encounterCountMin','encounterCountMax','encounterFormation','encounterComposition','result','progressEffect','notes'],
   treasure_tables: ['tableId','areaName','treasureRank','chestName','hasLock','unlockDifficulty','hasTrap','trapDetectDifficulty','trapDisarmDifficulty','trapName','trapEffect','hasLock','hasTrap','entryType','entryName','entryPublicId','recipeName','scrollRank','quantity','weight','description','enabled','notes'],
   appraisal_rules: ['facilityName','scrollRank','difficulty','spellType','spellRank','candidateTags','description','enabled','notes'],
@@ -1912,7 +1920,7 @@ const FORM_PRIMARY_FIELDS = {
 const FORM_LONG_FIELDS = new Set(['habit','description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','rewardItems','deliveryItems','unlockResult','mainMaterials','mainMonsters','result','progressEffect','actions','drops','passiveEffect','modifiers','encounterComposition','equipmentUpgradeDetail','balanceReason']);
 const RECORD_CARD_KEYS = new Set(['items','materials','recipes','spells','skills','exploration_areas']);
 const FIELD_PLACEHOLDERS = {
-  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'魔物・素材・装備・道具・レシピ・術式・クエスト・宝箱などは1以上の数値。すべての画面で★N表示', toolRank:'例：6。この道具で扱える上限ランク。道具本体も★6に揃え、飛び番を許可します', guaranteeUpgradeMaxRank:'例：6。このアイテムを使うと★6以下の強化素材を使う装備強化が確定成功になります。', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：鉱石 / 獣牙 / 植生 / 異界 / 草角。通常武器は大枠の素材系統、ボス武器は素材・特徴を表す固有系統を入力します。画面では「鉱石派生」のように表示します。', equipmentUpgradeEffect:'効果が単独で分かる名称を設定します。例：威力強化、威力固定強化、回復量強化、回復量固定強化、水属性軽減、抵抗妨害。数値や固有名を別欄へ分けません。', equipmentUpgradeSlotCost:'命中強化・回避強化などの基礎補正は1枠。威力固定強化・回復量固定強化・防御強化・術式枠拡張・術式省力化・属性系効果・技能補助は2枠以上。強力な複合効果やボス固有効果は3枠にできます。装備強化に防御値無視は設定しません。', equipmentUpgradeDetail:'すべての装備強化で、実際に適用される処理・補正・条件・重複可否を具体的に入力します。', upgradeMaterialMinRank:'例：3。この装備を強化できる素材の最低ランク。空欄時は装備ランクを使用します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,探索', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', requestKind:'通常依頼のみ：拠点内依頼 / エリア依頼 / 納品依頼。重要クエストは空欄', questType:'例：仕分け / 採取 / 討伐 / 納品', recommendedSkills:'納品依頼以外に設定。例：採取・戦闘系技能', rewardScope:'各PC / パーティー共通', deliveryItems:'例：薬草×3, 中和剤×2', areaName:'例：街はずれの草原', questLocation:'例：拠点 / 街はずれの草原', progressStep:'例：25。進行ボタン1回で加算する数値', fixedEvents:'例：50%\t採取確認地点\t内容を入力', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 異界', difficulty:'例：★1', unlockKey:'例：7UCX-JAUE-E2TH-GLRG-MEGW。エリア名や順番を推測しにくい文字列を設定', unlockOrder:'例：2。表示・並び替え・進行目安に使用します。施設HTMLの自動累積解放には使用しません', unlockAreaKey:'例：area_nearby_forest。商品・作成・派生に必要なエリアID', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：1。画面では★1と表示します', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定の魔法スクロール：★1', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：1。画面では★1と表示します', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：1。画面では★1と表示します', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'大分類：粘体 / 獣 / 虫 / 植物 / 爬虫 / 水棲 / 軟体 / 霊体 / 造魔 / 竜 / 異界', monsterTraits:'例：飛行,甲殻,異界。複数指定はカンマ区切り', encounterValue:'1～3。魔物単体の戦闘負荷。エリアではなく能力・行動の強さで設定します。', dismantleDifficulty:'例：7。採取技能>=解体難易度で判定し、成功時は全ドロップ率+10%（上限100%）。目安はチュートリアル5～6、通常6～9、ボス10以上', pullRule:'可 / 不可', passiveName:'例：胞子反応', passiveEffect:'発動条件・処理・回数制限を具体的に入力', habit:'生息場所・群れ方・警戒時の行動などを1～3文で入力', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
+  id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：30', rank:'魔物・素材・装備・道具・レシピ・術式・クエスト・宝箱などは1以上の数値。すべての画面で★N表示', toolRank:'例：6。この道具で扱える上限ランク。道具本体も★6に揃え、飛び番を許可します', guaranteeUpgradeMaxRank:'例：6。このアイテムを使うと★6以下の強化素材を使う装備強化が確定成功になります。', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：鉱石 / 獣牙 / 植生 / 異界 / 草角。通常武器は大枠の素材系統、ボス武器は素材・特徴を表す固有系統を入力します。画面では「鉱石派生」のように表示します。', equipmentUpgradeEffect:'効果が単独で分かる名称を設定します。例：威力強化、威力固定強化、回復量強化、回復量固定強化、水属性軽減、抵抗妨害。数値や固有名を別欄へ分けません。', equipmentUpgradeSlotCost:'命中強化・回避強化などの基礎補正は1枠。威力固定強化・回復量固定強化・防御強化・術式枠拡張・術式省力化・属性系効果・技能補助は2枠以上。強力な複合効果やボス固有効果は3枠にできます。装備強化に防御値無視は設定しません。', equipmentUpgradeDetail:'すべての装備強化で、実際に適用される処理・補正・条件・重複可否を具体的に入力します。', upgradeMaterialMinRank:'例：3。この装備を強化できる素材の最低ランク。空欄時は装備ランクを使用します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,探索', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', requestKind:'通常依頼のみ：拠点内依頼 / エリア依頼 / 納品依頼。重要クエストは空欄', questType:'例：仕分け / 採取 / 討伐 / 納品', recommendedSkills:'納品依頼以外に設定。例：採取・戦闘系技能', rewardScope:'各PC / パーティー共通', deliveryItems:'例：薬草×3, 中和剤×2', areaName:'例：街はずれの草原', questLocation:'例：拠点 / 街はずれの草原', progressStep:'例：25。進行ボタン1回で加算する数値', fixedEvents:'例：0%\t探索開始\t内容を入力。以降は進行度上昇ごとの区切りと100%を登録', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 異界', difficulty:'例：★1', unlockKey:'例：7UCX-JAUE-E2TH-GLRG-MEGW。エリア名や順番を推測しにくい文字列を設定', unlockOrder:'例：2。表示・並び替え・進行目安に使用します。施設HTMLの自動累積解放には使用しません', unlockAreaKey:'例：area_nearby_forest。商品・作成・派生に必要なエリアID', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', treasureRank:'例：1。画面では★1と表示します', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定の魔法スクロール：★1', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：1。画面では★1と表示します', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：1。画面では★1と表示します', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'大分類：粘体 / 獣 / 虫 / 植物 / 爬虫 / 水棲 / 軟体 / 霊体 / 造魔 / 竜 / 異界', monsterTraits:'例：飛行,甲殻,異界。複数指定はカンマ区切り', encounterValue:'1～3。魔物単体の戦闘負荷。エリアではなく能力・行動の強さで設定します。', dismantleDifficulty:'例：7。採取技能>=解体難易度で判定し、成功時は全ドロップ率+10%（上限100%）。目安はチュートリアル5～6、通常6～9、ボス10以上', pullRule:'可 / 不可', passiveName:'例：胞子反応', passiveEffect:'発動条件・処理・回数制限を具体的に入力', habit:'生息場所・群れ方・警戒時の行動などを1～3文で入力', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
 };
 FIELD_PLACEHOLDERS.encounterFormation='1体なら前衛。2体以上も前衛を最低1体置きます。全員前衛は可、全員後衛は不可。';
 FIELD_PLACEHOLDERS.encounterComposition='例：前衛,ルートハウンド,1;後衛,マイコニド,1。人数確定後に前衛不在なら1体を前衛へ自動移動します。';
@@ -1964,6 +1972,7 @@ let currentMealRecommendationAreaId = '';
 let currentMealRecommendationIds = [];
 let currentCopyistUnlockedAreaIds = [];
 let currentCopyistSpecifiedAreaId = '';
+let copyistAreaModalDraftIds = [];
 let currentCopyistSelectedIds = [];
 let currentCopyistSelectionDate = '';
 function copyistTokyoDateKey(){
@@ -3878,13 +3887,33 @@ function drawCopyistDailyRows(){
   saveCopyistDailyState();
   return selected.length===COPYIST_DAILY_COUNT;
 }
-function copyistAreaCheckboxesHtml(areas=[]){
+function copyistAreaCheckboxesHtml(areas=[],selectedIds=currentCopyistUnlockedAreaIds){
   const initial=areas.find(area=>Number(area.unlockOrder)===1)||areas[0];
   const initialId=mealAreaId(initial||{});
+  const selected=new Set((selectedIds||[]).map(String));
   return areas.map(area=>{
-    const id=mealAreaId(area),checked=currentCopyistUnlockedAreaIds.includes(id),fixed=id===initialId;
-    return `<label class="copyist-area-check"><input type="checkbox" data-copyist-unlocked-area value="${escapeHtml(id)}" ${checked?'checked':''} ${fixed?'disabled':''}><span>${escapeHtml(area.name||id)}${String(area.areaType||'').trim()==='異界'?'（任意）':''}</span></label>`;
+    const id=mealAreaId(area),checked=selected.has(id)||id===initialId,fixed=id===initialId;
+    return `<label class="copyist-area-check"><input type="checkbox" data-copyist-area-modal-check value="${escapeHtml(id)}" ${checked?'checked':''} ${fixed?'disabled':''}><span>${escapeHtml(area.name||id)}${String(area.areaType||'').trim()==='異界'?'（任意）':''}${fixed?'<small> / 初期解放</small>':''}</span></label>`;
   }).join('');
+}
+function renderCopyistAreaModal(){
+  const grid=$('copyistAreaModalGrid');if(!grid)return;
+  grid.innerHTML=copyistAreaCheckboxesHtml(ensureCopyistAreaState(),copyistAreaModalDraftIds)||'<p class="muted">エリアデータがありません。</p>';
+}
+function openCopyistAreaModal(){
+  ensureCopyistAreaState();copyistAreaModalDraftIds=[...currentCopyistUnlockedAreaIds];renderCopyistAreaModal();
+  const modal=$('copyistAreaModal');if(modal){modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');document.body.classList.add('modal-open');}
+}
+function closeCopyistAreaModal(){
+  const modal=$('copyistAreaModal');if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');if($('editModal')?.classList.contains('hidden'))document.body.classList.remove('modal-open');}
+}
+function applyCopyistAreaModal(){
+  const areas=copyistAreaRows(),initial=areas.find(area=>Number(area.unlockOrder)===1)||areas[0],initialId=mealAreaId(initial||{});
+  const next=[...new Set(copyistAreaModalDraftIds.map(String))];if(initialId&&!next.includes(initialId))next.unshift(initialId);
+  const before=currentCopyistUnlockedAreaIds.slice().sort().join('|'),after=next.slice().sort().join('|');
+  currentCopyistUnlockedAreaIds=next;ensureCopyistAreaState();
+  if(before!==after){currentCopyistSelectedIds=[];currentCopyistSelectionDate='';}
+  saveCopyistDailyState();closeCopyistAreaModal();renderFacilitiesPanel();if(before!==after)toast('レシピ販売の解放エリアを更新しました');
 }
 function copyistResultCardHtml(row={},index=0){
   const area=copyistAreaForRecipe(row);
@@ -3925,7 +3954,7 @@ function renderCopyistDailyPool(){
   return `<div class="copyist-manager">
     <p class="notice">施設HTMLでは自動選出しません。ここで販売する6枠を決めてコピーします。1枠は指定エリアから、残り5枠はチェックした解放済みエリア全体から完全ランダムで選出します。候補は、常設店売りされず、通常・希少などボス以外の宝箱から実際に入手できるレシピだけです。料理・装備強化・クリスタル強化・ボス専用レシピは候補に入りません。</p>
     <div class="copyist-control-grid">
-      <section class="copyist-area-panel"><b>解放済みエリア</b><div class="copyist-area-grid">${copyistAreaCheckboxesHtml(areas)}</div></section>
+      <section class="copyist-area-panel"><b>解放済みエリア</b><div class="copyist-area-summary">${escapeHtml(areas.filter(area=>unlockedSet.has(mealAreaId(area))).map(area=>area.name||mealAreaId(area)).join('、')||'未設定')}（${unlockedSet.size}エリア）</div><button type="button" class="secondary" data-copyist-area-open>解放エリアを選択</button></section>
       <label class="copyist-specified-field"><b>指定エリア枠</b><select data-copyist-specified-area>${specifiedOptions}</select></label>
       <div class="copyist-action-stack"><button type="button" data-copyist-draw>${rows.length?'販売品を再抽選':'販売品を選出'}</button><button type="button" class="ghost" data-copyist-copy ${rows.length?'':'disabled'}>選出結果をコピー</button></div>
     </div>
@@ -6427,10 +6456,10 @@ function formOptionValues(key, field){
   if(field==='bossMonster') state.monsters.forEach(r=>{ if(r.name) values.add(String(r.name)); });
   if(field==='areaType') ['草原','森','水辺','洞窟','街道','遺跡','市街地'].forEach(v=>values.add(v));
   if(field==='difficulty') ['チュートリアル','初級','中級','上級','高難度'].forEach(v=>values.add(v));
-  if(field==='eventType') ['採取','障害/採取','発見','発見/細工','発見/宝箱','採取/魔物遭遇','発見/魔物','魔物遭遇','休息地点','レアポイント','宿屋の噂','噂イベント','ボス遭遇'].forEach(v=>values.add(v));
-  if(field==='conditionType') ['なし','噂話'].forEach(v=>values.add(v));
+  if(field==='eventType') ['採取','障害/採取','発見','発見/細工','発見/宝箱','採取/魔物遭遇','発見/魔物','魔物遭遇','休息地点','レアポイント','宿屋の噂','噂イベント','ボス遭遇','拠点イベント'].forEach(v=>values.add(v));
+  if(field==='conditionType') ['なし','噂話','解放エリア'].forEach(v=>values.add(v));
   if(field==='encounterCountRule') ['','固定','半数切上','人数同数','ランダム編成'].forEach(v=>values.add(v));
-  if(field==='conditionValue') (state.event_tables || []).forEach(r=>{ if(String(r.eventType||'').trim()==='宿屋の噂' && r.eventName) values.add(String(r.eventName)); });
+  if(field==='conditionValue'){ (state.event_tables || []).forEach(r=>{ if(String(r.eventType||'').trim()==='宿屋の噂' && r.eventName) values.add(String(r.eventName)); }); (state.exploration_areas||[]).forEach(a=>{if(a.id)values.add(String(a.id));}); }
   if(field==='treasureTableId') (state.treasure_tables || []).forEach(r=>{ if(r.tableId) values.add(String(r.tableId)); });
   if(field==='entryType') ['通貨','換金品','アイテム','素材','レシピ','未鑑定スクロール'].forEach(v=>values.add(v));
   if(field==='entryName') (state.items || []).forEach(r=>{ if(r.name) values.add(String(r.name)); });
@@ -6699,7 +6728,7 @@ function questProgressStepSelect(value){
 }
 function questFixedEventPercentOptions(stepValue, currentValue=''){
   const step = normalizeQuestProgressStep(stepValue);
-  const nums = [];
+  const nums = [0];
   for(let n=step; n<=100; n+=step) nums.push(n);
   if(!nums.includes(100)) nums.push(100);
   const cur = getNumFromText(currentValue, NaN);
@@ -6767,6 +6796,7 @@ function questFixedEventRowHtml(row={}, stepValue='25%', idx=0){
 function nextQuestFixedEventPercent(rows, stepValue){
   const step = normalizeQuestProgressStep(stepValue);
   const used = new Set((rows||[]).map(r=>getNumFromText(r.progress, NaN)).filter(Number.isFinite));
+  if(!used.has(0)) return '0%';
   for(let n=step;n<=100;n+=step){ if(!used.has(n)) return `${n}%`; }
   return '100%';
 }
@@ -6776,7 +6806,7 @@ function questFixedEventsEditor(value, rowContext={}){
   const body = rows.map((r,i)=>questFixedEventRowHtml(r, step, i)).join('');
   return `<div class="quest-event-editor" data-quest-fixed-events-editor>
     <textarea data-form-field="fixedEvents" class="hidden-quest-fixed-raw">${escapeHtml(serializeQuestFixedEvents(rows))}</textarea>
-    <div class="form-help">固定イベントは必要な分だけ追加します。発生進行度は「進行度上昇」の区切りに合わせて選択できます。</div>
+    <div class="form-help">固定イベントは0%・進行度上昇ごとの区切り・100%を基本に登録します。発生進行度は区切りに合わせて選択できます。</div>
     <div class="quest-event-list" data-quest-fixed-event-list>${body || '<div class="muted small" data-quest-fixed-empty>固定イベントはまだありません。</div>'}</div>
     <button type="button" class="secondary" data-quest-fixed-event-add>固定イベントを追加</button>
   </div>`;
@@ -6990,7 +7020,7 @@ function buildFieldInput(key, field, value, rowContext={}){
     input = monsterDropsEditor(value);
   }else if((key==='quests' || key==='exploration_areas') && field==='progressStep'){
     input = questProgressStepSelect(value);
-  }else if(key==='quests' && field==='fixedEvents'){
+  }else if((key==='quests' || key==='exploration_areas') && field==='fixedEvents'){
     input = questFixedEventsEditor(value, rowContext);
   }else if(field==='checkType' && key==='items' && String(rowContext.itemType || '').trim()==='武器'){
     input = `<input ${common} value="" readonly placeholder="武器は「使用技能」で管理します">`;
@@ -8672,8 +8702,8 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.404';
-const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-04';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.411';
+const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-07';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
 const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([
@@ -8984,6 +9014,9 @@ document.addEventListener('click',e=>{
   }
   const mealReroll=e.target.closest('[data-meal-reroll]'); if(mealReroll){ drawMealRecommendations(); renderFacilitiesPanel(); toast('今日のおすすめ3品を再抽選しました'); return; }
   const mealRecommendCopy=e.target.closest('[data-meal-recommend-copy]'); if(mealRecommendCopy){ copyAdminTextDirect(mealRecommendationsText()).then(ok=>{if(ok)toast('今日のおすすめ3品をコピーしました');}); return; }
+  const copyistAreaOpen=e.target.closest('[data-copyist-area-open]'); if(copyistAreaOpen){openCopyistAreaModal();return;}
+  const copyistAreaCancel=e.target.closest('[data-copyist-area-cancel]'); if(copyistAreaCancel){closeCopyistAreaModal();return;}
+  const copyistAreaApply=e.target.closest('[data-copyist-area-apply]'); if(copyistAreaApply){applyCopyistAreaModal();return;}
   const copyistDraw=e.target.closest('[data-copyist-draw]'); if(copyistDraw){ const full=drawCopyistDailyRows(); renderFacilitiesPanel(); toast(full?'レシピ販売の販売する6枠を選出しました':'候補数が不足しているため選出可能な範囲で決定しました'); return; }
   const copyistCopy=e.target.closest('[data-copyist-copy]'); if(copyistCopy){ if(!copyistSelectedRows().length){toast('先に販売品を選出してください');return;} copyAdminTextDirect(copyistDailyText()).then(ok=>{if(ok)toast('レシピ販売の品揃えをコピーしました');}); return; }
   const weaponCategory=e.target.closest('[data-facility-weapon-category]'); if(weaponCategory){ currentFacilityWeaponCategory=weaponCategory.dataset.facilityWeaponCategory||''; renderFacilitiesPanel(); return; }
@@ -9140,11 +9173,11 @@ document.addEventListener('input',e=>{
   if(e.target.closest('[data-modifier-editor]')) syncModifierEditor(e.target.closest('[data-modifier-editor]'));
 });
 document.addEventListener('change',e=>{
-  if(e.target?.matches?.('[data-copyist-unlocked-area]')){
-    const id=String(e.target.value||'');
-    if(e.target.checked){if(id&&!currentCopyistUnlockedAreaIds.includes(id))currentCopyistUnlockedAreaIds.push(id);}
-    else currentCopyistUnlockedAreaIds=currentCopyistUnlockedAreaIds.filter(v=>v!==id);
-    currentCopyistSelectedIds=[];currentCopyistSelectionDate='';ensureCopyistAreaState();saveCopyistDailyState();renderFacilitiesPanel();return;
+  if(e.target?.matches?.('[data-copyist-area-modal-check]')){
+    const id=String(e.target.value||''),set=new Set(copyistAreaModalDraftIds.map(String));
+    if(e.target.checked){if(id)set.add(id);}else set.delete(id);
+    const areas=copyistAreaRows(),initial=areas.find(area=>Number(area.unlockOrder)===1)||areas[0],initialId=mealAreaId(initial||{});if(initialId)set.add(initialId);
+    copyistAreaModalDraftIds=[...set];return;
   }
   if(e.target?.matches?.('[data-copyist-specified-area]')){
     currentCopyistSpecifiedAreaId=String(e.target.value||'');currentCopyistSelectedIds=[];currentCopyistSelectionDate='';saveCopyistDailyState();renderFacilitiesPanel();return;
@@ -9247,7 +9280,8 @@ $('btnCancelEdit').addEventListener('click',closeForm);
 $('btnApplyEdit').addEventListener('click',()=>{try{applyFormToState()}catch(e){toast(e.message,'error')}});
 $('btnApplyAndSave').addEventListener('click',applyFormAndSave);
 $('editModal').addEventListener('click',e=>{ if(e.target.id==='editModal') closeForm(); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape' && !$('editModal').classList.contains('hidden')) closeForm(); });
+$('copyistAreaModal')?.addEventListener('click',e=>{if(e.target===$('copyistAreaModal'))closeCopyistAreaModal();});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && !$('copyistAreaModal')?.classList.contains('hidden')){closeCopyistAreaModal();return;} if(e.key==='Escape' && !$('editModal').classList.contains('hidden')) closeForm(); });
 $('btnSetup').addEventListener('click',setup);
 if($('btnDiagnoseSheets')) $('btnDiagnoseSheets').addEventListener('click',diagnoseSheets);
 if($('btnRepairHeaders')) $('btnRepairHeaders').addEventListener('click',repairHeaders);
@@ -9443,109 +9477,5 @@ function run(){
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
 })();
 </script>
-
-<style id="raDaggerAtlasPrototypeStyle">
-/* v90.8.404: 短剣のみの仮画像アトラス実装 */
-.ra-dagger-atlas-icon{
-  --ra-atlas-x:0%;
-  --ra-atlas-y:0%;
-  display:inline-block;
-  flex:0 0 auto;
-  width:52px;
-  height:52px;
-  border:1px solid rgba(151,112,70,.30);
-  border-radius:11px;
-  background-image:url("assets/items/weapons/dagger-atlas.webp");
-  background-repeat:no-repeat;
-  background-size:800% 800%;
-  background-position:var(--ra-atlas-x) var(--ra-atlas-y);
-  box-shadow:0 3px 10px rgba(66,43,22,.12);
-  vertical-align:middle;
-}
-.ra-dagger-atlas-icon.ra-atlas-xs{width:38px;height:38px;border-radius:8px}
-.ra-dagger-atlas-icon.ra-atlas-sm{width:48px;height:48px}
-.ra-dagger-atlas-icon.ra-atlas-md{width:78px;height:78px;border-radius:14px}
-.ra-dagger-atlas-icon.ra-atlas-lg{width:min(220px,64vw);height:min(220px,64vw);border-radius:18px}
-.ra-dagger-atlas-preview{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  margin:0 0 12px;
-}
-</style>
-
-<style id="raDaggerAtlasManagerLayout">
-.monster-title.ra-has-dagger-atlas{display:grid!important;grid-template-columns:50px minmax(0,1fr);column-gap:9px;align-items:center}
-.monster-title.ra-has-dagger-atlas>.ra-dagger-atlas-icon{grid-column:1;grid-row:1/3}
-.monster-title.ra-has-dagger-atlas>b{grid-column:2;grid-row:1}
-.monster-title.ra-has-dagger-atlas>.monster-id{grid-column:2;grid-row:2}
-.facility-recipe-card>.ra-dagger-atlas-preview{margin-bottom:7px}
-</style>
-
-<script id="raDaggerAtlasManagerPrototype">
-(()=>{
-'use strict';
-
-const RA_DAGGER_ATLAS_NAME_SLOTS=Object.freeze({"ショートダガー":1,"スティレット":2,"ファングナイフ":3,"ヴェルデスティング":4,"リーフナイフ":5,"ビーストククリ":6,"シルヴァエッジ":7,"マッドナイフ":8,"ヴェノムニードル":9,"マイアスティング":10,"フェイズダガー":11,"スペクトラナイフ":12,"ヴォイドスティンガー":13,"フェラススティレット":14,"シルバーニードル":15,"グランドファング":16,"ゼファースティング":17,"ボルトニードル":18,"テンペストエッジ":19});
-function raDaggerAtlasSlotByName(value){
-  const text=String(value||'').trim();
-  if(!text)return 0;
-  if(Object.prototype.hasOwnProperty.call(RA_DAGGER_ATLAS_NAME_SLOTS,text))return RA_DAGGER_ATLAS_NAME_SLOTS[text];
-  const names=Object.keys(RA_DAGGER_ATLAS_NAME_SLOTS).sort((a,b)=>b.length-a.length);
-  const hit=names.find(name=>text.includes(name));
-  return hit?RA_DAGGER_ATLAS_NAME_SLOTS[hit]:0;
-}
-function raCreateDaggerAtlasIcon(slot,size='sm',label='短剣画像'){
-  const n=Number(slot)||0;
-  if(n<1||n>64)return null;
-  const col=(n-1)%8,row=Math.floor((n-1)/8);
-  const span=document.createElement('span');
-  span.className=`ra-dagger-atlas-icon ra-atlas-${size}`;
-  span.style.setProperty('--ra-atlas-x',`${(col*100/7).toFixed(6)}%`);
-  span.style.setProperty('--ra-atlas-y',`${(row*100/7).toFixed(6)}%`);
-  span.setAttribute('role','img');
-  span.setAttribute('aria-label',String(label||'短剣画像'));
-  span.dataset.raDaggerSlot=String(n);
-  return span;
-}
-
-function decorateManagerDaggerImages(root=document){
-  root.querySelectorAll('.monster-card').forEach(card=>{
-    const title=card.querySelector(':scope > summary .monster-title b')?.textContent?.trim()||'';
-    const slot=raDaggerAtlasSlotByName(title);
-    const titleHost=card.querySelector(':scope > summary .monster-title');
-    if(!titleHost)return;
-    titleHost.classList.toggle('ra-has-dagger-atlas',!!slot);
-    const old=titleHost.querySelector(':scope > .ra-dagger-atlas-icon');
-    if(!slot){old?.remove();return;}
-    if(old?.dataset.raDaggerSlot===String(slot))return;
-    old?.remove();
-    titleHost.prepend(raCreateDaggerAtlasIcon(slot,'sm',`${title}の画像`));
-  });
-  root.querySelectorAll('.facility-recipe-card h5').forEach(title=>{
-    const name=title.textContent?.trim()||'';
-    const slot=raDaggerAtlasSlotByName(name);
-    const card=title.closest('.facility-recipe-card');
-    if(!card)return;
-    const old=card.querySelector(':scope > .ra-dagger-atlas-preview');
-    if(!slot){old?.remove();return;}
-    if(old?.dataset.raDaggerSlot===String(slot))return;
-    old?.remove();
-    const wrap=document.createElement('div');
-    wrap.className='ra-dagger-atlas-preview';
-    wrap.dataset.raDaggerSlot=String(slot);
-    wrap.appendChild(raCreateDaggerAtlasIcon(slot,'md',`${name}の画像`));
-    card.prepend(wrap);
-  });
-}
-const observer=new MutationObserver(()=>decorateManagerDaggerImages());
-function start(){
-  decorateManagerDaggerImages();
-  observer.observe(document.body,{childList:true,subtree:true,characterData:true});
-}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
-})();
-</script>
-
 </body>
 </html>
