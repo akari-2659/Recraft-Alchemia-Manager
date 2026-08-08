@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.425</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.428</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.425-random-table-copy1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.428-random-table-copy1">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -184,7 +184,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </style>
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.425｜更新：2026年8月8日</div>
+<div class="ra-build-info">v90.8.428｜更新：2026年8月8日</div>
 
 <header>
   <div class="header-inner">
@@ -456,7 +456,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.425';
+const VERSION='v90.8.428';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1665,7 +1665,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.425-party-scaling-3';
+const ENCOUNTER_RULE_VERSION='v90.8.428-party-scaling-3';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -3004,13 +3004,15 @@ function dropOutputBlock(d={}){
 
 function eventRewardUid(){return `reward_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;}
 function eventRewardItemRows(){return(state.items||[]).filter(row=>String(row.name||'').trim()).slice().sort((a,b)=>String(b.name||'').length-String(a.name||'').length);}
-function eventRewardTrigger(clause=''){
-  const text=String(clause||'');const threshold=text.match(/目標値\s*\+\s*(\d+)\s*以上/);
-  if(threshold)return{kind:'threshold',value:Number(threshold[1]),label:`目標値+${Number(threshold[1])}以上`};
-  if(/勝利後/.test(text))return{kind:'victory',value:0,label:'戦闘勝利後'};
-  if(/失敗/.test(text))return{kind:'failure',value:0,label:'失敗'};
-  if(/判定成功/.test(text)||/^成功[：:]/.test(text))return{kind:'success',value:0,label:'判定成功'};
-  return{kind:'always',value:0,label:'条件なし'};
+function eventRewardTrigger(clause='',branchKey=''){
+  const text=String(clause||'').trim();const threshold=text.match(/目標値\s*\+\s*(\d+)\s*以上/);
+  if(threshold)return{kind:'threshold',value:Number(threshold[1]),label:`目標値+${Number(threshold[1])}以上`,branchKey:String(branchKey||'')};
+  if(/勝利後/.test(text))return{kind:'victory',value:0,label:'戦闘勝利後',branchKey:''};
+  if(/^失敗\s*[：:]/.test(text)||/判定失敗/.test(text))return{kind:'failure',value:0,label:'失敗',branchKey:''};
+  const skillSuccess=text.match(/^([^：:。]{1,24}?)成功\s*[：:]/);
+  if(skillSuccess){const key=String(skillSuccess[1]||'').trim()||'判定';return{kind:'success',value:0,label:key==='判定'?'判定成功':`${key}成功`,branchKey:key};}
+  if(/判定成功/.test(text)||/^成功\s*[：:]/.test(text))return{kind:'success',value:0,label:'判定成功',branchKey:'判定'};
+  return{kind:'always',value:0,label:'条件なし',branchKey:''};
 }
 function eventRewardRoll(expr='1'){
   const raw=String(expr||'1').trim().toUpperCase();const dice=raw.match(/^(\d+)D(\d+)$/);
@@ -3029,8 +3031,18 @@ function eventRewardItemsFromClause(clause='',previousItemName=''){
   return mentions.map((m,index)=>{const until=mentions[index+1]?.start??text.length;const local=text.slice(m.end,until);const count=(local.match(/^\s*×\s*(\d+D\d+|\d+)/i)||[])[1]||'1';return{uid:eventRewardUid(),name:m.name,row:m.row,alternatives:[],selectedName:m.name,...eventRewardRoll(count)};});
 }
 function buildEventRewardState(row={}){
-  const clauses=String(row.result||'').split(/[。\n]+/).map(x=>x.trim()).filter(Boolean);const groups=[];let previousItemName='';
-  clauses.forEach(clause=>{if(!/(入手|追加)/.test(clause))return;const trigger=eventRewardTrigger(clause);const items=eventRewardItemsFromClause(clause,previousItemName);if(!items.length)return;previousItemName=items.at(-1).selectedName||previousItemName;const selected=trigger.kind==='always'||trigger.kind==='success'||(trigger.kind==='victory'&&!groups.some(g=>g.trigger.kind==='success'));groups.push({uid:eventRewardUid(),trigger,clause,items,selected});});
+  const clauses=String(row.result||'').split(/[。\n]+/).map(x=>x.trim()).filter(Boolean);const groups=[];let previousItemName='',currentBranchKey='';
+  clauses.forEach(clause=>{
+    if(!/(入手|追加)/.test(clause))return;
+    const trigger=eventRewardTrigger(clause,currentBranchKey);
+    if(trigger.kind==='success')currentBranchKey=String(trigger.branchKey||'判定');
+    else if(trigger.kind==='failure'||trigger.kind==='victory')currentBranchKey='';
+    const items=eventRewardItemsFromClause(clause,previousItemName);if(!items.length)return;
+    previousItemName=items.at(-1).selectedName||previousItemName;
+    const hasSelectedSuccess=groups.some(g=>g.trigger.kind==='success'&&g.selected);
+    const selected=trigger.kind==='always'||(trigger.kind==='success'&&!hasSelectedSuccess)||(trigger.kind==='victory'&&!groups.some(g=>g.trigger.kind==='success'));
+    groups.push({uid:eventRewardUid(),trigger,clause,items,selected});
+  });
   return groups.length?{eventName:String(row.eventName||row.name||'イベント'),groups}:null;
 }
 function eventRewardState(scope='event'){return scope==='quest'?state.lastQuestEventRewardState:state.lastEventRewardState;}
@@ -3057,10 +3069,35 @@ function renderEventRewardPanel(scope='event'){
   const copyButton=scope==='event'?'':`<button type="button" class="ghost" data-event-reward-copy="${scope}">入手アイテムコピー</button>`;panel.innerHTML=`<section class="card event-reward-card"><h3>素材・アイテム入手数</h3><p class="muted small">イベント選出時に数量ダイスを振っています。実際に成立した条件だけをチェックしてください。目標値+○以上は判定成功分へ追加されます。</p><div class="event-reward-list">${body}</div><div class="event-reward-total"><b>選択中の入手結果</b><span>${esc(total)}</span></div><div class="buttons"><button type="button" class="secondary" data-event-reward-reroll="${scope}">数量を振り直す</button>${copyButton}</div></section>`;
 }
 function updateEventRewardSelection(scope,uid,checked){
-  const reward=eventRewardState(scope),target=reward?.groups.find(g=>String(g.uid)===String(uid));if(!target)return;target.selected=!!checked;
-  if(target.trigger.kind==='failure'&&checked)reward.groups.forEach(g=>{if(['success','threshold'].includes(g.trigger.kind))g.selected=false;});
-  if(['success','threshold'].includes(target.trigger.kind)&&checked){reward.groups.forEach(g=>{if(g.trigger.kind==='failure')g.selected=false;});const n=target.trigger.kind==='threshold'?target.trigger.value:0;reward.groups.forEach(g=>{if(g.trigger.kind==='success'||(g.trigger.kind==='threshold'&&g.trigger.value<=n))g.selected=true;});}
-  if(target.trigger.kind==='success'&&!checked)reward.groups.forEach(g=>{if(g.trigger.kind==='threshold')g.selected=false;});renderEventRewardPanel(scope);if(scope==='event')updateAreaEventItemCopyButton();else if(scope==='quest')updateQuestEventItemCopyButton();
+  const reward=eventRewardState(scope),target=reward?.groups.find(g=>String(g.uid)===String(uid));if(!target)return;
+  if(target.trigger.kind==='always')return;
+  target.selected=!!checked;
+  const key=String(target.trigger.branchKey||'');
+  const sameBranch=g=>String(g.trigger.branchKey||'')===key;
+  if(target.trigger.kind==='failure'&&checked){
+    reward.groups.forEach(g=>{if(g.trigger.kind!=='always'&&g!==target)g.selected=false;});
+  }
+  if(target.trigger.kind==='success'){
+    if(checked){
+      reward.groups.forEach(g=>{if(g.trigger.kind==='failure')g.selected=false;});
+      reward.groups.forEach(g=>{if(g.trigger.kind==='success'&&g!==target&&!sameBranch(g))g.selected=false;if(g.trigger.kind==='threshold'&&!sameBranch(g))g.selected=false;});
+    }else{
+      reward.groups.forEach(g=>{if(g.trigger.kind==='threshold'&&sameBranch(g))g.selected=false;});
+    }
+  }
+  if(target.trigger.kind==='threshold'){
+    const n=Number(target.trigger.value)||0;
+    if(checked){
+      reward.groups.forEach(g=>{if(g.trigger.kind==='failure')g.selected=false;});
+      reward.groups.forEach(g=>{
+        if(g.trigger.kind==='success')g.selected=sameBranch(g);
+        if(g.trigger.kind==='threshold')g.selected=sameBranch(g)&&(Number(g.trigger.value)||0)<=n;
+      });
+    }else{
+      reward.groups.forEach(g=>{if(g.trigger.kind==='threshold'&&sameBranch(g)&&(Number(g.trigger.value)||0)>=n)g.selected=false;});
+    }
+  }
+  renderEventRewardPanel(scope);if(scope==='event')updateAreaEventItemCopyButton();else if(scope==='quest')updateQuestEventItemCopyButton();
 }
 function rerollEventReward(scope='event'){const reward=eventRewardState(scope);if(!reward)return;reward.groups.forEach(g=>g.items.forEach(item=>Object.assign(item,eventRewardRoll(item.expr||'1'))));renderEventRewardPanel(scope);if(scope==='event')updateAreaEventItemCopyButton();else if(scope==='quest')updateQuestEventItemCopyButton();}
 function dropInstanceUid(){return `drop_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;}
