@@ -1,84 +1,1740 @@
-(function(global){
-  'use strict';
+@import url('https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap');
 
-  const COST_BY_RANK = Object.freeze({1:10,2:25,3:45,4:70,5:100});
+:root {
+  interpolate-size: allow-keywords;
+  --ra-desk: #151b22;
+  --ra-desk-2: #202a35;
+  --ra-page: #fbf5df;
+  --ra-page-2: #f1e5bf;
+  --ra-page-3: #e5d39d;
+  --ra-ink: #202832;
+  --ra-muted: #59626a;
+  --ra-line: #aa8a4d;
+  --ra-line-soft: #d6c292;
+  --ra-line-dark: #73572a;
+  --ra-navy: #273e58;
+  --ra-navy-2: #172a3e;
+  --ra-burgundy: #6c2f3d;
+  --ra-burgundy-2: #4d202b;
+  --ra-green: #365d48;
+  --ra-brass: #b58a38;
+  --ra-brass-light: #e2c674;
+  --ra-danger: #a13c3c;
+  --ra-warn: #8a5a16;
+  --ra-good: #2f6746;
+  --ra-shadow-sm: 0 2px 6px rgba(18, 24, 31, .16);
+  --ra-shadow: 0 10px 28px rgba(10, 14, 20, .25);
+  --ra-shadow-lg: 0 22px 60px rgba(7, 10, 15, .38);
+  --ra-radius-sm: 5px;
+  --ra-radius: 8px;
+  --ra-radius-lg: 10px;
+  --ra-font-body: "BIZ UDPGothic", "Noto Sans JP", "Noto Sans CJK JP", "Yu Gothic UI", "Yu Gothic", "Hiragino Kaku Gothic ProN", sans-serif;
+  --ra-font-heading: var(--ra-font-body);
 
-  function asInt(value, fallback=0){
-    const n = Number(value);
-    return Number.isFinite(n) ? Math.floor(n) : fallback;
+  /* Legacy token mapping */
+  --bg: var(--ra-desk);
+  --paper: var(--ra-page);
+  --paper2: #fffaf0;
+  --card: var(--ra-page);
+  --ink: var(--ra-ink);
+  --muted: var(--ra-muted);
+  --line: var(--ra-line-soft);
+  --accent: var(--ra-burgundy);
+  --accent2: var(--ra-navy);
+  --green: var(--ra-green);
+  --blue: var(--ra-navy);
+  --danger: var(--ra-danger);
+  --good: var(--ra-good);
+  --bad: var(--ra-danger);
+  --warn: var(--ra-warn);
+  --soft: #eee2bd;
+  --shadow: var(--ra-shadow);
+}
+
+* { scrollbar-width: thin; scrollbar-color: #846b3f #e8d9ae; }
+*::-webkit-scrollbar { width: 11px; height: 11px; }
+*::-webkit-scrollbar-track { background: #e8d9ae; border-left: 1px solid #cfb875; }
+*::-webkit-scrollbar-thumb { background: #846b3f; border: 2px solid #e8d9ae; border-radius: 999px; }
+*::-webkit-scrollbar-thumb:hover { background: #5f4a2c; }
+
+html {
+  color-scheme: light;
+  background: var(--ra-desk);
+  scrollbar-gutter: stable;
+}
+body.ra-app {
+  margin: 0;
+  min-height: 100svh;
+  font-family: var(--ra-font-body) !important;
+  color: var(--ra-ink);
+  font-weight: 500;
+  line-height: 1.65;
+  letter-spacing: .015em;
+  background:
+    radial-gradient(circle at 15% 8%, rgba(181, 138, 56, .12), transparent 24rem),
+    radial-gradient(circle at 86% 18%, rgba(108, 47, 61, .10), transparent 26rem),
+    repeating-linear-gradient(135deg, rgba(255,255,255,.018) 0 1px, transparent 1px 9px),
+    linear-gradient(135deg, var(--ra-desk), var(--ra-desk-2));
+  background-attachment: fixed;
+}
+body.ra-app, body.ra-app button, body.ra-app input, body.ra-app select, body.ra-app textarea,
+body.ra-app label, body.ra-app summary, body.ra-app th, body.ra-app td {
+  font-family: var(--ra-font-body) !important;
+}
+body.ra-app h1, body.ra-app h2, body.ra-app h3, body.ra-app h4,
+body.ra-app .page-title, body.ra-app .section-title,
+body.ra-app .title-card h1, body.ra-app .hero h1,
+body.ra-app .dialog-title, body.ra-app .weapon-modal-header h3 {
+  font-family: var(--ra-font-heading) !important;
+  color: var(--ra-navy-2);
+  font-weight: 800 !important;
+  letter-spacing: .035em;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+body.ra-app p, body.ra-app li, body.ra-app dd { line-height: 1.72; }
+body.ra-app a { color: #214f7a; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+body.ra-app a:hover { color: var(--ra-burgundy); }
+
+/* Open-book / workshop ledger surface */
+body.ra-app > main {
+  position: relative;
+  isolation: isolate;
+  background:
+    linear-gradient(90deg, rgba(111,82,34,.10), transparent 14px),
+    repeating-linear-gradient(0deg, rgba(93,69,31,.025) 0 1px, transparent 1px 28px),
+    var(--ra-page);
+  border: 1px solid #80632f;
+  border-radius: 8px;
+  box-shadow: var(--ra-shadow-lg), inset 0 0 0 3px rgba(255,250,229,.85), inset 14px 0 20px rgba(91,65,26,.08);
+  padding: 18px;
+}
+body.ra-app > main::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  z-index: -1;
+  pointer-events: none;
+  border: 1px solid rgba(140,105,45,.38);
+  background:
+    linear-gradient(90deg, var(--ra-brass) 0 18px, transparent 18px) left top / 42px 2px no-repeat,
+    linear-gradient(180deg, var(--ra-brass) 0 18px, transparent 18px) left top / 2px 42px no-repeat,
+    linear-gradient(270deg, var(--ra-brass) 0 18px, transparent 18px) right top / 42px 2px no-repeat,
+    linear-gradient(180deg, var(--ra-brass) 0 18px, transparent 18px) right top / 2px 42px no-repeat,
+    linear-gradient(90deg, var(--ra-brass) 0 18px, transparent 18px) left bottom / 42px 2px no-repeat,
+    linear-gradient(0deg, var(--ra-brass) 0 18px, transparent 18px) left bottom / 2px 42px no-repeat,
+    linear-gradient(270deg, var(--ra-brass) 0 18px, transparent 18px) right bottom / 42px 2px no-repeat,
+    linear-gradient(0deg, var(--ra-brass) 0 18px, transparent 18px) right bottom / 2px 42px no-repeat;
+}
+body.ra-app > header { color: #f8efcf; }
+body.ra-app > header :is(h1,.subtitle,.build) { color: inherit; }
+body.ra-app .hero, body.ra-app .title-card {
+  position: relative;
+  overflow: hidden;
+  color: #fff7d9;
+  background:
+    linear-gradient(90deg, transparent, rgba(226,198,116,.08), transparent),
+    linear-gradient(135deg, var(--ra-navy-2), #314e6b 62%, var(--ra-burgundy-2));
+  border: 1px solid var(--ra-brass);
+  box-shadow: var(--ra-shadow), inset 0 0 0 2px rgba(226,198,116,.22);
+}
+body.ra-app .hero::after, body.ra-app .title-card::after {
+  content: "◆  RECRAFT ALCHEMIA  ◆";
+  position: absolute;
+  right: 14px;
+  bottom: 8px;
+  color: rgba(244,222,151,.34);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .18em;
+  pointer-events: none;
+}
+body.ra-app .hero :is(h1,h2,h3,.subtitle,.build),
+body.ra-app .title-card :is(h1,h2,h3,.subtitle,.build) { color: #fff7d9 !important; }
+
+/* Pages, cards, and chapter blocks */
+body.ra-app :is(.panel,.card,.big-section,.mini-card,.status-box,.resource-card,.choice-card,.help-card,
+.compact-storage-panel,.facility-work-block,.facility-summary,.autosave-panel,.weapon-modal-dialog,.dialog-inner,
+.branch-controls,.branch-graph-scroll,.catalog-rank-controls,.inventory-filter-panel,.inventory-search-panel) {
+  border-color: var(--ra-line-soft) !important;
+  background-color: #fffaf0 !important;
+  color: var(--ra-ink);
+  box-shadow: var(--ra-shadow-sm);
+}
+body.ra-app :is(.panel,.big-section,.card,.mini-card,.help-card,.choice-card,.resource-card) {
+  background-image:
+    linear-gradient(90deg, rgba(181,138,56,.035), transparent 20%, transparent 80%, rgba(181,138,56,.035)),
+    repeating-linear-gradient(0deg, rgba(82,65,35,.018) 0 1px, transparent 1px 24px);
+}
+body.ra-app :is(.panel,.big-section,.title-card,.hero) { border-radius: var(--ra-radius-lg) !important; }
+body.ra-app :is(.card,.mini-card,.status-box,.resource-card,.choice-card,.help-card,.compact-storage-panel,.facility-work-block,.facility-summary) {
+  border-radius: var(--ra-radius) !important;
+}
+body.ra-app .section-title,
+body.ra-app .big-section > h2,
+body.ra-app .panel > h2,
+body.ra-app .panel > h3,
+body.ra-app .summary-line h2 {
+  color: var(--ra-navy-2) !important;
+  border-bottom-color: rgba(181,138,56,.45) !important;
+}
+body.ra-app .section-title::before,
+body.ra-app .big-section > h2::before,
+body.ra-app .panel > h2::before {
+  content: "◆";
+  display: inline-grid;
+  place-items: center;
+  width: 1.15em;
+  height: 1.15em;
+  margin-right: 8px;
+  color: var(--ra-brass);
+  font-size: .72em;
+  vertical-align: .1em;
+  background: none;
+}
+body.ra-app :is(.subtitle,.hint,.muted,.notice,.version,.build,.small) { color: var(--ra-muted); }
+body.ra-app .ra-build-info,
+body.ra-app .build {
+  color: #554626;
+  border-color: #bca46b;
+  background: #eee1ba;
+  box-shadow: none;
+  font-weight: 600;
+}
+
+/* High-legibility controls */
+body.ra-app :is(input,select,textarea) {
+  color: #17202b !important;
+  background: #fffdf5 !important;
+  border: 1px solid #947b4e !important;
+  border-radius: var(--ra-radius-sm) !important;
+  box-shadow: inset 0 1px 2px rgba(57,42,20,.10);
+  font-weight: 500;
+  line-height: 1.45;
+  transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+body.ra-app :is(input,select,textarea):hover { border-color: #644d28 !important; }
+body.ra-app :is(input,select,textarea):focus {
+  outline: none !important;
+  border-color: var(--ra-navy) !important;
+  box-shadow: 0 0 0 3px rgba(39,62,88,.22) !important;
+  background-color: #fff !important;
+}
+body.ra-app :is(input,textarea)::placeholder { color: #737980; opacity: 1; }
+body.ra-app label { color: #3c4650; font-weight: 700 !important; }
+
+body.ra-app button,
+body.ra-app .tab,
+body.ra-app .subtab,
+body.ra-app .tab-btn,
+body.ra-app .editor-tab-btn,
+body.ra-app .quest-category-btn {
+  border: 1px solid #132538 !important;
+  border-radius: var(--ra-radius-sm) !important;
+  color: #fff8de !important;
+  background: linear-gradient(180deg, #365673, var(--ra-navy)) !important;
+  box-shadow: 0 2px 0 #102235, 0 4px 8px rgba(17,28,39,.18) !important;
+  font-weight: 700 !important;
+  letter-spacing: .025em;
+  text-shadow: 0 1px 0 rgba(0,0,0,.25);
+  transition: transform .11s ease, filter .11s ease, box-shadow .11s ease, background .11s ease;
+}
+body.ra-app button:hover:not(:disabled),
+body.ra-app :is(.tab,.subtab,.tab-btn,.editor-tab-btn,.quest-category-btn):hover {
+  filter: brightness(1.12);
+  transform: translateY(-1px);
+}
+body.ra-app button:active:not(:disabled) { transform: translateY(1px); box-shadow: 0 1px 0 #102235 !important; }
+body.ra-app button:focus-visible,
+body.ra-app :is(.tab,.subtab,.tab-btn,.editor-tab-btn,.quest-category-btn):focus-visible {
+  outline: 3px solid rgba(226,198,116,.70) !important;
+  outline-offset: 2px;
+}
+body.ra-app button:disabled { opacity: .52; cursor: not-allowed; filter: grayscale(.25); }
+body.ra-app button.secondary,
+body.ra-app .secondary { background: linear-gradient(180deg, #47765a, var(--ra-green)) !important; border-color: #234733 !important; box-shadow: 0 2px 0 #21422f, 0 4px 8px rgba(17,28,39,.15) !important; }
+body.ra-app button.blue,
+body.ra-app .blue { background: linear-gradient(180deg, #365d83, #234868) !important; }
+body.ra-app button.danger,
+body.ra-app .danger { background: linear-gradient(180deg, #b14d4d, #8c3030) !important; border-color: #672020 !important; box-shadow: 0 2px 0 #5f1c1c, 0 4px 8px rgba(17,28,39,.15) !important; }
+body.ra-app button.ghost,
+body.ra-app .ghost {
+  color: #27313b !important;
+  text-shadow: none;
+  background: linear-gradient(180deg, #fffaf0, #eadcb5) !important;
+  border-color: #8f7543 !important;
+  box-shadow: 0 2px 0 #9b814b !important;
+}
+body.ra-app button.ghost:hover:not(:disabled), body.ra-app .ghost:hover { background: #fffdf5 !important; }
+body.ra-app :is(.tab,.subtab,.tab-btn,.editor-tab-btn,.quest-category-btn).active,
+body.ra-app .facility-switch button.active,
+body.ra-app .section-tabs button.active,
+body.ra-app .rank-filter-buttons button.active {
+  color: #fff8de !important;
+  background: linear-gradient(180deg, #854054, var(--ra-burgundy)) !important;
+  border-color: var(--ra-burgundy-2) !important;
+  box-shadow: 0 2px 0 #431b25, 0 4px 10px rgba(56,20,31,.23) !important;
+}
+
+/* Book-index navigation: clearer than pale pills */
+body.ra-app :is(.tabs,.subtabs,.tab-nav,.editor-tabs,.section-tabs,.facility-switch,.quest-category-bar) {
+  border: 1px solid #8b713d !important;
+  background: linear-gradient(180deg, #ead9a8, #d8c287) !important;
+  box-shadow: 0 4px 10px rgba(31,24,14,.18), inset 0 1px 0 rgba(255,250,226,.9) !important;
+  backdrop-filter: none !important;
+}
+body.ra-facility .facility-switch,
+body.ra-facility .section-tabs {
+  gap: 6px !important;
+}
+body.ra-facility .facility-switch button,
+body.ra-facility .section-tabs button,
+body.ra-character .editor-tab-btn {
+  min-height: 38px;
+  padding: 8px 13px !important;
+  font-size: .91rem !important;
+  line-height: 1.3 !important;
+  white-space: normal;
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+
+/* Tables and metadata */
+body.ra-app table { border-color: #a98e59 !important; background: #fffaf0 !important; }
+body.ra-app th {
+  color: #fff7d8 !important;
+  background: var(--ra-navy) !important;
+  border-color: #172a3e !important;
+  font-weight: 700 !important;
+  letter-spacing: .02em;
+}
+body.ra-app td { color: var(--ra-ink); border-color: #d3c18f !important; }
+body.ra-app tbody tr:nth-child(even) td { background: rgba(229,211,157,.22) !important; }
+body.ra-app tbody tr:hover td { background: rgba(226,198,116,.28) !important; }
+body.ra-app :is(.badge,.chip,.kbd,.pill,.facility-chip,.view-mode-chip,.skill-badge,.spell-detail-pill) {
+  color: #29313a !important;
+  border-color: #b69b62 !important;
+  background: #efe1b8 !important;
+  font-weight: 700 !important;
+}
+
+/* Native details animation and fixed-position rotating glyphs */
+body.ra-app details { border-color: var(--ra-line-soft); }
+body.ra-app details::details-content {
+  block-size: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-4px);
+  transition:
+    block-size .28s cubic-bezier(.2,.7,.2,1),
+    opacity .18s ease,
+    transform .28s cubic-bezier(.2,.7,.2,1),
+    content-visibility .28s allow-discrete;
+}
+body.ra-app details[open]::details-content {
+  block-size: auto;
+  opacity: 1;
+  transform: translateY(0);
+}
+@starting-style {
+  body.ra-app details[open]::details-content {
+    block-size: 0;
+    opacity: 0;
+    transform: translateY(-4px);
   }
+}
+body.ra-app details > summary {
+  color: var(--ra-navy-2) !important;
+  background: linear-gradient(180deg, #f0e2b9, #e4d09a) !important;
+  border-color: #b79b5d !important;
+  font-weight: 700 !important;
+  transition: background .18s ease, color .18s ease, border-color .18s ease;
+}
+body.ra-app details[open] > summary {
+  color: #fff7da !important;
+  background: linear-gradient(180deg, #385571, var(--ra-navy)) !important;
+  border-bottom-color: #172a3e !important;
+}
+body.ra-app details > summary:hover { filter: brightness(1.035); }
 
-  function enabledLike(value){
-    if(value === false) return false;
-    return String(value ?? 'TRUE').trim().toUpperCase() !== 'FALSE';
+/* Character-sheet warehouse and all known custom disclosure arrows */
+body.ra-character :is(
+  details.big-section > summary,
+  .skill-category-title,
+  .inventory-registration-card > summary,
+  .inventory-filter-panel > summary,
+  .carry-item-edit > summary,
+  .spell-detail > summary
+)::before {
+  content: "▶" !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  flex: 0 0 17px !important;
+  width: 17px !important;
+  height: 17px !important;
+  margin: 0 7px 0 0 !important;
+  color: currentColor !important;
+  font-size: .72rem !important;
+  line-height: 1 !important;
+  transform: rotate(0deg) !important;
+  transform-origin: 50% 50% !important;
+  transition: transform .24s cubic-bezier(.2,.7,.2,1) !important;
+}
+body.ra-character :is(
+  details.big-section[open] > summary,
+  .skill-category-card[open] > .skill-category-title,
+  .inventory-registration-card[open] > summary,
+  .inventory-filter-panel[open] > summary,
+  .carry-item-edit[open] > summary,
+  .spell-detail[open] > summary
+)::before { transform: rotate(90deg) !important; }
+body.ra-character .inventory-filter-panel > summary::after { display: none !important; content: none !important; }
+body.ra-character .inventory-card-head::before {
+  content: "▶" !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  flex: 0 0 17px !important;
+  width: 17px !important;
+  height: 17px !important;
+  margin: 2px 0 0 !important;
+  color: currentColor !important;
+  font-size: .72rem !important;
+  line-height: 1 !important;
+  transform: rotate(0deg) !important;
+  transform-origin: 50% 50% !important;
+  transition: transform .24s cubic-bezier(.2,.7,.2,1) !important;
+}
+body.ra-character .inventory-card[open] > .inventory-card-head::before { transform: rotate(90deg) !important; }
+body.ra-character #tabEquipment .equipment-card-toggle::before {
+  content: "▶" !important;
+  color: currentColor !important;
+  transform: rotate(0deg) !important;
+  transform-origin: center !important;
+  transition: transform .24s cubic-bezier(.2,.7,.2,1) !important;
+}
+body.ra-character #tabEquipment .equipment-card[open] > .equipment-card-summary .equipment-card-toggle::before { transform: rotate(90deg) !important; }
+body.ra-character .big-section { overflow: clip; }
+body.ra-character .big-section > summary,
+body.ra-character .inventory-registration-card > summary,
+body.ra-character .inventory-filter-panel > summary,
+body.ra-character .skill-category-title,
+body.ra-character .inventory-card > summary { color: var(--ra-navy-2) !important; }
+body.ra-character :is(.big-section,.inventory-registration-card,.inventory-filter-panel,.inventory-card,.equipment-card)[open] > summary,
+body.ra-character .skill-category-card[open] > .skill-category-title { color: #fff7da !important; }
+
+/* Facility weapon tree: stronger contrast, clearer lines */
+body.ra-facility .branch-graph-scroll {
+  border: 2px solid #755a2f !important;
+  background:
+    repeating-linear-gradient(0deg, rgba(91,68,30,.035) 0 1px, transparent 1px 26px),
+    #fffaf0 !important;
+  box-shadow: inset 0 0 0 3px rgba(226,198,116,.23), var(--ra-shadow-sm) !important;
+}
+body.ra-facility .branch-graph-rank {
+  color: #fff7d8 !important;
+  background: var(--ra-navy) !important;
+  border: 1px solid #172a3e !important;
+  box-shadow: 0 2px 5px rgba(18,28,39,.25) !important;
+  font-weight: 800 !important;
+}
+body.ra-facility .branch-graph-label {
+  color: #2d2417 !important;
+  background: #dfca8d !important;
+  border-color: #8d713c !important;
+  box-shadow: 4px 0 8px rgba(41,31,14,.16) !important;
+  font-weight: 800 !important;
+}
+body.ra-facility .branch-graph-label.base { background: #c9ad65 !important; }
+body.ra-facility .branch-rank-band {
+  background: linear-gradient(180deg, rgba(226,198,116,.18), rgba(255,250,240,.02)) !important;
+  border-color: rgba(125,96,44,.34) !important;
+}
+body.ra-facility .branch-graph-edge {
+  stroke: #263e58 !important;
+  stroke-width: 2.25 !important;
+  filter: drop-shadow(0 1px 0 #fff7dc) !important;
+}
+body.ra-facility .branch-graph-node {
+  color: #202832 !important;
+  border: 2px solid #49637a !important;
+  background: #fffdf5 !important;
+  box-shadow: 0 4px 10px rgba(30,40,50,.16) !important;
+}
+body.ra-facility .branch-graph-node:hover { border-color: var(--ra-burgundy) !important; box-shadow: 0 6px 14px rgba(48,30,35,.23) !important; }
+body.ra-facility .branch-graph-node.branch-focus { outline-color: rgba(181,138,56,.85) !important; }
+body.ra-facility .branch-graph-node.locked {
+  color: #555b61 !important;
+  border-color: #8a8e92 !important;
+  background: repeating-linear-gradient(135deg,#f0eee8,#f0eee8 10px,#d9d8d2 10px,#d9d8d2 20px) !important;
+}
+body.ra-facility .weapon-modal,
+body.ra-app .output-dialog { background: rgba(10,14,19,.72) !important; backdrop-filter: blur(4px); }
+body.ra-facility .weapon-modal-dialog,
+body.ra-app .dialog-inner {
+  color: var(--ra-ink);
+  border: 2px solid var(--ra-brass) !important;
+  background: var(--ra-page) !important;
+  box-shadow: var(--ra-shadow-lg), inset 0 0 0 3px rgba(255,250,226,.8) !important;
+}
+body.ra-facility .weapon-modal-header,
+body.ra-app .dialog-title {
+  color: #fff7d8 !important;
+  background: var(--ra-navy) !important;
+  border-color: #172a3e !important;
+}
+body.ra-facility .weapon-modal-header h3 { color: #fff7d8 !important; }
+
+/* Manager pages: ledger-like, compact, not washed out */
+body.ra-manager :is(.panel,.card,.title-card,.help-card) { box-shadow: 0 2px 7px rgba(28,22,13,.16); }
+body.ra-manager :is(.panel,.card) { border-radius: 6px !important; }
+body.ra-manager :is(input,select,textarea,button,.tab,.subtab,.tab-btn) { border-radius: 5px !important; }
+body.ra-manager .title-card { border-left: 6px solid var(--ra-brass) !important; }
+body.ra-manager .toolbar { gap: 7px; }
+body.ra-manager .monster-area-head,
+body.ra-manager .guild-quest-section h4 { color: var(--ra-navy-2) !important; background: #e8d6a5 !important; border-color: var(--ra-burgundy) !important; }
+
+/* Status semantics */
+body.ra-app :is(.ok,.good) { color: var(--ra-good) !important; }
+body.ra-app :is(.warn,.warning) { color: var(--ra-warn) !important; }
+body.ra-app :is(.bad,.error,.error-text) { color: var(--ra-danger) !important; }
+body.ra-app .toast { color: var(--ra-ink); border-color: #9c8048 !important; background: #fffaf0 !important; box-shadow: var(--ra-shadow); }
+
+@media (max-width: 720px) {
+  body.ra-app { font-size: 14px; letter-spacing: .01em; }
+  body.ra-app > main {
+    width: calc(100% - 10px) !important;
+    padding: 10px !important;
+    border-radius: 5px;
+    box-shadow: 0 10px 26px rgba(5,8,12,.35), inset 0 0 0 2px rgba(255,250,229,.82);
   }
+  body.ra-app > main::before { inset: 5px; }
+  body.ra-app :is(.panel,.big-section,.title-card,.hero) { border-radius: 7px !important; }
+  body.ra-app button { min-height: 39px; }
+  body.ra-manager button { min-height: 36px; }
+  body.ra-app .ra-build-info { font-size: 10px; padding: 4px 7px; }
+  body.ra-facility .branch-graph-label { padding-inline: 2px !important; min-width: 48px !important; max-width: 58px !important; }
+  body.ra-facility .facility-switch button,
+  body.ra-facility .section-tabs button,
+  body.ra-character .editor-tab-btn { font-size: .84rem !important; padding: 7px 9px !important; }
+}
 
-  function enabledPool(master, rank){
-    const r = asInt(rank, 1);
-    return (master?.skills || []).filter(skill => skill && enabledLike(skill.enabled) && asInt(skill.rank, 0) === r && asInt(skill.drawWeight, 0) > 0);
+@media (prefers-reduced-motion: reduce) {
+  body.ra-app *, body.ra-app *::before, body.ra-app *::after,
+  body.ra-app details::details-content {
+    scroll-behavior: auto !important;
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
   }
+}
 
-  function weightedPick(pool, random=Math.random){
-    const total = pool.reduce((sum, skill) => sum + Math.max(0, Number(skill.drawWeight) || 0), 0);
-    if(!pool.length || total <= 0) throw new Error('抽選対象スキルがありません。');
-    let cursor = Math.min(0.999999999999, Math.max(0, Number(random()) || 0)) * total;
-    for(const skill of pool){
-      cursor -= Math.max(0, Number(skill.drawWeight) || 0);
-      if(cursor < 0) return skill;
-    }
-    return pool[pool.length - 1];
+/* v90.8.325 legibility + compact weapon tree revision */
+:root {
+  --ra-desk: #e6dfd2;
+  --ra-desk-2: #f2ece1;
+  --ra-page: #fffaf0;
+  --ra-page-2: #f5ead6;
+  --ra-page-3: #e8d8bc;
+  --ra-ink: #26323b;
+  --ra-muted: #5d6870;
+  --ra-line: #a98d5c;
+  --ra-line-soft: #d8c7a9;
+  --ra-line-dark: #7c633a;
+  --ra-navy: #617f91;
+  --ra-navy-2: #304b5d;
+  --ra-burgundy: #8e5a66;
+  --ra-burgundy-2: #65404a;
+  --ra-green: #5c806b;
+  --ra-brass: #b48e4f;
+  --ra-brass-light: #dfc88f;
+  --ra-shadow-sm: 0 2px 7px rgba(64, 51, 35, .12);
+  --ra-shadow: 0 9px 24px rgba(62, 49, 34, .16);
+  --ra-shadow-lg: 0 18px 46px rgba(58, 46, 32, .20);
+  --bg: var(--ra-desk);
+  --paper: var(--ra-page);
+  --card: var(--ra-page);
+  --ink: var(--ra-ink);
+  --muted: var(--ra-muted);
+  --accent: var(--ra-burgundy);
+  --accent2: var(--ra-navy);
+  --green: var(--ra-green);
+  --blue: var(--ra-navy);
+  --shadow: var(--ra-shadow);
+}
+html {
+  background: #e6dfd2 !important;
+}
+body.ra-app {
+  color: var(--ra-ink) !important;
+  background:
+    radial-gradient(circle at 12% 7%, rgba(180,142,79,.13), transparent 27rem),
+    radial-gradient(circle at 88% 12%, rgba(97,127,145,.11), transparent 30rem),
+    repeating-linear-gradient(135deg, rgba(91,73,48,.025) 0 1px, transparent 1px 11px),
+    linear-gradient(135deg, #e5ddd0, #f3eee5) !important;
+}
+body.ra-app > header,
+body.ra-app > header :is(h1,h2,h3,.subtitle,.build) {
+  color: #2e414d !important;
+  text-shadow: none !important;
+}
+body.ra-app > main {
+  background:
+    linear-gradient(90deg, rgba(122,94,52,.075), transparent 13px),
+    repeating-linear-gradient(0deg, rgba(95,76,46,.022) 0 1px, transparent 1px 29px),
+    #fffaf0 !important;
+  border-color: #a78a59 !important;
+  box-shadow: var(--ra-shadow-lg), inset 0 0 0 3px rgba(255,253,245,.92), inset 12px 0 18px rgba(113,86,44,.055) !important;
+}
+body.ra-app .hero,
+body.ra-app .title-card {
+  color: #283a46 !important;
+  background:
+    linear-gradient(90deg, rgba(180,142,79,.08), transparent 28%, transparent 72%, rgba(142,90,102,.07)),
+    linear-gradient(135deg, #f4ead8, #e7dcc6 62%, #e1d5c2) !important;
+  border-color: #aa8950 !important;
+  box-shadow: var(--ra-shadow), inset 0 0 0 2px rgba(255,252,241,.72) !important;
+}
+body.ra-app .hero :is(h1,h2,h3,.subtitle,.build),
+body.ra-app .title-card :is(h1,h2,h3,.subtitle,.build) {
+  color: #283f4f !important;
+  text-shadow: none !important;
+}
+body.ra-app .hero::after,
+body.ra-app .title-card::after {
+  color: rgba(70,83,91,.28) !important;
+}
+
+/* Softer book-index colors, with strong text contrast. */
+body.ra-app button,
+body.ra-app .tab,
+body.ra-app .subtab,
+body.ra-app .tab-btn,
+body.ra-app .editor-tab-btn,
+body.ra-app .quest-category-btn {
+  color: #fff !important;
+  background: linear-gradient(180deg, #7893a3, #5c788a) !important;
+  border-color: #405f72 !important;
+  box-shadow: 0 2px 0 #405d6e, 0 4px 8px rgba(51,69,81,.16) !important;
+  text-shadow: 0 1px 0 rgba(28,43,52,.35) !important;
+}
+body.ra-app :is(.tab,.subtab,.tab-btn,.editor-tab-btn,.quest-category-btn).active,
+body.ra-app .facility-switch button.active,
+body.ra-app .section-tabs button.active,
+body.ra-app .rank-filter-buttons button.active {
+  color: #fff !important;
+  background: linear-gradient(180deg, #a06c77, #86545f) !important;
+  border-color: #71424c !important;
+  box-shadow: 0 2px 0 #69404a, 0 4px 9px rgba(86,51,61,.18) !important;
+}
+body.ra-app button.secondary,
+body.ra-app .secondary {
+  background: linear-gradient(180deg, #739584, #5b7e6c) !important;
+  border-color: #426653 !important;
+  box-shadow: 0 2px 0 #42604f, 0 4px 8px rgba(54,79,65,.14) !important;
+}
+body.ra-app button.ghost,
+body.ra-app .ghost {
+  color: #2f3b43 !important;
+  background: linear-gradient(180deg, #fffdf7, #eee3cf) !important;
+  border-color: #a58b5e !important;
+  box-shadow: 0 2px 0 #b29a6d !important;
+  text-shadow: none !important;
+}
+body.ra-app :is(.tabs,.subtabs,.tab-nav,.editor-tabs,.section-tabs,.facility-switch,.quest-category-bar) {
+  border-color: #a88c59 !important;
+  background: linear-gradient(180deg, #efe4cf, #e1d2b6) !important;
+  box-shadow: 0 3px 9px rgba(74,58,37,.12), inset 0 1px 0 rgba(255,253,246,.9) !important;
+}
+
+/* Open disclosures stay light and readable. */
+body.ra-app details > summary {
+  color: #304653 !important;
+  background: linear-gradient(180deg, #f1e8d8, #e7dac2) !important;
+  border-color: #baa174 !important;
+}
+body.ra-app details[open] > summary {
+  color: #263b48 !important;
+  background: linear-gradient(180deg, #e1ecef, #ccdce2) !important;
+  border-color: #7895a3 !important;
+  border-bottom-color: #7895a3 !important;
+  text-shadow: none !important;
+}
+body.ra-character :is(.big-section,.inventory-registration-card,.inventory-filter-panel,.inventory-card,.equipment-card)[open] > summary,
+body.ra-character .skill-category-card[open] > .skill-category-title {
+  color: #263b48 !important;
+  background: linear-gradient(180deg, #e1ecef, #ccdce2) !important;
+  border-color: #7895a3 !important;
+  text-shadow: none !important;
+}
+body.ra-character :is(.big-section,.inventory-registration-card,.inventory-filter-panel,.inventory-card,.equipment-card)[open] > summary :is(span,strong,small),
+body.ra-character .skill-category-card[open] > .skill-category-title :is(span,strong,small) {
+  color: inherit !important;
+}
+
+/* Light, compact, high-legibility weapon tree. */
+body.ra-facility .branch-graph-scroll {
+  border-color: #9a8055 !important;
+  background:
+    repeating-linear-gradient(0deg, rgba(87,72,49,.028) 0 1px, transparent 1px 25px),
+    #fbf8ef !important;
+  box-shadow: inset 0 0 0 2px rgba(216,199,169,.40), var(--ra-shadow-sm) !important;
+}
+body.ra-facility .branch-graph-canvas {
+  --branch-label-width: 68px !important;
+  gap: 14px 18px !important;
+  padding: 8px !important;
+}
+body.ra-facility .branch-graph-rank {
+  min-height: 30px !important;
+  padding: 4px 7px !important;
+  color: #fff !important;
+  background: #698696 !important;
+  border-color: #4f6e7f !important;
+  box-shadow: 0 1px 4px rgba(50,72,84,.17) !important;
+  font-size: 12px !important;
+}
+body.ra-facility .branch-graph-label {
+  min-width: 0 !important;
+  width: var(--branch-label-width) !important;
+  padding: 4px 2px !important;
+  color: #473a28 !important;
+  background: #eadfc8 !important;
+  border-color: #ac9367 !important;
+  box-shadow: 2px 0 5px rgba(72,57,36,.10) !important;
+  font-size: 11px !important;
+  line-height: 1.25 !important;
+  letter-spacing: 0 !important;
+}
+body.ra-facility .branch-graph-label.base { background: #ddcba7 !important; }
+body.ra-facility .branch-rank-band {
+  background: linear-gradient(180deg, rgba(105,134,150,.08), rgba(255,255,255,0)) !important;
+  border-color: rgba(102,125,137,.18) !important;
+}
+body.ra-facility .branch-graph-edge {
+  stroke: #496675 !important;
+  stroke-width: 2.15 !important;
+  filter: drop-shadow(0 1px 0 #fff) !important;
+}
+body.ra-facility .branch-graph-node {
+  width: 164px !important;
+  min-height: 48px !important;
+  padding: 5px 6px !important;
+  gap: 0 !important;
+  justify-content: center !important;
+  color: #24343e !important;
+  border: 1.5px solid #718b99 !important;
+  border-radius: 8px !important;
+  background: #fffdf8 !important;
+  box-shadow: 0 2px 6px rgba(46,63,73,.12) !important;
+}
+body.ra-facility .branch-graph-node:hover {
+  border-color: #8e5a66 !important;
+  box-shadow: 0 3px 9px rgba(77,52,59,.16) !important;
+}
+body.ra-facility .branch-graph-node.locked {
+  min-height: 48px !important;
+  color: #5d6367 !important;
+  border-color: #a4a8aa !important;
+  background: repeating-linear-gradient(135deg,#f4f1eb,#f4f1eb 8px,#e8e5de 8px,#e8e5de 16px) !important;
+}
+body.ra-facility .branch-graph-node-trigger {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 5px !important;
+  width: 100% !important;
+  min-height: 0 !important;
+  padding: 3px 4px !important;
+  margin: 0 !important;
+  color: #24343e !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 5px !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transform: none !important;
+  filter: none !important;
+  font: inherit !important;
+  cursor: pointer !important;
+}
+body.ra-facility .branch-graph-node-trigger:hover,
+body.ra-facility .branch-graph-node-trigger:active {
+  color: #6f3f4b !important;
+  background: rgba(142,90,102,.08) !important;
+  box-shadow: none !important;
+  transform: none !important;
+  filter: none !important;
+}
+body.ra-facility .branch-graph-node-trigger:focus-visible {
+  outline: 2px solid #9b6c78 !important;
+  outline-offset: 1px !important;
+}
+body.ra-facility .branch-graph-node-rank-inline {
+  flex: 0 0 auto;
+  color: #704b55 !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  white-space: nowrap;
+}
+body.ra-facility .branch-graph-node-name-inline {
+  min-width: 0;
+  overflow: hidden;
+  color: #24343e !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1.3 !important;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+body.ra-facility .branch-graph-node-locked-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 4px;
+  font-size: 12px;
+  font-weight: 800;
+}
+body.ra-facility .weapon-modal,
+body.ra-app .output-dialog {
+  background: rgba(54,61,65,.42) !important;
+}
+body.ra-facility .weapon-modal-header,
+body.ra-app .dialog-title {
+  color: #2a414f !important;
+  background: linear-gradient(180deg, #e4ecee, #cedde2) !important;
+  border-color: #7895a3 !important;
+}
+body.ra-facility .weapon-modal-header h3 { color: #2a414f !important; }
+
+@media (max-width: 720px) {
+  body.ra-app > main {
+    box-shadow: 0 8px 22px rgba(61,49,35,.17), inset 0 0 0 2px rgba(255,253,245,.88) !important;
   }
-
-  function normalizeState(raw={}){
-    const slots = Math.max(2, asInt(raw.crystalSlots, 2));
-    const acquired = Array.isArray(raw.acquiredSkillIds) ? [...new Set(raw.acquiredSkillIds.map(String).filter(Boolean))] : [];
-    const equipped = Array.isArray(raw.equippedSkillIds) ? raw.equippedSkillIds.slice(0, slots).map(v => String(v || '')) : [];
-    while(equipped.length < slots) equipped.push('');
-    const fragments = {};
-    for(let rank=1; rank<=5; rank++) fragments[String(rank)] = Math.max(0, asInt(raw.resonanceFragments?.[String(rank)], 0));
-    return {
-      version: 1,
-      crystalSlots: slots,
-      acquiredSkillIds: acquired,
-      equippedSkillIds: equipped,
-      resonanceFragments: fragments,
-      drawHistory: Array.isArray(raw.drawHistory) ? raw.drawHistory.slice(-200) : []
-    };
+  body.ra-facility .branch-graph-canvas {
+    --branch-label-width: 56px !important;
+    gap: 10px 14px !important;
+    padding: 6px !important;
   }
-
-  function draw(master, rawState, rank, count, random=Math.random){
-    const state = normalizeState(rawState);
-    const r = asInt(rank, 1);
-    const n = Math.max(1, Math.min(100, asInt(count, 1)));
-    const pool = enabledPool(master, r);
-    if(!pool.length) throw new Error(`★${r}の抽選対象がありません。`);
-    const acquired = new Set(state.acquiredSkillIds);
-    const results = [];
-    for(let i=0; i<n; i++){
-      const skill = weightedPick(pool, random);
-      const duplicate = acquired.has(skill.id);
-      if(duplicate){
-        state.resonanceFragments[String(r)] = (state.resonanceFragments[String(r)] || 0) + 1;
-      }else{
-        acquired.add(skill.id);
-      }
-      const row = {
-        at: new Date().toISOString(), rank:r, skillId:skill.id, skillName:skill.name,
-        duplicate, fragmentRank: duplicate ? r : null
-      };
-      state.drawHistory.push(row);
-      results.push({...row, skill});
-    }
-    state.acquiredSkillIds = [...acquired];
-    state.drawHistory = state.drawHistory.slice(-200);
-    return {state, results, requiredStars:(COST_BY_RANK[r] || 0) * n};
+  body.ra-facility .branch-graph-label {
+    width: var(--branch-label-width) !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    padding: 3px 1px !important;
+    font-size: 10px !important;
   }
-
-  function probabilityRows(master, rank){
-    const pool = enabledPool(master, rank);
-    const total = pool.reduce((sum, skill) => sum + Number(skill.drawWeight || 0), 0);
-    return pool.map(skill => ({...skill, probability: total > 0 ? Number(skill.drawWeight || 0) / total : 0}));
+  body.ra-facility .branch-graph-node {
+    width: 154px !important;
+    min-height: 44px !important;
+    padding: 4px 5px !important;
   }
+  body.ra-facility .branch-graph-node-rank-inline,
+  body.ra-facility .branch-graph-node-name-inline { font-size: 11px !important; }
+}
 
-  global.RASkillGachaCore = Object.freeze({COST_BY_RANK, enabledPool, weightedPick, normalizeState, draw, probabilityRows});
-})(window);
+
+/* v90.8.325 UI performance and spacing pass */
+/* Large disclosures use a paint-only fade instead of intrinsic-height interpolation. */
+body.ra-app details::details-content {
+  block-size: auto !important;
+  max-block-size: none !important;
+  overflow: clip !important;
+  opacity: 0;
+  transform: translateY(-2px);
+  content-visibility: hidden;
+  contain: paint;
+  will-change: auto !important;
+  transition:
+    opacity .12s ease-out,
+    transform .12s ease-out,
+    content-visibility .12s allow-discrete !important;
+}
+body.ra-app details[open]::details-content {
+  block-size: auto !important;
+  opacity: 1;
+  transform: translateY(0);
+  content-visibility: visible;
+}
+@starting-style {
+  body.ra-app details[open]::details-content {
+    block-size: auto !important;
+    opacity: 0;
+    transform: translateY(-2px);
+  }
+}
+body.ra-character :is(
+  details.big-section > summary,
+  .skill-category-title,
+  .inventory-registration-card > summary,
+  .inventory-filter-panel > summary,
+  .carry-item-edit > summary,
+  .spell-detail > summary,
+  .inventory-card-head,
+  #tabEquipment .equipment-card-toggle::before
+)::before {
+  transition-duration: .15s !important;
+  transition-timing-function: ease-out !important;
+}
+
+/* Avoid expensive sticky blur/repaint while switching the character pages. */
+body.ra-character .editor-tabs {
+  background: #f1e6d3 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  contain: paint;
+}
+body.ra-character .editor-tab-btn {
+  transform: none !important;
+  transition: color .08s linear, background .08s linear, border-color .08s linear, box-shadow .08s linear !important;
+}
+body.ra-character .editor-tab-page {
+  background: transparent;
+  contain: layout paint;
+}
+body.ra-character .editor-tab-page.active {
+  animation: none !important;
+}
+
+/* Give sticky facility selectors breathing room from the panel edge. */
+body.ra-facility .facility-switch,
+body.ra-facility .section-tabs {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+body.ra-facility .section-tabs {
+  padding-top: 8px !important;
+  padding-bottom: 10px !important;
+}
+
+/* Denser weapon tree: branch labels and weapon nodes share the same compact row rhythm. */
+body.ra-facility .branch-graph-canvas {
+  --branch-label-width: 54px !important;
+  gap: 8px 14px !important;
+  padding: 6px !important;
+}
+body.ra-facility .branch-graph-rank {
+  min-height: 27px !important;
+  padding: 3px 6px !important;
+  border-radius: 7px !important;
+  font-size: 11px !important;
+  line-height: 1.15 !important;
+}
+body.ra-facility .branch-graph-label {
+  padding: 1px !important;
+  border-radius: 0 7px 7px 0 !important;
+  font-size: 10.5px !important;
+  line-height: 1.1 !important;
+}
+body.ra-facility .branch-graph-node,
+body.ra-facility .branch-graph-node.locked {
+  width: 154px !important;
+  min-height: 36px !important;
+  padding: 2px 4px !important;
+  border-radius: 7px !important;
+  box-shadow: 0 1px 4px rgba(46,63,73,.11) !important;
+}
+body.ra-facility .branch-graph-node-trigger,
+body.ra-facility .branch-graph-node-locked-label {
+  gap: 4px !important;
+  min-height: 30px !important;
+  padding: 2px 3px !important;
+  line-height: 1.15 !important;
+}
+body.ra-facility .branch-graph-node-rank-inline,
+body.ra-facility .branch-graph-node-name-inline,
+body.ra-facility .branch-graph-node-locked-label {
+  font-size: 11px !important;
+}
+
+@media (max-width: 720px) {
+  body.ra-facility .facility-switch,
+  body.ra-facility .section-tabs {
+    padding-left: 7px !important;
+    padding-right: 7px !important;
+  }
+  body.ra-facility .branch-graph-canvas {
+    --branch-label-width: 46px !important;
+    gap: 7px 12px !important;
+    padding: 4px !important;
+  }
+  body.ra-facility .branch-graph-label {
+    padding: 1px 0 !important;
+    font-size: 9.5px !important;
+  }
+  body.ra-facility .branch-graph-node,
+  body.ra-facility .branch-graph-node.locked {
+    width: 144px !important;
+    min-height: 34px !important;
+    padding: 2px 3px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.ra-app details::details-content,
+  body.ra-character .editor-tab-btn {
+    transition: none !important;
+  }
+}
+
+
+/* Branch label integrity: keep the full "派生" suffix on one horizontal line. */
+body.ra-facility .branch-graph-canvas {
+  --branch-label-width: 64px !important;
+}
+body.ra-facility .branch-graph-label {
+  width: var(--branch-label-width) !important;
+  min-width: var(--branch-label-width) !important;
+  max-width: var(--branch-label-width) !important;
+  padding: 1px 3px !important;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  writing-mode: horizontal-tb !important;
+  text-orientation: mixed !important;
+  line-height: 1.05 !important;
+}
+body.ra-facility .branch-graph-label > span {
+  display: block;
+  white-space: nowrap !important;
+  word-break: keep-all !important;
+}
+body.ra-facility .branch-graph-scroll.branch-labels-collapsed .branch-graph-canvas {
+  --branch-label-width: 28px !important;
+}
+body.ra-facility .branch-graph-scroll.branch-labels-collapsed .branch-graph-label {
+  min-width: 28px !important;
+  max-width: 28px !important;
+  width: 28px !important;
+  padding: 0 !important;
+}
+body.ra-facility .branch-graph-scroll.branch-labels-collapsed .branch-graph-label > span {
+  display: none !important;
+}
+@media (max-width: 720px) {
+  body.ra-facility .branch-graph-canvas {
+    --branch-label-width: 60px !important;
+  }
+  body.ra-facility .branch-graph-label {
+    width: var(--branch-label-width) !important;
+    min-width: var(--branch-label-width) !important;
+    max-width: var(--branch-label-width) !important;
+    font-size: 9.5px !important;
+  }
+}
+
+
+/* Branch label inline toggle: placed in the graph's upper-left blank cell. */
+body.ra-facility .branch-label-side-toggle {
+  min-width: 0 !important;
+  width: 100% !important;
+  height: 30px !important;
+  padding: 0 !important;
+  border-radius: 0 8px 8px 0 !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+}
+
+
+/* v90.8.325: ledger controls, clear selected hub tab, and natural scroll chaining. */
+body.ra-hub .tabs {
+  padding: 6px !important;
+  gap: 7px !important;
+  border: 1px solid #9b7a42 !important;
+  background:
+    linear-gradient(180deg, rgba(255,253,246,.78), rgba(224,207,174,.82)),
+    repeating-linear-gradient(90deg, rgba(104,75,36,.035) 0 1px, transparent 1px 18px) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9), 0 4px 11px rgba(66,49,28,.14) !important;
+}
+body.ra-hub .tabs button {
+  min-height: 39px !important;
+  color: #324451 !important;
+  text-shadow: none !important;
+  background:
+    linear-gradient(180deg, rgba(255,253,247,.98), rgba(226,216,196,.98)) !important;
+  border: 1px solid #a58a59 !important;
+  box-shadow: inset 0 1px 0 #fff, 0 2px 0 #b8a176 !important;
+}
+body.ra-hub .tabs button.active,
+body.ra-hub .tabs button[aria-current="page"] {
+  color: #fff9e8 !important;
+  background:
+    linear-gradient(90deg, rgba(225,195,112,.18), transparent 20%, transparent 80%, rgba(225,195,112,.14)),
+    linear-gradient(180deg, #955869, #74404d) !important;
+  border-color: #5f2f3a !important;
+  box-shadow: inset 0 0 0 1px rgba(232,205,130,.62), 0 2px 0 #552631, 0 5px 12px rgba(80,37,48,.24) !important;
+}
+body.ra-hub .framewrap {
+  border-top: 1px solid rgba(133,103,52,.42);
+  background: #fffaf0;
+}
+
+body.ra-manager:not(.ra-hub) :is(.toolbar,.filter-bar,.filter-panel,.section-actions,.table-toolbar,.subnav-block) {
+  background:
+    linear-gradient(180deg, rgba(248,243,232,.96), rgba(229,218,197,.94)),
+    repeating-linear-gradient(90deg, rgba(91,72,42,.025) 0 1px, transparent 1px 21px) !important;
+  border-color: #b59a67 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.92), 0 3px 8px rgba(69,52,31,.10) !important;
+}
+body.ra-manager:not(.ra-hub) :is(.panel,.card,.help-card) {
+  background-image:
+    linear-gradient(135deg, rgba(181,142,79,.045), transparent 18%, transparent 82%, rgba(97,127,145,.035)),
+    repeating-linear-gradient(0deg, rgba(85,66,37,.022) 0 1px, transparent 1px 26px) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.68), 0 3px 9px rgba(61,47,29,.12) !important;
+}
+body.ra-app select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  padding-right: 46px !important;
+  background-color: #fffdf5 !important;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #405866 50%),
+    linear-gradient(135deg, #405866 50%, transparent 50%),
+    linear-gradient(180deg, rgba(213,196,159,.28), rgba(157,131,79,.18)) !important;
+  background-position:
+    calc(100% - 18px) calc(50% - 1px),
+    calc(100% - 12px) calc(50% - 1px),
+    100% 0 !important;
+  background-size: 6px 6px, 6px 6px, 38px 100% !important;
+  background-repeat: no-repeat !important;
+}
+body.ra-app :is(input,textarea) {
+  background-color: #fffdf5 !important;
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.92), rgba(248,241,224,.72)),
+    repeating-linear-gradient(0deg, rgba(91,70,36,.018) 0 1px, transparent 1px 20px) !important;
+}
+body.ra-app :is(input,textarea):focus {
+  background-color: #fff !important;
+  background-image: none !important;
+}
+body.ra-app select:focus {
+  background-color: #fff !important;
+}
+body.ra-manager :is(.table-wrap,.tabs,.subtabs,.skill-prob-wrap,.log,.help-output) {
+  overscroll-behavior-y: auto !important;
+}
+
+/* v90.8.325: illustrated ledger redesign using generated reusable UI assets. */
+body.ra-app > main,
+body.ra-manager:not(.ra-hub) :is(.panel,.card,.help-card,.tab-panel,.github-public-db-panel),
+body.ra-hub header {
+  background-image:
+    linear-gradient(90deg, rgba(117,88,42,.035), transparent 22%, transparent 78%, rgba(117,88,42,.035)),
+    url("assets/ui/paper-texture.webp") !important;
+  background-repeat: no-repeat, repeat !important;
+  background-size: 100% 100%, 512px 512px !important;
+}
+body.ra-manager:not(.ra-hub) :is(.panel,.card,.help-card,.tab-panel,.github-public-db-panel) {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+body.ra-manager:not(.ra-hub) :is(.panel,.card,.help-card,.tab-panel,.github-public-db-panel) > * {
+  position: relative;
+  z-index: 1;
+}
+body.ra-database main > .panel:first-child::after,
+body.ra-progress #dayManagementPanel::after,
+body.ra-help main::after {
+  content:"";
+  position:absolute;
+  right:-44px;
+  bottom:-58px;
+  width:300px;
+  aspect-ratio:1;
+  background:center/contain no-repeat url("assets/ui/alchemy-watermark-1.png");
+  opacity:.075;
+  pointer-events:none;
+  z-index:0;
+}
+body.ra-progress #dayManagementPanel::after {
+  background-image:url("assets/ui/emblem-inn.png");
+  opacity:.07;
+}
+body.ra-manager .toolbar,
+body.ra-manager :is(.filter-bar,.filter-panel,.table-toolbar,.section-actions,.subnav-block,.tab-block) {
+  border:1px solid rgba(147,116,62,.48) !important;
+  background:
+    linear-gradient(180deg, rgba(250,246,236,.94), rgba(232,220,194,.9)),
+    url("assets/ui/paper-texture.webp") !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.8), 0 3px 10px rgba(55,42,25,.11) !important;
+}
+body.ra-manager .toolbar button:not(.danger):not(.ghost),
+body.ra-manager .section-actions button:not(.danger):not(.ghost) {
+  background:linear-gradient(180deg,#395d78,#243f57) !important;
+}
+body.ra-manager .toolbar button.ghost,
+body.ra-manager .section-actions button.ghost {
+  background:linear-gradient(180deg,#fffdf7,#e9ddc4) !important;
+}
+body.ra-manager table {
+  border-collapse:separate !important;
+  border-spacing:0 !important;
+}
+body.ra-manager table thead th {
+  position:sticky;
+  top:0;
+  z-index:8;
+  color:#fff7dc !important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.08),transparent),
+    linear-gradient(180deg,#35556d,#233e54) !important;
+  border-bottom:2px solid #ba9141 !important;
+  box-shadow:0 2px 0 rgba(62,45,22,.18);
+}
+body.ra-manager table tbody tr:nth-child(even) td {
+  background-color:rgba(222,207,176,.16) !important;
+}
+body.ra-manager table tbody tr:hover td {
+  background-color:rgba(181,138,56,.14) !important;
+  box-shadow:inset 0 1px rgba(181,138,56,.18), inset 0 -1px rgba(181,138,56,.18);
+}
+body.ra-manager table tbody tr:focus-within td:first-child,
+body.ra-manager table tbody tr:hover td:first-child {
+  box-shadow:inset 4px 0 #b58a38 !important;
+}
+body.ra-hub .tabs button {
+  position:relative;
+  overflow:hidden;
+}
+body.ra-hub .tabs button::before {
+  content:"";
+  width:25px;
+  height:25px;
+  margin-right:7px;
+  display:inline-block;
+  vertical-align:middle;
+  background:center/contain no-repeat url("assets/ui/emblem-antique.png");
+  opacity:.72;
+}
+body.ra-hub .tabs button[data-target="progress"]::before { background-image:url("assets/ui/emblem-quest.png"); }
+body.ra-hub .tabs button[data-target="help"]::before { background-image:url("assets/ui/alchemy-watermark-2.png"); }
+body.ra-hub .tabs button.active::before { filter:brightness(0) invert(1); opacity:.9; }
+.ra-dirty-state {
+  position:fixed;
+  right:14px;
+  bottom:14px;
+  z-index:9998;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  min-height:34px;
+  padding:7px 12px;
+  border:1px solid #846b3f;
+  border-radius:999px;
+  color:#355342;
+  background:rgba(255,250,238,.96);
+  box-shadow:0 8px 24px rgba(29,22,13,.22);
+  font-size:12px;
+  font-weight:900;
+  pointer-events:none;
+}
+.ra-dirty-state::before { content:"✓"; color:#2f6746; }
+.ra-dirty-state.is-dirty {
+  color:#6c2f3d;
+  border-color:#a16f49;
+  background:rgba(255,244,226,.98);
+}
+.ra-dirty-state.is-dirty::before { content:"●"; color:#a13c3c; }
+body.ra-app :is(.empty,.empty-state,[data-empty-state]) {
+  min-height:120px;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  padding:28px;
+  color:#6a675e;
+  border:1px dashed rgba(145,111,54,.55);
+  border-radius:8px;
+  background:rgba(255,252,243,.78) !important;
+}
+@media(max-width:720px){
+  .ra-dirty-state{right:8px;bottom:8px}
+  body.ra-manager table thead th{top:0}
+}
+
+/* Illustrated chapter headers. */
+body.ra-manager .title-card,
+body.ra-progress .header-inner,
+body.ra-help .title-card { position:relative; overflow:hidden; isolation:isolate; }
+body.ra-manager .title-card > *,
+body.ra-progress .header-inner > *,
+body.ra-help .title-card > * { position:relative; z-index:1; }
+body.ra-database .title-card::before,
+body.ra-progress .header-inner::after,
+body.ra-help .title-card::before {
+  content:"";
+  position:absolute;
+  right:14px;
+  top:50%;
+  width:190px;
+  height:150px;
+  transform:translateY(-50%);
+  background:center/contain no-repeat url("assets/ui/emblem-antique.png");
+  opacity:.085;
+  pointer-events:none;
+  z-index:0;
+}
+body.ra-hub header { position:relative; isolation:isolate; }
+body.ra-hub header > * { position:relative; z-index:1; }
+body.ra-progress .header-inner::after { background-image:url("assets/ui/emblem-quest.png"); opacity:.11; }
+body.ra-help .title-card::before { background-image:url("assets/ui/alchemy-watermark-2.png"); opacity:.075; }
+@media(max-width:720px){
+  body.ra-database .title-card::before,
+  body.ra-progress .header-inner::after,
+  body.ra-help .title-card::before { width:120px; height:100px; right:4px; opacity:.055; }
+}
+
+/* ========================================================================== */
+/* v90.8.392 — 工房掲示板 / 錬金術施設レイアウト                              */
+/* 旧「開いた魔導書」型の一枚面を廃止し、画像資産を使った独立パネル構成へ変更。 */
+/* ========================================================================== */
+body.ra-app{
+  --workshop-wall:#20282a;
+  --workshop-wall-2:#151c1e;
+  --workshop-brass:#b78a43;
+  --workshop-ink:#30261d;
+  min-height:100svh;
+  background:
+    linear-gradient(180deg,rgba(8,14,15,.18),rgba(8,14,15,.46)),
+    radial-gradient(circle at 14% 4%,rgba(217,174,101,.19),transparent 30rem),
+    radial-gradient(circle at 88% 12%,rgba(95,136,139,.18),transparent 34rem),
+    linear-gradient(135deg,var(--workshop-wall),var(--workshop-wall-2)) !important;
+  background-attachment:fixed !important;
+}
+body.ra-app::before,
+body.ra-app::after{
+  content:"";
+  position:fixed;
+  z-index:-1;
+  pointer-events:none;
+  opacity:.105;
+  filter:sepia(.15) saturate(.85);
+}
+body.ra-app::before{
+  width:min(43vw,540px);height:min(43vw,540px);left:-8vw;top:8vh;
+  background:center/contain no-repeat url("assets/ui/alchemy-watermark-2.png");
+  transform:rotate(-8deg);
+}
+body.ra-app::after{
+  width:min(38vw,480px);height:min(38vw,480px);right:-5vw;bottom:3vh;
+  background:center/contain no-repeat url("assets/ui/alchemy-watermark-3.png");
+  transform:rotate(11deg);
+}
+
+/* ページ全体を囲う本の表紙・見開き罫線を解除する。 */
+body.ra-app > main{
+  position:relative;
+  width:min(1180px,calc(100% - 28px)) !important;
+  margin:0 auto !important;
+  padding:8px 0 44px !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  overflow:visible !important;
+}
+body.ra-app > main::before,
+body.ra-app > main::after{display:none !important;content:none !important}
+
+/* タイトルは「工房の看板」として独立表示。 */
+body.ra-app > header{
+  width:min(1180px,calc(100% - 28px));
+  margin:0 auto;
+  padding:20px 0 8px;
+}
+body.ra-app .hero,
+body.ra-app .title-card,
+body.ra-app .header-inner{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(207,165,91,.72) !important;
+  border-radius:18px !important;
+  background:
+    linear-gradient(100deg,rgba(25,34,35,.97),rgba(39,48,48,.94)),
+    url("assets/ui/paper-texture.webp") center/420px auto repeat !important;
+  color:#fff8ea !important;
+  box-shadow:0 14px 34px rgba(0,0,0,.28),inset 0 0 0 3px rgba(255,255,255,.035) !important;
+}
+body.ra-app .hero::before,
+body.ra-app .title-card::before,
+body.ra-app .header-inner::before{
+  content:"" !important;
+  display:block !important;
+  position:absolute;
+  width:170px;height:170px;
+  right:18px;top:50%;
+  transform:translateY(-50%);
+  background:center/contain no-repeat url("assets/ui/alchemy-watermark-1.png") !important;
+  opacity:.14 !important;
+  pointer-events:none;
+}
+body.ra-app .hero h1,
+body.ra-app .title-card h1,
+body.ra-app .header-inner h1{color:#fffaf0 !important;text-shadow:0 2px 9px rgba(0,0,0,.34)}
+body.ra-app .hero .subtitle,
+body.ra-app .title-card .subtitle,
+body.ra-app .header-inner .subtitle,
+body.ra-app .hero .build{color:#e8dcc7 !important}
+body.ra-app .hero-brand{color:#ddbd80 !important;border-color:rgba(221,189,128,.48) !important}
+
+/* 内容は一枚の本ではなく、机上へ並べた台帳・依頼票として分割する。 */
+body.ra-app .panel,
+body.ra-app .card,
+body.ra-app .section-card,
+body.ra-app .hub-card,
+body.ra-app details.help-card,
+body.ra-app .branch-group,
+body.ra-app .recipe-category-group,
+body.ra-app .base-weapon{
+  position:relative;
+  border:1px solid rgba(116,82,45,.36) !important;
+  background:
+    linear-gradient(rgba(255,251,242,.94),rgba(249,240,224,.94)),
+    url("assets/ui/paper-texture.webp") center/360px auto repeat !important;
+  box-shadow:0 10px 25px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.8) !important;
+}
+body.ra-app .panel{
+  border-radius:16px !important;
+  margin-block:14px !important;
+}
+body.ra-app .panel::after{
+  content:"";
+  position:absolute;
+  left:12px;right:12px;top:0;height:3px;
+  border-radius:0 0 999px 999px;
+  background:linear-gradient(90deg,transparent,var(--workshop-brass),transparent);
+  opacity:.7;
+  pointer-events:none;
+}
+body.ra-app .card,
+body.ra-app .hub-card,
+body.ra-app .section-card{border-radius:13px !important}
+body.ra-app .card:hover,
+body.ra-app .hub-card:hover{box-shadow:0 14px 30px rgba(0,0,0,.23),inset 0 1px rgba(255,255,255,.82) !important}
+
+/* ナビゲーションは真鍮ラベル風。 */
+body.ra-app .tabs,
+body.ra-app .facility-switch,
+body.ra-app .section-tabs,
+body.ra-app .toolbar{
+  border-radius:14px;
+  background:rgba(16,23,24,.82) !important;
+  border:1px solid rgba(195,154,84,.4) !important;
+  box-shadow:0 8px 18px rgba(0,0,0,.18);
+  padding:8px !important;
+}
+body.ra-app .tabs button,
+body.ra-app .facility-switch button,
+body.ra-app .section-tabs button{
+  border-color:rgba(183,138,67,.58) !important;
+  background:rgba(245,235,216,.94) !important;
+  color:#30261d !important;
+  box-shadow:none !important;
+}
+body.ra-app .tabs button.active,
+body.ra-app .facility-switch button.active,
+body.ra-app .section-tabs button.active{
+  background:linear-gradient(180deg,#c69a53,#9a6d32) !important;
+  color:#fff !important;
+  border-color:#e0be7e !important;
+}
+
+/* 施設ごとの既存エンブレムをタブへ使用する。 */
+body.ra-facility .facility-switch button{display:inline-flex;align-items:center;gap:8px}
+body.ra-facility .facility-switch button::before{
+  content:"";width:25px;height:25px;flex:0 0 25px;
+  background:center/contain no-repeat url("assets/ui/alchemy-watermark-1.png");
+}
+body.ra-facility .facility-switch button[data-facility="smith"]::before{background-image:url("assets/ui/emblem-blacksmith.png")}
+body.ra-facility .facility-switch button[data-facility="apothecary"]::before{background-image:url("assets/ui/emblem-apothecary.png")}
+body.ra-facility .facility-switch button[data-facility="antique"]::before{background-image:url("assets/ui/emblem-antique.png")}
+body.ra-facility .facility-switch button[data-facility="eatery"]::before{background-image:url("assets/ui/emblem-eatery.png")}
+body.ra-facility .facility-heading-emblem{
+  width:54px !important;height:54px !important;border-radius:14px;
+  border:1px solid rgba(154,108,50,.38);
+  background-color:rgba(255,249,236,.76) !important;
+  box-shadow:inset 0 0 0 3px rgba(255,255,255,.48);
+}
+body.ra-facility[data-facility="smith"] .facility-heading-emblem{background-image:url("assets/ui/emblem-blacksmith.png") !important}
+body.ra-facility[data-facility="apothecary"] .facility-heading-emblem{background-image:url("assets/ui/emblem-apothecary.png") !important}
+body.ra-facility[data-facility="antique"] .facility-heading-emblem{background-image:url("assets/ui/emblem-antique.png") !important}
+body.ra-facility[data-facility="eatery"] .facility-heading-emblem{background-image:url("assets/ui/emblem-eatery.png") !important}
+
+/* 管理トップは機能ごとの紋章付きボード。 */
+body.ra-hub .hub-card::before,
+body.ra-manager .section-card::before{
+  content:"";
+  position:absolute;right:10px;bottom:8px;width:74px;height:74px;
+  background:center/contain no-repeat url("assets/ui/alchemy-watermark-3.png");
+  opacity:.055;pointer-events:none;
+}
+body.ra-hub .hub-card:nth-child(2n)::before{background-image:url("assets/ui/emblem-quest.png")}
+body.ra-hub .hub-card:nth-child(3n)::before{background-image:url("assets/ui/emblem-crystal.png")}
+
+/* フォームは机上の紙面でも読みやすさを優先。 */
+body.ra-app input,
+body.ra-app select,
+body.ra-app textarea{
+  background:rgba(255,253,247,.96) !important;
+  border-color:rgba(115,82,48,.42) !important;
+  color:var(--workshop-ink,#30261d) !important;
+}
+body.ra-app footer{color:#d8cbb8 !important;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+
+@media(max-width:720px){
+  body.ra-app::before,body.ra-app::after{opacity:.065}
+  body.ra-app > main,body.ra-app > header{width:min(100% - 16px,1180px) !important}
+  body.ra-app .hero::before,body.ra-app .title-card::before,body.ra-app .header-inner::before{width:115px;height:115px;right:-8px}
+  body.ra-app .tabs,body.ra-app .facility-switch,body.ra-app .section-tabs{border-radius:11px}
+}
+
+/* ========================================================================== */
+/* v90.8.392 — 明るい工房回廊 / 施設カードレイアウト                           */
+/* 暗い壁面表現を廃止し、紙テクスチャと既存紋章画像を淡い背景へ配置する。       */
+/* ========================================================================== */
+html{background:#f5efe3 !important;color-scheme:light !important}
+body.ra-app{
+  --ra-desk:#f5efe3;
+  --ra-desk-2:#eaf1ed;
+  --ra-page:#fffaf0;
+  --ra-page-2:#f8edd6;
+  --ra-ink:#302a24;
+  --ra-muted:#70665b;
+  --ra-navy:#466979;
+  --ra-navy-2:#2f5262;
+  --ra-burgundy:#9a5963;
+  --ra-burgundy-2:#7b404b;
+  --ra-green:#5e806d;
+  --ra-brass:#b78a43;
+  --workshop-wall:#f7f1e5;
+  --workshop-wall-2:#e8f0eb;
+  --workshop-brass:#b78a43;
+  --workshop-ink:#302a24;
+  color:var(--ra-ink) !important;
+  background:
+    linear-gradient(rgba(255,255,255,.62),rgba(255,255,255,.48)),
+    radial-gradient(circle at 9% 4%,rgba(223,187,117,.24),transparent 31rem),
+    radial-gradient(circle at 92% 10%,rgba(124,170,165,.20),transparent 34rem),
+    url("assets/ui/paper-texture.webp") center/560px auto repeat,
+    linear-gradient(135deg,#fbf4e6,#e9f1ec) !important;
+  background-attachment:fixed !important;
+}
+body.ra-app::before,body.ra-app::after{opacity:.065 !important;filter:sepia(.05) saturate(.7) !important}
+body.ra-app::before{background-image:url("assets/ui/alchemy-watermark-2.png") !important}
+body.ra-app::after{background-image:url("assets/ui/alchemy-watermark-3.png") !important}
+body.ra-app > header{color:var(--ra-ink) !important}
+body.ra-app .hero,
+body.ra-app .title-card,
+body.ra-app .header-inner{
+  color:var(--ra-ink) !important;
+  border:1px solid rgba(169,128,62,.48) !important;
+  background:
+    linear-gradient(102deg,rgba(255,251,241,.97),rgba(245,250,247,.95)),
+    url("assets/ui/paper-texture.webp") center/430px auto repeat !important;
+  box-shadow:0 10px 28px rgba(89,70,44,.13),inset 0 0 0 3px rgba(255,255,255,.58) !important;
+}
+body.ra-app .hero::before,
+body.ra-app .title-card::before,
+body.ra-app .header-inner::before{opacity:.10 !important;filter:none !important}
+body.ra-app .hero h1,
+body.ra-app .title-card h1,
+body.ra-app .header-inner h1{color:#315566 !important;text-shadow:none !important}
+body.ra-app .hero .subtitle,
+body.ra-app .title-card .subtitle,
+body.ra-app .header-inner .subtitle{color:#6e655b !important}
+body.ra-app .hero .build,
+body.ra-app .title-card .build,
+body.ra-app .header-inner .build{color:#7b6748 !important;background:transparent !important;border:0 !important}
+body.ra-app .hero-brand{color:#8e6840 !important;border-color:rgba(142,104,64,.34) !important;background:rgba(255,255,255,.46) !important}
+
+body.ra-app .panel,
+body.ra-app .card,
+body.ra-app .section-card,
+body.ra-app .hub-card,
+body.ra-app details.help-card,
+body.ra-app .branch-group,
+body.ra-app .recipe-category-group,
+body.ra-app .sales-category-group,
+body.ra-app .base-weapon{
+  border-color:rgba(145,112,68,.30) !important;
+  background:
+    linear-gradient(rgba(255,252,245,.95),rgba(252,246,234,.95)),
+    url("assets/ui/paper-texture.webp") center/390px auto repeat !important;
+  box-shadow:0 8px 22px rgba(94,74,48,.11),inset 0 1px rgba(255,255,255,.9) !important;
+}
+body.ra-app .card:hover,body.ra-app .hub-card:hover{box-shadow:0 11px 25px rgba(94,74,48,.15),inset 0 1px rgba(255,255,255,.92) !important}
+body.ra-app .panel::after{background:linear-gradient(90deg,transparent,#c9a866,transparent) !important;opacity:.52 !important}
+
+body.ra-app .tabs,
+body.ra-app .facility-switch,
+body.ra-app .section-tabs,
+body.ra-app .toolbar{
+  background:rgba(255,251,242,.90) !important;
+  border:1px solid rgba(157,124,72,.26) !important;
+  box-shadow:0 5px 15px rgba(99,80,54,.08) !important;
+  backdrop-filter:blur(10px);
+}
+body.ra-app .tabs button,
+body.ra-app .facility-switch button,
+body.ra-app .section-tabs button{
+  border-color:rgba(142,111,70,.32) !important;
+  background:rgba(247,239,224,.96) !important;
+  color:#3e382f !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+}
+body.ra-app .tabs button.active,
+body.ra-app .facility-switch button.active,
+body.ra-app .section-tabs button.active{
+  background:linear-gradient(180deg,#7599a1,#527984) !important;
+  color:#fff !important;
+  border-color:#527984 !important;
+  box-shadow:0 3px 8px rgba(57,91,99,.18) !important;
+}
+body.ra-app button,
+body.ra-app .tab,
+body.ra-app .subtab,
+body.ra-app .tab-btn,
+body.ra-app .editor-tab-btn,
+body.ra-app .quest-category-btn{
+  background:linear-gradient(180deg,#6f929c,#527783) !important;
+  border-color:#456873 !important;
+  box-shadow:0 2px 0 #3f6069,0 4px 8px rgba(75,96,99,.14) !important;
+  color:#fff !important;
+  text-shadow:none !important;
+}
+body.ra-app button.secondary,body.ra-app .secondary{background:linear-gradient(180deg,#7d9b86,#5f806c) !important;border-color:#4e6d5b !important;box-shadow:0 2px 0 #496452,0 4px 8px rgba(75,96,80,.13) !important}
+body.ra-app button.ghost,body.ra-app .ghost{background:#f5ead7 !important;color:#443c33 !important;border-color:#cbb38d !important;box-shadow:none !important}
+body.ra-app button.danger,body.ra-app .danger{background:linear-gradient(180deg,#b76b70,#985058) !important}
+body.ra-app input,body.ra-app select,body.ra-app textarea{background:rgba(255,254,250,.98) !important;border-color:rgba(119,94,61,.36) !important;color:#302a24 !important}
+body.ra-app footer{color:#71665a !important;text-shadow:none !important}
+
+body.ra-facility .facility-switch button[data-facility="copyist"]::before{background-image:url("assets/ui/emblem-quest.png") !important}
+body.ra-facility[data-facility="copyist"] .facility-heading-emblem{background-image:url("assets/ui/emblem-quest.png") !important}
+body.ra-facility[data-facility="copyist"] main > .panel::after{background-image:none !important}
+body.ra-facility .daily-recipe-card{border-color:rgba(151,91,101,.34) !important;background:linear-gradient(rgba(255,252,247,.97),rgba(250,242,235,.97)),url("assets/ui/paper-texture.webp") center/390px auto repeat !important}
+body.ra-facility .daily-stock-ribbon{background:#9a5963 !important;color:#fff !important}
+body.ra-facility .daily-recipe-card::after{content:"";position:absolute;right:10px;bottom:8px;width:74px;height:74px;background:center/contain no-repeat url("assets/ui/emblem-quest.png");opacity:.055;pointer-events:none}
+
+@media(max-width:720px){
+  body.ra-app::before,body.ra-app::after{opacity:.04 !important}
+  body.ra-app .hero::before,body.ra-app .title-card::before,body.ra-app .header-inner::before{opacity:.075 !important}
+}
+
+/* v90.8.392: version information is shown once at the page top, never floating. */
+body.ra-app .ra-build-info{
+  position:static !important;inset:auto !important;z-index:auto !important;
+  width:min(1180px,calc(100% - 28px));margin:6px auto 0 !important;padding:4px 2px !important;
+  border:0 !important;border-radius:0 !important;background:transparent !important;box-shadow:none !important;
+  color:var(--ra-muted,#70665b) !important;text-align:right !important;backdrop-filter:none !important;
+}
+@media(max-width:720px){body.ra-app .ra-build-info{text-align:left !important;width:min(100% - 20px,1180px)}}
+
+
+/* v90.8.392: fine spacing and edge readability */
+body.ra-app > main{padding:clamp(18px,2.4vw,30px)!important;}
+body.ra-app :is(.panel,.big-section,.tab-panel){padding:clamp(15px,2vw,24px)!important;}
+body.ra-app :is(.card,.mini-card,.status-box,.notice,.result,.facility-summary,.facility-work-block,.facility-product-body,.help-body){padding:clamp(11px,1.5vw,17px)!important;}
+body.ra-app :is(.panel,.card,.notice,.status-box,.result,.facility-product,.facility-upgrade-box,.table-wrap,.modal-card,.weapon-modal-dialog){overflow-clip-margin:8px;}
+body.ra-app :is(.panel,.card,.facility-product-body,.modal-body,.weapon-modal-body)>:first-child{margin-top:0!important;}
+body.ra-app :is(.panel,.card,.facility-product-body,.modal-body,.weapon-modal-body)>:last-child{margin-bottom:0!important;}
+body.ra-app :is(.buttons,.tabs,.subtabs,.tab-nav,.quest-category-bar,.section-actions,.filter-actions,.facility-actions,.help-actions,.monster-output-actions,.modal-foot){gap:10px!important;margin-block:12px!important;padding:2px!important;}
+body.ra-app :is(button,.tab,.subtab,.tab-btn,.quest-category-btn){min-height:40px;padding:8px 13px!important;line-height:1.35;}
+body.ra-app :is(input,select,textarea){min-height:40px;padding:8px 10px!important;}
+body.ra-app :is(label,.field){min-width:0;}
+body.ra-app :is(table th,table td){padding:9px 10px!important;}
+body.ra-app details>summary{padding:10px 12px!important;}
+body.ra-app .facility-product-meta{gap:7px!important;margin-block:8px!important;}
+body.ra-app .facility-chip,body.ra-app .pill{padding:4px 8px!important;line-height:1.35;}
+body.ra-app :is(.modal-body,.weapon-modal-body,.dialog-body){padding:16px!important;}
+body.ra-app :is(.modal-head,.weapon-modal-header,.dialog-head){padding:13px 16px!important;}
+@media(max-width:720px){body.ra-app>main{padding:13px!important}body.ra-app :is(.panel,.big-section,.tab-panel){padding:13px!important}body.ra-app :is(.card,.mini-card,.status-box,.notice,.result,.facility-product-body,.help-body){padding:11px!important}}
+
+/* v90.8.392: recipe sales layout */
+body.ra-app .copyist-manager{display:grid;gap:14px;padding:16px;border:1px solid var(--line);border-radius:14px;background:rgba(255,253,248,.76)}
+body.ra-app .copyist-manager>.notice{margin:0!important}
+body.ra-app .copyist-control-grid{display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(210px,300px) minmax(160px,190px)!important;gap:14px!important;align-items:start!important;margin:0!important}
+body.ra-app .copyist-area-panel,body.ra-app .copyist-specified-field{min-width:0;padding:12px;border:1px solid #dfccb0;border-radius:12px;background:rgba(255,255,255,.72)}
+body.ra-app .copyist-area-grid{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px!important;margin-top:8px!important}
+body.ra-app .copyist-area-check{display:flex!important;width:100%;min-width:0;padding:8px 10px!important;line-height:1.35}
+body.ra-app .copyist-area-check span{overflow-wrap:anywhere}
+body.ra-app .copyist-specified-field{display:grid;gap:8px}
+body.ra-app .copyist-action-stack{display:grid;gap:9px;align-self:stretch}
+body.ra-app .copyist-action-stack button{width:100%!important;min-width:0!important;text-align:center!important;margin:0!important}
+body.ra-app .copyist-stat-row{display:flex;flex-wrap:wrap;gap:7px;padding-inline:2px}
+body.ra-app .copyist-result-grid{gap:12px!important;margin-top:0!important}
+body.ra-app .copyist-result-card{padding:14px!important}
+@media(max-width:980px){body.ra-app .copyist-control-grid{grid-template-columns:minmax(0,1fr) minmax(210px,280px)!important}body.ra-app .copyist-action-stack{grid-column:1/-1;grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){body.ra-app .copyist-control-grid{grid-template-columns:1fr!important}body.ra-app .copyist-action-stack{grid-column:auto;grid-template-columns:1fr}body.ra-app .copyist-area-grid{grid-template-columns:1fr}}
+/* v90.8.392: encounter drop UI */
+body.ra-app .drop-mode-switch{display:grid;grid-template-columns:repeat(2,minmax(0,220px));gap:8px;margin:12px 0 14px}
+body.ra-app .drop-mode-btn{width:100%;text-align:center}
+body.ra-app .drop-mode-btn:not(.active){filter:saturate(.55) brightness(.92);opacity:.82}
+body.ra-app .drop-check-card{display:flex!important;align-items:flex-start;gap:10px;margin:12px 0!important;cursor:pointer}
+body.ra-app .drop-check-card input,body.ra-app .encounter-dismantle-check input{width:auto!important;min-height:0;margin-top:3px}
+body.ra-app .encounter-drop-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;margin:12px 0}
+body.ra-app .encounter-drop-actions button{width:100%!important;min-width:0!important;text-align:center!important}
+body.ra-app .encounter-drop-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin:12px 0}
+body.ra-app .encounter-drop-instance{position:relative;display:grid;gap:7px;padding:13px 14px 14px;border:1px solid var(--line);border-radius:12px;background:rgba(255,253,248,.82);min-width:0}
+body.ra-app .encounter-drop-title{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-right:54px}
+body.ra-app .encounter-dismantle-check{display:flex;align-items:flex-start;gap:8px;padding:8px;border-radius:9px;background:rgba(244,235,217,.78);font-weight:700}
+body.ra-app .encounter-drop-remove{position:absolute;right:10px;top:10px;min-height:30px!important;padding:4px 8px!important;font-size:12px}
+body.ra-app .encounter-drop-result-list{display:grid;gap:14px}
+body.ra-app .encounter-drop-result-group{padding:13px;border:1px solid var(--line);border-radius:12px;background:rgba(255,253,248,.7)}
+body.ra-app .encounter-drop-result-group h4{margin:0 0 5px}
+body.ra-app .drop-copy-actions{margin-top:14px!important}
+@media(max-width:600px){body.ra-app .drop-mode-switch{grid-template-columns:1fr}body.ra-app .encounter-drop-list{grid-template-columns:1fr}}
+
+
+/* v90.8.392: encounter-first drops and event acquisition */
+body.ra-app .ra-inline-fold{margin:16px 0;border:1px solid var(--line);border-radius:13px;background:rgba(255,253,248,.72);overflow:visible}
+body.ra-app .ra-inline-fold>summary{cursor:pointer;padding:12px 14px;font-weight:900;list-style:none;background:rgba(244,235,220,.72)}
+body.ra-app .ra-inline-fold>summary::-webkit-details-marker{display:none}
+body.ra-app .ra-inline-fold>summary::before{content:'▶';display:inline-block;margin-right:8px;color:var(--accent2);transition:transform .15s ease}
+body.ra-app .ra-inline-fold[open]>summary::before{transform:rotate(90deg)}
+body.ra-app .ra-inline-fold-body{padding:14px}
+body.ra-app .event-reward-panel{margin-top:14px}
+body.ra-app .event-reward-card{padding:15px}
+body.ra-app .event-reward-card h3{margin-top:0}
+body.ra-app .event-reward-list{display:grid;gap:9px;margin:12px 0}
+body.ra-app .event-reward-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.58)}
+body.ra-app .event-reward-check{display:flex;align-items:flex-start;gap:9px;margin:0;min-width:0;flex:1}
+body.ra-app .event-reward-check input{width:auto;min-width:18px;margin-top:2px}
+body.ra-app .event-reward-choice{display:flex;align-items:center;gap:7px;margin:0;flex:0 1 260px}
+body.ra-app .event-reward-choice select{min-width:130px}
+body.ra-app .event-reward-total{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:11px 12px;margin:12px 0;border-radius:10px;background:rgba(232,244,239,.72);border:1px solid rgba(55,116,91,.24)}
+body.ra-app .individual-drop-fold{margin-top:18px}
+body.ra-app .encounter-drop-title{padding-right:0!important}
+@media(max-width:680px){body.ra-app .event-reward-row,body.ra-app .event-reward-total{display:grid;grid-template-columns:1fr}body.ra-app .event-reward-choice{width:100%;max-width:none}body.ra-app .event-reward-choice select{width:100%}}
+
+/* v90.8.392: フォーム部品の種類別サイズを分離。テキスト入力用の width:100% をチェックボックスへ適用しない。 */
+body.ra-app input[type="checkbox"],
+body.ra-app input[type="radio"]{
+  appearance:auto!important;
+  -webkit-appearance:auto!important;
+  width:18px!important;
+  height:18px!important;
+  min-width:18px!important;
+  min-height:18px!important;
+  max-width:18px!important;
+  max-height:18px!important;
+  padding:0!important;
+  margin:0!important;
+  border-radius:3px;
+  flex:0 0 18px!important;
+  vertical-align:middle;
+}
+body.ra-app input[type="checkbox"]+span,
+body.ra-app input[type="radio"]+span{min-width:0}
+body.ra-progress #questShowOffWrap{
+  display:inline-flex!important;
+  width:auto!important;
+  max-width:100%!important;
+  align-items:center!important;
+  gap:7px!important;
+  margin:0!important;
+  color:var(--ink)!important;
+  line-height:1.45!important;
+  white-space:normal!important;
+}
+body.ra-progress #questShowOffWrap input{margin:0!important}
+
