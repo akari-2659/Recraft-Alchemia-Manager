@@ -1,12 +1,8 @@
 {
-  "format": "recraft-alchemia-github-master",
+  "format": "recraft-alchemia-initial-data",
   "version": "90.8.424",
-  "updatedAt": "2026-08-08T04:47:40Z",
   "encoding": "UTF-8",
-  "sourceRepository": "akari-2659/Recraft-Alchemia-Manager",
-  "description": "Recraft-Alchemiaのキャラシ・施設・管理画面で共通参照する静的マスターデータ。エリア解放キーは平文を含めず、照合用SHA-256のみ収録する。",
-  "gmAllUnlockKeyHash": "99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb",
-  "recordCount": 2471,
+  "description": "Recraft Alchemia integrated DB: sparse quest fixed/area-event progression, recipe-merchant area encounters, reward-item tables with low-weight processed materials, base random events, base-quest random-event routing, full-detail random reward copy, and modal unlock-area selection UI.",
   "data": {
     "item_types": [
       {
@@ -25038,7 +25034,9 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "wpn_branch_outskirts_grass_staff_1",
@@ -25075,6 +25073,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "植生",
@@ -25117,6 +25117,8 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "植生",
@@ -25157,6 +25159,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "植生",
@@ -25197,6 +25201,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "獣牙",
@@ -25237,6 +25243,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "植生",
@@ -25277,6 +25285,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "疾駆",
@@ -25317,6 +25327,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "植生",
@@ -25357,6 +25369,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "獣牙",
@@ -25397,6 +25411,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "植生",
@@ -25437,6 +25453,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "妨害",
@@ -25477,6 +25495,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "植生",
@@ -25516,6 +25536,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "矢弾依存",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -25556,6 +25578,8 @@
         "updatedAt": "2026-08-02",
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "矢弾依存",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -25596,6 +25620,8 @@
         "updatedAt": "2026-08-02",
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "矢弾依存",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -25636,6 +25662,8 @@
         "updatedAt": "2026-08-02",
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "矢弾依存",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -25676,6 +25704,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -25716,6 +25746,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -25756,6 +25788,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -25796,6 +25830,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -25836,6 +25872,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -25879,6 +25917,8 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "闇",
         "branchClass": "通常派生",
         "branchType": "菌核",
@@ -25921,6 +25961,8 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "植生",
@@ -25963,6 +26005,8 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "反撃",
@@ -26012,6 +26056,8 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchType": "荊棘",
         "branchDisplayOrder": 9
@@ -26051,6 +26097,8 @@
         "skill": "魔法",
         "checkType": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "target": "",
         "element": "",
         "branchClass": "通常派生",
@@ -26092,6 +26140,8 @@
         "skill": "祈祷",
         "checkType": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "target": "",
         "element": "",
         "branchClass": "通常派生",
@@ -26133,6 +26183,8 @@
         "skill": "祈祷",
         "checkType": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "target": "",
         "element": "",
         "branchClass": "通常派生",
@@ -26174,6 +26226,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "泥核",
@@ -26214,6 +26268,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "泥核",
@@ -26254,6 +26310,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "泥核",
@@ -26294,6 +26352,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "泥核",
@@ -26334,6 +26394,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "泥核",
@@ -26374,6 +26436,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "水",
         "branchClass": "通常派生",
         "branchType": "泥核",
@@ -26414,6 +26478,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "泥核",
@@ -26454,6 +26520,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "泥核",
@@ -26493,6 +26561,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "矢弾依存",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -26533,6 +26603,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "矢弾依存",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -26573,6 +26645,8 @@
         "updatedAt": "2026-08-02",
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "矢弾依存",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -26613,6 +26687,8 @@
         "updatedAt": "2026-08-02",
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "矢弾依存",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -26653,6 +26729,8 @@
         "updatedAt": "2026-08-02",
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "矢弾依存",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -26693,6 +26771,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -26733,6 +26813,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -26773,6 +26855,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "水",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -26816,6 +26900,8 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "水",
         "branchClass": "通常派生",
         "branchType": "泥核",
@@ -26865,6 +26951,8 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchType": "泥核",
         "branchDisplayOrder": 6
@@ -26904,6 +26992,8 @@
         "skill": "魔法",
         "checkType": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "target": "",
         "element": "",
         "branchClass": "通常派生",
@@ -26945,6 +27035,8 @@
         "skill": "魔法",
         "checkType": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "target": "",
         "element": "",
         "branchClass": "通常派生",
@@ -26986,6 +27078,8 @@
         "skill": "祈祷",
         "checkType": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "target": "",
         "element": "",
         "branchClass": "通常派生",
@@ -27027,6 +27121,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "無",
         "branchClass": "通常派生",
         "branchType": "異界",
@@ -27067,6 +27163,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "可変",
         "branchClass": "通常派生",
         "branchType": "異界",
@@ -27107,6 +27205,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "無",
         "branchClass": "通常派生",
         "branchType": "異界",
@@ -27147,6 +27247,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "風",
         "branchClass": "通常派生",
         "branchType": "異界",
@@ -27187,6 +27289,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "水",
         "branchClass": "通常派生",
         "branchType": "異界",
@@ -27227,6 +27331,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "異界",
@@ -27266,6 +27372,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "矢弾依存",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -27306,6 +27414,8 @@
         "updatedAt": "2026-08-02",
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "矢弾依存",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -27346,6 +27456,8 @@
         "updatedAt": "2026-08-02",
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "矢弾依存",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -27386,6 +27498,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "無",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -27426,6 +27540,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "光",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -27466,6 +27582,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -27509,6 +27627,8 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "光",
         "branchClass": "通常派生",
         "branchType": "異界",
@@ -27551,6 +27671,8 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "無",
         "branchClass": "通常派生",
         "branchType": "異界",
@@ -27600,6 +27722,8 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchType": "異界",
         "branchDisplayOrder": 1
@@ -27639,6 +27763,8 @@
         "skill": "魔法",
         "checkType": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "target": "",
         "element": "",
         "branchClass": "通常派生",
@@ -27680,6 +27806,8 @@
         "skill": "祈祷",
         "checkType": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "target": "",
         "element": "",
         "branchClass": "通常派生",
@@ -27721,6 +27849,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "鉱石",
@@ -27761,6 +27891,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "鉱石",
@@ -27801,6 +27933,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "鉱石",
@@ -27841,6 +27975,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "鉱石",
@@ -27881,6 +28017,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "鉱石",
@@ -27921,6 +28059,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "魔晶",
@@ -27960,6 +28100,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "矢弾依存",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -28000,6 +28142,8 @@
         "updatedAt": "2026-08-02",
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "矢弾依存",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -28040,6 +28184,8 @@
         "updatedAt": "2026-08-02",
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "矢弾依存",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -28080,6 +28226,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -28120,6 +28268,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -28160,6 +28310,8 @@
         "equipmentUpgradeTarget": "",
         "unlockFacility": "鍛冶屋",
         "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "offhandBonus": "",
         "branchClass": "通常派生",
@@ -28203,6 +28355,8 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "鉱石",
@@ -28245,6 +28399,8 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
+        "ownerKey": "",
+        "createdBy": "",
         "element": "物",
         "branchClass": "通常派生",
         "branchType": "鉱石",
@@ -28294,6 +28450,8 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchType": "鎖鋼",
         "branchDisplayOrder": 3
@@ -28333,6 +28491,8 @@
         "skill": "魔法",
         "checkType": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "target": "",
         "element": "",
         "branchClass": "通常派生",
@@ -28374,6 +28534,8 @@
         "skill": "祈祷",
         "checkType": "",
         "unlockFacility": "鍛冶屋",
+        "ownerKey": "",
+        "createdBy": "",
         "target": "",
         "element": "",
         "branchClass": "通常派生",
@@ -38357,6 +38519,8 @@
         "tags": "調合,探索補助,高原,強風対策",
         "notes": "",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "limitedRecipePrice": "2200"
       },
       {
@@ -38387,6 +38551,8 @@
         "tags": "調合,探索補助,高原,雷対策",
         "notes": "",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "limitedRecipePrice": "2200"
       },
       {
@@ -38417,6 +38583,8 @@
         "tags": "料理,HP補助,おすすめ候補,おすすめ価格:80",
         "notes": "持ち込み調理代:45G / 今日のおすすめ価格:80G。食事効果は次の探索・依頼から帰還するまで継続し、同時に1種類のみ。",
         "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": "",
         "limitedRecipePrice": ""
       },
       {
@@ -38447,6 +38615,8 @@
         "tags": "料理,属性軽減,風,おすすめ候補,おすすめ価格:80",
         "notes": "持ち込み調理代:45G / 今日のおすすめ価格:80G。食事効果は次の探索・依頼から帰還するまで継続し、同時に1種類のみ。",
         "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": "",
         "limitedRecipePrice": ""
       },
       {
@@ -38477,6 +38647,8 @@
         "tags": "料理,攻撃補助,おすすめ候補,おすすめ価格:90",
         "notes": "持ち込み調理代:55G / 今日のおすすめ価格:90G。食事効果は次の探索・依頼から帰還するまで継続し、同時に1種類のみ。",
         "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": "",
         "limitedRecipePrice": ""
       },
       {
@@ -38507,6 +38679,8 @@
         "tags": "料理,MP補助,おすすめ候補,おすすめ価格:75",
         "notes": "持ち込み調理代:40G / 今日のおすすめ価格:75G。食事効果は次の探索・依頼から帰還するまで継続し、同時に1種類のみ。",
         "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": "",
         "limitedRecipePrice": ""
       },
       {
@@ -38537,6 +38711,8 @@
         "tags": "料理,疲労対策,おすすめ候補,おすすめ価格:85",
         "notes": "持ち込み調理代:50G / 今日のおすすめ価格:85G。食事効果は次の探索・依頼から帰還するまで継続し、同時に1種類のみ。",
         "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": "",
         "limitedRecipePrice": ""
       },
       {
@@ -38567,6 +38743,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 5,
         "limitedRecipePrice": "2800"
@@ -38599,6 +38777,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 6,
         "limitedRecipePrice": "3350"
@@ -38631,6 +38811,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 15,
         "limitedRecipePrice": ""
@@ -38663,6 +38845,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 2,
         "limitedRecipePrice": "2800"
@@ -38695,6 +38879,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 1,
         "limitedRecipePrice": "3350"
@@ -38727,6 +38913,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 12,
         "limitedRecipePrice": ""
@@ -38759,6 +38947,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 11,
         "limitedRecipePrice": "2800"
@@ -38791,6 +38981,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 7,
         "limitedRecipePrice": "3350"
@@ -38823,6 +39015,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 13,
         "limitedRecipePrice": ""
@@ -38855,6 +39049,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 11,
         "limitedRecipePrice": "2800"
@@ -38887,6 +39083,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 8,
         "limitedRecipePrice": "3350"
@@ -38919,6 +39117,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 15,
         "limitedRecipePrice": ""
@@ -38951,6 +39151,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 13,
         "limitedRecipePrice": "2800"
@@ -38983,6 +39185,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 14,
         "limitedRecipePrice": "3350"
@@ -39015,6 +39219,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 15,
         "limitedRecipePrice": ""
@@ -39047,6 +39253,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 3,
         "limitedRecipePrice": "2800"
@@ -39079,6 +39287,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 2,
         "limitedRecipePrice": "3350"
@@ -39111,6 +39321,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 4,
         "limitedRecipePrice": ""
@@ -39143,6 +39355,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 11,
         "limitedRecipePrice": "2800"
@@ -39175,6 +39389,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 13,
         "limitedRecipePrice": "3350"
@@ -39207,6 +39423,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 12,
         "limitedRecipePrice": ""
@@ -39239,6 +39457,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 4,
         "limitedRecipePrice": "2800"
@@ -39271,6 +39491,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 8,
         "limitedRecipePrice": "3350"
@@ -39303,6 +39525,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 5,
         "limitedRecipePrice": ""
@@ -39335,6 +39559,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 7,
         "limitedRecipePrice": "2800"
@@ -39367,6 +39593,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 8,
         "limitedRecipePrice": "3350"
@@ -39399,6 +39627,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 10,
         "limitedRecipePrice": ""
@@ -39431,6 +39661,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 5,
         "limitedRecipePrice": "2800"
@@ -39463,6 +39695,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 11,
         "limitedRecipePrice": "3350"
@@ -39495,6 +39729,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 14,
         "limitedRecipePrice": ""
@@ -39527,6 +39763,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 13,
         "limitedRecipePrice": "2800"
@@ -39559,6 +39797,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 12,
         "limitedRecipePrice": "3350"
@@ -39591,6 +39831,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 14,
         "limitedRecipePrice": ""
@@ -39623,6 +39865,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 4,
         "limitedRecipePrice": "2800"
@@ -39655,6 +39899,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 12,
         "limitedRecipePrice": "3350"
@@ -39687,6 +39933,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 9,
         "limitedRecipePrice": ""
@@ -39719,6 +39967,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 3,
         "limitedRecipePrice": "2800"
@@ -39751,6 +40001,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 7,
         "limitedRecipePrice": "3350"
@@ -39783,6 +40035,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 6,
         "limitedRecipePrice": ""
@@ -39815,6 +40069,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 13,
         "limitedRecipePrice": "2800"
@@ -39847,6 +40103,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 10,
         "limitedRecipePrice": "3350"
@@ -39879,6 +40137,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 14,
         "limitedRecipePrice": ""
@@ -39911,6 +40171,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 9,
         "limitedRecipePrice": "2800"
@@ -39943,6 +40205,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 8,
         "limitedRecipePrice": "3350"
@@ -39975,6 +40239,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 12,
         "limitedRecipePrice": ""
@@ -40007,6 +40273,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 1,
         "limitedRecipePrice": "2800"
@@ -40039,6 +40307,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 2,
         "limitedRecipePrice": "3400"
@@ -40071,6 +40341,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 6,
         "limitedRecipePrice": ""
@@ -40103,6 +40375,8 @@
         "tags": "武器派生,高原,★3,獣牙系統",
         "notes": "完成装備と同じ★3。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 13,
         "limitedRecipePrice": "2800"
@@ -40135,6 +40409,8 @@
         "tags": "武器派生,高原,★4,獣牙系統",
         "notes": "完成装備と同じ★4。自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 12,
         "limitedRecipePrice": "3400"
@@ -40167,6 +40443,8 @@
         "tags": "武器派生,高原,★5,嵐翼系統,ボス素材,ボス派生",
         "notes": "嵐翼獣ヴェルグラートのボス素材派生。ボス固有素材は1個使用し、最新派生だけを一律の派生元にはしない。施設依頼ではレシピ不要。 素材系統：嵐翼派生。 ボス派生。通常の順当強化ラインから分岐する。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "ボス派生",
         "branchDisplayOrder": 14,
         "limitedRecipePrice": ""
@@ -40197,6 +40475,8 @@
         "tags": "防具製作,軽装,ボス素材,高原,★3",
         "notes": "新規防具の製作レシピ。防具の派生装備としては扱わない。施設依頼ではレシピ不要。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "limitedRecipePrice": ""
       },
       {
@@ -40225,6 +40505,8 @@
         "tags": "武器派生,通常素材,草木,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 5,
         "limitedRecipePrice": "1800"
@@ -40255,6 +40537,8 @@
         "tags": "武器派生,通常素材,草木,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 11,
         "limitedRecipePrice": "1800"
@@ -40285,6 +40569,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 7,
         "limitedRecipePrice": "1800"
@@ -40315,6 +40601,8 @@
         "tags": "武器派生,通常素材,森獣,★2,獣牙系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 3,
         "limitedRecipePrice": "1800"
@@ -40345,6 +40633,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 3,
         "limitedRecipePrice": "1800"
@@ -40375,6 +40665,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 11,
         "limitedRecipePrice": "1800"
@@ -40405,6 +40697,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 10,
         "limitedRecipePrice": "1800"
@@ -40435,6 +40729,8 @@
         "tags": "武器派生,通常素材,森獣,★2,獣牙系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 5,
         "limitedRecipePrice": "1800"
@@ -40465,6 +40761,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 8,
         "limitedRecipePrice": "1800"
@@ -40495,6 +40793,8 @@
         "tags": "武器派生,通常素材,森獣,★2,獣牙系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 13,
         "limitedRecipePrice": "1800"
@@ -40525,6 +40825,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 5,
         "limitedRecipePrice": "1800"
@@ -40555,6 +40857,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 8,
         "limitedRecipePrice": "1800"
@@ -40585,6 +40889,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 2,
         "limitedRecipePrice": "1800"
@@ -40615,6 +40921,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 1,
         "limitedRecipePrice": "1800"
@@ -40645,6 +40953,8 @@
         "tags": "武器派生,通常素材,森獣,★2,獣牙系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 11,
         "limitedRecipePrice": "1800"
@@ -40675,6 +40985,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 1,
         "limitedRecipePrice": "1800"
@@ -40705,6 +41017,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 1,
         "limitedRecipePrice": "1800"
@@ -40735,6 +41049,8 @@
         "tags": "武器派生,通常素材,森獣,★2,獣牙系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 2,
         "limitedRecipePrice": "1800"
@@ -40765,6 +41081,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 6,
         "limitedRecipePrice": "1800"
@@ -40795,6 +41113,8 @@
         "tags": "武器派生,通常素材,森獣,★2,獣牙系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 2,
         "limitedRecipePrice": "1800"
@@ -40825,6 +41145,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 13,
         "limitedRecipePrice": "1800"
@@ -40855,6 +41177,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 5,
         "limitedRecipePrice": "1800"
@@ -40885,6 +41209,8 @@
         "tags": "武器派生,通常素材,森獣,★2,獣牙系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 13,
         "limitedRecipePrice": "1800"
@@ -40915,6 +41241,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 9,
         "limitedRecipePrice": "1800"
@@ -40945,6 +41273,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 11,
         "limitedRecipePrice": "1800"
@@ -40975,6 +41305,8 @@
         "tags": "武器派生,通常素材,森樹,★2,植生系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：植生派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 7,
         "limitedRecipePrice": "1800"
@@ -41005,6 +41337,8 @@
         "tags": "武器派生,通常素材,森獣,★2,獣牙系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：獣牙派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 11,
         "limitedRecipePrice": "1800"
@@ -41035,6 +41369,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 10,
         "limitedRecipePrice": "1800"
@@ -41065,6 +41401,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 6,
         "limitedRecipePrice": "1800"
@@ -41095,6 +41433,8 @@
         "tags": "武器派生,通常素材,水霧,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 6,
         "limitedRecipePrice": "1800"
@@ -41125,6 +41465,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 6,
         "limitedRecipePrice": "1800"
@@ -41155,6 +41497,8 @@
         "tags": "武器派生,通常素材,水霧,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 6,
         "limitedRecipePrice": "1800"
@@ -41185,6 +41529,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 3,
         "limitedRecipePrice": "1800"
@@ -41215,6 +41561,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 3,
         "limitedRecipePrice": "1800"
@@ -41245,6 +41593,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 11,
         "limitedRecipePrice": "1800"
@@ -41275,6 +41625,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 2,
         "limitedRecipePrice": "1800"
@@ -41305,6 +41657,8 @@
         "tags": "武器派生,通常素材,水霧,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 2,
         "limitedRecipePrice": "1800"
@@ -41335,6 +41689,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 7,
         "limitedRecipePrice": "1800"
@@ -41365,6 +41721,8 @@
         "tags": "武器派生,通常素材,水霧,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 7,
         "limitedRecipePrice": "1800"
@@ -41395,6 +41753,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 9,
         "limitedRecipePrice": "1800"
@@ -41425,6 +41785,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 9,
         "limitedRecipePrice": "1800"
@@ -41455,6 +41817,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 3,
         "limitedRecipePrice": "1800"
@@ -41485,6 +41849,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 8,
         "limitedRecipePrice": "1800"
@@ -41515,6 +41881,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 9,
         "limitedRecipePrice": "1800"
@@ -41545,6 +41913,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 6,
         "limitedRecipePrice": "1800"
@@ -41575,6 +41945,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 3,
         "limitedRecipePrice": "1800"
@@ -41605,6 +41977,8 @@
         "tags": "武器派生,通常素材,水霧,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 13,
         "limitedRecipePrice": "1800"
@@ -41635,6 +42009,8 @@
         "tags": "武器派生,通常素材,湿泥,★2,泥核系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：泥核派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 4,
         "limitedRecipePrice": "1800"
@@ -41665,6 +42041,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 11,
         "limitedRecipePrice": "1800"
@@ -41695,6 +42073,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 4,
         "limitedRecipePrice": "1800"
@@ -41725,6 +42105,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 1,
         "limitedRecipePrice": "1800"
@@ -41755,6 +42137,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 7,
         "limitedRecipePrice": "1800"
@@ -41785,6 +42169,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 4,
         "limitedRecipePrice": "1800"
@@ -41815,6 +42201,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 9,
         "limitedRecipePrice": "1800"
@@ -41845,6 +42233,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 6,
         "limitedRecipePrice": "1800"
@@ -41875,6 +42265,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 6,
         "limitedRecipePrice": "1800"
@@ -41905,6 +42297,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 2,
         "limitedRecipePrice": "1800"
@@ -41935,6 +42329,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 6,
         "limitedRecipePrice": "1800"
@@ -41965,6 +42361,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 4,
         "limitedRecipePrice": "1800"
@@ -41995,6 +42393,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 3,
         "limitedRecipePrice": "1800"
@@ -42025,6 +42425,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 1,
         "limitedRecipePrice": "1800"
@@ -42055,6 +42457,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 4,
         "limitedRecipePrice": "1800"
@@ -42085,6 +42489,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 1,
         "limitedRecipePrice": "1800"
@@ -42115,6 +42521,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 9,
         "limitedRecipePrice": "1800"
@@ -42145,6 +42553,8 @@
         "tags": "武器派生,通常素材,鏡像,★2,異界系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：異界派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 5,
         "limitedRecipePrice": "1800"
@@ -42175,6 +42585,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 1,
         "limitedRecipePrice": "2400"
@@ -42205,6 +42617,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 10,
         "limitedRecipePrice": "2400"
@@ -42235,6 +42649,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 2,
         "limitedRecipePrice": "2400"
@@ -42265,6 +42681,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 2,
         "limitedRecipePrice": "2400"
@@ -42295,6 +42713,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 2,
         "limitedRecipePrice": "2400"
@@ -42325,6 +42745,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 7,
         "limitedRecipePrice": "2400"
@@ -42355,6 +42777,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 1,
         "limitedRecipePrice": "2400"
@@ -42385,6 +42809,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 12,
         "limitedRecipePrice": "2400"
@@ -42415,6 +42841,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 13,
         "limitedRecipePrice": "2400"
@@ -42445,6 +42873,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 3,
         "limitedRecipePrice": "2400"
@@ -42475,6 +42905,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 10,
         "limitedRecipePrice": "2400"
@@ -42505,6 +42937,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 11,
         "limitedRecipePrice": "2400"
@@ -42535,6 +42969,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 5,
         "limitedRecipePrice": "2400"
@@ -42565,6 +43001,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 1,
         "limitedRecipePrice": "2400"
@@ -42595,6 +43033,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 3,
         "limitedRecipePrice": "2400"
@@ -42625,6 +43065,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 5,
         "limitedRecipePrice": "2500"
@@ -42655,6 +43097,8 @@
         "tags": "武器派生,通常素材,銀鉱,★3,鉱石系統",
         "notes": "自作時はこのレシピが必要。施設依頼ではレシピ不要。 素材系統：鉱石派生。",
         "updatedAt": "2026-08-04",
+        "ownerKey": "",
+        "createdBy": "",
         "branchClass": "通常派生",
         "branchDisplayOrder": 1,
         "limitedRecipePrice": "2500"
@@ -43551,7 +43995,9 @@
         "notes": "RA相談15で追加。",
         "description": "凝縮した光を直線状に放ち、光属性弱点を強く突く攻撃術式。",
         "power": "2D6+2",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "mag_inferno_lance",
@@ -43571,7 +44017,9 @@
         "notes": "RA相談15で追加。",
         "description": "イグニスランスの役割を変えず、純粋な単体火力として★3相当に強化した攻撃術式。",
         "power": "3D6+1",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "mag_glacial_prison",
@@ -43591,7 +44039,9 @@
         "notes": "RA相談15で追加。",
         "description": "冷気と水圧で敵列を閉じ込め、損傷と妨害を同時に与える術式。",
         "power": "1D6+2",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "mag_cyclone_burst",
@@ -43611,7 +44061,9 @@
         "notes": "RA相談15で追加。",
         "description": "圧縮した暴風を敵列へ解き放つ、追加効果を持たない列火力術式。",
         "power": "2D6+2",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "mag_nightfall_mire",
@@ -43631,7 +44083,9 @@
         "notes": "RA相談15で追加。",
         "description": "夜闇をまとわりつかせ、時間差で追加ダメージを与える攻撃術式。",
         "power": "2D6",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "mag_volt_chain",
@@ -43651,7 +44105,9 @@
         "notes": "RA相談15で追加。",
         "description": "妨害を受けた敵へ雷撃を集中させる単体攻撃術式。",
         "power": "2D6+2",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "pr_courage",
@@ -43899,7 +44355,9 @@
         "notes": "RA相談15で追加。",
         "description": "長く残る強い祝福を与え、複数回の能動判定を支援する祈祷。",
         "power": "なし",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "pr_greater_sanctuary",
@@ -43919,7 +44377,9 @@
         "notes": "RA相談15で追加。",
         "description": "味方列を強い聖域で包み、それぞれが次に受けるダメージを軽減する祈祷。",
         "power": "軽減5",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "pr_divine_punishment",
@@ -43939,7 +44399,9 @@
         "notes": "RA相談15で追加。",
         "description": "異界固有の魔物へ強く働く、光属性の攻撃祈祷。",
         "power": "2D6",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "pr_supreme_heal",
@@ -43959,7 +44421,9 @@
         "notes": "RA相談15で追加。",
         "description": "一人の傷へ祈りを集中し、大きくHPを回復する祈祷。",
         "power": "3D6+2",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "pr_purifying_light",
@@ -43979,7 +44443,9 @@
         "notes": "RA相談15で追加。",
         "description": "癒やしと浄化を同時に行い、正式な状態異常をまとめて洗い流す祈祷。",
         "power": "1D6",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "pr_healing_ring",
@@ -43999,7 +44465,9 @@
         "notes": "RA相談15で追加。",
         "description": "癒やしの光輪を味方列へ広げ、複数人を同時に回復する祈祷。",
         "power": "2D6+1",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       }
     ],
     "quest_rewards": [
@@ -44272,6 +44740,8 @@
         "description": "工房で使う柄付き道具の緩みと刃こぼれが増えている。拠点の作業台でまとめて整えてほしい。",
         "notes": "反復可能。拠点だけで完結する依頼。 報酬は入手アイテム表「reward_outskirts_grass」から2枠抽選。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_outskirts_grass",
         "rewardDrawCount": 2
       },
@@ -44302,6 +44772,8 @@
         "description": "薬屋の棚に傷みかけの薬草が混ざってしまった。使える分を選り分け、乾燥箱へ移してほしい。",
         "notes": "反復可能。拠点だけで完結する依頼。 報酬は入手アイテム表「reward_outskirts_grass」から2枠抽選。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_outskirts_grass",
         "rewardDrawCount": 2
       },
@@ -44496,6 +44968,8 @@
         "description": "食事処と薬屋で使う乾燥茸が混ざってしまった。香りと状態を確かめ、用途ごとに分けてほしい。",
         "notes": "反復可能。拠点だけで完結する依頼。 報酬は入手アイテム表「reward_nearby_forest」から2枠抽選。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_nearby_forest",
         "rewardDrawCount": 2
       },
@@ -44526,6 +45000,8 @@
         "description": "修繕に使う革ひもと蔓材が足りない。拠点の作業台で切り揃え、扱いやすい長さに整えてほしい。",
         "notes": "反復可能。拠点だけで完結する依頼。 報酬は入手アイテム表「reward_nearby_forest」から2枠抽選。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_nearby_forest",
         "rewardDrawCount": 2
       },
@@ -44665,6 +45141,8 @@
         "description": "湿地から持ち帰られた粘液素材に泥や水草が混じっている。薬屋の器具を使い、調合に回せる状態へ整えてほしい。",
         "notes": "反復可能。拠点だけで完結する依頼。 報酬は入手アイテム表「reward_waterside_wetland」から2枠抽選。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_waterside_wetland",
         "rewardDrawCount": 2
       },
@@ -44695,6 +45173,8 @@
         "description": "湿気を吸った遠征具がまとめて持ち込まれた。拠点の工房で汚れを落とし、保存液をなじませてほしい。",
         "notes": "反復可能。拠点だけで完結する依頼。 報酬は入手アイテム表「reward_waterside_wetland」から2枠抽選。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_waterside_wetland",
         "rewardDrawCount": 2
       },
@@ -44834,6 +45314,8 @@
         "description": "異界観測に使った器具の焦点がずれている。鏡面と晶石の位置を調整し、正しく像が結ばれるよう直してほしい。",
         "notes": "反復可能。拠点だけで完結する依頼。 報酬は入手アイテム表「reward_reflection_water_garden」から2枠抽選。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_reflection_water_garden",
         "rewardDrawCount": 2
       },
@@ -44864,6 +45346,8 @@
         "description": "水庭から持ち帰られた植物標本の上下と採取地点が分からなくなっている。性質を見極め、記録札と合わせてほしい。",
         "notes": "反復可能。拠点だけで完結する依頼。 報酬は入手アイテム表「reward_reflection_water_garden」から2枠抽選。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_reflection_water_garden",
         "rewardDrawCount": 2
       },
@@ -45062,6 +45546,8 @@
         "description": "採掘隊が使うつるはしと楔の刃先が丸くなっている。拠点の工房でまとめて研ぎ直してほしい。",
         "notes": "反復可能。拠点だけで完結する依頼。 報酬は入手アイテム表「reward_foothill_old_mine」から2枠抽選。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_foothill_old_mine",
         "rewardDrawCount": 2
       },
@@ -45092,6 +45578,8 @@
         "description": "鍛冶場の炉床に熱むらが出ている。石炭の組み方と送風を整え、火勢を安定させてほしい。",
         "notes": "反復可能。拠点だけで完結する依頼。 報酬は入手アイテム表「reward_foothill_old_mine」から2枠抽選。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_foothill_old_mine",
         "rewardDrawCount": 2
       },
@@ -45262,6 +45750,8 @@
         "description": "高原向けの避雷器具に接触不良が見つかった。導線と石材の噛み合わせを確かめ、出発前に直してほしい。",
         "notes": "反復可能。拠点だけで完結する依頼。 報酬は入手アイテム表「reward_wind_swept_highland」から2枠抽選。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_wind_swept_highland",
         "rewardDrawCount": 2
       },
@@ -45292,6 +45782,8 @@
         "description": "高原から回収された風標布が裂けている。拠点の作業台で継ぎ目を補強し、再び張れる状態へ戻してほしい。",
         "notes": "反復可能。拠点だけで完結する依頼。 報酬は入手アイテム表「reward_wind_swept_highland」から2枠抽選。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_wind_swept_highland",
         "rewardDrawCount": 2
       },
@@ -45591,6 +46083,7 @@
         "notes": "旧称：街はずれの草原。チュートリアル後も日替わり依頼と自由探索に使用。\n人数別ランダム遭遇値幅：1人 2～2／2人 2～3／3人 3～4／4人 3～5／5人 4～6／6人 4～7／7人 5～8。",
         "updatedAt": "2026-08-07",
         "fieldEffect": "なし",
+        "unlockKey": "",
         "unlockOrder": 1
       },
       {
@@ -45607,8 +46100,8 @@
         "notes": "エリア開放クエスト後に通常探索対象。\n人数別ランダム遭遇値幅：1人 2～3／2人 2～4／3人 3～5／4人 3～6／5人 4～7／6人 4～8／7人 5～9。",
         "updatedAt": "2026-08-07",
         "fieldEffect": "なし",
-        "unlockOrder": 2,
-        "unlockKeyHash": "d68d5521d8aa593293d6187248bee81b82e4bc5360bcf5ffa3a15cc28c896c8f"
+        "unlockKey": "7UCX-JAUE-E2TH-GLRG-MEGW",
+        "unlockOrder": 2
       },
       {
         "id": "area_waterside_wetland",
@@ -45624,8 +46117,8 @@
         "notes": "宿屋の噂によってボス遭遇イベントが解放される。\n人数別ランダム遭遇値幅：1人 2～4／2人 2～5／3人 3～6／4人 3～7／5人 4～8／6人 4～9／7人 5～10。",
         "updatedAt": "2026-08-07",
         "fieldEffect": "【ぬかるみ】戦闘中、PC全員の回避－1。魔物には適用しない。",
-        "unlockOrder": 3,
-        "unlockKeyHash": "9f0ec349533c1ab480e7f06f9d64b8b3bc43544602bea4823f9641ba3f7d5b48"
+        "unlockKey": "DQFU-KXNP-UKGQ-WN93-7LFU",
+        "unlockOrder": 3
       },
       {
         "id": "area_foothill_old_mine",
@@ -45641,8 +46134,8 @@
         "notes": "水辺の湿地の次に解放される通常エリア。反照の水庭は解放条件に含めない。宿屋でボスの噂を聞いた探索周回のみ、100%イベントを坑奥の穿王ドルガン戦へ固定する。\n人数別ランダム遭遇値幅：1人 2～5／2人 2～6／3人 3～7／4人 3～8／5人 4～9／6人 4～10／7人 5～11。",
         "updatedAt": "2026-08-07",
         "fieldEffect": "なし。落石・粉塵・狭所などの危険はエリアイベントとして処理する。",
-        "unlockOrder": 4,
-        "unlockKeyHash": "55693969b87d5b5f62fe8452dc01b11e8b818cedd2aa166d329e728c05661449"
+        "unlockKey": "9N6J-MDGZ-P2ZK-H2NQ-A3RL",
+        "unlockOrder": 4
       },
       {
         "id": "area_reflection_water_garden",
@@ -45658,8 +46151,8 @@
         "notes": "任意攻略の異界エリア。山麓の旧鉱山以降を含む通常進行・施設・一般商品・一般レシピの解放条件には使用しない。このエリア固有の素材を実際に使用する装備・消耗品・レシピのみ、このエリアの解放を条件にできる。施設カタログでは、このエリア自身の解放キーを登録した場合だけ表示対象へ追加する。\n人数別ランダム遭遇値幅：1人 4～5／2人 4～6／3人 6～7／4人 6～8／5人 8～9／6人 8～10／7人 10～11。",
         "updatedAt": "2026-08-07",
         "fieldEffect": "【反照の眩惑】各ラウンド開始時、PCからランダムに1人を選ぶ。対象の抵抗値が10未満なら、そのターンに行う攻撃・魔法・祈祷に-2。抵抗値が10以上なら効果なし。敵・ボス、防御、道具使用には適用しない。",
-        "unlockOrder": 3.5,
-        "unlockKeyHash": "96e9e66585fef9e273fe40cb6e89e158cf621efd1e0264b660fa55155146ce59"
+        "unlockKey": "54BY-CKSS-K3BR-ZG59-DX7B",
+        "unlockOrder": 3.5
       },
       {
         "id": "area_wind_swept_highland",
@@ -45675,8 +46168,10 @@
         "notes": "人数別ランダム遭遇値幅：1人 2～3／2人 3～4／3人 4～5／4人 5～7／5人 6～8／6人 7～9／7人 8～10。ボス遭遇は任意戦闘。\n施設カタログでは、このエリア固有の解放キーを個別登録した場合のみ解放する。内部IDから推測できない解放キーへ更新。",
         "updatedAt": "2026-08-07",
         "fieldEffect": "高原の強風と局地雷。探索開始時に防風香油または避雷樹脂を使用すると、対応するイベント上の不利を探索終了まで無効化する。",
+        "unlockKey": "AEWX-PLK7-BD8E-2VJL-U2FF",
         "unlockOrder": 5,
-        "unlockKeyHash": "70c3ab7da99870a67f61066492912896bcc8ee823c7b7358bbd4786b41e7d5c5"
+        "ownerKey": "",
+        "createdBy": ""
       }
     ],
     "event_tables": [
@@ -46742,7 +47237,9 @@
         "result": "魔法成功：湧き水に混じる魔力を安定させ、澄んだ水×1D2・小さな水晶片×1を入手。採取で代用可能（判定-2）。採取成功：澄んだ水×1D2を入手。失敗：澄んだ水×1を入手。",
         "progressEffect": "",
         "notes": "噂条件イベント。",
-        "updatedAt": "2026-08-07"
+        "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_forest_25",
@@ -47338,7 +47835,9 @@
         "result": "判定成功：水蓮根×1D2を入手。目標値+3以上：水蓮根×1を追加で入手。失敗：入手なし。",
         "progressEffect": "",
         "notes": "噂条件イベント。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_wetland_24",
@@ -47657,7 +48156,9 @@
         "result": "森の沢で、朝方だけ青白く光る水場を見た者がいる。水底に小さな晶片が沈んでいるらしい。",
         "progressEffect": "近郊の森探索時、条件イベント「青光の湧き水」が候補に入る。",
         "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "rumor_forest_boss",
@@ -47762,7 +48263,9 @@
         "result": "湿地の霧が薄い朝、水蓮根が密集した小さな浮島が姿を見せるという。日が高くなると流されてしまうらしい。",
         "progressEffect": "水辺の湿地探索時、条件イベント「水蓮根の浮島」が候補に入る。",
         "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "rumor_swamp_lord",
@@ -47804,7 +48307,9 @@
         "result": "最近の小さな崩落で、坑道の壁に銀色の鉱脈が露出したらしい。まだ採掘者は入っていないという。",
         "progressEffect": "山麓の旧鉱山探索時、条件イベント「崩落跡の銀鉱脈」が候補に入る。",
         "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "rumor_mine_supply_box",
@@ -47825,7 +48330,9 @@
         "result": "閉鎖前の坑夫が置いた補給箱が、脇道の奥に残っているらしい。湿気は少なく、中身も無事かもしれない。",
         "progressEffect": "山麓の旧鉱山探索時、条件イベント「放棄坑道の補給箱」が候補に入る。",
         "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "rumor_mine_blue_light",
@@ -47846,7 +48353,9 @@
         "result": "深部の縦坑で、灯りとは違う青白い光が揺れていたという。魔晶石か、光をまとった魔物かもしれない。",
         "progressEffect": "山麓の旧鉱山探索時、条件イベント「青白く光る深坑」が候補に入る。",
         "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "rumor_mine_blackiron_layer",
@@ -47867,7 +48376,9 @@
         "result": "崩れかけた坑壁の奥に、光をほとんど返さない黒い鉱層が見えたという。足場を確保できれば採れそうだ。",
         "progressEffect": "山麓の旧鉱山探索時、条件イベント「黒鉄の露出層」が候補に入る。",
         "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "rumor_mine_boss",
@@ -47909,7 +48420,9 @@
         "result": "水面の裏側に、反照苔が棚のように広がっている場所があるらしい。角度を変えると採取できるという。",
         "progressEffect": "反照の水庭探索時、条件イベント「水面裏の苔棚」が候補に入る。",
         "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "rumor_reflection_sealed_box",
@@ -47930,7 +48443,9 @@
         "result": "鏡のような水底に、景色へ溶け込む半透明の箱が沈んでいたという。見る位置を変えると輪郭が現れるらしい。",
         "progressEffect": "反照の水庭探索時、条件イベント「鏡底の封箱」が候補に入る。",
         "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "rumor_reflection_crystal_sand",
@@ -47951,7 +48466,9 @@
         "result": "景色が細く裂けた場所の周囲で、晶砂が淡く光っているという。裂界晶も混じっているかもしれない。",
         "progressEffect": "反照の水庭探索時、条件イベント「裂け目際の晶砂」が候補に入る。",
         "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "rumor_reflection_delayed_howl",
@@ -47972,7 +48489,9 @@
         "result": "黒い足跡を見つけた後、かなり遅れて獣の遠吠えが響いたという。音と本体の位置がずれているらしい。",
         "progressEffect": "反照の水庭探索時、条件イベント「遅れて響く遠吠え」が候補に入る。",
         "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "rumor_reflection_lord",
@@ -48014,7 +48533,9 @@
         "encounterCountMin": "",
         "encounterCountMax": "",
         "encounterComposition": "",
-        "encounterFormation": ""
+        "encounterFormation": "",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "rumor_highland_windstone",
@@ -48035,7 +48556,9 @@
         "result": "昨夜の強風で崖肌が削れ、新しい風鳴石の露頭が現れたらしい。風が弱まる間なら採取できそうだ。",
         "progressEffect": "風渡りの高原探索時、条件イベント「風割れの露頭」が候補に入る。",
         "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "rumor_highland_windmarker_box",
@@ -48056,7 +48579,9 @@
         "result": "古い風標の裏側に、旅人が残した補給箱が隠されているという。風除けの石壁が目印らしい。",
         "progressEffect": "風渡りの高原探索時、条件イベント「風標裏の補給箱」が候補に入る。",
         "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "rumor_highland_thunder_vein",
@@ -48077,7 +48602,9 @@
         "result": "雷雲が低く垂れ込める斜面で、雷脈石が地表へ露出しているらしい。採取には落雷への備えが必要だ。",
         "progressEffect": "風渡りの高原探索時、条件イベント「低雷雲の雷脈地」が候補に入る。",
         "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "rumor_highland_boss",
@@ -48098,7 +48625,9 @@
         "result": "高原の最も高い峰で、嵐をまとって飛ぶ巨大な翼の影を見た者がいる。嵐翼獣ヴェルグラートの縄張りだろう。",
         "progressEffect": "この噂を選択した日に風渡りの高原探索を100%まで進めると、ボス「嵐翼獣ヴェルグラート」と遭遇する。",
         "notes": "宿屋で聞ける噂。クエスト報酬には影響しない。エリア探索時だけ使用。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_grass_iron_vein",
@@ -48497,7 +49026,9 @@
         "result": "判定成功：反照苔×1D2、虚ろ雫×1を入手。目標値+3以上：反照苔×1を追加で入手。失敗：入手なし。",
         "progressEffect": "",
         "notes": "噂条件イベント。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_otherworld_rumor_sealed_box",
@@ -48518,7 +49049,9 @@
         "result": "判定成功：宝箱表「otherworld_weapon_recipe_cache」を1回抽選する。失敗：箱の位置を見失い、抽選なし。",
         "progressEffect": "",
         "notes": "噂条件イベント。 宝箱分類：反照武具箱。",
-        "updatedAt": "2026-08-02"
+        "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_otherworld_rumor_crystal",
@@ -48539,7 +49072,9 @@
         "result": "判定成功：裂界晶×1、小さな水晶片×1を入手。目標値+3以上：裂界晶×1を追加で入手。失敗：入手なし。",
         "progressEffect": "",
         "notes": "噂条件イベント。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_otherworld_rumor_howl",
@@ -48560,7 +49095,9 @@
         "result": "戦闘発生：前衛にヴォイドハウンド×1、後衛にフェイズモス×1。判定成功：1ラウンド目に味方全員が行う最初の判定+1。失敗：補正なし。勝利後、各魔物のドロップ判定を行う。",
         "progressEffect": "",
         "notes": "噂条件イベント。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_otherworld_14",
@@ -50547,7 +51084,9 @@
         "result": "判定成功：銀鉱石×1D2を入手。目標値+3以上：鉄鉱石×1を追加で入手。失敗：鉄鉱石×1を入手。",
         "progressEffect": "",
         "notes": "噂条件イベント。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_mine_rumor_supply",
@@ -50568,7 +51107,9 @@
         "result": "判定成功：宝箱表「mine_craft_recipe_cache」を1回抽選する。失敗：抽選なし。",
         "progressEffect": "",
         "notes": "噂条件イベント。 宝箱分類：旧工房の設計箱。",
-        "updatedAt": "2026-08-02"
+        "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_mine_rumor_magic_crystal",
@@ -50589,7 +51130,9 @@
         "result": "判定成功：魔晶石×1を入手。失敗：後衛にルミナウィスプ×1との戦闘が発生する。勝利後、ルミナウィスプのドロップ判定を行う。",
         "progressEffect": "",
         "notes": "噂条件イベント。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_mine_rumor_blackiron",
@@ -50610,7 +51153,9 @@
         "result": "判定成功：黒鉄鉱×1を入手。目標値+3以上：石炭×1を追加で入手。失敗：採掘を断念し、入手なし。",
         "progressEffect": "",
         "notes": "噂条件イベント。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_mine_boss",
@@ -51072,7 +51617,9 @@
         "result": "成功：風鳴石×1D3を入手。目標値+3以上：風鳴石×1を追加。失敗：入手なし。",
         "progressEffect": "",
         "notes": "高原の基礎鉱石。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_02",
@@ -51093,7 +51640,9 @@
         "result": "成功：浮雲綿×1D3を入手。目標値+3以上：浮雲綿×1を追加。失敗：入手なし。",
         "progressEffect": "",
         "notes": "軽い繊維の採取地点。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_03",
@@ -51114,7 +51663,9 @@
         "result": "成功：高原硬木×1D2を入手。目標値+3以上：高原硬木×1を追加。失敗：入手なし。",
         "progressEffect": "",
         "notes": "強風に耐えた木材。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_04",
@@ -51135,7 +51686,9 @@
         "result": "成功：雷脈石×1D2を入手。目標値+3以上：雷脈石×1を追加。失敗：1D3雷属性ダメージ。避雷樹脂使用中はこのダメージを無効化。",
         "progressEffect": "",
         "notes": "雷対策が役立つ採掘地点。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_05",
@@ -51156,7 +51709,9 @@
         "result": "成功：風紋草×1D3を入手。目標値+3以上：風紋草×1を追加。失敗：入手なし。",
         "progressEffect": "",
         "notes": "調合素材の採取。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_06",
@@ -51177,7 +51732,9 @@
         "result": "成功：天空露×1D2を入手。目標値+3以上：天空露×1を追加。失敗：入手なし。",
         "progressEffect": "",
         "notes": "高原の水・液体素材。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_07",
@@ -51199,6 +51756,8 @@
         "progressEffect": "",
         "notes": "崖際に吹き寄せられた混成素材。入手アイテム表：reward_wind_swept_highland。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_wind_swept_highland",
         "rewardDrawCount": 2
       },
@@ -51221,7 +51780,9 @@
         "result": "成功：雷脈石×1、風紋草×1、天空露×1を入手。失敗：入手なし。避雷樹脂未使用なら失敗時に疲労+1。",
         "progressEffect": "",
         "notes": "高原で設定する疲労増加イベントの2件目。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_09",
@@ -51242,7 +51803,9 @@
         "result": "戦闘発生：風渡りの高原の候補から人数対応の遭遇値でランダム編成する。",
         "progressEffect": "",
         "notes": "固定構成を使わない通常遭遇。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_13",
@@ -51263,7 +51826,9 @@
         "result": "戦闘発生：風渡りの高原の候補から人数対応の遭遇値でランダム編成する。",
         "progressEffect": "",
         "notes": "固定構成を使わない通常遭遇。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_14",
@@ -51284,7 +51849,9 @@
         "result": "戦闘発生：風渡りの高原の候補から人数対応の遭遇値でランダム編成する。",
         "progressEffect": "",
         "notes": "固定構成を使わない通常遭遇。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_15",
@@ -51305,7 +51872,9 @@
         "result": "戦闘発生：風渡りの高原の候補から人数対応の遭遇値でランダム編成する。",
         "progressEffect": "",
         "notes": "固定構成を使わない通常遭遇。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_17",
@@ -51327,6 +51896,8 @@
         "progressEffect": "",
         "notes": "古い荷箱の残置品。中身は入手アイテム表から決定。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_wind_swept_highland",
         "rewardDrawCount": 2
       },
@@ -51350,6 +51921,8 @@
         "progressEffect": "",
         "notes": "崖陰に残された古い補給箱。中身は入手アイテム表から決定。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_wind_swept_highland",
         "rewardDrawCount": 2
       },
@@ -51372,7 +51945,9 @@
         "result": "設計成功：風標の構造から隠し収納を開き、宝箱表「highland_rare_cache」を1回抽選する。操作で代用可能（判定-2）。操作成功：同じ宝箱表を1回抽選する。失敗：入手なし。",
         "progressEffect": "",
         "notes": "",
-        "updatedAt": "2026-08-07"
+        "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_20",
@@ -51393,7 +51968,9 @@
         "result": "鑑定成功：残骸から安全な導電部を見抜き、宝箱表「highland_rare_cache」を1回抽選し、雷脈石×1を追加で入手。設計で代用可能（判定-2）。設計成功：同じ宝箱表を1回抽選する。失敗：1D3雷属性ダメージ。避雷樹脂使用中はダメージ無効。",
         "progressEffect": "",
         "notes": "",
-        "updatedAt": "2026-08-07"
+        "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_21",
@@ -51415,6 +51992,8 @@
         "progressEffect": "",
         "notes": "風穴の奥に軽い素材や小物が溜まる。入手アイテム表：reward_wind_swept_highland。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_wind_swept_highland",
         "rewardDrawCount": 1
       },
@@ -51437,7 +52016,9 @@
         "result": "成功：探索進行+25%。失敗：進行なし。",
         "progressEffect": "+25%",
         "notes": "高原の広い地形を見渡せる。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_23",
@@ -51458,7 +52039,9 @@
         "result": "成功：安全に通過。失敗：味方全員1D3ダメージ。防風香油使用中は失敗時ダメージを無効化。",
         "progressEffect": "",
         "notes": "高原固有の障害。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_24",
@@ -51479,7 +52062,9 @@
         "result": "成功：道を確保し探索進行+25%。失敗：進行なし。",
         "progressEffect": "",
         "notes": "高原固有の障害。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_25",
@@ -51500,7 +52085,9 @@
         "result": "成功：宝箱表「highland_craft_recipe_cache」を1回抽選する。失敗：開かない。",
         "progressEffect": "",
         "notes": "高原固有の障害。 宝箱分類：風車工房の設計箱。",
-        "updatedAt": "2026-08-02"
+        "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_26",
@@ -51521,7 +52108,9 @@
         "result": "射撃成功：遠くの損傷した留め具だけを撃ち外し、安全な索道を確保する。細工で代用可能（判定-2）。細工成功：風に耐えながら索を補修し、次の障害判定+1。失敗：味方1人が1D6ダメージ。防風香油使用中は判定+1。",
         "progressEffect": "",
         "notes": "高原固有の障害。",
-        "updatedAt": "2026-08-07"
+        "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_27",
@@ -51542,7 +52131,9 @@
         "result": "成功：安全に通過。失敗：味方全員1D3雷属性ダメージ。避雷樹脂使用中は判定+1かつ失敗時ダメージ無効。",
         "progressEffect": "",
         "notes": "高原固有の障害。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_28",
@@ -51563,7 +52154,9 @@
         "result": "集中成功：風の乱れに姿勢を合わせ、次の障害判定+1。感知で代用可能（判定-2）。感知成功：次の障害判定への失敗ペナルティを無効化する。失敗：次の障害判定-1。防風香油使用中は失敗による-1を無効化。",
         "progressEffect": "",
         "notes": "",
-        "updatedAt": "2026-08-07"
+        "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_29",
@@ -51584,7 +52177,9 @@
         "result": "魔法成功：雷の流れを逸らし、雷脈石×1を入手。知識で代用可能（判定-2）。知識成功：安全な窪地へ退避する。失敗：味方全員1D3雷属性ダメージ。避雷樹脂使用中はダメージ無効。",
         "progressEffect": "",
         "notes": "",
-        "updatedAt": "2026-08-07"
+        "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_30",
@@ -51605,7 +52200,9 @@
         "result": "抵抗成功：共鳴に影響されず、風紋草×1を入手。祈祷で代用可能（判定-2）。祈祷成功：共鳴を鎮め、風紋草×2を入手。失敗：次の探索判定-1。判定後に解除。",
         "progressEffect": "",
         "notes": "ソノラブルームの花粉が残る場所。",
-        "updatedAt": "2026-08-07"
+        "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_31",
@@ -51626,7 +52223,9 @@
         "result": "成功：探索進行+25%。失敗：探索進行-25%（最低0）。",
         "progressEffect": "",
         "notes": "",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_32",
@@ -51647,7 +52246,9 @@
         "result": "成功：味方全員のHPを1D3回復。失敗：休息できない。",
         "progressEffect": "",
         "notes": "",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_33",
@@ -51668,7 +52269,9 @@
         "result": "成功：味方全員のMPを1回復。失敗：効果なし。",
         "progressEffect": "",
         "notes": "",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_34",
@@ -51689,7 +52292,9 @@
         "result": "戦闘発生：前衛にボルトバイソン×1、後衛にカイトビーク×人数半数切上。",
         "progressEffect": "",
         "notes": "ボルトバイソンの強さを見せる固定編成。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_35",
@@ -51710,7 +52315,9 @@
         "result": "成功：ヴェルグラートの飛行経路を特定し、次に同ボスへ挑む戦闘の1ラウンド目のみ味方全員が行う最初の判定+1。失敗：補正なし。",
         "progressEffect": "",
         "notes": "ボスの存在を示す痕跡。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_rumor_storm_eye",
@@ -51731,7 +52338,9 @@
         "result": "判定成功：風道を読み取り、味方1人の次の風渡りの高原で行う探索判定+1。判定後に解除する。失敗：補正なし。",
         "progressEffect": "",
         "notes": "噂条件イベント。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_rumor_windstone",
@@ -51752,7 +52361,9 @@
         "result": "判定成功：風鳴石×1D2を入手。目標値+3以上：風紋草×1を追加で入手。失敗：入手なし。",
         "progressEffect": "",
         "notes": "噂条件イベント。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_rumor_windmarker",
@@ -51773,7 +52384,9 @@
         "result": "判定成功：宝箱表「highland_weapon_recipe_cache」を1回抽選する。目標値+3以上：もう1回抽選する。失敗：抽選なし。",
         "progressEffect": "",
         "notes": "噂条件イベント。 宝箱分類：風標の武具箱。",
-        "updatedAt": "2026-08-02"
+        "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_rumor_thunder_vein",
@@ -51794,7 +52407,9 @@
         "result": "判定成功：雷脈石×1D2を入手。失敗：1D3雷属性ダメージを受け、入手なし。避雷樹脂使用中は失敗時のダメージを無効化する。",
         "progressEffect": "",
         "notes": "噂条件イベント。",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_36",
@@ -51815,7 +52430,9 @@
         "result": "エリアボス「嵐翼獣ヴェルグラート」と遭遇する。PCはこの場で挑むか、戦闘せず離れるかを選べる。挑む場合のみ戦闘が発生する。勝利後、宝箱表「highland_storm_lord_cache」を1回抽選し、ヴェルグラートのドロップ判定を行う。",
         "progressEffect": "",
         "notes": "任意戦闘。通常探索の攻略時に倒す前提ではない。 確定遭遇噂ID: rumor_highland_boss",
-        "updatedAt": "2026-07-30"
+        "updatedAt": "2026-07-30",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_37",
@@ -51836,7 +52453,9 @@
         "result": "成功：風紋草×1D2を入手。判定後、人数対応のランダム遭遇。失敗：入手なしで遭遇。",
         "progressEffect": "",
         "notes": "",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_38",
@@ -51858,6 +52477,8 @@
         "progressEffect": "",
         "notes": "滑空獣が巣棚へ集めた物。入手アイテム表：reward_wind_swept_highland。",
         "updatedAt": "2026-08-07",
+        "ownerKey": "",
+        "createdBy": "",
         "rewardTableId": "reward_wind_swept_highland",
         "rewardDrawCount": 2
       },
@@ -51880,7 +52501,9 @@
         "result": "成功：雷脈石×1D2を入手後、人数対応のランダム遭遇。失敗：入手なしで遭遇。",
         "progressEffect": "",
         "notes": "",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_highland_40",
@@ -51901,7 +52524,9 @@
         "result": "成功：宝箱表「highland_weapon_recipe_cache」を1回抽選する。失敗：宝箱表「highland_common_cache」を1回抽選する。",
         "progressEffect": "",
         "notes": "宝箱分類：風標の武具箱。",
-        "updatedAt": "2026-08-02"
+        "updatedAt": "2026-08-02",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_food_highland_01",
@@ -51922,7 +52547,9 @@
         "result": "判定成功：風跳兎の肉×1D2を入手。目標値+3以上：1個追加。失敗：入手なし。",
         "progressEffect": "",
         "notes": "料理専用食材。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_food_highland_02",
@@ -51943,7 +52570,9 @@
         "result": "判定成功：風渡り鳥の胸肉×1D2を入手。目標値+3以上：1個追加。失敗：入手なし。",
         "progressEffect": "",
         "notes": "料理専用食材。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_food_highland_03",
@@ -51964,7 +52593,9 @@
         "result": "判定成功：雷角牛の赤身×1D2を入手。目標値+3以上：1個追加。失敗：入手なし。",
         "progressEffect": "",
         "notes": "料理専用食材。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_food_highland_04",
@@ -51985,7 +52616,9 @@
         "result": "判定成功：雲豆×1D2を入手。目標値+3以上：1個追加。失敗：入手なし。",
         "progressEffect": "",
         "notes": "料理専用食材。",
-        "updatedAt": "2026-07-29"
+        "updatedAt": "2026-07-29",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "evt_base_001",
@@ -68713,7 +69346,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_dagger_double_feint",
@@ -68736,7 +69371,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_dagger_fallback_cut",
@@ -68759,7 +69396,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_sword_escort_edge",
@@ -68782,7 +69421,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_sword_safety_return",
@@ -68805,7 +69446,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_sword_duel_mark",
@@ -68828,7 +69471,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_sword_blade_press",
@@ -68851,7 +69496,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_axe_weight_shift",
@@ -68874,7 +69521,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_axe_grip_shift",
@@ -68897,7 +69546,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_axe_graze_chop",
@@ -68920,7 +69571,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_hammer_stock_impact",
@@ -68943,7 +69596,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_hammer_target_break",
@@ -68966,7 +69621,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_hammer_flat_impact",
@@ -68989,7 +69646,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_spear_guard_thrust",
@@ -69012,7 +69671,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_spear_screen_thrust",
@@ -69035,7 +69696,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_spear_relief_shift",
@@ -69058,7 +69721,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_staff_recurrent_blow",
@@ -69081,7 +69746,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_staff_resonance_blow",
@@ -69104,7 +69771,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_staff_word_switch",
@@ -69127,7 +69796,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_whip_watch_reel",
@@ -69150,7 +69821,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_whip_snap_drag",
@@ -69173,7 +69846,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_whip_twin_reel",
@@ -69196,7 +69871,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_scythe_cross_reap",
@@ -69219,7 +69896,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_scythe_switch_reap",
@@ -69242,7 +69921,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_scythe_link_reap",
@@ -69265,7 +69946,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_gauntlet_cross_guard",
@@ -69288,7 +69971,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_gauntlet_switch_rush",
@@ -69311,7 +69996,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_gauntlet_one_two_rush",
@@ -69334,7 +70021,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_greatsword_all_or_blade",
@@ -69357,7 +70046,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_greatsword_full_swing",
@@ -69380,7 +70071,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_greatsword_recut_roll",
@@ -69403,7 +70096,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_greathammer_swing_through",
@@ -69426,7 +70121,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_greathammer_precharge",
@@ -69449,7 +70146,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_greathammer_recovery_guard",
@@ -69472,7 +70171,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_longspear_first_point",
@@ -69495,7 +70196,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_longspear_point_guide",
@@ -69518,7 +70221,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_longspear_line_entry",
@@ -69541,7 +70246,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_bow_safe_nock",
@@ -69564,7 +70271,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_bow_dual_nock",
@@ -69587,7 +70296,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_bow_reuse_nock",
@@ -69610,7 +70321,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_crossbow_guard_load",
@@ -69633,7 +70346,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_crossbow_single_load",
@@ -69656,7 +70371,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_crossbow_stay_load",
@@ -69679,7 +70396,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_heavycrossbow_hold_trigger",
@@ -69702,7 +70421,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_heavycrossbow_recock_keep",
@@ -69725,7 +70446,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_heavycrossbow_reserve_cock",
@@ -69748,7 +70471,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_magicbook_page_swap",
@@ -69771,7 +70496,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_magicbook_redirect_cast",
@@ -69794,7 +70521,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_magicbook_rewrite_page",
@@ -69817,7 +70546,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_prayerbook_overflow_pray",
@@ -69840,7 +70571,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_prayerbook_divide_pray",
@@ -69863,7 +70596,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_prayerbook_transfer_bless",
@@ -69886,7 +70621,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_general_item_recover",
@@ -69909,7 +70646,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_general_last_stand",
@@ -69932,7 +70671,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_general_last_reserve",
@@ -69955,7 +70696,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_general_recovery_count",
@@ -69978,7 +70721,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_explore_trail_shift",
@@ -70001,7 +70746,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_explore_harvest_choice",
@@ -70024,7 +70771,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_explore_retrace",
@@ -70047,7 +70796,9 @@
         "unlockAreaKey": "area_nearby_forest",
         "unlockCondition": "近郊の森解放時に★1スキルガチャ開放",
         "notes": "",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_dagger_01",
@@ -70070,7 +70821,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_dagger_02",
@@ -70093,7 +70846,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_dagger_03",
@@ -70116,7 +70871,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_sword_01",
@@ -70139,7 +70896,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_sword_02",
@@ -70162,7 +70921,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_sword_03",
@@ -70185,7 +70946,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_sword_04",
@@ -70208,7 +70971,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_axe_01",
@@ -70231,7 +70996,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_axe_02",
@@ -70254,7 +71021,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_axe_03",
@@ -70277,7 +71046,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_hammer_01",
@@ -70300,7 +71071,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_hammer_02",
@@ -70323,7 +71096,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_hammer_03",
@@ -70346,7 +71121,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_spear_01",
@@ -70369,7 +71146,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_spear_02",
@@ -70392,7 +71171,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_spear_03",
@@ -70415,7 +71196,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_staff_01",
@@ -70438,7 +71221,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_staff_02",
@@ -70461,7 +71246,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_staff_03",
@@ -70484,7 +71271,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_whip_01",
@@ -70507,7 +71296,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_whip_02",
@@ -70530,7 +71321,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_whip_03",
@@ -70553,7 +71346,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_scythe_01",
@@ -70576,7 +71371,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_scythe_02",
@@ -70599,7 +71396,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_scythe_03",
@@ -70622,7 +71421,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_gauntlet_01",
@@ -70645,7 +71446,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_gauntlet_02",
@@ -70668,7 +71471,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_gauntlet_03",
@@ -70691,7 +71496,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_greatsword_01",
@@ -70714,7 +71521,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_greatsword_02",
@@ -70737,7 +71546,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_greatsword_03",
@@ -70760,7 +71571,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_greathammer_01",
@@ -70783,7 +71596,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_greathammer_02",
@@ -70806,7 +71621,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_greathammer_03",
@@ -70829,7 +71646,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_longspear_01",
@@ -70852,7 +71671,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_longspear_02",
@@ -70875,7 +71696,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_longspear_03",
@@ -70898,7 +71721,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_bow_01",
@@ -70921,7 +71746,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_bow_02",
@@ -70944,7 +71771,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_bow_03",
@@ -70967,7 +71796,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_crossbow_01",
@@ -70990,7 +71821,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_crossbow_02",
@@ -71013,7 +71846,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_crossbow_03",
@@ -71036,7 +71871,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_heavycrossbow_01",
@@ -71059,7 +71896,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_heavycrossbow_02",
@@ -71082,7 +71921,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_heavycrossbow_03",
@@ -71105,7 +71946,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_magicbook_01",
@@ -71128,7 +71971,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_magicbook_02",
@@ -71151,7 +71996,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_magicbook_03",
@@ -71174,7 +72021,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_prayerbook_01",
@@ -71197,7 +72046,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_prayerbook_02",
@@ -71220,7 +72071,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_prayerbook_03",
@@ -71243,7 +72096,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_general_01",
@@ -71266,7 +72121,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_general_02",
@@ -71289,7 +72146,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_general_03",
@@ -71312,7 +72171,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_general_04",
@@ -71335,7 +72196,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_explore_01",
@@ -71358,7 +72221,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_explore_02",
@@ -71381,7 +72246,9 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       },
       {
         "id": "skill_r2_explore_03",
@@ -71404,8 +72271,12 @@
         "unlockAreaKey": "area_sector3_2_tbd",
         "unlockCondition": "第3区画3-2通常エリア解放時（エリア未設定）",
         "notes": "RA相談15で追加。 ★2スキルガチャは第3区画3-2通常エリアで解放予定。エリア未設定のため現在は排出対象外。",
-        "updatedAt": "2026-08-06"
+        "updatedAt": "2026-08-06",
+        "ownerKey": "",
+        "createdBy": ""
       }
     ]
-  }
+  },
+  "updatedAt": "2026-08-08T04:47:40Z",
+  "generatedAt": "2026-08-08T13:48:21+09:00"
 }
