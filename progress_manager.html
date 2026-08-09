@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.448</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.450</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.448-random-table-copy1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.450-random-table-copy1">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -184,7 +184,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </style>
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.448｜更新：2026年8月9日</div>
+<div class="ra-build-info">v90.8.450｜更新：2026年8月9日</div>
 
 <header>
   <div class="header-inner">
@@ -456,7 +456,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.448';
+const VERSION='v90.8.450';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1152,18 +1152,44 @@ function eventCheckSkillName(checkType=''){
   if(!raw||raw==='なし')return '';
   return raw.replace(/\s*>=\s*目標値.*$/,'').trim();
 }
+function eventCheckExpressionDisplay(expr=''){
+  const raw=String(expr||'').trim();
+  if(!raw)return '';
+  const parts=raw.split(/\s*または\s*/).map(v=>v.trim()).filter(Boolean);
+  const parsed=parts.map(part=>{
+    const m=part.match(/^(.+?)\s*>=\s*(\d+(?:\.\d+)?)$/);
+    return m?{skill:m[1].trim(),target:m[2]}:null;
+  });
+  if(!parsed.length||parsed.some(v=>!v))return '';
+  const targets=[...new Set(parsed.map(v=>v.target))];
+  if(targets.length===1)return `使用技能：${parsed.map(v=>v.skill).join(' または ')} / 達成値：${targets[0]}`;
+  return `使用技能：${parsed.map(v=>`${v.skill}（達成値：${v.target}）`).join(' または ')}`;
+}
+function inlineEventCheckInfo(text=''){
+  const raw=String(text||'');
+  const m=raw.match(/^\s*判定：([^。]+)。\s*/);
+  if(!m)return {display:'',text:raw};
+  const display=eventCheckExpressionDisplay(m[1]);
+  return display?{display,text:raw.slice(m[0].length)}:{display:'',text:raw};
+}
 function eventCheckDisplayText(e={}){
-  const skill=eventCheckSkillName(e.checkType);
-  if(!skill)return '';
-  const target=String(e.targetValue||'').trim();
-  return [`使用技能：${skill}`,target?`達成値：${target}`:''].filter(Boolean).join(' / ');
+  const raw=String(e.checkType||'').trim();
+  if(raw&&raw!=='なし'){
+    const target=String(e.targetValue||'').trim();
+    const expr=raw.replace(/目標値/g,target||'目標値');
+    const parsed=eventCheckExpressionDisplay(expr);
+    if(parsed)return parsed;
+    const skill=eventCheckSkillName(raw);
+    return [`使用技能：${skill}`,target?`達成値：${target}`:''].filter(Boolean).join(' / ');
+  }
+  return inlineEventCheckInfo(e.result||'').display;
 }
 function eventDetailText(e,q=null){
   const partySize=q?effectiveQuestPartySize(q):selectedPartySize();
   return [
     e.eventType?`種別：${e.eventType}`:'',
     eventCheckDisplayText(e),
-    e.result?`結果：${resolveEncounterTokensInText(e.result,partySize)}`:'',
+    e.result?`結果：${eventResultTextForDisplay(e,partySize)}`:'',
     e.progressEffect?`進行効果：${e.progressEffect}`:'',
     e.notes?`メモ：${e.notes}`:''
   ].filter(Boolean).join('\n');
@@ -1676,7 +1702,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.448-party-scaling-3';
+const ENCOUNTER_RULE_VERSION='v90.8.450-party-scaling-3';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -2032,6 +2058,10 @@ function encounterCountText(row={},resolution=null){
 function eventHasTreasure(row={}){return !!String(row.treasureTableId||'').trim();}
 function eventResultTextForDisplay(row={},partySize=selectedPartySize()){
   let text=resolveEncounterTokensInText(row.result||'',partySize);
+  const inline=inlineEventCheckInfo(text);
+  if(inline.display)text=inline.text;
+  // 固定イベント等の自由記述に旧式「技能>=目標値」が残っていても、画面には式を出さない。
+  text=String(text||'').replace(/([^\s、。：「」]+)\s*>=\s*(\d+(?:\.\d+)?)/g,'$1（達成値$2以上）');
   if(!eventHasTreasure(row))return text;
   return String(text||'')
     .replace(/宝箱表「[^」]+」を1回抽選して/g,'下記の宝箱を確認して')
