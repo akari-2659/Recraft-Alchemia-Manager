@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.444</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.448</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.444-random-table-copy1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.448-random-table-copy1">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -184,7 +184,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </style>
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.444｜更新：2026年8月9日</div>
+<div class="ra-build-info">v90.8.448｜更新：2026年8月9日</div>
 
 <header>
   <div class="header-inner">
@@ -456,7 +456,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.444';
+const VERSION='v90.8.448';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1147,11 +1147,22 @@ function renderQuestStepInfo(q,p){
   const nextPlan=questProgressEventForAdvance(q,current,nextValue);
   box.innerHTML=`<div class="kv"><b>現在</b><span>${current}%</span><b>現在地点のイベント</b><span>${esc(currentPlan)}</span><b>1回の進行</b><span>+${step}%</span><b>進行後</b><span>${nextValue}%</span><b>次のイベント</b><span>${esc(nextPlan)}</span></div><p class="muted small">クエストは固定イベントとランダムイベントを混在させます。固定イベントが登録されていない進行区切り（0%を含む）は、エリア依頼では対象エリアのイベント、拠点内依頼では拠点内ランダムイベントを使用します。</p>`;
 }
+function eventCheckSkillName(checkType=''){
+  const raw=String(checkType||'').trim();
+  if(!raw||raw==='なし')return '';
+  return raw.replace(/\s*>=\s*目標値.*$/,'').trim();
+}
+function eventCheckDisplayText(e={}){
+  const skill=eventCheckSkillName(e.checkType);
+  if(!skill)return '';
+  const target=String(e.targetValue||'').trim();
+  return [`使用技能：${skill}`,target?`達成値：${target}`:''].filter(Boolean).join(' / ');
+}
 function eventDetailText(e,q=null){
   const partySize=q?effectiveQuestPartySize(q):selectedPartySize();
   return [
     e.eventType?`種別：${e.eventType}`:'',
-    e.checkType?`判定：${e.checkType}${e.targetValue?` / 目標値：${e.targetValue}`:''}`:'',
+    eventCheckDisplayText(e),
     e.result?`結果：${resolveEncounterTokensInText(e.result,partySize)}`:'',
     e.progressEffect?`進行効果：${e.progressEffect}`:'',
     e.notes?`メモ：${e.notes}`:''
@@ -1232,7 +1243,7 @@ ${baseQuest?'拠点内ランダムイベント':'該当エリアのランダム�
         sourceArea?`候補追加元：${sourceArea.name||sourceArea.id}`:'',
         picked.eventName?`イベント：${picked.eventName}`:'',
         picked.eventType?`種別：${picked.eventType}`:'',
-        picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'',
+        eventCheckDisplayText(picked),
         picked.result?`結果：${eventResultTextForDisplay(picked,effectiveQuestPartySize(q))}`:'',
         picked.progressEffect?`補足：${picked.progressEffect}`:''
       ].filter(Boolean).join('\n')
@@ -1268,7 +1279,7 @@ function triggerQuestSpecificEvents(q,before,after){
     const resolvedEncounter=resolveQuestFixedEncounter(q,e,true);
     const extraLines=['このイベントはクエスト進行度による確定発生です。ランダム抽選ではありません。'];
     const supportNote=questPartyAdjustmentNote(q);if(supportNote)extraLines.push(supportNote);
-    if(resolvedEncounter){extraLines.push(encounterResolutionBlock(resolvedEncounter));recordLastEncounter(e.eventName||q.name||'クエスト戦闘',area?.name||q.areaName||'',encounterGroupsForDrop({},resolvedEncounter,effectiveSize));}
+    if(resolvedEncounter){const resolvedGroups=encounterGroupsForDrop({},resolvedEncounter,effectiveSize);extraLines.push(encounterResolutionBlock(resolvedEncounter));extraLines.push(encounterInitiativeText(resolvedGroups));recordLastEncounter(e.eventName||q.name||'クエスト戦闘',area?.name||q.areaName||'',resolvedGroups);}
     state.lastQuestFixedEventText=formatEventOutput(
       `【クエスト固有イベント】${e.eventName||'名称未設定'}`,
       e,
@@ -1407,7 +1418,7 @@ function rollBaseEvent(){
     '【拠点内ランダムイベント】',
     source?`追加元エリア：${source.name||source.id}`:'',
     picked.eventName?`イベント：${picked.eventName}`:'',
-    picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'',
+    eventCheckDisplayText(picked),
     picked.result?`結果：${eventResultTextForDisplay(picked)}`:'',
     picked.rewardTableId?`入手アイテム表：${picked.rewardTableId}`:'',
     picked.progressEffect?`補足：${picked.progressEffect}`:''
@@ -1665,7 +1676,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.444-party-scaling-3';
+const ENCOUNTER_RULE_VERSION='v90.8.448-party-scaling-3';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -1995,8 +2006,8 @@ function encounterCompositionGroups(row={},partySize=selectedPartySize()){
   }).filter(Boolean);
   return normalizeEncounterFrontline(groups);
 }
-function encounterCompositionText(row={}){
-  const groups=encounterCompositionGroups(row);
+function encounterCompositionText(row={},partySize=selectedPartySize()){
+  const groups=encounterCompositionGroups(row,partySize);
   if(groups.length)return ['出現構成：',...groups.map(group=>`${group.position}：${group.name} ×${group.count}`)].join('\n');
   const formation=String(row.encounterFormation||'').trim();return formation?`配置：${formation}`:'';
 }
@@ -2057,15 +2068,29 @@ function encounterGroupsForDrop(row={},resolution=null,partySize=selectedPartySi
   if(resolution&&Array.isArray(resolution.groups))return resolution.groups.map(g=>({name:g.name,count:g.count,formation:g.formation||g.position||''}));
   return encounterCompositionGroups(row,partySize).map(g=>({name:g.name,count:g.count,formation:g.position||''}));
 }
+function encounterHighestInitiative(groups=[]){
+  const values=(groups||[]).map(group=>{
+    const name=String(group?.name||'').trim();
+    const monster=(state.monsters||[]).find(row=>String(row.name||'').trim()===name);
+    const value=Number(monster?.initiative);
+    return Number.isFinite(value)?value:null;
+  }).filter(value=>value!==null);
+  return values.length?Math.max(...values):null;
+}
+function encounterInitiativeText(groups=[]){
+  const highest=encounterHighestInitiative(groups);
+  return highest===null?'':`先制値：${highest}`;
+}
 function formatEventOutput(prefix,picked,area,tableId,extraLines=[],partySizeOverride=null){
   const partySize=partySizeOverride===null?selectedPartySize():normalizePartySize(partySizeOverride);
   const condition=eventConditionType(picked)==='なし'?'':`前提：${eventConditionType(picked)}${picked.conditionValue?` / ${picked.conditionValue}`:''}`;
   const random=String(picked.encounterCountRule||'').trim()==='ランダム編成'?generateRandomEncounter(area?.name||picked.areaName||'',randomEncounterOptionsForEvent(picked,partySize)):null;
   const encounter=encounterCountText(picked,random);
-  const composition=random?encounterResolutionBlock(random):encounterCompositionText(picked);
+  const composition=random?encounterResolutionBlock(random):encounterCompositionText(picked,partySize);
   const dropGroups=encounterGroupsForDrop(picked,random,partySize);
+  const initiative=encounterInitiativeText(dropGroups);
   if(dropGroups.length)recordLastEncounter(picked.eventName||prefix,area?.name||picked.areaName||'',dropGroups);
-  return [prefix,area?`エリア：${area.name||area.id}`:'',area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'',`表：${tableId}`,picked.eventName?`イベント：${picked.eventName}`:'',picked.eventType?`種別：${picked.eventType}`:'',condition,encounter,composition,picked.checkType?`判定：${picked.checkType}${picked.targetValue?` / 目標値：${picked.targetValue}`:''}`:'',picked.result?`結果：${eventResultTextForDisplay(picked,partySize)}`:'',picked.progressEffect?`補足：${picked.progressEffect}`:'',...extraLines].filter(Boolean).join('\n');
+  return [prefix,area?`エリア：${area.name||area.id}`:'',area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'',`表：${tableId}`,picked.eventName?`イベント：${picked.eventName}`:'',picked.eventType?`種別：${picked.eventType}`:'',condition,encounter,composition,initiative,eventCheckDisplayText(picked),picked.result?`結果：${eventResultTextForDisplay(picked,partySize)}`:'',picked.progressEffect?`補足：${picked.progressEffect}`:'',...extraLines].filter(Boolean).join('\n');
 }
 function triggerAreaClearRumorEvent(area){
   clearRecipeMerchantOffers();
@@ -3130,7 +3155,7 @@ function addSelectedMonsterToEncounter(){const m=selectedDropMonster();if(!m){ad
 function renderEncounterDropList(){
   const rows=normalizeDropInstances(state.dropEncounterInstances||[]);state.dropEncounterInstances=rows;
   const summary=$('lastEncounterSummary');
-  if(summary){const source=state.lastEncounter;summary.innerHTML=source&&source.groups?.length?`<b>${esc(source.label||'直前の出現構成')}</b>${source.areaName?`<br><span class="muted small">エリア：${esc(source.areaName)}</span>`:''}<br><span class="muted small">${source.groups.map(g=>`${esc(g.formation||'配置未設定')}：${esc(g.name)} ×${Math.max(1,Number(g.count)||1)}`).join(' / ')}</span>`:'まだ出現構成が読み込まれていません。';}
+  if(summary){const source=state.lastEncounter;const initiative=source&&source.groups?.length?encounterInitiativeText(source.groups):'';summary.innerHTML=source&&source.groups?.length?`<b>${esc(source.label||'直前の出現構成')}</b>${source.areaName?`<br><span class="muted small">エリア：${esc(source.areaName)}</span>`:''}<br><span class="muted small">${source.groups.map(g=>`${esc(g.formation||'配置未設定')}：${esc(g.name)} ×${Math.max(1,Number(g.count)||1)}`).join(' / ')}</span>${initiative?`<br><span class="muted small">${esc(initiative)}</span>`:''}`:'まだ出現構成が読み込まれていません。';}
   const box=$('encounterDropList');if(!box)return;
   if(!rows.length){box.innerHTML='<div class="card muted">戦闘イベント・クエストで出現構成が決定すると、ここへ自動表示されます。</div>';if($('rollEncounterDropBtn'))$('rollEncounterDropBtn').disabled=true;return;}if($('rollEncounterDropBtn'))$('rollEncounterDropBtn').disabled=false;
   const counts={};
