@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.441</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.444</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.441-random-table-copy1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.444-random-table-copy1">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -184,7 +184,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </style>
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.441｜更新：2026年8月9日</div>
+<div class="ra-build-info">v90.8.444｜更新：2026年8月9日</div>
 
 <header>
   <div class="header-inner">
@@ -456,7 +456,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.441';
+const VERSION='v90.8.444';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1665,7 +1665,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.441-party-scaling-3';
+const ENCOUNTER_RULE_VERSION='v90.8.444-party-scaling-3';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -2147,14 +2147,21 @@ function recipeMerchantRecipeForTreasure(row={}){
       ||(state.recipes||[]).find(r=>entry&&[`${String(r.resultItem||r.name||'').trim()}のレシピ`,String(r.name||'').trim()].includes(entry))
       ||null;
 }
+function recipeMerchantIsRegularShopRecipe(row={}){
+  const price=Number(String(row.recipePrice||'').trim());
+  return Number.isFinite(price)&&price>0;
+}
+function recipeMerchantIsRecipeItem(row={}){
+  const sell=Number(String(row.recipeSellPrice||'').trim());
+  return Number.isFinite(sell)&&sell>0;
+}
 function recipeMerchantPool(areaName=''){
   const name=String(areaName||'').trim(),map=new Map();
-  (state.treasures||[]).forEach(row=>{
-    if(String(row.enabled??'TRUE').trim().toUpperCase()==='FALSE')return;
-    if(String(row.entryType||'').trim()!=='レシピ')return;
-    if(String(row.areaName||'').trim()!==name)return;
-    if(recipeMerchantIsBossTreasureRow(row))return;
-    const recipe=recipeMerchantRecipeForTreasure(row);if(!recipe)return;
+  (state.recipes||[]).forEach(recipe=>{
+    if(!enabledRow(recipe))return;
+    if(!recipeMerchantIsRecipeItem(recipe))return;
+    if(recipeMerchantIsRegularShopRecipe(recipe))return;
+    if(!treasureUnlockAreaAllowed(recipe.unlockAreaKey,name))return;
     const key=recipeMerchantRecipeKey(recipe);if(key&&!map.has(key))map.set(key,recipe);
   });
   return [...map.values()];
@@ -2229,7 +2236,7 @@ function renderRecipeMerchantPanel(){
   if(!rows.some(r=>recipeMerchantRecipeKey(r)===state.selectedRecipeMerchantId))state.selectedRecipeMerchantId=recipeMerchantRecipeKey(rows[0]);
   const cards=rows.map(r=>`<article class="recipe-merchant-card"><h4>${esc(r.name||r.resultItem||'名称未設定')}</h4><div>${esc(progressPlayerRank(r.rank)||'ランク未設定')} / ${esc(r.craftType||'製作区分未設定')}</div><div class="recipe-merchant-price">${recipeMerchantPrice(r)}G <span class="recipe-merchant-normal">通常${recipeMerchantNormalPrice(r)}G</span></div></article>`).join('');
   const opts=rows.map(r=>`<option value="${esc(recipeMerchantRecipeKey(r))}" ${recipeMerchantRecipeKey(r)===state.selectedRecipeMerchantId?'selected':''}>${esc(r.name||r.resultItem||'名称未設定')}</option>`).join('');
-  panel.innerHTML=`<section class="card"><h3>レシピ商人の販売品</h3><p class="muted small">このエリアの非ボス宝箱から入手できるレシピを4件抽選しています。遭遇価格は通常販売価格の75%（10G単位切り捨て）です。</p><div class="recipe-merchant-grid">${cards}</div><div class="buttons"><button type="button" class="secondary" id="copyRecipeMerchantListBtn">販売商品リストをコピー</button></div><div class="recipe-merchant-tools"><label>情報コピーするレシピ<select id="recipeMerchantSelect">${opts}</select></label><button type="button" class="secondary" id="copyRecipeMerchantInfoBtn">選択レシピ情報をコピー</button></div></section>`;
+  panel.innerHTML=`<section class="card"><h3>レシピ商人の販売品</h3><p class="muted small">常設店売りレシピを除き、この進行段階までに解放されるレシピ全体から4件抽選しています。宝箱限定・ボス由来を含みます。遭遇価格は通常販売価格の75%（10G単位切り捨て）です。</p><div class="recipe-merchant-grid">${cards}</div><div class="buttons"><button type="button" class="secondary" id="copyRecipeMerchantListBtn">販売商品リストをコピー</button></div><div class="recipe-merchant-tools"><label>情報コピーするレシピ<select id="recipeMerchantSelect">${opts}</select></label><button type="button" class="secondary" id="copyRecipeMerchantInfoBtn">選択レシピ情報をコピー</button></div></section>`;
 }
 function mergeEventItemCopyParts(parts=[]){
   let eventHeading='';const bodies=[];
