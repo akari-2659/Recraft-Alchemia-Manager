@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.450</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.451</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.450-random-table-copy1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.451-random-table-copy1">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -184,7 +184,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </style>
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.450｜更新：2026年8月9日</div>
+<div class="ra-build-info">v90.8.451｜更新：2026年8月9日</div>
 
 <header>
   <div class="header-inner">
@@ -456,7 +456,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.450';
+const VERSION='v90.8.451';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1111,6 +1111,8 @@ function questRandomEvents(q){
 function isDeliveryQuest(q={}){return String(q.requestKind||'').trim()==='納品依頼';}
 function isImportantQuest(q={}){return questCategoryFor(q)==='重要';}
 function questLocationText(q={}){return String(q.questLocation||((q.requestKind==='拠点内依頼'||q.requestKind==='納品依頼')?'拠点':q.areaName)||'未設定').trim();}
+function questBattleRoundLimit(q={}){const n=Number(q.battleRoundLimit);return Number.isFinite(n)&&n>0?Math.floor(n):0;}
+function questBattleRoundLines(q={}){const n=questBattleRoundLimit(q);if(!n)return[];return [`戦闘制限：${n}ラウンド以内`,q.battleRoundSuccess?`制限成功：${q.battleRoundSuccess}`:'',q.battleRoundFailure?`制限失敗：${q.battleRoundFailure}`:''].filter(Boolean);}
 function questStepAmount(q){
   if(isDeliveryQuest(q))return 0;
   const n=getNumFromText(q&&q.progressStep,10);
@@ -1282,6 +1284,7 @@ ${baseQuest?'拠点内ランダムイベント':'該当エリアのランダム�
   state.lastQuestEventText=[baseText,treasureBundle.displayText,tableReward.displayText,isRecipeMerchantEvent(picked)?recipeMerchantOfferDisplayText():''].filter(Boolean).join('\n\n');
   state.lastQuestTreasureCopyText=treasureBundle.copyText||'';
   state.lastQuestEventRewardState=buildEventRewardState(picked);
+  updateQuestEventItemCopyButton();
   updateTreasureCopyButtons();
   renderQuestEvents();
   addLog(`クエストランダムイベント：${q.name||q.id} / ${picked.eventName||'名称未設定'}${baseQuest?'（拠点内イベント）':''}${treasureBundle.results.length?` / 宝箱${treasureBundle.results.length}件を同時決定`:''}${tableReward.items?.length?` / 入手アイテム${tableReward.items.length}種`:''}`);
@@ -1305,7 +1308,7 @@ function triggerQuestSpecificEvents(q,before,after){
     const resolvedEncounter=resolveQuestFixedEncounter(q,e,true);
     const extraLines=['このイベントはクエスト進行度による確定発生です。ランダム抽選ではありません。'];
     const supportNote=questPartyAdjustmentNote(q);if(supportNote)extraLines.push(supportNote);
-    if(resolvedEncounter){const resolvedGroups=encounterGroupsForDrop({},resolvedEncounter,effectiveSize);extraLines.push(encounterResolutionBlock(resolvedEncounter));extraLines.push(encounterInitiativeText(resolvedGroups));recordLastEncounter(e.eventName||q.name||'クエスト戦闘',area?.name||q.areaName||'',resolvedGroups);}
+    if(resolvedEncounter){const resolvedGroups=encounterGroupsForDrop({},resolvedEncounter,effectiveSize);extraLines.push(encounterResolutionBlock(resolvedEncounter));extraLines.push(encounterInitiativeText(resolvedGroups));extraLines.push(...questBattleRoundLines(q));recordLastEncounter(e.eventName||q.name||'クエスト戦闘',area?.name||q.areaName||'',resolvedGroups);}
     state.lastQuestFixedEventText=formatEventOutput(
       `【クエスト固有イベント】${e.eventName||'名称未設定'}`,
       e,
@@ -1321,6 +1324,7 @@ function triggerQuestSpecificEvents(q,before,after){
       updateTreasureCopyButtons();
     }
     state.lastQuestEventRewardState=buildEventRewardState(e);
+    updateQuestEventItemCopyButton();
     renderEventRewardPanel('quest');
     addLog(`クエスト固有イベント：${q.name||q.id} / ${e.eventName||'名称未設定'}`);
     fired.push(e);
@@ -1353,7 +1357,7 @@ function renderQuest(){
   const important=isImportantQuest(q);
   const kindRow=important?'':`<b>依頼区分</b><span>${esc(q.requestKind||'未設定')}</span>`;
   const skillRow=!delivery&&q.recommendedSkills?`<b>推奨技能</b><span>${esc(q.recommendedSkills)}</span>`:'';
-  $('questDetail').innerHTML=`<div class="kv"><b>分類</b><span>${esc(questCategoryFor(q))}${!questEnabled(q)?'<span class="quest-pill off">OFF</span>':'<span class="quest-pill">ON</span>'}</span>${kindRow}<b>内容種別</b><span>${esc(q.questType||'')}</span>${skillRow}<b>報酬範囲</b><span>${esc(q.rewardScope||'各PC')}</span>${q.deliveryItems?`<b>納品物</b><span>${esc(q.deliveryItems)}</span>`:''}<b>ランク</b><span>${esc(progressPlayerRank(q.rank)||'')}</span><b>実施場所</b><span>${esc(questLocationText(q))}</span><b>進行上昇値</b><span>${delivery?'納品確認':`+${questStepAmount(q)}%`}</span><b>固定イベント数</b><span>${questSpecificEvents(q).length}件</span><b>クエストボス</b><span>${esc(questBossText(q))}</span><b>構成</b><span>${esc(questBossFormationText(q))}${randomFormation?' <button id="rerollQuestEncounterBtn" type="button" class="secondary" style="margin-left:8px;padding:5px 9px">編成を再抽選</button>':''}</span><b>クリア条件</b><span>${esc(q.clearCondition||'')}</span><b>報酬</b><span>${esc([q.rewardMoney,questRewardItemDisplay(q),Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / '))}（${esc(q.rewardScope||'各PC')}）</span></div>${randomFormation?'<p class="muted small">表示中の構成はプレビューです。実際の戦闘発生時には、同じ人数条件で改めて再抽選します。</p>':''}${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
+  $('questDetail').innerHTML=`<div class="kv"><b>分類</b><span>${esc(questCategoryFor(q))}${!questEnabled(q)?'<span class="quest-pill off">OFF</span>':'<span class="quest-pill">ON</span>'}</span>${kindRow}<b>内容種別</b><span>${esc(q.questType||'')}</span>${skillRow}<b>報酬範囲</b><span>${esc(q.rewardScope||'各PC')}</span>${q.deliveryItems?`<b>納品物</b><span>${esc(q.deliveryItems)}</span>`:''}<b>ランク</b><span>${esc(progressPlayerRank(q.rank)||'')}</span><b>実施場所</b><span>${esc(questLocationText(q))}</span><b>進行上昇値</b><span>${delivery?'納品確認':`+${questStepAmount(q)}%`}</span><b>固定イベント数</b><span>${questSpecificEvents(q).length}件</span><b>クエストボス</b><span>${esc(questBossText(q))}</span><b>構成</b><span>${esc(questBossFormationText(q))}${randomFormation?' <button id="rerollQuestEncounterBtn" type="button" class="secondary" style="margin-left:8px;padding:5px 9px">編成を再抽選</button>':''}</span>${questBattleRoundLimit(q)?`<b>戦闘制限</b><span>${esc(questBattleRoundLimit(q)+'ラウンド以内')}</span><b>制限成功</b><span>${esc(q.battleRoundSuccess||'')}</span><b>制限失敗</b><span>${esc(q.battleRoundFailure||'')}</span>`:''}<b>クリア条件</b><span>${esc(q.clearCondition||'')}</span><b>報酬</b><span>${esc([q.rewardMoney,questRewardItemDisplay(q),Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / '))}（${esc(q.rewardScope||'各PC')}）</span></div>${randomFormation?'<p class="muted small">表示中の構成はプレビューです。実際の戦闘発生時には、同じ人数条件で改めて再抽選します。</p>':''}${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
   $('rerollQuestEncounterBtn')?.addEventListener('click',rerollSelectedQuestEncounter);
   renderQuestStepInfo(q,p);
   renderQuestEvents();
@@ -1702,7 +1706,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.450-party-scaling-3';
+const ENCOUNTER_RULE_VERSION='v90.8.451-party-scaling-3';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -2305,7 +2309,7 @@ function mergeEventItemCopyParts(parts=[]){
 function questEventItemCopyText(){
   const parts=[];
   const rewardRows=eventRewardSelectedItems('quest');
-  if(rewardRows.length)parts.push(eventRewardCopyText('quest'));
+  if(eventRewardState('quest'))parts.push(eventRewardCopyText('quest'));
   if(String(state.lastQuestEventTableRewardCopyText||'').trim())parts.push(state.lastQuestEventTableRewardCopyText);
   if(String(state.lastQuestTreasureCopyText||'').trim())parts.push(state.lastQuestTreasureCopyText);
   return mergeEventItemCopyParts(parts);
@@ -2314,7 +2318,7 @@ function updateQuestEventItemCopyButton(){const btn=$('copyQuestEventBtn');if(bt
 function areaEventItemCopyText(){
   const parts=[];
   const rewardRows=eventRewardSelectedItems('event');
-  if(rewardRows.length)parts.push(eventRewardCopyText('event'));
+  if(eventRewardState('event'))parts.push(eventRewardCopyText('event'));
   if(String(state.lastEventTableRewardCopyText||'').trim())parts.push(state.lastEventTableRewardCopyText);
   if(String(state.lastEventTreasureCopyText||'').trim())parts.push(state.lastEventTreasureCopyText);
   return mergeEventItemCopyParts(parts);
@@ -3106,8 +3110,8 @@ function buildEventRewardState(row={}){
     const trigger=eventRewardTrigger(clause,currentBranchKey);
     if(trigger.kind==='success')currentBranchKey=String(trigger.branchKey||'判定');
     else if(trigger.kind==='failure'||trigger.kind==='victory')currentBranchKey='';
-    const items=eventRewardItemsFromClause(clause,previousItemName);if(!items.length)return;
-    previousItemName=items.at(-1).selectedName||previousItemName;
+    const items=eventRewardItemsFromClause(clause,previousItemName);const explicitNoReward=/入手なし|追加素材なし/.test(clause);if(!items.length&&!explicitNoReward)return;
+    if(items.length)previousItemName=items.at(-1).selectedName||previousItemName;
     const hasSelectedSuccess=groups.some(g=>g.trigger.kind==='success'&&g.selected);
     const selected=trigger.kind==='always'||(trigger.kind==='success'&&!hasSelectedSuccess)||(trigger.kind==='victory'&&!groups.some(g=>g.trigger.kind==='success'));
     groups.push({uid:eventRewardUid(),trigger,clause,items,selected});
@@ -3130,12 +3134,12 @@ function eventRewardCopyText(scope='event'){
     lines.push('',block);
   });return lines.join('\n');
 }
-function eventRewardGroupText(group={}){return(group.items||[]).map(item=>`${item.selectedName||item.name}×${item.count}${/D/i.test(item.expr||'')?`（${item.expr}）`:''}`).join('、');}
+function eventRewardGroupText(group={}){const text=(group.items||[]).map(item=>`${item.selectedName||item.name}×${item.count}${/D/i.test(item.expr||'')?`（${item.expr}）`:''}`).join('、');return text||'入手なし';}
 function renderEventRewardPanel(scope='event'){
-  const panel=$(eventRewardPanelId(scope)),reward=eventRewardState(scope);if(!panel)return;if(!reward?.groups?.length){panel.classList.add('hidden');panel.innerHTML='';return;}panel.classList.remove('hidden');
+  const panel=$(eventRewardPanelId(scope)),reward=eventRewardState(scope);if(!panel)return;if(!reward?.groups?.length){const merged=scope==='quest'?questEventItemCopyText():areaEventItemCopyText();if(String(merged||'').trim()){panel.classList.remove('hidden');panel.innerHTML=`<section class="card event-reward-card"><h3>入手アイテム</h3><p class="muted small">このイベントで確定した入手アイテムをまとめてコピーできます。</p><div class="buttons"><button type="button" class="ghost" data-event-reward-copy="${scope}">入手アイテムコピー</button></div></section>`;}else{panel.classList.add('hidden');panel.innerHTML='';}return;}panel.classList.remove('hidden');
   const body=reward.groups.map(group=>{const choices=group.items.map(item=>item.alternatives?.length?`<label class="event-reward-choice">選択：<select data-event-reward-choice="${esc(group.uid)}" data-event-reward-item="${esc(item.uid)}">${item.alternatives.map(name=>`<option value="${esc(name)}" ${name===item.selectedName?'selected':''}>${esc(name)}</option>`).join('')}</select></label>`:'').join('');const locked=group.trigger.kind==='always';return`<article class="event-reward-row"><label class="event-reward-check"><input type="checkbox" data-event-reward-check="${esc(group.uid)}" ${group.selected||locked?'checked':''} ${locked?'disabled':''}><span><b>${esc(group.trigger.label)}</b><br><span class="muted small">${esc(eventRewardGroupText(group))}</span></span></label>${choices}</article>`;}).join('');
   const selected=eventRewardSelectedItems(scope),total=selected.length?selected.map(row=>`${row.name}×${row.count}`).join('、'):'入手なし';
-  const copyButton=scope==='event'?'':`<button type="button" class="ghost" data-event-reward-copy="${scope}">入手アイテムコピー</button>`;panel.innerHTML=`<section class="card event-reward-card"><h3>素材・アイテム入手数</h3><p class="muted small">イベント選出時に数量ダイスを振っています。実際に成立した条件だけをチェックしてください。目標値+○以上は判定成功分へ追加されます。</p><div class="event-reward-list">${body}</div><div class="event-reward-total"><b>選択中の入手結果</b><span>${esc(total)}</span></div><div class="buttons"><button type="button" class="secondary" data-event-reward-reroll="${scope}">数量を振り直す</button>${copyButton}</div></section>`;
+  const copyButton=`<button type="button" class="ghost" data-event-reward-copy="${scope}">入手アイテムコピー</button>`;panel.innerHTML=`<section class="card event-reward-card"><h3>素材・アイテム入手数</h3><p class="muted small">イベント選出時に数量ダイスを振っています。実際に成立した条件だけをチェックしてください。目標値+○以上は判定成功分へ追加されます。</p><div class="event-reward-list">${body}</div><div class="event-reward-total"><b>選択中の入手結果</b><span>${esc(total)}</span></div><div class="buttons"><button type="button" class="secondary" data-event-reward-reroll="${scope}">数量を振り直す</button>${copyButton}</div></section>`;
 }
 function updateEventRewardSelection(scope,uid,checked){
   const reward=eventRewardState(scope),target=reward?.groups.find(g=>String(g.uid)===String(uid));if(!target)return;
@@ -3237,7 +3241,7 @@ async function copyText(text,noteId){
   try{await navigator.clipboard.writeText(v);}catch(e){const ta=document.createElement('textarea'); ta.value=v; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();}
   if(noteId){const el=$(noteId); el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),1200);} addLog('結果をコピーしました。');
 }
-function questMemo(){const q=selected($('questSelect'),state.quests); if(!q)return ''; const p=progressObj('quests',q.id||q.name); const delivery=isDeliveryQuest(q); return [`【クエスト進行】${q.name||q.id}`,isImportantQuest(q)?'':`依頼区分：${q.requestKind||'未設定'}`,!delivery&&q.recommendedSkills?`推奨技能：${q.recommendedSkills}`:'',`実施場所：${questLocationText(q)}`,delivery?`納品状況：${clamp(p.value)>=100?'完了':'未完了'}`:`進行度：${clamp(p.value)}%`,q.deliveryItems?`納品物：${q.deliveryItems}`:'',q.clearCondition?`クリア条件：${q.clearCondition}`:'',q.rewardMoney||q.rewardItems||q.rewardTableId||Number(q.bonusPoints||0)>0?`報酬：${[q.rewardMoney,questRewardItemDisplay(q),Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / ')}（${q.rewardScope||'各PC'}）`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
+function questMemo(){const q=selected($('questSelect'),state.quests); if(!q)return ''; const p=progressObj('quests',q.id||q.name); const delivery=isDeliveryQuest(q); return [`【クエスト進行】${q.name||q.id}`,isImportantQuest(q)?'':`依頼区分：${q.requestKind||'未設定'}`,!delivery&&q.recommendedSkills?`推奨技能：${q.recommendedSkills}`:'',`実施場所：${questLocationText(q)}`,delivery?`納品状況：${clamp(p.value)>=100?'完了':'未完了'}`:`進行度：${clamp(p.value)}%`,q.deliveryItems?`納品物：${q.deliveryItems}`:'',...questBattleRoundLines(q),q.clearCondition?`クリア条件：${q.clearCondition}`:'',q.rewardMoney||q.rewardItems||q.rewardTableId||Number(q.bonusPoints||0)>0?`報酬：${[q.rewardMoney,questRewardItemDisplay(q),Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / ')}（${q.rewardScope||'各PC'}）`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
 function questPublicRewardText(q={}){
   return [q.rewardMoney,questRewardItemDisplay(q),Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'',q.unlockResult?`解放：${q.unlockResult}`:''].filter(Boolean).join(' / ');
 }
@@ -3250,6 +3254,7 @@ function questPublicInfoLines(q={}){
     `実施場所：${questLocationText(q)}`,
     `クエスト説明：${q.description||'説明未設定'}`,
     q.deliveryItems?`納品物：${q.deliveryItems}`:'',
+    ...questBattleRoundLines(q),
     `達成条件：${q.clearCondition||'未設定'}`,
     `報酬：${questPublicRewardText(q)||'なし'}（${q.rewardScope||'各PC'}）`
   ].filter(Boolean);
@@ -3304,7 +3309,7 @@ $('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){su
   });
   document.addEventListener('click',e=>{
     const reroll=e.target.closest('[data-event-reward-reroll]');if(reroll){rerollEventReward(reroll.dataset.eventRewardReroll);return;}
-    const copy=e.target.closest('[data-event-reward-copy]');if(copy){const scope=copy.dataset.eventRewardCopy;copyText(eventRewardCopyText(scope),scope==='quest'?'questCopyNote':'eventCopyNote');}
+    const copy=e.target.closest('[data-event-reward-copy]');if(copy){const scope=copy.dataset.eventRewardCopy;const text=scope==='quest'?questEventItemCopyText():areaEventItemCopyText();copyText(text,scope==='quest'?'questCopyNote':'eventCopyNote');}
     if(e.target.closest('#copyRecipeMerchantListBtn')){const note=state.lastRecipeMerchantContext?.scope==='quest'?'questCopyNote':'eventCopyNote';copyText(recipeMerchantListCopyText(),note);return;}
     if(e.target.closest('#copyRecipeMerchantInfoBtn')){const note=state.lastRecipeMerchantContext?.scope==='quest'?'questCopyNote':'eventCopyNote';copyText(recipeMerchantInfoCopyText(selectedRecipeMerchantRow()),note);return;}
   });
