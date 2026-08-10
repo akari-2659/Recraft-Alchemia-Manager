@@ -1,7 +1,7 @@
 {
   "format": "recraft-alchemia-github-master",
-  "version": "90.8.464",
-  "updatedAt": "2026-08-10T14:08:00+09:00",
+  "version": "90.8.466",
+  "updatedAt": "2026-08-10T14:34:00+09:00",
   "encoding": "UTF-8",
   "sourceRepository": "akari-2659/Recraft-Alchemia-Manager",
   "description": "Recraft-Alchemiaのキャラシ・施設・管理画面で共通参照する静的マスターデータ。エリア解放キーは平文を含めず、照合用SHA-256のみ収録する。",
@@ -1675,7 +1675,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 330,
+        "buyPrice": "300",
         "sellPrice": "300"
       },
       {
@@ -1722,7 +1722,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 995,
+        "buyPrice": "900",
         "sellPrice": "900"
       },
       {
@@ -1769,7 +1769,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 2975,
+        "buyPrice": "2700",
         "sellPrice": "2700"
       },
       {
@@ -1816,7 +1816,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 8800,
+        "buyPrice": "8000",
         "sellPrice": "8000"
       },
       {
@@ -1863,7 +1863,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 330,
+        "buyPrice": "300",
         "sellPrice": "300"
       },
       {
@@ -1910,7 +1910,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 995,
+        "buyPrice": "900",
         "sellPrice": "900"
       },
       {
@@ -1957,7 +1957,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 2975,
+        "buyPrice": "2700",
         "sellPrice": "2700"
       },
       {
@@ -2004,7 +2004,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 8800,
+        "buyPrice": "8000",
         "sellPrice": "8000"
       },
       {
@@ -3168,7 +3168,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-31",
-        "buyPrice": 115,
+        "buyPrice": 100,
         "sellPrice": 100
       },
       {
@@ -3445,7 +3445,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 255,
+        "buyPrice": 230,
         "sellPrice": 230
       },
       {
@@ -4250,7 +4250,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 245,
+        "buyPrice": 220,
         "sellPrice": 220
       },
       {
@@ -4846,7 +4846,7 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-16",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 445,
+        "buyPrice": 400,
         "sellPrice": 400
       },
       {
@@ -5157,7 +5157,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 290,
+        "buyPrice": 260,
         "sellPrice": 260
       },
       {
@@ -5762,7 +5762,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 235,
+        "buyPrice": 210,
         "sellPrice": 210
       },
       {
@@ -6280,7 +6280,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 155,
+        "buyPrice": 140,
         "sellPrice": 140
       },
       {
@@ -6594,7 +6594,7 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-16",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 265,
+        "buyPrice": 240,
         "sellPrice": 240
       },
       {
@@ -7049,7 +7049,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-31",
-        "buyPrice": 100,
+        "buyPrice": 90,
         "sellPrice": 90
       },
       {
@@ -8026,7 +8026,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-31",
-        "buyPrice": 180,
+        "buyPrice": 160,
         "sellPrice": 160
       },
       {
@@ -8163,7 +8163,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-31",
-        "buyPrice": 235,
+        "buyPrice": 210,
         "sellPrice": 210
       },
       {
@@ -8568,7 +8568,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-31",
-        "buyPrice": 190,
+        "buyPrice": 170,
         "sellPrice": 170
       },
       {
@@ -9257,7 +9257,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-31",
-        "buyPrice": 225,
+        "buyPrice": 200,
         "sellPrice": 200
       },
       {
@@ -9678,7 +9678,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-31",
-        "buyPrice": 180,
+        "buyPrice": 160,
         "sellPrice": 160
       },
       {
@@ -10365,7 +10365,7 @@
         "equipmentUpgradeTarget": "",
         "skill": "祈祷",
         "checkType": "",
-        "buyPrice": 330,
+        "buyPrice": 300,
         "sellPrice": 300
       },
       {
@@ -11077,7 +11077,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 245,
+        "buyPrice": 220,
         "sellPrice": 220
       },
       {
@@ -11612,7 +11612,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 165,
+        "buyPrice": 150,
         "sellPrice": 150
       },
       {
@@ -11779,7 +11779,7 @@
         "equipmentUpgradeTarget": "",
         "skill": "魔法",
         "checkType": "",
-        "buyPrice": 330,
+        "buyPrice": 300,
         "sellPrice": 300
       },
       {
@@ -12125,7 +12125,7 @@
         "compatibleWeaponTypes": "大型弩",
         "updatedAt": "2026-07-31",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 40,
+        "buyPrice": 35,
         "sellPrice": 35
       },
       {
@@ -12136,7 +12136,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "拘束ボルト",
-        "price": 90,
+        "price": 80,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 10,
@@ -12163,8 +12163,8 @@
         "equipmentUpgradeTarget": "",
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
-        "buyPrice": 100,
-        "sellPrice": 90
+        "buyPrice": 80,
+        "sellPrice": 80
       },
       {
         "id": "ammo_bind_heavy_bolt",
@@ -12174,7 +12174,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "拘束大型ボルト",
-        "price": 110,
+        "price": 100,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 6,
@@ -12201,8 +12201,8 @@
         "equipmentUpgradeTarget": "",
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
-        "buyPrice": 125,
-        "sellPrice": 110
+        "buyPrice": 100,
+        "sellPrice": 100
       },
       {
         "id": "ammo_bind_arrow",
@@ -12212,7 +12212,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "拘束矢",
-        "price": 75,
+        "price": 70,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 10,
@@ -12239,8 +12239,8 @@
         "equipmentUpgradeTarget": "",
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
-        "buyPrice": 85,
-        "sellPrice": 75
+        "buyPrice": 70,
+        "sellPrice": 70
       },
       {
         "id": "ammo_poison_bolt",
@@ -12250,7 +12250,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "毒ボルト",
-        "price": 85,
+        "price": 80,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 10,
@@ -12277,8 +12277,8 @@
         "equipmentUpgradeTarget": "",
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
-        "buyPrice": 95,
-        "sellPrice": 85
+        "buyPrice": 80,
+        "sellPrice": 80
       },
       {
         "id": "ammo_poison_heavy_bolt",
@@ -12288,7 +12288,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "毒大型ボルト",
-        "price": 105,
+        "price": 100,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 6,
@@ -12315,8 +12315,8 @@
         "equipmentUpgradeTarget": "",
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
-        "buyPrice": 120,
-        "sellPrice": 105
+        "buyPrice": 100,
+        "sellPrice": 100
       },
       {
         "id": "ammo_poison_arrow",
@@ -12326,7 +12326,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "毒矢",
-        "price": 75,
+        "price": 70,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 10,
@@ -12353,8 +12353,8 @@
         "equipmentUpgradeTarget": "",
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
-        "buyPrice": 85,
-        "sellPrice": 75
+        "buyPrice": 70,
+        "sellPrice": 70
       },
       {
         "id": "ammo_water_bolt",
@@ -12392,7 +12392,7 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-21",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 80,
+        "buyPrice": 70,
         "sellPrice": 70
       },
       {
@@ -12431,7 +12431,7 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-21",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 100,
+        "buyPrice": 90,
         "sellPrice": 90
       },
       {
@@ -12470,7 +12470,7 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-21",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 70,
+        "buyPrice": 60,
         "sellPrice": 60
       },
       {
@@ -12481,7 +12481,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "浄化ボルト",
-        "price": 240,
+        "price": 220,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 10,
@@ -12508,8 +12508,8 @@
         "equipmentUpgradeTarget": "",
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
-        "buyPrice": 265,
-        "sellPrice": 240
+        "buyPrice": 220,
+        "sellPrice": 220
       },
       {
         "id": "ammo_purify_heavy_bolt",
@@ -12519,7 +12519,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "浄化大型ボルト",
-        "price": 280,
+        "price": 260,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 6,
@@ -12546,8 +12546,8 @@
         "equipmentUpgradeTarget": "",
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
-        "buyPrice": 310,
-        "sellPrice": 280
+        "buyPrice": 260,
+        "sellPrice": 260
       },
       {
         "id": "ammo_purify",
@@ -12557,7 +12557,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "浄化矢",
-        "price": 225,
+        "price": 210,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 10,
@@ -12584,8 +12584,8 @@
         "equipmentUpgradeTarget": "",
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
-        "buyPrice": 250,
-        "sellPrice": 225
+        "buyPrice": 210,
+        "sellPrice": 210
       },
       {
         "id": "ammo_fire_bolt",
@@ -12595,7 +12595,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "火炎ボルト",
-        "price": 75,
+        "price": 70,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 10,
@@ -12623,8 +12623,8 @@
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
         "element": "火",
-        "buyPrice": 85,
-        "sellPrice": 75
+        "buyPrice": 70,
+        "sellPrice": 70
       },
       {
         "id": "ammo_fire_heavy_bolt",
@@ -12634,7 +12634,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "火炎大型ボルト",
-        "price": 100,
+        "price": 90,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 6,
@@ -12662,8 +12662,8 @@
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
         "element": "火",
-        "buyPrice": 115,
-        "sellPrice": 100
+        "buyPrice": 90,
+        "sellPrice": 90
       },
       {
         "id": "ammo_fire_arrow",
@@ -12701,7 +12701,7 @@
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
         "element": "火",
-        "buyPrice": 70,
+        "buyPrice": 60,
         "sellPrice": 60
       },
       {
@@ -12712,7 +12712,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "破甲ボルト",
-        "price": 100,
+        "price": 90,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 10,
@@ -12739,8 +12739,8 @@
         "equipmentUpgradeTarget": "",
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
-        "buyPrice": 115,
-        "sellPrice": 100
+        "buyPrice": 90,
+        "sellPrice": 90
       },
       {
         "id": "ammo_piercing_heavy_bolt",
@@ -12750,7 +12750,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "破甲大型ボルト",
-        "price": 130,
+        "price": 120,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 6,
@@ -12777,8 +12777,8 @@
         "equipmentUpgradeTarget": "",
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
-        "buyPrice": 145,
-        "sellPrice": 130
+        "buyPrice": 120,
+        "sellPrice": 120
       },
       {
         "id": "ammo_piercing",
@@ -12788,7 +12788,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "破甲矢",
-        "price": 85,
+        "price": 80,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 10,
@@ -12815,8 +12815,8 @@
         "equipmentUpgradeTarget": "",
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
-        "buyPrice": 95,
-        "sellPrice": 85
+        "buyPrice": 80,
+        "sellPrice": 80
       },
       {
         "id": "ammo_bolt_normal",
@@ -12852,7 +12852,7 @@
         "compatibleWeaponTypes": "弩",
         "updatedAt": "2026-07-17",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 15,
+        "buyPrice": 12,
         "sellPrice": 12
       },
       {
@@ -12889,7 +12889,7 @@
         "compatibleWeaponTypes": "弓",
         "updatedAt": "2026-07-17",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 15,
+        "buyPrice": 10,
         "sellPrice": 10
       },
       {
@@ -12900,7 +12900,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "閃光ボルト",
-        "price": 90,
+        "price": 80,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 10,
@@ -12927,8 +12927,8 @@
         "equipmentUpgradeTarget": "",
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
-        "buyPrice": 100,
-        "sellPrice": 90
+        "buyPrice": 80,
+        "sellPrice": 80
       },
       {
         "id": "ammo_flash_heavy_bolt",
@@ -12938,7 +12938,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "閃光大型ボルト",
-        "price": 110,
+        "price": 100,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 6,
@@ -12965,8 +12965,8 @@
         "equipmentUpgradeTarget": "",
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
-        "buyPrice": 125,
-        "sellPrice": 110
+        "buyPrice": 100,
+        "sellPrice": 100
       },
       {
         "id": "ammo_flash",
@@ -12976,7 +12976,7 @@
         "materialType": "",
         "materialCategory": "",
         "name": "閃光矢",
-        "price": 75,
+        "price": 70,
         "rank": 1,
         "equipSlot": "所持品",
         "maxStack": 10,
@@ -13003,8 +13003,8 @@
         "equipmentUpgradeTarget": "",
         "csVisible": "TRUE",
         "ammoUse": "消費あり",
-        "buyPrice": 85,
-        "sellPrice": 75
+        "buyPrice": 70,
+        "sellPrice": 70
       },
       {
         "id": "ammo_wind_bolt",
@@ -13042,7 +13042,7 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-21",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 80,
+        "buyPrice": 70,
         "sellPrice": 70
       },
       {
@@ -13081,7 +13081,7 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-21",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 100,
+        "buyPrice": 90,
         "sellPrice": 90
       },
       {
@@ -13120,7 +13120,7 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-21",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 70,
+        "buyPrice": 60,
         "sellPrice": 60
       },
       {
@@ -13151,7 +13151,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 1765,
+        "buyPrice": 1600,
         "sellPrice": 1600
       },
       {
@@ -13247,7 +13247,7 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-16",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 255,
+        "buyPrice": 230,
         "sellPrice": 230
       },
       {
@@ -13279,7 +13279,7 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-16",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 115,
+        "buyPrice": 100,
         "sellPrice": 100
       },
       {
@@ -13311,7 +13311,7 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-16",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 375,
+        "buyPrice": 340,
         "sellPrice": 340
       },
       {
@@ -13345,7 +13345,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-21",
-        "buyPrice": 200,
+        "buyPrice": 180,
         "sellPrice": 180
       },
       {
@@ -13357,7 +13357,7 @@
         "materialCategory": "",
         "name": "狩人の矢筒",
         "csVisible": "TRUE",
-        "price": 375,
+        "price": 360,
         "rank": 3,
         "equipSlot": "矢筒",
         "quiverCapacity": 4,
@@ -13379,8 +13379,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-21",
-        "buyPrice": 415,
-        "sellPrice": 375
+        "buyPrice": 360,
+        "sellPrice": 360
       },
       {
         "id": "quiver_simple",
@@ -13413,7 +13413,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-31",
-        "buyPrice": 115,
+        "buyPrice": 100,
         "sellPrice": 100
       },
       {
@@ -13635,7 +13635,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 1985,
+        "buyPrice": "1800",
         "sellPrice": "1800"
       },
       {
@@ -13887,7 +13887,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 275,
+        "buyPrice": 250,
         "sellPrice": 250
       },
       {
@@ -14112,7 +14112,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 1985,
+        "buyPrice": "1800",
         "sellPrice": "1800"
       },
       {
@@ -14400,7 +14400,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 145,
+        "buyPrice": 130,
         "sellPrice": 130
       },
       {
@@ -14435,7 +14435,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 365,
+        "buyPrice": 330,
         "sellPrice": 330
       },
       {
@@ -14470,7 +14470,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 155,
+        "buyPrice": 140,
         "sellPrice": 140
       },
       {
@@ -14506,7 +14506,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-31",
-        "buyPrice": 70,
+        "buyPrice": 60,
         "sellPrice": 60
       },
       {
@@ -14646,7 +14646,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 135,
+        "buyPrice": 120,
         "sellPrice": 120
       },
       {
@@ -14927,7 +14927,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-31",
-        "buyPrice": 70,
+        "buyPrice": 60,
         "sellPrice": 60
       },
       {
@@ -14962,7 +14962,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 60,
+        "buyPrice": 50,
         "sellPrice": 50
       },
       {
@@ -14998,7 +14998,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-31",
-        "buyPrice": 70,
+        "buyPrice": 60,
         "sellPrice": 60
       },
       {
@@ -15033,7 +15033,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 190,
+        "buyPrice": 170,
         "sellPrice": 170
       },
       {
@@ -15069,7 +15069,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-31",
-        "buyPrice": 90,
+        "buyPrice": 80,
         "sellPrice": 80
       },
       {
@@ -15105,7 +15105,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-31",
-        "buyPrice": 115,
+        "buyPrice": 100,
         "sellPrice": 100
       },
       {
@@ -15141,7 +15141,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-07-31",
-        "buyPrice": 45,
+        "buyPrice": 40,
         "sellPrice": 40
       },
       {
@@ -15257,7 +15257,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 1655,
+        "buyPrice": "1500",
         "sellPrice": "1500"
       },
       {
@@ -15304,7 +15304,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "enabled": "FALSE",
-        "buyPrice": 500,
+        "buyPrice": 450,
         "sellPrice": 450
       },
       {
@@ -15351,7 +15351,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "enabled": "TRUE",
-        "buyPrice": 245,
+        "buyPrice": 220,
         "sellPrice": 220
       },
       {
@@ -15398,7 +15398,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "enabled": "FALSE",
-        "buyPrice": 795,
+        "buyPrice": 720,
         "sellPrice": 720
       },
       {
@@ -15444,7 +15444,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 245,
+        "buyPrice": 220,
         "sellPrice": 220
       },
       {
@@ -15490,7 +15490,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 685,
+        "buyPrice": 620,
         "sellPrice": 620
       },
       {
@@ -15536,7 +15536,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 310,
+        "buyPrice": 280,
         "sellPrice": 280
       },
       {
@@ -15582,7 +15582,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 155,
+        "buyPrice": 140,
         "sellPrice": 140
       },
       {
@@ -15628,7 +15628,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 465,
+        "buyPrice": 420,
         "sellPrice": 420
       },
       {
@@ -15675,7 +15675,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 375,
+        "buyPrice": 340,
         "sellPrice": 340
       },
       {
@@ -15722,7 +15722,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 355,
+        "buyPrice": 320,
         "sellPrice": 320
       },
       {
@@ -15769,7 +15769,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 420,
+        "buyPrice": 380,
         "sellPrice": 380
       },
       {
@@ -15816,7 +15816,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 510,
+        "buyPrice": 460,
         "sellPrice": 460
       },
       {
@@ -15863,7 +15863,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 550,
+        "buyPrice": 500,
         "sellPrice": 500
       },
       {
@@ -15910,7 +15910,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 720,
+        "buyPrice": 650,
         "sellPrice": 650
       },
       {
@@ -15935,7 +15935,7 @@
         "itemType": "道具",
         "itemCategory": "罠",
         "name": "磁着拘束具",
-        "price": 565,
+        "price": 560,
         "rank": 3,
         "equipSlot": "所持品",
         "maxStack": 1,
@@ -15957,8 +15957,8 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 625,
-        "sellPrice": 565
+        "buyPrice": 560,
+        "sellPrice": 560
       },
       {
         "dataKind": "アイテム",
@@ -16004,7 +16004,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 795,
+        "buyPrice": 720,
         "sellPrice": 720
       },
       {
@@ -16029,7 +16029,7 @@
         "itemType": "道具",
         "itemCategory": "罠",
         "name": "風圧跳弾罠",
-        "price": 720,
+        "price": 700,
         "rank": 3,
         "equipSlot": "所持品",
         "maxStack": 1,
@@ -16051,8 +16051,8 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 795,
-        "sellPrice": 720
+        "buyPrice": 700,
+        "sellPrice": 700
       },
       {
         "dataKind": "アイテム",
@@ -16098,7 +16098,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 860,
+        "buyPrice": 780,
         "sellPrice": 780
       },
       {
@@ -16133,7 +16133,7 @@
         "equipmentUpgradeTarget": "",
         "enabled": "TRUE",
         "updatedAt": "2026-07-29",
-        "buyPrice": 135,
+        "buyPrice": 120,
         "sellPrice": 120
       },
       {
@@ -16490,7 +16490,7 @@
         "equipmentUpgradeTarget": "",
         "enabled": "TRUE",
         "updatedAt": "2026-07-29",
-        "buyPrice": 465,
+        "buyPrice": 420,
         "sellPrice": 420
       },
       {
@@ -16609,7 +16609,7 @@
         "equipmentUpgradeTarget": "",
         "enabled": "TRUE",
         "updatedAt": "2026-07-29",
-        "buyPrice": 165,
+        "buyPrice": 150,
         "sellPrice": 150
       },
       {
@@ -16821,7 +16821,7 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-16",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 485,
+        "buyPrice": 440,
         "sellPrice": 440
       },
       {
@@ -16883,7 +16883,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 795,
+        "buyPrice": 720,
         "sellPrice": 720
       },
       {
@@ -16946,7 +16946,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 1600,
+        "buyPrice": 1450,
         "sellPrice": 1450
       },
       {
@@ -16978,7 +16978,7 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-16",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 420,
+        "buyPrice": 380,
         "sellPrice": 380
       },
       {
@@ -17106,7 +17106,7 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-16",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 640,
+        "buyPrice": 580,
         "sellPrice": 580
       },
       {
@@ -17232,7 +17232,7 @@
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 520,
+        "buyPrice": 470,
         "sellPrice": 470
       },
       {
@@ -20100,7 +20100,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-08-02",
-        "buyPrice": 225,
+        "buyPrice": 200,
         "sellPrice": 200
       },
       {
@@ -20396,7 +20396,7 @@
         "processingResultCount": 2,
         "processingDifficulty": "11",
         "processingFee": 40,
-        "buyPrice": 115,
+        "buyPrice": 100,
         "sellPrice": 100
       },
       {
@@ -22183,7 +22183,7 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "updatedAt": "2026-08-02",
-        "buyPrice": 225,
+        "buyPrice": 200,
         "sellPrice": 200
       },
       {
@@ -24059,7 +24059,7 @@
         "materialCategory": "",
         "name": "防風香油",
         "csVisible": "TRUE",
-        "price": 105,
+        "price": 100,
         "rank": 3,
         "equipSlot": "所持品",
         "maxStack": 5,
@@ -24081,8 +24081,8 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-31",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 120,
-        "sellPrice": 105
+        "buyPrice": 100,
+        "sellPrice": 100
       },
       {
         "id": "con_highland_insulating_resin",
@@ -24094,7 +24094,7 @@
         "materialCategory": "",
         "name": "避雷樹脂",
         "csVisible": "TRUE",
-        "price": 110,
+        "price": 105,
         "rank": 3,
         "equipSlot": "所持品",
         "maxStack": 5,
@@ -24116,8 +24116,8 @@
         "equipmentUpgradeSlotCost": "",
         "updatedAt": "2026-07-29",
         "equipmentUpgradeTarget": "",
-        "buyPrice": 125,
-        "sellPrice": 110
+        "buyPrice": 105,
+        "sellPrice": 105
       },
       {
         "id": "wpn_highland_wind_dagger",
@@ -30866,7 +30866,7 @@
         "publicId": "RCA-RCPX-QHNT",
         "name": "狩人の矢筒",
         "rank": 3,
-        "price": "150",
+        "price": "140",
         "recipePrice": "",
         "recipeSellPrice": "470",
         "recipeSource": "反照の水庭の半透明工房箱",
@@ -37120,7 +37120,7 @@
         "publicId": "RCA-RCPW-MAGN",
         "name": "磁着拘束具",
         "rank": 3,
-        "price": "250",
+        "price": "245",
         "recipePrice": "",
         "recipeSellPrice": "470",
         "recipeSource": "山麓の旧鉱山の旧工房設計箱",
@@ -37139,7 +37139,7 @@
         "unlockAreaKey": "area_foothill_old_mine",
         "unlockFacility": "鍛冶屋",
         "tags": "設計,罠,★3,宝箱限定レシピ",
-        "notes": "店頭購入560G。施設依頼費250G。自作時はこのレシピが必要。施設依頼ではレシピ不要。",
+        "notes": "店頭購入560G。施設依頼費245G。自作時はこのレシピが必要。施設依頼ではレシピ不要。",
         "updatedAt": "2026-08-09T04:25:00Z",
         "limitedRecipePrice": "2350"
       },
@@ -37176,7 +37176,7 @@
         "publicId": "RCA-RCPW-GALE",
         "name": "風圧跳弾罠",
         "rank": 3,
-        "price": "300",
+        "price": "280",
         "recipePrice": "",
         "recipeSellPrice": "470",
         "recipeSource": "風渡りの高原の風車工房設計箱",
@@ -37195,7 +37195,7 @@
         "unlockAreaKey": "area_wind_swept_highland",
         "unlockFacility": "鍛冶屋",
         "tags": "設計,罠,★3,宝箱限定レシピ",
-        "notes": "店頭購入700G。施設依頼費300G。自作時はこのレシピが必要。施設依頼ではレシピ不要。",
+        "notes": "店頭購入700G。施設依頼費280G。自作時はこのレシピが必要。施設依頼ではレシピ不要。",
         "updatedAt": "2026-08-09T04:25:00Z",
         "limitedRecipePrice": "2350"
       },
@@ -38410,7 +38410,7 @@
         "publicId": "RCA-RBBT-0212",
         "name": "拘束ボルト",
         "rank": 1,
-        "price": "30",
+        "price": "20",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "近郊の森の工房レシピ箱",
@@ -38438,7 +38438,7 @@
         "publicId": "RCA-RBHB-0212",
         "name": "拘束大型ボルト",
         "rank": 1,
-        "price": "25",
+        "price": "15",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "近郊の森の工房レシピ箱",
@@ -38466,7 +38466,7 @@
         "publicId": "RCA-RUQ6-MTQO",
         "name": "拘束矢",
         "rank": 1,
-        "price": "20",
+        "price": "15",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "近郊の森の工房レシピ箱",
@@ -38494,7 +38494,7 @@
         "publicId": "RCA-RPBT-0212",
         "name": "毒ボルト",
         "rank": 1,
-        "price": "30",
+        "price": "25",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "近郊の森の工房レシピ箱",
@@ -38522,7 +38522,7 @@
         "publicId": "RCA-RPHB-0212",
         "name": "毒大型ボルト",
         "rank": 1,
-        "price": "25",
+        "price": "20",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "近郊の森の工房レシピ箱",
@@ -38550,7 +38550,7 @@
         "publicId": "RCA-R2NS-HYAI",
         "name": "毒矢",
         "rank": 1,
-        "price": "25",
+        "price": "20",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "近郊の森の工房レシピ箱",
@@ -38578,7 +38578,7 @@
         "publicId": "RCA-RQBT-0212",
         "name": "浄化ボルト",
         "rank": 1,
-        "price": "160",
+        "price": "130",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "街はずれの草原の工房レシピ箱",
@@ -38606,7 +38606,7 @@
         "publicId": "RCA-RQHB-0212",
         "name": "浄化大型ボルト",
         "rank": 1,
-        "price": "185",
+        "price": "150",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "街はずれの草原の工房レシピ箱",
@@ -38634,7 +38634,7 @@
         "publicId": "RCA-R3A4-XWOH",
         "name": "浄化矢",
         "rank": 1,
-        "price": "145",
+        "price": "120",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "街はずれの草原の工房レシピ箱",
@@ -38662,7 +38662,7 @@
         "publicId": "RCA-RFBT-0212",
         "name": "火炎ボルト",
         "rank": 1,
-        "price": "30",
+        "price": "25",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "街はずれの草原の工房レシピ箱",
@@ -38690,7 +38690,7 @@
         "publicId": "RCA-RFHB-0212",
         "name": "火炎大型ボルト",
         "rank": 1,
-        "price": "25",
+        "price": "20",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "街はずれの草原の工房レシピ箱",
@@ -38746,7 +38746,7 @@
         "publicId": "RCA-RCBT-0212",
         "name": "破甲ボルト",
         "rank": 1,
-        "price": "40",
+        "price": "35",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "街はずれの草原の工房レシピ箱",
@@ -38774,7 +38774,7 @@
         "publicId": "RCA-RCHB-0212",
         "name": "破甲大型ボルト",
         "rank": 1,
-        "price": "45",
+        "price": "35",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "街はずれの草原の工房レシピ箱",
@@ -38802,7 +38802,7 @@
         "publicId": "RCA-RFZA-7HXA",
         "name": "破甲矢",
         "rank": 1,
-        "price": "30",
+        "price": "25",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "街はずれの草原の工房レシピ箱",
@@ -38886,7 +38886,7 @@
         "publicId": "RCA-RLBT-0212",
         "name": "閃光ボルト",
         "rank": 1,
-        "price": "35",
+        "price": "30",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "街はずれの草原の工房レシピ箱",
@@ -38914,7 +38914,7 @@
         "publicId": "RCA-RLHB-0212",
         "name": "閃光大型ボルト",
         "rank": 1,
-        "price": "30",
+        "price": "20",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "街はずれの草原の工房レシピ箱",
@@ -38942,7 +38942,7 @@
         "publicId": "RCA-R5FC-L3UB",
         "name": "閃光矢",
         "rank": 1,
-        "price": "25",
+        "price": "20",
         "recipePrice": "",
         "recipeSellPrice": "210",
         "recipeSource": "街はずれの草原の工房レシピ箱",
@@ -40006,7 +40006,7 @@
         "publicId": "RCA-QRR3-H2D3",
         "name": "防風香油の調合",
         "rank": 3,
-        "price": 80,
+        "price": 65,
         "recipePrice": "",
         "recipeSellPrice": "440",
         "recipeSource": "風渡りの高原の風車工房設計箱",
@@ -40038,7 +40038,7 @@
         "publicId": "RCA-7RQ7-LGPP",
         "name": "避雷樹脂の調合",
         "rank": 3,
-        "price": 80,
+        "price": 75,
         "recipePrice": "",
         "recipeSellPrice": "440",
         "recipeSource": "風渡りの高原の風車工房設計箱",
@@ -46441,20 +46441,20 @@
         "rank": 1,
         "areaName": "街はずれの草原",
         "progressStep": 25,
-        "fixedEvents": "25%\t新しい足跡\t判定：追跡>=9または感知>=9。成功：100%戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t畑荒らしの追い払い\t戦闘発生：ラピットホーン×1を必ず含み、草原の候補から人数対応の随伴魔物を抽選する。勝利後、小獣の毛皮×1を入手してクエストクリア。",
+        "fixedEvents": "25%\t新しい足跡\t判定：追跡>=9または感知>=9。成功：100%戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t畑荒らしの追い払い\t戦闘発生：ラピットホーンとラフィンラットだけで構成する。人数別構成は、1人：ラピットホーン×1、2人：ラピットホーン×1＋ラフィンラット×1、3人：ラピットホーン×1＋ラフィンラット×2、4人：各×2、5人：ラピットホーン×2＋ラフィンラット×3、6人：各×3、7人：ラピットホーン×3＋ラフィンラット×4。勝利後、小獣の毛皮×1を入手してクエストクリア。",
         "clearCondition": "ラピットホーンを含む畑荒らしの魔物群を討伐する。",
         "bossMonster": "ラピットホーン",
         "rewardMoney": "50G",
         "rewardItems": "小獣の毛皮×1",
         "unlockResult": "",
         "description": "農地周辺を荒らす小型魔物が増えている。痕跡を追い、作物への被害が広がる前に追い払ってほしい。",
-        "notes": "反復可能。指定対象＋ランダム随伴編成。 戦闘デイリー。1人でも受注可能。人数補正は重要クエストより軽くし、魔物の能力値ではなく出現数だけを調整する。 戦闘ごとに候補と数を再抽選し、人数ごとの固定編成表は使用しない。",
-        "updatedAt": "2026-08-07",
+        "notes": "出現種は依頼内容に合わせて固定し、参加人数では同じ対象種の数だけを調整する。 反復可能。戦闘デイリー。1人でも受注可能。人数補正は重要クエストより軽くし、魔物の能力値ではなく出現数だけを調整する。",
+        "updatedAt": "2026-08-10T14:34:00+09:00",
         "questCategory": "デイリー",
         "enabled": "TRUE",
-        "questBossName": "畑荒らしの小型魔物",
-        "questBossFormation": "指定対象＋人数対応ランダム随伴（毎戦闘再抽選）",
-        "questBossComposition": "指定対象＋ランダム随伴,ラピットホーン,1,街はずれの草原",
+        "questBossName": "畑荒らしの小型魔物群",
+        "questBossFormation": "対象限定・人数対応編成",
+        "questBossComposition": "前衛,ラピットホーン,人数別[1:1/2:1/3:1/4:2/5:2/6:3/7:3];前衛,ラフィンラット,人数別[1:0/2:1/3:2/4:2/5:3/6:3/7:4]",
         "requestKind": "エリア依頼",
         "recommendedSkills": "追跡・感知・戦闘系技能",
         "rewardScope": "各PC",
@@ -46696,20 +46696,20 @@
         "rank": 1,
         "areaName": "近郊の森",
         "progressStep": 25,
-        "fixedEvents": "50%\t獣の通り道\t判定：追跡>=9または感知>=9。成功：100%戦闘の1ラウンド目に、味方全員が行う最初の判定+2。失敗：補正なし。\n100%\t痕跡の主との遭遇\t戦闘発生：ルートハウンド×1を必ず含み、森の候補から人数対応の随伴魔物を抽選する。勝利後、動く根×1を入手してクエストクリア。",
+        "fixedEvents": "50%\t獣の通り道\t判定：追跡>=9または感知>=9。成功：100%戦闘の1ラウンド目に、味方全員が行う最初の判定+2。失敗：補正なし。\n100%\t痕跡の主との遭遇\t戦闘発生：ルートハウンドのみ。人数別構成は、1～2人：1体、3～5人：2体、6～7人：3体。勝利後、動く根×1を入手してクエストクリア。",
         "clearCondition": "ルートハウンドを含む魔物群を討伐し、痕跡調査を完了する。",
         "bossMonster": "ルートハウンド",
         "rewardMoney": "70G",
         "rewardItems": "",
         "unlockResult": "",
         "description": "森の獣道に見慣れない痕跡が増えている。足跡や食べ跡を調べ、周辺を徘徊する魔物の正体を確かめてほしい。",
-        "notes": "反復可能。指定対象＋ランダム随伴編成。 戦闘デイリー。1人でも受注可能。人数補正は重要クエストより軽くし、魔物の能力値ではなく出現数だけを調整する。 戦闘ごとに候補と数を再抽選し、人数ごとの固定編成表は使用しない。",
-        "updatedAt": "2026-08-07",
+        "notes": "出現種は依頼内容に合わせて固定し、参加人数では同じ対象種の数だけを調整する。 反復可能。戦闘デイリー。1人でも受注可能。人数補正は重要クエストより軽くし、魔物の能力値ではなく出現数だけを調整する。",
+        "updatedAt": "2026-08-10T14:34:00+09:00",
         "questCategory": "デイリー",
         "enabled": "TRUE",
-        "questBossName": "痕跡の主",
-        "questBossFormation": "指定対象＋人数対応ランダム随伴（毎戦闘再抽選）",
-        "questBossComposition": "指定対象＋ランダム随伴,ルートハウンド,1,近郊の森",
+        "questBossName": "痕跡の主となるルートハウンド群",
+        "questBossFormation": "対象限定・人数対応編成",
+        "questBossComposition": "前衛,ルートハウンド,人数別[1:1/2:1/3:2/4:2/5:2/6:3/7:3]",
         "requestKind": "エリア依頼",
         "recommendedSkills": "追跡・感知・戦闘系技能",
         "rewardScope": "各PC",
@@ -46869,20 +46869,20 @@
         "rank": 1,
         "areaName": "水辺の湿地",
         "progressStep": 25,
-        "fixedEvents": "50%\t粘液溜まり\t判定：採取>=9。成功：ゼラチン液×1、湿地粘液×1を入手。失敗：戦闘発生：前衛にバブルスライム×1。勝利後、ゼラチン液×1を入手。\n100%\t泡立つ粘液核\t戦闘発生：人数対応ランダム随伴。ドロマール×1を必ず含み、残りは水辺の湿地の通常遭遇候補から参加人数に応じて毎戦闘再抽選する。勝利後、湿地粘液×1を入手してクエストクリア。",
+        "fixedEvents": "50%\t粘液溜まり\t判定：採取>=9。成功：ゼラチン液×1、湿地粘液×1を入手。失敗：戦闘発生：前衛にバブルスライム×1。勝利後、ゼラチン液×1を入手。\n100%\t泡立つ粘液核\t戦闘発生：ドロマール×1とバブルスライムだけで構成する。人数別構成は、1人：ドロマール×1、2～3人：ドロマール×1＋バブルスライム×1、4～5人：ドロマール×1＋バブルスライム×2、6～7人：ドロマール×1＋バブルスライム×3。勝利後、湿地粘液×1を入手してクエストクリア。",
         "clearCondition": "ゼラチン液を1個、湿地粘液を1個入手する。",
         "bossMonster": "",
         "rewardMoney": "70G",
         "rewardItems": "ゼラチン液×1",
         "unlockResult": "",
         "description": "調合に使える粘液素材が不足している。湿地に棲むスライム系魔物を調べ、状態のよい素材を確保してほしい。",
-        "notes": "反復可能。日替わり依頼として再受注可能。戦闘デイリー。1人でも受注可能。ドロマール1体を必ず含み、残りは水辺の湿地の候補から人数に応じて毎戦闘再抽選する。魔物の能力値は変更しない。人数ごとの固定編成表は使用しない。",
-        "updatedAt": "2026-08-07",
+        "notes": "出現種は依頼内容に合わせて固定し、参加人数では同じ対象種の数だけを調整する。 反復可能。日替わり依頼として再受注可能。戦闘デイリー。1人でも受注可能。ドロマール1体を必ず含み、残りは水辺の湿地の候補から人数に応じて毎戦闘再抽選する。魔物の能力値は変更しない。人数ごとの固定編成表は使用しない。",
+        "updatedAt": "2026-08-10T14:34:00+09:00",
         "questCategory": "デイリー",
         "enabled": "TRUE",
-        "questBossName": "泡立つ粘液核",
-        "questBossFormation": "指定対象＋人数対応ランダム随伴（毎戦闘再抽選）",
-        "questBossComposition": "指定対象＋ランダム随伴,ドロマール,1,水辺の湿地",
+        "questBossName": "湿地の粘液魔物群",
+        "questBossFormation": "対象限定・人数対応編成",
+        "questBossComposition": "前衛,ドロマール,1;後衛,バブルスライム,人数別[1:0/2:1/3:1/4:2/5:2/6:3/7:3]",
         "requestKind": "エリア依頼",
         "recommendedSkills": "採取・戦闘系技能",
         "rewardScope": "各PC",
@@ -48287,12 +48287,12 @@
         "rewardScope": "各PC",
         "deliveryItems": "",
         "progressStep": 50,
-        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t逃げる荷荒らしを止めろ\t戦闘発生：ラフィンラット×1を必ず含み、街はずれの草原の候補から人数対応の随伴魔物を抽選する。 特殊条件：第3ラウンド終了までに敵を全滅させれば成功。第3ラウンド終了時点で敵が1体でも残っていれば失敗。",
-        "clearCondition": "特殊条件：時間制限。第3ラウンド終了までにラフィンラットを含む魔物群を全滅させる。第3ラウンド終了時点で敵が残っていれば失敗。",
+        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t逃げる荷荒らしを止めろ\t戦闘発生：前衛にラフィンラット×4。特殊条件：第3ラウンド終了までに4体すべてを倒せば成功。第3ラウンド終了時点で1体でも残っていれば失敗。",
+        "clearCondition": "特殊条件：時間制限。第3ラウンド終了までにラフィンラット4体をすべて倒す。第3ラウンド終了時点で1体でも残っていれば失敗。",
         "bossMonster": "ラフィンラット",
-        "questBossName": "ラフィンラット",
-        "questBossFormation": "指定対象＋人数対応ランダム随伴（毎戦闘再抽選）",
-        "questBossComposition": "指定対象＋ランダム随伴,ラフィンラット,1,街はずれの草原",
+        "questBossName": "荷荒らしの群れ",
+        "questBossFormation": "固定編成",
+        "questBossComposition": "前衛,ラフィンラット,4",
         "rewardMoney": "75G",
         "rewardItems": "",
         "rewardTableId": "",
@@ -48300,13 +48300,13 @@
         "bonusPoints": 0,
         "unlockResult": "",
         "description": "荷を奪ったラフィンラットが草むらへ逃げ込んだ。散らばる前に追いつき、荷を取り戻してほしい。",
-        "notes": "反復可能。戦闘ごとに候補と数を再抽選し、人数ごとの固定編成表は使用しない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
-        "updatedAt": "2026-08-09T17:56:00+09:00",
+        "notes": "反復可能。クエスト内容に合わせた専用固定編成。参加人数による敵数の再抽選は行わない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
+        "updatedAt": "2026-08-10T14:34:00+09:00",
         "ownerKey": "",
         "createdBy": "",
         "battleRoundLimit": 3,
-        "battleRoundSuccess": "第3ラウンド終了までにラフィンラットを含む魔物群を全滅させる。",
-        "battleRoundFailure": "第3ラウンド終了時点で敵が1体でも残っていればクエスト失敗。"
+        "battleRoundSuccess": "第3ラウンド終了までにラフィンラット4体をすべて倒す。",
+        "battleRoundFailure": "第3ラウンド終了時点で対象が1体でも残っていればクエスト失敗。"
       },
       {
         "id": "quest_daily_grass_beetle_break",
@@ -48322,26 +48322,26 @@
         "rewardScope": "各PC",
         "deliveryItems": "",
         "progressStep": 50,
-        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t甲殻虫の急襲を止めろ\t戦闘発生：カラパスビートル×1を必ず含み、街はずれの草原の候補から人数対応の随伴魔物を抽選する。 特殊条件：第3ラウンド終了までに敵を全滅させれば成功。第3ラウンド終了時点で敵が1体でも残っていれば失敗。",
-        "clearCondition": "特殊条件：時間制限。第3ラウンド終了までにカラパスビートルを含む魔物群を全滅させる。第3ラウンド終了時点で敵が残っていれば失敗。",
+        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t甲殻虫の急襲を止めろ\t戦闘発生：前衛にカラパスビートル×2。特殊条件：第3ラウンド終了までに2体すべてを倒せば成功。第3ラウンド終了時点で1体でも残っていれば失敗。",
+        "clearCondition": "特殊条件：時間制限。第3ラウンド終了までにカラパスビートル2体をすべて倒す。第3ラウンド終了時点で1体でも残っていれば失敗。",
         "bossMonster": "カラパスビートル",
-        "questBossName": "カラパスビートル",
-        "questBossFormation": "指定対象＋人数対応ランダム随伴（毎戦闘再抽選）",
-        "questBossComposition": "指定対象＋ランダム随伴,カラパスビートル,1,街はずれの草原",
+        "questBossName": "急襲甲殻虫",
+        "questBossFormation": "固定編成",
+        "questBossComposition": "前衛,カラパスビートル,2",
         "rewardMoney": "80G",
         "rewardItems": "",
         "rewardTableId": "",
         "rewardDrawCount": "",
         "bonusPoints": 0,
         "unlockResult": "",
-        "description": "街道脇へ大型の甲殻虫が現れ、荷車を狙っている。短時間で押し返して通行を再開させてほしい。",
-        "notes": "反復可能。戦闘ごとに候補と数を再抽選し、人数ごとの固定編成表は使用しない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
-        "updatedAt": "2026-08-09T17:56:00+09:00",
+        "description": "街道脇へカラパスビートルが複数現れ、荷車を狙っている。短時間で押し返して通行を再開させてほしい。",
+        "notes": "反復可能。クエスト内容に合わせた専用固定編成。参加人数による敵数の再抽選は行わない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
+        "updatedAt": "2026-08-10T14:34:00+09:00",
         "ownerKey": "",
         "createdBy": "",
         "battleRoundLimit": 3,
-        "battleRoundSuccess": "第3ラウンド終了までにカラパスビートルを含む魔物群を全滅させる。",
-        "battleRoundFailure": "第3ラウンド終了時点で敵が1体でも残っていればクエスト失敗。"
+        "battleRoundSuccess": "第3ラウンド終了までにカラパスビートル2体をすべて倒す。",
+        "battleRoundFailure": "第3ラウンド終了時点で対象が1体でも残っていればクエスト失敗。"
       },
       {
         "id": "quest_daily_grass_crystal_outcrop",
@@ -48491,26 +48491,26 @@
         "rewardScope": "各PC",
         "deliveryItems": "",
         "progressStep": 50,
-        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t樹牙獣を追い払え\t戦闘発生：ルートハウンド×1を必ず含み、近郊の森の候補から人数対応の随伴魔物を抽選する。 特殊条件：第4ラウンド終了までに敵を全滅させれば成功。第4ラウンド終了時点で敵が1体でも残っていれば失敗。",
-        "clearCondition": "特殊条件：時間制限。第4ラウンド終了までにルートハウンドを含む魔物群を全滅させる。第4ラウンド終了時点で敵が残っていれば失敗。",
+        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t樹牙獣を追い払え\t戦闘発生：前衛にルートハウンド×3。特殊条件：第4ラウンド終了までに3体すべてを倒せば成功。第4ラウンド終了時点で1体でも残っていれば失敗。",
+        "clearCondition": "特殊条件：時間制限。第4ラウンド終了までにルートハウンド3体をすべて倒す。第4ラウンド終了時点で1体でも残っていれば失敗。",
         "bossMonster": "ルートハウンド",
-        "questBossName": "ルートハウンド",
-        "questBossFormation": "指定対象＋人数対応ランダム随伴（毎戦闘再抽選）",
-        "questBossComposition": "指定対象＋ランダム随伴,ルートハウンド,1,近郊の森",
+        "questBossName": "樹牙獣の群れ",
+        "questBossFormation": "固定編成",
+        "questBossComposition": "前衛,ルートハウンド,3",
         "rewardMoney": "115G",
         "rewardItems": "",
         "rewardTableId": "",
         "rewardDrawCount": "",
         "bonusPoints": 0,
         "unlockResult": "",
-        "description": "ルートハウンドが伐採路へ入り込み、作業者を追い回している。離散する前に主個体を倒してほしい。",
-        "notes": "反復可能。戦闘ごとに候補と数を再抽選し、人数ごとの固定編成表は使用しない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
-        "updatedAt": "2026-08-09T17:56:00+09:00",
+        "description": "数頭のルートハウンドが伐採路へ入り込み、作業者を追い回している。離散する前に群れを追い払ってほしい。",
+        "notes": "反復可能。クエスト内容に合わせた専用固定編成。参加人数による敵数の再抽選は行わない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
+        "updatedAt": "2026-08-10T14:34:00+09:00",
         "ownerKey": "",
         "createdBy": "",
         "battleRoundLimit": 4,
-        "battleRoundSuccess": "第4ラウンド終了までにルートハウンドを含む魔物群を全滅させる。",
-        "battleRoundFailure": "第4ラウンド終了時点で敵が1体でも残っていればクエスト失敗。"
+        "battleRoundSuccess": "第4ラウンド終了までにルートハウンド3体をすべて倒す。",
+        "battleRoundFailure": "第4ラウンド終了時点で対象が1体でも残っていればクエスト失敗。"
       },
       {
         "id": "quest_daily_forest_spore_break",
@@ -48526,12 +48526,12 @@
         "rewardScope": "各PC",
         "deliveryItems": "",
         "progressStep": 50,
-        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t胞子群の拡散阻止\t戦闘発生：マイコニド×1を必ず含み、近郊の森の候補から人数対応の随伴魔物を抽選する。 特殊条件：第3ラウンド終了までに敵を全滅させれば成功。第3ラウンド終了時点で敵が1体でも残っていれば失敗。",
-        "clearCondition": "特殊条件：時間制限。第3ラウンド終了までにマイコニドを含む魔物群を全滅させる。第3ラウンド終了時点で敵が残っていれば失敗。",
+        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t胞子群の拡散阻止\t戦闘発生：前衛にマイコニド×1、後衛にマイコニド×3。特殊条件：第3ラウンド終了までに4体すべてを倒せば成功。第3ラウンド終了時点で1体でも残っていれば失敗。",
+        "clearCondition": "特殊条件：時間制限。第3ラウンド終了までにマイコニド4体をすべて倒す。第3ラウンド終了時点で1体でも残っていれば失敗。",
         "bossMonster": "マイコニド",
-        "questBossName": "マイコニド",
-        "questBossFormation": "指定対象＋人数対応ランダム随伴（毎戦闘再抽選）",
-        "questBossComposition": "指定対象＋ランダム随伴,マイコニド,1,近郊の森",
+        "questBossName": "胞子群",
+        "questBossFormation": "固定編成",
+        "questBossComposition": "前衛,マイコニド,1;後衛,マイコニド,3",
         "rewardMoney": "110G",
         "rewardItems": "",
         "rewardTableId": "",
@@ -48539,13 +48539,13 @@
         "bonusPoints": 0,
         "unlockResult": "",
         "description": "マイコニドの群れが胞子を広げ始めた。周囲へ散る前に群れの中心を崩してほしい。",
-        "notes": "反復可能。戦闘ごとに候補と数を再抽選し、人数ごとの固定編成表は使用しない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
-        "updatedAt": "2026-08-09T17:56:00+09:00",
+        "notes": "反復可能。クエスト内容に合わせた専用固定編成。参加人数による敵数の再抽選は行わない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
+        "updatedAt": "2026-08-10T14:34:00+09:00",
         "ownerKey": "",
         "createdBy": "",
         "battleRoundLimit": 3,
-        "battleRoundSuccess": "第3ラウンド終了までにマイコニドを含む魔物群を全滅させる。",
-        "battleRoundFailure": "第3ラウンド終了時点で敵が1体でも残っていればクエスト失敗。"
+        "battleRoundSuccess": "第3ラウンド終了までにマイコニド4体をすべて倒す。",
+        "battleRoundFailure": "第3ラウンド終了時点で対象が1体でも残っていればクエスト失敗。"
       },
       {
         "id": "quest_daily_forest_patrol_cull",
@@ -48727,26 +48727,26 @@
         "rewardScope": "各PC",
         "deliveryItems": "",
         "progressStep": 50,
-        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t瘴蛭の接近を止めろ\t戦闘発生：ミアズマリーチ×1を必ず含み、水辺の湿地の候補から人数対応の随伴魔物を抽選する。 特殊条件：第3ラウンド終了までに敵を全滅させれば成功。第3ラウンド終了時点で敵が1体でも残っていれば失敗。",
-        "clearCondition": "特殊条件：時間制限。第3ラウンド終了までにミアズマリーチを含む魔物群を全滅させる。第3ラウンド終了時点で敵が残っていれば失敗。",
+        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t瘴蛭の接近を止めろ\t戦闘発生：前衛にミアズマリーチ×4。特殊条件：第3ラウンド終了までに4体すべてを倒せば成功。第3ラウンド終了時点で1体でも残っていれば失敗。",
+        "clearCondition": "特殊条件：時間制限。第3ラウンド終了までにミアズマリーチ4体をすべて倒す。第3ラウンド終了時点で1体でも残っていれば失敗。",
         "bossMonster": "ミアズマリーチ",
-        "questBossName": "ミアズマリーチ",
-        "questBossFormation": "指定対象＋人数対応ランダム随伴（毎戦闘再抽選）",
-        "questBossComposition": "指定対象＋ランダム随伴,ミアズマリーチ,1,水辺の湿地",
+        "questBossName": "瘴蛭の群れ",
+        "questBossFormation": "固定編成",
+        "questBossComposition": "前衛,ミアズマリーチ,4",
         "rewardMoney": "140G",
         "rewardItems": "",
         "rewardTableId": "",
         "rewardDrawCount": "",
         "bonusPoints": 0,
         "unlockResult": "",
-        "description": "ミアズマリーチが浅瀬の渡り場へ寄ってきている。瘴液を撒き散らす前に主個体を倒してほしい。",
-        "notes": "反復可能。戦闘ごとに候補と数を再抽選し、人数ごとの固定編成表は使用しない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
-        "updatedAt": "2026-08-09T17:56:00+09:00",
+        "description": "ミアズマリーチの群れが浅瀬の渡り場へ寄ってきている。瘴液を撒き散らす前に短時間で排除してほしい。",
+        "notes": "反復可能。クエスト内容に合わせた専用固定編成。参加人数による敵数の再抽選は行わない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
+        "updatedAt": "2026-08-10T14:34:00+09:00",
         "ownerKey": "",
         "createdBy": "",
         "battleRoundLimit": 3,
-        "battleRoundSuccess": "第3ラウンド終了までにミアズマリーチを含む魔物群を全滅させる。",
-        "battleRoundFailure": "第3ラウンド終了時点で敵が1体でも残っていればクエスト失敗。"
+        "battleRoundSuccess": "第3ラウンド終了までにミアズマリーチ4体をすべて倒す。",
+        "battleRoundFailure": "第3ラウンド終了時点で対象が1体でも残っていればクエスト失敗。"
       },
       {
         "id": "quest_daily_wetland_mosquito_swarm",
@@ -48762,12 +48762,12 @@
         "rewardScope": "各PC",
         "deliveryItems": "",
         "progressStep": 50,
-        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t霧蚊の群れを散らせ\t戦闘発生：ミストモスキート×1を必ず含み、水辺の湿地の候補から人数対応の随伴魔物を抽選する。 特殊条件：第5ラウンド終了までに敵を全滅させれば成功。第5ラウンド終了時点で敵が1体でも残っていれば失敗。",
-        "clearCondition": "特殊条件：時間制限。第5ラウンド終了までにミストモスキートを含む魔物群を全滅させる。第5ラウンド終了時点で敵が残っていれば失敗。",
+        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t霧蚊の群れを散らせ\t戦闘発生：前衛にミストモスキート×2、後衛にミストモスキート×3。特殊条件：第4ラウンド終了までに5体すべてを倒せば成功。第4ラウンド終了時点で1体でも残っていれば失敗。",
+        "clearCondition": "特殊条件：時間制限。第4ラウンド終了までにミストモスキート5体をすべて倒す。第4ラウンド終了時点で1体でも残っていれば失敗。",
         "bossMonster": "ミストモスキート",
-        "questBossName": "ミストモスキート",
-        "questBossFormation": "指定対象＋人数対応ランダム随伴（毎戦闘再抽選）",
-        "questBossComposition": "指定対象＋ランダム随伴,ミストモスキート,1,水辺の湿地",
+        "questBossName": "霧蚊の群れ",
+        "questBossFormation": "固定編成",
+        "questBossComposition": "前衛,ミストモスキート,2;後衛,ミストモスキート,3",
         "rewardMoney": "135G",
         "rewardItems": "",
         "rewardTableId": "",
@@ -48775,13 +48775,13 @@
         "bonusPoints": 0,
         "unlockResult": "",
         "description": "ミストモスキートの群れが岸辺へ集まり始めた。群れが広がる前に短時間で散らしてほしい。",
-        "notes": "反復可能。戦闘ごとに候補と数を再抽選し、人数ごとの固定編成表は使用しない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
-        "updatedAt": "2026-08-09T17:56:00+09:00",
+        "notes": "反復可能。クエスト内容に合わせた専用固定編成。参加人数による敵数の再抽選は行わない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
+        "updatedAt": "2026-08-10T14:34:00+09:00",
         "ownerKey": "",
         "createdBy": "",
-        "battleRoundLimit": 5,
-        "battleRoundSuccess": "第5ラウンド終了までにミストモスキートを含む魔物群を全滅させる。",
-        "battleRoundFailure": "第5ラウンド終了時点で敵が1体でも残っていればクエスト失敗。"
+        "battleRoundLimit": 4,
+        "battleRoundSuccess": "第4ラウンド終了までにミストモスキート5体をすべて倒す。",
+        "battleRoundFailure": "第4ラウンド終了時点で対象が1体でも残っていればクエスト失敗。"
       },
       {
         "id": "quest_daily_wetland_path_cull",
@@ -48963,26 +48963,26 @@
         "rewardScope": "各PC",
         "deliveryItems": "",
         "progressStep": 50,
-        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t掘爪獣の突破阻止\t戦闘発生：ピックモール×1を必ず含み、山麓の旧鉱山の候補から人数対応の随伴魔物を抽選する。 特殊条件：第4ラウンド終了までに敵を全滅させれば成功。第4ラウンド終了時点で敵が1体でも残っていれば失敗。",
-        "clearCondition": "特殊条件：時間制限。第4ラウンド終了までにピックモールを含む魔物群を全滅させる。第4ラウンド終了時点で敵が残っていれば失敗。",
+        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t掘爪獣の突破阻止\t戦闘発生：前衛にピックモール×3。特殊条件：第4ラウンド終了までに3体すべてを倒せば成功。第4ラウンド終了時点で1体でも残っていれば失敗。",
+        "clearCondition": "特殊条件：時間制限。第4ラウンド終了までにピックモール3体をすべて倒す。第4ラウンド終了時点で1体でも残っていれば失敗。",
         "bossMonster": "ピックモール",
-        "questBossName": "ピックモール",
-        "questBossFormation": "指定対象＋人数対応ランダム随伴（毎戦闘再抽選）",
-        "questBossComposition": "指定対象＋ランダム随伴,ピックモール,1,山麓の旧鉱山",
+        "questBossName": "掘爪獣の群れ",
+        "questBossFormation": "固定編成",
+        "questBossComposition": "前衛,ピックモール,3",
         "rewardMoney": "210G",
         "rewardItems": "",
         "rewardTableId": "",
         "rewardDrawCount": "",
         "bonusPoints": 0,
         "unlockResult": "",
-        "description": "ピックモールが薄い坑壁を破って運搬路へ出ようとしている。作業区画へ抜ける前に止めてほしい。",
-        "notes": "反復可能。戦闘ごとに候補と数を再抽選し、人数ごとの固定編成表は使用しない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
-        "updatedAt": "2026-08-09T17:56:00+09:00",
+        "description": "複数のピックモールが薄い坑壁を破って運搬路へ出ようとしている。作業区画へ抜ける前に止めてほしい。",
+        "notes": "反復可能。クエスト内容に合わせた専用固定編成。参加人数による敵数の再抽選は行わない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
+        "updatedAt": "2026-08-10T14:34:00+09:00",
         "ownerKey": "",
         "createdBy": "",
         "battleRoundLimit": 4,
-        "battleRoundSuccess": "第4ラウンド終了までにピックモールを含む魔物群を全滅させる。",
-        "battleRoundFailure": "第4ラウンド終了時点で敵が1体でも残っていればクエスト失敗。"
+        "battleRoundSuccess": "第4ラウンド終了までにピックモール3体をすべて倒す。",
+        "battleRoundFailure": "第4ラウンド終了時点で対象が1体でも残っていればクエスト失敗。"
       },
       {
         "id": "quest_daily_mine_rust_swarm",
@@ -48998,12 +48998,12 @@
         "rewardScope": "各PC",
         "deliveryItems": "",
         "progressStep": 50,
-        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t錆蟲の食害を止めろ\t戦闘発生：ラストマイト×1を必ず含み、山麓の旧鉱山の候補から人数対応の随伴魔物を抽選する。 特殊条件：第4ラウンド終了までに敵を全滅させれば成功。第4ラウンド終了時点で敵が1体でも残っていれば失敗。",
-        "clearCondition": "特殊条件：時間制限。第4ラウンド終了までにラストマイトを含む魔物群を全滅させる。第4ラウンド終了時点で敵が残っていれば失敗。",
+        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t錆蟲の食害を止めろ\t戦闘発生：前衛にラストマイト×4。特殊条件：第4ラウンド終了までに4体すべてを倒せば成功。第4ラウンド終了時点で1体でも残っていれば失敗。",
+        "clearCondition": "特殊条件：時間制限。第4ラウンド終了までにラストマイト4体をすべて倒す。第4ラウンド終了時点で1体でも残っていれば失敗。",
         "bossMonster": "ラストマイト",
-        "questBossName": "ラストマイト",
-        "questBossFormation": "指定対象＋人数対応ランダム随伴（毎戦闘再抽選）",
-        "questBossComposition": "指定対象＋ランダム随伴,ラストマイト,1,山麓の旧鉱山",
+        "questBossName": "錆蟲の群れ",
+        "questBossFormation": "固定編成",
+        "questBossComposition": "前衛,ラストマイト,4",
         "rewardMoney": "220G",
         "rewardItems": "",
         "rewardTableId": "",
@@ -49011,13 +49011,13 @@
         "bonusPoints": 0,
         "unlockResult": "",
         "description": "ラストマイトが補強金具へ群がっている。腐蝕が広がる前に群れを短時間で排除してほしい。",
-        "notes": "反復可能。戦闘ごとに候補と数を再抽選し、人数ごとの固定編成表は使用しない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
-        "updatedAt": "2026-08-09T17:56:00+09:00",
+        "notes": "反復可能。クエスト内容に合わせた専用固定編成。参加人数による敵数の再抽選は行わない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
+        "updatedAt": "2026-08-10T14:34:00+09:00",
         "ownerKey": "",
         "createdBy": "",
         "battleRoundLimit": 4,
-        "battleRoundSuccess": "第4ラウンド終了までにラストマイトを含む魔物群を全滅させる。",
-        "battleRoundFailure": "第4ラウンド終了時点で敵が1体でも残っていればクエスト失敗。"
+        "battleRoundSuccess": "第4ラウンド終了までにラストマイト4体をすべて倒す。",
+        "battleRoundFailure": "第4ラウンド終了時点で対象が1体でも残っていればクエスト失敗。"
       },
       {
         "id": "quest_daily_mine_guard_cull",
@@ -49167,26 +49167,26 @@
         "rewardScope": "各PC",
         "deliveryItems": "",
         "progressStep": 50,
-        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t虚喰い獣の追撃\t戦闘発生：ヴォイドハウンド×1を必ず含み、反照の水庭の候補から人数対応の随伴魔物を抽選する。 特殊条件：第5ラウンド終了までに敵を全滅させれば成功。第5ラウンド終了時点で敵が1体でも残っていれば失敗。",
-        "clearCondition": "特殊条件：時間制限。第5ラウンド終了までにヴォイドハウンドを含む魔物群を全滅させる。第5ラウンド終了時点で敵が残っていれば失敗。",
+        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t虚喰い獣の追撃\t戦闘発生：前衛にヴォイドハウンド×2。特殊条件：第5ラウンド終了までに2体すべてを倒せば成功。第5ラウンド終了時点で1体でも残っていれば失敗。",
+        "clearCondition": "特殊条件：時間制限。第5ラウンド終了までにヴォイドハウンド2体をすべて倒す。第5ラウンド終了時点で1体でも残っていれば失敗。",
         "bossMonster": "ヴォイドハウンド",
-        "questBossName": "ヴォイドハウンド",
-        "questBossFormation": "指定対象＋人数対応ランダム随伴（毎戦闘再抽選）",
-        "questBossComposition": "指定対象＋ランダム随伴,ヴォイドハウンド,1,反照の水庭",
+        "questBossName": "虚喰い獣の群れ",
+        "questBossFormation": "固定編成",
+        "questBossComposition": "前衛,ヴォイドハウンド,2",
         "rewardMoney": "270G",
         "rewardItems": "",
         "rewardTableId": "",
         "rewardDrawCount": "",
         "bonusPoints": 0,
         "unlockResult": "",
-        "description": "ヴォイドハウンドが観測班の残した光跡を追っている。位相を外して逃げる前に仕留めてほしい。",
-        "notes": "反復可能。戦闘ごとに候補と数を再抽選し、人数ごとの固定編成表は使用しない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
-        "updatedAt": "2026-08-09T17:56:00+09:00",
+        "description": "2体のヴォイドハウンドが観測班の残した光跡を追っている。位相を外して逃げる前に仕留めてほしい。",
+        "notes": "反復可能。クエスト内容に合わせた専用固定編成。参加人数による敵数の再抽選は行わない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
+        "updatedAt": "2026-08-10T14:34:00+09:00",
         "ownerKey": "",
         "createdBy": "",
         "battleRoundLimit": 5,
-        "battleRoundSuccess": "第5ラウンド終了までにヴォイドハウンドを含む魔物群を全滅させる。",
-        "battleRoundFailure": "第5ラウンド終了時点で敵が1体でも残っていればクエスト失敗。"
+        "battleRoundSuccess": "第5ラウンド終了までにヴォイドハウンド2体をすべて倒す。",
+        "battleRoundFailure": "第5ラウンド終了時点で対象が1体でも残っていればクエスト失敗。"
       },
       {
         "id": "quest_daily_reflection_crab_break",
@@ -49202,26 +49202,26 @@
         "rewardScope": "各PC",
         "deliveryItems": "",
         "progressStep": 50,
-        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t裂け目蟹の封鎖突破\t戦闘発生：リフトクラブ×1を必ず含み、反照の水庭の候補から人数対応の随伴魔物を抽選する。 特殊条件：第4ラウンド終了までに敵を全滅させれば成功。第4ラウンド終了時点で敵が1体でも残っていれば失敗。",
-        "clearCondition": "特殊条件：時間制限。第4ラウンド終了までにリフトクラブを含む魔物群を全滅させる。第4ラウンド終了時点で敵が残っていれば失敗。",
+        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t裂け目蟹の封鎖突破\t戦闘発生：前衛にリフトクラブ×2。特殊条件：第4ラウンド終了までに2体すべてを倒せば成功。第4ラウンド終了時点で1体でも残っていれば失敗。",
+        "clearCondition": "特殊条件：時間制限。第4ラウンド終了までにリフトクラブ2体をすべて倒す。第4ラウンド終了時点で1体でも残っていれば失敗。",
         "bossMonster": "リフトクラブ",
-        "questBossName": "リフトクラブ",
-        "questBossFormation": "指定対象＋人数対応ランダム随伴（毎戦闘再抽選）",
-        "questBossComposition": "指定対象＋ランダム随伴,リフトクラブ,1,反照の水庭",
+        "questBossName": "裂け目蟹の群れ",
+        "questBossFormation": "固定編成",
+        "questBossComposition": "前衛,リフトクラブ,2",
         "rewardMoney": "280G",
         "rewardItems": "",
         "rewardTableId": "",
         "rewardDrawCount": "",
         "bonusPoints": 0,
         "unlockResult": "",
-        "description": "リフトクラブが帰還路の裂け目を塞いでいる。裂け目が広がる前に短時間で排除してほしい。",
-        "notes": "反復可能。戦闘ごとに候補と数を再抽選し、人数ごとの固定編成表は使用しない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
-        "updatedAt": "2026-08-09T17:56:00+09:00",
+        "description": "2体のリフトクラブが帰還路の裂け目を塞いでいる。裂け目が広がる前に短時間で排除してほしい。",
+        "notes": "反復可能。クエスト内容に合わせた専用固定編成。参加人数による敵数の再抽選は行わない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
+        "updatedAt": "2026-08-10T14:34:00+09:00",
         "ownerKey": "",
         "createdBy": "",
         "battleRoundLimit": 4,
-        "battleRoundSuccess": "第4ラウンド終了までにリフトクラブを含む魔物群を全滅させる。",
-        "battleRoundFailure": "第4ラウンド終了時点で敵が1体でも残っていればクエスト失敗。"
+        "battleRoundSuccess": "第4ラウンド終了までにリフトクラブ2体をすべて倒す。",
+        "battleRoundFailure": "第4ラウンド終了時点で対象が1体でも残っていればクエスト失敗。"
       },
       {
         "id": "quest_daily_reflection_glass_fin",
@@ -49339,26 +49339,26 @@
         "rewardScope": "各PC",
         "deliveryItems": "",
         "progressStep": 50,
-        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t雷角牛の突進阻止\t戦闘発生：ボルトバイソン×1を必ず含み、風渡りの高原の候補から人数対応の随伴魔物を抽選する。 特殊条件：第4ラウンド終了までに敵を全滅させれば成功。第4ラウンド終了時点で敵が1体でも残っていれば失敗。",
-        "clearCondition": "特殊条件：時間制限。第4ラウンド終了までにボルトバイソンを含む魔物群を全滅させる。第4ラウンド終了時点で敵が残っていれば失敗。",
+        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t雷角牛の突進阻止\t戦闘発生：前衛にボルトバイソン×2。特殊条件：第4ラウンド終了までに2体すべてを倒せば成功。第4ラウンド終了時点で1体でも残っていれば失敗。",
+        "clearCondition": "特殊条件：時間制限。第4ラウンド終了までにボルトバイソン2体をすべて倒す。第4ラウンド終了時点で1体でも残っていれば失敗。",
         "bossMonster": "ボルトバイソン",
-        "questBossName": "ボルトバイソン",
-        "questBossFormation": "指定対象＋人数対応ランダム随伴（毎戦闘再抽選）",
-        "questBossComposition": "指定対象＋ランダム随伴,ボルトバイソン,1,風渡りの高原",
+        "questBossName": "雷角牛の群れ",
+        "questBossFormation": "固定編成",
+        "questBossComposition": "前衛,ボルトバイソン,2",
         "rewardMoney": "300G",
         "rewardItems": "",
         "rewardTableId": "",
         "rewardDrawCount": "",
         "bonusPoints": 0,
         "unlockResult": "",
-        "description": "ボルトバイソンが風標のある尾根へ突進している。標柱を壊される前に主個体を止めてほしい。",
-        "notes": "反復可能。戦闘ごとに候補と数を再抽選し、人数ごとの固定編成表は使用しない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
-        "updatedAt": "2026-08-09T17:56:00+09:00",
+        "description": "2頭のボルトバイソンが風標のある尾根へ突進している。標柱を壊される前に止めてほしい。",
+        "notes": "反復可能。クエスト内容に合わせた専用固定編成。参加人数による敵数の再抽選は行わない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
+        "updatedAt": "2026-08-10T14:34:00+09:00",
         "ownerKey": "",
         "createdBy": "",
         "battleRoundLimit": 4,
-        "battleRoundSuccess": "第4ラウンド終了までにボルトバイソンを含む魔物群を全滅させる。",
-        "battleRoundFailure": "第4ラウンド終了時点で敵が1体でも残っていればクエスト失敗。"
+        "battleRoundSuccess": "第4ラウンド終了までにボルトバイソン2体をすべて倒す。",
+        "battleRoundFailure": "第4ラウンド終了時点で対象が1体でも残っていればクエスト失敗。"
       },
       {
         "id": "quest_daily_highland_glide_break",
@@ -49374,12 +49374,12 @@
         "rewardScope": "各PC",
         "deliveryItems": "",
         "progressStep": 50,
-        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t滑空鱗の急襲阻止\t戦闘発生：グライドスケイル×1を必ず含み、風渡りの高原の候補から人数対応の随伴魔物を抽選する。 特殊条件：第5ラウンド終了までに敵を全滅させれば成功。第5ラウンド終了時点で敵が1体でも残っていれば失敗。",
-        "clearCondition": "特殊条件：時間制限。第5ラウンド終了までにグライドスケイルを含む魔物群を全滅させる。第5ラウンド終了時点で敵が残っていれば失敗。",
+        "fixedEvents": "50%\t戦闘地点の確認\t判定：感知>=10または探索>=10。成功：最終戦闘の1ラウンド目に、味方全員が行う最初の判定+1。失敗：補正なし。\n100%\t滑空鱗の急襲阻止\t戦闘発生：前衛にグライドスケイル×1、後衛にグライドスケイル×2。特殊条件：第5ラウンド終了までに3体すべてを倒せば成功。第5ラウンド終了時点で1体でも残っていれば失敗。",
+        "clearCondition": "特殊条件：時間制限。第5ラウンド終了までにグライドスケイル3体をすべて倒す。第5ラウンド終了時点で1体でも残っていれば失敗。",
         "bossMonster": "グライドスケイル",
-        "questBossName": "グライドスケイル",
-        "questBossFormation": "指定対象＋人数対応ランダム随伴（毎戦闘再抽選）",
-        "questBossComposition": "指定対象＋ランダム随伴,グライドスケイル,1,風渡りの高原",
+        "questBossName": "滑空鱗の群れ",
+        "questBossFormation": "固定編成",
+        "questBossComposition": "前衛,グライドスケイル,1;後衛,グライドスケイル,2",
         "rewardMoney": "290G",
         "rewardItems": "",
         "rewardTableId": "",
@@ -49387,13 +49387,13 @@
         "bonusPoints": 0,
         "unlockResult": "",
         "description": "グライドスケイルの群れが荷運び路へ降下している。風向きが変わって散る前に排除してほしい。",
-        "notes": "反復可能。戦闘ごとに候補と数を再抽選し、人数ごとの固定編成表は使用しない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
-        "updatedAt": "2026-08-09T17:56:00+09:00",
+        "notes": "反復可能。クエスト内容に合わせた専用固定編成。参加人数による敵数の再抽選は行わない。 制限ラウンド戦闘。通常～やや高い回避の魔物への攻撃は基本成功する前提で制限を設定し、回避12～13の明確な回避型だけ攻撃失敗を見込む。制限超過はPC敗北ではなくクエスト失敗。",
+        "updatedAt": "2026-08-10T14:34:00+09:00",
         "ownerKey": "",
         "createdBy": "",
         "battleRoundLimit": 5,
-        "battleRoundSuccess": "第5ラウンド終了までにグライドスケイルを含む魔物群を全滅させる。",
-        "battleRoundFailure": "第5ラウンド終了時点で敵が1体でも残っていればクエスト失敗。"
+        "battleRoundSuccess": "第5ラウンド終了までにグライドスケイル3体をすべて倒す。",
+        "battleRoundFailure": "第5ラウンド終了時点で対象が1体でも残っていればクエスト失敗。"
       },
       {
         "id": "quest_daily_highland_patrol_cull",
@@ -75914,5 +75914,5 @@
       }
     ]
   },
-  "generatedAt": "2026-08-10T14:08:00+09:00"
+  "generatedAt": "2026-08-10T14:34:00+09:00"
 }
