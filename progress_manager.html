@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.468</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.469</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.468-event-check-copy-layout1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.469-event-check-copy-layout1">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -184,7 +184,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </style>
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.468｜更新：2026年8月10日</div>
+<div class="ra-build-info">v90.8.469｜更新：2026年8月10日</div>
 
 <header>
   <div class="header-inner">
@@ -390,7 +390,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
       <p class="muted small">プレイヤーが 2D6+鑑定技能 で鑑定判定を行い、成功後にここで術式内容を決定します。鑑定料はランクごとに異なります。</p>
       <div class="buttons">
         <button id="rollAppraisalBtn">鑑定成功時の術式を決定</button>
-        <button class="secondary" id="copyAppraisalBtn">結果コピー</button>
+        <button class="secondary" id="copyAppraisalBtn" disabled>鑑定後スクロールコピー</button>
       </div>
       <div id="appraisalResult" class="result">鑑定結果がここに表示されます。</div>
     </section>
@@ -460,7 +460,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.468';
+const VERSION='v90.8.469';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -480,7 +480,7 @@ const GUILD_DAILY_CHANNEL_NAME='recraft_alchemia_guild_daily_channel';
 const GUILD_DAILY_REQUEST_KINDS=['拠点内依頼','エリア依頼','納品依頼'];
 const MASTER_CACHE_KEY=STORE_KEY+'_master_cache_v1';
 const $=id=>document.getElementById(id);
-const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},dayState:{day:1,fatigue:0,usedActions:0,awaitingEnd:false},lastEventText:'',lastEventKey:'',lastEventCheckCopyText:'',lastEventTreasureCopyText:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestCheckCopyText:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',lastQuestTreasureCopyText:'',lastQuestEventTableRewardText:'',lastQuestEventTableRewardCopyText:'',triggeredQuestEvents:{},lastAreaFixedEventText:'',lastAreaFixedEventKey:'',triggeredAreaEvents:{},baseUnlockedAreaIds:[],lastBaseEventText:'',lastBaseEventKey:'',lastBaseCheckCopyText:'',lastBaseRewardText:'',lastBaseRewardCopyText:'',questRewardCache:{},lastEventTableRewardText:'',lastEventTableRewardCopyText:'',lastRecipeMerchantOffers:[],selectedRecipeMerchantId:'',lastRecipeMerchantContext:{scope:'',areaName:'',eventName:''},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastTreasureCopyText:'',lastAppraisalText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],lastDailyQuestKeysByKind:{'拠点内依頼':[],'エリア依頼':[],'納品依頼':[]},dailyQuestUnlockedAreaId:'',questEncounterCache:{},partySize:4,areaBossEncountered:{},treasureSetup:null,treasureContext:null,lastEncounter:null,dropEncounterInstances:[],dropMode:'encounter',lastEventRewardState:null,lastQuestEventRewardState:null,lastQuestReinforcementText:'',questWorkReinforcementCounts:{},log:[]};
+const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},dayState:{day:1,fatigue:0,usedActions:0,awaitingEnd:false},lastEventText:'',lastEventKey:'',lastEventCheckCopyText:'',lastEventTreasureCopyText:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestCheckCopyText:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',lastQuestTreasureCopyText:'',lastQuestEventTableRewardText:'',lastQuestEventTableRewardCopyText:'',triggeredQuestEvents:{},lastAreaFixedEventText:'',lastAreaFixedEventKey:'',triggeredAreaEvents:{},baseUnlockedAreaIds:[],lastBaseEventText:'',lastBaseEventKey:'',lastBaseCheckCopyText:'',lastBaseRewardText:'',lastBaseRewardCopyText:'',questRewardCache:{},lastEventTableRewardText:'',lastEventTableRewardCopyText:'',lastRecipeMerchantOffers:[],selectedRecipeMerchantId:'',lastRecipeMerchantContext:{scope:'',areaName:'',eventName:''},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastTreasureCopyText:'',lastAppraisalText:'',lastAppraisalCopyText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],lastDailyQuestKeysByKind:{'拠点内依頼':[],'エリア依頼':[],'納品依頼':[]},dailyQuestUnlockedAreaId:'',questEncounterCache:{},partySize:4,areaBossEncountered:{},treasureSetup:null,treasureContext:null,lastEncounter:null,dropEncounterInstances:[],dropMode:'encounter',lastEventRewardState:null,lastQuestEventRewardState:null,lastQuestReinforcementText:'',questWorkReinforcementCounts:{},log:[]};
 let currentQuestCategory='重要';
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function clamp(n){return Math.max(0,Math.min(100,Number(n)||0));}
@@ -1434,10 +1434,9 @@ function triggerQuestSpecificEvents(q,before,after){
   rows.forEach(e=>{
     const key=`${String(q.id||q.name||'')}:${eventUniqueKey(e)}:${eventThreshold(e)??''}`;
     if(state.triggeredQuestEvents[key]) return;
-    // 入手コピーは「いま発生したイベント」単位で完結させる。
-    // 直前のランダムイベント／固定イベントの抽選報酬・宝箱・直接入手を残さない。
-    resetQuestEventItemCopyState();
-    if(state.lastRecipeMerchantContext?.scope==='quest')clearRecipeMerchantOffers();
+    // 固有イベント発生時は、直前のランダムイベント履歴とその戦闘ドロップ状態を破棄する。
+    // 固定イベント側の結果だけを新しいコンテキストとして扱う。
+    clearQuestRandomEventHistory();
     state.triggeredQuestEvents[key]=true;
     state.lastQuestFixedEventKey=key;
     state.lastQuestCheckCopyText=eventCheckCopyText(e);
@@ -2272,8 +2271,6 @@ function formatEventOutput(prefix,picked,area,tableId,extraLines=[],partySizeOve
   return [prefix,area?`エリア：${area.name||area.id}`:'',area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'',`表：${tableId}`,picked.eventName?`イベント：${picked.eventName}`:'',picked.eventType?`種別：${picked.eventType}`:'',condition,encounter,composition,initiative,eventCheckDisplayText(picked),picked.result?`結果：${eventResultTextForDisplay(picked,partySize)}`:'',picked.progressEffect?`補足：${picked.progressEffect}`:'',...extraLines].filter(Boolean).join('\n');
 }
 function triggerAreaClearRumorEvent(area){
-  resetAreaEventItemCopyState();
-  clearRecipeMerchantOffers();
   const rumor=selectedRumor();
   if(!area || !rumor) return false;
   const key=areaEventKey(area);
@@ -2285,6 +2282,8 @@ function triggerAreaClearRumorEvent(area){
     bossMatchesSelectedRumor(e,rumor)
   );
   if(!picked) return false;
+  // 探索クリア固有イベントが確定した時点で、直前のランダムイベント履歴とドロップ状態を消す。
+  clearAreaRandomEventHistory();
   state.areaBossEncountered[key]=true;
   state.lastEventKey=eventUniqueKey(picked);
   state.lastEventCheckCopyText=eventCheckCopyText(picked);
@@ -2445,6 +2444,31 @@ function renderRecipeMerchantPanel(){
   const cards=rows.map(r=>`<article class="recipe-merchant-card"><h4>${esc(r.name||r.resultItem||'名称未設定')}</h4><div>${esc(progressPlayerRank(r.rank)||'ランク未設定')} / ${esc(r.craftType||'製作区分未設定')}</div><div class="recipe-merchant-price">${recipeMerchantPrice(r)}G <span class="recipe-merchant-normal">通常${recipeMerchantNormalPrice(r)}G</span></div></article>`).join('');
   const opts=rows.map(r=>`<option value="${esc(recipeMerchantRecipeKey(r))}" ${recipeMerchantRecipeKey(r)===state.selectedRecipeMerchantId?'selected':''}>${esc(r.name||r.resultItem||'名称未設定')}</option>`).join('');
   panel.innerHTML=`<section class="card"><h3>レシピ商人の販売品</h3><p class="muted small">常設店売りレシピを除き、この進行段階までに解放されるレシピ全体から4件抽選しています。宝箱限定・ボス由来を含みます。遭遇価格は通常販売価格の75%（10G単位切り捨て）です。</p><div class="recipe-merchant-grid">${cards}</div><div class="buttons"><button type="button" class="secondary" id="copyRecipeMerchantListBtn">販売商品リストをコピー</button></div><div class="recipe-merchant-tools"><label>情報コピーするレシピ<select id="recipeMerchantSelect">${opts}</select></label><button type="button" class="secondary" id="copyRecipeMerchantInfoBtn">選択レシピ情報をコピー</button></div></section>`;
+}
+function clearEncounterDropState(){
+  state.lastEncounter=null;
+  state.dropEncounterInstances=[];
+  state.lastDropText='';
+  state.lastDropSuccessText='';
+  renderEncounterDropList();
+  const result=$('dropResult');
+  if(result)result.textContent='ドロップ結果がここに表示されます。';
+}
+function clearQuestRandomEventHistory(){
+  state.lastQuestEventText='';
+  state.lastQuestEventKey='';
+  state.lastQuestCheckCopyText='';
+  resetQuestEventItemCopyState();
+  if(state.lastRecipeMerchantContext?.scope==='quest')clearRecipeMerchantOffers();
+  clearEncounterDropState();
+}
+function clearAreaRandomEventHistory(){
+  state.lastEventText='';
+  state.lastEventKey='';
+  state.lastEventCheckCopyText='';
+  resetAreaEventItemCopyState();
+  if(state.lastRecipeMerchantContext?.scope==='event')clearRecipeMerchantOffers();
+  clearEncounterDropState();
 }
 function resetQuestEventItemCopyState(){
   state.lastQuestTreasureCopyText='';
@@ -3145,8 +3169,10 @@ function rollAppraisal(){
   if(!rule){$('appraisalResult').textContent='鑑定ルールがありません。'; return;}
   const candidates=(state.spells||[]).filter(s=>spellMatchesRule(s,rule));
   if(!candidates.length){
+    state.lastAppraisalCopyText='';
     state.lastAppraisalText=[`【スクロール鑑定】${rule.facilityName||''}`,`対象：未鑑定の${rule.spellType||'術式'}スクロール`,`スクロールランク：${progressPlayerRank(rule.scrollRank)}`,`道具鑑定：術式鑑定具を使用し、2D6+鑑定技能>=${rule.difficulty||''}`,`施設鑑定：${appraisalFee(rule.scrollRank)}Gで自動成功`,'鑑定結果：候補術式がありません。術式データと鑑定条件を確認してください。'].filter(Boolean).join('\n');
     $('appraisalResult').textContent=state.lastAppraisalText;
+    updateAppraisalCopyButton();
     return;
   }
   const spell=candidates[Math.floor(Math.random()*candidates.length)];
@@ -3172,8 +3198,23 @@ function rollAppraisal(){
   lines.push(`使用：このスクロールを消費すると、術式「${spell.name}」をコスト消費なしで1回発動できます。`);
   lines.push(`術式化：鑑定済みスクロールと対応素材×${transcriptionMaterialCount(rule.scrollRank)}を消費し、2D6+集中>=${transcriptionDifficulty(rule.scrollRank)}。施設への術式化依頼はできません。`);
   state.lastAppraisalText=lines.filter(Boolean).join('\n');
+  state.lastAppraisalCopyText=scroll
+    ? buildTreasureItemCopyText(scroll,'1')
+    : [`【${spell.name}のスクロール】`,spell.publicId?`術式登録ID：${spell.publicId}`:'','個数：1',`ランク：${progressPlayerRank(spell.rank||rule.scrollRank)}`,`分類：スクロール / 術式スクロール`,`効果：使用すると術式「${spell.name}」をコスト消費なしで1回発動し、このスクロールを消費する。`].filter(Boolean).join('\n');
   $('appraisalResult').textContent=state.lastAppraisalText;
+  updateAppraisalCopyButton();
   addLog(`スクロール鑑定：${progressPlayerRank(rule.scrollRank)} → ${spell.name}`);
+}
+function updateAppraisalCopyButton(){
+  const btn=$('copyAppraisalBtn');
+  if(btn)btn.disabled=!String(state.lastAppraisalCopyText||'').trim();
+}
+function resetAppraisalResult(){
+  state.lastAppraisalText='';
+  state.lastAppraisalCopyText='';
+  const result=$('appraisalResult');
+  if(result)result.textContent='鑑定結果がここに表示されます。';
+  updateAppraisalCopyButton();
 }
 function parseDrops(text){
   return String(text||'').split(/\r?\n/).map(line=>line.trim()).filter(Boolean).map(line=>{
@@ -3483,7 +3524,7 @@ $('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){su
   $('rollRumorBtn').addEventListener('click',rollRumor); $('applyRumorBtn').addEventListener('click',()=>applyRumorIndex($('rumorSelectForInn').value,true)); $('clearRumorBtn').addEventListener('click',clearRumor); $('copyRumorBtn').addEventListener('click',()=>copyText(state.lastRumorText,'rumorCopyNote'));
   $('rollEventBtn').addEventListener('click',rollEvent); $('copyEventCheckBtn')?.addEventListener('click',()=>copyText(state.lastEventCheckCopyText,'eventCopyNote')); $('copyEventItemsBtn')?.addEventListener('click',()=>copyText(areaEventItemCopyText(),'eventCopyNote'));
   $('treasureTableSelect').addEventListener('change',()=>{const tableId=$('treasureTableSelect').value; setTreasureContext(tableId,treasureAreaName(tableId),'normal'); $('treasureResult').textContent='「宝箱の中身を決定」を押すと、鍵・罠・各難易度・中身をまとめて決定します。';}); $('copyTrapDetectBtn').addEventListener('click',()=>copyText(trapDetectText(),'treasureCopyNote')); $('copyTrapDisarmBtn').addEventListener('click',()=>copyText(trapDisarmText(),'treasureCopyNote')); $('copyUnlockBtn').addEventListener('click',()=>copyText(unlockText(),'treasureCopyNote')); $('rollTreasureBtn').addEventListener('click',rollTreasure); $('copyTreasureBtn').addEventListener('click',()=>copyText(state.lastTreasureCopyText,'treasureCopyNote'));
-  $('rollAppraisalBtn').addEventListener('click',rollAppraisal); $('copyAppraisalBtn').addEventListener('click',()=>copyText(state.lastAppraisalText,'appraisalCopyNote')); updateTreasureCopyButtons();
+  $('rollAppraisalBtn').addEventListener('click',rollAppraisal); $('copyAppraisalBtn').addEventListener('click',()=>copyText(state.lastAppraisalCopyText,'appraisalCopyNote')); $('appraisalRuleSelect').addEventListener('change',resetAppraisalResult); updateAppraisalCopyButton(); updateTreasureCopyButtons();
 
   window.addEventListener('storage',e=>{if(e.key===GUILD_DAILY_STORAGE_KEY)syncDailyQuestSelectionFromFacility({render:true});});
   try{
