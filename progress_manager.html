@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.463</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.464</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.463-event-check-copy1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.464-event-check-copy-layout1">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -184,7 +184,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </style>
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.463｜更新：2026年8月10日</div>
+<div class="ra-build-info">v90.8.464｜更新：2026年8月10日</div>
 
 <header>
   <div class="header-inner">
@@ -459,7 +459,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.463';
+const VERSION='v90.8.464';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1269,9 +1269,7 @@ function eventDetailHtml(e, cls='', prefix='', kind='fixed',q=null){
   const th=eventThreshold(e);
   const badge = kind==='random' ? '<span class="badge random">ランダム</span>' : '<span class="badge fixed">固定</span>';
   const threshold = th!==null ? `進行度${th}%：` : '';
-  const checkCopy=eventCheckCopyText(e);
-  const checkButton=checkCopy?`<div class="buttons"><button type="button" class="ghost" data-event-check-copy="${esc(checkCopy)}">判定コピー</button></div>`:'';
-  return `<div class="event-card ${kind} ${cls}"><div class="event-title">${badge} ${esc(prefix)}${threshold}${esc(e.eventName||'名称未設定')}</div><div class="muted small">${esc(eventDetailText(e,q)).replace(/\n/g,'<br>')}</div>${checkButton}</div>`;
+  return `<div class="event-card ${kind} ${cls}"><div class="event-title">${badge} ${esc(prefix)}${threshold}${esc(e.eventName||'名称未設定')}</div><div class="muted small">${esc(eventDetailText(e,q)).replace(/\n/g,'<br>')}</div></div>`;
 }
 function renderQuestEvents(){
   const box=$('questEventDetail');
@@ -3438,7 +3436,6 @@ $('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){su
     const choice=e.target.closest('[data-event-reward-choice]');if(choice){const panel=choice.closest('#questEventRewardPanel,#eventRewardPanel'),scope=panel?.id==='questEventRewardPanel'?'quest':'event',reward=eventRewardState(scope),group=reward?.groups.find(g=>String(g.uid)===String(choice.dataset.eventRewardChoice)),item=group?.items.find(x=>String(x.uid)===String(choice.dataset.eventRewardItem));if(item)item.selectedName=choice.value;renderEventRewardPanel(scope);}
   });
   document.addEventListener('click',e=>{
-    const checkCopy=e.target.closest('[data-event-check-copy]');if(checkCopy){copyText(checkCopy.dataset.eventCheckCopy,'questCopyNote');return;}
     const reroll=e.target.closest('[data-event-reward-reroll]');if(reroll){rerollEventReward(reroll.dataset.eventRewardReroll);return;}
     const copy=e.target.closest('[data-event-reward-copy]');if(copy){const scope=copy.dataset.eventRewardCopy;const text=scope==='quest'?questEventItemCopyText():areaEventItemCopyText();copyText(text,scope==='quest'?'questCopyNote':'eventCopyNote');}
     if(e.target.closest('#copyRecipeMerchantListBtn')){const note=state.lastRecipeMerchantContext?.scope==='quest'?'questCopyNote':'eventCopyNote';copyText(recipeMerchantListCopyText(),note);return;}
