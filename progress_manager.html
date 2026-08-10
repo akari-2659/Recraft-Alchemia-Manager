@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.457</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.459</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.457-craft-economy1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.459-quest-conditions1">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -184,7 +184,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </style>
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.457｜更新：2026年8月9日</div>
+<div class="ra-build-info">v90.8.459｜更新：2026年8月10日</div>
 
 <header>
   <div class="header-inner">
@@ -456,7 +456,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.457';
+const VERSION='v90.8.459';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1112,7 +1112,18 @@ function isDeliveryQuest(q={}){return String(q.requestKind||'').trim()==='納品
 function isImportantQuest(q={}){return questCategoryFor(q)==='重要';}
 function questLocationText(q={}){return String(q.questLocation||((q.requestKind==='拠点内依頼'||q.requestKind==='納品依頼')?'拠点':q.areaName)||'未設定').trim();}
 function questBattleRoundLimit(q={}){const n=Number(q.battleRoundLimit);return Number.isFinite(n)&&n>0?Math.floor(n):0;}
-function questBattleRoundLines(q={}){const n=questBattleRoundLimit(q);if(!n)return[];return [`戦闘制限：${n}ラウンド以内`,q.battleRoundSuccess?`制限成功：${q.battleRoundSuccess}`:'',q.battleRoundFailure?`制限失敗：${q.battleRoundFailure}`:''].filter(Boolean);}
+function questSpecialConditionLabel(q={}){
+  const type=String(q.questType||'').trim(),n=questBattleRoundLimit(q);
+  if(type==='制限戦闘')return n?`時間制限（${n}ラウンド以内）`:'時間制限';
+  if(type==='継続行動')return n?`継続作業（${n}ラウンド以内）`:'継続作業';
+  if(type==='運搬保護'){
+    const fail=String(q.battleRoundFailure||q.clearCondition||'');
+    return fail.includes('命中')?'運搬保護（命中失敗）':'運搬保護（被ダメージ失敗）';
+  }
+  if(q.battleRoundSuccess||q.battleRoundFailure)return n?`特殊戦闘（${n}ラウンド以内）`:'特殊戦闘';
+  return '';
+}
+function questBattleRoundLines(q={}){const label=questSpecialConditionLabel(q);if(!label)return[];return [`特殊条件：${label}`,q.battleRoundSuccess?`達成条件：${q.battleRoundSuccess}`:'',q.battleRoundFailure?`失敗条件：${q.battleRoundFailure}`:''].filter(Boolean);}
 function questStepAmount(q){
   if(isDeliveryQuest(q))return 0;
   const n=getNumFromText(q&&q.progressStep,10);
@@ -1357,7 +1368,7 @@ function renderQuest(){
   const important=isImportantQuest(q);
   const kindRow=important?'':`<b>依頼区分</b><span>${esc(q.requestKind||'未設定')}</span>`;
   const skillRow=!delivery&&q.recommendedSkills?`<b>推奨技能</b><span>${esc(q.recommendedSkills)}</span>`:'';
-  $('questDetail').innerHTML=`<div class="kv"><b>分類</b><span>${esc(questCategoryFor(q))}${!questEnabled(q)?'<span class="quest-pill off">OFF</span>':'<span class="quest-pill">ON</span>'}</span>${kindRow}<b>内容種別</b><span>${esc(q.questType||'')}</span>${skillRow}<b>報酬範囲</b><span>${esc(q.rewardScope||'各PC')}</span>${q.deliveryItems?`<b>納品物</b><span>${esc(q.deliveryItems)}</span>`:''}<b>ランク</b><span>${esc(progressPlayerRank(q.rank)||'')}</span><b>実施場所</b><span>${esc(questLocationText(q))}</span><b>進行上昇値</b><span>${delivery?'納品確認':`+${questStepAmount(q)}%`}</span><b>固定イベント数</b><span>${questSpecificEvents(q).length}件</span><b>クエストボス</b><span>${esc(questBossText(q))}</span><b>構成</b><span>${esc(questBossFormationText(q))}${randomFormation?' <button id="rerollQuestEncounterBtn" type="button" class="secondary" style="margin-left:8px;padding:5px 9px">編成を再抽選</button>':''}</span>${questBattleRoundLimit(q)?`<b>戦闘制限</b><span>${esc(questBattleRoundLimit(q)+'ラウンド以内')}</span><b>制限成功</b><span>${esc(q.battleRoundSuccess||'')}</span><b>制限失敗</b><span>${esc(q.battleRoundFailure||'')}</span>`:''}<b>クリア条件</b><span>${esc(q.clearCondition||'')}</span><b>報酬</b><span>${esc([q.rewardMoney,questRewardItemDisplay(q),Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / '))}（${esc(q.rewardScope||'各PC')}）</span></div>${randomFormation?'<p class="muted small">表示中の構成はプレビューです。実際の戦闘発生時には、同じ人数条件で改めて再抽選します。</p>':''}${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
+  $('questDetail').innerHTML=`<div class="kv"><b>分類</b><span>${esc(questCategoryFor(q))}${!questEnabled(q)?'<span class="quest-pill off">OFF</span>':'<span class="quest-pill">ON</span>'}</span>${kindRow}<b>内容種別</b><span>${esc(q.questType||'')}</span>${skillRow}<b>報酬範囲</b><span>${esc(q.rewardScope||'各PC')}</span>${q.deliveryItems?`<b>納品物</b><span>${esc(q.deliveryItems)}</span>`:''}<b>ランク</b><span>${esc(progressPlayerRank(q.rank)||'')}</span><b>実施場所</b><span>${esc(questLocationText(q))}</span><b>進行上昇値</b><span>${delivery?'納品確認':`+${questStepAmount(q)}%`}</span><b>固定イベント数</b><span>${questSpecificEvents(q).length}件</span><b>クエストボス</b><span>${esc(questBossText(q))}</span><b>構成</b><span>${esc(questBossFormationText(q))}${randomFormation?' <button id="rerollQuestEncounterBtn" type="button" class="secondary" style="margin-left:8px;padding:5px 9px">編成を再抽選</button>':''}</span>${questSpecialConditionLabel(q)?`<b>特殊条件</b><span>${esc(questSpecialConditionLabel(q))}</span><b>達成条件</b><span>${esc(q.battleRoundSuccess||q.clearCondition||'')}</span><b>失敗条件</b><span>${esc(q.battleRoundFailure||'なし')}</span>`:`<b>クリア条件</b><span>${esc(q.clearCondition||'')}</span>`}<b>報酬</b><span>${esc([q.rewardMoney,questRewardItemDisplay(q),Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / '))}（${esc(q.rewardScope||'各PC')}）</span></div>${randomFormation?'<p class="muted small">表示中の構成はプレビューです。実際の戦闘発生時には、同じ人数条件で改めて再抽選します。</p>':''}${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
   $('rerollQuestEncounterBtn')?.addEventListener('click',rerollSelectedQuestEncounter);
   renderQuestStepInfo(q,p);
   renderQuestEvents();
@@ -2431,8 +2442,15 @@ function treasureAreaName(tableId, explicit=''){
   const row=treasureRows(tableId)[0];
   return String(row?.areaName||'').trim();
 }
+const RECIPE_CACHE_EMPTY_CHANCE=45;
 function treasureProfile(areaName){
   return TREASURE_AREA_PROFILES[areaName] || TREASURE_AREA_PROFILES['街はずれの草原'];
+}
+function isRecipeCacheTable(tableId=''){return /_recipe_cache$/i.test(String(tableId||''));}
+function treasureEmptyChance(tableId='',areaName='',questFixed=false){
+  if(questFixed)return 0;
+  const base=Number(treasureProfile(areaName).emptyChance||0);
+  return isRecipeCacheTable(tableId)?Math.max(base,RECIPE_CACHE_EMPTY_CHANCE):base;
 }
 function positiveTreasureDifficulty(value,fallback=1){
   const n=Number(String(value??'').trim());
@@ -2496,7 +2514,7 @@ function buildTreasureSetup(tableId, areaName='', questFixed=false){
   if(questFixed){
     return normalizeTreasureSetup({
       tableId:String(tableId||''),areaName:area,chestName:row.chestName||row.tableId||'クエスト固有宝箱',
-      questFixed:true,hasLock:false,hasTrap:false,
+      questFixed:true,hasLock:false,hasTrap:false,emptyChance:0,
       trapDetectDifficulty:rolledTrapDetectDifficulty(row,profile)
     });
   }
@@ -2505,7 +2523,7 @@ function buildTreasureSetup(tableId, areaName='', questFixed=false){
   const trap=hasTrap?profile.traps[Math.floor(Math.random()*profile.traps.length)]:null;
   return normalizeTreasureSetup({
     tableId:String(tableId||''),areaName:area,chestName:row.chestName||row.tableId||'宝箱',
-    hasLock,hasTrap,questFixed:false,
+    hasLock,hasTrap,questFixed:false,emptyChance:treasureEmptyChance(tableId,area,false),
     unlockDifficulty:hasLock?rolledUnlockDifficulty(row,profile):'',
     trapDetectDifficulty:rolledTrapDetectDifficulty(row,profile),
     trapDisarmDifficulty:hasTrap?rolledTrapDisarmDifficulty(row,profile):'',
@@ -2546,7 +2564,8 @@ function treasureSetupLines(setup={}){
     `解錠難易度（細工）：${setup.hasLock?setup.unlockDifficulty:'—'}`,
     `罠：${setup.hasTrap?'あり':'なし'}`,
     `罠感知難易度（感知）：${setup.trapDetectDifficulty}`,
-    `罠解除難易度（細工）：${setup.hasTrap?setup.trapDisarmDifficulty:'—'}`
+    `罠解除難易度（細工）：${setup.hasTrap?setup.trapDisarmDifficulty:'—'}`,
+    `空箱率：${Number(setup.emptyChance||0)}%${isRecipeCacheTable(setup.tableId)?'（レシピ箱）':''}`
   ];
   if(setup.hasTrap){
     if(setup.trapName)lines.push(`罠内容：${setup.trapName}`);
@@ -2868,8 +2887,7 @@ function resolveTreasureTable(tableId,areaName='',options={}){
   const rows=eligibleTreasureRows(tableId,areaName),questFixed=!!options.questFixed;
   if(!rows.length)return {tableId,setup:buildTreasureSetup(tableId,areaName,questFixed),picked:null,isEmpty:true,displayText:`【宝箱】\n宝箱表：${tableId}\nこの解放段階で有効な中身候補がありません。`,copyText:'',contentLabel:'中身候補なし'};
   const setup=buildTreasureSetup(tableId,areaName,questFixed);
-  const profile=treasureProfile(setup?.areaName||areaName||'');
-  const isEmpty=!questFixed&&Math.random()*100<Number(profile.emptyChance||0);
+  const isEmpty=!questFixed&&Math.random()*100<Number(setup?.emptyChance||0);
   if(isEmpty){
     const displayText=['【宝箱】',...treasureSetupLines(setup),'中身：なし','補足：鍵・罠・中身は独立して決定されます。'].join('\n');
     return {tableId,setup,picked:null,isEmpty:true,displayText,copyText:'',contentLabel:'中身なし'};
@@ -3245,7 +3263,7 @@ async function copyText(text,noteId){
   try{await navigator.clipboard.writeText(v);}catch(e){const ta=document.createElement('textarea'); ta.value=v; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();}
   if(noteId){const el=$(noteId); el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),1200);} addLog('結果をコピーしました。');
 }
-function questMemo(){const q=selected($('questSelect'),state.quests); if(!q)return ''; const p=progressObj('quests',q.id||q.name); const delivery=isDeliveryQuest(q); return [`【クエスト進行】${q.name||q.id}`,isImportantQuest(q)?'':`依頼区分：${q.requestKind||'未設定'}`,!delivery&&q.recommendedSkills?`推奨技能：${q.recommendedSkills}`:'',`実施場所：${questLocationText(q)}`,delivery?`納品状況：${clamp(p.value)>=100?'完了':'未完了'}`:`進行度：${clamp(p.value)}%`,q.deliveryItems?`納品物：${q.deliveryItems}`:'',...questBattleRoundLines(q),q.clearCondition?`クリア条件：${q.clearCondition}`:'',q.rewardMoney||q.rewardItems||q.rewardTableId||Number(q.bonusPoints||0)>0?`報酬：${[q.rewardMoney,questRewardItemDisplay(q),Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / ')}（${q.rewardScope||'各PC'}）`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
+function questMemo(){const q=selected($('questSelect'),state.quests); if(!q)return ''; const p=progressObj('quests',q.id||q.name); const delivery=isDeliveryQuest(q); return [`【クエスト進行】${q.name||q.id}`,isImportantQuest(q)?'':`依頼区分：${q.requestKind||'未設定'}`,!delivery&&q.recommendedSkills?`推奨技能：${q.recommendedSkills}`:'',`実施場所：${questLocationText(q)}`,delivery?`納品状況：${clamp(p.value)>=100?'完了':'未完了'}`:`進行度：${clamp(p.value)}%`,q.deliveryItems?`納品物：${q.deliveryItems}`:'',...questBattleRoundLines(q),!questSpecialConditionLabel(q)&&q.clearCondition?`クリア条件：${q.clearCondition}`:'',q.rewardMoney||q.rewardItems||q.rewardTableId||Number(q.bonusPoints||0)>0?`報酬：${[q.rewardMoney,questRewardItemDisplay(q),Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / ')}（${q.rewardScope||'各PC'}）`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
 function questPublicRewardText(q={}){
   return [q.rewardMoney,questRewardItemDisplay(q),Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'',q.unlockResult?`解放：${q.unlockResult}`:''].filter(Boolean).join(' / ');
 }
@@ -3259,7 +3277,7 @@ function questPublicInfoLines(q={}){
     `クエスト説明：${q.description||'説明未設定'}`,
     q.deliveryItems?`納品物：${q.deliveryItems}`:'',
     ...questBattleRoundLines(q),
-    `達成条件：${q.clearCondition||'未設定'}`,
+    !questSpecialConditionLabel(q)?`達成条件：${q.clearCondition||'未設定'}`:'',
     `報酬：${questPublicRewardText(q)||'なし'}（${q.rewardScope||'各PC'}）`
   ].filter(Boolean);
 }
