@@ -1,6 +1,6 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "90.8.469",
+  "version": "90.8.470",
   "encoding": "UTF-8",
   "description": "Recraft Alchemia integrated DB. Craft and weapon-branch sell prices use cumulative economic cost: consumed items/materials at sell value plus facility fee, with output sell total at least 120% of that cost.",
   "data": {

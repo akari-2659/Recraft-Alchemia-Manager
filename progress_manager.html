@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.469</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.470</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.469-event-check-copy-layout1">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.470-event-check-copy-layout1">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -184,7 +184,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </style>
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.469｜更新：2026年8月10日</div>
+<div class="ra-build-info">v90.8.470｜更新：2026年8月10日</div>
 
 <header>
   <div class="header-inner">
@@ -460,7 +460,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.469';
+const VERSION='v90.8.470';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -480,7 +480,7 @@ const GUILD_DAILY_CHANNEL_NAME='recraft_alchemia_guild_daily_channel';
 const GUILD_DAILY_REQUEST_KINDS=['拠点内依頼','エリア依頼','納品依頼'];
 const MASTER_CACHE_KEY=STORE_KEY+'_master_cache_v1';
 const $=id=>document.getElementById(id);
-const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},dayState:{day:1,fatigue:0,usedActions:0,awaitingEnd:false},lastEventText:'',lastEventKey:'',lastEventCheckCopyText:'',lastEventTreasureCopyText:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestCheckCopyText:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',lastQuestTreasureCopyText:'',lastQuestEventTableRewardText:'',lastQuestEventTableRewardCopyText:'',triggeredQuestEvents:{},lastAreaFixedEventText:'',lastAreaFixedEventKey:'',triggeredAreaEvents:{},baseUnlockedAreaIds:[],lastBaseEventText:'',lastBaseEventKey:'',lastBaseCheckCopyText:'',lastBaseRewardText:'',lastBaseRewardCopyText:'',questRewardCache:{},lastEventTableRewardText:'',lastEventTableRewardCopyText:'',lastRecipeMerchantOffers:[],selectedRecipeMerchantId:'',lastRecipeMerchantContext:{scope:'',areaName:'',eventName:''},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastTreasureCopyText:'',lastAppraisalText:'',lastAppraisalCopyText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],lastDailyQuestKeysByKind:{'拠点内依頼':[],'エリア依頼':[],'納品依頼':[]},dailyQuestUnlockedAreaId:'',questEncounterCache:{},partySize:4,areaBossEncountered:{},treasureSetup:null,treasureContext:null,lastEncounter:null,dropEncounterInstances:[],dropMode:'encounter',lastEventRewardState:null,lastQuestEventRewardState:null,lastQuestReinforcementText:'',questWorkReinforcementCounts:{},log:[]};
+const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},dayState:{day:1,fatigue:0,usedActions:0,awaitingEnd:false},lastEventText:'',lastEventKey:'',lastEventCheckCopyText:'',lastEventTreasureCopyText:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestCheckCopyText:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',lastQuestTreasureCopyText:'',lastQuestHasTreasure:false,lastQuestEventTableRewardText:'',lastQuestEventTableRewardCopyText:'',triggeredQuestEvents:{},lastAreaFixedEventText:'',lastAreaFixedEventKey:'',triggeredAreaEvents:{},baseUnlockedAreaIds:[],lastBaseEventText:'',lastBaseEventKey:'',lastBaseCheckCopyText:'',lastBaseRewardText:'',lastBaseRewardCopyText:'',questRewardCache:{},lastEventTableRewardText:'',lastEventTableRewardCopyText:'',lastRecipeMerchantOffers:[],selectedRecipeMerchantId:'',lastRecipeMerchantContext:{scope:'',areaName:'',eventName:''},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastTreasureCopyText:'',lastAppraisalText:'',lastAppraisalCopyText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],lastDailyQuestKeysByKind:{'拠点内依頼':[],'エリア依頼':[],'納品依頼':[]},dailyQuestUnlockedAreaId:'',questEncounterCache:{},partySize:4,areaBossEncountered:{},treasureSetup:null,treasureContext:null,lastEncounter:null,dropEncounterInstances:[],dropMode:'encounter',lastEventRewardState:null,lastQuestEventRewardState:null,lastQuestReinforcementText:'',questWorkReinforcementCounts:{},log:[]};
 let currentQuestCategory='重要';
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function clamp(n){return Math.max(0,Math.min(100,Number(n)||0));}
@@ -1414,6 +1414,7 @@ ${baseQuest?'拠点内ランダムイベント':'該当エリアのランダム�
   if(isRecipeMerchantEvent(picked))drawRecipeMerchantOffers(sourceArea||questArea||{},'quest',picked.eventName||'レシピ商人との遭遇');
   state.lastQuestEventText=[baseText,treasureBundle.displayText,tableReward.displayText,isRecipeMerchantEvent(picked)?recipeMerchantOfferDisplayText():''].filter(Boolean).join('\n\n');
   state.lastQuestTreasureCopyText=treasureBundle.copyText||'';
+  state.lastQuestHasTreasure=treasureBundle.results.length>0&&!!String(treasureBundle.copyText||'').trim();
   state.lastQuestEventRewardState=buildEventRewardState(picked);
   updateQuestEventItemCopyButton();
   updateEventCheckCopyButtons();
@@ -1458,6 +1459,7 @@ function triggerQuestSpecificEvents(q,before,after){
       const treasureBundle=resolveEventTreasures(e,area?.name||e.areaName||'',true);
       state.lastQuestFixedEventText=[state.lastQuestFixedEventText,treasureBundle.displayText].filter(Boolean).join('\n\n');
       state.lastQuestTreasureCopyText=treasureBundle.copyText||'';
+      state.lastQuestHasTreasure=treasureBundle.results.length>0&&!!String(treasureBundle.copyText||'').trim();
       updateTreasureCopyButtons();
     }
     state.lastQuestEventRewardState=buildEventRewardState(e);
@@ -2472,6 +2474,7 @@ function clearAreaRandomEventHistory(){
 }
 function resetQuestEventItemCopyState(){
   state.lastQuestTreasureCopyText='';
+  state.lastQuestHasTreasure=false;
   state.lastQuestEventTableRewardText='';
   state.lastQuestEventTableRewardCopyText='';
   state.lastQuestEventRewardState=null;
@@ -3131,7 +3134,8 @@ function resolveEventTreasures(row={},areaName='',questFixed=false){
   return {results,displayText,copyText};
 }
 function updateTreasureCopyButtons(){
-  const questBtn=$('copyQuestTreasureBtn');if(questBtn){questBtn.hidden=!state.lastQuestTreasureCopyText;questBtn.disabled=!state.lastQuestTreasureCopyText;}
+  const questTreasureReady=!!state.lastQuestHasTreasure&&!!String(state.lastQuestTreasureCopyText||'').trim();
+  const questBtn=$('copyQuestTreasureBtn');if(questBtn){questBtn.hidden=!questTreasureReady;questBtn.disabled=!questTreasureReady;}
   const treasureBtn=$('copyTreasureBtn');if(treasureBtn)treasureBtn.disabled=!state.lastTreasureCopyText;
   updateQuestEventItemCopyButton();updateAreaEventItemCopyButton();
 }
@@ -3320,11 +3324,14 @@ function eventRewardItemsFromClause(clause='',previousItemName=''){
   return mentions.map((m,index)=>{const until=mentions[index+1]?.start??text.length;const local=text.slice(m.end,until);const count=(local.match(/^\s*×\s*(\d+D\d+|\d+)/i)||[])[1]||'1';return{uid:eventRewardUid(),name:m.name,row:m.row,alternatives:[],selectedName:m.name,...eventRewardRoll(count)};});
 }
 function buildEventRewardState(row={}){
-  const clauses=String(row.result||'').split(/[。\n]+/).map(x=>x.trim()).filter(Boolean);const groups=[];let previousItemName='',currentBranchKey='';
+  const clauses=String(row.result||'').split(/[。\n]+/).map(x=>x.trim()).filter(Boolean);const groups=[];let previousItemName='',currentBranchKey='',lastSuccessBranchKey='';
   clauses.forEach(clause=>{
     if(!/(入手|追加)/.test(clause))return;
-    const trigger=eventRewardTrigger(clause,currentBranchKey);
-    if(trigger.kind==='success')currentBranchKey=String(trigger.branchKey||'判定');
+    let trigger=eventRewardTrigger(clause,currentBranchKey);
+    // 目標値+○以上は、結果文の並びが「成功→失敗→+○」でも成功報酬へ加算する。
+    // 失敗節を挟んだだけで成功チェックが外れることがないよう、直近の成功分岐を継承する。
+    if(trigger.kind==='threshold'&&!String(trigger.branchKey||''))trigger={...trigger,branchKey:lastSuccessBranchKey||'判定'};
+    if(trigger.kind==='success'){currentBranchKey=String(trigger.branchKey||'判定');lastSuccessBranchKey=currentBranchKey;}
     else if(trigger.kind==='failure'||trigger.kind==='victory')currentBranchKey='';
     const items=eventRewardItemsFromClause(clause,previousItemName);const explicitNoReward=/入手なし|追加素材なし/.test(clause);if(!items.length&&!explicitNoReward)return;
     if(items.length)previousItemName=items.at(-1).selectedName||previousItemName;
@@ -3366,10 +3373,10 @@ function eventRewardCopyText(scope='event'){
 }
 function eventRewardGroupText(group={}){const text=(group.items||[]).map(item=>`${item.selectedName||item.name}×${item.count}${/D/i.test(item.expr||'')?`（${item.expr}）`:''}`).join('、');return text||'入手なし';}
 function renderEventRewardPanel(scope='event'){
-  const panel=$(eventRewardPanelId(scope)),reward=eventRewardState(scope);if(!panel)return;if(!reward?.groups?.length){const merged=scope==='quest'?questEventItemCopyText():areaEventItemCopyText();if(String(merged||'').trim()){panel.classList.remove('hidden');panel.innerHTML=`<section class="card event-reward-card"><h3>入手アイテム</h3><p class="muted small">このイベントで確定した入手アイテムをまとめてコピーできます。</p><div class="buttons"><button type="button" class="ghost" data-event-reward-copy="${scope}">入手アイテムコピー</button></div></section>`;}else{panel.classList.add('hidden');panel.innerHTML='';}return;}panel.classList.remove('hidden');
+  const panel=$(eventRewardPanelId(scope)),reward=eventRewardState(scope);if(!panel)return;if(!reward?.groups?.length){panel.classList.add('hidden');panel.innerHTML='';return;}panel.classList.remove('hidden');
   const body=reward.groups.map(group=>{const choices=group.items.map(item=>item.alternatives?.length?`<label class="event-reward-choice">選択：<select data-event-reward-choice="${esc(group.uid)}" data-event-reward-item="${esc(item.uid)}">${item.alternatives.map(name=>`<option value="${esc(name)}" ${name===item.selectedName?'selected':''}>${esc(name)}</option>`).join('')}</select></label>`:'').join('');const locked=group.trigger.kind==='always';return`<article class="event-reward-row"><label class="event-reward-check"><input type="checkbox" data-event-reward-check="${esc(group.uid)}" ${group.selected||locked?'checked':''} ${locked?'disabled':''}><span><b>${esc(group.trigger.label)}</b><br><span class="muted small">${esc(eventRewardGroupText(group))}</span></span></label>${choices}</article>`;}).join('');
   const selected=eventRewardSelectedItems(scope),total=selected.length?selected.map(row=>`${row.name}×${row.count}`).join('、'):'入手なし';
-  const copyButton=`<button type="button" class="ghost" data-event-reward-copy="${scope}">入手アイテムコピー</button>`;panel.innerHTML=`<section class="card event-reward-card"><h3>素材・アイテム入手数</h3><p class="muted small">イベント選出時に数量ダイスを振っています。実際に成立した条件だけをチェックしてください。目標値+○以上は判定成功分へ追加されます。</p><div class="event-reward-list">${body}</div><div class="event-reward-total"><b>選択中の入手結果</b><span>${esc(total)}</span></div><div class="buttons"><button type="button" class="secondary" data-event-reward-reroll="${scope}">数量を振り直す</button>${copyButton}</div></section>`;
+  panel.innerHTML=`<section class="card event-reward-card"><h3>素材・アイテム入手数</h3><p class="muted small">イベント選出時に数量ダイスを振っています。実際に成立した条件だけをチェックしてください。目標値+○以上は判定成功分へ追加されます。</p><div class="event-reward-list">${body}</div><div class="event-reward-total"><b>選択中の入手結果</b><span>${esc(total)}</span></div><div class="buttons"><button type="button" class="secondary" data-event-reward-reroll="${scope}">数量を振り直す</button></div></section>`;
 }
 function updateEventRewardSelection(scope,uid,checked){
   const reward=eventRewardState(scope),target=reward?.groups.find(g=>String(g.uid)===String(uid));if(!target)return;
@@ -3539,7 +3546,6 @@ $('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){su
   });
   document.addEventListener('click',e=>{
     const reroll=e.target.closest('[data-event-reward-reroll]');if(reroll){rerollEventReward(reroll.dataset.eventRewardReroll);return;}
-    const copy=e.target.closest('[data-event-reward-copy]');if(copy){const scope=copy.dataset.eventRewardCopy;const text=scope==='quest'?questEventItemCopyText():areaEventItemCopyText();copyText(text,scope==='quest'?'questCopyNote':'eventCopyNote');}
     if(e.target.closest('#copyRecipeMerchantListBtn')){const note=state.lastRecipeMerchantContext?.scope==='quest'?'questCopyNote':'eventCopyNote';copyText(recipeMerchantListCopyText(),note);return;}
     if(e.target.closest('#copyRecipeMerchantInfoBtn')){const note=state.lastRecipeMerchantContext?.scope==='quest'?'questCopyNote':'eventCopyNote';copyText(recipeMerchantInfoCopyText(selectedRecipeMerchantRow()),note);return;}
   });
