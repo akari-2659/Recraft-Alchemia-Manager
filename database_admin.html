@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.484</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.488</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1196,10 +1196,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.484-purifying-light-status-fix">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.488-purifying-light-status-fix">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.484｜更新：2026年8月11日</div>
+<div class="ra-build-info">v90.8.488｜更新：2026年8月11日</div>
 
 <header>
   <div class="title-card">
@@ -1883,7 +1883,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.484';
+const RECRAFT_DB_VERSION = 'v90.8.488';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.403';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -2786,25 +2786,25 @@ const ADMIN_FORTUNE_ROWS=[
  {from:11,to:16,name:'剣星の導き',oracle:'刃の先に細い光が見えます。狙いを定めるなら今日でしょう。',effect:'1日2回、命中判定+1。'},
  {from:17,to:22,name:'隠者の灯火',oracle:'見落としていた足跡を、小さな灯りが照らしてくれそうです。',effect:'1日2回、探索・感知・追跡のいずれかの判定+1。'},
  {from:23,to:28,name:'豊穣杯の恵み',oracle:'満ちた杯は、手を伸ばした者へ少し多くの実りを返します。',effect:'1日2回、採取判定+1。'},
- {from:29,to:34,name:'魔術師の指先',oracle:'今日は道具がよく手になじむ日。細かな仕事ほど冴えるでしょう。',effect:'1日2回、調合・鍛冶・細工のいずれかの判定+1。'},
+ {from:29,to:34,name:'魔術師の指先',oracle:'今日は道具がよく手になじむ日。細かな仕事ほど冴えるでしょう。',effect:'1日2回、調合・細工・設計のいずれかの判定+1。'},
  {from:35,to:39,name:'獅子座の加護',oracle:'胸の奥に力が満ちています。身体を使う仕事なら追い風になるでしょう。',effect:'1日2回、力業・運動のいずれかの判定+1。'},
  {from:40,to:45,name:'梟書の啓示',oracle:'閉じた頁の間から、必要な答えだけが覗いています。',effect:'1日2回、知識判定+1。'},
  {from:46,to:54,name:'暁星の兆し',oracle:'最初の一歩だけ、夜明けの星が強く照らしてくれます。',effect:'その日の最初に行う判定+1。'},
  {from:55,to:62,name:'均衡の天秤',oracle:'わずかな傾きが結果を変える日。最後のひと押しを見逃さないで。',effect:'1日1回、判定後・成否確定前に達成値+1。'},
  {from:63,to:70,name:'幸運の残り火',oracle:'小さな火は消えにくいもの。役目を果たすまで手元に残るでしょう。',effect:'1日1回、判定前に宣言して判定+1。その判定に失敗した場合、この運勢の使用回数を消費しない。'},
- {from:71,to:78,name:'薄雲の影',oracle:'薄い雲が一度だけ光を遮ります。避けるより、軽いうちに通り過ぎるのがよさそうです。',effect:'その日のうち1回、任意の判定に-1を適用しなければならない。'},
- {from:79,to:84,name:'絡み糸の兆し',oracle:'細い糸が二度、足元へ絡みます。大事な場面まで残さない方がよいでしょう。',effect:'その日のうち2回、任意の判定に-1を適用しなければならない。'},
- {from:85,to:89,name:'欠けた杯',oracle:'器の縁に小さな欠けがあります。今日は手仕事と採集に少し注意を。',effect:'その日のうち1回、調合・鍛冶・細工・採取のいずれかの判定に-2を適用しなければならない。'},
- {from:90,to:95,name:'迷い月の囁き',oracle:'月の光が道を二つに見せています。手掛かりを追う時ほど迷いが入りそうです。',effect:'その日のうち1回、探索・感知・追跡のいずれかの判定に-2を適用しなければならない。'},
- {from:96,to:98,name:'黒星の宣告',oracle:'黒い星がひとつ落ちています。避け切るより、受ける場所を選ぶべき日です。',effect:'その日のうち1回、任意の判定に-2を適用しなければならない。'},
- {from:99,to:100,name:'崩塔の凶兆',oracle:'高く積み上げたものほど、小さな揺らぎを恐れるもの。今日は足元をよくご覧なさい。',effect:'その日のうち3回、任意の判定に-1を適用しなければならない。'}
+ {from:71,to:78,name:'薄雲の影',oracle:'薄い雲が一度だけ光を遮ります。避けるより、軽いうちに通り過ぎるのがよさそうです。',effect:'その日のうち1回、任意の判定に-1を適用しなければならない。未消費のまま1日を終えた場合、翌日の最初の判定に-1を強制適用する。'},
+ {from:79,to:84,name:'絡み糸の兆し',oracle:'細い糸が二度、足元へ絡みます。大事な場面まで残さない方がよいでしょう。',effect:'その日のうち2回、任意の判定に-1を適用しなければならない。未消費分が残ったまま1日を終えた場合、残り回数を翌日に持ち越し、翌日の最初の判定から1回ずつ-1を強制適用する。'},
+ {from:85,to:89,name:'欠けた杯',oracle:'器の縁に小さな欠けがあります。今日は手仕事と採集に少し注意を。',effect:'その日のうち1回、調合・細工・採取のいずれかの判定に-2を適用しなければならない。未消費のまま1日を終えた場合、翌日の最初の判定に-2を強制適用する。'},
+ {from:90,to:95,name:'迷い月の囁き',oracle:'月の光が道を二つに見せています。手掛かりを追う時ほど迷いが入りそうです。',effect:'その日のうち1回、探索・感知・追跡のいずれかの判定に-2を適用しなければならない。未消費のまま1日を終えた場合、翌日の最初の判定に-2を強制適用する。'},
+ {from:96,to:98,name:'黒星の宣告',oracle:'黒い星がひとつ落ちています。避け切るより、受ける場所を選ぶべき日です。',effect:'その日のうち1回、任意の判定に-2を適用しなければならない。未消費のまま1日を終えた場合、翌日の最初の判定に-2を強制適用する。'},
+ {from:99,to:100,name:'崩塔の凶兆',oracle:'高く積み上げたものほど、小さな揺らぎを恐れるもの。今日は足元をよくご覧なさい。',effect:'その日のうち3回、任意の判定に-1を適用しなければならない。未消費分が残ったまま1日を終えた場合、残り回数を翌日に持ち越し、翌日の最初の判定から1回ずつ-1を強制適用する。'}
 ];
 let currentAdminFortune=null;
 function adminFortuneCopyText(row=currentAdminFortune){
   if(!row)return '';
   return `【今日の運勢】
 ${row.name}
-${row.oracle} ${row.effect}`;
+${row.effect}`;
 }
 function renderAdminFortuneResult(){
   const box=$('facilityFortuneResult');
@@ -6977,7 +6977,7 @@ function syncAllQuestFixedEventEditors(){
 
 const MODIFIER_TARGET_OPTIONS = [
   ['ability:body','能力：体力'], ['ability:dexterity','能力：器用'], ['ability:sense','能力：感覚'], ['ability:intellect','能力：知性'], ['ability:will','能力：意志'], ['ability:charm','能力：魅力'],
-  ['hit','命中（装備種別に応じて近接/射撃）'], ['skill:melee','技能：近接'], ['skill:shoot','技能：射撃'], ['skill:guard','技能：防御'], ['skill:evade','技能：回避'], ['skill:resist','技能：抵抗'],
+  ['hit','命中（装備種別に応じて近接/射撃）'], ['skill:melee','技能：近接'], ['skill:shoot','技能：射撃'], ['skill:guard','技能：防御'], ['skill:evade','技能：回避'], ['skill:resist','技能：抵抗'], ['skill:craft','技能：細工'],
   ['combat:defense','戦闘：防御値'], ['combat:guardAction','戦闘：防御行動値'], ['combat:evasion','戦闘：回避値'], ['skill:detect','技能：感知'], ['resource:maxHp','最大HP'], ['resource:maxMp','最大MP']
 ];
 function adminModifierTargetOptions(selected=''){
@@ -6987,7 +6987,7 @@ function adminModifierTargetOptions(selected=''){
     ]],
     ['技能', [
       ['skill:force','力業'], ['skill:melee','近接'], ['skill:guard','防御'], ['skill:shoot','射撃'], ['skill:throw','投擲'], ['skill:evade','回避'], ['skill:resist','抵抗'], ['skill:detect','感知'],
-      ['skill:magic','魔法'], ['skill:prayer','祈祷'], ['skill:alchemy','調合'], ['skill:appraise','鑑定'], ['skill:knowledge','知識'], ['skill:design','設計'], ['skill:blacksmith','鍛冶'],
+      ['skill:magic','魔法'], ['skill:prayer','祈祷'], ['skill:alchemy','調合'], ['skill:appraise','鑑定'], ['skill:knowledge','知識'], ['skill:craft','細工'], ['skill:design','設計'],
       ['skill:negotiate','交渉'], ['skill:empathy','共感'], ['skill:social','社交'], ['skill:encourage','鼓舞']
     ]],
     ['戦闘', [
@@ -7013,7 +7013,7 @@ function adminModifierTargetDisplayName(target=''){
     'resource:maxHp':'最大HP','resource:maxMp':'最大MP',
     'ability:body':'体力','ability:dexterity':'器用','ability:sense':'感覚','ability:intellect':'知性','ability:will':'意志','ability:charm':'魅力',
     'skill:force':'力業','skill:melee':'近接','skill:guard':'防御','skill:shoot':'射撃','skill:throw':'投擲','skill:evade':'回避','skill:resist':'抵抗','skill:detect':'感知',
-    'skill:magic':'魔法','skill:prayer':'祈祷','skill:alchemy':'調合','skill:appraise':'鑑定','skill:knowledge':'知識','skill:design':'設計','skill:blacksmith':'鍛冶',
+    'skill:magic':'魔法','skill:prayer':'祈祷','skill:alchemy':'調合','skill:appraise':'鑑定','skill:knowledge':'知識','skill:craft':'細工','skill:design':'設計',
     'skill:negotiate':'交渉','skill:empathy':'共感','skill:social':'社交','skill:encourage':'鼓舞'
   };
   return names[key] || key;
@@ -7050,7 +7050,7 @@ function normalizeModifierTargetAlias(target=''){
     'monsterKnowledge':'skill:knowledge','materialKnowledge':'skill:knowledge','elementKnowledge':'skill:knowledge',
     'skill:monsterKnowledge':'skill:knowledge','skill:materialKnowledge':'skill:knowledge','skill:elementKnowledge':'skill:knowledge',
     '体力':'ability:body','器用':'ability:dexterity','感覚':'ability:sense','知性':'ability:intellect','意志':'ability:will','魅力':'ability:charm',
-    '最大HP':'resource:maxHp','HP':'resource:maxHp','最大MP':'resource:maxMp','MP':'resource:maxMp','先制':'skill:detect','先制値':'skill:detect','combat:initiative':'skill:detect'
+    '最大HP':'resource:maxHp','HP':'resource:maxHp','最大MP':'resource:maxMp','MP':'resource:maxMp','先制':'skill:detect','先制値':'skill:detect','combat:initiative':'skill:detect','鍛冶':'skill:craft','細工':'skill:craft'
   };
   if(/^知識[:：]/.test(raw)) return 'skill:knowledge';
   return aliases[raw] || raw;
@@ -7202,7 +7202,7 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='materialType') help += '<div class="form-help">素材用の親分類です。魔物素材だけが専用の装備強化項目を持ち、ほかの素材には装備強化内容を設定しません。</div>';
   if(field==='materialCategory') help += '<div class="form-help">選んだ素材種別に紐づくカテゴリだけ表示します。</div>';
   if(field==='rank') help += '<div class="form-help">魔物・素材・装備・道具・レシピ・術式・クエストなど、ランクを持つデータは1以上の数値で管理し、すべての画面で★Nと表示します。</div>';
-  if(field==='buyPrice' && key==='items') help += '<div class="form-help">プレイヤーが店で購入する買値です。店売り品と武器派生の完成品には必ず設定し、売値より高い金額にします。</div>';
+  if(field==='buyPrice' && key==='items') help += '<div class="form-help">プレイヤーが店で購入する買値です。店売り品と武器派生の完成品には必ず設定し、売値より高い金額にします。同額設定の修正では買値を維持し、売値側を下げます。</div>';
   if(field==='sellPrice' && key==='items') help += '<div class="form-help">プレイヤーが売却するときの売値です。従来のprice列へも互換用として同じ値を自動同期します。売却不可のシステム定義だけ0Gを設定します。</div>';
   if(field==='limitedRecipePrice') help += '<div class="form-help">レシピ販売で選出された際の販売価格です。常設店売りではない、非ボス宝箱入手レシピだけに設定します。</div>';
   if(field==='recipeSellPrice') help += '<div class="form-help">宝箱などで既習レシピと重複した場合に売却できる価格です。レシピ購入価格や施設依頼費とは別に管理します。</div>';
@@ -8845,7 +8845,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.484';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.488';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-07';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
