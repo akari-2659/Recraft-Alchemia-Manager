@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.490</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.495</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -330,6 +330,12 @@
   .facility-upgrade-box{border:1px solid #dcc7ad;border-radius:18px;background:#fffdf9;padding:14px;box-shadow:0 6px 16px rgba(94,66,35,.06)}
   .facility-upgrade-result{margin-top:10px;border:1px solid #ead9c2;border-radius:12px;background:#fffaf3;padding:12px;line-height:1.7;color:var(--ink)}
   .facility-upgrade-result .muted{color:var(--muted)}
+  .facility-upgrade-control-grid{display:grid!important;grid-template-columns:repeat(2,minmax(260px,1fr))!important;gap:12px!important;align-items:start!important;width:100%!important;max-width:100%!important}
+  .facility-upgrade-control-grid>div:not(.facility-upgrade-actions){min-width:0!important;min-height:84px;display:flex;flex-direction:column;align-items:stretch}
+  .facility-upgrade-control-grid label{display:block;min-height:1.8em;margin-bottom:6px}
+  .facility-upgrade-control-grid select,.facility-upgrade-control-grid input,.facility-upgrade-control-grid .ra-manager-picker-button{width:100%!important;min-height:44px!important;margin-top:0!important}
+  .facility-upgrade-actions{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:center;min-height:44px}
+  @media(max-width:760px){.facility-upgrade-control-grid{grid-template-columns:1fr!important}.facility-upgrade-actions{grid-column:1}}
   .facility-fortune-box{display:grid;gap:10px}
   .facility-fortune-box h3{margin:0;color:var(--accent);font-size:18px}
   .facility-fortune-actions{display:flex;gap:8px;flex-wrap:wrap}
@@ -405,7 +411,7 @@
   .monster-output-panel textarea{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;line-height:1.55;min-height:180px;white-space:pre;overflow:auto}
   .monster-card-actions .secondary{background:#6d7e68;color:white;border-color:transparent}
 
-.monster-line-editor{display:grid;gap:8px}.monster-line-head,.monster-line-row{display:grid;gap:6px;align-items:center}.monster-line-head{font-size:11px;color:var(--muted);font-weight:900}.monster-line-head.action-head,.monster-line-row[data-monster-action-row]{grid-template-columns:1fr .82fr 1.08fr .86fr .55fr .72fr 1.25fr auto}.monster-line-head.drop-head,.monster-line-row[data-monster-drop-row]{grid-template-columns:1fr 1fr 1.45fr .75fr .65fr auto}.monster-line-row input,.monster-line-row select{min-width:0}
+.monster-line-editor{display:grid;gap:8px}.monster-line-head,.monster-line-row{display:grid;gap:6px;align-items:center}.monster-line-head{font-size:11px;color:var(--muted);font-weight:900}.monster-line-head.action-head,.monster-line-row[data-monster-action-row]{grid-template-columns:1fr .78fr 1.08fr .52fr .82fr .52fr .70fr 1.22fr auto}.monster-line-head.drop-head,.monster-line-row[data-monster-drop-row]{grid-template-columns:1fr 1fr 1.45fr .75fr .65fr auto}.monster-line-row input,.monster-line-row select{min-width:0}
   @media(max-width:980px){
     .monster-line-head.action-head{display:none}
     .monster-line-row[data-monster-action-row]{grid-template-columns:repeat(2,minmax(0,1fr));padding:9px;border:1px solid var(--line);border-radius:12px;background:#fffaf3}
@@ -1196,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.490-purifying-light-status-fix">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.495-purifying-light-status-fix">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.490｜更新：2026年8月11日</div>
+<div class="ra-build-info">v90.8.495｜更新：2026年8月11日</div>
 
 <header>
   <div class="title-card">
@@ -1630,29 +1636,20 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
         <h3 id="facilityWorkTitle">施設作業</h3>
         <p class="notice" id="facilityWorkNotice">施設ごとの作業内容を確認します。</p>
         <div id="facilitySmithyWork" class="facility-work-block">
-          <div class="input-action-row">
+          <div class="facility-upgrade-control-grid">
             <div>
               <label for="facilityUpgradeEquipmentType">強化する装備種別</label>
               <select id="facilityUpgradeEquipmentType">
                 <option value="武器">武器</option>
-                <option value="防具">防具</option>
-                <option value="盾">盾</option>
+                <option value="防具・盾">防具・盾</option>
                 <option value="装飾品">装飾品</option>
                 <option value="魔導書">魔導書</option>
                 <option value="祈祷書">祈祷書</option>
               </select>
             </div>
             <div>
-              <label for="facilityUpgradeEquipmentSearch">武器・防具キーワード検索</label>
-              <input id="facilityUpgradeEquipmentSearch" type="search" autocomplete="off" placeholder="名称・武器種・説明・効果で検索">
-            </div>
-            <div>
               <label for="facilityUpgradeEquipmentSelect">強化する装備</label>
               <select id="facilityUpgradeEquipmentSelect"></select>
-            </div>
-            <div>
-              <label for="facilityUpgradeMaterialSearch">魔物素材キーワード検索</label>
-              <input id="facilityUpgradeMaterialSearch" type="search" autocomplete="off" placeholder="素材名・分類・強化内容・詳細で検索">
             </div>
             <div>
               <label for="facilityUpgradeMaterialInput">強化素材</label>
@@ -1667,14 +1664,14 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
               <select id="facilityUpgradeStepInput"></select>
             </div>
             <div>
-              <label for="facilitySmithToolRankInput">使用する細工道具</label>
+              <label for="facilitySmithToolRankInput">使用する細工道具（自作）</label>
               <select id="facilitySmithToolRankInput"></select>
             </div>
             <div>
               <label for="facilityUpgradeGuaranteeItem">確定成功アイテム</label>
               <select id="facilityUpgradeGuaranteeItem"><option value="">使用しない</option></select>
             </div>
-            <button class="secondary" type="button" data-facility-upgrade-check>強化内容を確認</button><button class="ghost" type="button" data-facility-upgrade-reset>選択をやり直す</button>
+            <div class="facility-upgrade-actions"><button class="secondary" type="button" data-facility-upgrade-check>強化内容を確認</button><button class="ghost" type="button" data-facility-upgrade-reset>選択をやり直す</button></div>
           </div>
           <div id="facilityUpgradeResult" class="facility-upgrade-result muted">強化素材・強化回数・使用済み強化枠・使用道具を選択してください。</div>
           <div class="facility-upgrade-result facility-upgrade-removal-rule">
@@ -1883,7 +1880,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.490';
+const RECRAFT_DB_VERSION = 'v90.8.495';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.403';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -2894,7 +2891,7 @@ const SYSTEM_HELP = [
       "鍛冶道具は野鍛冶の槌箱、焼入れ金床具、鋼噛み火ばさみ具、星鉄火ばさみ具、竜炉の鍛冶具。",
       "道具は★3、★6、★9、★12、★15以下のように複数ランクをまとめて扱う。レシピ側に要求道具ランクは設定しない。",
       "作成するレシピまたは装備強化に使う素材のランクが、道具の使用可能上限以下なら使用できる。上位道具による難易度低下は行わない。",
-      "装備強化は素材ランクで基本難易度を決め、強化回数が高いほど必要価格と難易度が上がる。",
+      "装備強化は、強化回数で自作目標値と施設依頼成功率、強化後の使用済み枠で施設依頼価格を算出する。自作用の道具補正は施設依頼成功率へ適用しない。",
       "調合道具は薬屋、鍛冶道具は鍛冶屋で扱う。"
     ]
   },
@@ -3022,12 +3019,15 @@ const SYSTEM_HELP = [
       "魔物種別は粘体・獣・虫・植物・爬虫・水棲・軟体・霊体・造魔・竜・異界の大分類で管理する。飛行・甲殻・異界・鉱質などは魔物特性へ分ける。",
       "魔物素材カテゴリは魔物種別と同じ大分類を使用し、派生候補を種別から探せるようにする。",
       "属性相性は、通常、耐、無、反、吸、弱で管理する。",
+      "山麓の旧鉱山以降に初登場する通常魔物の魔物素材は、基本ドロップを★3、ドロップ率20%のレア固有素材だけ★4にする。20%以外の通常素材を★4にしない。エリアボス固有素材は対象外。",
       "耐はダメージ半減。",
       "無はダメージ0、属性効果なし。",
       "反はダメージ0、受けるはずだったダメージを攻撃者へ返す。",
       "吸はダメージ0、受けるはずだったダメージ分だけHPを回復する。",
       "弱はダメージ2倍。",
       "魔物の行動は1行動1行で管理する。",
+      "魔物本体の命中値は基礎命中として扱い、判定を行う各行動に-2～+2の命中補正を設定する。チャットパレットは2D6+{命中}±補正の形で基礎命中ラベルを参照する。",
+      "命中補正を高くする攻撃はその分だけ威力を低めに、命中補正を低くする攻撃はその分だけ威力を高めに設定し、命中率とダメージを交換関係にする。",
       "通常魔物は技を必ず3個、ボスは技を必ず4個所持する。固有パッシブは技数に含めない。",
       "準備と次ターンの大技で構成される予告攻撃は、2段階を1つの技として同じ行に登録する。",
       "魔物行動には距離とは別に行動種別を設定する。種別は近接攻撃、遠距離攻撃、術式、祈祷、防御、補助、回復、特殊。",
@@ -3279,7 +3279,7 @@ const SYSTEM_HELP = [
     ],
     "body": [
       "武器、防具、盾、装飾品、魔導書、祈祷書には強化枠上限を設定する。",
-      "★1の武器・防具・盾は原則2回まで強化可能。",
+      "★1の武器・防具・盾は原則2枠の強化枠上限を持つ。",
       "★1の装飾品は原則1回まで強化可能。",
       "魔導書と祈祷書は原則2回まで強化可能。",
       "素手、普段着、バッグ、矢筒、素材、調合品、道具、矢弾、スクロールには強化枠上限を表示しない。",
@@ -4626,7 +4626,8 @@ function renderMonsterActionCards(value){
   if(!rows.length) return '<div class="monster-empty-note">行動は未登録です。</div>';
   return `<div class="monster-mini-table">${rows.map(r=>{
     const title = r.name || '名称未設定の行動';
-    const chips = [r.actionType ? `種別:${r.actionType}` : '', r.checkType, r.target ? `対象:${r.target}` : '', r.element ? `属性:${r.element}` : '', r.power ? `威力:${r.power}` : ''].filter(Boolean);
+    const hasCheck=String(r.checkType||'').trim() && String(r.checkType||'').trim()!=='なし';
+    const chips = [r.actionType ? `種別:${r.actionType}` : '', r.checkType, hasCheck ? `命中${monsterActionHitModLabel(r.hitMod)}` : '', r.target ? `対象:${r.target}` : '', r.element ? `属性:${r.element}` : '', r.power ? `威力:${r.power}` : ''].filter(Boolean);
     return `<div class="monster-action-card"><div class="monster-action-main"><span>${escapeHtml(title)}</span>${chips.map(c=>`<span class="monster-badge">${escapeHtml(c)}</span>`).join('')}</div>${r.effect ? `<div class="monster-action-sub">${escapeHtml(r.effect)}</div>` : ''}</div>`;
   }).join('')}</div>`;
 }
@@ -4816,6 +4817,7 @@ function renderFacilityRemovalMaterialSelect(){
     return `<option value="${escapeHtml(facilityRemovalMaterialId(row))}">${escapeHtml(effect)}（${escapeHtml(row.name||'素材名未設定')} / ${slots}枠 / ${cls}）</option>`;
   }).join('');
   if([...sel.options].some(o=>o.value===prev))sel.value=prev;
+  syncFacilityUpgradePickerButton(sel);
 }
 function facilityRemovalConfiguredRows(){return facilityRemovalEntryIds.map(facilityRemovalMaterialById).filter(Boolean);}
 function facilityRemovalPriceResult(){
@@ -5576,7 +5578,7 @@ function renderFacilityWorkPanel(){
   if(!show) return;
   if(kind==='smithy'){
     if(title) title.textContent='装備強化';
-    if(notice) notice.textContent='自作は鍛冶道具＋素材、施設依頼は素材＋表示価格で行います。';
+    if(notice) notice.textContent='自作は細工道具＋素材、施設依頼は素材＋表示価格で行います。施設依頼の成功率には自作側の道具補正を適用しません。';
     renderFacilityUpgradeEquipmentSelect(); renderFacilityUpgradeLookupList(); renderFacilityGuaranteeSelect(); renderUpgradeCountSelect($('facilityUpgradeCountInput')?.value||'0'); renderUpgradeStepSelect($('facilityUpgradeStepInput')?.value||'1'); renderToolRankSelect('facilitySmithToolRankInput',$('facilitySmithToolRankInput')?.value||'3'); renderFacilityUpgradeResult($('facilityUpgradeMaterialInput')?.value||''); renderFacilityRemovalCalculator();
   }else if(kind==='crystal'){
     if(title) title.textContent='スキルクリスタル強化';
@@ -5599,31 +5601,33 @@ function renderFacilityWorkPanel(){
     if(section==='skill_gacha') renderSkillGachaManagement();
   }
 }
-function facilityUpgradeEquipmentRows({respectSearch=true}={}){
+function facilityUpgradeEquipmentRows(){
   const type=String($('facilityUpgradeEquipmentType')?.value||'武器').trim();
-  const query=respectSearch?String($('facilityUpgradeEquipmentSearch')?.value||''):'';
   return (state.items||[]).filter(r=>{
     if(String(r.dataKind||'').trim()!=='アイテム') return false;
     if(Number(r.upgradeLimit||0)<=0) return false;
     const itemType=String(r.itemType||'').trim();
     const itemCategory=String(r.itemCategory||'').trim();
-    const typeMatch=(type==='魔導書'||type==='祈祷書') ? (itemType==='武器'||itemType==='術式装備') && itemCategory===type : itemType===type;
-    return typeMatch && facilityUpgradeSearchMatches(r,query);
+    let typeMatch=false;
+    if(type==='魔導書'||type==='祈祷書') typeMatch=(itemType==='武器'||itemType==='術式装備') && itemCategory===type;
+    else if(type==='防具・盾') typeMatch=itemType==='防具'||itemType==='盾';
+    else typeMatch=itemType===type;
+    return typeMatch;
   });
+}
+function syncFacilityUpgradePickerButton(sel){
+  if(!sel)return;
+  const btn=sel.parentElement?.querySelector(':scope > .ra-manager-picker-button');
+  const label=btn?.querySelector('[data-ra-manager-label]');
+  if(label)label.textContent=String(sel.selectedOptions?.[0]?.textContent||'未選択').trim()||'未選択';
 }
 function renderFacilityUpgradeEquipmentSelect(){
   const sel=$('facilityUpgradeEquipmentSelect'); if(!sel)return;
   const prev=sel.value;
-  let rows=facilityUpgradeEquipmentRows({respectSearch:true});
-  if(prev&&!rows.some(r=>String(r.name||r.id||'').trim()===prev)){
-    const selected=facilityUpgradeEquipmentRows({respectSearch:false}).find(r=>String(r.name||r.id||'').trim()===prev);
-    if(selected)rows=[selected,...rows];
-  }
-  rows=rows.slice().sort((a,b)=>numericRankValueIncludingLegacyMaterialGrade(a.rank,1)-numericRankValueIncludingLegacyMaterialGrade(b.rank,1)||String(a.name||'').localeCompare(String(b.name||''),'ja'));
-  const q=String($('facilityUpgradeEquipmentSearch')?.value||'').trim();
-  const placeholder=q&&!rows.length?'検索条件に一致する装備がありません':'装備を選択';
-  sel.innerHTML=`<option value="">${escapeHtml(placeholder)}</option>`+rows.map(r=>`<option value="${escapeHtml(r.name||r.id||'')}">${escapeHtml(r.name||r.id||'名称未設定')}（${escapeHtml(adminRankLabel(r.rank)||'ランク未設定')} / 最低素材${escapeHtml(playerRankLabel(equipmentUpgradeMinimumRank(r))) }）</option>`).join('');
+  const rows=facilityUpgradeEquipmentRows().slice().sort((a,b)=>numericRankValueIncludingLegacyMaterialGrade(a.rank,1)-numericRankValueIncludingLegacyMaterialGrade(b.rank,1)||String(a.name||'').localeCompare(String(b.name||''),'ja'));
+  sel.innerHTML='<option value="">装備を選択</option>'+rows.map(r=>`<option value="${escapeHtml(r.name||r.id||'')}">${escapeHtml(r.name||r.id||'名称未設定')}（${escapeHtml(adminRankLabel(r.rank)||'ランク未設定')} / 最低素材${escapeHtml(playerRankLabel(equipmentUpgradeMinimumRank(r))) }）</option>`).join('');
   if([...sel.options].some(o=>o.value===prev)) sel.value=prev;
+  syncFacilityUpgradePickerButton(sel);
 }
 function upgradeMaterialTarget(mat){
   const explicit=String(mat?.equipmentUpgradeTarget||'').trim(); if(explicit)return explicit;
@@ -5639,21 +5643,22 @@ function facilityUpgradeMaterialCompatible(mat){
   const type=String($('facilityUpgradeEquipmentType')?.value||'武器').trim();
   const targets=upgradeMaterialTargetTypes(mat);
   if((type==='魔導書'||type==='祈祷書') && targets.includes('武器')) return true;
+  if(type==='防具・盾') return targets.includes('防具')||targets.includes('盾')||targets.includes('防具・盾');
+  if(type==='防具'||type==='盾') return targets.includes(type)||targets.includes('防具')||targets.includes('盾')||targets.includes('防具・盾');
   return targets.includes(type);
 }
-function facilityUpgradeMaterials({respectMinimum=true,respectSearch=true}={}){
+function facilityUpgradeMaterials({respectMinimum=true}={}){
   const equipment=selectedUpgradeEquipment();
   const minRank=equipment ? equipmentUpgradeMinimumRank(equipment) : 1;
-  const query=respectSearch?String($('facilityUpgradeMaterialSearch')?.value||''):'';
   return (state.items||[]).filter(r=>{
     if(String(r.dataKind||'').trim()!=='素材'||String(r.materialType||'').trim()!=='魔物素材'||!String(r.equipmentUpgradeEffect||'').trim()||!facilityUpgradeMaterialCompatible(r)) return false;
     if(respectMinimum&&equipment&&numericRankValueIncludingLegacyMaterialGrade(r.rank,1)<minRank)return false;
-    return facilityUpgradeSearchMatches(r,query);
+    return true;
   });
 }
 function findUpgradeMaterialByName(name=''){
   const q=String(name||'').trim(); if(!q)return null;
-  const rows=facilityUpgradeMaterials({respectMinimum:false,respectSearch:false});
+  const rows=facilityUpgradeMaterials({respectMinimum:false});
   const norm=v=>String(v||'').trim().toLowerCase(), nq=norm(q);
   return rows.find(r=>norm(r.name)===nq)||rows.find(r=>norm(r.id)===nq)||rows.find(r=>norm(r.publicId)===nq)||rows.find(r=>norm(r.name).includes(nq))||rows.find(r=>norm(r.id).includes(nq))||rows.find(r=>norm(r.publicId).includes(nq))||null;
 }
@@ -5662,15 +5667,14 @@ function renderFacilityUpgradeLookupList(){
   if(!input)return;
   const prev=input.value, equipment=selectedUpgradeEquipment();
   const minRank=equipment?equipmentUpgradeMinimumRank(equipment):1;
-  let rows=facilityUpgradeMaterials({respectMinimum:true,respectSearch:true});
+  let rows=facilityUpgradeMaterials({respectMinimum:true});
   if(prev&&!rows.some(r=>String(r.name||r.id||'').trim()===prev)){
-    const selected=facilityUpgradeMaterials({respectMinimum:true,respectSearch:false}).find(r=>String(r.name||r.id||'').trim()===prev);
+    const selected=facilityUpgradeMaterials({respectMinimum:true}).find(r=>String(r.name||r.id||'').trim()===prev);
     if(selected)rows=[selected,...rows];
   }
   rows=rows.slice().sort((a,b)=>numericRankValueIncludingLegacyMaterialGrade(a.rank,1)-numericRankValueIncludingLegacyMaterialGrade(b.rank,1)||String(a.name||'').localeCompare(String(b.name||''),'ja'));
-  const q=String($('facilityUpgradeMaterialSearch')?.value||'').trim();
   const placeholder=equipment
-    ?(rows.length?`${playerRankLabel(minRank)}以上の強化素材を選択`:(q?'検索条件に一致する対応素材がありません':`${playerRankLabel(minRank)}以上の対応素材がありません`))
+    ?(rows.length?`${playerRankLabel(minRank)}以上の強化素材を選択`:`${playerRankLabel(minRank)}以上の対応素材がありません`)
     :'先に強化する装備を選択';
   input.innerHTML=`<option value="">${escapeHtml(placeholder)}</option>`+rows.map(m=>{
     const name=String(m.name||m.id||'').trim();
@@ -5680,6 +5684,7 @@ function renderFacilityUpgradeLookupList(){
     return `<option value="${escapeHtml(name)}">${escapeHtml(name)}（${escapeHtml(label)}）</option>`;
   }).join('');
   if(prev&&[...input.options].some(o=>o.value===prev))input.value=prev;
+  syncFacilityUpgradePickerButton(input);
 }
 function renderFacilityUpgradeResult(materialName=''){
   const result=$('facilityUpgradeResult'); if(!result)return;
@@ -5688,7 +5693,7 @@ function renderFacilityUpgradeResult(materialName=''){
   const mat=findUpgradeMaterialByName(materialName||$('facilityUpgradeMaterialInput')?.value||'');
   if(!mat){result.classList.add('muted');result.innerHTML=`${escapeHtml(equipment.name||'選択装備')}の強化には${escapeHtml(playerRankLabel(equipmentUpgradeMinimumRank(equipment)))}以上の対応素材が必要です。`;return;}
   const equipmentName=String(equipment.name||'').trim();
-  const equipmentType=String($('facilityUpgradeEquipmentType')?.value||'武器').trim();
+  const equipmentType=String(equipment.itemType||equipment.itemCategory||$('facilityUpgradeEquipmentType')?.value||'武器').trim();
   const effect=String(mat.equipmentUpgradeEffect||'').trim(), detail=String(mat.equipmentUpgradeDetail||'').trim(), effectDisplay=equipmentUpgradeDisplayName(mat);
   const materialRank=numericRankValueIncludingLegacyMaterialGrade(mat.rank,1), minimumRank=equipmentUpgradeMinimumRank(equipment);
   const equipmentRank=numericRankValueIncludingLegacyMaterialGrade(equipment.rank,1);
@@ -5706,11 +5711,12 @@ function renderFacilityUpgradeResult(materialName=''){
   const tool=toolDifficultyReduction(materialRank,toolMax), price=upgradeWorkPrice(mat,rule,equipment);
   const toolReduction=tool.usable?tool.reduction:0;
   const finalTarget=target-toolReduction;
+  const selfCraftUsable=rankAllowed&&tool.usable&&capacityAllowed;
+  const facilityUsable=rankAllowed&&capacityAllowed;
   const guarantee=selectedFacilityGuaranteeItem();
   const guaranteeCap=Number(guarantee?.guaranteeUpgradeMaxRank||0);
-  const guaranteeUsable=!!guarantee && guaranteeCap>=materialRank && rankAllowed && tool.usable && capacityAllowed;
-  const successRate=facilityUpgradeSuccessRate(finalTarget,difficulty);
-  const usable=rankAllowed&&tool.usable&&capacityAllowed;
+  const guaranteeUsable=!!guarantee && guaranteeCap>=materialRank && facilityUsable;
+  const successRate=facilityUpgradeSuccessRate(target,difficulty);
   result.classList.remove('muted');
   result.innerHTML=`<div><b>${escapeHtml(mat.name||mat.id||'素材名未設定')}</b></div>
     <div class="facility-product-meta">${[playerRankLabel(materialRank),'対象:'+(upgradeMaterialTarget(mat)||'未設定'),mat.materialCategory||'',mat.price?'素材売値:'+mat.price+'G':''].filter(Boolean).map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>
@@ -5724,11 +5730,11 @@ function renderFacilityUpgradeResult(materialName=''){
     <div><b>基礎作成難易度：</b>${escapeHtml(String(target))}（7＋装備ランク${escapeHtml(String(equipmentRank))}＋現在の強化回数${escapeHtml(String(upgradeCount))}）</div>
     <div><b>道具による軽減：</b>－${escapeHtml(String(toolReduction))}</div>
     <div><b>最終作成難易度：</b>${escapeHtml(String(finalTarget))}</div>
-    <div><b>自作判定：</b>2D6＋細工－${escapeHtml(String(difficulty))} &gt;= ${escapeHtml(String(finalTarget))}</div>
-    <div><b>使用する細工道具：</b>${escapeHtml(selectedToolText('facilitySmithToolRankInput'))} / ${tool.usable?'使用可能':'素材ランクが対応上限を超過'}</div>
-    <div><b>施設依頼成功率：</b>${usable?(guaranteeUsable?'100%（確定成功アイテム使用）':escapeHtml(String(successRate))+'%'):'強化不可'}</div>
+    <div><b>自作判定：</b>${selfCraftUsable?`2D6＋細工－${escapeHtml(String(difficulty))} &gt;= ${escapeHtml(String(finalTarget))}`:'使用する細工道具の対応上限不足、素材ランク不足、または強化枠不足'}</div>
+    <div><b>使用する細工道具（自作）：</b>${escapeHtml(selectedToolText('facilitySmithToolRankInput'))} / ${tool.usable?'使用可能':'素材ランクが対応上限を超過'}</div>
+    <div><b>施設依頼成功率：</b>${facilityUsable?(guaranteeUsable?'100%（確定成功アイテム使用）':escapeHtml(String(successRate))+'%'):'強化不可'}</div>
     <div><b>確定成功アイテム：</b>${guarantee?`${escapeHtml(guarantee.name||'名称未設定')}（${escapeHtml(playerRankLabel(guaranteeCap))}以下） / ${guaranteeUsable?'使用可能':'対応上限外または他条件未達'}`:'使用しない'}</div>
-    <div><b>施設依頼価格：</b>${rankAllowed&&capacityAllowed?(price.total?`${escapeHtml(String(price.total))}G`:'未設定'):'素材ランク不足または強化枠不足のため算出対象外'}</div>
+    <div><b>施設依頼価格：</b>${facilityUsable?(price.total?`${escapeHtml(String(price.total))}G`:'未設定'):'素材ランク不足または強化枠不足のため算出対象外'}</div>
     <div><b>装備強化内容：</b>${escapeHtml(effectDisplay||'未設定')}</div>
     <div><b>効果説明：</b>${escapeHtml(detail||'未設定')}</div>`;
 }
@@ -5825,14 +5831,15 @@ function monsterActionCheckCommand(row={}, action={}){
   if(!parsed.raw || parsed.left === 'なし') return '';
   const right = parsed.right || '目標値';
   const left = parsed.left || '命中';
-  let mod = row.hitValue;
-  if(left === '回避') mod = row.evasionValue;
-  else if(left === '抵抗') mod = row.resistValue;
-  else if(left === '防御') mod = row.defenseValue;
+  let baseRef = '{命中}';
+  let applyActionHitMod = true;
+  if(left === '回避'){ baseRef = '{回避}'; applyActionHitMod = false; }
+  else if(left === '抵抗'){ baseRef = '{抵抗}'; applyActionHitMod = false; }
+  else if(left === '防御'){ baseRef = '{防御}'; applyActionHitMod = false; }
   else if(left === 'なし') return '';
-  const numeric = String(mod ?? '').trim();
-  const formula = numeric ? `2D6+${numeric}>=${right}` : `2D6>=${right}`;
-  return `${formula} 【${action.name || '魔物行動'}】`;
+  const hitMod = applyActionHitMod ? normalizeMonsterActionHitMod(action.hitMod) : 0;
+  const modText = hitMod>0 ? `+${hitMod}` : hitMod<0 ? String(hitMod) : '';
+  return `2D6+${baseRef}${modText}>=${right} 【${action.name || '魔物行動'}】`;
 }
 function monsterDamageCommand(action={}){
   const power = compactMonsterText(action.power);
@@ -6639,38 +6646,54 @@ function normalizeMonsterActionType(row={}){
   const type = String(row.actionType || '').trim();
   return MONSTER_ACTION_TYPE_VALUES.includes(type) ? type : inferMonsterActionType(row);
 }
+function normalizeMonsterActionHitMod(value){
+  const raw=String(value ?? '').trim();
+  if(raw==='') return 0;
+  const n=Number(raw);
+  return Number.isInteger(n) && n>=-2 && n<=2 ? n : 0;
+}
+function monsterActionHitModLabel(value){
+  const n=normalizeMonsterActionHitMod(value);
+  return n>0 ? `+${n}` : n<0 ? String(n) : '±0';
+}
 function parseMonsterActions(value){
   const raw = String(value || '').trim();
   if(!raw) return [];
   try{
     const arr = JSON.parse(raw);
-    if(Array.isArray(arr)) return arr.map(r=>({name:r.name||'', actionType:normalizeMonsterActionType(r), checkType:r.checkType||'', target:r.target||'', element:r.element||'', power:r.power||'', effect:r.effect||''}));
+    if(Array.isArray(arr)) return arr.map(r=>({name:r.name||'', actionType:normalizeMonsterActionType(r), checkType:r.checkType||'', target:r.target||'', element:r.element||'', power:r.power||'', effect:r.effect||'', hitMod:normalizeMonsterActionHitMod(r.hitMod)}));
   }catch(e){}
   return raw.split(/\r?\n/).map(line=>line.trim()).filter(Boolean).map(line=>{
     const rawCols = String(line || '').split('\t');
+    if(rawCols.length >= 8){
+      const cols = splitMonsterLine(line, 8);
+      const row = {name:cols[0], actionType:cols[1], checkType:cols[2], target:cols[3], element:cols[4], power:cols[5], effect:cols[6], hitMod:normalizeMonsterActionHitMod(cols[7])};
+      row.actionType = normalizeMonsterActionType(row);
+      return row;
+    }
     if(rawCols.length >= 7){
       const cols = splitMonsterLine(line, 7);
-      const row = {name:cols[0], actionType:cols[1], checkType:cols[2], target:cols[3], element:cols[4], power:cols[5], effect:cols[6]};
+      const row = {name:cols[0], actionType:cols[1], checkType:cols[2], target:cols[3], element:cols[4], power:cols[5], effect:cols[6], hitMod:0};
       row.actionType = normalizeMonsterActionType(row);
       return row;
     }
     if(rawCols.length >= 6){
       const cols = splitMonsterLine(line, 6);
-      const row = {name:cols[0], checkType:cols[1], target:cols[2], element:cols[3], power:cols[4], effect:cols[5]};
+      const row = {name:cols[0], checkType:cols[1], target:cols[2], element:cols[3], power:cols[4], effect:cols[5], hitMod:0};
       row.actionType = inferMonsterActionType(row);
       return row;
     }
     const m = line.match(/^([^：:]+)[：:](.*)$/);
-    const row = {name:m ? m[1].trim() : '', checkType:'', target:'', element:'物', power:'', effect:m ? m[2].trim() : line};
+    const row = {name:m ? m[1].trim() : '', checkType:'', target:'', element:'物', power:'', effect:m ? m[2].trim() : line, hitMod:0};
     row.actionType = inferMonsterActionType(row);
     return row;
   });
 }
 function serializeMonsterActions(rows){
   return (rows || []).map(r=>({
-    name:String(r.name||'').trim(), actionType:normalizeMonsterActionType(r), checkType:normalizeMonsterActionCheckType(r), target:String(r.target||'').trim(), element:String(r.element||'').trim(), power:String(r.power||'').trim(), effect:String(r.effect||'').trim()
+    name:String(r.name||'').trim(), actionType:normalizeMonsterActionType(r), checkType:normalizeMonsterActionCheckType(r), target:String(r.target||'').trim(), element:String(r.element||'').trim(), power:String(r.power||'').trim(), effect:String(r.effect||'').trim(), hitMod:normalizeMonsterActionHitMod(r.hitMod)
   })).filter(r=>r.name || r.actionType || r.checkType || r.target || r.element || r.power || r.effect)
-    .map(r=>[r.name,r.actionType,r.checkType,r.target,r.element,r.power,r.effect].join('\t')).join('\n');
+    .map(r=>[r.name,r.actionType,r.checkType,r.target,r.element,r.power,r.effect,(r.checkType && r.checkType!=='なし') ? String(r.hitMod) : ''].join('\t')).join('\n');
 }
 function parseMonsterDrops(value){
   const raw = String(value || '').trim();
@@ -6763,11 +6786,17 @@ function optionHtml(values, current, empty='未選択'){
   if(cur && !list.includes(cur)) list.unshift(cur);
   return `<option value="">${escapeHtml(empty)}</option>` + list.map(v=>`<option value="${escapeHtml(v)}" ${v===cur?'selected':''}>${escapeHtml(v)}</option>`).join('');
 }
+function monsterActionHitModOptions(value=0){
+  const current=normalizeMonsterActionHitMod(value);
+  return [-2,-1,0,1,2].map(n=>`<option value="${n}" ${n===current?'selected':''}>${n>0?`+${n}`:n<0?String(n):'±0'}</option>`).join('');
+}
 function monsterActionRowHtml(row={}, idx=0){
+  const hasCheck=String(row.checkType||'').trim() && String(row.checkType||'').trim()!=='なし';
   return `<div class="monster-line-row" data-monster-action-row>
     <input data-monster-action-field="name" value="${escapeHtml(row.name||'')}" placeholder="行動名">
     <select data-monster-action-field="actionType">${optionHtml(MONSTER_ACTION_TYPE_VALUES, normalizeMonsterActionType(row), '行動種別')}</select>
     ${checkBuilderHtml(row.checkType, 'data-monster-action-field="checkType"', {key:'monsters', row})}
+    <select data-monster-action-field="hitMod" title="基礎命中への行動別補正" ${hasCheck?'':'disabled'}>${monsterActionHitModOptions(row.hitMod)}</select>
     <input data-monster-action-field="target" value="${escapeHtml(row.target||'')}" placeholder="対象">
     <select data-monster-action-field="element">${optionHtml(ELEMENT_VALUES, row.element || '物')}</select>
     <input data-monster-action-field="power" value="${escapeHtml(row.power||'')}" placeholder="威力">
@@ -6800,7 +6829,7 @@ function monsterDropRowHtml(row={}, idx=0){
 function monsterActionsEditor(value){
   const rows = parseMonsterActions(value);
   const body = rows.length ? rows.map(monsterActionRowHtml).join('') : monsterActionRowHtml({element:'物'});
-  return `<div class="monster-line-editor" data-monster-actions-editor><textarea data-form-field="actions" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(serializeMonsterActions(rows))}</textarea><div class="form-help">行動は1行動ずつ入力します。通常魔物は必ず3個、ボスは必ず4個です。固有パッシブは技数に含めません。行動種別は距離とは別に、近接攻撃・遠距離攻撃・術式・祈祷・防御・補助・回復・特殊から選択します。状態異常を付与する効果欄は「○○状態にする」までを記載し、共通の効果・解除条件は状態異常定義から自動表示します。同じ状態異常名で効果や解除条件を変えないでください。異なる場合は別の状態異常名を使用します。</div><div class="monster-line-head action-head"><span>行動名</span><span>行動種別</span><span>判定</span><span>対象</span><span>属性</span><span>威力</span><span>効果</span><span></span></div><div data-monster-action-list>${body}</div><button type="button" class="secondary" data-monster-action-add>行動を追加</button></div>`;
+  return `<div class="monster-line-editor" data-monster-actions-editor><textarea data-form-field="actions" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(serializeMonsterActions(rows))}</textarea><div class="form-help">行動は1行動ずつ入力します。通常魔物は必ず3個、ボスは必ず4個です。固有パッシブは技数に含めません。判定を行う行動は基礎命中に対する命中補正を-2～+2で設定します。高命中の攻撃は威力を抑え、低命中の攻撃は威力を上げることを基本にします。行動種別は距離とは別に、近接攻撃・遠距離攻撃・術式・祈祷・防御・補助・回復・特殊から選択します。状態異常を付与する効果欄は「○○状態にする」までを記載し、共通の効果・解除条件は状態異常定義から自動表示します。同じ状態異常名で効果や解除条件を変えないでください。異なる場合は別の状態異常名を使用します。</div><div class="monster-line-head action-head"><span>行動名</span><span>行動種別</span><span>判定</span><span>命中補正</span><span>対象</span><span>属性</span><span>威力</span><span>効果</span><span></span></div><div data-monster-action-list>${body}</div><button type="button" class="secondary" data-monster-action-add>行動を追加</button></div>`;
 }
 function monsterDropsEditor(value){
   const rows = parseMonsterDrops(value);
@@ -6810,7 +6839,7 @@ function monsterDropsEditor(value){
 function readMonsterActionRows(editor){
   return Array.from(editor.querySelectorAll('[data-monster-action-row]')).map(row=>{
     const get=f=>row.querySelector(`[data-monster-action-field="${f}"]`)?.value || '';
-    return {name:get('name'), actionType:get('actionType'), checkType:get('checkType'), target:get('target'), element:get('element'), power:get('power'), effect:get('effect')};
+    return {name:get('name'), actionType:get('actionType'), checkType:get('checkType'), hitMod:get('hitMod'), target:get('target'), element:get('element'), power:get('power'), effect:get('effect')};
   });
 }
 function readMonsterDropRows(editor){
@@ -6827,6 +6856,7 @@ function readMonsterDropRows(editor){
   });
 }
 function syncMonsterActionEditor(editor){
+  editor.querySelectorAll('[data-monster-action-row]').forEach(row=>{ const check=row.querySelector('[data-monster-action-field="checkType"]')?.value||''; const hit=row.querySelector('[data-monster-action-field="hitMod"]'); if(hit){ const enabled=!!check && check!=='なし'; hit.disabled=!enabled; if(!enabled) hit.value='0'; } });
   const hidden = editor.querySelector('[data-form-field="actions"]');
   if(hidden) hidden.value = serializeMonsterActions(readMonsterActionRows(editor));
 }
@@ -7579,6 +7609,52 @@ function assertMonsterMaterialDescriptionRows(rows=[]){
   const rest=invalid.length>10 ? `\nほか${invalid.length-10}件` : '';
   throw new Error(`固有素材・ボス素材以外の魔物素材説明には、魔物の固有名を記載しないでください。種族や性質による一般表現へ置き換えてください。\n${details}${rest}`);
 }
+function lateAreaMonsterMaterialExpectedRank(row={}){
+  const rowId=String(row.id||'').trim(),rowName=String(row.name||'').trim();
+  if(!rowId&&!rowName)return 0;
+  const areas=(state.exploration_areas||[]).map(a=>({order:Number(a.unlockOrder||999),names:String(a.mainMonsters||'').split(/[、,，\n]+/).map(v=>v.trim()).filter(Boolean)}));
+  let expected=0;
+  for(const monster of state.monsters||[]){
+    const drops=parseMonsterDrops(monster.drops||'');
+    const hit=drops.find(d=>String(d.itemId||'').trim()===rowId||String(d.itemName||'').trim()===rowName);
+    if(!hit)continue;
+    const debut=Math.min(...areas.filter(a=>a.names.includes(String(monster.name||'').trim())).map(a=>a.order));
+    if(!Number.isFinite(debut)||debut<4)continue;
+    const isBoss=String(monster.monsterTraits||'').split(/[,、，]/).map(v=>v.trim()).includes('ボス');
+    if(isBoss)continue;
+    const rate=Number(String(hit.rate||'').replace('%','').trim());
+    if(!Number.isFinite(rate))continue;
+    const thisExpected=rate===20?4:3;
+    expected=expected?Math.max(expected,thisExpected):thisExpected;
+  }
+  return expected;
+}
+function assertLateAreaMonsterMaterialRankRows(rows=[]){
+  const invalid=[];
+  for(const row of rows||[]){
+    if(String(row.dataKind||'').trim()!=='素材'||String(row.materialType||'').trim()!=='魔物素材')continue;
+    const expected=lateAreaMonsterMaterialExpectedRank(row);if(!expected)continue;
+    const actual=numericRankValueIncludingLegacyMaterialGrade(row.rank,'');
+    if(actual!==expected)invalid.push({row,expected,actual});
+  }
+  if(!invalid.length)return;
+  const details=invalid.slice(0,12).map(x=>`・${String(x.row.name||x.row.id||'名称未設定')}：★${x.actual||'?'} → ★${x.expected}`).join('\n');
+  throw new Error(`山麓の旧鉱山以降に初登場する通常魔物の素材は、基本ドロップを★3、20%のレアドロップ枠だけ★4にしてください。\n${details}${invalid.length>12?`\nほか${invalid.length-12}件`:''}`);
+}
+function assertMonsterActionHitModRows(rows=[]){
+  const invalid=[];
+  (rows||[]).forEach(monster=>{
+    parseMonsterActions(monster.actions||'').forEach(action=>{
+      const check=String(action.checkType||'').trim();
+      if(!check || check==='なし') return;
+      const n=Number(action.hitMod);
+      if(!Number.isInteger(n) || n < -2 || n > 2) invalid.push({monster,action});
+    });
+  });
+  if(!invalid.length) return;
+  const details=invalid.slice(0,12).map(x=>`・${String(x.monster.name||x.monster.id||'名称未設定')}／${String(x.action.name||'行動名未設定')}`).join('\n');
+  throw new Error(`魔物行動の命中補正は-2～+2の整数で設定してください。\n${details}`);
+}
 function assertMonsterActionCountRows(rows=[]){
   const invalid=(rows || []).map(row=>{
     const isBoss=String(row.monsterTraits || '').split(/[,、，]/).map(v=>v.trim()).includes('ボス');
@@ -7703,14 +7779,14 @@ function collectFormRow(){
   }
   const clean = {};
   (SCHEMA[key]||[]).forEach(field=>clean[field]=base[field] === undefined || base[field] === null ? '' : base[field]);
-  if(key==='items'){ assertNumericRankRows('items',[clean]); assertItemPriceRows([clean]); assertItemClassificationRows([clean]); assertWeaponKatakanaNames([clean]); assertEquipmentUpgradeMinimumRows([clean]); assertMonsterMaterialUpgradeRows([clean]); assertSpecialUpgradeNonStackRows([clean]); assertNoDefenseIgnoreUpgradeRows([clean]); assertMaterialUpgradeSlotCostRows([clean]); assertMaterialUpgradeSeparationRows([clean]); assertProcessedMaterialRows([clean]); assertMonsterMaterialDescriptionRows([clean]); }
+  if(key==='items'){ assertNumericRankRows('items',[clean]); assertItemPriceRows([clean]); assertItemClassificationRows([clean]); assertWeaponKatakanaNames([clean]); assertEquipmentUpgradeMinimumRows([clean]); assertMonsterMaterialUpgradeRows([clean]); assertSpecialUpgradeNonStackRows([clean]); assertNoDefenseIgnoreUpgradeRows([clean]); assertMaterialUpgradeSlotCostRows([clean]); assertMaterialUpgradeSeparationRows([clean]); assertProcessedMaterialRows([clean]); assertMonsterMaterialDescriptionRows([clean]); assertLateAreaMonsterMaterialRankRows([clean]); }
   if(key==='material_ranks') assertNumericRankRows('material_ranks',[clean]);
   if(key==='spells') assertNumericRankRows('spells',[clean]);
   if(key==='recipes'){ assertNumericRankRows('recipes',[clean]); assertWeaponBranchMaterialRows([clean]); }
   if(key==='quest_rewards') assertNumericRankRows('quest_rewards',[clean]);
   if(key==='quests') assertNumericRankRows('quests',[clean]);
   if(key==='treasure_tables'){ assertNumericRankRows('treasure_tables',[clean]); assertTreasureDifficultyRows([clean]); }
-  if(key==='monsters'){ assertNumericRankRows('monsters',[clean]); assertMonsterActionCountRows([clean]); }
+  if(key==='monsters'){ assertNumericRankRows('monsters',[clean]); assertMonsterActionCountRows([clean]); assertMonsterActionHitModRows([clean]); }
   return clean;
 }
 function applyFormToState(){
@@ -8551,9 +8627,9 @@ function cloneRowsForSave(baseKey, rows){
   if(baseKey==='skills') recalculateSkillProbabilities();
   if(['items','recipes','spells','skills','material_ranks','quest_rewards','quests','treasure_tables','monsters'].includes(baseKey)) assertNumericRankRows(baseKey,rows||[]);
   if(baseKey==='treasure_tables') assertTreasureDifficultyRows(rows||[]);
-  if(baseKey==='items'){ assertItemPriceRows(rows||[]); assertItemClassificationRows(rows||[]); assertWeaponKatakanaNames(rows||[]); assertEquipmentUpgradeMinimumRows(rows||[]); assertMonsterMaterialUpgradeRows(rows || []); assertSpecialUpgradeNonStackRows(rows || []); assertNoDefenseIgnoreUpgradeRows(rows || []); assertMaterialUpgradeSlotCostRows(rows || []); assertMaterialUpgradeSeparationRows(rows || []); assertMonsterMaterialDescriptionRows(rows || []); }
+  if(baseKey==='items'){ assertItemPriceRows(rows||[]); assertItemClassificationRows(rows||[]); assertWeaponKatakanaNames(rows||[]); assertEquipmentUpgradeMinimumRows(rows||[]); assertMonsterMaterialUpgradeRows(rows || []); assertSpecialUpgradeNonStackRows(rows || []); assertNoDefenseIgnoreUpgradeRows(rows || []); assertMaterialUpgradeSlotCostRows(rows || []); assertMaterialUpgradeSeparationRows(rows || []); assertMonsterMaterialDescriptionRows(rows || []); assertLateAreaMonsterMaterialRankRows(rows || []); }
   if(baseKey==='recipes') assertWeaponBranchMaterialRows(rows || []);
-  if(baseKey==='monsters') assertMonsterActionCountRows(rows || []);
+  if(baseKey==='monsters'){ assertMonsterActionCountRows(rows || []); assertMonsterActionHitModRows(rows || []); }
   return (rows || []).map(src=>{
     const r = {...(src || {})};
     normalizeEncounterPlacementRow(baseKey,r);
@@ -8839,7 +8915,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.490';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.495';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-07';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
@@ -9140,7 +9216,7 @@ document.addEventListener('click',e=>{
   const addMod=e.target.closest('[data-modifier-add]'); if(addMod){ const editor=addMod.closest('[data-modifier-editor]'); const list=editor.querySelector('[data-modifier-list]'); list.querySelector('[data-modifier-empty]')?.remove(); const idx=list.querySelectorAll('[data-modifier-row]').length; list.insertAdjacentHTML('beforeend', modifierEditorRowHtml({}, idx)); syncModifierEditor(editor); return; }
   const remMod=e.target.closest('[data-modifier-remove]'); if(remMod){ const editor=remMod.closest('[data-modifier-editor]'); remMod.closest('[data-modifier-row]')?.remove(); const list=editor.querySelector('[data-modifier-list]'); if(!list.querySelector('[data-modifier-row]')) list.innerHTML='<div class="muted small" data-modifier-empty>補正値はまだありません。</div>'; syncModifierEditor(editor); return; }
   const quickCat=e.target.closest('[data-quick-category-field]'); if(quickCat){ quickCreateCategory(quickCat.dataset.quickCategoryField); return; }
-  const upgradeReset=e.target.closest('[data-facility-upgrade-reset]'); if(upgradeReset){ if($('facilityUpgradeEquipmentSearch')) $('facilityUpgradeEquipmentSearch').value=''; if($('facilityUpgradeMaterialSearch')) $('facilityUpgradeMaterialSearch').value=''; if($('facilityUpgradeEquipmentSelect')) $('facilityUpgradeEquipmentSelect').value=''; if($('facilityUpgradeMaterialInput')) $('facilityUpgradeMaterialInput').value=''; if($('facilityUpgradeGuaranteeItem')) $('facilityUpgradeGuaranteeItem').value=''; if($('facilityUpgradeCountInput')) $('facilityUpgradeCountInput').value='0'; if($('facilityUpgradeStepInput')) $('facilityUpgradeStepInput').value='1'; facilityRemovalEntryIds=[]; renderFacilityUpgradeResult(''); renderFacilityRemovalCalculator(); toast('装備強化の選択をリセットしました'); return; }
+  const upgradeReset=e.target.closest('[data-facility-upgrade-reset]'); if(upgradeReset){ if($('facilityUpgradeEquipmentSelect')) $('facilityUpgradeEquipmentSelect').value=''; if($('facilityUpgradeMaterialInput')) $('facilityUpgradeMaterialInput').value=''; if($('facilityUpgradeGuaranteeItem')) $('facilityUpgradeGuaranteeItem').value=''; if($('facilityUpgradeCountInput')) $('facilityUpgradeCountInput').value='0'; if($('facilityUpgradeStepInput')) $('facilityUpgradeStepInput').value='1'; facilityRemovalEntryIds=[]; renderFacilityUpgradeResult(''); renderFacilityRemovalCalculator(); toast('装備強化の選択をリセットしました'); return; }
   const facilitySection=e.target.closest('[data-facility-section]'); if(facilitySection){
     currentFacilitySectionByName[currentFacilityView]=facilitySection.dataset.facilitySection||facilitySectionDefs(currentFacilityView)[0][0];
     renderFacilitiesPanel();
@@ -9292,16 +9368,6 @@ document.addEventListener('input',e=>{
   if(e.target.id==='facilitySkillGachaCount'){renderSkillGachaManagement();return;}
   if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
   if(e.target.id==='facilityWeaponBranchSearch'){ currentFacilityWeaponBranchSearch=e.target.value||''; renderFacilitiesPanel(); const input=$('facilityWeaponBranchSearch'); if(input){input.focus();input.setSelectionRange(input.value.length,input.value.length);} return; }
-  if(e.target.id==='facilityUpgradeEquipmentSearch'){
-    renderFacilityUpgradeEquipmentSelect();
-    const input=$('facilityUpgradeEquipmentSearch');if(input){input.focus();input.setSelectionRange(input.value.length,input.value.length);}
-    return;
-  }
-  if(e.target.id==='facilityUpgradeMaterialSearch'){
-    renderFacilityUpgradeLookupList();
-    const input=$('facilityUpgradeMaterialSearch');if(input){input.focus();input.setSelectionRange(input.value.length,input.value.length);}
-    return;
-  }
   if(['facilityUpgradeMaterialInput','facilityUpgradeCountInput','facilityUpgradeStepInput','facilitySmithToolRankInput','facilityUpgradeGuaranteeItem'].includes(e.target.id)) renderFacilityUpgradeResult();
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)) renderFacilityAlchemyResult();
   if(['facilityAppraisalTypeInput','facilityAppraisalRankInput'].includes(e.target.id)) renderAntiqueAppraisalResult();
@@ -9580,7 +9646,7 @@ document.addEventListener('click', (ev) => {
 .ra-manager-picker{width:min(1040px,calc(100vw - 24px));max-height:88vh;border:1px solid var(--line);border-radius:20px;background:var(--paper);color:var(--ink);padding:0;box-shadow:0 24px 70px rgba(35,22,12,.38)}
 .ra-manager-picker::backdrop{background:rgba(28,18,10,.5)}.ra-manager-picker-shell{display:grid;grid-template-rows:auto auto auto minmax(0,1fr);max-height:88vh}
 .ra-manager-picker-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}.ra-manager-picker-head h3{margin:0;color:var(--accent)}
-.ra-manager-picker-search{padding:11px 15px 0}.ra-manager-picker-tabs{display:flex;gap:7px;overflow-x:auto;padding:10px 15px}.ra-manager-picker-tabs button{flex:0 0 auto;background:#fffaf3;color:var(--ink);border:1px solid var(--line);box-shadow:none}.ra-manager-picker-tabs button.active{background:var(--accent);color:white}
+.ra-manager-picker-search{padding:11px 15px 10px;min-height:66px}.ra-manager-picker-search input{width:100%!important;min-height:44px!important;margin:0!important}.ra-manager-picker-tabs{display:flex;gap:7px;overflow-x:auto;padding:10px 15px}.ra-manager-picker-tabs button{flex:0 0 auto;background:#fffaf3;color:var(--ink);border:1px solid var(--line);box-shadow:none}.ra-manager-picker-tabs button.active{background:var(--accent);color:white}
 .ra-manager-picker-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);min-height:0;border-top:1px solid var(--line)}.ra-manager-picker-list{overflow:auto;padding:12px;display:grid;align-content:start;gap:8px}.ra-manager-picker-detail{overflow:auto;padding:14px;border-left:1px solid var(--line)}
 .ra-manager-picker-card{border:1px solid var(--line);border-radius:14px;background:#fffdf8;padding:10px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}.ra-manager-picker-name{font-weight:900;color:var(--accent)}.ra-manager-picker-meta{font-size:.8rem;color:var(--muted)}.ra-manager-picker-actions{display:flex;gap:6px}.ra-manager-picker-actions button{padding:7px 10px}
 .ra-manager-picker-detail dl{display:grid;grid-template-columns:auto 1fr;gap:7px 10px}.ra-manager-picker-detail dt{font-weight:900;color:var(--muted)}.ra-manager-picker-detail dd{margin:0;white-space:pre-wrap}
@@ -9594,21 +9660,41 @@ function run(){
  const txt=v=>String(v??'').trim(),escHtml=v=>txt(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const dialog=document.createElement('dialog');dialog.className='ra-manager-picker';dialog.innerHTML=`<div class="ra-manager-picker-shell"><header class="ra-manager-picker-head"><div><div class="notice">管理用共通選択</div><h3>武器・武器種を選択</h3></div><button type="button" class="ghost" data-ra-manager-close>×</button></header><div class="ra-manager-picker-search"><input type="search" placeholder="名称・武器種・効果で検索"></div><div class="ra-manager-picker-tabs"></div><div class="ra-manager-picker-body"><div class="ra-manager-picker-list"></div><aside class="ra-manager-picker-detail"><p class="notice">一覧から詳細を選択してください。</p></aside></div></div>`;document.body.appendChild(dialog);
  const search=dialog.querySelector('input[type=search]'),tabs=dialog.querySelector('.ra-manager-picker-tabs'),list=dialog.querySelector('.ra-manager-picker-list'),detail=dialog.querySelector('.ra-manager-picker-detail');let target=null,mode='item',category='すべて',detailKey='';
- function stateWeapons(){let rows=[];try{rows=Array.isArray(state?.items)?state.items:[]}catch(_){rows=[]}return rows.filter(r=>{const t=[r.itemType,r.dataKind,r.itemCategory,r.tags].map(txt).join(' ');return /武器|術式装備|短剣|剣|斧|槌|槍|杖|鞭|弓|弩/u.test(t)&&!txt(r.name).includes('レシピ')})}
+ function allStateItems(){let rows=[];try{rows=Array.isArray(state?.items)?state.items:[]}catch(_){rows=[]}return rows}
+ function stateWeapons(){return allStateItems().filter(r=>{const t=[r.itemType,r.dataKind,r.itemCategory,r.tags].map(txt).join(' ');return /武器|術式装備|短剣|剣|斧|槌|槍|杖|鞭|弓|弩/u.test(t)&&!txt(r.name).includes('レシピ')})}
  function itemCategory(r){return txt(r.itemCategory||r.category||r.weaponType||'その他')||'その他'}
+ function optionBaseText(o){return txt(o?.textContent).replace(/（.*$/,'').trim()}
+ function sourceForMode(){if(mode==='upgradeEquipment'||mode==='upgradeMaterial')return allStateItems();return stateWeapons()}
+ function rawForOption(o){const source=sourceForMode(),value=txt(o.value),base=optionBaseText(o);return source.find(r=>[r.id,r.publicId,r.name].map(txt).includes(value))||source.find(r=>txt(r.name)===base)||{}}
+ function pickerCategory(raw,o){
+   if(mode==='upgradeMaterial')return txt(raw.equipmentUpgradeEffect||raw.materialCategory||'その他')||'その他';
+   if(mode==='upgradeEquipment'){const it=txt(raw.itemType),cat=txt(raw.itemCategory);if(it==='防具'||it==='盾')return '防具・盾';return cat||it||'その他';}
+   return mode==='category'?txt(o?.textContent):itemCategory(raw);
+ }
  function rows(){
    if(!target)return[];
-   if(target.tagName==='SELECT')return [...target.options].filter(o=>o.value).map((o,i)=>{const raw=stateWeapons().find(r=>txt(r.id)===txt(o.value)||txt(r.name)===txt(o.textContent))||{};return{key:txt(o.value),value:txt(o.value),name:txt(raw.name)||txt(o.textContent),category:mode==='category'?txt(o.textContent):itemCategory(raw),raw}});
+   if(target.tagName==='SELECT')return [...target.options].filter(o=>o.value).map((o,i)=>{const raw=rawForOption(o);return{key:txt(o.value),value:txt(o.value),name:txt(raw.name)||optionBaseText(o),category:pickerCategory(raw,o),raw}});
    if(mode==='category')return [...new Set(stateWeapons().map(itemCategory))].map(c=>({key:c,value:c,name:c,category:c,raw:{}}));
    return stateWeapons().map((r,i)=>({key:txt(r.id||r.publicId||`${r.name}:${i}`),value:txt(r.name),name:txt(r.name),category:itemCategory(r),raw:r}));
  }
  function triggerLabel(el){if(el.tagName==='SELECT')return txt(el.selectedOptions?.[0]?.textContent)||'未選択';return txt(el.value)||'未選択'}
  function syncButton(el){const btn=el.parentElement?.querySelector(':scope > .ra-manager-picker-button'),label=btn?.querySelector('[data-ra-manager-label]');if(!label)return;const next=triggerLabel(el);if(label.textContent!==next)label.textContent=next}
- function choose(x){if(!target||!x)return;if(target.tagName==='SELECT'){target.value=x.value}else target.value=x.value;target.dispatchEvent(new Event('input',{bubbles:true}));target.dispatchEvent(new Event('change',{bubbles:true}));syncButton(target);dialog.close()}
- function render(){const all=rows(),cats=['すべて',...new Set(all.map(x=>x.category))];if(!cats.includes(category))category='すべて';tabs.innerHTML=cats.map(c=>`<button type="button" data-ra-manager-cat="${escHtml(c)}" class="${c===category?'active':''}">${escHtml(c)}</button>`).join('');const q=txt(search.value).normalize('NFKC').toLocaleLowerCase('ja');const filtered=all.filter(x=>category==='すべて'||x.category===category).filter(x=>!q||[x.name,x.category,x.raw.description,x.raw.effect,x.raw.power].map(txt).join(' ').normalize('NFKC').toLocaleLowerCase('ja').includes(q));list.innerHTML=filtered.length?filtered.map(x=>`<article class="ra-manager-picker-card"><div><div class="ra-manager-picker-name">${escHtml(x.name)}</div><div class="ra-manager-picker-meta">${escHtml([x.category,x.raw.rank?`★${x.raw.rank}`:'',x.raw.power||''].filter(Boolean).join(' / '))}</div></div><div class="ra-manager-picker-actions"><button type="button" class="ghost" data-ra-manager-detail="${escHtml(x.key)}">詳細</button><button type="button" data-ra-manager-choose="${escHtml(x.key)}">選択</button></div></article>`).join(''):'<p class="notice">条件に一致する候補がありません。</p>';const x=all.find(v=>v.key===detailKey);if(x){const r=x.raw||{};const pairs=[['武器種',x.category],['ランク',r.rank?`★${r.rank}`:''],['属性',r.element],['ダメージ',r.power],['命中・補正',r.modifiers],['強化枠',r.upgradeLimit],['説明',r.description],['効果',r.effect]].filter(([,v])=>txt(v));detail.innerHTML=`<h4>${escHtml(x.name)}</h4><dl>${pairs.map(([k,v])=>`<dt>${escHtml(k)}</dt><dd>${escHtml(v)}</dd>`).join('')}</dl><button type="button" data-ra-manager-choose="${escHtml(x.key)}">この候補を選択</button>`}else detail.innerHTML='<p class="notice">一覧から詳細を選択してください。</p>'}
+ function choose(x){if(!target||!x)return;target.value=x.value;target.dispatchEvent(new Event('input',{bubbles:true}));target.dispatchEvent(new Event('change',{bubbles:true}));syncButton(target);dialog.close()}
+ function pickerTitle(){if(mode==='upgradeEquipment')return '強化する装備を選択';if(mode==='upgradeMaterial')return target?.id==='facilityRemovalMaterialSelect'?'現在付いている強化を選択':'強化素材を選択';return mode==='category'?'武器種を選択':'武器・武器種を選択'}
+ function pickerSearchPlaceholder(){if(mode==='upgradeMaterial')return '素材名・強化内容・効果説明・入手先で検索';if(mode==='upgradeEquipment')return '装備名・種別・説明・効果で検索';return '名称・武器種・効果で検索'}
+ function metaText(x){const r=x.raw||{};if(mode==='upgradeMaterial')return [r.rank?`★${r.rank}`:'',r.equipmentUpgradeSlotCost?`消費${r.equipmentUpgradeSlotCost}枠`:'',r.equipmentUpgradeEffect,r.materialCategory].map(txt).filter(Boolean).join(' / ');if(mode==='upgradeEquipment')return [x.category,r.rank?`★${r.rank}`:'',r.upgradeLimit?`強化枠${r.upgradeLimit}`:'',r.upgradeMaterialMinRank?`最低素材★${r.upgradeMaterialMinRank}`:''].map(txt).filter(Boolean).join(' / ');return [x.category,r.rank?`★${r.rank}`:'',r.power||''].filter(Boolean).join(' / ')}
+ function detailPairs(x){const r=x.raw||{};if(mode==='upgradeMaterial')return [['ランク',r.rank?`★${r.rank}`:''],['分類',r.materialCategory],['強化内容',r.equipmentUpgradeEffect],['消費枠',r.equipmentUpgradeSlotCost?`${r.equipmentUpgradeSlotCost}枠`:'' ],['強化対象',r.equipmentUpgradeTarget],['効果説明',r.equipmentUpgradeDetail],['入手先',r.source],['説明',r.description]].filter(([,v])=>txt(v));if(mode==='upgradeEquipment')return [['種別',txt(r.itemType)==='盾'?'盾':x.category],['ランク',r.rank?`★${r.rank}`:''],['属性',r.element],['威力',r.power],['強化枠',r.upgradeLimit],['強化素材最低ランク',r.upgradeMaterialMinRank?`★${r.upgradeMaterialMinRank}`:''],['説明',r.description],['効果',r.effect]].filter(([,v])=>txt(v));return [['武器種',x.category],['ランク',r.rank?`★${r.rank}`:''],['属性',r.element],['ダメージ',r.power],['命中・補正',r.modifiers],['強化枠',r.upgradeLimit],['説明',r.description],['効果',r.effect]].filter(([,v])=>txt(v))}
+ function render(){
+   dialog.querySelector('.ra-manager-picker-head h3').textContent=pickerTitle();search.placeholder=pickerSearchPlaceholder();
+   const all=rows(),cats=['すべて',...new Set(all.map(x=>x.category))];if(!cats.includes(category))category='すべて';tabs.innerHTML=cats.map(c=>`<button type="button" data-ra-manager-cat="${escHtml(c)}" class="${c===category?'active':''}">${escHtml(c)}</button>`).join('');
+   const q=txt(search.value).normalize('NFKC').toLocaleLowerCase('ja');
+   const filtered=all.filter(x=>category==='すべて'||x.category===category).filter(x=>!q||[x.name,x.category,x.raw.description,x.raw.effect,x.raw.power,x.raw.equipmentUpgradeEffect,x.raw.equipmentUpgradeDetail,x.raw.source].map(txt).join(' ').normalize('NFKC').toLocaleLowerCase('ja').includes(q));
+   list.innerHTML=filtered.length?filtered.map(x=>`<article class="ra-manager-picker-card"><div><div class="ra-manager-picker-name">${escHtml(x.name)}</div><div class="ra-manager-picker-meta">${escHtml(metaText(x))}</div></div><div class="ra-manager-picker-actions"><button type="button" class="ghost" data-ra-manager-detail="${escHtml(x.key)}">詳細</button><button type="button" data-ra-manager-choose="${escHtml(x.key)}">選択</button></div></article>`).join(''):'<p class="notice">条件に一致する候補がありません。</p>';
+   const x=all.find(v=>v.key===detailKey);if(x){const pairs=detailPairs(x);detail.innerHTML=`<h4>${escHtml(x.name)}</h4><dl>${pairs.map(([k,v])=>`<dt>${escHtml(k)}</dt><dd>${escHtml(v)}</dd>`).join('')}</dl><button type="button" data-ra-manager-choose="${escHtml(x.key)}">この候補を選択</button>`}else detail.innerHTML='<p class="notice">一覧から詳細を選択してください。</p>'
+ }
  function open(el,m){target=el;mode=m;category='すべて';detailKey='';search.value='';render();dialog.showModal();search.focus()}
  function associatedText(el){const label=el.id?document.querySelector(`label[for="${CSS.escape(el.id)}"]`):null;return [el.id,el.name,el.placeholder,label?.textContent,el.closest('.field,div')?.querySelector(':scope > label')?.textContent].map(txt).join(' ')}
- function classify(el){const t=associatedText(el);if(el.type==='search'||/検索/u.test(t))return'';if(/武器種|weaponCategory|weaponType/u.test(t))return'category';if(el.id==='facilityUpgradeEquipmentSelect'||/強化する装備|派生元|派生先|結果武器|baseItem|resultItem|武器選択/u.test(t))return'item';return''}
+ function classify(el){const t=associatedText(el);if(el.type==='search'||/検索/u.test(t))return'';if(el.id==='facilityUpgradeEquipmentType')return'';if(el.id==='facilityUpgradeEquipmentSelect')return'upgradeEquipment';if(el.id==='facilityUpgradeMaterialInput'||el.id==='facilityRemovalMaterialSelect')return'upgradeMaterial';if(/武器種|weaponCategory|weaponType/u.test(t))return'category';if(/強化する装備|派生元|派生先|結果武器|baseItem|resultItem|武器選択/u.test(t))return'item';return''}
  function enhance(el){if(el.dataset.raManagerPicker||el.disabled)return;const m=classify(el);if(!m)return;el.dataset.raManagerPicker='1';if(el.tagName==='SELECT')el.classList.add('ra-manager-picker-native');const btn=document.createElement('button');btn.type='button';btn.className='ra-manager-picker-button';btn.innerHTML='<span data-ra-manager-label></span><span>一覧を開く ▾</span>';el.insertAdjacentElement('afterend',btn);btn.addEventListener('click',()=>open(el,m));el.addEventListener('change',()=>syncButton(el));syncButton(el)}
  function scan(root=document){if(root instanceof Element&&root.matches('select,input[type="text"]'))enhance(root);root.querySelectorAll?.('select,input[type="text"]').forEach(enhance)}
  function observeAdded(mutations){for(const mutation of mutations){for(const node of mutation.addedNodes){if(!(node instanceof Element)||node===dialog||dialog.contains(node)||node.matches('.ra-manager-picker-button'))continue;scan(node)}}}
