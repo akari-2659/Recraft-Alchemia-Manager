@@ -1,8 +1,8 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "v90.8.513",
+  "version": "v90.8.514",
   "encoding": "UTF-8",
-  "description": "Recraft-Alchemia initial master v90.8.513（DB実データ変更なし。施設同期・装飾品強化表示・管理モーダルUI更新）",
+  "description": "Recraft-Alchemia initial master v90.8.514（DB実データ変更なし。施設HTMLの装飾品強化を★ランク列の単一派生図表示へ改善）",
   "data": {
     "item_types": [
       {
@@ -77841,6 +77841,6 @@
       }
     ]
   },
-  "updatedAt": "2026-08-12T18:12:00+09:00",
-  "generatedAt": "2026-08-12T16:32:00+09:00"
+  "updatedAt": "2026-08-12T19:39:00+09:00",
+  "generatedAt": "2026-08-12T19:39:00+09:00"
 }
