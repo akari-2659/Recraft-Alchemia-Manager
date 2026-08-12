@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.512</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.513</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.512-focus-hit-skill-bonus-terms">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.513-facility-sync-accessory-graph">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.512｜更新：2026年8月12日</div>
+<div class="ra-build-info">v90.8.513｜更新：2026年8月12日</div>
 
 <header>
   <div class="title-card">
@@ -1880,7 +1880,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.512';
+const RECRAFT_DB_VERSION = 'v90.8.513';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.403';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -9125,7 +9125,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.512';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.513';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-07';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
@@ -9894,7 +9894,7 @@ document.addEventListener('click', (ev) => {
 function run(){
  if(document.documentElement.dataset.raManagerPicker398)return;document.documentElement.dataset.raManagerPicker398='1';
  const txt=v=>String(v??'').trim(),escHtml=v=>txt(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const dialog=document.createElement('dialog');dialog.className='ra-manager-picker';dialog.innerHTML=`<div class="ra-manager-picker-shell"><header class="ra-manager-picker-head"><div><div class="notice">管理用共通選択</div><h3>武器・武器種を選択</h3></div><button type="button" class="ghost" data-ra-manager-close>×</button></header><div class="ra-manager-picker-search"><input type="search" placeholder="名称・武器種・効果で検索"></div><div class="ra-manager-picker-tabs"></div><div class="ra-manager-picker-body"><div class="ra-manager-picker-list"></div><aside class="ra-manager-picker-detail"><p class="notice">一覧から詳細を選択してください。</p></aside></div></div>`;document.body.appendChild(dialog);
+ const dialog=document.createElement('dialog');dialog.className='ra-manager-picker';dialog.innerHTML=`<div class="ra-manager-picker-shell"><header class="ra-manager-picker-head"><h3>項目を選択</h3><button type="button" class="ghost" data-ra-manager-close>×</button></header><div class="ra-manager-picker-search"><input type="search" placeholder="名称・効果で検索"></div><div class="ra-manager-picker-tabs"></div><div class="ra-manager-picker-body"><div class="ra-manager-picker-list"></div><aside class="ra-manager-picker-detail"><p class="notice">一覧から詳細を選択してください。</p></aside></div></div>`;document.body.appendChild(dialog);
  const search=dialog.querySelector('input[type=search]'),tabs=dialog.querySelector('.ra-manager-picker-tabs'),list=dialog.querySelector('.ra-manager-picker-list'),detail=dialog.querySelector('.ra-manager-picker-detail');let target=null,mode='item',category='すべて',detailKey='';
  function allStateItems(){let rows=[];try{rows=Array.isArray(state?.items)?state.items:[]}catch(_){rows=[]}return rows}
  function stateWeapons(){return allStateItems().filter(r=>{const t=[r.itemType,r.dataKind,r.itemCategory,r.tags].map(txt).join(' ');return /武器|術式装備|短剣|剣|斧|槌|槍|杖|鞭|弓|弩/u.test(t)&&!txt(r.name).includes('レシピ')})}
@@ -9924,7 +9924,8 @@ function run(){
  function triggerLabel(el){if(el.tagName==='SELECT'){const label=txt(el.selectedOptions?.[0]?.textContent)||'未選択';return /^すべて$/u.test(label)?'全て':label;}return txt(el.value)||'未選択'}
  function syncButton(el){const btn=el.parentElement?.querySelector(':scope > .ra-manager-picker-button'),label=btn?.querySelector('[data-ra-manager-label]');if(!label)return;const next=triggerLabel(el);if(label.textContent!==next)label.textContent=next}
  function choose(x){if(!target||!x)return;target.value=x.value;target.dispatchEvent(new Event('input',{bubbles:true}));target.dispatchEvent(new Event('change',{bubbles:true}));syncButton(target);dialog.close()}
- function pickerTitle(){if(mode==='upgradeEquipment')return '強化する装備を選択';if(mode==='upgradeMaterial')return target?.id==='facilityRemovalMaterialSelect'?'現在付いている強化を選択':'強化素材を選択';if(mode==='category')return '武器種を選択';if(mode==='generic'){const t=associatedText(target).replace(/一覧を開く\s*▾?/gu,'').trim();return (t||'項目')+'を選択';}return '武器・武器種を選択'}
+ function visibleFieldLabel(el){const label=el?.id?document.querySelector(`label[for="${CSS.escape(el.id)}"]`):null;const own=txt(label?.textContent||el?.closest?.('.field,div')?.querySelector?.(':scope > label')?.textContent||el?.getAttribute?.('aria-label')||el?.placeholder||'');return own.replace(/一覧を開く\s*▾?/gu,'').replace(/モーダルで選択\s*▾?/gu,'').replace(/を選択$/u,'').trim()}
+ function pickerTitle(){if(mode==='upgradeEquipment')return '強化する装備を選択';if(mode==='upgradeMaterial')return target?.id==='facilityRemovalMaterialSelect'?'現在付いている強化を選択':'強化素材を選択';if(mode==='category')return '武器種を選択';if(mode==='generic'){const t=visibleFieldLabel(target);return (t||'項目')+'を選択';}return '武器・武器種を選択'}
  function pickerSearchPlaceholder(){if(mode==='upgradeMaterial')return '素材名・強化内容・効果説明・入手先で検索';if(mode==='upgradeEquipment')return '装備名・種別・説明・効果で検索';if(mode==='generic')return '候補名で検索';return '名称・武器種・効果で検索'}
  function metaText(x){const r=x.raw||{};if(mode==='upgradeMaterial')return [r.rank?`★${r.rank}`:'',r.equipmentUpgradeSlotCost?`消費${r.equipmentUpgradeSlotCost}枠`:'',r.equipmentUpgradeEffect,r.materialCategory].map(txt).filter(Boolean).join(' / ');if(mode==='upgradeEquipment')return [x.category,r.rank?`★${r.rank}`:'',r.upgradeLimit?`強化枠${r.upgradeLimit}`:'',r.upgradeMaterialMinRank?`最低素材★${r.upgradeMaterialMinRank}`:''].map(txt).filter(Boolean).join(' / ');if(mode==='generic')return x.category||'';return [x.category,r.rank?`★${r.rank}`:'',r.power||''].filter(Boolean).join(' / ')}
  function detailPairs(x){const r=x.raw||{};if(mode==='upgradeMaterial')return [['ランク',r.rank?`★${r.rank}`:''],['分類',r.materialCategory],['強化内容',r.equipmentUpgradeEffect],['消費枠',r.equipmentUpgradeSlotCost?`${r.equipmentUpgradeSlotCost}枠`:'' ],['強化対象',r.equipmentUpgradeTarget],['効果説明',r.equipmentUpgradeDetail],['入手先',r.source],['説明',r.description]].filter(([,v])=>txt(v));if(mode==='upgradeEquipment')return [['種別',txt(r.itemType)==='盾'?'盾':x.category],['ランク',r.rank?`★${r.rank}`:''],['属性',r.element],['威力',r.power],['強化枠',r.upgradeLimit],['強化素材最低ランク',r.upgradeMaterialMinRank?`★${r.upgradeMaterialMinRank}`:''],['説明',r.description],['効果',r.effect]].filter(([,v])=>txt(v));if(mode==='generic')return [['分類',x.category]].filter(([,v])=>txt(v));return [['武器種',x.category],['ランク',r.rank?`★${r.rank}`:''],['属性',r.element],['ダメージ',r.power],['命中・補正',r.modifiers],['強化枠',r.upgradeLimit],['説明',r.description],['効果',r.effect]].filter(([,v])=>txt(v))}

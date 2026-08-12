@@ -1,8 +1,8 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "v90.8.512",
+  "version": "v90.8.513",
   "encoding": "UTF-8",
-  "description": "Recraft-Alchemia initial master v90.8.512（罠ダメージ装飾品を維持し、集中攻撃の命中補正継承と技能補正の+X別項表示に対応）",
+  "description": "Recraft-Alchemia initial master v90.8.513（DB実データ変更なし。施設同期・装飾品強化表示・管理モーダルUI更新）",
   "data": {
     "item_types": [
       {
@@ -77841,6 +77841,6 @@
       }
     ]
   },
-  "updatedAt": "2026-08-12T16:32:00+09:00",
+  "updatedAt": "2026-08-12T18:12:00+09:00",
   "generatedAt": "2026-08-12T16:32:00+09:00"
 }
