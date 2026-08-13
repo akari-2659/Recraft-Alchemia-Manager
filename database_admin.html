@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.515</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.525</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.515-accessory-all-graph">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.525-boss-reward-chest-rule">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.515｜更新：2026年8月12日</div>
+<div class="ra-build-info">v90.8.525｜更新：2026年8月13日</div>
 
 <header>
   <div class="title-card">
@@ -1880,7 +1880,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.515';
+const RECRAFT_DB_VERSION = 'v90.8.525';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.403';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -3027,7 +3027,7 @@ const SYSTEM_HELP = [
       "弱はダメージ2倍。",
       "魔物の行動は1行動1行で管理する。",
       "魔物本体の命中値は基礎命中として扱い、判定を行う各行動に-2～+2の命中補正を設定する。チャットパレットは2D6+{命中}±補正の形で基礎命中ラベルを参照する。",
-      "命中補正を高くする攻撃はその分だけ威力を低めに、命中補正を低くする攻撃はその分だけ威力を高めに設定し、命中率とダメージを交換関係にする。",
+      "命中補正は威力調整の一要素として参照するが、命中補正だけを理由にダメージを機械的に上下させない。エリア難易度・対象数・追加効果・防御貫通・予告の有無・期待値と振れ幅を合わせて個別に決める。",
       "魔物の直接ダメージ式はD6を必須とし、最大構成をxD6+yD2～D5+zとする。D2～D5はD6へ追加する補助ダイスとしてのみ使用でき、x>=yを必須とする。固定値zは0以上のみとし、ダメージ式へのマイナス固定値は禁止。D2～D5だけのダメージ式は禁止。毒などの継続ダメージはこの制限の対象外。",
       "防御・補助・回復行動も自動成功にせず、基礎命中を使う『命中>=固定達成値』判定を設定する。失敗時はその行動の防御・強化・回復・準備効果を適用しない。妨害による次の判定値-2はこの判定にも適用する。",
       "通常魔物は技を必ず3個、ボスは技を必ず4個所持する。固有パッシブは技数に含めない。",
@@ -6912,7 +6912,7 @@ function monsterDropRowHtml(row={}, idx=0){
 function monsterActionsEditor(value){
   const rows = parseMonsterActions(value);
   const body = rows.length ? rows.map(monsterActionRowHtml).join('') : monsterActionRowHtml({element:'物'});
-  return `<div class="monster-line-editor" data-monster-actions-editor><textarea data-form-field="actions" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(serializeMonsterActions(rows))}</textarea><div class="form-help">行動は1行動ずつ入力します。通常魔物は必ず3個、ボスは必ず4個です。固有パッシブは技数に含めません。判定を行う行動は基礎命中に対する命中補正を-2～+2で設定します。防御・補助・回復行動も「命中>=固定値」で判定し、失敗時は効果を適用しません。命中補正は威力調整の一要素ですが、命中補正だけで一律に威力を上下させません。エリア難易度・対象数・追加効果・防御貫通・予告の有無を優先します。直接ダメージ式はD6を必ず含め、最大構成はxD6+yD2～D5+zです。D2～D5は補助ダイスとして使用でき、x>=yが必須です。固定値zは0以上のみで、ダメージ式へのマイナス固定値は禁止です。D2～D5単独は使用できません（毒などの継続ダメージは除外）。行動種別は距離とは別に、近接攻撃・遠距離攻撃・術式・祈祷・防御・補助・回復・特殊から選択します。状態異常を付与する効果欄は「○○状態にする」までを記載し、共通の効果・解除条件は状態異常定義から自動表示します。同じ状態異常名で効果や解除条件を変えないでください。異なる場合は別の状態異常名を使用します。</div><div class="monster-line-head action-head"><span>行動名</span><span>行動種別</span><span>判定</span><span>命中補正</span><span>対象</span><span>属性</span><span>威力</span><span>効果</span><span></span></div><div data-monster-action-list>${body}</div><button type="button" class="secondary" data-monster-action-add>行動を追加</button></div>`;
+  return `<div class="monster-line-editor" data-monster-actions-editor><textarea data-form-field="actions" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(serializeMonsterActions(rows))}</textarea><div class="form-help">行動は1行動ずつ入力します。通常魔物は必ず3個、ボスは必ず4個です。固有パッシブは技数に含めません。判定を行う行動は基礎命中に対する命中補正を-2～+2で設定します。防御・補助・回復行動も「命中>=固定値」で判定し、失敗時は効果を適用しません。命中補正は威力調整の一要素ですが、命中補正だけで一律に威力を上下させません。エリア難易度・対象数・追加効果・防御貫通・予告の有無を優先します。直接ダメージ式はD6を必ず含め、最大構成はxD6+yD2～D5+zです。D2～D5は期待値・振れ幅・技の重さを調整する補助ダイスとして使用でき、x>=yが必須です。エリアごとの最低ダメージ値は固定しません。固定値zは必要な行動だけに0以上で設定し、ダメージ式へのマイナス固定値は禁止です。D2～D5単独は使用できません（毒などの継続ダメージは除外）。行動種別は距離とは別に、近接攻撃・遠距離攻撃・術式・祈祷・防御・補助・回復・特殊から選択します。状態異常を付与する効果欄は「○○状態にする」までを記載し、共通の効果・解除条件は状態異常定義から自動表示します。同じ状態異常名で効果や解除条件を変えないでください。異なる場合は別の状態異常名を使用します。</div><div class="monster-line-head action-head"><span>行動名</span><span>行動種別</span><span>判定</span><span>命中補正</span><span>対象</span><span>属性</span><span>威力</span><span>効果</span><span></span></div><div data-monster-action-list>${body}</div><button type="button" class="secondary" data-monster-action-add>行動を追加</button></div>`;
 }
 function monsterDropsEditor(value){
   const rows = parseMonsterDrops(value);
@@ -9125,7 +9125,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.515';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.525';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-07';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';

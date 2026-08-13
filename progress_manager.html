@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.515</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.525</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.515-accessory-all-graph">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.525-boss-reward-chest-rule">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -188,7 +188,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </style>
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.515｜更新：2026年8月12日</div>
+<div class="ra-build-info">v90.8.525｜更新：2026年8月13日</div>
 
 <header>
   <div class="header-inner">
@@ -475,7 +475,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.515';
+const VERSION='v90.8.525';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -804,8 +804,8 @@ function dropAreaMonsterRows(){
   const area=selectedDropArea(); if(!area)return [];
   const names=[...new Set([...monsterNameTokens(area.mainMonsters),...eventMonsterNamesForArea(area)])];
   const byName=new Map((state.monsters||[]).map(m=>[String(m.name||'').trim(),m]));
-  const rows=names.map(name=>byName.get(name)).filter(Boolean);
-  const missing=(state.monsters||[]).filter(m=>String(m.areaName||'').trim()===String(area.name||'').trim() && !rows.includes(m));
+  const rows=names.map(name=>byName.get(name)).filter(m=>m&&!isAreaBossMonster(m));
+  const missing=(state.monsters||[]).filter(m=>!isAreaBossMonster(m)&&String(m.areaName||'').trim()===String(area.name||'').trim() && !rows.includes(m));
   return rows.concat(missing);
 }
 function monsterOptionLabel(m={}){
@@ -1839,6 +1839,7 @@ function eventMatchesRumor(row, rumor){
   return false;
 }
 function isBossEvent(row){return String(row && row.eventType || '').trim()==='ボス遭遇';}
+function isAreaBossMonster(row={}){return String(row.monsterTraits||'').split(',').map(v=>v.trim()).includes('ボス');}
 function isQuestSpecificEvent(row){
   return eventConditionType(row)==='クエスト固有' || String(row && row.eventType || '').includes('クエスト固有');
 }
@@ -2380,7 +2381,7 @@ function formatEventOutput(prefix,picked,area,tableId,extraLines=[],partySizeOve
   const composition=random?encounterResolutionBlock(random):encounterCompositionText(picked,partySize);
   const dropGroups=encounterGroupsForDrop(picked,random,partySize);
   const initiative=encounterInitiativeText(dropGroups);
-  if(dropGroups.length)recordLastEncounter(picked.eventName||prefix,area?.name||picked.areaName||'',dropGroups);
+  if(dropGroups.length&&!isBossEvent(picked))recordLastEncounter(picked.eventName||prefix,area?.name||picked.areaName||'',dropGroups);
   return [prefix,area?`エリア：${area.name||area.id}`:'',area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'',`表：${tableId}`,picked.eventName?`イベント：${picked.eventName}`:'',picked.eventType?`種別：${picked.eventType}`:'',condition,encounter,composition,initiative,eventCheckDisplayText(picked),picked.result?`結果：${eventResultTextForDisplay(picked,partySize)}`:'',picked.progressEffect?`補足：${picked.progressEffect}`:'',...extraLines].filter(Boolean).join('\n');
 }
 function triggerAreaClearRumorEvent(area){
@@ -2779,6 +2780,7 @@ function rolledTrapDisarmDifficulty(row,profile){return rolledTreasureDifficulty
 
 function normalizeTreasureSetup(setup){
   if(!setup)return setup;
+  if(setup.bossReward){setup.hasLock=false;setup.hasTrap=false;setup.unlockDifficulty='';setup.trapDetectDifficulty='';setup.trapDisarmDifficulty='';setup.trapName='';setup.trapEffect='';setup.emptyChance=0;return setup;}
   const row=treasureRows(setup.tableId||'')[0]||{};
   const profile=treasureProfile(setup.areaName||row.areaName||'');
   if(setup.hasLock) setup.unlockDifficulty=positiveTreasureDifficulty(setup.unlockDifficulty,configuredUnlockDifficulty(row,profile));
@@ -2810,6 +2812,7 @@ function buildTreasureSetup(tableId, areaName='', questFixed=false){
   if(!row)return null;
   const area=treasureAreaName(tableId,areaName);
   const profile=treasureProfile(area);
+  if(isBossTreasureTable(tableId)){return normalizeTreasureSetup({tableId:String(tableId||''),areaName:area,chestName:row.chestName||row.tableId||'エリアボスの褒賞箱',bossReward:true,questFixed:false,hasLock:false,hasTrap:false,emptyChance:0});}
   if(questFixed){
     return normalizeTreasureSetup({
       tableId:String(tableId||''),areaName:area,chestName:row.chestName||row.tableId||'クエスト固有宝箱',
@@ -2855,6 +2858,7 @@ function prepareQuestFixedTreasure(tableId, areaName=''){
   return state.treasureSetup;
 }
 function treasureSetupLines(setup={}){
+  if(setup.bossReward)return [`宝箱：${setup.chestName||setup.tableId||'エリアボスの褒賞箱'}`,`宝箱表：${setup.tableId||'未設定'}`,`エリア：${setup.areaName||'未設定'}`,'鍵：なし','罠：なし','採取・解体判定：なし','補足：エリアボスが実力を認めたPCへ授ける褒賞箱。'];
   const lines=[
     `宝箱：${setup.chestName||setup.tableId||'宝箱'}`,
     `宝箱表：${setup.tableId||'未設定'}`,
@@ -2883,9 +2887,9 @@ function renderTreasureTrapInfo(){
  }
  box.textContent=treasureSetupLines(r).join('\n');
 }
-function trapDetectText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; return `【罠感知判定】\n2D6+{感知}>=${r.trapDetectDifficulty}`;}
-function trapDisarmText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.questFixed)return 'このクエスト固有宝箱では罠解除判定を行いません。'; return r.hasTrap?`【罠解除判定】\n2D6+{細工}>=${r.trapDisarmDifficulty}`:'この宝箱に罠はありません。';}
-function unlockText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.questFixed)return 'このクエスト固有宝箱では解錠判定を行いません。'; return r.hasLock?`【鍵の解除判定】\n2D6+{細工}>=${r.unlockDifficulty}`:'この宝箱に鍵はありません。';}
+function trapDetectText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.bossReward)return 'エリアボスの褒賞箱には罠がないため、感知判定は行いません。'; return `【罠感知判定】\n2D6+{感知}>=${r.trapDetectDifficulty}`;}
+function trapDisarmText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.bossReward)return 'エリアボスの褒賞箱には罠がありません。'; if(r.questFixed)return 'このクエスト固有宝箱では罠解除判定を行いません。'; return r.hasTrap?`【罠解除判定】\n2D6+{細工}>=${r.trapDisarmDifficulty}`:'この宝箱に罠はありません。';}
+function unlockText(){const r=currentTreasureSetup(); if(!r)return '宝箱の状態はまだ決定されていません。'; if(r.bossReward)return 'エリアボスの褒賞箱には鍵がありません。'; if(r.questFixed)return 'このクエスト固有宝箱では解錠判定を行いません。'; return r.hasLock?`【鍵の解除判定】\n2D6+{細工}>=${r.unlockDifficulty}`:'この宝箱に鍵はありません。';}
 const LEGACY_PROGRESS_NUMERIC_RANKS={'初期':1,'初級':1,'低級':1,'チュートリアル':1,'小規模':1,'中級':2,'普通':2,'通常':2,'標準':2,'上級':3,'良質':3,'大規模':3,'特級':4,'希少':4,'強敵':4,'ボス':4,'高難度':4,'最上級':5,'高級':5};
 function progressNumericRank(value,fallback=''){
   if(typeof value==='number'&&Number.isFinite(value)&&value>=1)return Math.floor(value);
@@ -3118,7 +3122,7 @@ function treasureRowEligible(row={},tableId='',areaName=''){
     if(!treasureUnlockAreaAllowed(recipe.unlockAreaKey,area))return false;
     if(!treasureRecipeMaterialsAvailable(recipe,area))return false;
     const source=String(recipe.recipeSource||'').trim();
-    const bossRecipe=String(recipe.branchClass||'').trim()==='ボス派生'||/討伐後|戦利品箱|ボス報酬/.test(source);
+    const bossRecipe=String(recipe.branchClass||'').trim()==='ボス派生'||/討伐後|勝利後|戦利品箱|褒賞箱|ボス報酬|授けられる/.test(source);
     if(bossRecipe&&!isBossTreasureTable(tableId))return false;
     if(source.includes('希少宝箱')&&!isRareTreasureTable(tableId))return false;
     if(!treasureSourceAreaMatches(source,area))return false;
@@ -3248,7 +3252,26 @@ function treasureContentLines(row={},q={text:'1',detail:''}){
   }
   return lines;
 }
+function bossMonsterForTreasureTable(tableId=''){
+  const evt=(state.events||[]).find(e=>isBossEvent(e)&&String(e.treasureTableId||'').trim()===String(tableId||'').trim());
+  if(!evt)return null;
+  const text=[evt.encounterComposition,evt.encounterFormation,evt.result].map(v=>String(v||'')).join(' / ');
+  return (state.monsters||[]).filter(isAreaBossMonster).find(m=>text.includes(String(m.name||'')))||null;
+}
+function resolveBossRewardChest(tableId,areaName=''){
+  const area=treasureAreaName(tableId,areaName),setup=buildTreasureSetup(tableId,area,false),boss=bossMonsterForTreasureTable(tableId);
+  if(!boss)return {tableId,setup,picked:null,isEmpty:true,displayText:`【エリアボス褒賞箱】\n宝箱表：${tableId}\n対応するエリアボスを特定できません。`,copyText:'',contentLabel:'ボス未特定'};
+  const drops=parseDrops(boss.drops),dropNames=new Set(drops.map(d=>String(d.name||'').trim()));
+  const materialLines=[],copyBlocks=[];
+  drops.forEach(d=>{const roll=1+Math.floor(Math.random()*100),rate=rateNum(d.rate),ok=roll<=rate;let qtyText=String(d.count||'1個');if(ok){const q=dropQuantityRoll(d.count||'1');qtyText=q.detail;copyBlocks.push(dropPlayerInfoBlock({...d,count:`${q.count}個`}));}materialLines.push(`${ok?'○':'×'} ${d.name||d.id||'名称未設定'} ${ok?qtyText:String(d.count||'1個')}（${rate}% / 出目${roll}）`);});
+  const rewards=eligibleTreasureRows(tableId,area).filter(row=>!dropNames.has(String(row.entryName||'').trim()));
+  const picked=rewards.length?weightedPick(rewards):null,q=picked?rollDiceText(picked.quantity||'1'):null;
+  if(picked)copyBlocks.push(treasureContentCopyText(picked,q.text));
+  const display=['【エリアボス褒賞箱】',...treasureSetupLines(setup),`授与者：${boss.name||boss.id}`,'','〔ボス固有素材：採取・解体不要／各確率を独立判定〕',...(materialLines.length?materialLines:['設定なし']),'','〔ランダム報酬：1枠〕',...(picked?treasureContentLines(picked,q):['中身：なし'])].join('\n');
+  return {tableId,setup,picked,quantity:q?.text||'',quantityDetail:q?.detail||'',isEmpty:false,displayText:display,copyText:copyBlocks.filter(Boolean).join('\n\n'),contentLabel:`${boss.name}の褒賞箱`};
+}
 function resolveTreasureTable(tableId,areaName='',options={}){
+  if(isBossTreasureTable(tableId)&&!options.randomOnly)return resolveBossRewardChest(tableId,areaName);
   const rows=eligibleTreasureRows(tableId,areaName),questFixed=!!options.questFixed;
   if(!rows.length)return {tableId,setup:buildTreasureSetup(tableId,areaName,questFixed),picked:null,isEmpty:true,displayText:`【宝箱】\n宝箱表：${tableId}\nこの解放段階で有効な中身候補がありません。`,copyText:'',contentLabel:'中身候補なし'};
   const setup=buildTreasureSetup(tableId,areaName,questFixed);
@@ -3695,7 +3718,7 @@ $('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){su
   $('rollQuestEventBtn').addEventListener('click',rollQuestEvent); $('copyQuestCheckBtn')?.addEventListener('click',()=>copyText(state.lastQuestCheckCopyText,'questCopyNote')); $('copyQuestEventBtn').addEventListener('click',()=>copyText(questEventItemCopyText(),'questCopyNote')); $('copyQuestTreasureBtn').addEventListener('click',()=>copyText(state.lastQuestTreasureCopyText,'questCopyNote'));
   $('rollRumorBtn').addEventListener('click',rollRumor); $('applyRumorBtn').addEventListener('click',()=>applyRumorIndex($('rumorSelectForInn').value,true)); $('clearRumorBtn').addEventListener('click',clearRumor); $('copyRumorBtn').addEventListener('click',()=>copyText(state.lastRumorText,'rumorCopyNote'));
   $('rollEventBtn').addEventListener('click',rollEvent); $('copyEventCheckBtn')?.addEventListener('click',()=>copyText(state.lastEventCheckCopyText,'eventCopyNote')); $('copyEventItemsBtn')?.addEventListener('click',()=>copyText(areaEventItemCopyText(),'eventCopyNote'));
-  $('treasureTableSelect').addEventListener('change',()=>{const tableId=$('treasureTableSelect').value; setTreasureContext(tableId,treasureAreaName(tableId),'normal'); $('treasureResult').textContent='「宝箱の中身を決定」を押すと、鍵・罠・各難易度・中身をまとめて決定します。';}); $('copyTrapDetectBtn').addEventListener('click',()=>copyText(trapDetectText(),'treasureCopyNote')); $('copyTrapDisarmBtn').addEventListener('click',()=>copyText(trapDisarmText(),'treasureCopyNote')); $('copyUnlockBtn').addEventListener('click',()=>copyText(unlockText(),'treasureCopyNote')); $('rollTreasureBtn').addEventListener('click',rollTreasure); $('copyTreasureBtn').addEventListener('click',()=>copyText(state.lastTreasureCopyText,'treasureCopyNote'));
+  $('treasureTableSelect').addEventListener('change',()=>{const tableId=$('treasureTableSelect').value; setTreasureContext(tableId,treasureAreaName(tableId),'normal'); $('treasureResult').textContent=isBossTreasureTable(tableId)?'「宝箱の中身を決定」を押すと、ボス固有素材の確率抽選とランダム報酬1枠をまとめて決定します。鍵・罠・採取判定はありません。':'「宝箱の中身を決定」を押すと、鍵・罠・各難易度・中身をまとめて決定します。';}); $('copyTrapDetectBtn').addEventListener('click',()=>copyText(trapDetectText(),'treasureCopyNote')); $('copyTrapDisarmBtn').addEventListener('click',()=>copyText(trapDisarmText(),'treasureCopyNote')); $('copyUnlockBtn').addEventListener('click',()=>copyText(unlockText(),'treasureCopyNote')); $('rollTreasureBtn').addEventListener('click',rollTreasure); $('copyTreasureBtn').addEventListener('click',()=>copyText(state.lastTreasureCopyText,'treasureCopyNote'));
   $('rollAppraisalBtn').addEventListener('click',rollAppraisal); $('copyAppraisalBtn').addEventListener('click',()=>copyText(state.lastAppraisalCopyText,'appraisalCopyNote')); $('appraisalRuleSelect').addEventListener('change',resetAppraisalResult); updateAppraisalCopyButton(); updateTreasureCopyButtons();
 
   window.addEventListener('storage',e=>{if(e.key===GUILD_DAILY_STORAGE_KEY)syncDailyQuestSelectionFromFacility({render:true});});
