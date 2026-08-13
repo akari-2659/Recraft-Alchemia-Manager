@@ -1,9 +1,9 @@
 {
   "format": "recraft-alchemia-public-master",
-  "version": "90.8.528",
+  "version": "90.8.530",
   "updatedAt": "2026-08-13",
-  "generatedAt": "2026-08-13T18:11:00+09:00",
-  "description": "Recraft-Alchemia public master v90.8.528（灰冠の火山峡谷追加）",
+  "generatedAt": "2026-08-13T23:11:36+09:00",
+  "description": "Recraft-Alchemia master v90.8.530（強化枠を武器・鎧・盾だけに統一。装飾品の旧強化枠を削除し、魔物素材の装飾品向け強化対象も廃止）",
   "recordCount": 2694,
   "data": {
     "item_types": [
@@ -1560,7 +1560,7 @@
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 1,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
@@ -1592,7 +1592,7 @@
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 2,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
@@ -1624,7 +1624,7 @@
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 3,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_wind_swept_highland",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
@@ -1657,7 +1657,7 @@
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 1,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
@@ -13473,19 +13473,19 @@
         "notes": "",
         "description": "指先の動きを澄ませる細工指輪。細かな作業や正確さを求める技に向く。",
         "publicId": "RCA-V2HQ-YHTY",
-        "upgradeLimit": "1",
+        "upgradeLimit": "0",
         "modifiers": "ability:dexterity\t+1",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 1,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": 200,
         "buyPrice": "",
-        "updatedAt": "2026-08-12"
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_deep_mirror_observation_ring",
@@ -13505,18 +13505,19 @@
         "tags": "装飾品,指輪,解析,攻撃補助,★4,異界,ボス素材",
         "notes": "鍛冶屋の装飾品作成で入手可能。",
         "description": "鏡淵主の深核の像を裂界晶へ映し込み、看破した性質を攻め手へ結びつける観測環。",
-        "upgradeLimit": "4",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 4,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": 1500,
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_mana_ring",
@@ -13536,19 +13537,19 @@
         "notes": "",
         "description": "内側に魔力の流れを刻んだ指輪。身につけると魔力を保ちやすくなる。",
         "publicId": "RCA-3KMM-ZWZZ",
-        "upgradeLimit": "1",
+        "upgradeLimit": "0",
         "modifiers": "resource:maxMp\t+2",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 1,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": 180,
         "buyPrice": "",
-        "updatedAt": "2026-08-12"
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_glass_fin_earring",
@@ -13568,18 +13569,19 @@
         "tags": "装飾品,耳飾り,遠距離,後衛,★3,異界",
         "notes": "鍛冶屋の装飾品作成で入手可能。",
         "description": "玻璃鰭と逆さ葦を裂界晶へ留め、遮るものの向こうにある標的を捉える耳飾り。",
-        "upgradeLimit": "3",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 3,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": 895,
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_wind_earring",
@@ -13599,16 +13601,16 @@
         "notes": "",
         "description": "風の流れを読む耳飾り。かすかな気配や迫る攻撃を感じ取りやすくする。",
         "publicId": "RCA-TWXE-2KVY",
-        "upgradeLimit": "1",
+        "upgradeLimit": "0",
         "modifiers": "skill:evade\t+1",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 1,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
-        "updatedAt": "2026-07-16",
+        "updatedAt": "2026-08-13",
         "equipmentUpgradeTarget": "",
         "sellPrice": 220,
         "buyPrice": ""
@@ -13631,19 +13633,19 @@
         "tags": "装飾品,耳飾り,感知,★1",
         "notes": "鍛冶屋の装飾品作成で入手可能。",
         "description": "鳴き羽虫の響翅を水晶片へ留め、かすかな音や空気の揺れを拾う耳飾り。",
-        "upgradeLimit": "1",
+        "upgradeLimit": "0",
         "modifiers": "skill:detect\t+1",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 1,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": 170,
         "buyPrice": "",
-        "updatedAt": "2026-08-12"
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_holy_symbol",
@@ -13666,20 +13668,20 @@
         "notes": "骨董屋の高額常設販売品。",
         "description": "清らかな祈りを込める小さな聖印。身につけた者の祈祷を静かに支える。",
         "publicId": "RCA-AWN4-27W8",
-        "upgradeLimit": "1",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "unlockFacility": "骨董屋",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 1,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "1440",
         "buyPrice": "1800",
-        "updatedAt": "2026-08-11"
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_power_bracelet",
@@ -13699,19 +13701,19 @@
         "notes": "",
         "description": "腕に力を集める重みのある腕輪。踏み込みや持ち上げる動きを支える。",
         "publicId": "RCA-79RT-NEA3",
-        "upgradeLimit": "1",
+        "upgradeLimit": "0",
         "modifiers": "damage:melee\t+1",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 1,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": 200,
         "buyPrice": "",
-        "updatedAt": "2026-08-12"
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_dolgan_ley_bracelet",
@@ -13732,17 +13734,17 @@
         "tags": "装飾品,腕輪,解析,硬敵,ボス素材,★3,旧鉱山",
         "notes": "山麓の旧鉱山で得られる素材を使う製作品。鍛冶屋の防具・装飾品作成で入手可能。",
         "description": "穿王の地脈核の小片を黒鉄の環へ収めた腕輪。硬い外殻を伝う振動から、力を通す一点を探り出す。",
-        "upgradeLimit": "3",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 3,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_foothill_old_mine",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "updatedAt": "2026-07-17",
+        "updatedAt": "2026-08-13",
         "sellPrice": 1350,
         "buyPrice": ""
       },
@@ -13764,18 +13766,19 @@
         "tags": "装飾品,腕輪,妨害,★1",
         "notes": "鍛冶屋の装飾品作成で入手可能。",
         "description": "動く根としなやかな蔓を編み、相手の動きを捉える感覚を助ける腕輪。",
-        "upgradeLimit": "1",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 1,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": 195,
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_carapace_guard_bangle",
@@ -13795,16 +13798,16 @@
         "tags": "装飾品,腕輪,防御行動値,★2",
         "notes": "鍛冶屋の装飾品作成で入手可能。",
         "description": "甲殻板をなめし革へ沿わせ、攻撃を受け止める腕の動きを補う防輪。",
-        "upgradeLimit": "2",
+        "upgradeLimit": "0",
         "modifiers": "combat:guardAction\t+1",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 2,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
-        "updatedAt": "2026-07-16",
+        "updatedAt": "2026-08-13",
         "equipmentUpgradeTarget": "",
         "sellPrice": 350,
         "buyPrice": ""
@@ -13827,19 +13830,19 @@
         "tags": "装飾品,腕輪,力業,★2,ボス素材",
         "notes": "鍛冶屋の装飾品作成で入手可能。",
         "description": "草角王の大角を鉄環へ組み込み、腕へ力を伝えやすくした重厚な腕輪。",
-        "upgradeLimit": "2",
+        "upgradeLimit": "0",
         "modifiers": "skill:force\t+1",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 2,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": 560,
         "buyPrice": "",
-        "updatedAt": "2026-08-12"
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_phase_ward_charm",
@@ -13859,18 +13862,19 @@
         "tags": "装飾品,護符,抵抗,呪い,★3,異界",
         "notes": "鍛冶屋の装飾品作成で入手可能。",
         "description": "位相鱗粉と異界素材を重ね、現実を侵す呪いの流れを逸らす護符。",
-        "upgradeLimit": "3",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 3,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": 865,
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_dreamturn_earring",
@@ -13890,17 +13894,17 @@
         "tags": "装飾品,耳飾り,抵抗,睡眠,★3,異界",
         "notes": "鍛冶屋の装飾品作成で入手可能。",
         "description": "反響種子と虚ろ雫を小さな環へ封じ、意識が夢へ沈む兆しを耳元の響きで打ち返す耳飾り。",
-        "upgradeLimit": "3",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 3,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "updatedAt": "2026-07-31",
+        "updatedAt": "2026-08-13",
         "sellPrice": 915,
         "buyPrice": ""
       },
@@ -13922,19 +13926,19 @@
         "notes": "",
         "description": "守りの祈りを込めた小さなお守り。身につけた者を危険から遠ざける。",
         "publicId": "RCA-SF2E-PCFK",
-        "upgradeLimit": "1",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 1,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "200",
         "buyPrice": "250",
-        "updatedAt": "2026-08-11"
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_forest_lord_guard_cord",
@@ -13954,18 +13958,19 @@
         "tags": "装飾品,護符,かばう,防御,★2,ボス素材",
         "notes": "鍛冶屋の装飾品作成で入手可能。",
         "description": "枝王の樹心と尾房を強化木材へ結び、仲間へ踏み出す意志を支える護り紐。",
-        "upgradeLimit": "2",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 2,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_nearby_forest",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": 580,
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_purifying_herb_charm",
@@ -13985,18 +13990,19 @@
         "tags": "装飾品,護符,抵抗,毒,汚染,呪い,★1",
         "notes": "鍛冶屋の装飾品作成で入手可能。",
         "description": "清め草の香りをスライム核へ封じ、身体へ入り込む毒や穢れを遠ざける護符。",
-        "upgradeLimit": "1",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 1,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": 200,
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_mireheart_talisman",
@@ -14016,16 +14022,16 @@
         "tags": "装飾品,護符,毒,汚染,抵抗,★2,ボス素材",
         "notes": "泥主の濁心核を使うボス素材装飾品。鍛冶屋の装飾品作成で入手可能。",
         "description": "泥主の濁心核を薄い殻へ封じ、湿地の毒気を吸わせる護符。体内へ入り込む濁りへ強く反応する。",
-        "upgradeLimit": "2",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 2,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_waterside_wetland",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
-        "updatedAt": "2026-07-17",
+        "updatedAt": "2026-08-13",
         "equipmentUpgradeTarget": "",
         "sellPrice": 725,
         "buyPrice": ""
@@ -14049,17 +14055,17 @@
         "tags": "装飾品,護符,光属性軽減,魔物素材,★3,旧鉱山",
         "notes": "山麓の旧鉱山で得られる素材を使う製作品。鍛冶屋の防具・装飾品作成で入手可能。",
         "description": "燐鉱霊砂を魔晶石の小灯へ封じた護符。強い光を受けると淡く明滅し、余分な輝きを散らす。",
-        "upgradeLimit": "3",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 3,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_foothill_old_mine",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "updatedAt": "2026-07-17",
+        "updatedAt": "2026-08-13",
         "sellPrice": 945,
         "buyPrice": ""
       },
@@ -14081,17 +14087,17 @@
         "tags": "装飾品,腕輪,抵抗,麻痺,★3,旧鉱山",
         "notes": "山麓の旧鉱山で得られる素材を使う製作品。鍛冶屋の防具・装飾品作成で入手可能。",
         "description": "反響翼膜を銀と魔晶石の環へ張り、筋肉へ走る異常な震えを外へ逃がす腕輪。",
-        "upgradeLimit": "3",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 3,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_foothill_old_mine",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "updatedAt": "2026-07-31",
+        "updatedAt": "2026-08-13",
         "sellPrice": 985,
         "buyPrice": ""
       },
@@ -14113,19 +14119,19 @@
         "tags": "装飾品,護符,運動,★1",
         "notes": "鍛冶屋の装飾品作成で入手可能。",
         "description": "小獣の牙と毛皮を蔓で結び、しなやかな身のこなしを支える護符。",
-        "upgradeLimit": "1",
+        "upgradeLimit": "0",
         "modifiers": "skill:athletics\t+1",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 1,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": 160,
         "buyPrice": "",
-        "updatedAt": "2026-08-12"
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_magic_seal_basic",
@@ -14148,20 +14154,20 @@
         "notes": "骨董屋の高額常設販売品。",
         "description": "淡い魔力を留める小さな魔印。身につけた者の魔法を発動しやすく整える。",
         "publicId": "RCA-BSSG-2PDN",
-        "upgradeLimit": "1",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "unlockFacility": "骨董屋",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 1,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "1440",
         "buyPrice": "1800",
-        "updatedAt": "2026-08-11"
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_small_mana_stone",
@@ -14181,18 +14187,19 @@
         "notes": "",
         "description": "小さな魔導石を留めた装飾品。魔法を使う瞬間、わずかに魔力の消耗を和らげる。",
         "publicId": "RCA-8YBV-ZLH4",
-        "upgradeLimit": "1",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 1,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": 200,
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "con_water_enchant_drop",
@@ -14221,7 +14228,7 @@
         "reloadTurns": "",
         "spellSlots": "",
         "modifiers": "",
-        "upgradeLimit": 0,
+        "upgradeLimit": "0",
         "upgradeMaterialMinRank": "",
         "mpCost": "",
         "target": "装備中の武器1つ",
@@ -14272,7 +14279,7 @@
         "reloadTurns": "",
         "spellSlots": "",
         "modifiers": "",
-        "upgradeLimit": 0,
+        "upgradeLimit": "0",
         "upgradeMaterialMinRank": "",
         "mpCost": "",
         "checkType": "",
@@ -14327,7 +14334,7 @@
         "reloadTurns": "",
         "spellSlots": "",
         "modifiers": "",
-        "upgradeLimit": 0,
+        "upgradeLimit": "0",
         "upgradeMaterialMinRank": "",
         "mpCost": "",
         "checkType": "",
@@ -14387,7 +14394,7 @@
         "reloadTurns": "",
         "spellSlots": "",
         "modifiers": "",
-        "upgradeLimit": 0,
+        "upgradeLimit": "0",
         "upgradeMaterialMinRank": "",
         "mpCost": "",
         "target": "装備中の武器1つ",
@@ -17318,7 +17325,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 14,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_hollow_drop_fruit",
@@ -17343,7 +17352,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 30,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_reverse_reed_shoot",
@@ -17368,7 +17379,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 24,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_reflection_moss",
@@ -17393,7 +17406,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 26,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_mirrorfin",
@@ -17418,7 +17433,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 28,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_rockgoat_meat",
@@ -17443,7 +17460,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 26,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_forest_boar_meat",
@@ -17468,7 +17487,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 14,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_grass_runner_meat",
@@ -17493,7 +17514,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 10,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_mooncap_mushroom",
@@ -17518,7 +17541,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 12,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_glowcap",
@@ -17543,7 +17568,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 24,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_tree_honey",
@@ -17568,7 +17595,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 14,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_cave_tuber",
@@ -17593,7 +17622,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 20,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_waterlotus_root",
@@ -17618,7 +17649,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 14,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_sunny_root",
@@ -17643,7 +17676,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 8,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_dewleaf",
@@ -17668,7 +17703,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 10,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_wind_herb",
@@ -17693,7 +17730,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 8,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_mineral_saltfruit",
@@ -17718,7 +17757,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 28,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_marsh_spice",
@@ -17743,7 +17784,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 16,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_mudfish",
@@ -17768,7 +17811,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 18,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "food_mist_shell",
@@ -17793,7 +17838,9 @@
         "unlockFacility": "食事処",
         "updatedAt": "2026-07-21",
         "sellPrice": 20,
-        "buyPrice": ""
+        "buyPrice": "",
+        "upgradeLimit": "0",
+        "upgradeMaterialMinRank": ""
       },
       {
         "id": "mat_flexible_vine",
@@ -19520,11 +19567,11 @@
         "source": "沼主グラボロス",
         "usageTags": "素材,ボス素材,粘体,防具強化,盾強化,装飾品強化,水,汚染,特殊効果,濁水護膜",
         "equipmentUpgradeEffect": "濁水護膜",
-        "equipmentUpgradeTarget": "防具・盾・装飾品",
+        "equipmentUpgradeTarget": "防具・盾",
         "unlockFacility": "",
         "tags": "素材,固有素材,ボス素材,粘体,水,汚染,特殊効果,濁水護膜",
         "notes": "沼主グラボロスだけから得られる固有素材。\n読み：でいしゅのだくえきのう",
-        "updatedAt": "2026-08-04",
+        "updatedAt": "2026-08-13",
         "equipmentUpgradeDetail": "水属性に「耐」を得る。さらに汚染状態によるHP回復量の減少を受けない。同名効果は重複しない。",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_waterside_wetland",
@@ -19788,11 +19835,11 @@
         "source": "ルミナウィスプ",
         "usageTags": "魔物素材,霊体,光耐性",
         "equipmentUpgradeEffect": "光耐性付与",
-        "equipmentUpgradeTarget": "防具・装飾品",
+        "equipmentUpgradeTarget": "防具",
         "unlockFacility": "",
         "tags": "素材,魔物素材,霊体,光耐性",
         "notes": "山麓の旧鉱山で得られる魔物素材。装備強化に使用できる。",
-        "updatedAt": "2026-08-11T18:02:00+09:00",
+        "updatedAt": "2026-08-13",
         "equipmentUpgradeDetail": "光属性に「耐」を得る。同名効果は重複しない。",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_foothill_old_mine",
@@ -20676,14 +20723,14 @@
         "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
-        "equipmentUpgradeTarget": "防具・装飾品",
+        "equipmentUpgradeTarget": "防具",
         "equipmentUpgradeDetail": "回避値+1。同名の通常強化は重複し、段階数として累積する。",
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_outskirts_grass",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": 1,
-        "updatedAt": "2026-08-05",
+        "updatedAt": "2026-08-13",
         "csVisible": "TRUE",
         "sellPrice": 55,
         "buyPrice": ""
@@ -21925,9 +21972,9 @@
         "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
-        "equipmentUpgradeTarget": "防具・装飾品",
+        "equipmentUpgradeTarget": "防具",
         "equipmentUpgradeDetail": "戦闘中1回、自分を対象とする攻撃の判定直前に使用できる。その判定に対して回避値+2。判定終了後に解除する。同名効果は重複しない。",
-        "updatedAt": "2026-08-04",
+        "updatedAt": "2026-08-13",
         "toolRank": "",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_reflection_water_garden",
@@ -23020,11 +23067,11 @@
         "source": "ブリーズホップ",
         "usageTags": "魔物素材,獣,回避",
         "equipmentUpgradeEffect": "回避強化",
-        "equipmentUpgradeTarget": "防具・装飾品",
+        "equipmentUpgradeTarget": "防具",
         "unlockFacility": "",
         "tags": "素材,魔物素材,獣,回避",
         "notes": "風渡りの高原で入手できる素材。",
-        "updatedAt": "2026-08-05",
+        "updatedAt": "2026-08-13",
         "equipmentUpgradeDetail": "回避値+1。同名の通常強化は重複し、段階数として累積する。",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_wind_swept_highland",
@@ -23114,11 +23161,11 @@
         "source": "ブリーズホップ",
         "usageTags": "魔物素材,固有素材,獣,回避",
         "equipmentUpgradeEffect": "回避転勢",
-        "equipmentUpgradeTarget": "防具・装飾品",
+        "equipmentUpgradeTarget": "防具",
         "unlockFacility": "",
         "tags": "素材,魔物素材,固有素材,獣,回避",
         "notes": "風渡りの高原で入手できる素材。",
-        "updatedAt": "2026-08-04",
+        "updatedAt": "2026-08-13",
         "equipmentUpgradeDetail": "攻撃を回避した後、次の自分のターン終了まで防御値+1。同名効果は重複しない。",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_wind_swept_highland",
@@ -23584,11 +23631,11 @@
         "source": "グライドスケイル",
         "usageTags": "魔物素材,爬虫,回避",
         "equipmentUpgradeEffect": "回避強化",
-        "equipmentUpgradeTarget": "防具・装飾品",
+        "equipmentUpgradeTarget": "防具",
         "unlockFacility": "",
         "tags": "素材,魔物素材,爬虫,回避",
         "notes": "風渡りの高原で入手できる素材。",
-        "updatedAt": "2026-08-05",
+        "updatedAt": "2026-08-13",
         "equipmentUpgradeDetail": "回避値+1。同名の通常強化は重複し、段階数として累積する。",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_wind_swept_highland",
@@ -23772,11 +23819,11 @@
         "source": "ボルトバイソン",
         "usageTags": "魔物素材,獣,雷軽減",
         "equipmentUpgradeEffect": "雷属性軽減",
-        "equipmentUpgradeTarget": "防具・盾・装飾品",
+        "equipmentUpgradeTarget": "防具・盾",
         "unlockFacility": "",
         "tags": "素材,魔物素材,獣,雷軽減",
         "notes": "風渡りの高原で入手できる素材。",
-        "updatedAt": "2026-08-04",
+        "updatedAt": "2026-08-13",
         "equipmentUpgradeDetail": "受ける雷属性ダメージを1点軽減する。同名効果は重複しない。",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_wind_swept_highland",
@@ -23913,11 +23960,11 @@
         "source": "嵐翼獣ヴェルグラート",
         "usageTags": "魔物素材,ボス,回避,防御",
         "equipmentUpgradeEffect": "回避強化",
-        "equipmentUpgradeTarget": "防具・装飾品",
+        "equipmentUpgradeTarget": "防具",
         "unlockFacility": "",
         "tags": "素材,魔物素材,ボス,回避,防御",
         "notes": "風渡りの高原で入手できる素材。",
-        "updatedAt": "2026-08-05",
+        "updatedAt": "2026-08-13",
         "equipmentUpgradeDetail": "回避値+1。同名の通常強化は重複し、段階数として累積する。",
         "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_wind_swept_highland",
@@ -30628,17 +30675,17 @@
         "tags": "装飾品,護符,水属性軽減,★2,湿地",
         "notes": "水辺の湿地で得られる素材を使う製作品。鍛冶屋の防具・装飾品作成で入手可能。",
         "description": "葦蜥蜴の水鱗を湿地粘液で封じ、水の衝撃を薄く受け流す護符。",
-        "upgradeLimit": "2",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 2,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_waterside_wetland",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "updatedAt": "2026-07-29",
+        "updatedAt": "2026-08-13",
         "sellPrice": 590,
         "buyPrice": ""
       },
@@ -30660,17 +30707,17 @@
         "tags": "装飾品,腕輪,抵抗,拘束,転倒,★3,高原",
         "notes": "風渡りの高原で得られる素材を使う製作品。鍛冶屋の防具・装飾品作成で入手可能。",
         "description": "風袋腱と風紋布を輪状に編み、身体を縛る力や足元を崩す衝撃を逃がす腕輪。",
-        "upgradeLimit": "3",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 3,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_wind_swept_highland",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "updatedAt": "2026-07-29",
+        "updatedAt": "2026-08-13",
         "sellPrice": 1535,
         "buyPrice": ""
       },
@@ -30692,17 +30739,17 @@
         "tags": "装飾品,護符,風属性軽減,雷属性軽減,★4,高原,ボス素材",
         "notes": "嵐翼獣ヴェルグラートの素材を使うボス素材装飾品。鍛冶屋の防具・装飾品作成で入手可能。",
         "description": "嵐王の大翼膜を小さく折り重ね、風と雷の奔流を一度だけ大きく逸らす護符。",
-        "upgradeLimit": "4",
+        "upgradeLimit": "0",
         "modifiers": "",
         "reloadTurns": "",
         "toolRank": "",
         "equipmentUpgradeDetail": "",
-        "upgradeMaterialMinRank": 4,
+        "upgradeMaterialMinRank": "",
         "unlockAreaKey": "area_wind_swept_highland",
         "guaranteeUpgradeMaxRank": "",
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
-        "updatedAt": "2026-07-29",
+        "updatedAt": "2026-08-13",
         "sellPrice": 2180,
         "buyPrice": ""
       },
@@ -31387,7 +31434,7 @@
         "tags": "装飾品,首飾り,段階強化,HP,★1",
         "notes": "最大Ⅴ想定。低負荷の数値型として、5セットを通して段階的に伸ばす。",
         "description": "若葉色の小石を編み込んだ首飾り。身につけた者の生命力を穏やかに巡らせ、傷に耐える余力を増やす。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "resource:maxHp\t+3",
         "reloadTurns": "",
         "toolRank": "",
@@ -31398,7 +31445,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "185",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_life_2",
@@ -31418,7 +31466,7 @@
         "tags": "装飾品,首飾り,段階強化,HP,★3",
         "notes": "最大Ⅴ想定。低負荷の数値型として、5セットを通して段階的に伸ばす。",
         "description": "黒鉄の細枠に深緑の晶石を収めた首飾り。生命力の巡りを強く整え、より大きな傷に耐える余力を増やす。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "resource:maxHp\t+6",
         "reloadTurns": "",
         "toolRank": "",
@@ -31429,7 +31477,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "1125",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_mana_1",
@@ -31449,7 +31498,7 @@
         "tags": "装飾品,耳飾り,段階強化,MP,★1",
         "notes": "最大Ⅴ想定。低負荷の数値型として、5セットを通して段階的に伸ばす。",
         "description": "星明かりを閉じ込めたような淡青の雫石を下げた耳飾り。魔力をわずかに蓄え、術式に使える余力を増やす。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "resource:maxMp\t+2",
         "reloadTurns": "",
         "toolRank": "",
@@ -31460,7 +31509,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "195",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_mana_2",
@@ -31480,7 +31530,7 @@
         "tags": "装飾品,耳飾り,段階強化,MP,★3",
         "notes": "最大Ⅴ想定。低負荷の数値型として、5セットを通して段階的に伸ばす。",
         "description": "蒼い星晶を銀鎖で吊った耳飾り。魔力の流れを太く保ち、術式に使える余力をさらに増やす。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "resource:maxMp\t+4",
         "reloadTurns": "",
         "toolRank": "",
@@ -31491,7 +31541,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "1255",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_gather_1",
@@ -31511,7 +31562,7 @@
         "tags": "装飾品,腕輪,段階強化,採取,★1",
         "notes": "最大Ⅲ想定。技能補正型は+3程度を上限目安とし、後半ほど強化間隔を広げる。",
         "description": "乾燥させた薬草と細い蔓を編んだ腕輪。素材の傷みや取り頃を見分けやすくする。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "skill:gather\t+1",
         "reloadTurns": "",
         "toolRank": "",
@@ -31522,7 +31573,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "170",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_gather_2",
@@ -31542,7 +31594,7 @@
         "tags": "装飾品,腕輪,段階強化,採取,★3",
         "notes": "最大Ⅲ想定。技能補正型は+3程度を上限目安とし、後半ほど強化間隔を広げる。",
         "description": "鉱爪の欠片と銀線を編み込んだ腕輪。素材の状態を細かく見分け、希少部位を傷めず扱いやすくする。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "skill:gather\t+2",
         "reloadTurns": "",
         "toolRank": "",
@@ -31553,7 +31605,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "1100",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_search_1",
@@ -31573,7 +31626,7 @@
         "tags": "装飾品,耳飾り,段階強化,探索,★1",
         "notes": "最大Ⅲ想定。技能補正型は+3程度を上限目安とし、後半ほど強化間隔を広げる。",
         "description": "小さな羽根飾りがわずかな空気の流れにも揺れる耳飾り。地形の違和感や隠れた手掛かりへ意識を向けやすくする。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "skill:search\t+1",
         "reloadTurns": "",
         "toolRank": "",
@@ -31584,7 +31637,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "175",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_search_2",
@@ -31604,7 +31658,7 @@
         "tags": "装飾品,耳飾り,段階強化,探索,★3",
         "notes": "最大Ⅲ想定。技能補正型は+3程度を上限目安とし、後半ほど強化間隔を広げる。",
         "description": "風鳴石を薄く削って仕立てた耳飾り。風や足元の変化まで手掛かりとして拾い、探索の精度を高める。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "skill:search\t+2",
         "reloadTurns": "",
         "toolRank": "",
@@ -31615,7 +31669,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "1295",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_craft_1",
@@ -31635,7 +31690,7 @@
         "tags": "装飾品,指輪,段階強化,細工,★1",
         "notes": "最大Ⅲ想定。技能補正型は+3程度を上限目安とし、後半ほど強化間隔を広げる。",
         "description": "細い銀糸を幾重にも撚って作った指輪。指先の動きを安定させ、精密な作業を助ける。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "skill:craft\t+1",
         "reloadTurns": "",
         "toolRank": "",
@@ -31646,7 +31701,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "210",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_craft_2",
@@ -31666,7 +31722,7 @@
         "tags": "装飾品,指輪,段階強化,細工,★3",
         "notes": "最大Ⅲ想定。技能補正型は+3程度を上限目安とし、後半ほど強化間隔を広げる。",
         "description": "旧式機構の微細な歯を黒鉄の輪へ組み込んだ指輪。細かな振動まで抑え、複雑な分解や加工を安定させる。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "skill:craft\t+2",
         "reloadTurns": "",
         "toolRank": "",
@@ -31677,7 +31733,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "1255",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_alchemy_1",
@@ -31697,7 +31754,7 @@
         "tags": "装飾品,ブローチ,段階強化,調合,★1",
         "notes": "最大Ⅲ想定。技能補正型は+3程度を上限目安とし、後半ほど強化間隔を広げる。",
         "description": "薬草と茸の香りを淡く残す小さなブローチ。素材の混ざり具合や温度変化を読みやすくする。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "skill:alchemy\t+1",
         "reloadTurns": "",
         "toolRank": "",
@@ -31708,7 +31765,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "195",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_alchemy_2",
@@ -31728,7 +31786,7 @@
         "tags": "装飾品,ブローチ,段階強化,調合,★3",
         "notes": "最大Ⅲ想定。技能補正型は+3程度を上限目安とし、後半ほど強化間隔を広げる。",
         "description": "天空露を封じた花弁型のブローチ。香りや色の微細な変化を捉え、調合の仕上がりを安定させる。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "skill:alchemy\t+2",
         "reloadTurns": "",
         "toolRank": "",
@@ -31739,7 +31797,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "1310",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_appraise_1",
@@ -31759,7 +31818,7 @@
         "tags": "装飾品,片眼鏡,段階強化,鑑定,★2",
         "notes": "最大Ⅲ想定。技能補正型は+3程度を上限目安とし、後半ほど強化間隔を広げる。",
         "description": "透明度の高い薄晶を磨いて仕立てた片眼鏡。素材や品物の小さな違いを見抜きやすくする。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "skill:appraise\t+1",
         "reloadTurns": "",
         "toolRank": "",
@@ -31770,7 +31829,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "240",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_appraise_2",
@@ -31790,7 +31850,7 @@
         "tags": "装飾品,片眼鏡,段階強化,鑑定,★3",
         "notes": "最大Ⅲ想定。技能補正型は+3程度を上限目安とし、後半ほど強化間隔を広げる。",
         "description": "雷脈石と風鳴石を重ねた多層レンズの片眼鏡。光沢や魔力の揺らぎから、価値や性質をより正確に見抜く。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "skill:appraise\t+2",
         "reloadTurns": "",
         "toolRank": "",
@@ -31801,7 +31861,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "1460",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_knowledge_1",
@@ -31821,7 +31882,7 @@
         "tags": "装飾品,髪飾り,段階強化,知識,★2",
         "notes": "最大Ⅲ想定。技能補正型は+3程度を上限目安とし、後半ほど強化間隔を広げる。",
         "description": "薄い木片へ小さな記号を刻んだ髪飾り。記憶した知識を整理し、必要な情報を引き出しやすくする。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "skill:knowledge\t+1",
         "reloadTurns": "",
         "toolRank": "",
@@ -31832,7 +31893,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "250",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_knowledge_2",
@@ -31852,7 +31914,7 @@
         "tags": "装飾品,髪飾り,段階強化,知識,★3",
         "notes": "最大Ⅲ想定。技能補正型は+3程度を上限目安とし、後半ほど強化間隔を広げる。",
         "description": "高原硬木を頁の形に削り、風鳴石を留めた髪飾り。複数の知識を結び付け、魔物や素材の性質をより深く読み解く。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "skill:knowledge\t+2",
         "reloadTurns": "",
         "toolRank": "",
@@ -31863,7 +31925,8 @@
         "equipmentUpgradeSlotCost": "",
         "equipmentUpgradeTarget": "",
         "sellPrice": "1465",
-        "buyPrice": ""
+        "buyPrice": "",
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_medicine_1",
@@ -31883,7 +31946,7 @@
         "tags": "装飾品,首飾り,段階強化,薬効,★2",
         "notes": "最大Ⅳ想定。回復調合品だけに作用するため段階数を多めに取れるが、祈祷・自然回復には適用しない。",
         "description": "薬草を練り込んだ香玉を下げた首飾り。薬液の働きを身体へ馴染ませ、回復薬の効き目をわずかに高める。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "healing:alchemy\t+1",
         "reloadTurns": "",
         "toolRank": "",
@@ -31895,7 +31958,7 @@
         "equipmentUpgradeTarget": "",
         "sellPrice": "240",
         "buyPrice": "",
-        "updatedAt": "2026-08-12"
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_charm_medicine_2",
@@ -31915,7 +31978,7 @@
         "tags": "装飾品,首飾り,段階強化,薬効,★3",
         "notes": "最大Ⅳ想定。回復調合品だけに作用するため段階数を多めに取れるが、祈祷・自然回復には適用しない。",
         "description": "天空露を染み込ませた香玉を銀枠へ収めた首飾り。薬液の働きをより強く引き出し、回復薬の効き目を高める。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "healing:alchemy\t+2",
         "reloadTurns": "",
         "toolRank": "",
@@ -31927,7 +31990,7 @@
         "equipmentUpgradeTarget": "",
         "sellPrice": "1390",
         "buyPrice": "",
-        "updatedAt": "2026-08-12"
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_crystal_elixir_force_1",
@@ -31947,7 +32010,7 @@
         "tags": "装飾品,腕輪,段階強化,攻撃調合品,ダメージ,★2",
         "notes": "最大Ⅲ想定。攻撃調合品全般へ作用し、複数対象では各対象へ適用されるため、回復調合品補助より段階数を少なめにする。",
         "description": "赤橙色の反応石を小瓶型の飾りへ封じた腕輪。投擲調合品の反応を着弾の瞬間だけ強く引き出す。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "damage:alchemyAttack\t+1",
         "reloadTurns": "",
         "toolRank": "",
@@ -31959,7 +32022,7 @@
         "equipmentUpgradeTarget": "",
         "sellPrice": "300",
         "buyPrice": "",
-        "updatedAt": "2026-08-12"
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_crystal_elixir_force_2",
@@ -31979,7 +32042,7 @@
         "tags": "装飾品,腕輪,段階強化,攻撃調合品,ダメージ,★3",
         "notes": "最大Ⅲ想定。攻撃調合品全般へ作用し、複数対象では各対象へ適用されるため、回復調合品補助より段階数を少なめにする。",
         "description": "魔晶の芯と錆喰い顎の粉を封じた小瓶飾りの腕輪。投擲調合品の瞬間的な破壊力をさらに引き上げる。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "damage:alchemyAttack\t+2",
         "reloadTurns": "",
         "toolRank": "",
@@ -31991,7 +32054,7 @@
         "equipmentUpgradeTarget": "",
         "sellPrice": "1430",
         "buyPrice": "",
-        "updatedAt": "2026-08-12"
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_trap_damage_ring_1",
@@ -32011,7 +32074,7 @@
         "tags": "装飾品,指輪,段階強化,罠,ダメージ,★2",
         "notes": "罠の直接ダメージ補助。最大Ⅲ程度を想定。複数対象にも各対象へ適用されるため段階数は少なめにする。",
         "description": "細かな刻み歯と張り糸を銀枠へ収めた指輪。指先の合図に合わせて仕掛けの噛み込みや起爆を鋭く整える。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "damage:trap\t+1",
         "reloadTurns": "",
         "toolRank": "",
@@ -32023,7 +32086,7 @@
         "equipmentUpgradeTarget": "",
         "sellPrice": "300",
         "buyPrice": "",
-        "updatedAt": "2026-08-12"
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "acc_trap_damage_ring_2",
@@ -32043,7 +32106,7 @@
         "tags": "装飾品,指輪,段階強化,罠,ダメージ,★3",
         "notes": "刻歯の指輪の上位段階。罠の直接ダメージへ作用する強い限定補正のため、以後の段階追加は間隔を広く取る。",
         "description": "黒鉄の歯環へ震動を蓄える小核を組み込んだ指輪。仕掛けが作動する瞬間だけ衝撃を増幅し、破壊力を引き上げる。",
-        "upgradeLimit": "",
+        "upgradeLimit": "0",
         "modifiers": "damage:trap\t+2",
         "reloadTurns": "",
         "toolRank": "",
@@ -32055,7 +32118,7 @@
         "equipmentUpgradeTarget": "",
         "sellPrice": "1500",
         "buyPrice": "",
-        "updatedAt": "2026-08-12"
+        "updatedAt": "2026-08-13"
       },
       {
         "id": "mat_ashcrown_obsidian_shard",
@@ -32496,7 +32559,7 @@
         "source": "スコリアゲッコー",
         "usageTags": "素材,魔物素材,爬虫,火山峡谷,回避",
         "equipmentUpgradeEffect": "回避強化",
-        "equipmentUpgradeTarget": "防具・装飾品",
+        "equipmentUpgradeTarget": "防具",
         "unlockFacility": "",
         "tags": "素材,魔物素材,爬虫,火山峡谷,回避",
         "notes": "灰冠の火山峡谷で入手できる魔物素材。",
@@ -32637,7 +32700,7 @@
         "source": "シンダースライム",
         "usageTags": "素材,魔物素材,粘体,火山峡谷,抵抗",
         "equipmentUpgradeEffect": "抵抗強化",
-        "equipmentUpgradeTarget": "防具・装飾品",
+        "equipmentUpgradeTarget": "防具",
         "unlockFacility": "",
         "tags": "素材,魔物素材,粘体,火山峡谷,抵抗",
         "notes": "灰冠の火山峡谷で入手できる魔物素材。",
@@ -32778,7 +32841,7 @@
         "source": "サルファマーモット",
         "usageTags": "素材,魔物素材,獣,火山峡谷,抵抗",
         "equipmentUpgradeEffect": "抵抗強化",
-        "equipmentUpgradeTarget": "防具・装飾品",
+        "equipmentUpgradeTarget": "防具",
         "unlockFacility": "",
         "tags": "素材,魔物素材,獣,火山峡谷,抵抗",
         "notes": "灰冠の火山峡谷で入手できる魔物素材。",
@@ -32825,7 +32888,7 @@
         "source": "サルファマーモット",
         "usageTags": "素材,魔物素材,獣,火山峡谷,抵抗,毒",
         "equipmentUpgradeEffect": "毒耐性強化",
-        "equipmentUpgradeTarget": "防具・装飾品",
+        "equipmentUpgradeTarget": "防具",
         "unlockFacility": "",
         "tags": "素材,魔物素材,獣,火山峡谷,抵抗,毒",
         "notes": "灰冠の火山峡谷で入手できる魔物素材。",
@@ -32966,7 +33029,7 @@
         "source": "サーマルカイト",
         "usageTags": "素材,魔物素材,飛行獣,火山峡谷,回避",
         "equipmentUpgradeEffect": "回避強化",
-        "equipmentUpgradeTarget": "防具・装飾品",
+        "equipmentUpgradeTarget": "防具",
         "unlockFacility": "",
         "tags": "素材,魔物素材,飛行獣,火山峡谷,回避",
         "notes": "灰冠の火山峡谷で入手できる魔物素材。",
@@ -33624,7 +33687,7 @@
         "source": "灰嶺の大蛇ウルガナ",
         "usageTags": "素材,魔物素材,大蛇,火山峡谷,ボス素材,特殊効果,抵抗",
         "equipmentUpgradeEffect": "地脈護持",
-        "equipmentUpgradeTarget": "防具・盾・装飾品",
+        "equipmentUpgradeTarget": "防具・盾",
         "unlockFacility": "",
         "tags": "素材,魔物素材,大蛇,火山峡谷,ボス素材,特殊効果,抵抗",
         "notes": "灰冠の火山峡谷で入手できる魔物素材。",

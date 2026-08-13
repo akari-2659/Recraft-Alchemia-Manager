@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.528</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.530</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.528-boss-reward-chest-rule">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.530-upgrade-slot-scope-fix">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -188,7 +188,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </style>
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.528｜更新：2026年8月13日</div>
+<div class="ra-build-info">v90.8.530｜更新：2026年8月13日</div>
 
 <header>
   <div class="header-inner">
@@ -475,7 +475,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.528';
+const VERSION='v90.8.530';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1357,8 +1357,9 @@ function eventCheckInfo(e={}){
 function eventCheckDisplayText(e={}){
   return eventCheckInfo(e)?.display||'';
 }
-function eventCheckCopyText(e={}){
-  return eventCheckInfo(e)?.copy||'';
+function eventCheckCopyText(e={},fixed=false){
+  const text=eventCheckInfo(e)?.copy||'';
+  return fixed&&text?`【固定】${text}`:text;
 }
 function eventDetailText(e,q=null){
   const partySize=q?effectiveQuestPartySize(q):selectedPartySize();
@@ -1487,7 +1488,7 @@ function triggerQuestSpecificEvents(q,before,after){
     clearQuestRandomEventHistory();
     state.triggeredQuestEvents[key]=true;
     state.lastQuestFixedEventKey=key;
-    state.lastQuestCheckCopyText=eventCheckCopyText(e);
+    state.lastQuestCheckCopyText=eventCheckCopyText(e,true);
     const effectiveSize=effectiveQuestPartySize(q);
     const resolvedEncounter=resolveQuestFixedEncounter(q,e,true);
     if(isWorkQuest(q)&&Number(eventThreshold(e))===100){const workKey=String(q.id||q.name||'work');state.questWorkReinforcementCounts=state.questWorkReinforcementCounts||{};state.questWorkReinforcementCounts[workKey]=0;state.lastQuestReinforcementText='';}
@@ -2404,7 +2405,7 @@ function triggerAreaClearRumorEvent(area){
   clearAreaRandomEventHistory();
   state.areaBossEncountered[key]=true;
   state.lastEventKey=eventUniqueKey(picked);
-  state.lastEventCheckCopyText=eventCheckCopyText(picked);
+  state.lastEventCheckCopyText=eventCheckCopyText(picked,true);
   const baseText=formatEventOutput(`【探索クリア時イベント】${picked.eventName||'名称未設定'}`, picked, area, tableId, [`噂：${rumor.eventName||''}`]);
   const treasureBundle=resolveEventTreasures(picked,area?.name||picked.areaName||'',false);
   state.lastEventRewardState=buildEventRewardState(picked);
@@ -3191,7 +3192,7 @@ function treasureModifierName(target=''){
   return names[key]||key;
 }
 function treasureModifierDisplay(value=''){return treasureModifierRows(value).map(row=>`${treasureModifierName(row.target)} ${String(row.value||'')}`).filter(Boolean).join(' / ');}
-function treasureIsUpgradeable(row={}){return ['武器','防具','盾','装飾品'].includes(treasureItemKind(row));}
+function treasureIsUpgradeable(row={}){return ['武器','防具','盾'].includes(treasureItemKind(row));}
 function treasureIsSpecialMaterial(row={}){return treasureFieldText(row,'equipmentUpgradeEffect')==='特殊効果';}
 function treasureUpgradeDisplayName(row={}){return treasureFieldText(row,'equipmentUpgradeEffect');}
 function buildTreasureItemCopyText(row={},count='1'){

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.528</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.530</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.528-boss-reward-chest-rule">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.530-upgrade-slot-scope-fix">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.528｜更新：2026年8月13日</div>
+<div class="ra-build-info">v90.8.530｜更新：2026年8月13日</div>
 
 <header>
   <div class="title-card">
@@ -1642,7 +1642,6 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
               <select id="facilityUpgradeEquipmentType">
                 <option value="武器">武器</option>
                 <option value="防具・盾">防具・盾</option>
-                <option value="装飾品">装飾品</option>
                 <option value="魔導書">魔導書</option>
                 <option value="祈祷書">祈祷書</option>
               </select>
@@ -1880,7 +1879,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.528';
+const RECRAFT_DB_VERSION = 'v90.8.530';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.403';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -3283,15 +3282,15 @@ const SYSTEM_HELP = [
     "body": [
       "段階強化型装飾品は、通常の装備強化枠とは別に『装飾品強化』で上位段階へ置き換え、固有効果そのものを強くする。",
       "装飾品強化は、強化元の装飾品1個と必要素材を使い、上位段階の装飾品へ置き換える。施設依頼は判定不要、自作は細工で判定する。",
-      "段階強化専用の装飾品は通常の装備強化枠を持たせず、素材強化との二重取りを避ける。既存の特殊装飾品は従来どおり個別に扱う。",
+      "装飾品は種類を問わず通常の装備強化枠を持たない。性能成長は『装飾品強化』による段階強化・派生だけで扱い、素材強化との二重取りをしない。",
       "進行の大区切りは『通常エリア3つ＋異界1つ』を1セットとし、5セットで1区切りとして装飾品の最大段階を設計する。",
       "低負荷の数値型（最大HP・最大MPなど）は最大5段階を目安にし、1セットごとに伸ばしてよい。",
       "技能補正型は最大3段階程度を目安にし、+1、+2、+3のように伸ばす。段階間隔は数値型より広くしてよい。",
       "回復調合品補助など対象が限定される効果は3～4段階程度まで許可し、適用範囲が広いほど段階数を減らす。攻撃調合品の直接ダメージ補助は、複数対象にも各対象へ適用されるため回復補助より段階数を少なめにする。",
       "罠の直接ダメージ補助も装飾品固有効果として扱い、継続ダメージ・状態異常由来のダメージには適用しない。水辺の湿地で『刻歯の指輪（罠直接ダメージ+1）』、山麓の旧鉱山で『震牙の指輪（罠直接ダメージ+2）』へ段階強化する。",
       "装飾品による技能・能力・最大HP/MP・近接ダメージ・攻撃調合品ダメージ・罠ダメージ・回復調合品回復量などの数値補正は、効果文だけでなく補正値データへ別項として登録する。キャラシでは技能値・ダメージ式・回復式へ+Xの別項として加算し、チャットパレットには装飾品名・補正値・効果詳細を併記する。",
-      "後衛狙い補正の緩和、回数制の強力効果、複数効果を持つ特殊装飾品などは無強化または1段階程度に留める。",
-      "異界由来の特殊装飾品は通常エリアの数値型と同じ速度で伸ばさず、原則として無強化または後続異界で1回だけ強化する。",
+      "後衛狙い補正の緩和、回数制の強力効果、複数効果を持つ特殊装飾品なども通常の装備強化枠は持たせず、必要な成長は専用の段階強化・派生で扱う。",
+      "異界由来の特殊装飾品は通常エリアの数値型と同じ速度で伸ばさず、必要な場合のみ後続異界で専用の段階強化・派生を追加する。",
       "異界産の装飾品を段階強化する場合、強化段階の解放先も異界とする。異界外の素材や通常加工素材を副材料として要求してよいが、強化先の異界由来素材を必ず主材料とし、必要個数の合計は異界外素材より多くする。異界に生息する魔物・異界ボスのドロップ素材は、その異界由来素材として数える。",
       "未定義の将来エリア名や解放キーは先に作らない。現在実装済みのエリアだけ実データ化し、残りの段階は5セット設計に沿って後続エリア実装時に追加する。",
       "装飾品では、武器・防具の素材強化で扱う威力・命中・防御値・防御行動値の単純な焼き直しより、技能、最大HP/MP、調合品効率、状態対策、探索補助など装飾品固有の役割を優先する。"
@@ -3305,11 +3304,11 @@ const SYSTEM_HELP = [
       "素材"
     ],
     "body": [
-      "武器、防具、盾、装飾品、魔導書、祈祷書には強化枠上限を設定する。",
+      "強化枠上限を持つのは武器・鎧・盾だけとする。魔導書・祈祷書は武器に含む。装飾品・バッグ・矢筒・道具・消耗品・素材などには強化枠を設定しない。",
       "★1の武器・防具・盾は原則2枠の強化枠上限を持つ。",
-      "★1の装飾品は原則1回まで強化可能。",
-      "魔導書と祈祷書は原則2回まで強化可能。",
-      "素手、普段着、バッグ、矢筒、素材、調合品、道具、矢弾、スクロールには強化枠上限を表示しない。",
+      "装飾品の性能成長は通常の素材強化ではなく、専用の『装飾品強化』による段階強化・派生で扱う。",
+      "魔導書と祈祷書は武器として、対応する武器ランクの強化枠ルールを適用する。",
+      "素手、普段着、装飾品、バッグ、矢筒、素材、調合品、道具、矢弾、スクロールには強化枠上限を表示しない。",
       "実際に適用した強化内容はキャラクターシートの装備欄で、1強化1行で記録する。"
     ]
   }
@@ -4419,8 +4418,7 @@ function adminItemSellPriceText(value){
 }
 function isUpgradeableEquipmentRow(row={}, key=''){
   const kind = warehouseKindForRow(row, key);
-  if(!['武器','防具','盾','装飾品','術式'].includes(kind)) return false;
-  if(kind === '術式' && baseKeyForTable(key)==='spells') return false;
+  if(!['武器','防具','盾'].includes(kind)) return false;
   return true;
 }
 const STANDARD_UPGRADE_EFFECT_NAMES=new Set(['威力強化','威力固定強化','命中強化','防御強化','防御行動強化','回避強化','副手追撃強化','術式枠拡張','術式省力化','回復量強化','回復量固定強化','最大スタック拡張','HP強化','MP強化','力業補助','魔法補助','祈祷補助']);
@@ -7336,7 +7334,7 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='monsterTraits') help += '<div class="form-help">飛行・甲殻・異界・鉱質など、大分類だけでは表せない特徴をカンマ区切りで入力します。</div>';
   if(field==='encounterValue') help += '<div class="form-help">通常魔物は1～3で設定します。1＝小型・軽量、2＝標準、3＝強敵。エリアが後半かどうかではなく、その魔物自身の能力と行動で決めます。ボスは通常遭遇から除外されるため空欄で構いません。</div>';
   if(field==='hasLock' || field==='hasTrap') ['なし','あり'].forEach(v=>values.add(v));
-  if(field==='equipmentUpgradeTarget') help += '<div class="form-help">この素材で強化できる装備種別です。武器・防具・盾・装飾品・魔導書・祈祷書を指定できます。複数対象は「・」で区切ります。</div>';
+  if(field==='equipmentUpgradeTarget') help += '<div class="form-help">この素材で強化できる装備種別です。対象は武器（魔導書・祈祷書を含む）・鎧・盾だけです。複数対象は「・」で区切ります。装飾品・バッグ・矢筒・道具などは指定できません。</div>';
   if(field==='equipmentUpgradeEffect') help += '<div class="form-help">効果名だけで内容を判別できる名称を設定します。例：威力強化、威力固定強化、回復量強化、回復量固定強化、水属性軽減、抵抗妨害。独立した数値欄は使用しません。</div>';
   if(field==='equipmentUpgradeDetail') help += '<div class="form-help">すべての強化で必須です。補正値・対象・条件・持続・解除条件・重複可否まで具体的に入力します。通常強化は同名でも重複して累積し、同名重複不可は素材固有の特殊効果だけです。</div>';
   if(field==='enchantTarget') help += '<div class="form-help">使用時に選べる装備範囲です。武器は右手・左手の通常武器、防具・盾は鎧と盾、装飾品は装飾品枠を対象にします。</div>';
@@ -7864,8 +7862,34 @@ function assertTreasureDifficultyRows(rows=[]){
   const rest=invalid.length>12?`\nほか${invalid.length-12}件`:'';
   throw new Error(`すべての宝箱表に、1以上の解錠・罠感知・罠解除の基準難易度を設定してください。\n${details}${rest}`);
 }
+function isUpgradeSlotEligibleItemRow(row={}){
+  const itemType=String(row.itemType||'').trim();
+  return String(row.dataKind||'アイテム').trim()!=='素材' && ['武器','防具','盾'].includes(itemType);
+}
+function assertUpgradeSlotScopeRows(rows=[]){
+  const invalid=(rows||[]).filter(row=>{
+    if(String(row.dataKind||'アイテム').trim()==='素材')return false;
+    if(isUpgradeSlotEligibleItemRow(row))return false;
+    return Number(row.upgradeLimit||0)>0 || String(row.upgradeMaterialMinRank||'').trim();
+  });
+  if(!invalid.length)return;
+  const details=invalid.slice(0,12).map(row=>`・${String(row.name||row.id||'名称未設定')}（${String(row.itemType||row.dataKind||'種別未設定')}）`).join('\n');
+  throw new Error(`強化枠を設定できるのは武器・鎧・盾だけです。装飾品・バッグ・矢筒・道具・消耗品などには強化枠／強化素材最低ランクを設定できません。\n${details}${invalid.length>12?`\nほか${invalid.length-12}件`:''}`);
+}
+function assertUpgradeMaterialTargetScopeRows(rows=[]){
+  const banned=['装飾品','バッグ','矢筒','道具','調合品','消耗品','スクロール','アイテム'];
+  const invalid=(rows||[]).filter(row=>{
+    const isMonsterMaterial=String(row.dataKind||'').trim()==='素材'&&String(row.materialType||'').trim()==='魔物素材';
+    if(!isMonsterMaterial)return false;
+    const target=String(row.equipmentUpgradeTarget||'').trim();
+    return banned.some(token=>target.includes(token));
+  });
+  if(!invalid.length)return;
+  const details=invalid.slice(0,12).map(row=>`・${String(row.name||row.id||'名称未設定')}：${String(row.equipmentUpgradeTarget||'対象未設定')}`).join('\n');
+  throw new Error(`魔物素材の装備強化対象は武器（魔導書・祈祷書を含む）・鎧・盾だけにしてください。装飾品など強化枠を持たない品は対象にできません。\n${details}${invalid.length>12?`\nほか${invalid.length-12}件`:''}`);
+}
 function assertEquipmentUpgradeMinimumRows(rows=[]){
-  const invalid=(rows||[]).filter(row=>isEquipmentItemRow(row)&&Number(row.upgradeLimit||0)>0&&!numericRankValueIncludingLegacyMaterialGrade(row.upgradeMaterialMinRank,''));
+  const invalid=(rows||[]).filter(row=>isUpgradeSlotEligibleItemRow(row)&&Number(row.upgradeLimit||0)>0&&!numericRankValueIncludingLegacyMaterialGrade(row.upgradeMaterialMinRank,''));
   if(!invalid.length)return;
   const details=invalid.slice(0,10).map(row=>`・${String(row.name||row.id||'名称未設定')}`).join('\n');
   throw new Error(`強化可能な装備には強化素材最低ランクが必要です。\n${details}`);
@@ -8032,7 +8056,7 @@ function collectFormRow(){
   }
   const clean = {};
   (SCHEMA[key]||[]).forEach(field=>clean[field]=base[field] === undefined || base[field] === null ? '' : base[field]);
-  if(key==='items'){ assertNumericRankRows('items',[clean]); assertItemPriceRows([clean]); assertItemClassificationRows([clean]); assertWeaponKatakanaNames([clean]); assertEquipmentUpgradeMinimumRows([clean]); assertMonsterMaterialUpgradeRows([clean]); assertSpecialUpgradeNonStackRows([clean]); assertNoDefenseIgnoreUpgradeRows([clean]); assertMaterialUpgradeSlotCostRows([clean]); assertMaterialUpgradeSeparationRows([clean]); assertProcessedMaterialRows([clean]); assertMonsterMaterialDescriptionRows([clean]); assertLateAreaMonsterMaterialRankRows([clean]); }
+  if(key==='items'){ assertNumericRankRows('items',[clean]); assertItemPriceRows([clean]); assertItemClassificationRows([clean]); assertWeaponKatakanaNames([clean]); assertUpgradeSlotScopeRows([clean]); assertUpgradeMaterialTargetScopeRows([clean]); assertEquipmentUpgradeMinimumRows([clean]); assertMonsterMaterialUpgradeRows([clean]); assertSpecialUpgradeNonStackRows([clean]); assertNoDefenseIgnoreUpgradeRows([clean]); assertMaterialUpgradeSlotCostRows([clean]); assertMaterialUpgradeSeparationRows([clean]); assertProcessedMaterialRows([clean]); assertMonsterMaterialDescriptionRows([clean]); assertLateAreaMonsterMaterialRankRows([clean]); }
   if(key==='material_ranks') assertNumericRankRows('material_ranks',[clean]);
   if(key==='spells') assertNumericRankRows('spells',[clean]);
   if(key==='recipes'){ assertNumericRankRows('recipes',[clean]); assertWeaponBranchMaterialRows([clean]); assertOtherworldAccessoryUpgradeMaterialRows([clean]); }
@@ -8880,7 +8904,7 @@ function cloneRowsForSave(baseKey, rows){
   if(baseKey==='skills') recalculateSkillProbabilities();
   if(['items','recipes','spells','skills','material_ranks','quest_rewards','quests','treasure_tables','monsters'].includes(baseKey)) assertNumericRankRows(baseKey,rows||[]);
   if(baseKey==='treasure_tables') assertTreasureDifficultyRows(rows||[]);
-  if(baseKey==='items'){ assertItemPriceRows(rows||[]); assertItemClassificationRows(rows||[]); assertWeaponKatakanaNames(rows||[]); assertEquipmentUpgradeMinimumRows(rows||[]); assertMonsterMaterialUpgradeRows(rows || []); assertSpecialUpgradeNonStackRows(rows || []); assertNoDefenseIgnoreUpgradeRows(rows || []); assertMaterialUpgradeSlotCostRows(rows || []); assertMaterialUpgradeSeparationRows(rows || []); assertMonsterMaterialDescriptionRows(rows || []); assertLateAreaMonsterMaterialRankRows(rows || []); }
+  if(baseKey==='items'){ assertItemPriceRows(rows||[]); assertItemClassificationRows(rows||[]); assertWeaponKatakanaNames(rows||[]); assertUpgradeSlotScopeRows(rows||[]); assertUpgradeMaterialTargetScopeRows(rows||[]); assertEquipmentUpgradeMinimumRows(rows||[]); assertMonsterMaterialUpgradeRows(rows || []); assertSpecialUpgradeNonStackRows(rows || []); assertNoDefenseIgnoreUpgradeRows(rows || []); assertMaterialUpgradeSlotCostRows(rows || []); assertMaterialUpgradeSeparationRows(rows || []); assertMonsterMaterialDescriptionRows(rows || []); assertLateAreaMonsterMaterialRankRows(rows || []); }
   if(baseKey==='recipes'){ assertWeaponBranchMaterialRows(rows || []); assertOtherworldAccessoryUpgradeMaterialRows(rows || []); }
   if(baseKey==='monsters'){ assertMonsterActionCountRows(rows || []); assertMonsterActionHitModRows(rows || []); assertMonsterSupportActionCheckRows(rows || []); assertMonsterDirectDamageDieRows(rows || []); }
   return (rows || []).map(src=>{
@@ -9168,7 +9192,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.528';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.530';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-07';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
