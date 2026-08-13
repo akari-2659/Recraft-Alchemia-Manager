@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.527</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.528</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.527-boss-reward-chest-rule">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.528-boss-reward-chest-rule">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -188,7 +188,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </style>
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.527｜更新：2026年8月13日</div>
+<div class="ra-build-info">v90.8.528｜更新：2026年8月13日</div>
 
 <header>
   <div class="header-inner">
@@ -475,7 +475,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.527';
+const VERSION='v90.8.528';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1906,7 +1906,8 @@ const ENCOUNTER_DEFAULT_VALUES={
   'ルートハウンド':3,'モスバック':2,'ウィスパウル':1,'ドロマール':3,'リードリザード':2,'ミアズマリーチ':1,
   'ミラースライム':2,'エコーリード':2,'フェイズモス':3,'グラスレイ':3,'リフトクラブ':3,'ヴォイドハウンド':3,
   'レゾナバット':1,'ピックモール':2,'オアスケイル':2,'ラストマイト':1,'マインゴーレム':3,'ルミナウィスプ':2,
-  'ブリーズホップ':2,'クラッグラム':3,'カイトビーク':2,'ソノラブルーム':2,'グライドスケイル':3,'ボルトバイソン':3
+  'ブリーズホップ':2,'クラッグラム':3,'カイトビーク':2,'ソノラブルーム':2,'グライドスケイル':3,'ボルトバイソン':3,
+  'スコリアゲッコー':2,'シンダースライム':2,'サルファマーモット':1,'サーマルカイト':2,'グラスケイル':3,'ヴェインサラマンダー':3,'アッシュバイソン':3
 };
 const AREA_ENCOUNTER_POOLS={
   '街はずれの草原':['プチスライム','ラフィンラット','ラピットホーン','ヴェスパット','カラパスビートル','グラウワーム'],
@@ -1914,7 +1915,8 @@ const AREA_ENCOUNTER_POOLS={
   '水辺の湿地':['プチスライム','グラウワーム','マイコニド','マッドホッパー','バブルスライム','ミストモスキート','ドロマール','リードリザード','ミアズマリーチ'],
   '山麓の旧鉱山':['ラフィンラット','グラウワーム','マイコニド','ミアズマリーチ','レゾナバット','ピックモール','オアスケイル','ラストマイト','マインゴーレム','ルミナウィスプ'],
   '反照の水庭':['ミラースライム','フェイズモス','グラスレイ','エコーリード','リフトクラブ','ヴォイドハウンド'],
-  '風渡りの高原':['ブリーズホップ','クラッグラム','カイトビーク','ソノラブルーム','グライドスケイル','ボルトバイソン']
+  '風渡りの高原':['ブリーズホップ','クラッグラム','カイトビーク','ソノラブルーム','グライドスケイル','ボルトバイソン'],
+  '灰冠の火山峡谷':['クラッグラム','グライドスケイル','スコリアゲッコー','シンダースライム','サルファマーモット','サーマルカイト','グラスケイル','ヴェインサラマンダー','アッシュバイソン']
 };
 const ENCOUNTER_BACKLINE_RATE={
   'プチスライム':.15,'ラフィンラット':.10,'ラピットホーン':.10,'ヴェスパット':.60,'カラパスビートル':.10,'グラウワーム':.10,
@@ -1922,7 +1924,8 @@ const ENCOUNTER_BACKLINE_RATE={
   'ミストモスキート':.60,'ドロマール':.10,'リードリザード':.15,'ミアズマリーチ':.10,
   'レゾナバット':.65,'ピックモール':.15,'オアスケイル':.10,'ラストマイト':.25,'マインゴーレム':.05,'ルミナウィスプ':.65,
   'ミラースライム':.30,'フェイズモス':.55,'グラスレイ':.30,'エコーリード':.50,'リフトクラブ':.15,'ヴォイドハウンド':.35,
-  'ブリーズホップ':.10,'クラッグラム':.05,'カイトビーク':.65,'ソノラブルーム':.70,'グライドスケイル':.15,'ボルトバイソン':.05
+  'ブリーズホップ':.10,'クラッグラム':.05,'カイトビーク':.65,'ソノラブルーム':.70,'グライドスケイル':.15,'ボルトバイソン':.05,
+  'スコリアゲッコー':.10,'シンダースライム':.30,'サルファマーモット':.35,'サーマルカイト':.70,'グラスケイル':.05,'ヴェインサラマンダー':.20,'アッシュバイソン':.05
 };
 // エリア差は魔物自身の遭遇値ではなく、編成全体の予算へ一度だけ加算する。
 const AREA_ENCOUNTER_BUDGET_BONUS={
@@ -1931,7 +1934,8 @@ const AREA_ENCOUNTER_BUDGET_BONUS={
   '水辺の湿地':2,
   '山麓の旧鉱山':3,
   '反照の水庭':3,
-  '風渡りの高原':4
+  '風渡りの高原':4,
+  '灰冠の火山峡谷':5
 };
 function partyEncounterProfile(size=selectedPartySize()){
   const n=normalizePartySize(size);
@@ -2731,6 +2735,17 @@ const TREASURE_AREA_PROFILES={
       {name:'逆巻く気流',effect:'開封者は次の自分の行動まで回避－2。行動後に解除する。'},
       {name:'風圧跳弾',effect:'開封者に2D6風属性ダメージを与え、次の自分のターン終了まで回避－1。'},
       {name:'雷導捕縛網',effect:'開封者に1D6+2雷属性ダメージを与え、次の自分の判定－1。'}
+    ]
+  },
+  '灰冠の火山峡谷':{
+    lockChance:65, trapChance:65, emptyChance:7, detect:[14,16], disarm:[14,16], unlock:[14,16],
+    traps:[
+      {name:'噴気弁',effect:'開封者に2D6+2火属性ダメージ。'},
+      {name:'黒曜片ばね',effect:'開封者に2D6+2物属性ダメージ。'},
+      {name:'灰煙筒',effect:'開封者は次の自分のターン終了まで判定－1。'},
+      {name:'熱膨張留め金',effect:'開封者は次の自分の行動まで回避－2。行動後に解除する。'},
+      {name:'焼締拘束輪',effect:'開封者は次の自分のターン終了まで回避－1・抵抗－1。'},
+      {name:'火脈晶の破裂',effect:'開封者に2D6+1D4火属性ダメージ。このダメージは常時防御値を1点まで無視する。'}
     ]
   }
 };
