@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.550</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.551</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.550-upgrade-slot-scope-fix">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.551-upgrade-slot-scope-fix">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -186,9 +186,24 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 <style id="raCommunityGatheringManagerV474">
 .community-manager-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}.community-manager-card{border:1px solid var(--line);border-radius:14px;background:#fffdf8;padding:13px}.community-manager-card h3{margin:0 0 5px}.community-manager-meta{font-size:12px;color:var(--muted);margin-bottom:9px}.community-manager-progress{height:9px;border-radius:999px;background:#eadfce;overflow:hidden;margin:9px 0}.community-manager-progress span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--good));border-radius:inherit}.community-manager-row{display:grid;grid-template-columns:minmax(120px,1fr) 92px auto;gap:7px;align-items:center;margin:6px 0}.community-manager-row input{width:100%}.community-manager-card .buttons{margin-top:10px;padding:0;border:0;background:transparent}.community-complete{color:var(--good);font-weight:900}@media(max-width:720px){.community-manager-grid{grid-template-columns:1fr}.community-manager-row{grid-template-columns:minmax(100px,1fr) 88px auto}}
 </style>
+
+<style id="raAreaWeatherV551">
+.weather-manager{margin:12px 0;border:1px solid var(--line);border-radius:14px;background:#fffaf2;padding:12px}
+.weather-current{display:grid;grid-template-columns:minmax(0,1fr);gap:5px;margin:8px 0 10px}
+.weather-current-name{font-weight:900;font-size:1.08rem;color:var(--accent2)}
+.weather-unlocked-list{display:grid;gap:7px;margin-top:10px}
+.weather-area-row{display:grid;grid-template-columns:minmax(130px,.75fr) minmax(110px,.55fr) minmax(0,1.7fr) auto;gap:8px;align-items:center;border-top:1px solid #eadfce;padding-top:7px}
+.weather-area-row:first-child{border-top:0;padding-top:0}
+.weather-area-row b{font-size:13px}
+.weather-area-row .weather-name{font-weight:900;color:var(--accent2)}
+.weather-area-row .weather-desc{font-size:12px;color:var(--muted);line-height:1.45}
+.weather-area-row button{padding:6px 9px;min-height:auto}
+@media(max-width:760px){.weather-area-row{grid-template-columns:1fr auto}.weather-area-row .weather-name,.weather-area-row .weather-desc{grid-column:1/-1}}
+</style>
+
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.550｜更新：2026年8月15日</div>
+<div class="ra-build-info">v90.8.551｜更新：2026年8月16日</div>
 
 <header>
   <div class="header-inner">
@@ -297,6 +312,15 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
       <label>探索エリア</label>
       <select id="areaSelect"></select>
       <div id="areaDetail" class="card muted">DB読込後、エリアを選択してください。</div>
+      <div class="weather-manager">
+        <h3>今日の天気 <span class="copy-note" id="weatherCopyNote">コピーしました</span></h3>
+        <div id="selectedAreaWeather" class="weather-current muted">DB読込後、天気を抽選します。</div>
+        <div class="buttons">
+          <button id="rerollAreaWeatherBtn" class="secondary" type="button">このエリアの天気を再抽選</button>
+          <button id="copyUnlockedWeatherBtn" class="secondary" type="button">解放エリアの天気をコピー</button>
+        </div>
+        <div id="unlockedWeatherList" class="weather-unlocked-list"></div>
+      </div>
       <h3>探索進行度</h3>
       <div class="progress-wrap"><div id="areaBar" class="progress-bar"></div><div id="areaLabel" class="progress-label">0%</div></div>
       <div id="areaStepInfo" class="card muted">探索進行上昇値と、100%到達時のボス噂イベント状態がここに表示されます。</div>
@@ -475,7 +499,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.550';
+const VERSION='v90.8.551';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -495,7 +519,7 @@ const GUILD_DAILY_CHANNEL_NAME='recraft_alchemia_guild_daily_channel';
 const GUILD_DAILY_REQUEST_KINDS=['拠点内依頼','エリア依頼','納品依頼'];
 const MASTER_CACHE_KEY=STORE_KEY+'_master_cache_v1';
 const $=id=>document.getElementById(id);
-const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},dayState:{day:1,fatigue:0,usedActions:0,awaitingEnd:false},lastEventText:'',lastEventKey:'',lastEventCheckCopyText:'',lastEventTreasureCopyText:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestCheckCopyText:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',lastQuestTreasureCopyText:'',lastQuestHasTreasure:false,lastQuestEventTableRewardText:'',lastQuestEventTableRewardCopyText:'',triggeredQuestEvents:{},lastAreaFixedEventText:'',lastAreaFixedEventKey:'',triggeredAreaEvents:{},baseUnlockedAreaIds:[],lastBaseEventText:'',lastBaseEventKey:'',lastBaseCheckCopyText:'',lastBaseRewardText:'',lastBaseRewardCopyText:'',lastBaseEventRewardState:null,lastBaseEventTableRewardState:null,questRewardCache:{},lastEventTableRewardText:'',lastEventTableRewardCopyText:'',lastEventTableRewardState:null,lastQuestEventTableRewardState:null,lastRecipeMerchantOffers:[],selectedRecipeMerchantId:'',lastRecipeMerchantContext:{scope:'',areaName:'',eventName:''},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastTreasureCopyText:'',lastAppraisalText:'',lastAppraisalCopyText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],lastDailyQuestKeysByKind:{'拠点内依頼':[],'エリア依頼':[],'納品依頼':[]},dailyQuestUnlockedAreaId:'',questEncounterCache:{},partySize:4,areaBossEncountered:{},treasureSetup:null,treasureContext:null,lastEncounter:null,dropEncounterInstances:[],dropMode:'encounter',lastEventRewardState:null,lastQuestEventRewardState:null,lastQuestReinforcementText:'',questWorkReinforcementCounts:{},log:[]};
+const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},dayState:{day:1,fatigue:0,usedActions:0,awaitingEnd:false},lastEventText:'',lastEventKey:'',lastEventCheckCopyText:'',lastEventTreasureCopyText:'',lastQuestEventText:'',lastQuestEventKey:'',lastQuestCheckCopyText:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',lastQuestTreasureCopyText:'',lastQuestHasTreasure:false,lastQuestEventTableRewardText:'',lastQuestEventTableRewardCopyText:'',triggeredQuestEvents:{},lastAreaFixedEventText:'',lastAreaFixedEventKey:'',triggeredAreaEvents:{},baseUnlockedAreaIds:[],lastBaseEventText:'',lastBaseEventKey:'',lastBaseCheckCopyText:'',lastBaseRewardText:'',lastBaseRewardCopyText:'',lastBaseEventRewardState:null,lastBaseEventTableRewardState:null,questRewardCache:{},lastEventTableRewardText:'',lastEventTableRewardCopyText:'',lastEventTableRewardState:null,lastQuestEventTableRewardState:null,lastRecipeMerchantOffers:[],selectedRecipeMerchantId:'',lastRecipeMerchantContext:{scope:'',areaName:'',eventName:''},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastTreasureCopyText:'',lastAppraisalText:'',lastAppraisalCopyText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],lastDailyQuestKeysByKind:{'拠点内依頼':[],'エリア依頼':[],'納品依頼':[]},dailyQuestUnlockedAreaId:'',questEncounterCache:{},partySize:4,areaBossEncountered:{},treasureSetup:null,treasureContext:null,lastEncounter:null,dropEncounterInstances:[],dropMode:'encounter',lastEventRewardState:null,lastQuestEventRewardState:null,lastQuestReinforcementText:'',questWorkReinforcementCounts:{},areaWeatherById:{},log:[]};
 let currentQuestCategory='重要';
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function clamp(n){return Math.max(0,Math.min(100,Number(n)||0));}
@@ -504,13 +528,13 @@ function addLog(text){state.log.unshift(`[${now()}] ${text}`); state.log=state.l
 function renderLog(){ $('log').innerHTML = state.log.length ? state.log.map(x=>`<div>${esc(x)}</div>`).join('') : '<div class="muted">ログはまだありません。</div>'; }
 function setStatus(type,msg){const el=$('dbStatus'); el.className='status '+(type||''); el.textContent=msg;}
 function saveState(show=true){
-  localStorage.setItem(STORE_KEY, JSON.stringify({progress:state.progress, log:state.log, questEncounterCache:state.questEncounterCache||{}, areaBossEncountered:state.areaBossEncountered||{}, partySize:selectedPartySize(), lastQuestFixedEventText:state.lastQuestFixedEventText||'', lastQuestFixedEventKey:state.lastQuestFixedEventKey||'', triggeredQuestEvents:state.triggeredQuestEvents||{}, lastAreaFixedEventText:state.lastAreaFixedEventText||'', lastAreaFixedEventKey:state.lastAreaFixedEventKey||'', triggeredAreaEvents:state.triggeredAreaEvents||{}, baseUnlockedAreaIds:state.baseUnlockedAreaIds||[], lastBaseEventText:state.lastBaseEventText||'', lastBaseEventKey:state.lastBaseEventKey||'', lastBaseRewardText:state.lastBaseRewardText||'', lastBaseRewardCopyText:state.lastBaseRewardCopyText||'', lastBaseEventRewardState:state.lastBaseEventRewardState||null, lastBaseEventTableRewardState:state.lastBaseEventTableRewardState||null, questRewardCache:state.questRewardCache||{}, treasureSetup:state.treasureSetup||null, treasureContext:state.treasureContext||null, dayState:state.dayState||{day:1,fatigue:0,usedActions:0,awaitingEnd:false}, lastEncounter:state.lastEncounter||null, dropEncounterInstances:state.dropEncounterInstances||[], dropMode:state.dropMode||'single', lastQuestReinforcementText:state.lastQuestReinforcementText||'', questWorkReinforcementCounts:state.questWorkReinforcementCounts||{}}));
+  localStorage.setItem(STORE_KEY, JSON.stringify({progress:state.progress, log:state.log, questEncounterCache:state.questEncounterCache||{}, areaBossEncountered:state.areaBossEncountered||{}, partySize:selectedPartySize(), lastQuestFixedEventText:state.lastQuestFixedEventText||'', lastQuestFixedEventKey:state.lastQuestFixedEventKey||'', triggeredQuestEvents:state.triggeredQuestEvents||{}, lastAreaFixedEventText:state.lastAreaFixedEventText||'', lastAreaFixedEventKey:state.lastAreaFixedEventKey||'', triggeredAreaEvents:state.triggeredAreaEvents||{}, baseUnlockedAreaIds:state.baseUnlockedAreaIds||[], lastBaseEventText:state.lastBaseEventText||'', lastBaseEventKey:state.lastBaseEventKey||'', lastBaseRewardText:state.lastBaseRewardText||'', lastBaseRewardCopyText:state.lastBaseRewardCopyText||'', lastBaseEventRewardState:state.lastBaseEventRewardState||null, lastBaseEventTableRewardState:state.lastBaseEventTableRewardState||null, questRewardCache:state.questRewardCache||{}, treasureSetup:state.treasureSetup||null, treasureContext:state.treasureContext||null, dayState:state.dayState||{day:1,fatigue:0,usedActions:0,awaitingEnd:false}, lastEncounter:state.lastEncounter||null, dropEncounterInstances:state.dropEncounterInstances||[], dropMode:state.dropMode||'single', lastQuestReinforcementText:state.lastQuestReinforcementText||'', questWorkReinforcementCounts:state.questWorkReinforcementCounts||{}, areaWeatherById:state.areaWeatherById||{}}));
   if(show) addLog('進行状態を保存しました。');
 }
 function loadState(){
   // DB読込時の初期ゲージは必ず0%にするため、進行度は自動復元しない。
   // 保存済み進行を使う場合は「保存済み進行を復元」を押す。
-  try{const raw=localStorage.getItem(STORE_KEY); if(!raw)return; const data=JSON.parse(raw); state.log=data.log||[]; state.questEncounterCache=(data.questEncounterCache&&typeof data.questEncounterCache==='object')?data.questEncounterCache:{}; state.areaBossEncountered=(data.areaBossEncountered&&typeof data.areaBossEncountered==='object')?data.areaBossEncountered:{}; state.baseUnlockedAreaIds=Array.isArray(data.baseUnlockedAreaIds)?data.baseUnlockedAreaIds:[]; state.lastBaseEventText=data.lastBaseEventText||''; state.lastBaseEventKey=data.lastBaseEventKey||''; state.lastBaseRewardText=data.lastBaseRewardText||''; state.lastBaseRewardCopyText=data.lastBaseRewardCopyText||''; state.lastBaseEventRewardState=data.lastBaseEventRewardState||null; state.lastBaseEventTableRewardState=data.lastBaseEventTableRewardState||null; state.questRewardCache=(data.questRewardCache&&typeof data.questRewardCache==='object')?data.questRewardCache:{}; setPartySize(data.partySize||4); state.treasureSetup=data.treasureSetup||null; state.treasureContext=data.treasureContext||null; state.lastEncounter=data.lastEncounter||null; state.dropEncounterInstances=Array.isArray(data.dropEncounterInstances)?data.dropEncounterInstances:[]; state.dropMode=data.dropMode==='encounter'?'encounter':'single'; state.lastQuestReinforcementText=data.lastQuestReinforcementText||''; state.questWorkReinforcementCounts=(data.questWorkReinforcementCounts&&typeof data.questWorkReinforcementCounts==='object')?data.questWorkReinforcementCounts:{}; state.dayState=normalizeDayState(data.dayState); }catch(e){}
+  try{const raw=localStorage.getItem(STORE_KEY); if(!raw)return; const data=JSON.parse(raw); state.log=data.log||[]; state.questEncounterCache=(data.questEncounterCache&&typeof data.questEncounterCache==='object')?data.questEncounterCache:{}; state.areaBossEncountered=(data.areaBossEncountered&&typeof data.areaBossEncountered==='object')?data.areaBossEncountered:{}; state.baseUnlockedAreaIds=Array.isArray(data.baseUnlockedAreaIds)?data.baseUnlockedAreaIds:[]; state.lastBaseEventText=data.lastBaseEventText||''; state.lastBaseEventKey=data.lastBaseEventKey||''; state.lastBaseRewardText=data.lastBaseRewardText||''; state.lastBaseRewardCopyText=data.lastBaseRewardCopyText||''; state.lastBaseEventRewardState=data.lastBaseEventRewardState||null; state.lastBaseEventTableRewardState=data.lastBaseEventTableRewardState||null; state.questRewardCache=(data.questRewardCache&&typeof data.questRewardCache==='object')?data.questRewardCache:{}; setPartySize(data.partySize||4); state.treasureSetup=data.treasureSetup||null; state.treasureContext=data.treasureContext||null; state.lastEncounter=data.lastEncounter||null; state.dropEncounterInstances=Array.isArray(data.dropEncounterInstances)?data.dropEncounterInstances:[]; state.dropMode=data.dropMode==='encounter'?'encounter':'single'; state.lastQuestReinforcementText=data.lastQuestReinforcementText||''; state.questWorkReinforcementCounts=(data.questWorkReinforcementCounts&&typeof data.questWorkReinforcementCounts==='object')?data.questWorkReinforcementCounts:{}; state.areaWeatherById=(data.areaWeatherById&&typeof data.areaWeatherById==='object')?data.areaWeatherById:{}; state.dayState=normalizeDayState(data.dayState); }catch(e){}
 }
 function restoreSavedState(){
   try{
@@ -537,6 +561,7 @@ function restoreSavedState(){
     state.dropMode=data.dropMode==='encounter'?'encounter':(state.dropMode||'single');
     state.lastQuestReinforcementText=data.lastQuestReinforcementText||state.lastQuestReinforcementText||'';
     state.questWorkReinforcementCounts=(data.questWorkReinforcementCounts&&typeof data.questWorkReinforcementCounts==='object')?data.questWorkReinforcementCounts:(state.questWorkReinforcementCounts||{});
+    state.areaWeatherById=(data.areaWeatherById&&typeof data.areaWeatherById==='object')?data.areaWeatherById:(state.areaWeatherById||{});
     state.dayState=normalizeDayState(data.dayState||state.dayState);
     setPartySize(data.partySize||state.partySize||4);
     renderAll();
@@ -1095,12 +1120,12 @@ function advanceToNextDay(stayAtInn=false){
   const previousDay=state.dayState.day;
   if(stayAtInn){
     state.dayState={day:previousDay+1,fatigue:0,usedActions:0,awaitingEnd:false};
-    clearDailyRumor(); renderDayStatus();
+    clearDailyRumor(); rerollUnlockedWeatherForNewDay(); renderDayStatus(); renderWeatherManager();
     addLog(`宿屋に45Gで宿泊しました。HP・MPを全回復し、疲労度を0にして第${state.dayState.day}日へ進みました。`);
   }else{
     const nextFatigue=state.dayState.fatigue+1;
     state.dayState={day:previousDay+1,fatigue:nextFatigue,usedActions:0,awaitingEnd:false};
-    clearDailyRumor(); renderDayStatus();
+    clearDailyRumor(); rerollUnlockedWeatherForNewDay(); renderDayStatus(); renderWeatherManager();
     addLog(`宿泊せず第${state.dayState.day}日へ進みました。疲労度が${nextFatigue}になりました。`);
   }
 }
@@ -1156,9 +1181,14 @@ function isBaseQuest(q={}){return String(q.requestKind||'').trim()==='拠点内�
 function questRandomEventLabel(q={}){return isBaseQuest(q)?'拠点内イベント':'エリアイベント';}
 function questRandomEvents(q){
   if(isBaseQuest(q))return baseEventRows();
-  const tableId=tableIdForQuest(q);
+  const area=areaForQuest(q),tableId=tableIdForQuest(q);
   if(!tableId)return [];
-  return state.events.filter(e=>String(e.tableId||'').trim()===tableId && !isRumorEvent(e) && eventConditionType(e)==='なし');
+  return state.events.filter(e=>{
+    if(String(e.tableId||'').trim()!==tableId||isRumorEvent(e)||isQuestSpecificEvent(e)||isBossEvent(e))return false;
+    const type=eventConditionType(e);
+    if(type==='天気')return eventMatchesWeather(e,area);
+    return type==='なし';
+  });
 }
 function isDeliveryQuest(q={}){return String(q.requestKind||'').trim()==='納品依頼';}
 function isImportantQuest(q={}){return questCategoryFor(q)==='重要';}
@@ -1438,7 +1468,7 @@ function rollQuestEvent(){
   const rows=questRandomEvents(q);
   if(!rows.length){state.lastQuestEventText=`【クエストランダムイベント】${q.name||q.id}
 ${baseQuest?'拠点内ランダムイベント':'該当エリアのランダムイベント'}候補がありません。`; renderQuestEvents(); updateTreasureCopyButtons(); return;}
-  const picked=pickRandomEvent(rows, state.lastQuestEventKey);
+  const picked=baseQuest?pickRandomEvent(rows,state.lastQuestEventKey):pickAreaEvent(rows,state.lastQuestEventKey,questArea);
   state.lastQuestEventKey=eventUniqueKey(picked);
   state.lastQuestCheckCopyText=eventCheckCopyText(picked);
   const sourceArea=baseQuest?(state.areas||[]).find(a=>String(a.id||a.name||'')===String(picked.conditionValue||'')):questArea;
@@ -1571,6 +1601,115 @@ function normalizeBaseUnlockedAreaIds(){
   state.baseUnlockedAreaIds=[...new Set(ids)];
   return state.baseUnlockedAreaIds;
 }
+
+function parseAreaWeatherProfiles(area={}){
+  return String(area.weatherProfiles||'').split(/\n+/).map(line=>{
+    const [name,weight,detail,up,down,off]=String(line||'').split('\t');
+    const n=String(name||'').trim();if(!n)return null;
+    const list=v=>String(v||'').split(/[,、，]/).map(x=>x.trim()).filter(Boolean);
+    return {name:n,weight:Math.max(1,Number(weight)||1),detail:String(detail||'').trim(),monsterUp:list(up),monsterDown:list(down),monsterOff:list(off)};
+  }).filter(Boolean);
+}
+function weatherAreaKey(area={}){return String(area.id||area.name||'').trim();}
+function weatherAreaByKey(key=''){return (state.areas||[]).find(a=>weatherAreaKey(a)===String(key||'').trim()||String(a.name||'').trim()===String(key||'').trim())||null;}
+function weightedPick(rows=[],weightFn=row=>row.weight||1){
+  if(!rows.length)return null;
+  const entries=rows.map(row=>({row,weight:Math.max(0,Number(weightFn(row))||0)})).filter(x=>x.weight>0);
+  if(!entries.length)return rows[Math.floor(Math.random()*rows.length)];
+  let roll=Math.random()*entries.reduce((s,x)=>s+x.weight,0);
+  for(const e of entries){roll-=e.weight;if(roll<=0)return e.row;}
+  return entries.at(-1).row;
+}
+function ensureAreaWeather(area={},force=false){
+  const key=weatherAreaKey(area);if(!key)return null;
+  state.areaWeatherById=(state.areaWeatherById&&typeof state.areaWeatherById==='object')?state.areaWeatherById:{};
+  const day=Math.max(1,Number(state.dayState?.day)||1);
+  const current=state.areaWeatherById[key];
+  const profiles=parseAreaWeatherProfiles(area);
+  if(!profiles.length)return null;
+  if(!force&&current&&Number(current.day)===day&&profiles.some(p=>p.name===current.weatherName))return current;
+  const picked=weightedPick(profiles,p=>p.weight)||profiles[0];
+  const next={day,weatherName:picked.name};
+  state.areaWeatherById[key]=next;
+  return next;
+}
+function currentAreaWeather(area={}){
+  const stateRow=ensureAreaWeather(area,false);if(!stateRow)return null;
+  const profile=parseAreaWeatherProfiles(area).find(p=>p.name===stateRow.weatherName)||null;
+  return profile?{...stateRow,...profile}:stateRow;
+}
+function unlockedWeatherAreas(){
+  const ids=new Set(normalizeBaseUnlockedAreaIds().map(String));
+  return [...(state.areas||[])].filter(a=>ids.has(weatherAreaKey(a))).sort((a,b)=>Number(a.unlockOrder||999)-Number(b.unlockOrder||999)||String(a.name||'').localeCompare(String(b.name||''),'ja'));
+}
+function ensureWeatherForUnlockedAreas(force=false){unlockedWeatherAreas().forEach(a=>ensureAreaWeather(a,force));}
+function rerollAreaWeather(area={}){
+  const row=ensureAreaWeather(area,true);if(!row)return;
+  state.lastEventText='';state.lastEventKey='';state.lastEventCheckCopyText='';state.lastEventRewardState=null;
+  saveState(false);renderArea();renderWeatherManager();addLog(`${area.name||area.id} の天気を再抽選：${row.weatherName}`);
+}
+function rerollUnlockedWeatherForNewDay(){
+  ensureWeatherForUnlockedAreas(true);
+  state.lastEventText='';state.lastEventKey='';state.lastEventCheckCopyText='';state.lastEventRewardState=null;
+}
+function weatherCopyText(){
+  ensureWeatherForUnlockedAreas(false);
+  const rows=unlockedWeatherAreas();
+  return ['【今日の天気】',...rows.flatMap((area,index)=>{
+    const w=currentAreaWeather(area);
+    const block=[`・${area.name||area.id}：${w?.name||'未設定'}`,w?.detail||'天気詳細なし'];
+    return index<rows.length-1?[...block,'']:block;
+  })].join('\n');
+}
+function weatherMonsterWeight(areaName='',monsterName=''){
+  const area=(state.areas||[]).find(a=>String(a.name||'').trim()===String(areaName||'').trim()||String(a.id||'').trim()===String(areaName||'').trim());
+  const weather=area?currentAreaWeather(area):null;
+  const name=String(monsterName||'').trim();if(!weather||!name)return 1;
+  if(weather.monsterOff?.includes(name))return 0;
+  if(weather.monsterUp?.includes(name))return 1.8;
+  if(weather.monsterDown?.includes(name))return .5;
+  return 1;
+}
+function weatherEventWeight(row={},area={}){
+  const weather=currentAreaWeather(area);if(!weather)return 1;
+  const spec=String(row.weatherWeights||'').trim();if(!spec)return 1;
+  const map={};
+  spec.split(/[;；\n]+/).forEach(chunk=>{const m=String(chunk||'').trim().match(/^(.+?)[:：]\s*([0-9.]+)$/);if(m)map[m[1].trim()]=Number(m[2]);});
+  const value=map[weather.name];
+  return Number.isFinite(value)?Math.max(0,value):1;
+}
+function eventMatchesWeather(row={},area={}){
+  const type=eventConditionType(row);
+  if(type!=='天気')return true;
+  const weather=currentAreaWeather(area);if(!weather)return false;
+  const allowed=String(row.conditionValue||'').split(/[,、，\/／]/).map(v=>v.trim()).filter(Boolean);
+  return allowed.includes(weather.name);
+}
+function pickAreaEvent(rows=[],lastKey='',area={}){
+  const list=(rows||[]).filter(Boolean);if(!list.length)return null;
+  const filtered=list.length>1?list.filter(r=>eventUniqueKey(r)!==lastKey):list;
+  const pool=filtered.length?filtered:list;
+  return weightedPick(pool,row=>weatherEventWeight(row,area));
+}
+function renderWeatherManager(){
+  const selectedArea=selected($('areaSelect'),state.areas);
+  const currentBox=$('selectedAreaWeather'),list=$('unlockedWeatherList');
+  if(currentBox){
+    if(!selectedArea)currentBox.textContent='エリアが選択されていません。';
+    else{
+      const weather=currentAreaWeather(selectedArea);
+      currentBox.innerHTML=weather?`<div class="weather-current-name">${esc(weather.name)}</div><div>${esc(weather.detail||'')}</div><div class="muted small">遭遇傾向：${esc([weather.monsterUp?.length?`出やすい ${weather.monsterUp.join('・')}`:'',weather.monsterDown?.length?`出にくい ${weather.monsterDown.join('・')}`:''].filter(Boolean).join(' / ')||'大きな変化なし')}</div>`:'天気設定なし';
+    }
+  }
+  if(list){
+    ensureWeatherForUnlockedAreas(false);
+    const rows=unlockedWeatherAreas();
+    list.innerHTML=rows.length?rows.map(area=>{
+      const w=currentAreaWeather(area);
+      return `<div class="weather-area-row"><b>${esc(area.name||area.id)}</b><span class="weather-name">${esc(w?.name||'未設定')}</span><span class="weather-desc">${esc(w?.detail||'')}</span><button class="ghost" type="button" data-weather-reroll="${esc(weatherAreaKey(area))}">再抽選</button></div>`;
+    }).join(''):'<div class="muted small">解放済みエリアがありません。</div>';
+  }
+}
 let baseAreaModalDraftIds=[];
 function baseEventRows(){
   const unlocked=new Set(normalizeBaseUnlockedAreaIds());
@@ -1605,7 +1744,7 @@ function applyBaseAreaModal(){
     const q=selected($('questSelect'),state.quests);
     if(isBaseQuest(q)){state.lastQuestEventText='';state.lastQuestEventKey='';state.lastQuestCheckCopyText='';state.lastQuestTreasureCopyText='';state.lastQuestEventTableRewardText='';state.lastQuestEventTableRewardCopyText='';state.lastQuestEventRewardState=null;}
   }
-  saveState(false);closeBaseAreaModal();renderBaseEventControls();renderQuest();updateTreasureCopyButtons();
+  ensureWeatherForUnlockedAreas(false);saveState(false);closeBaseAreaModal();renderBaseEventControls();renderWeatherManager();renderQuest();updateTreasureCopyButtons();
 }
 function handleBaseAreaModalCheck(input){
   const id=String(input?.dataset?.baseAreaModalCheck||'');if(!id)return;
@@ -1651,7 +1790,7 @@ function renderArea(){
   const a=selected($('areaSelect'),state.areas);
   if(!a){$('areaDetail').textContent='エリアデータがありません。';$('areaBar').style.width='0%';$('areaLabel').textContent='0%';return;}
   const p=progressObj('areas',a.id||a.name);
-  $('areaNote').value=p.note||'';$('areaBar').style.width=clamp(p.value)+'%';$('areaLabel').textContent=clamp(p.value)+'%';
+  $('areaNote').value=p.note||''; renderWeatherManager();$('areaBar').style.width=clamp(p.value)+'%';$('areaLabel').textContent=clamp(p.value)+'%';
   $('areaDetail').innerHTML=`<div class="kv"><b>種別</b><span>${esc(a.areaType||'')}</span><b>難度</b><span>${esc(a.difficulty||'')}</span><b>イベント表</b><span>${esc(a.eventTableId||'')}</span><b>探索進行上昇</b><span>+${areaStepAmount(a)}%</span><b>主な素材</b><span>${esc(a.mainMaterials||'')}</span><b>主な魔物</b><span>${esc(a.mainMonsters||'')}</span><b>フィールド効果</b><span>${esc(a.fieldEffect||'なし')}</span></div>${a.description?`<p class="muted">${esc(a.description)}</p>`:''}`;
   const step=areaStepAmount(a),current=clamp(p.value),boss=areaBossEventForRumor(a),rumor=selectedRumor();
   const bossText=boss?`100%：${boss.eventName||'ボスイベント'}に固定`:(rumor?'100%固定イベントなし（選択中の噂はボス噂ではありません）':'100%固定イベントなし');
@@ -1663,7 +1802,7 @@ function renderMonster(){
   const m=selectedDropMonster(); if(!m){$('monsterDetail').textContent=dropAreaMonsterRows().length?'候補から魔物を選択してください。':'このエリアで選択できる魔物がありません。'; return;}
   $('monsterDetail').innerHTML=`<div class="kv"><b>HP</b><span>${esc(m.hp||'')}</span><b>命中</b><span>${esc(m.hitValue||'')}</span><b>回避</b><span>${esc(m.evasionValue||'')}</span><b>抵抗</b><span>${esc(m.resistValue||'')}</span><b>防御</b><span>${esc(m.defenseValue||'')}</span><b>先制</b><span>${esc(m.initiative||'')}</span><b>解体難易度</b><span>${esc(m.dismantleDifficulty||'未設定')}</span><b>解体判定</b><span>採取技能 &gt;= ${esc(m.dismantleDifficulty||'解体難易度')}</span></div>${m.habit?`<p class="muted"><b>習性：</b>${esc(m.habit)}</p>`:''}`;
 }
-function renderAll(){updateEventCheckCopyButtons();renderDayStatus(); syncDailyQuestSelectionFromFacility(); fillDropAreaSelect($('dropAreaSelect')?.value||''); ensureDailyQuestSelection(); fillQuestSelect($('questSelect')?.value || ''); fillEventTables(); fillRumorSelect(); fillRumorAreas(); fillInnRumorSelect(); fillTreasureTables(); fillAppraisalRules(); fillMonsterSearch($('monsterSelectValue')?.value || $('monsterSelect')?.value || ''); renderQuest(); renderArea(); renderBaseEventControls(); renderMonster(); renderDropMode(); renderEncounterDropList(); renderEventRewardPanel('event'); renderEventRewardPanel('quest'); renderEventRewardPanel('base'); renderRecipeMerchantPanel(); updateAreaEventItemCopyButton(); renderRumorResult(); renderDailyQuestResult(); renderLog();}
+function renderAll(){updateEventCheckCopyButtons();renderDayStatus(); ensureWeatherForUnlockedAreas(false); syncDailyQuestSelectionFromFacility(); fillDropAreaSelect($('dropAreaSelect')?.value||''); ensureDailyQuestSelection(); fillQuestSelect($('questSelect')?.value || ''); fillEventTables(); fillRumorSelect(); fillRumorAreas(); fillInnRumorSelect(); fillTreasureTables(); fillAppraisalRules(); fillMonsterSearch($('monsterSelectValue')?.value || $('monsterSelect')?.value || ''); renderQuest(); renderArea(); renderBaseEventControls(); renderMonster(); renderDropMode(); renderEncounterDropList(); renderEventRewardPanel('event'); renderEventRewardPanel('quest'); renderEventRewardPanel('base'); renderRecipeMerchantPanel(); updateAreaEventItemCopyButton(); renderRumorResult(); renderDailyQuestResult(); renderWeatherManager(); renderLog();}
 function getNumFromText(s, fallback=0){const m=String(s||'').match(/[+-]?\d+/); return m?Number(m[0]):fallback;}
 function advanceQuestProgress(){const q=selected($('questSelect'),state.quests); if(!q)return; const p=progressObj('quests',q.id||q.name); const add=questStepAmount(q); const before=clamp(p.value); if(isDeliveryQuest(q)){p.value=100; saveState(false); renderQuest(); addLog(`${q.name||q.id} の納品を完了しました。`); return;} p.value=clamp(before+add); const fired=triggerQuestSpecificEvents(q,before,p.value); saveState(false); renderQuest(); addLog(`${q.name||q.id} の進行度を +${add}% しました。${before}% → ${p.value}%（行動回数は変更していません）`); if(fired.length && fired[0].treasureTableId){addLog(`確定入手：未鑑定の魔法または祈祷スクロール：★1×1（${fired[0].eventName||'クエスト固有イベント'}）`);}}
 function advanceAreaProgress(){const a=selected($('areaSelect'),state.areas); if(!a)return; const p=progressObj('areas',a.id||a.name); const add=areaStepAmount(a); const before=clamp(p.value); p.value=clamp(before+add); saveState(false); renderArea(); addLog(`${a.name||a.id} の探索進行度を +${add}% しました。${before}% → ${p.value}%（行動回数は変更していません）`); if(before<100 && p.value>=100) triggerAreaClearRumorEvent(a);}
@@ -1867,6 +2006,9 @@ function eventRowsForArea(area, options={}){
     if(String(e.tableId||'').trim()!==tableId) return false;
     if(isRumorEvent(e) || isQuestSpecificEvent(e)) return false;
     if(isBossEvent(e) && encountered && !includeEncounteredBoss) return false;
+    if(!eventMatchesWeather(e,area)) return false;
+    const type=eventConditionType(e);
+    if(type==='天気')return true;
     return eventMatchesRumor(e, rumor);
   });
 }
@@ -2039,7 +2181,7 @@ function weightedEncounterRow(rows=[],weightFn=()=>1){
   for(const entry of weighted){roll-=entry.weight;if(roll<=0)return entry.row;}
   return weighted.at(-1)?.row||null;
 }
-function chooseEncounterCandidate(candidates=[],pattern='混成遭遇',budget=0,featuredName=''){
+function chooseEncounterCandidate(candidates=[],pattern='混成遭遇',budget=0,featuredName='',areaName=''){
   if(!candidates.length)return null;
   const matched=candidates.filter(c=>encounterPatternMatches(c.picks,pattern));
   let source=matched.length?matched:candidates;
@@ -2062,12 +2204,18 @@ function chooseEncounterCandidate(candidates=[],pattern='混成遭遇',budget=0,
       if(!current||nextGap<currentGap||(nextGap===currentGap&&candidate.picks.length>current.picks.length))byMonster.set(name,candidate);
     });
     const rows=[...byMonster.values()];
-    if(rows.length)return randomRow(rows);
+    if(rows.length)return weightedPick(rows,row=>weatherMonsterWeight(areaName,String(row.picks?.[0]||'')));
   }
   return weightedEncounterRow(source,candidate=>{
     const gap=Math.max(0,Number(budget||0)-Number(candidate.spent||0));
     const diversity=new Set(candidate.picks||[]).size;
     let weight=(1/(1+gap*.75))*(1+.75*Math.max(0,diversity-1));
+    if(candidate.picks?.length){
+      const factors=candidate.picks.map(name=>weatherMonsterWeight(areaName,name));
+      if(factors.some(v=>v<=0))return 0.0001;
+      const weatherFactor=Math.pow(factors.reduce((product,v)=>product*Math.max(.01,v),1),1/factors.length);
+      weight*=weatherFactor;
+    }
     if(pattern==='強敵＋取り巻き')weight*=1.5;
     return weight;
   });
@@ -2106,8 +2254,8 @@ function generateRandomEncounter(areaName='', options={}){
     });
   const roll=Math.random();
   let pattern=options.pattern||(roll<.28?'単一種の群れ':roll<.76?'混成遭遇':'強敵＋取り巻き');
-  const featuredName=pool.length?randomRow(pool):(reservedPicks[0]||'');
-  let chosen=chooseEncounterCandidate(candidates,pattern,budget,featuredName);
+  const featuredName=pool.length?(weightedPick(pool,name=>weatherMonsterWeight(areaName,name))||pool[0]):(reservedPicks[0]||'');
+  let chosen=chooseEncounterCandidate(candidates,pattern,budget,featuredName,areaName);
   if(!chosen){
     const fallback=[...reservedPicks];
     let fallbackSpent=fallback.reduce((sum,n)=>sum+monsterEncounterValue(n),0);
@@ -2116,23 +2264,23 @@ function generateRandomEncounter(areaName='', options={}){
     while((fallback.length<wantedCount||fallbackSpent<minSpent)&&pool.length&&fallback.length<naturalTotalCap){
       const feasible=pool.filter(name=>fallbackSpent+monsterEncounterValue(name)<=budget);
       if(!feasible.length)break;
-      const picked=randomRow(feasible);fallback.push(picked);fallbackSpent+=monsterEncounterValue(picked);
+      const picked=weightedPick(feasible,name=>weatherMonsterWeight(areaName,name))||feasible[0];fallback.push(picked);fallbackSpent+=monsterEncounterValue(picked);
     }
     if(exactCount!==null){
       while(fallback.length<exactCount&&pool.length&&fallback.length<naturalTotalCap){
         const feasible=pool.filter(name=>fallbackSpent+monsterEncounterValue(name)<=budget);
         if(!feasible.length)break;
-        const picked=randomRow(feasible);fallback.push(picked);fallbackSpent+=monsterEncounterValue(picked);
+        const picked=weightedPick(feasible,name=>weatherMonsterWeight(areaName,name))||feasible[0];fallback.push(picked);fallbackSpent+=monsterEncounterValue(picked);
       }
     }
-    if(!fallback.length&&pool.length){const picked=randomRow(pool);fallback.push(picked);fallbackSpent=monsterEncounterValue(picked);}
+    if(!fallback.length&&pool.length){const picked=weightedPick(pool,name=>weatherMonsterWeight(areaName,name))||pool[0];fallback.push(picked);fallbackSpent=monsterEncounterValue(picked);}
     chosen={picks:fallback,spent:fallbackSpent};
   }
   if(encounterPatternMatches(chosen.picks,'単一種の群れ'))pattern='単一種の群れ';
   else if(encounterPatternMatches(chosen.picks,'強敵＋取り巻き'))pattern='強敵＋取り巻き';
   else pattern='混成遭遇';
   const groups=groupEncounterPicks(chosen.picks);
-  return {areaName,partySize:size,baseBudget,budget,spent:groups.reduce((s,g)=>s+g.cost*g.count,0),pattern,groups,total:chosen.picks.length,minCount,minSpent,featuredName};
+  const weather=currentAreaWeather((state.areas||[]).find(a=>String(a.name||'').trim()===String(areaName||'').trim()||String(a.id||'').trim()===String(areaName||'').trim())||{}); return {areaName,partySize:size,baseBudget,budget,spent:groups.reduce((s,g)=>s+g.cost*g.count,0),pattern,groups,total:chosen.picks.length,minCount,minSpent,featuredName,weatherName:weather?.name||''};
 }
 function encounterResolutionText(resolution){
   if(!resolution||!resolution.groups?.length)return '';
@@ -2387,7 +2535,7 @@ function formatEventOutput(prefix,picked,area,tableId,extraLines=[],partySizeOve
   const dropGroups=encounterGroupsForDrop(picked,random,partySize);
   const initiative=encounterInitiativeText(dropGroups);
   if(dropGroups.length&&!isBossEvent(picked))recordLastEncounter(picked.eventName||prefix,area?.name||picked.areaName||'',dropGroups);
-  return [prefix,area?`エリア：${area.name||area.id}`:'',area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'',`表：${tableId}`,picked.eventName?`イベント：${picked.eventName}`:'',picked.eventType?`種別：${picked.eventType}`:'',condition,encounter,composition,initiative,eventCheckDisplayText(picked),picked.result?`結果：${eventResultTextForDisplay(picked,partySize)}`:'',picked.progressEffect?`補足：${picked.progressEffect}`:'',...extraLines].filter(Boolean).join('\n');
+  const weather=area?currentAreaWeather(area):null; return [prefix,area?`エリア：${area.name||area.id}`:'',weather?`天気：${weather.name}`:'',weather?.detail?`天気詳細：${weather.detail}`:'',area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'',`表：${tableId}`,picked.eventName?`イベント：${picked.eventName}`:'',picked.eventType?`種別：${picked.eventType}`:'',condition,encounter,composition,initiative,eventCheckDisplayText(picked),picked.result?`結果：${eventResultTextForDisplay(picked,partySize)}`:'',picked.progressEffect?`補足：${picked.progressEffect}`:'',...extraLines].filter(Boolean).join('\n');
 }
 function triggerAreaClearRumorEvent(area){
   const rumor=selectedRumor();
@@ -2440,7 +2588,7 @@ function rollEvent(){
   state.lastEventCheckCopyText='';
   resetAreaEventItemCopyState();clearRecipeMerchantOffers();
   if(!rows.length){$('eventResult').textContent='このエリアに登録されたランダムイベント候補がありません。前提条件付きイベントは、今日の噂が一致した時だけ候補に入ります。';renderEventRewardPanel('event');updateAreaEventItemCopyButton();return;}
-  const picked=pickRandomEvent(rows, state.lastEventKey);
+  const picked=pickAreaEvent(rows,state.lastEventKey,area);
   state.lastEventKey=eventUniqueKey(picked);
   state.lastEventCheckCopyText=eventCheckCopyText(picked);
   const rumorLine=rumor ? [`今日の噂：${rumor.eventName||''}`] : [];
@@ -3704,7 +3852,7 @@ function questInfoMemo(){
   const q=selected($('questSelect'),state.quests);
   return q ? questPublicInfoLines(q).join('\n') : '';
 }
-function areaMemo(){const a=selected($('areaSelect'),state.areas); if(!a)return ''; const p=progressObj('areas',a.id||a.name); return [`【エリア探索】${a.name||a.id}`,`探索進行度：${clamp(p.value)}%`,a.eventTableId?`イベント表：${a.eventTableId}`:'',a.mainMaterials?`主な素材：${a.mainMaterials}`:'',a.mainMonsters?`主な魔物：${a.mainMonsters}`:'',a.fieldEffect&&a.fieldEffect!=='なし'?`フィールド効果：${a.fieldEffect}`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
+function areaMemo(){const a=selected($('areaSelect'),state.areas); if(!a)return ''; const p=progressObj('areas',a.id||a.name); const w=currentAreaWeather(a); return [`【エリア探索】${a.name||a.id}`,w?`天気：${w.name}`:'',w?.detail?`天気詳細：${w.detail}`:'',`探索進行度：${clamp(p.value)}%`,a.eventTableId?`イベント表：${a.eventTableId}`:'',a.mainMaterials?`主な素材：${a.mainMaterials}`:'',a.mainMonsters?`主な魔物：${a.mainMonsters}`:'',a.fieldEffect&&a.fieldEffect!=='なし'?`フィールド効果：${a.fieldEffect}`:'',p.note?`メモ：${p.note}`:''].filter(Boolean).join('\n');}
 function switchProgressTab(tab){
   let key=String(tab || 'quest');
   const panels=[...document.querySelectorAll('[data-progress-tab]')];
@@ -3718,7 +3866,7 @@ function bindTabs(){
   switchProgressTab(localStorage.getItem(STORE_KEY+'_tab') || 'quest');
 }
 function bind(){
-  $('fixedUrlLabel').textContent='GitHub共通DB（失敗時のみGAS）'; bindTabs(); setPartySize(state.partySize||4); setQuestCategory('重要'); $('communityReloadBtn')?.addEventListener('click',loadCommunityGatheringManager); document.addEventListener('click',e=>{const b=e.target.closest('[data-community-send]');if(b)saveCommunityGatheringFacility(b.dataset.communitySend||'');}); $('loadDbBtn').addEventListener('click',()=>loadDb({auto:false})); $('saveStateBtn').addEventListener('click',()=>saveState(true)); $('restoreStateBtn').addEventListener('click',restoreSavedState); $('clearStateBtn').addEventListener('click',()=>{if(confirm('進行状態を初期化しますか？')){localStorage.removeItem(STORE_KEY); state.progress={quests:{},areas:{}}; state.dayState={day:1,fatigue:0,usedActions:0,awaitingEnd:false}; state.triggeredQuestEvents={}; state.triggeredAreaEvents={}; state.lastQuestFixedEventText=''; state.lastQuestCheckCopyText=''; state.lastEventCheckCopyText=''; state.lastBaseCheckCopyText=''; state.lastAreaFixedEventText=''; state.baseUnlockedAreaIds=defaultBaseUnlockedAreaIds(); state.lastBaseEventText=''; state.lastBaseEventKey=''; state.lastBaseRewardText=''; state.lastBaseRewardCopyText=''; state.questRewardCache={}; state.lastEncounter=null; state.dropEncounterInstances=[]; state.dropMode='encounter'; state.lastQuestReinforcementText=''; state.questWorkReinforcementCounts={}; state.log=[]; renderAll(); addLog('進行状態を初期化しました。');}});
+  $('fixedUrlLabel').textContent='GitHub共通DB（失敗時のみGAS）'; bindTabs(); setPartySize(state.partySize||4); setQuestCategory('重要'); $('communityReloadBtn')?.addEventListener('click',loadCommunityGatheringManager); document.addEventListener('click',e=>{const b=e.target.closest('[data-community-send]');if(b)saveCommunityGatheringFacility(b.dataset.communitySend||'');}); $('loadDbBtn').addEventListener('click',()=>loadDb({auto:false})); $('saveStateBtn').addEventListener('click',()=>saveState(true)); $('restoreStateBtn').addEventListener('click',restoreSavedState); $('clearStateBtn').addEventListener('click',()=>{if(confirm('進行状態を初期化しますか？')){localStorage.removeItem(STORE_KEY); state.progress={quests:{},areas:{}}; state.dayState={day:1,fatigue:0,usedActions:0,awaitingEnd:false}; state.triggeredQuestEvents={}; state.triggeredAreaEvents={}; state.lastQuestFixedEventText=''; state.lastQuestCheckCopyText=''; state.lastEventCheckCopyText=''; state.lastBaseCheckCopyText=''; state.lastAreaFixedEventText=''; state.baseUnlockedAreaIds=defaultBaseUnlockedAreaIds(); state.lastBaseEventText=''; state.lastBaseEventKey=''; state.lastBaseRewardText=''; state.lastBaseRewardCopyText=''; state.questRewardCache={}; state.lastEncounter=null; state.dropEncounterInstances=[]; state.dropMode='encounter'; state.lastQuestReinforcementText=''; state.questWorkReinforcementCounts={}; state.areaWeatherById={}; state.log=[]; renderAll(); addLog('進行状態を初期化しました。');}});
   document.querySelectorAll('[data-quest-category]').forEach(btn=>btn.addEventListener('click',()=>setQuestCategory(btn.dataset.questCategory)));
   $('questShowDisabledImportant')?.addEventListener('change',()=>{fillQuestSelect(); renderQuest();});
   $('questSelect').addEventListener('change',()=>{state.lastQuestEventText=''; state.lastQuestEventKey=''; state.lastQuestCheckCopyText=''; state.lastQuestFixedEventText=''; state.lastQuestFixedEventKey=''; state.lastQuestCheckCopyText=''; state.lastQuestTreasureCopyText=''; state.lastQuestEventTableRewardText=''; state.lastQuestEventTableRewardCopyText=''; state.lastQuestEventRewardState=null; state.lastQuestReinforcementText=''; renderEventRewardPanel('quest'); updateTreasureCopyButtons(); const q=selected($('questSelect'),state.quests); if(q&&questUsesRandomEncounter(q))resolveQuestEncounter(q,true); renderQuest();}); $('areaSelect').addEventListener('change',()=>{state.lastEventText='';state.lastEventKey='';state.lastEventCheckCopyText='';state.lastEventTreasureCopyText='';state.lastEventTableRewardText='';state.lastEventTableRewardCopyText='';state.lastEventRewardState=null;clearRecipeMerchantOffers();state.lastAreaFixedEventText='';state.lastAreaFixedEventKey='';renderEventRewardPanel('event');updateTreasureCopyButtons();fillEventTables();renderArea();}); $('dropAreaSelect').addEventListener('change',()=>refreshDropMonsterSelection('')); $('monsterSelect').addEventListener('input',()=>{setSelectedDropMonster(null,{clearInput:false});openMonsterMenu($('monsterSelect').value);renderMonster();});
@@ -3727,6 +3875,9 @@ function bind(){
   $('rollEncounterDropBtn')?.addEventListener('click',rollEncounterDrops);
   $('encounterDropList')?.addEventListener('change',e=>{const input=e.target.closest('[data-encounter-dismantle]');if(!input)return;state.dropEncounterInstances=(state.dropEncounterInstances||[]).map(row=>String(row.uid)===String(input.dataset.encounterDismantle)?({...row,dismantleSuccess:input.checked}):row);saveState(false);});
 $('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){suppressMonsterFocusOpen=false;return;} openMonsterMenu('');}); $('monsterSelect').addEventListener('pointerdown',()=>setTimeout(()=>{openMonsterMenu('');$('monsterSelect').select();},0)); $('rumorAreaSelect').addEventListener('change',()=>{fillInnRumorSelect(); renderRumorResult();}); $('rumorSelectForInn').addEventListener('change',()=>applyRumorIndex($('rumorSelectForInn').value,true)); $('rumorSelect').addEventListener('change',()=>{state.lastEventText=''; state.lastEventKey=''; state.lastEventCheckCopyText=''; state.lastEventTreasureCopyText=''; state.lastEventTableRewardText=''; state.lastEventTableRewardCopyText=''; state.lastEventRewardState=null; clearRecipeMerchantOffers(); renderEventRewardPanel('event'); updateTreasureCopyButtons(); renderRumorDetail(); fillInnRumorSelect(); renderRumorResult(selectedRumor(),'apply'); renderArea();}); $('partySizeSelect')?.addEventListener('change',e=>handlePartySizeChange(e.target.value)); $('questPartySizeSelect')?.addEventListener('change',e=>handlePartySizeChange(e.target.value));
+  $('rerollAreaWeatherBtn')?.addEventListener('click',()=>{const a=selected($('areaSelect'),state.areas);if(a)rerollAreaWeather(a);});
+  $('copyUnlockedWeatherBtn')?.addEventListener('click',()=>copyText(weatherCopyText(),'weatherCopyNote'));
+  document.addEventListener('click',e=>{const b=e.target.closest('[data-weather-reroll]');if(!b)return;const a=weatherAreaByKey(b.dataset.weatherReroll||'');if(a)rerollAreaWeather(a);});
   $('questAdvanceBtn').addEventListener('click',advanceQuestProgress); $('areaAdvanceBtn').addEventListener('click',advanceAreaProgress); $('manualActionBtn')?.addEventListener('click',()=>consumeDailyAction('その他の行動')); $('undoActionBtn')?.addEventListener('click',undoDailyAction); $('innRestBtn')?.addEventListener('click',restAtInn); $('innStayBtn')?.addEventListener('click',()=>advanceToNextDay(true)); $('endDayWithoutInnBtn')?.addEventListener('click',()=>{if(confirm('宿泊せず一日を終了しますか？ 疲労度が1増加します。'))advanceToNextDay(false);});
   $('questResetBtn').addEventListener('click',()=>{const q=selected($('questSelect'),state.quests); if(q){const qkey=String(q.id||q.name||''); progressObj('quests',qkey).value=0; Object.keys(state.triggeredQuestEvents||{}).forEach(k=>{if(k.startsWith(qkey+':')) delete state.triggeredQuestEvents[k];}); state.lastQuestFixedEventText=''; state.lastQuestFixedEventKey=''; state.lastQuestCheckCopyText=''; state.lastQuestTreasureCopyText=''; state.lastQuestEventTableRewardText=''; state.lastQuestEventTableRewardCopyText=''; state.lastQuestEventRewardState=null; state.lastQuestReinforcementText=''; if(state.questWorkReinforcementCounts)delete state.questWorkReinforcementCounts[qkey]; if(state.lastRecipeMerchantContext?.scope==='quest')clearRecipeMerchantOffers(); updateTreasureCopyButtons(); saveState(false); renderQuest();}}); $('areaResetBtn').addEventListener('click',()=>{const a=selected($('areaSelect'),state.areas); if(a){const akey=String(a.id||a.name||''); progressObj('areas',akey).value=0; delete state.areaBossEncountered[areaEventKey(a)];state.lastEventText=''; state.lastEventKey=''; state.lastEventCheckCopyText=''; state.lastEventTreasureCopyText=''; state.lastEventTableRewardText=''; state.lastEventTableRewardCopyText=''; state.lastEventRewardState=null; clearRecipeMerchantOffers(); renderEventRewardPanel('event'); updateTreasureCopyButtons(); saveState(false); renderArea();}});
   $('questNote').addEventListener('input',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).note=$('questNote').value; saveState(false);}}); $('areaNote').addEventListener('input',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).note=$('areaNote').value; saveState(false);}});
