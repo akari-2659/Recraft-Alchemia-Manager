@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.553</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.558</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.553-upgrade-slot-scope-fix">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.558-upgrade-slot-scope-fix">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -203,7 +203,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.553｜更新：2026年8月16日</div>
+<div class="ra-build-info">v90.8.558｜更新：2026年8月16日</div>
 
 <header>
   <div class="header-inner">
@@ -499,7 +499,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.553';
+const VERSION='v90.8.558';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1347,33 +1347,147 @@ function eventSubstituteCheckSkills(e={}){
   }
   return rows;
 }
-function eventSkillSuccessOutcome(text='',skill=''){
+function eventSkillSuccessSegment(text='',skill=''){
   if(!skill)return '';
+  const raw=String(text||'');
   const safe=String(skill).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
-  const m=String(text||'').match(new RegExp(`${safe}成功\\s*[：:]\\s*([^。\\n]+)`));
-  return m?String(m[1]||'').trim():'';
+  const patterns=[
+    new RegExp(`${safe}成功\\s*[：:]`),
+    new RegExp(`判定成功\\s*[：:]`)
+  ];
+  let match=null;
+  for(const re of patterns){
+    const m=raw.match(re);
+    if(m){match=m;break;}
+  }
+  if(!match)return '';
+  const start=(match.index||0)+match[0].length;
+  const tail=raw.slice(start);
+  const boundaries=[
+    /。[^。]*?で代用可能（判定\s*[+-]\d+）/,
+    /。失敗\s*[：:]/,
+    /。(?:判定)?成功\s*[：:]/,
+    /。\s*戦闘発生\s*[：。]/
+  ];
+  let cut=tail.length;
+  boundaries.forEach(re=>{
+    const m=tail.match(re);
+    if(m&&Number.isFinite(m.index)&&m.index<cut)cut=m.index;
+  });
+  return tail.slice(0,cut).trim();
 }
 function normalizeEventOutcome(text=''){
   return String(text||'').replace(/^同じ(?:結果|抽選結果|宝箱表)?\s*/,'').replace(/^同様に\s*/,'').replace(/[、，,\s]/g,'').trim();
 }
+function eventItemOutcomeSignature(outcome=''){
+  let text=String(outcome||'').trim();
+  if(!text||/^(?:入手なし|追加素材なし|抽選なし|効果なし|補正なし|安全に通過|安全に迂回|安全な位置へ移動|危険な空気を避ける)/.test(text))return 'NONE';
+
+  const parts=[];
+
+  const tableMatches=[...text.matchAll(/宝箱表「([^」]+)」/g)];
+  tableMatches.forEach(m=>parts.push(`TABLE:${m[1]}`));
+
+  const drawMatches=[...text.matchAll(/(?:入手アイテム表の)?(?:同じ)?抽選結果(?:の)?\s*(\d+)\s*枠/g)];
+  drawMatches.forEach(m=>parts.push(`DRAW:${m[1]}`));
+  if(/抽選結果の1枠目のみ/.test(text))parts.push('DRAW:1');
+
+  const itemMatches=[...text.matchAll(/([一-龠々ぁ-んァ-ヶーA-Za-z0-9・]+)×([0-9D+d+-]+)/g)];
+  itemMatches.forEach(m=>{
+    const name=String(m[1]||'').trim();
+    if(name&&!/^(?:前衛|後衛|味方|敵)$/.test(name))parts.push(`ITEM:${name}×${m[2]}`);
+  });
+
+  if(/換金品[^。]*数量[^。]*1個/.test(text))parts.push('MOD:換金品数量1');
+  if(/追加で入手|追加素材/.test(text)){
+    const extra=[...text.matchAll(/([一-龠々ぁ-んァ-ヶーA-Za-z0-9・]+)×([0-9D+d+-]+)[^。]*追加/g)];
+    extra.forEach(m=>parts.push(`EXTRA:${m[1]}×${m[2]}`));
+  }
+
+  if(!parts.length){
+    if(/入手アイテム表|抽選結果|宝箱表|を入手|を回収|を発見/.test(text))return `ITEMTEXT:${normalizeEventOutcome(text)}`;
+    return 'NONE';
+  }
+  return [...new Set(parts)].sort().join('|');
+}
 function eventCheckContentMode(e={},skills=[]){
   if((skills||[]).length<2)return '';
   const text=String(e.result||'');
-  const primary=skills[0]?.skill||'';
-  const primaryOutcome=eventSkillSuccessOutcome(text,primary);
-  let explicitDifference=false;
-  let sawComparable=false;
-  for(const row of skills.slice(1)){
-    const altOutcome=eventSkillSuccessOutcome(text,row.skill);
-    if(!altOutcome)continue;
-    sawComparable=true;
-    if(/^(?:同じ|同様|同一|同内容)/.test(altOutcome))continue;
-    if(primaryOutcome&&normalizeEventOutcome(primaryOutcome)===normalizeEventOutcome(altOutcome))continue;
-    explicitDifference=true;
-  }
-  if(explicitDifference)return '内容変化';
-  if(sawComparable||/成功\s*[：:]/.test(text))return '内容同一';
-  return '内容同一';
+  const segments=skills.map(row=>eventSkillSuccessSegment(text,row.skill));
+  const signatures=segments.map(seg=>eventItemOutcomeSignature(seg));
+  const primary=signatures[0]||'NONE';
+  const primaryTableOnly=primary.split('|').filter(v=>v.startsWith('TABLE:')).join('|')||'NONE';
+  const normalized=signatures.map((sig,index)=>{
+    if(index===0)return primary;
+    const seg=String(segments[index]||'');
+    if(/^同じ宝箱表/.test(seg)){
+      const mods=[];
+      if(/換金品[^。]*数量[^。]*1個/.test(seg))mods.push('MOD:換金品数量1');
+      return [primaryTableOnly,...mods].filter(v=>v&&v!=='NONE').sort().join('|')||'NONE';
+    }
+    return sig||'NONE';
+  });
+  return normalized.slice(1).some(sig=>sig!==primary)?'内容変化':'内容同一';
+}
+function eventBattleCopyMode(e={}){
+  const text=String(e.result||'').trim();
+  if(!text)return '';
+
+  // 「次にボスへ挑む戦闘」など、将来の戦闘を示すだけの記述は現在イベントの戦闘扱いにしない。
+  const actualBattle=/(?:戦闘発生|戦闘が発生|との戦闘(?:が発生)?|人数対応戦闘|ランダム編成との戦闘)/;
+  if(!actualBattle.test(text))return '';
+
+  // 文頭、または独立した文として「戦闘発生」が置かれている場合は判定結果にかかわらず戦闘。
+  if(/^\s*戦闘発生\s*[：。]/.test(text)||/。\s*戦闘発生\s*[：。]/.test(text))return '戦闘発生';
+
+  // 成功側で「戦闘前」と明記され、失敗側でも戦闘が発生するものも確定戦闘。
+  if(/成功\s*[：:][^。]*戦闘前/.test(text)&&/失敗\s*[：:][^。]*(?:戦闘発生|戦闘が発生|との戦闘|人数対応戦闘)/.test(text))return '戦闘発生';
+
+  // 成否など一部の結果でのみ戦闘になる。
+  return '戦闘予感';
+}
+function eventFailureSegment(text=''){
+  const raw=String(text||'');
+  const m=raw.match(/失敗\s*[：:]/);
+  if(!m)return '';
+  return raw.slice((m.index||0)+m[0].length).trim();
+}
+function eventHasCrisisOutcome(e={}){
+  const failure=eventFailureSegment(e.result||'');
+  if(!failure)return false;
+  // 戦闘そのものは戦闘タグで示すため、ここでは直接ダメージ・状態異常・不利効果を対象にする。
+  return /(?:HPを?\s*\d+点?減少|\d+D\d+(?:[+-]\d+)?(?:無属性|火|水|風|雷|光|闇)?ダメージ|ダメージを受け|ダメージを与え|疲労度(?:が|を)?\s*\d+増加|火傷|毒|麻痺|睡眠|汚染|呪い|呪縛|拘束|転倒|行動不能|回避[-－−]\d+|抵抗[-－−]\d+|防御[-－−]\d+|判定[-－−]\d+|最初の判定[-－−]\d+)/.test(failure);
+}
+function eventHasMaterialOutcome(e={}){
+  const type=String(e.eventType||'');
+  const result=String(e.result||'');
+  if(type.includes('採取'))return true;
+  const mats=(state.items||[]).filter(row=>String(row.dataKind||'').trim()==='素材'&&String(row.name||'').trim());
+  return mats.some(row=>{
+    const name=String(row.name||'').trim();
+    if(!name||!result.includes(name))return false;
+    const safe=name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    return new RegExp(`${safe}[^。]{0,24}(?:×[0-9D+d+-]+)?[^。]{0,20}(?:入手|回収|採取)`).test(result)
+      || new RegExp(`(?:入手|回収|採取)[^。]{0,20}${safe}`).test(result);
+  });
+}
+function eventHasTreasureOutcome(e={}){
+  const type=String(e.eventType||'');
+  const result=String(e.result||'');
+  return type.includes('宝箱')||!!String(e.treasureTableId||'').trim()||/宝箱表「[^」]+」/.test(result);
+}
+function eventOutcomeCopyTags(e={}){
+  // 戦闘が発生し得るイベントは、他の結果タグより戦闘タグを優先する。
+  // 確定戦闘なら /戦闘発生、結果次第なら /戦闘予感 のみを表示する。
+  const battle=eventBattleCopyMode(e);
+  if(battle)return [battle];
+
+  const tags=[];
+  const treasure=eventHasTreasureOutcome(e);
+  if(treasure)tags.push('宝箱発見');
+  else if(eventHasMaterialOutcome(e))tags.push('素材入手');
+  if(eventHasCrisisOutcome(e))tags.push('危機回避');
+  return [...new Set(tags)];
 }
 function eventCheckInfo(e={}){
   let expr='';
@@ -1388,19 +1502,23 @@ function eventCheckInfo(e={}){
   });
   const targets=[...new Set(skills.map(row=>String(row.target||'')).filter(Boolean))];
   const skillText=skills.map(row=>`${row.skill}${row.penalty?`${row.penalty>0?'+':''}${row.penalty}`:''}`).join('・');
-  const mode=eventCheckContentMode(e,skills);
-  let copy='';
-  if(targets.length===1)copy=`${skillText} / 達成値：${targets[0]}`;
-  else copy=skills.map(row=>`${row.skill}${row.penalty?`${row.penalty>0?'+':''}${row.penalty}`:''}（達成値：${row.target||'?'}）`).join('・');
-  if(mode)copy+=` / ${mode}`;
-  return {skills,targets,mode,copy,display:`使用技能：${copy}`};
+  const contentMode=eventCheckContentMode(e,skills);
+  const outcomeTags=eventOutcomeCopyTags(e);
+  let line='';
+  if(targets.length===1)line=`${skillText} / 達成値：${targets[0]}`;
+  else line=skills.map(row=>`${row.skill}${row.penalty?`${row.penalty>0?'+':''}${row.penalty}`:''}（達成値：${row.target||'?'}）`).join('・');
+  if(contentMode)line+=` /${contentMode}`;
+  outcomeTags.forEach(tag=>{line+=` /${tag}`;});
+  return {skills,targets,mode:contentMode,outcomeTags,copy:line,display:`使用技能：${line}`};
 }
 function eventCheckDisplayText(e={}){
   return eventCheckInfo(e)?.display||'';
 }
 function eventCheckCopyText(e={},fixed=false){
-  const text=eventCheckInfo(e)?.copy||'';
-  return fixed&&text?`【固定】${text}`:text;
+  const line=eventCheckInfo(e)?.copy||'';
+  if(!line)return '';
+  const name=String(e.eventName||'名称未設定').trim()||'名称未設定';
+  return `【${name}】\n${line}`;
 }
 function eventDetailText(e,q=null){
   const partySize=q?effectiveQuestPartySize(q):selectedPartySize();
@@ -2926,7 +3044,7 @@ function treasureAreaName(tableId, explicit=''){
   const row=treasureRows(tableId)[0];
   return String(row?.areaName||'').trim();
 }
-const RECIPE_CACHE_EMPTY_CHANCE=45;
+const RECIPE_CACHE_EMPTY_CHANCE=25;
 function treasureProfile(areaName){
   return TREASURE_AREA_PROFILES[areaName] || TREASURE_AREA_PROFILES['街はずれの草原'];
 }
