@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.572</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.575</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.572-upgrade-slot-scope-fix">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.575-upgrade-slot-scope-fix">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -203,7 +203,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.572｜更新：2026年8月18日</div>
+<div class="ra-build-info">v90.8.575｜更新：2026年8月19日</div>
 
 <header>
   <div class="header-inner">
@@ -499,7 +499,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.572';
+const VERSION='v90.8.575';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1932,7 +1932,7 @@ function renderArea(){
   $('areaDetail').innerHTML=`<div class="kv"><b>種別</b><span>${esc(a.areaType||'')}</span><b>難度</b><span>${esc(a.difficulty||'')}</span><b>イベント表</b><span>${esc(a.eventTableId||'')}</span><b>探索進行上昇</b><span>+${areaStepAmount(a)}%</span><b>主な素材</b><span>${esc(a.mainMaterials||'')}</span><b>主な魔物</b><span>${esc(a.mainMonsters||'')}</span><b>フィールド効果</b><span>${esc(a.fieldEffect||'なし')}</span></div>${a.description?`<p class="muted">${esc(a.description)}</p>`:''}`;
   const step=areaStepAmount(a),current=clamp(p.value),boss=areaBossEventForRumor(a),rumor=selectedRumor();
   const bossText=boss?`100%：${boss.eventName||'ボスイベント'}に固定`:(rumor?'100%固定イベントなし（選択中の噂はボス噂ではありません）':'100%固定イベントなし');
-  $('areaStepInfo').innerHTML=`<div class="kv"><b>現在</b><span>${current}%</span><b>1回の進行</b><span>+${step}%</span><b>進行後</b><span>${clamp(current+step)}%</span><b>100%イベント</b><span>${esc(bossText)}</span></div><p class="muted small">エリア探索には通常の固定イベントを設定しません。対応するボス噂を選択している場合だけ、100%到達時にそのボスイベントが確定発生します。ランダムイベント結果では進行度を自動変更しません。</p>`;
+  $('areaStepInfo').innerHTML=`<div class="kv"><b>現在</b><span>${current}%</span><b>1回の進行</b><span>+${step}%</span><b>進行後</b><span>${clamp(current+step)}%</span><b>100%イベント</b><span>${esc(bossText)}</span></div><p class="muted small">エリア探索には通常の固定イベントを設定しません。対応するボス噂を選択している場合だけ、100%到達時にそのボスイベントが必ず発生します。途中のランダム抽選で同じボスに遭遇していても、100%到達時の確定発生は省略しません。ランダムイベント結果では進行度を自動変更しません。</p>`;
   fillEventTables();
   const roll=$('rollEventBtn');if(roll)roll.textContent=state.lastEventText?'イベント再抽選':'イベント抽選';updateEventCheckCopyButtons();
 }
@@ -2679,7 +2679,6 @@ function triggerAreaClearRumorEvent(area){
   const rumor=selectedRumor();
   if(!area || !rumor) return false;
   const key=areaEventKey(area);
-  if(state.areaBossEncountered[key]) return false;
   const tableId=String(area.eventTableId||'').trim();
   const picked=state.events.find(e=>
     String(e.tableId||'').trim()===tableId &&
@@ -2722,7 +2721,7 @@ function rollEvent(){
   const area=selected($('areaSelect'),state.areas);
   const tableId=String((area&&area.eventTableId)||$('eventTableSelect').value||'').trim();
   const rumor=selectedRumor();
-  let rows=eventRowsForArea(area,{rumor,includeBoss:false});
+  let rows=eventRowsForArea(area,{rumor});
   state.lastEventCheckCopyText='';
   resetAreaEventItemCopyState();clearRecipeMerchantOffers();
   if(!rows.length){$('eventResult').textContent='このエリアに登録されたランダムイベント候補がありません。前提条件付きイベントは、今日の噂が一致した時だけ候補に入ります。';renderEventRewardPanel('event');updateAreaEventItemCopyButton();return;}
