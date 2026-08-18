@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.564</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.567</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.564-upgrade-slot-scope-fix">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.567-upgrade-slot-scope-fix">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.564｜更新：2026年8月17日</div>
+<div class="ra-build-info">v90.8.567｜更新：2026年8月17日</div>
 
 <header>
   <div class="title-card">
@@ -1879,7 +1879,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.564';
+const RECRAFT_DB_VERSION = 'v90.8.567';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.403';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -2945,7 +2945,7 @@ const SYSTEM_HELP = [
     ],
     "body": [
       "レシピはDB上では1表で管理する。",
-      "管理HTML上では、調合レシピ、鍛冶レシピ、仕掛け製作、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。プレイヤー施設の武器派生は武器種選択モーダルの横書きボタンで選択し、「全て」も選べる。武器種ボタンを押した時点で表示を切り替え、素材系統を縦、★ランクを横にした派生図で表示する。順当強化と分岐は派生元から矢印で接続し、素材やエリアだけを理由に派生名を増やさず、分岐は派生元の直下へ配置する。草角・樹心・沼核・穿王・反照のボス素材武器は、素手を除く全17武器カテゴリへ必ず用意する。",
+      "管理HTML上では、調合レシピ、鍛冶レシピ、仕掛け製作、武器派生、防具製作、バッグ製作、素材加工に分けて表示する。プレイヤー施設の武器派生は武器種選択モーダルの横書きボタンで選択し、「全て」も選べる。武器種ボタンを押した時点で表示を切り替え、素材系統を縦、★ランクを横にした派生図で表示する。順当強化と分岐は派生元から矢印で接続し、素材やエリアだけを理由に派生名を増やさず、分岐は派生元の直下へ配置する。同じ★ランクでの順当強化は連続2個までとし、別派生へ降りた後に元の派生列へ戻る接続は作らない。草角・樹心・沼核・穿王・反照のボス素材武器は、素手を除く全17武器カテゴリへ必ず用意する。",
       "各エリアボスには、ボス素材を使う防具または装飾品も必ず用意する。通常魔物素材の★2派生は横方向の選択肢として追加し、ボス派生の必須前提にはしない。",
       "武器派生の魔物素材要求量は、★2で合計1～2個、★3で合計2～3個を目安とする。既存の複合素材派生は維持してよい。",
       "★3以降は複数の魔物素材を要求してよいが、ボス固有素材は原則1個のままとし、大量周回を前提にしない。",
@@ -2955,7 +2955,7 @@ const SYSTEM_HELP = [
       "武器派生を含む作成可能品には対応レシピを用意する。",
       "自作ではレシピ、素材、道具、製作判定が必要。施設依頼ではレシピ不要。",
       "属性派生を全属性分作る方針にはしない。物属性派生は基礎火力を維持し、属性を持つ派生は同格の物属性派生より基礎威力を少し低くする。",
-      "弓・弩・大型弩の攻撃属性は矢弾依存とし、一部の派生だけが特定属性の矢・ボルトへ命中・ダメージなどの適性を持つ。武器の属性は派生武器自体の性能として設定し、魔物素材による後付けの属性付与は行わない。"
+      "弓・弩・大型弩の攻撃属性は矢弾依存とし、一部の派生だけが特定属性の矢・ボルトへ命中・ダメージなどの適性を持つ。武器の属性は派生武器自体の性能として設定し、魔物素材による後付けの属性付与は行わない。攻撃属性は物・火・水・風・雷・光・闇・無の8種のみとし、可変属性は使用しない。武器の効果文言は同じ処理なら同じ表現へ統一し、外観説明は現武器単体の素材・形状・意匠を中心に書いて派生元武器名を安易に入れない。"
     ]
   },
   {
@@ -2996,7 +2996,7 @@ const SYSTEM_HELP = [
       "武器は素材による派生や強化に反映する。",
       "防具は派生式ではなく、購入または作成した防具を後から強化する方式。",
       "制作と購入の両方が可能な商品は、店頭購入価格を必要素材の価格合計＋施設制作費より高く設定する。",
-      "実際の攻撃属性は、物、火、水、風、雷、光、闇、無。武器の表示補助として、攻撃ごとに選ぶ『可変』と、使用する矢・ボルトで決まる『矢弾依存』を使用できる。",
+      "実際の攻撃属性は、物、火、水、風、雷、光、闇、無の8種だけを使用する。『可変』は使用禁止。弓・弩・大型弩のみ、使用する矢・ボルトで決まる表示補助『矢弾依存』を使用する。",
       "採取素材・加工素材・特殊素材など、魔物素材ではない素材は装備強化内容・消費強化枠・効果説明・強化対象をすべて空欄にし、一般の効果欄にも装備強化内容を記載しない。",
       "魔物素材の特徴が装備性能に出るように、素材ごとに分かりやすい装備強化名と効果説明を設定する。",
       "ドロップ判定やドロップ入手の出力では、素材の説明、効果、売値などを表示してよい。",
@@ -6650,14 +6650,14 @@ function formOptionValues(key, field){
   if(key==='skills' && field==='balanceTier') ['限定的','標準','強め','強力','最上位'].forEach(v=>values.add(v));
   if(field==='enabled') ['TRUE','FALSE'].forEach(v=>values.add(v));
   if(field==='checkType') ['近接>=回避値','射撃>=回避値','魔法>=回避値','魔法>=抵抗値','祈祷>=10','祈祷>=回避値','祈祷>=抵抗値','調合>=回避値','採取','なし'].forEach(v=>values.add(v));
-  if(field==='element') ['物','火','水','風','雷','光','闇','無','可変','矢弾依存'].forEach(v=>values.add(v));
+  if(field==='element') ['物','火','水','風','雷','光','闇','無','矢弾依存'].forEach(v=>values.add(v));
   if(field==='enchantTarget') ['武器','防具・盾','装飾品','装備'].forEach(v=>values.add(v));
   if(field==='enchantEffectType') ['属性付与','ダメージ補正','防御補正','回避補正','耐性付与','特殊効果'].forEach(v=>values.add(v));
   if(field==='enchantDuration') ['次の攻撃終了まで','次にダメージを受けるまで','戦闘終了まで','ラウンド制','シーン終了まで','手動解除'].forEach(v=>values.add(v));
   if(field==='enchantStackRule') ['同じ装備は1つ・新しい効果で上書き','重複可'].forEach(v=>values.add(v));
   if(field==='hasLock' || field==='hasTrap') ['なし','あり'].forEach(v=>values.add(v));
   if(field==='equipmentUpgradeTarget') ['武器','防具','盾','装飾品','魔導書','祈祷書','武器・防具','防具・盾','魔導書・祈祷書','武器・魔導書・祈祷書'].forEach(v=>values.add(v));
-  if(field==='equipmentUpgradeEffect') ['威力強化','威力固定強化','命中強化','防御強化','防御行動強化','回避強化','副手追撃強化','術式枠拡張','術式省力化','回復量強化','回復量固定強化','最大スタック拡張','HP強化','MP強化','力業補助','魔法補助','祈祷補助','水属性軽減','水耐性付与','光耐性付与','雷属性強化','雷属性軽減','風雷増幅'].forEach(v=>values.add(v));
+  if(field==='equipmentUpgradeEffect') ['威力強化','威力固定強化','命中強化','防御強化','防御行動強化','回避強化','副手追撃強化','術式枠拡張','術式省力化','回復量強化','回復量固定強化','最大スタック拡張','HP強化','MP強化','力業補助','魔法補助','祈祷補助','水属性軽減','水耐性付与','光耐性付与','風属性強化','風属性軽減','風属性増幅'].forEach(v=>values.add(v));
   if(field==='craftType') ['調合','料理','鍛冶','細工','武器派生','防具製作','バッグ製作'].forEach(v=>values.add(v));
   if(field==='baseItem') (state.items || []).forEach(r=>{ const type=String(r.itemType || '').trim(); const cat=String(r.itemCategory || '').trim(); if(String(r.dataKind || '').trim() !== '素材' && ((type==='武器' && ['魔導書','祈祷書'].includes(cat)) || type==='武器' || (type==='術式装備' && ['魔導書','祈祷書'].includes(cat))) && r.name) values.add(String(r.name)); });
   if(field==='branchType') (state.recipes||[]).forEach(r=>{ const v=String(r.branchType||'').trim(); if(v) values.add(v); });
@@ -7653,7 +7653,7 @@ function recommendedEquipmentUpgradeSlotCost(row={}){
   if(['mat_dolgan_ley_core','mat_glaboros_mire_gland','mat_nereive_reflection_fin','mat_dolgan_magic_crystal_horn','mat_velgrat_thunder_horn'].includes(id))return 3;
   if(id==='mat_crag_ram_hoof_core')return 2;
   if(['威力強化','命中強化','防御行動強化','回避強化','副手追撃強化','回復量強化','最大スタック拡張','HP強化','MP強化'].includes(effect))return 1;
-  if(['威力固定強化','回復量固定強化','防御強化','術式枠拡張','術式省力化','力業補助','魔法補助','祈祷補助','水属性軽減','水耐性付与','光耐性付与','雷属性強化','雷属性軽減','風雷増幅','魔力循環','風歌省力'].includes(effect))return 2;
+  if(['威力固定強化','回復量固定強化','防御強化','術式枠拡張','術式省力化','力業補助','魔法補助','祈祷補助','水属性軽減','水耐性付与','光耐性付与','風属性強化','風属性軽減','風属性増幅','魔力循環','風歌省力'].includes(effect))return 2;
   return 2;
 }
 function assertNoDefenseIgnoreUpgradeRows(rows=[]){
@@ -9230,7 +9230,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.564';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.567';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-07';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
