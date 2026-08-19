@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.584</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.587</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.584-time-cycle">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.587-time-cycle">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.584｜更新：2026年8月19日</div>
+<div class="ra-build-info">v90.8.587｜更新：2026年8月19日</div>
 
 <header>
   <div class="title-card">
@@ -1918,8 +1918,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.584';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.583';
+const RECRAFT_DB_VERSION = 'v90.8.587';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.587';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -4455,19 +4455,15 @@ function antiqueGearDbRow(entry={}){
     upgradeEntries:JSON.stringify((entry.enhancements||[]).map(antiqueGearEnhancementStorageEntry)),createdAt:new Date().toISOString()
   };
 }
-async function antiqueRegistrationIdAvailable(publicId=''){
-  if(!publicId)return false;
-  if(allRegistrationIds().has(String(publicId).toUpperCase()))return false;
-  try{const res=await callApi(payload('resolveRegistrationId',{publicId}));return !res?.found;}catch(_){return false;}
-}
-async function antiqueGenerateRegistrationIds(count=1){
+function antiqueGenerateRegistrationIds(count=1){
   const ids=[],reserved=new Set(allRegistrationIds());
+  (currentAntiqueGearRows||[]).forEach(entry=>{const id=String(entry?.equipment?.publicId||'').trim().toUpperCase();if(id)reserved.add(id);});
   for(let i=0;i<count;i++){
     let id='';
-    for(let attempt=0;attempt<40;attempt++){
+    for(let attempt=0;attempt<80;attempt++){
       const candidate=generateRegistrationId();
       if(reserved.has(candidate))continue;
-      if(await antiqueRegistrationIdAvailable(candidate)){id=candidate;break;}
+      id=candidate;break;
     }
     if(!id)throw new Error('骨董装備の登録IDを発行できませんでした。');
     reserved.add(id);ids.push(id);
@@ -4476,7 +4472,19 @@ async function antiqueGenerateRegistrationIds(count=1){
 }
 async function antiquePersistGeneratedEntries(entries=[]){
   const rows=(entries||[]).map(antiqueGearDbRow);
-  const res=await upsertSheetRowsByJsonp('antique_instances',rows,'');
+  if(!rows.length)throw new Error('骨董個体の登録データがありません。');
+  await assertServerVersion();
+  let res;
+  if(canUseGzipUpload()){
+    try{
+      res=await uploadRowsByGzipPostChunks('antique_instances',rows,'upsert','');
+    }catch(postErr){
+      console.warn('antique gzip POST split upload failed; retry with gzip JSONP split',postErr);
+      res=await uploadRowsByGzipChunks('antique_instances',rows,'upsert','');
+    }
+  }else{
+    res=await uploadRowsByTextChunks('antique_instances',rows,'upsert','');
+  }
   if(!res||!res.ok)throw new Error((res&&res.error)||'骨董個体DBへの登録に失敗しました。');
   return res;
 }
@@ -4487,7 +4495,7 @@ async function antiqueIssueRegistrationId(index=-1){
   const button=document.querySelector(`[data-antique-gear-issue-id="${index}"]`);if(button)button.disabled=true;
   try{
     await assertServerVersion();
-    const [publicId]=await antiqueGenerateRegistrationIds(1);
+    const [publicId]=antiqueGenerateRegistrationIds(1);
     eq.publicId=publicId;eq.id=antiqueInstanceId(publicId);entry.rollId=eq.id;
     await antiquePersistGeneratedEntries([entry]);
     renderAntiqueGearStock(false);
@@ -4502,10 +4510,20 @@ function antiqueGearStatsText(eq={}){
   const map=antiqueModifierMap(eq.modifiers);return [`防御値:${String(map.get('combat:defense')||0).replace(/^\+/,'')}`,`防御行動値:${String(map.get('combat:guardAction')||'0').replace(/^\+/,'')}`].join(' / ');
 }
 function antiqueGearCopyText(){
-  const labels=antiqueGearSelectedAreaLabels(),kind=antiqueGearSelectedKind(),cat=String($('facilityAntiqueGearCategory')?.value||''),rank=Math.max(1,Number($('facilityAntiqueGearRank')?.value)||1),cost=ANTIQUE_GEAR_COST_BY_RANK[rank]||0;
-  const lines=['【骨董屋・骨董装備ガチャ】',`抽選対象：${kind} / ${cat} / ★${rank}`,`解放済みエリア：${labels.join('、')||'未設定'}`,`消費：魔物素材★合計 ${cost} / 1回`,''];
+  const rank=Math.max(1,Number($('facilityAntiqueGearRank')?.value)||1);
+  const lines=['【骨董屋・骨董装備ガチャ】',''];
   if(!(currentAntiqueGearRows||[]).length){lines.push('- 未抽選');return lines.join('\n');}
-  currentAntiqueGearRows.forEach((entry,i)=>{const eq=entry.equipment||{},enh=entry.enhancements||[];lines.push(`${i+1}. ${eq.name||'名称未設定'} / ★${eq.rank||rank} / ${eq.itemCategory||eq.itemType||'装備'}`);lines.push(`   ${antiqueGearStatsText(eq)}`);lines.push(`   強化枠：${entry.usedSlots||0}/${eq.upgradeLimit||0}`);lines.push(`   強化：${enh.length?enh.map(m=>`${antiqueGearEnhancementLabel(m)}（${upgradeSlotCostForMaterial(m)}枠）`).join(' / '):'なし'}`);enh.forEach(m=>{if(String(m.equipmentUpgradeDetail||'').trim())lines.push(`   ・${antiqueGearEnhancementLabel(m)}：${String(m.equipmentUpgradeDetail).trim()}`);});lines.push(`   登録ID：${eq.publicId||'未発行'}`);lines.push('');});return lines.join('\n').trim();
+  currentAntiqueGearRows.forEach((entry,i)=>{
+    const eq=entry.equipment||{},enh=entry.enhancements||[];
+    lines.push(`${i+1}. ${eq.name||'名称未設定'} / ★${eq.rank||rank}`);
+    lines.push(`   ${antiqueGearStatsText(eq)}`);
+    lines.push(`   強化枠：${entry.usedSlots||0}/${eq.upgradeLimit||0}`);
+    lines.push(`   強化：${enh.length?enh.map(m=>`${antiqueGearEnhancementLabel(m)}（${upgradeSlotCostForMaterial(m)}枠）`).join(' / '):'なし'}`);
+    enh.forEach(m=>{if(String(m.equipmentUpgradeDetail||'').trim())lines.push(`   ・${antiqueGearEnhancementLabel(m)}：${String(m.equipmentUpgradeDetail).trim()}`);});
+    lines.push(`   登録ID：${eq.publicId||'未発行'}`);
+    lines.push('');
+  });
+  return lines.join('\n').trim();
 }
 async function drawAntiqueGearStock(){
   const result=$('facilityAntiqueGearResult');if(!result)return;antiqueEnsureGearAreaState();syncAntiqueGearSelectors();const selected=antiqueSelectedAreaSet();if(!selected.size){result.textContent='解放済みエリアを1つ以上選択してください。';return;}
@@ -4524,7 +4542,7 @@ function renderAntiqueGearStock(){
   const result=$('facilityAntiqueGearResult');if(!result)return;antiqueEnsureGearAreaState();syncAntiqueGearSelectors();const areas=antiqueAreaRows(),selected=antiqueSelectedAreaSet(),labels=areas.filter(a=>selected.has(antiqueAreaId(a))).map(antiqueAreaLabel),kind=antiqueGearSelectedKind(),category=String($('facilityAntiqueGearCategory')?.value||''),rank=Math.max(1,Number($('facilityAntiqueGearRank')?.value)||1),count=Math.max(1,Math.min(5,Number($('facilityAntiqueGearCount')?.value||1)||1)),cost=ANTIQUE_GEAR_COST_BY_RANK[rank]||0;
   const summary=$('facilityAntiqueGearAreaSummary');if(summary)summary.textContent=`${labels.join('、')||'未設定'}（${selected.size}エリア）`;
   if(!(currentAntiqueGearRows||[]).length){result.classList.add('muted');result.innerHTML=`<div><b>骨董装備ガチャ</b></div><div>${escapeHtml(kind)} / ${escapeHtml(category||'未選択')} / ★${rank}。1回につき魔物素材★合計${cost}。基礎性能・属性（対応武器のみ）・強化枠数・固定強化内容を個体ごとに抽選します。平均は同★帯相当以下、大当たりでも同★帯より少し上までに抑えます。抽選済みの強化は完成時固定で、空き枠があっても後から追加・変更できません。基礎性能大当たりと強化枠+1は独立抽選のため、極低確率で両方を引く個体もあります。</div>`;return;}
-  result.classList.remove('muted');result.innerHTML=`<div><b>骨董装備ガチャ・抽選結果</b></div><div class="muted small">${escapeHtml(currentAntiqueGearDate||'')} / ${escapeHtml(kind)} / ${escapeHtml(category)} / ★${rank} / ${currentAntiqueGearRows.length}回 / 消費：魔物素材★合計${cost*currentAntiqueGearRows.length}</div><div class="muted small">抽選しただけではDBへ登録されません。正式に残す個体だけ「ID発行」を押してください。</div>`+currentAntiqueGearRows.map((entry,index)=>{const eq=entry.equipment||{},enh=entry.enhancements||[],issued=!!String(eq.publicId||'').trim(),chips=[`★${eq.rank||rank}`,eq.itemCategory||eq.itemType,antiqueGearStatsText(eq),`強化枠:${entry.usedSlots||0}/${eq.upgradeLimit||0}`].filter(Boolean),enhHtml=enh.length?enh.map(m=>`<div><b>${escapeHtml(equipmentUpgradeDisplayName(m))}</b>${m.antiqueExclusive?' <span class="facility-chip">骨董限定</span>':''}（${escapeHtml(String(upgradeSlotCostForMaterial(m)))}枠）${m.equipmentUpgradeDetail?`：${escapeHtml(m.equipmentUpgradeDetail)}`:''}</div>`).join(''):'<div>固定強化：なし</div>',idHtml=issued?`<div class="small"><b>登録ID：${escapeHtml(eq.publicId)}</b> <span class="facility-chip">発行済</span></div>`:`<div class="small muted">登録ID：未発行（DB未登録）</div><div style="margin-top:8px"><button type="button" class="secondary" data-antique-gear-issue-id="${index}">ID発行</button></div>`;return `<div class="facility-product"><div class="facility-product-body"><div><b>${escapeHtml(eq.name||'名称未設定')}</b></div><div class="facility-product-meta">${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>${enhHtml}${idHtml}</div></div>`;}).join('');
+  result.classList.remove('muted');result.innerHTML=`<div><b>骨董装備ガチャ・抽選結果</b></div><div class="muted small">正式に残す個体だけ「ID発行」を押してください。</div>`+currentAntiqueGearRows.map((entry,index)=>{const eq=entry.equipment||{},enh=entry.enhancements||[],issued=!!String(eq.publicId||'').trim(),chips=[`★${eq.rank||rank}`,antiqueGearStatsText(eq),`強化枠:${entry.usedSlots||0}/${eq.upgradeLimit||0}`].filter(Boolean),enhHtml=enh.length?enh.map(m=>`<div><b>${escapeHtml(equipmentUpgradeDisplayName(m))}</b>${m.antiqueExclusive?' <span class="facility-chip">骨董限定</span>':''}（${escapeHtml(String(upgradeSlotCostForMaterial(m)))}枠）${m.equipmentUpgradeDetail?`：${escapeHtml(m.equipmentUpgradeDetail)}`:''}</div>`).join(''):'<div>固定強化：なし</div>',idHtml=issued?`<div class="small"><b>登録ID：${escapeHtml(eq.publicId)}</b> <span class="facility-chip">発行済</span></div>`:`<div class="small muted">登録ID：未発行（DB未登録）</div><div style="margin-top:8px"><button type="button" class="secondary" data-antique-gear-issue-id="${index}">ID発行</button></div>`;return `<div class="facility-product"><div class="facility-product-body"><div><b>${escapeHtml(eq.name||'名称未設定')}</b></div><div class="facility-product-meta">${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>${enhHtml}${idHtml}</div></div>`;}).join('');
 }
 function antiqueRandomStockText(){
   const lines=['【骨董屋・未鑑定スクロール販売】',`選出範囲：${currentAntiqueRandomArea||'未設定'}`,''];
@@ -9646,7 +9664,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.584';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.587';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-07';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';

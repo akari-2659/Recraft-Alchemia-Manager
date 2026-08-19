@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.584</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.587</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.584-time-cycle">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.587-time-cycle">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -203,7 +203,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.584｜更新：2026年8月19日</div>
+<div class="ra-build-info">v90.8.587｜更新：2026年8月19日</div>
 
 <header>
   <div class="header-inner">
@@ -444,37 +444,36 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
     <section class="panel tab-panel" data-progress-tab="drop">
       <h2>アイテムドロップ <span class="copy-note" id="dropCopyNote">コピーしました</span></h2>
-      <div id="dropEncounterPanel" class="drop-mode-panel">
-        <h3>出現構成の一括判定</h3>
-        <p class="muted small">戦闘イベント・クエストで決定した出現構成を自動表示します。各個体の解体判定成否をチェックしてから、一括でドロップ判定を行ってください。</p>
-        <div id="lastEncounterSummary" class="card muted">戦闘イベントを抽選すると、出現構成がここに自動反映されます。</div>
-        <div class="encounter-drop-actions">
-          <button id="markAllDismantleSuccessBtn" type="button" class="ghost">全て解体成功</button>
-          <button id="markAllDismantleFailBtn" type="button" class="ghost">全て補正なし</button>
-        </div>
-        <div id="encounterDropList" class="encounter-drop-list"></div>
-        <div class="buttons"><button id="rollEncounterDropBtn">構成全体のドロップを一括判定</button></div>
-      </div>
-      <details class="ra-inline-fold individual-drop-fold">
-        <summary>魔物を個別に選んで判定</summary>
-        <div class="ra-inline-fold-body">
-          <div class="drop-select-grid">
-            <label>対象エリア<select id="dropAreaSelect"></select></label>
-            <label>魔物（検索可能）
-              <div class="monster-combobox" id="monsterCombobox">
-                <input id="monsterSelect" type="search" autocomplete="off" placeholder="魔物名を検索・選択" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="monsterSelectMenu">
-                <input id="monsterSelectValue" type="hidden" value="">
-                <div id="monsterSelectMenu" class="monster-combobox-menu" role="listbox" hidden></div>
-              </div>
-            </label>
+      <div class="drop-select-grid">
+        <label>対象エリア<select id="dropAreaSelect"></select></label>
+        <label>魔物（検索可能）
+          <div class="monster-combobox" id="monsterCombobox">
+            <input id="monsterSelect" type="search" autocomplete="off" placeholder="魔物名を検索・選択" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="monsterSelectMenu">
+            <input id="monsterSelectValue" type="hidden" value="">
+            <div id="monsterSelectMenu" class="monster-combobox-menu" role="listbox" hidden></div>
           </div>
-          <div id="monsterDetail" class="card muted">DB読込後、魔物を選択してください。</div>
-          <div id="dropSinglePanel" class="drop-mode-panel">
-            <label class="card drop-check-card">
-              <input id="dismantleSuccess" type="checkbox">
-              <span><b>解体判定成功</b><br><span class="muted small">採取技能 &gt;= 解体難易度に成功した場合、その魔物の全ドロップ率を+10%します（上限100%）。</span></span>
-            </label>
-            <div class="buttons"><button id="rollDropBtn">ドロップ判定</button></div>
+        </label>
+      </div>
+      <div id="monsterDetail" class="card muted">DB読込後、魔物を選択してください。</div>
+      <div id="dropSinglePanel" class="drop-mode-panel">
+        <label class="card drop-check-card">
+          <input id="dismantleSuccess" type="checkbox">
+          <span><b>解体判定成功</b><br><span class="muted small">採取技能 &gt;= 解体難易度に成功した場合、その魔物の全ドロップ率を+10%します（上限100%）。</span></span>
+        </label>
+        <div class="buttons"><button id="rollDropBtn">ドロップ判定</button></div>
+      </div>
+      <details class="ra-inline-fold encounter-drop-fold">
+        <summary>出現構成をまとめて判定</summary>
+        <div class="ra-inline-fold-body">
+          <div id="dropEncounterPanel" class="drop-mode-panel">
+            <p class="muted small">戦闘イベント・クエストで決定した出現構成を自動表示します。各個体の解体判定成否をチェックしてから、一括でドロップ判定を行えます。</p>
+            <div id="lastEncounterSummary" class="card muted">戦闘イベントを抽選すると、出現構成がここに自動反映されます。</div>
+            <div class="encounter-drop-actions">
+              <button id="markAllDismantleSuccessBtn" type="button" class="ghost">全て解体成功</button>
+              <button id="markAllDismantleFailBtn" type="button" class="ghost">全て補正なし</button>
+            </div>
+            <div id="encounterDropList" class="encounter-drop-list"></div>
+            <div class="buttons"><button id="rollEncounterDropBtn">構成全体のドロップを一括判定</button></div>
           </div>
         </div>
       </details>
@@ -507,7 +506,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.584';
+const VERSION='v90.8.587';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
