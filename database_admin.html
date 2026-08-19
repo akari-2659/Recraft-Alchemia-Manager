@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.577</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.582</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -547,7 +547,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;ov
 .skill-result-grid,.skill-acquired-grid{display:grid;grid-template-columns:1fr;gap:7px;margin-top:10px}.skill-result-card{border:1px solid var(--line);border-radius:11px;background:#fffdf8;padding:0;overflow:hidden}.skill-result-card.new{border-color:#8ebda0;background:#f2fbf5}.skill-result-card.dup{border-color:#d1ac6d;background:#fff8e8}.skill-result-card summary{cursor:pointer;padding:10px 12px;font-size:15px;font-weight:900;list-style-position:inside}.skill-result-detail{display:grid;gap:6px;padding:0 12px 12px;border-top:1px solid var(--line);padding-top:10px;line-height:1.6}.skill-result-effect{white-space:pre-wrap}.skill-slot-list{display:grid;gap:8px;margin-top:10px}.skill-slot-row{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px;align-items:center}.skill-fragment-line{font-weight:900;margin-top:10px}.skill-prob-wrap{max-height:360px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:10px}.skill-prob-table{width:100%;border-collapse:collapse;font-size:12px}.skill-prob-table th,.skill-prob-table td{padding:7px 8px;border-bottom:1px solid #eadcc9;text-align:left}.skill-prob-table th{position:sticky;top:0;background:#f7ead7;z-index:1}.crystal-upgrade-list{display:grid;gap:10px}.crystal-upgrade-card{border:1px solid var(--line);border-radius:14px;background:#fffaf3;padding:12px}.crystal-upgrade-card h5{margin:0 0 7px}.crystal-current{font-size:18px;font-weight:900;color:#6a3f25}.crystal-upgrade-card.is-next{border-color:#a9c5ae;background:#f2fbf4}
 @media(max-width:560px){.skill-slot-row{grid-template-columns:1fr}.skill-admin-grid{grid-template-columns:1fr}}
 
-.copyist-control-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(220px,.8fr) auto;gap:16px;align-items:end;margin:14px 0}.copyist-area-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:8px}.copyist-area-check{display:flex;align-items:flex-start;gap:7px;padding:9px 10px;border:1px solid #d8c6aa;border-radius:10px;background:rgba(255,255,255,.78);font-weight:800}.copyist-area-check input{width:auto;margin:2px 0 0}.copyist-area-summary{margin:5px 0 8px;color:var(--muted);font-size:.88rem;line-height:1.5;overflow-wrap:anywhere}.copyist-area-panel button{margin-top:2px}.copyist-result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:12px}.copyist-result-card{padding:13px;background:rgba(255,255,255,.83);border:1px solid #d8c6aa;border-radius:12px}.copyist-result-card h4{margin:8px 0}.copyist-result-head{display:flex;flex-wrap:wrap;gap:6px}#copyistAreaModal .modal-card,#guildDailyAreaModal .modal-card{width:min(760px,100%)}#copyistAreaModal .modal-body,#guildDailyAreaModal .modal-body{overflow:auto}@media(max-width:760px){.copyist-control-grid{grid-template-columns:1fr}.copyist-action-stack{display:flex;gap:8px;flex-wrap:wrap}}
+.copyist-control-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(220px,.8fr) auto;gap:16px;align-items:end;margin:14px 0}.copyist-area-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:8px}.copyist-area-check{display:flex;align-items:flex-start;gap:7px;padding:9px 10px;border:1px solid #d8c6aa;border-radius:10px;background:rgba(255,255,255,.78);font-weight:800}.copyist-area-check input{width:auto;margin:2px 0 0}.copyist-area-summary{margin:5px 0 8px;color:var(--muted);font-size:.88rem;line-height:1.5;overflow-wrap:anywhere}.copyist-area-panel button{margin-top:2px}.copyist-result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:12px}.copyist-result-card{padding:13px;background:rgba(255,255,255,.83);border:1px solid #d8c6aa;border-radius:12px}.copyist-result-card h4{margin:8px 0}.copyist-result-head{display:flex;flex-wrap:wrap;gap:6px}#copyistAreaModal .modal-card,#guildDailyAreaModal .modal-card,#antiqueGearAreaModal .modal-card{width:min(760px,100%)}#copyistAreaModal .modal-body,#guildDailyAreaModal .modal-body,#antiqueGearAreaModal .modal-body{overflow:auto}@media(max-width:760px){.copyist-control-grid{grid-template-columns:1fr}.copyist-action-stack{display:flex;gap:8px;flex-wrap:wrap}}
 </style>
 
 <style id="raBuildInfoStyle">
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.577-time-cycle">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.582-time-cycle">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.577｜更新：2026年8月19日</div>
+<div class="ra-build-info">v90.8.582｜更新：2026年8月19日</div>
 
 <header>
   <div class="title-card">
@@ -1740,6 +1740,37 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
             </div>
             <div id="facilityAntiqueStockResult" class="facility-upgrade-result muted">未鑑定スクロールのランダム販売枠を選出できます。</div>
           </div>
+          <div id="facilityAntiqueGearWork" class="hidden">
+            <div class="input-action-row">
+              <div>
+                <label for="facilityAntiqueGearKind">装備区分</label>
+                <select id="facilityAntiqueGearKind"><option value="武器" selected>武器</option><option value="防具">防具</option><option value="盾">盾</option></select>
+              </div>
+              <div>
+                <label for="facilityAntiqueGearCategory">武器種 / 防具種</label>
+                <select id="facilityAntiqueGearCategory"></select>
+              </div>
+              <div>
+                <label for="facilityAntiqueGearRank">抽選★帯</label>
+                <select id="facilityAntiqueGearRank"></select>
+              </div>
+              <div>
+                <label for="facilityAntiqueGearCount">抽選回数</label>
+                <select id="facilityAntiqueGearCount">
+                  <option value="1" selected>1回</option><option value="2">2回</option><option value="3">3回</option><option value="4">4回</option><option value="5">5回</option>
+                </select>
+              </div>
+              <section class="copyist-area-panel">
+                <b>解放済みエリア</b>
+                <div id="facilityAntiqueGearAreaSummary" class="copyist-area-summary">街はずれの草原</div>
+                <button class="secondary" type="button" data-antique-gear-area-open>解放エリアを選択</button>
+              </section>
+              <button class="secondary" type="button" data-facility-antique-gear-draw>骨董装備ガチャを回す</button>
+              <button class="ghost" type="button" data-facility-antique-gear-copy>抽選結果をコピー</button>
+            </div>
+            <div id="facilityAntiqueGearCost" class="skill-fragment-line">必要魔物素材★合計：15</div>
+            <div id="facilityAntiqueGearResult" class="facility-upgrade-result muted">装備区分・武器種/防具種・★帯を選び、魔物素材を使って骨董装備を抽選します。個体ごとに基礎性能・属性・強化枠・固定強化内容が変化します。抽選後の強化追加・変更はできません。</div>
+          </div>
           <div id="facilityAntiqueAppraisalWork" class="hidden">
             <div class="input-action-row">
               <div>
@@ -1850,6 +1881,14 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
   </div>
 </div>
 
+<div class="modal-backdrop hidden" id="antiqueGearAreaModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="antiqueGearAreaModalTitle">
+    <div class="modal-head"><div><h2 id="antiqueGearAreaModalTitle">骨董装備・解放エリア選択</h2><p>現在解放済みのエリアをチェックしてください。通常エリア・異界とも個別に選択でき、ボス装備・ボス素材は常に候補外です。</p></div><button type="button" class="ghost" data-antique-gear-area-cancel>閉じる</button></div>
+    <div class="modal-body"><div id="antiqueGearAreaModalGrid" class="copyist-area-grid"></div></div>
+    <div class="modal-foot"><button type="button" class="ghost" data-antique-gear-area-cancel>キャンセル</button><button type="button" data-antique-gear-area-apply>選択を適用</button></div>
+  </div>
+</div>
+
 <div class="modal-backdrop hidden" id="editModal" aria-hidden="true">
   <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-head">
@@ -1879,7 +1918,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.577';
+const RECRAFT_DB_VERSION = 'v90.8.582';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.403';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -1973,6 +2012,11 @@ let currentFacilityWeaponCategory = '';
 let currentFacilityWeaponBranchSearch = '';
 let currentAntiqueRandomRows = [];
 let currentAntiqueRandomArea = '';
+let currentAntiqueGearRows = [];
+let currentAntiqueGearArea = ''; // v90.8.579以前の単一エリア選択との互換用
+let currentAntiqueGearUnlockedAreaIds = [];
+let antiqueGearAreaModalDraftIds = [];
+let currentAntiqueGearDate = '';
 let currentAntiqueAppraisalText = '';
 let currentSkillDrawResults=[];
 let currentSkillStatusMessage='抽選結果だけを表示します。キャラクターの読込・保存は行いません。';
@@ -1991,6 +2035,7 @@ let guildDailyAreaModalDraftIds = [];
 const GUILD_DAILY_STORAGE_KEY = 'recraft_alchemia_guild_daily_selection_v1';
 const MEAL_RECOMMEND_STORAGE_KEY = 'recraft_alchemia_meal_recommendation_v1';
 const COPYIST_DAILY_STORAGE_KEY = 'recraft_alchemia_copyist_daily_selection_v2';
+const ANTIQUE_GEAR_AREA_STORAGE_KEY = 'recraft_alchemia_antique_gear_area_selection_v1';
 const COPYIST_DAILY_COUNT = 6;
 let currentMealRecommendationAreaId = '';
 let currentMealRecommendationIds = [];
@@ -2029,6 +2074,22 @@ function saveCopyistDailyState(){
     }));
   }catch(e){console.warn('copyist daily state save failed',e);}
 }
+function loadAntiqueGearAreaState(){
+  try{
+    const raw=localStorage.getItem(ANTIQUE_GEAR_AREA_STORAGE_KEY);
+    if(!raw)return;
+    const data=JSON.parse(raw);
+    currentAntiqueGearUnlockedAreaIds=Array.isArray(data.unlockedAreaIds)?data.unlockedAreaIds.map(String):[];
+  }catch(e){console.warn('antique gear area state load failed',e);}
+}
+function saveAntiqueGearAreaState(){
+  try{
+    localStorage.setItem(ANTIQUE_GEAR_AREA_STORAGE_KEY,JSON.stringify({
+      unlockedAreaIds:currentAntiqueGearUnlockedAreaIds.map(String),
+      updatedAt:new Date().toISOString()
+    }));
+  }catch(e){console.warn('antique gear area state save failed',e);}
+}
 function loadMealRecommendationState(){
   try{
     const raw=localStorage.getItem(MEAL_RECOMMEND_STORAGE_KEY);
@@ -2048,6 +2109,7 @@ function saveMealRecommendationState(){
 }
 loadMealRecommendationState();
 loadCopyistDailyState();
+loadAntiqueGearAreaState();
 function normalizeGuildDailyCount(value,fallback=0){
   const n=Number(value);
   if(Number.isFinite(n))return Math.max(0,Math.min(10,n));
@@ -2757,10 +2819,11 @@ const FACILITY_DEFS = [
   },
   {
     id:'antique', name:'骨董屋',
-    role:'古い巻物や術式用品、不思議な結晶を扱う骨董屋。価値の分からない品の鑑定も引き受ける。',
+    role:'古い巻物や術式用品、不思議な結晶に加え、魔物素材を用いた骨董装備ガチャも扱う骨董屋。価値の分からない品の鑑定も引き受ける。',
     services:[
       {name:'スクロール鑑定', price:'★1 150G〜', description:'未鑑定の巻物を調べ、その内側に封じられた術式を明らかにする。鑑定具を使って自分で見極めることもできる。'},
       {name:'集中術式化', price:'施設依頼不可', description:'鑑定済みの巻物へ魔導インクや祈祷紙を用い、自ら集中して術式として定着させる。'},
+      {name:'骨董装備ガチャ', price:'魔物素材の★合計', description:'武器種・防具種と★帯を指定し、来歴不詳の骨董装備を抽選する。個体ごとに基礎性能・属性・強化枠・固定強化内容が異なる。抽選後の強化追加・変更は不可。'},
       {name:'スキルガチャ', price:'共鳴用素材の★合計', description:'共鳴する素材を結晶へ捧げ、その時点で扱える力の中から一つを引き出す。'}
     ]
   },
@@ -2843,7 +2906,7 @@ const SYSTEM_HELP = [
       "料理は各エリア5品を基本とし、その5品を持ち込み料理と今日のおすすめ候補の両方に使用する。",
       "料理材料は食材カテゴリに限定せず、丸茸など用途タグが「食用可能」の採取素材・魔物素材も使用できる。",
       "宿屋は宿泊45G、休息30G、噂、クエスト情報を扱う。休息は1行動を消費してHP/MPを全回復し、宿泊は一日を終了してHP/MP全回復・疲労度0にする。",
-      "骨董屋は未鑑定スクロールの高額ランダム販売、施設鑑定、魔導インク・祈祷紙・術式鑑定具・聖印・魔印の常設販売を扱う。店頭ではスクロールの中身を公開しない。",
+      "骨董屋は未鑑定スクロールの高額ランダム販売、施設鑑定、魔物素材を使う骨董装備ガチャ、魔導インク・祈祷紙・術式鑑定具・聖印・魔印の常設販売を扱う。骨董装備ガチャは管理HTMLのモーダルで解放済み通常エリア・異界を指定し、装備区分・武器種/防具種・★帯を選んで骨董屋専用個体を抽選する。既存装備を素体にはせず、個体ごとに基礎性能・属性（対応武器のみ）・強化枠・固定強化内容が変化し、抽選後の強化追加・変更はできない。通常強化に加えて骨董品限定強化が低確率で付く。ボス装備・ボス素材は候補外とし、店頭では未鑑定スクロールの中身を公開しない。",
       "ギルドは受注可能クエストを、重要クエストとデイリークエストに分けて掲示する。",
       "重要クエストは有効列がTRUEのものだけ、ギルドの受注可能一覧に表示する。",
       "デイリークエストは再受注可能な依頼として、選択した抽選対象エリア以下の候補から、拠点内依頼・エリア依頼・納品依頼を種別ごとに独立して抽選する。",
@@ -3581,7 +3644,7 @@ function openGuildDailyAreaModal(){
   const modal=$('guildDailyAreaModal');if(modal){modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');document.body.classList.add('modal-open');}
 }
 function closeGuildDailyAreaModal(){
-  const modal=$('guildDailyAreaModal');if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');if($('editModal')?.classList.contains('hidden')&&$('copyistAreaModal')?.classList.contains('hidden'))document.body.classList.remove('modal-open');}
+  const modal=$('guildDailyAreaModal');if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');if($('editModal')?.classList.contains('hidden')&&$('copyistAreaModal')?.classList.contains('hidden')&&$('antiqueGearAreaModal')?.classList.contains('hidden'))document.body.classList.remove('modal-open');}
 }
 function applyGuildDailyAreaModal(){
   const areas=ensureGuildDailyAreaState(),initial=areas.find(area=>Number(area.unlockOrder)===1)||areas[0],initialId=guildDailyAreaId(initial||{});
@@ -4061,7 +4124,7 @@ function openCopyistAreaModal(){
   const modal=$('copyistAreaModal');if(modal){modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');document.body.classList.add('modal-open');}
 }
 function closeCopyistAreaModal(){
-  const modal=$('copyistAreaModal');if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');if($('editModal')?.classList.contains('hidden'))document.body.classList.remove('modal-open');}
+  const modal=$('copyistAreaModal');if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');if($('editModal')?.classList.contains('hidden')&&$('antiqueGearAreaModal')?.classList.contains('hidden'))document.body.classList.remove('modal-open');}
 }
 function applyCopyistAreaModal(){
   const areas=copyistAreaRows(),initial=areas.find(area=>Number(area.unlockOrder)===1)||areas[0],initialId=mealAreaId(initial||{});
@@ -4121,6 +4184,282 @@ function facilityDisplayLabel(facilityName){
   return '販売商品';
 }
 
+function antiqueAreaRows(){
+  return (state.exploration_areas||[]).filter(a=>String(a.enabled??'TRUE')!=='FALSE').slice().sort((a,b)=>(Number(a.unlockOrder)||999)-(Number(b.unlockOrder)||999)||compareValues(a.name||a.id||'',b.name||b.id||''));
+}
+function antiqueAreaId(area={}){return String(area.id||area.name||'').trim();}
+function antiqueEnsureGearAreaState(){
+  const areas=antiqueAreaRows();
+  if(!areas.length){currentAntiqueGearUnlockedAreaIds=[];return areas;}
+  const valid=new Set(areas.map(antiqueAreaId));
+  currentAntiqueGearUnlockedAreaIds=currentAntiqueGearUnlockedAreaIds.filter(id=>valid.has(String(id)));
+  const initial=areas.find(a=>Number(a.unlockOrder)===1)||areas[0],initialId=antiqueAreaId(initial);
+  if(initialId&&!currentAntiqueGearUnlockedAreaIds.includes(initialId))currentAntiqueGearUnlockedAreaIds.unshift(initialId);
+  return areas;
+}
+function antiqueSelectedAreaSet(){antiqueEnsureGearAreaState();return new Set(currentAntiqueGearUnlockedAreaIds.map(String));}
+function antiqueAreaLabel(area={}){return `${area.name||antiqueAreaId(area)}${String(area.areaType||'').trim()==='異界'?'（異界）':''}`;}
+function antiqueGearAreaCheckboxesHtml(areas=[],selectedIds=currentAntiqueGearUnlockedAreaIds){
+  const initial=areas.find(a=>Number(a.unlockOrder)===1)||areas[0],initialId=antiqueAreaId(initial||{}),selected=new Set((selectedIds||[]).map(String));
+  return areas.map(area=>{
+    const id=antiqueAreaId(area),fixed=id===initialId,checked=selected.has(id)||fixed;
+    return `<label class="copyist-area-check"><input type="checkbox" data-antique-gear-area-modal-check value="${escapeHtml(id)}" ${checked?'checked':''} ${fixed?'disabled':''}><span>${escapeHtml(antiqueAreaLabel(area))}${fixed?'<small> / 初期解放</small>':''}</span></label>`;
+  }).join('');
+}
+function renderAntiqueGearAreaModal(){
+  const grid=$('antiqueGearAreaModalGrid');if(!grid)return;
+  grid.innerHTML=antiqueGearAreaCheckboxesHtml(antiqueEnsureGearAreaState(),antiqueGearAreaModalDraftIds)||'<p class="muted">エリアデータがありません。</p>';
+}
+function openAntiqueGearAreaModal(){
+  antiqueEnsureGearAreaState();antiqueGearAreaModalDraftIds=[...currentAntiqueGearUnlockedAreaIds];renderAntiqueGearAreaModal();
+  const modal=$('antiqueGearAreaModal');if(modal){modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');document.body.classList.add('modal-open');}
+}
+function closeAntiqueGearAreaModal(){
+  const modal=$('antiqueGearAreaModal');if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');if($('editModal')?.classList.contains('hidden')&&$('copyistAreaModal')?.classList.contains('hidden')&&$('guildDailyAreaModal')?.classList.contains('hidden'))document.body.classList.remove('modal-open');}
+}
+function applyAntiqueGearAreaModal(){
+  const areas=antiqueEnsureGearAreaState(),valid=new Set(areas.map(antiqueAreaId)),initial=areas.find(a=>Number(a.unlockOrder)===1)||areas[0],initialId=antiqueAreaId(initial||{});
+  const next=[...new Set(antiqueGearAreaModalDraftIds.map(String).filter(id=>valid.has(id)))];if(initialId&&!next.includes(initialId))next.unshift(initialId);
+  const before=currentAntiqueGearUnlockedAreaIds.slice().sort().join('|'),after=next.slice().sort().join('|');
+  currentAntiqueGearUnlockedAreaIds=next;currentAntiqueGearArea='';
+  if(before!==after){currentAntiqueGearRows=[];currentAntiqueGearDate='';}
+  saveAntiqueGearAreaState();closeAntiqueGearAreaModal();syncAntiqueGearSelectors();renderAntiqueGearStock(false);if(before!==after)toast('骨董装備の解放済みエリアを更新しました');
+}
+function antiqueBossMonsterNames(){
+  const names=new Set();
+  (state.event_tables||[]).filter(e=>String(e.eventType||'').trim()==='ボス遭遇').forEach(e=>{
+    String(e.encounterComposition||'').split(/\n+/).forEach(line=>{
+      const parts=line.split(',').map(v=>v.trim());if(parts[1])names.add(parts[1]);
+    });
+    const result=String(e.result||'');
+    const m=result.match(/エリアボス[「\"]([^」\"]+)[」\"]/);if(m?.[1])names.add(m[1]);
+  });
+  return [...names].filter(Boolean);
+}
+function antiqueRowHasDirectBossOrigin(row={}){
+  const text=[row.source,row.tags,row.usageTags,row.notes,row.branchType,row.name].map(v=>String(v||'')).join(' ');
+  if(/ボス専用|ボス装備|ボス素材|エリアボス/.test(text))return true;
+  const source=String(row.source||'');
+  return antiqueBossMonsterNames().some(name=>source.includes(name));
+}
+function antiqueBossMaterialNames(){
+  return (state.items||[]).filter(row=>String(row.dataKind||'').trim()==='素材'&&antiqueRowHasDirectBossOrigin(row)).map(row=>String(row.name||'').trim()).filter(Boolean);
+}
+function antiqueEquipmentUsesBossMaterial(row={}){
+  const resultName=String(row.name||'').trim();if(!resultName)return false;
+  const bossMaterials=antiqueBossMaterialNames();if(!bossMaterials.length)return false;
+  return (state.recipes||[]).some(recipe=>{
+    if(String(recipe.resultItem||'').trim()!==resultName)return false;
+    const required=String(recipe.requiredMaterials||'');
+    return bossMaterials.some(name=>required.includes(name));
+  });
+}
+function antiqueRowIsBossOrigin(row={}){
+  if(antiqueRowHasDirectBossOrigin(row))return true;
+  if(['武器','防具','盾'].includes(String(row.itemType||'').trim())&&antiqueEquipmentUsesBossMaterial(row))return true;
+  return false;
+}
+function antiqueRowWithinSelectedAreas(row={},selectedSet=antiqueSelectedAreaSet()){
+  const key=String(row.unlockAreaKey||'').trim();
+  if(!key)return false;
+  return selectedSet.has(key);
+}
+const ANTIQUE_EXCLUSIVE_UPGRADE_RATE=20;
+const ANTIQUE_WEAPON_CATEGORIES=['短剣','片手剣','片手斧','片手槌','片手槍','杖','鞭','ガントレット','両手剣','大槌','大鎌','長槍','弓','弩','大型弩','魔導書','祈祷書'];
+const ANTIQUE_ARMOR_CATEGORIES=['軽装','中装','重装','魔導衣','祈祷衣'];
+const ANTIQUE_FIXED_AMMO_ELEMENT=new Set(['弓','弩','大型弩']);
+const ANTIQUE_BOOK_CATEGORIES=new Set(['魔導書','祈祷書']);
+const ANTIQUE_ATTRIBUTE_WEIGHTS=[['物',44],['火',8],['水',8],['風',8],['雷',8],['光',8],['闇',8],['無',8]];
+const ANTIQUE_GEAR_COST_BY_RANK=Object.freeze({1:15,2:30,3:55,4:85,5:120,6:160,7:205});
+const ANTIQUE_AREA_MAX_RANK={
+  武器:{area_outskirts_grass:1,area_nearby_forest:2,area_waterside_wetland:2,area_foothill_old_mine:3,area_reflection_water_garden:3,area_wind_swept_highland:4,area_ashcrown_volcanic_canyon:5},
+  防具:{area_outskirts_grass:1,area_nearby_forest:2,area_waterside_wetland:2,area_foothill_old_mine:3,area_reflection_water_garden:3,area_wind_swept_highland:3,area_ashcrown_volcanic_canyon:4},
+  盾:{area_outskirts_grass:1,area_nearby_forest:2,area_waterside_wetland:2,area_foothill_old_mine:3,area_reflection_water_garden:3,area_wind_swept_highland:3,area_ashcrown_volcanic_canyon:4}
+};
+const ANTIQUE_EXCLUSIVE_UPGRADES=[
+  {id:'old_balance',name:'古式重心',slotCost:1,itemTypes:['武器'],excludeCategories:['魔導書','祈祷書'],target:'武器',detail:'移動を行わなかった手番に、この装備を使用する通常攻撃で与えるダメージ+1。1回の攻撃につき1回だけ適用する。同名効果は重複しない。'},
+  {id:'worn_pierce',name:'磨耗穿ち',slotCost:2,itemTypes:['武器'],excludeCategories:['魔導書','祈祷書'],target:'武器',detail:'戦闘中1回、この装備を使用する通常攻撃のダメージ算出時、対象の常時防御値を1点低く扱う。ダメージ算出前に宣言する。同名効果は重複しない。'},
+  {id:'old_margin',name:'古書の余白',slotCost:1,itemTypes:['武器'],categories:['魔導書','祈祷書'],target:'魔導書・祈祷書',detail:'2枠目以降にセットした術式・祈祷を使用する場合、戦闘中1回だけその判定+1。判定前に宣言する。同名効果は重複しない。'},
+  {id:'old_circuit',name:'旧式導環',slotCost:2,itemTypes:['武器'],categories:['杖','魔導書','祈祷書'],target:'杖・魔導書・祈祷書',detail:'戦闘中1回、この装備を使用して行う魔法・祈祷の消費MPを1点軽減する（最低1）。同名効果は重複しない。'},
+  {id:'worn_lining',name:'馴染み革',slotCost:1,itemTypes:['防具'],target:'防具',detail:'戦闘中、自分を対象とする最初の攻撃判定に対して回避値+1。判定の解決後に解除する。同名効果は重複しない。'},
+  {id:'patched_reinforce',name:'継ぎ当て補強',slotCost:2,itemTypes:['防具'],target:'防具',detail:'現在HPが最大HPの半分以下の間、防御値+1。同名効果は重複しない。'},
+  {id:'old_guard_rim',name:'古守の縁金',slotCost:1,itemTypes:['盾'],target:'盾',detail:'防御行動中、その防御行動中に最初に受けるダメージを1点軽減する。1回の防御行動につき1回だけ適用する。同名効果は重複しない。'},
+  {id:'familiar_grip',name:'握り癖',slotCost:2,itemTypes:['盾'],target:'盾',detail:'《かばう》に成功して自分が受けるダメージを1点軽減する。1ラウンドにつき1回だけ適用する。同名効果は重複しない。'}
+];
+function antiqueExclusiveCompatible(def={},equipment={}){
+  const type=String(equipment.itemType||'').trim(),cat=String(equipment.itemCategory||'').trim();
+  if((def.itemTypes||[]).length&&!def.itemTypes.includes(type))return false;
+  if((def.categories||[]).length&&!def.categories.includes(cat))return false;
+  if((def.excludeCategories||[]).includes(cat))return false;
+  return true;
+}
+function antiqueExclusiveEntry(def={},equipment={}){
+  return {id:`antique_exclusive_${def.id}`,name:`骨董限定：${def.name}`,rank:equipment.rank||'',equipmentUpgradeEffect:def.name,equipmentUpgradeSlotCost:def.slotCost,equipmentUpgradeDetail:def.detail,equipmentUpgradeTarget:def.target,antiqueExclusive:true};
+}
+function antiqueGearExclusivePool(equipment={}){return ANTIQUE_EXCLUSIVE_UPGRADES.filter(def=>antiqueExclusiveCompatible(def,equipment)).map(def=>antiqueExclusiveEntry(def,equipment));}
+function antiqueGearSelectedKind(){return String($('facilityAntiqueGearKind')?.value||'武器').trim()||'武器';}
+function antiqueGearCategoryOptions(kind=antiqueGearSelectedKind()){
+  if(kind==='武器')return ANTIQUE_WEAPON_CATEGORIES.slice();
+  if(kind==='防具')return ANTIQUE_ARMOR_CATEGORIES.slice();
+  return ['盾'];
+}
+function antiqueGearMaxRank(kind=antiqueGearSelectedKind(),selectedSet=antiqueSelectedAreaSet()){
+  const map=ANTIQUE_AREA_MAX_RANK[kind]||ANTIQUE_AREA_MAX_RANK.武器;
+  let max=1;for(const id of selectedSet)max=Math.max(max,Number(map[String(id)]||0));return Math.max(1,max);
+}
+function syncAntiqueGearSelectors(){
+  const kind=antiqueGearSelectedKind(),catSel=$('facilityAntiqueGearCategory'),rankSel=$('facilityAntiqueGearRank');
+  if(catSel){const current=String(catSel.value||'');const cats=antiqueGearCategoryOptions(kind);catSel.innerHTML=cats.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');catSel.value=cats.includes(current)?current:(cats[0]||'');}
+  if(rankSel){const max=antiqueGearMaxRank(kind);const current=Math.max(1,Number(rankSel.value)||max);rankSel.innerHTML=Array.from({length:max},(_,i)=>`<option value="${i+1}">★${i+1}</option>`).join('');rankSel.value=String(Math.min(max,current));}
+  const rank=Math.max(1,Number(rankSel?.value)||1),count=Math.max(1,Math.min(5,Number($('facilityAntiqueGearCount')?.value||1)||1));
+  const cost=ANTIQUE_GEAR_COST_BY_RANK[rank]||Math.ceil((10+rank*20)*1.2/5)*5;
+  if($('facilityAntiqueGearCost'))$('facilityAntiqueGearCost').textContent=`必要魔物素材★合計：${cost*count}（1回 ${cost}）`;
+}
+function antiqueGearReferenceRows(kind='',category='',rank=1,selectedSet=antiqueSelectedAreaSet()){
+  const type=kind==='盾'?'盾':kind;
+  const all=(state.items||[]).filter(row=>String(row.itemType||'').trim()===type&&String(row.itemCategory||'').trim()===category&&!antiqueRowIsBossOrigin(row)&&antiqueRowWithinSelectedAreas(row,selectedSet)&&!/骨董装備|骨董個体/.test([row.tags,row.usageTags,row.source].map(v=>String(v||'')).join(' ')));
+  const exact=all.filter(row=>Number(row.rank||0)===Number(rank));if(exact.length)return exact;
+  const lower=all.filter(row=>Number(row.rank||0)<=Number(rank)).sort((a,b)=>Number(b.rank||0)-Number(a.rank||0));if(lower.length){const best=Number(lower[0].rank||0);return lower.filter(row=>Number(row.rank||0)===best);}
+  return all.slice().sort((a,b)=>Number(a.rank||999)-Number(b.rank||999)).slice(0,3);
+}
+function antiqueDiceAverage(expr=''){
+  let text=String(expr||'').replace(/\s+/g,''),sum=0,matched=false;
+  text=text.replace(/([+-]?)(\d*)D(?:\((\d+)[～~\-](\d+)\)|(\d+))/gi,(m,sg,c,a,b,s)=>{matched=true;const count=Number(c||1),faces=s?Number(s):(Number(a)+Number(b))/2;sum+=(sg==='-'?-1:1)*count*(faces+1)/2;return '';});
+  const nums=text.match(/[+-]?\d+(?:\.\d+)?/g)||[];nums.forEach(n=>sum+=Number(n)||0);return matched||nums.length?sum:0;
+}
+function antiquePowerCandidates(rows=[]){
+  const map=new Map();for(const row of rows){const p=String(row.power||'').trim();if(p&&!map.has(p))map.set(p,antiqueDiceAverage(p));}
+  return [...map].map(([power,avg])=>({power,avg})).sort((a,b)=>a.avg-b.avg);
+}
+function antiqueShiftPower(expr='',delta=0){
+  const text=String(expr||'').trim();const d=Math.trunc(Number(delta)||0);if(!text||!d)return text;
+  const m=text.match(/([+-])(\d+)$/);if(m){const old=(m[1]==='-'?-1:1)*Number(m[2]||0),next=old+d,base=text.slice(0,m.index);if(next===0)return base;return `${base}${next>0?'+':''}${next}`;}
+  return `${text}${d>0?'+':''}${d}`;
+}
+function antiquePercentileRow(rows=[],p=.5){if(!rows.length)return null;return rows[Math.max(0,Math.min(rows.length-1,Math.round((rows.length-1)*p)))];}
+function antiqueRollQuality(){const r=Math.random()*100;return r<40?'low':r<92?'standard':'jackpot';}
+function antiqueRollSlotTier(){const r=Math.random()*100;return r<35?-1:r<90?0:1;}
+function antiqueMedianNumber(values=[],fallback=0){const a=values.map(Number).filter(Number.isFinite).sort((x,y)=>x-y);return a.length?a[Math.floor((a.length-1)/2)]:fallback;}
+function antiqueModifierMap(text=''){const out=new Map();String(text||'').split(/\n+/).forEach(line=>{const [k,v]=line.split(/\t+/);if(String(k||'').trim())out.set(String(k).trim(),String(v||'').trim());});return out;}
+function antiqueModifierText(map=new Map()){return [...map.entries()].filter(([,v])=>String(v).trim()!=='').map(([k,v])=>`${k}\t${v}`).join('\n');}
+function antiqueGuardCandidate(rows=[]){
+  const vals=[];for(const row of rows){const map=antiqueModifierMap(row.modifiers);const g=String(map.get('combat:guardAction')||'').replace(/^\+/,'').trim();if(g)vals.push({guard:g,avg:antiqueDiceAverage(g)});}return vals.sort((a,b)=>a.avg-b.avg);
+}
+function antiqueDefenseCandidate(rows=[]){return antiqueMedianNumber(rows.map(row=>Number(String(antiqueModifierMap(row.modifiers).get('combat:defense')||'0').replace(/^\+/,''))),0);}
+function antiqueFixedModifierSource(kind='',category='',rows=[]){
+  const all=(state.items||[]).filter(row=>String(row.itemType||'').trim()===(kind==='盾'?'盾':kind)&&String(row.itemCategory||'').trim()===category&&!antiqueRowIsBossOrigin(row));
+  if(kind==='盾')return all.find(row=>String(row.name||'').trim()==='小盾')||rows[0]||all[0]||{};
+  return all.slice().sort((a,b)=>Number(a.rank||999)-Number(b.rank||999))[0]||rows[0]||{};
+}
+function antiqueRandomAttribute(category=''){
+  if(ANTIQUE_FIXED_AMMO_ELEMENT.has(category))return '矢弾依存';
+  if(ANTIQUE_BOOK_CATEGORIES.has(category))return '';
+  const total=ANTIQUE_ATTRIBUTE_WEIGHTS.reduce((s,x)=>s+x[1],0);let r=Math.random()*total;for(const [name,w] of ANTIQUE_ATTRIBUTE_WEIGHTS){r-=w;if(r<=0)return name;}return '物';
+}
+function antiqueGearBaseProfile(kind='',category='',rank=1,selectedSet=antiqueSelectedAreaSet()){
+  const refs=antiqueGearReferenceRows(kind,category,rank,selectedSet),quality=antiqueRollQuality(),source=antiqueFixedModifierSource(kind,category,refs),slotBase=Math.max(1,Math.round(antiqueMedianNumber(refs.map(r=>Number(r.upgradeLimit||0)).filter(Boolean),Math.max(2,rank+1))));
+  const slotDelta=antiqueRollSlotTier();
+  const upgradeLimit=Math.max(1,Math.min(9,slotBase+slotDelta));
+  const profile={quality,slotDelta,upgradeLimit,source,refs,power:'',element:'',modifiers:String(source.modifiers||''),defense:'',guard:''};
+  if(kind==='武器'){
+    if(!ANTIQUE_BOOK_CATEGORIES.has(category)){
+      const powers=antiquePowerCandidates(refs),base=antiquePercentileRow(powers,.50)?.power||String(source.power||'');
+      profile.power=antiqueShiftPower(base,quality==='low'?-1:quality==='jackpot'?1:0);
+    }
+    profile.element=antiqueRandomAttribute(category);
+  }else{
+    const def0=antiqueDefenseCandidate(refs),guards=antiqueGuardCandidate(refs),g0=antiquePercentileRow(guards,.5)?.guard||'';
+    let defense=def0,guard=g0;
+    if(quality==='low'){
+      if(Math.random()<.5)defense=Math.max(0,defense-1);else guard=antiqueShiftPower(guard,-1);
+    }else if(quality==='jackpot'){
+      if(Math.random()<.5)defense=defense+1;else guard=antiqueShiftPower(guard,1);
+    }
+    const map=antiqueModifierMap(source.modifiers);map.set('combat:defense',String(defense));if(guard)map.set('combat:guardAction',String(guard));profile.modifiers=antiqueModifierText(map);profile.defense=String(defense);profile.guard=String(guard);
+  }
+  return profile;
+}
+function antiqueGearMaterialCompatible(mat={},equipment={}){
+  const targets=String(mat.equipmentUpgradeTarget||'').split(/[・、,，／/|]+/).map(v=>v.trim()).filter(Boolean);
+  const type=String(equipment.itemType||'').trim(),category=String(equipment.itemCategory||'').trim();
+  if(type==='武器')return targets.includes('武器')||targets.includes(category);
+  if(type==='防具')return targets.includes('防具');
+  if(type==='盾')return targets.includes('盾')||targets.includes('防具');
+  return false;
+}
+function antiqueGearUpgradePool(equipment={},selectedSet=antiqueSelectedAreaSet()){
+  const minRank=Number(equipment.rank||1);
+  return (state.items||[]).filter(mat=>{
+    if(String(mat.dataKind||'').trim()!=='素材'||String(mat.materialType||'').trim()!=='魔物素材')return false;
+    if(!String(mat.equipmentUpgradeEffect||'').trim())return false;
+    if(antiqueRowIsBossOrigin(mat))return false;
+    if(!antiqueRowWithinSelectedAreas(mat,selectedSet))return false;
+    if(numericRankValueIncludingLegacyMaterialGrade(mat.rank,1)<minRank)return false;
+    if(String(equipment.itemCategory||'').trim()==='魔導書'&&/回復量/.test(String(mat.equipmentUpgradeEffect||'')))return false;
+    const category=String(equipment.itemCategory||'').trim(),element=String(equipment.element||'').trim(),detail=String(mat.equipmentUpgradeDetail||'');
+    if(!['杖','魔導書','祈祷書'].includes(category)&&!ANTIQUE_FIXED_AMMO_ELEMENT.has(category)){
+      const requiredAttrs=[...new Set([...detail.matchAll(/([物火水風雷光闇無])属性/g)].map(m=>m[1]))];
+      if(requiredAttrs.length&&!requiredAttrs.includes(element))return false;
+    }
+    return antiqueGearMaterialCompatible(mat,equipment);
+  });
+}
+function antiqueWeightedPick(rows=[],weightFn=()=>1){
+  if(!rows.length)return null;const weighted=rows.map(row=>({row,w:Math.max(.01,Number(weightFn(row))||1)}));let roll=Math.random()*weighted.reduce((s,x)=>s+x.w,0);for(const x of weighted){roll-=x.w;if(roll<=0)return x.row;}return weighted[weighted.length-1].row;
+}
+function antiqueDesiredUpgradeCount(profile={}){
+  const r=Math.random()*100;return r<25?0:r<75?1:r<95?2:3;
+}
+function antiqueGearEnhancements(equipment={},selectedSet=antiqueSelectedAreaSet(),profile={}){
+  const desired=antiqueDesiredUpgradeCount(profile),limit=Math.max(0,Number(equipment.upgradeLimit||0)),maxUsed=limit;if(!desired||!maxUsed)return [];
+  const normalPool=antiqueGearUpgradePool(equipment,selectedSet),exclusivePool=antiqueGearExclusivePool(equipment),picked=[],effects=new Set();let used=0;
+  while(picked.length<desired){
+    const legal=pool=>pool.filter(mat=>{const cost=upgradeSlotCostForMaterial(mat),effect=String(mat.equipmentUpgradeEffect||'').trim();return cost>0&&used+cost<=maxUsed&&!effects.has(effect);});
+    const normal=legal(normalPool),exclusive=legal(exclusivePool);if(!normal.length&&!exclusive.length)break;let mat=null;
+    if(exclusive.length&&(!normal.length||Math.random()*100<ANTIQUE_EXCLUSIVE_UPGRADE_RATE))mat=antiqueWeightedPick(exclusive,m=>1/Math.max(1,upgradeSlotCostForMaterial(m)));else mat=antiqueWeightedPick(normal,m=>1/Math.max(1,upgradeSlotCostForMaterial(m)));
+    if(!mat)break;picked.push(mat);effects.add(String(mat.equipmentUpgradeEffect||'').trim());used+=upgradeSlotCostForMaterial(mat);
+  }
+  return picked;
+}
+function antiqueGeneratedName(kind='',category=''){return `古物の${category||kind||'装備'}`;}
+function antiqueInstanceId(){return `antq_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,9)}`;}
+function antiqueGearEnhancementStorageEntry(m={}){
+  const effect=String(m.equipmentUpgradeEffect||'').trim();return {content:effect,rank:m.rank||'',slotCost:Math.max(1,upgradeSlotCostForMaterial(m)),specialEffectName:m.antiqueExclusive?effect:'',specialEffectDetail:String(m.equipmentUpgradeDetail||'').trim(),sourceMaterialId:m.antiqueExclusive?'':String(m.id||m.masterId||'').trim(),sourceMaterialPublicId:m.antiqueExclusive?'':String(m.publicId||'').trim(),sourceMaterialName:m.antiqueExclusive?'':String(m.name||'').trim(),sourceMaterialTarget:String(m.equipmentUpgradeTarget||'').trim()};
+}
+function antiqueGearBuildRow(kind='',category='',rank=1,selectedSet=antiqueSelectedAreaSet()){
+  const profile=antiqueGearBaseProfile(kind,category,rank,selectedSet),src=profile.source||{},id=antiqueInstanceId(),itemType=kind==='盾'?'盾':kind;
+  const equipment={id,name:antiqueGeneratedName(kind,category),dataKind:'アイテム',itemType,itemCategory:category,rank,equipSlot:String(src.equipSlot||((kind==='防具')?'鎧':'右手/左手')),skill:kind==='武器'?String(src.skill||''):String(src.skill||''),power:profile.power,element:profile.element,modifiers:profile.modifiers,upgradeLimit:String(profile.upgradeLimit),upgradeMaterialMinRank:String(rank),effect:'',description:`骨董屋に持ち込まれた来歴不詳の${category}。固有効果は持たず、個体ごとに基礎性能・強化枠・強化内容が異なる。抽選後の強化追加・変更はできない。`,source:'骨董屋（骨董装備ガチャ）',tags:`骨董屋,骨董装備,骨董個体,骨董強化固定,${category},★${rank}`};
+  const enhancements=antiqueGearEnhancements(equipment,selectedSet,profile),usedSlots=enhancements.reduce((s,m)=>s+upgradeSlotCostForMaterial(m),0);
+  return {equipment,enhancements:enhancements.map(x=>({...x})),usedSlots,quality:profile.quality,slotDelta:profile.slotDelta,rollId:id};
+}
+function antiqueGearSelectedAreaLabels(){const selected=antiqueSelectedAreaSet();return antiqueAreaRows().filter(a=>selected.has(antiqueAreaId(a))).map(antiqueAreaLabel);}
+function antiqueGearEnhancementLabel(m={}){return `${equipmentUpgradeDisplayName(m)}${m.antiqueExclusive?'［骨董限定］':''}`;}
+function antiqueUtf8ToBase64Url(text=''){const bytes=new TextEncoder().encode(String(text));let bin='';bytes.forEach(b=>bin+=String.fromCharCode(b));return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+function antiqueGearRegistrationCode(entry={}){
+  const eq=entry.equipment||{};const payload={v:1,type:'antiqueGear',item:{...eq,id:'',masterId:'',publicId:'',masterSheet:'',count:1,location:'倉庫',upgradeEntries:(entry.enhancements||[]).map(antiqueGearEnhancementStorageEntry),upgradeLines:''}};return `RCA-ANTQ:${antiqueUtf8ToBase64Url(JSON.stringify(payload))}`;
+}
+function antiqueGearStatsText(eq={}){
+  if(String(eq.itemType||'')==='武器')return [eq.power?`ダメージ:${eq.power}`:'',eq.element?`属性:${eq.element}`:''].filter(Boolean).join(' / ')||'基礎攻撃値なし';
+  const map=antiqueModifierMap(eq.modifiers);return [`防御値:${String(map.get('combat:defense')||0).replace(/^\+/,'')}`,`防御行動値:${String(map.get('combat:guardAction')||'0').replace(/^\+/,'')}`].join(' / ');
+}
+function antiqueGearCopyText(){
+  const labels=antiqueGearSelectedAreaLabels(),kind=antiqueGearSelectedKind(),cat=String($('facilityAntiqueGearCategory')?.value||''),rank=Math.max(1,Number($('facilityAntiqueGearRank')?.value)||1),cost=ANTIQUE_GEAR_COST_BY_RANK[rank]||0;
+  const lines=['【骨董屋・骨董装備ガチャ】',`抽選対象：${kind} / ${cat} / ★${rank}`,`解放済みエリア：${labels.join('、')||'未設定'}`,`消費：魔物素材★合計 ${cost} / 1回`,''];
+  if(!(currentAntiqueGearRows||[]).length){lines.push('- 未抽選');return lines.join('\n');}
+  currentAntiqueGearRows.forEach((entry,i)=>{const eq=entry.equipment||{},enh=entry.enhancements||[];lines.push(`${i+1}. ${eq.name||'名称未設定'} / ★${eq.rank||rank} / ${eq.itemCategory||eq.itemType||'装備'}`);lines.push(`   ${antiqueGearStatsText(eq)}`);lines.push(`   強化枠：${entry.usedSlots||0}/${eq.upgradeLimit||0}`);lines.push(`   強化：${enh.length?enh.map(m=>`${antiqueGearEnhancementLabel(m)}（${upgradeSlotCostForMaterial(m)}枠）`).join(' / '):'なし'}`);enh.forEach(m=>{if(String(m.equipmentUpgradeDetail||'').trim())lines.push(`   ・${antiqueGearEnhancementLabel(m)}：${String(m.equipmentUpgradeDetail).trim()}`);});lines.push(`   骨董装備コード：${antiqueGearRegistrationCode(entry)}`);lines.push('');});return lines.join('\n').trim();
+}
+function drawAntiqueGearStock(){
+  const result=$('facilityAntiqueGearResult');if(!result)return;antiqueEnsureGearAreaState();syncAntiqueGearSelectors();const selected=antiqueSelectedAreaSet();if(!selected.size){result.textContent='解放済みエリアを1つ以上選択してください。';return;}
+  const kind=antiqueGearSelectedKind(),category=String($('facilityAntiqueGearCategory')?.value||''),rank=Math.max(1,Number($('facilityAntiqueGearRank')?.value)||1),maxRank=antiqueGearMaxRank(kind,selected);if(rank>maxRank){result.textContent=`現在の解放状況では${kind}の★${rank}骨董装備は抽選できません。`;return;}
+  const count=Math.max(1,Math.min(5,Number($('facilityAntiqueGearCount')?.value||1)||1));if(!category){result.textContent='武器種 / 防具種を選択してください。';return;}
+  currentAntiqueGearRows=Array.from({length:count},()=>antiqueGearBuildRow(kind,category,rank,selected));currentAntiqueGearArea='';currentAntiqueGearDate=new Date().toLocaleDateString('ja-JP');renderAntiqueGearStock(false);
+}
+function renderAntiqueGearStock(){
+  const result=$('facilityAntiqueGearResult');if(!result)return;antiqueEnsureGearAreaState();syncAntiqueGearSelectors();const areas=antiqueAreaRows(),selected=antiqueSelectedAreaSet(),labels=areas.filter(a=>selected.has(antiqueAreaId(a))).map(antiqueAreaLabel),kind=antiqueGearSelectedKind(),category=String($('facilityAntiqueGearCategory')?.value||''),rank=Math.max(1,Number($('facilityAntiqueGearRank')?.value)||1),count=Math.max(1,Math.min(5,Number($('facilityAntiqueGearCount')?.value||1)||1)),cost=ANTIQUE_GEAR_COST_BY_RANK[rank]||0;
+  const summary=$('facilityAntiqueGearAreaSummary');if(summary)summary.textContent=`${labels.join('、')||'未設定'}（${selected.size}エリア）`;
+  if(!(currentAntiqueGearRows||[]).length){result.classList.add('muted');result.innerHTML=`<div><b>骨董装備ガチャ</b></div><div>${escapeHtml(kind)} / ${escapeHtml(category||'未選択')} / ★${rank}。1回につき魔物素材★合計${cost}。基礎性能・属性（対応武器のみ）・強化枠数・固定強化内容を個体ごとに抽選します。平均は同★帯相当以下、大当たりでも同★帯より少し上までに抑えます。抽選済みの強化は完成時固定で、空き枠があっても後から追加・変更できません。基礎性能大当たりと強化枠+1は独立抽選のため、極低確率で両方を引く個体もあります。</div>`;return;}
+  result.classList.remove('muted');result.innerHTML=`<div><b>骨董装備ガチャ・抽選結果</b></div><div class="muted small">${escapeHtml(currentAntiqueGearDate||'')} / ${escapeHtml(kind)} / ${escapeHtml(category)} / ★${rank} / ${currentAntiqueGearRows.length}回 / 消費：魔物素材★合計${cost*currentAntiqueGearRows.length}</div>`+currentAntiqueGearRows.map(entry=>{const eq=entry.equipment||{},enh=entry.enhancements||[],chips=[`★${eq.rank||rank}`,eq.itemCategory||eq.itemType,antiqueGearStatsText(eq),`強化枠:${entry.usedSlots||0}/${eq.upgradeLimit||0}`].filter(Boolean),enhHtml=enh.length?enh.map(m=>`<div><b>${escapeHtml(equipmentUpgradeDisplayName(m))}</b>${m.antiqueExclusive?' <span class="facility-chip">骨董限定</span>':''}（${escapeHtml(String(upgradeSlotCostForMaterial(m)))}枠）${m.equipmentUpgradeDetail?`：${escapeHtml(m.equipmentUpgradeDetail)}`:''}</div>`).join(''):'<div>固定強化：なし</div>';return `<div class="facility-product"><div class="facility-product-body"><div><b>${escapeHtml(eq.name||'名称未設定')}</b></div><div class="facility-product-meta">${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>${enhHtml}<div class="small muted">個体コードは「抽選結果をコピー」から取得できます。</div></div></div>`;}).join('');
+}
 function antiqueRandomStockText(){
   const lines=['【骨董屋・未鑑定スクロール販売】',`選出範囲：${currentAntiqueRandomArea||'未設定'}`,''];
   if(!(currentAntiqueRandomRows||[]).length){
@@ -4909,7 +5248,7 @@ const FACILITY_SECTION_DEFS = {
   '薬屋':[['sales','販売商品'],['alchemy','調合'],['materials','素材加工'],['services','サービス']],
   '食事処':[['recommendations','今日のおすすめ'],['meals','持ち込み料理'],['services','サービス']],
   '宿屋':[['services','サービス']],
-  '骨董屋':[['sales','常設販売'],['random','未鑑定スクロール'],['appraisal','鑑定'],['transcribe','集中術式化'],['skill_gacha','スキルガチャ'],['services','サービス']],
+  '骨董屋':[['sales','常設販売'],['antique_gear','骨董装備ガチャ'],['random','未鑑定スクロール'],['appraisal','鑑定'],['transcribe','集中術式化'],['skill_gacha','スキルガチャ'],['services','サービス']],
   'レシピ販売':[['daily','日替わりレシピ選出'],['services','サービス']],
   'ギルド':[['important','重要クエスト'],['daily','デイリークエスト'],['support','サポートキャラクター'],['services','サービス']]
 };
@@ -5586,7 +5925,7 @@ function facilityWorkKind(){
   if(currentFacilityView==='鍛冶屋' && section==='upgrade') return 'smithy';
   if(currentFacilityView==='鍛冶屋' && section==='crystal') return 'crystal';
   if(currentFacilityView==='薬屋' && section==='alchemy') return 'alchemy';
-  if(currentFacilityView==='骨董屋' && ['random','appraisal','transcribe','skill_gacha'].includes(section)) return `antique-${section}`;
+  if(currentFacilityView==='骨董屋' && ['antique_gear','random','appraisal','transcribe','skill_gacha'].includes(section)) return `antique-${section}`;
   return 'none';
 }
 function facilityRecipeRows(kind='調合'){
@@ -5665,12 +6004,14 @@ function renderFacilityWorkPanel(){
     renderFacilityAlchemyLookupList(); renderToolRankSelect('facilityAlchemyToolRankInput',$('facilityAlchemyToolRankInput')?.value||'3'); renderFacilityAlchemyResult($('facilityAlchemyRecipeSelect')?.value||'');
   }else{
     const section=activeFacilitySection();
-    if(title) title.textContent=section==='random'?'未鑑定スクロール':section==='appraisal'?'スクロール鑑定':section==='transcribe'?'集中術式化':'スキルガチャ';
-    if(notice) notice.textContent=section==='random'?'未鑑定スクロールのランダム販売枠を抽選します。':section==='appraisal'?'種別とランクに一致する術式から鑑定結果をランダムに決定します。':section==='transcribe'?'対応素材と集中技能による術式化難易度を確認します。施設依頼はできません。':'進行段階とランクに応じた個別ウェイト抽選を行い、結果だけを表示します。';
+    if(title) title.textContent=section==='antique_gear'?'骨董装備ガチャ':section==='random'?'未鑑定スクロール':section==='appraisal'?'スクロール鑑定':section==='transcribe'?'集中術式化':'スキルガチャ';
+    if(notice) notice.textContent=section==='antique_gear'?'魔物素材を使い、装備区分・武器種/防具種・★帯を指定して骨董屋専用装備を抽選します。個体ごとに基礎性能・属性・強化枠・固定強化内容が変化し、抽選後の強化追加・変更はできません。通常装備を恒常的に上回らない範囲で生成します。':section==='random'?'未鑑定スクロールのランダム販売枠を抽選します。':section==='appraisal'?'種別とランクに一致する術式から鑑定結果をランダムに決定します。':section==='transcribe'?'対応素材と集中技能による術式化難易度を確認します。施設依頼はできません。':'進行段階とランクに応じた個別ウェイト抽選を行い、結果だけを表示します。';
+    $('facilityAntiqueGearWork')?.classList.toggle('hidden',section!=='antique_gear');
     $('facilityAntiqueStockWork')?.classList.toggle('hidden',section!=='random');
     $('facilityAntiqueAppraisalWork')?.classList.toggle('hidden',section!=='appraisal');
     $('facilityAntiqueTranscribeWork')?.classList.toggle('hidden',section!=='transcribe');
     $('facilityAntiqueSkillGachaWork')?.classList.toggle('hidden',section!=='skill_gacha');
+    if(section==='antique_gear') renderAntiqueGearStock();
     if(section==='appraisal') renderAntiqueAppraisalResult();
     if(section==='transcribe') renderAntiqueTranscriptionResult();
     if(section==='skill_gacha') renderSkillGachaManagement();
@@ -9239,7 +9580,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.577';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.582';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-07';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
@@ -9602,6 +9943,14 @@ document.addEventListener('click',e=>{
   const facilityRemovalRemove=e.target.closest('[data-facility-removal-remove]'); if(facilityRemovalRemove){const idx=Number(facilityRemovalRemove.dataset.facilityRemovalRemove);if(Number.isInteger(idx)&&idx>=0)facilityRemovalEntryIds.splice(idx,1);renderFacilityRemovalCalculator();return;}
   const facilityUpgradeCheck=e.target.closest('[data-facility-upgrade-check]'); if(facilityUpgradeCheck){ renderFacilityUpgradeResult(); return; }
   const facilityAlchemyCheck=e.target.closest('[data-facility-alchemy-check]'); if(facilityAlchemyCheck){ renderFacilityAlchemyResult(); return; }
+  const antiqueGearAreaOpen=e.target.closest('[data-antique-gear-area-open]'); if(antiqueGearAreaOpen){openAntiqueGearAreaModal();return;}
+  const antiqueGearAreaCancel=e.target.closest('[data-antique-gear-area-cancel]'); if(antiqueGearAreaCancel){closeAntiqueGearAreaModal();return;}
+  const antiqueGearAreaApply=e.target.closest('[data-antique-gear-area-apply]'); if(antiqueGearAreaApply){applyAntiqueGearAreaModal();return;}
+  const facilityAntiqueGearDraw=e.target.closest('[data-facility-antique-gear-draw]'); if(facilityAntiqueGearDraw){ drawAntiqueGearStock(); return; }
+  const facilityAntiqueGearCopy=e.target.closest('[data-facility-antique-gear-copy]'); if(facilityAntiqueGearCopy){
+    if(!(currentAntiqueGearRows||[]).length){toast('先に骨董装備を選出してください');return;}
+    copyAdminTextDirect(antiqueGearCopyText()).then(ok=>{if(ok)toast('骨董装備の選出結果をコピーしました');});return;
+  }
   const facilityAntiqueRandom=e.target.closest('[data-facility-antique-random]'); if(facilityAntiqueRandom){ renderAntiqueRandomStock(); return; }
   const facilityAntiqueRandomCopy=e.target.closest('[data-facility-antique-random-copy]'); if(facilityAntiqueRandomCopy){
     if(!(currentAntiqueRandomRows||[]).length){ toast('先に未鑑定スクロールを選出してください'); return; }
@@ -9708,6 +10057,7 @@ document.addEventListener('input',e=>{
     }
   }
   if(['facilitySkillGachaProgressArea','facilityCrystalProgressArea'].includes(e.target.id)){currentSkillProgressAreaId=String(e.target.value||'area_outskirts_grass');syncSkillProgressFields();renderSkillManagementPanels();return;}
+  if(['facilityAntiqueGearKind','facilityAntiqueGearCategory','facilityAntiqueGearRank','facilityAntiqueGearCount'].includes(e.target.id)){currentAntiqueGearRows=[];syncAntiqueGearSelectors();renderAntiqueGearStock(false);return;}
   if(e.target.id==='facilitySkillGachaRank'){renderSkillGachaManagement();return;}
   if(e.target.id==='facilitySkillGachaCount'){renderSkillGachaManagement();return;}
   if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
@@ -9715,6 +10065,7 @@ document.addEventListener('input',e=>{
   if(['facilityUpgradeMaterialInput','facilityUpgradeCountInput','facilityUpgradeStepInput','facilitySmithToolRankInput','facilityUpgradeGuaranteeItem'].includes(e.target.id)) renderFacilityUpgradeResult();
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)) renderFacilityAlchemyResult();
   if(['facilityAppraisalTypeInput','facilityAppraisalRankInput'].includes(e.target.id)) renderAntiqueAppraisalResult();
+  if(e.target.id==='facilityAntiqueGearCount'){currentAntiqueGearRows=[];renderAntiqueGearStock(false);} 
   if(['facilityAntiqueStockArea','facilityAntiqueStockCount'].includes(e.target.id)) renderAntiqueRandomStock();
   if(['facilityTranscribeTypeInput','facilityTranscribeRankInput'].includes(e.target.id)) renderAntiqueTranscriptionResult();
   if(e.target.closest('[data-check-builder]')) syncCheckBuilder(e.target.closest('[data-check-builder]'));
@@ -9725,6 +10076,12 @@ document.addEventListener('input',e=>{
   if(e.target.closest('[data-modifier-editor]')) syncModifierEditor(e.target.closest('[data-modifier-editor]'));
 });
 document.addEventListener('change',e=>{
+  if(e.target?.matches?.('[data-antique-gear-area-modal-check]')){
+    const id=String(e.target.value||''),set=new Set(antiqueGearAreaModalDraftIds.map(String));
+    if(e.target.checked){if(id)set.add(id);}else set.delete(id);
+    const areas=antiqueAreaRows(),initial=areas.find(a=>Number(a.unlockOrder)===1)||areas[0],initialId=antiqueAreaId(initial||{});if(initialId)set.add(initialId);
+    antiqueGearAreaModalDraftIds=[...set];return;
+  }
   if(e.target?.matches?.('[data-copyist-area-modal-check]')){
     const id=String(e.target.value||''),set=new Set(copyistAreaModalDraftIds.map(String));
     if(e.target.checked){if(id)set.add(id);}else set.delete(id);
@@ -9775,6 +10132,7 @@ document.addEventListener('change',e=>{
   if(['facilityUpgradeMaterialInput','facilityUpgradeCountInput','facilityUpgradeStepInput','facilitySmithToolRankInput','facilityUpgradeGuaranteeItem'].includes(e.target.id)){ renderFacilityUpgradeResult(); return; }
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)){ renderFacilityAlchemyResult(); return; }
   if(['facilityAppraisalTypeInput','facilityAppraisalRankInput'].includes(e.target.id)){ renderAntiqueAppraisalResult(); return; }
+  if(e.target.id==='facilityAntiqueGearCount'){currentAntiqueGearRows=[];renderAntiqueGearStock(false);return;}
   if(['facilityAntiqueStockArea','facilityAntiqueStockCount'].includes(e.target.id)){ renderAntiqueRandomStock(); return; }
   if(['facilityTranscribeTypeInput','facilityTranscribeRankInput'].includes(e.target.id)){ renderAntiqueTranscriptionResult(); return; }
   if(e.target.dataset.formField==='dataKind'){ rerenderCurrentForm(); return; }
@@ -9831,7 +10189,8 @@ $('btnApplyAndSave').addEventListener('click',applyFormAndSave);
 $('editModal').addEventListener('click',e=>{ if(e.target.id==='editModal') closeForm(); });
 $('copyistAreaModal')?.addEventListener('click',e=>{if(e.target===$('copyistAreaModal'))closeCopyistAreaModal();});
 $('guildDailyAreaModal')?.addEventListener('click',e=>{if(e.target===$('guildDailyAreaModal'))closeGuildDailyAreaModal();});
-document.addEventListener('keydown',e=>{ if(e.key==='Escape' && !$('guildDailyAreaModal')?.classList.contains('hidden')){closeGuildDailyAreaModal();return;} if(e.key==='Escape' && !$('copyistAreaModal')?.classList.contains('hidden')){closeCopyistAreaModal();return;} if(e.key==='Escape' && !$('editModal').classList.contains('hidden')) closeForm(); });
+$('antiqueGearAreaModal')?.addEventListener('click',e=>{if(e.target===$('antiqueGearAreaModal'))closeAntiqueGearAreaModal();});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && !$('antiqueGearAreaModal')?.classList.contains('hidden')){closeAntiqueGearAreaModal();return;} if(e.key==='Escape' && !$('guildDailyAreaModal')?.classList.contains('hidden')){closeGuildDailyAreaModal();return;} if(e.key==='Escape' && !$('copyistAreaModal')?.classList.contains('hidden')){closeCopyistAreaModal();return;} if(e.key==='Escape' && !$('editModal').classList.contains('hidden')) closeForm(); });
 $('btnSetup').addEventListener('click',setup);
 if($('btnDiagnoseSheets')) $('btnDiagnoseSheets').addEventListener('click',diagnoseSheets);
 if($('btnRepairHeaders')) $('btnRepairHeaders').addEventListener('click',repairHeaders);
