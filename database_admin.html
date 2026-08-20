@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.593</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.595</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1205,7 +1205,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <link rel="stylesheet" href="ra-design-system.css?v=90.8.592-accessory-chain">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.593｜更新：2026年8月20日</div>
+<div class="ra-build-info">v90.8.595｜更新：2026年8月20日</div>
 
 <header>
   <div class="title-card">
@@ -1231,7 +1231,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
     </div>
     <p class="notice">
       この管理ツールは固定のWeb App URLへ接続します。通常は、各表の <span class="kbd">この表だけDB読込</span> / <span class="kbd">この表だけDB登録</span> / <span class="kbd">この表だけDB置換</span>、または各行の <span class="kbd">個別DB登録</span> / <span class="kbd">個別DB置換</span> を使ってください。
-      個別DB置換は対象1件だけを上書きし、同じ表の他データは保持します。全データ操作はDBシート単位で一度ずつ処理し、途中で失敗した場合はそこで停止します。アイテムDBはアイテムと素材をまとめて一度だけ送信します。
+      個別DB置換は対象1件だけを上書きし、同じ表の他データは保持します。DB送信はデータ量に応じて自動で軽量経路を選びます。個別・小規模更新は1回POST、中～大規模は1回gzip POST、1回送信に収まらない場合だけ分割送信へ切り替えます。全データ操作は変更のないDBを省略します。
     </p>
     <div class="toolbar initial-data-toolbar">
       <div class="field">
@@ -1918,7 +1918,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.593';
+const RECRAFT_DB_VERSION = 'v90.8.595';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.586';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -4489,18 +4489,9 @@ function antiqueGenerateRegistrationIds(count=1){
 async function antiquePersistGeneratedEntries(entries=[]){
   const rows=(entries||[]).map(antiqueGearDbRow);
   if(!rows.length)throw new Error('骨董個体の登録データがありません。');
-  await assertServerVersion();
-  let res;
-  if(canUseGzipUpload()){
-    try{
-      res=await uploadRowsByGzipPostChunks('antique_instances',rows,'upsert','');
-    }catch(postErr){
-      console.warn('antique gzip POST split upload failed; retry with gzip JSONP split',postErr);
-      res=await uploadRowsByGzipChunks('antique_instances',rows,'upsert','');
-    }
-  }else{
-    res=await uploadRowsByTextChunks('antique_instances',rows,'upsert','');
-  }
+  // v90.8.594: 骨董ID発行は通常1件なので、共通の軽量upsert経路へ送る。
+  // 小さい個体登録では圧縮・分割・仮シート・commitを一切使わない。
+  const res=await upsertSheetRowsByJsonp('antique_instances',rows,'');
   if(!res||!res.ok)throw new Error((res&&res.error)||'骨董個体DBへの登録に失敗しました。');
   return res;
 }
@@ -8865,8 +8856,7 @@ function directPostForm(action,payloadObject,timeoutMs=DIRECT_POST_TIMEOUT_MS){
   });
 }
 function canUseDirectPostUpload(){
-  return typeof TextEncoder==='function'
-    && window.crypto && crypto.subtle
+  return !!apiBaseUrl()
     && (isGasMode() || (typeof document!=='undefined' && typeof HTMLFormElement!=='undefined'));
 }
 async function loadServerDbHashes(){
@@ -8882,6 +8872,11 @@ const UPLOAD_GZIP_RAW_BYTES_PER_CHUNK = 32768;
 const UPLOAD_GZIP_MAX_ROWS_PER_CHUNK = 40;
 const UPLOAD_GZIP_COMPRESSION_SCHEMA = 'gzipUtf8Bytes32kRows40_v90_8_385';
 const UPLOAD_GZIP_CHUNK_TIMEOUT_MS = 15000;
+// v90.8.594: 少量～中量のDB更新は仮シート・分割を使わず、1回のPOSTで直接反映する。
+// 日本語を含むform POSTの膨張を避けるため、生JSON直送は小さい時だけ。大きめは1回だけgzipして直送する。
+const DIRECT_UPLOAD_TEXT_MAX_CHARS = 120000;
+const DIRECT_UPLOAD_GZIP_MAX_B64_CHARS = 5400000;
+const DIRECT_UPLOAD_WHOLE_GZIP_TIMEOUT_MS = 30000;
 function uploadPartPayload(token, chunkIndex, partIndex, textPart){
   return payload('putUploadChunk', {
     token,
@@ -9207,8 +9202,50 @@ async function uploadRowsByGzipPostChunks(key, rows, mode, dataKindScope=''){
   }
 }
 
-async function uploadRowsByChunks(key, rows, mode, dataKindScope='', options={}){
-  await assertServerVersion();
+async function uploadRowsDirectPost(key, rows, mode, dataKindScope='', options={}){
+  const list=(rows||[]).map(cleanUploadRow);
+  const token=uploadToken(mode==='replace'?'directrp':'directup',key);
+  const serializedRows=typeof options.serializedRows==='string' ? options.serializedRows : JSON.stringify(list);
+  const checksum=String(options.checksum||'').trim();
+  uploadProgressStart(`${labelKey(key)}の軽量直接送信`,list.length);
+  try{
+    // 1件登録や小さい表は、圧縮処理すら行わずそのまま1回POSTする。
+    if(serializedRows.length<=DIRECT_UPLOAD_TEXT_MAX_CHARS){
+      uploadProgressUpdate({phase:`${labelKey(key)}を直接送信中`,percent:35,currentRows:0,totalRows:list.length,chunks:1,parts:1,rawChars:serializedRows.length,sentChars:serializedRows.length,detail:'圧縮・分割・仮シートを使わず1回POSTで反映します。'});
+      // 通常の個別・表更新は、二重JSON解析やSHA計算もない upsert / replaceSheet が最軽量。
+      // 全DB更新でchecksumを持つ場合だけdirectUploadを使い、サーバー側ハッシュも更新する。
+      const directAction=checksum?'directUpload':(mode==='replace'?'replaceSheet':'upsert');
+      const directPayload=checksum
+        ? {sheetKey:key,mode,token,uploadEncoding:'text',rowsPayload:serializedRows,rowCount:list.length,dataKindScope,checksum}
+        : {sheetKey:key,token,rows:list,dataKindScope,returnRows:false};
+      const res=await directPostForm(directAction,directPayload,DIRECT_POST_TIMEOUT_MS);
+      if(!res||!res.ok)throw new Error((res&&res.error)||`${labelKey(key)}の直接DB送信に失敗しました`);
+      const result={...res,uploadEncoding:checksum?'direct-text-post':'direct-row-post',sentRows:list.length,sentChunks:1,sentParts:1,rawChars:serializedRows.length};
+      uploadProgressDone(result);return result;
+    }
+    // 中～大サイズは全体を1回だけgzipし、6MB上限内なら分割せずそのまま直接反映する。
+    if(canUseGzipUpload()){
+      uploadProgressUpdate({phase:`${labelKey(key)}を1回圧縮中`,percent:18,currentRows:0,totalRows:list.length,chunks:1,parts:1,rawChars:serializedRows.length,detail:'全体を1回だけ圧縮し、1回POSTで反映できるか確認しています。'});
+      await yieldUploadUi();
+      const gzipBase64=await withUploadTimeout(gzipBase64FromText(serializedRows),DIRECT_UPLOAD_WHOLE_GZIP_TIMEOUT_MS,'DB全体の軽量圧縮がタイムアウトしました。');
+      if(gzipBase64.length<=DIRECT_UPLOAD_GZIP_MAX_B64_CHARS){
+        uploadProgressUpdate({phase:`${labelKey(key)}を圧縮直接送信中`,percent:45,currentRows:0,totalRows:list.length,chunks:1,parts:1,rawChars:serializedRows.length,sentChars:gzipBase64.length*.75,detail:'分割せず1回POSTで直接反映します。'});
+        const res=await directPostForm('directUpload',{
+          sheetKey:key,mode,token,uploadEncoding:'gzipBase64',rowsPayload:gzipBase64,rowCount:list.length,dataKindScope,checksum
+        },DIRECT_POST_TIMEOUT_MS);
+        if(!res||!res.ok)throw new Error((res&&res.error)||`${labelKey(key)}の圧縮直接DB送信に失敗しました`);
+        const result={...res,uploadEncoding:'direct-gzip-post',sentRows:list.length,sentChunks:1,sentParts:1,rawChars:serializedRows.length,gzipBase64Chars:gzipBase64.length};
+        uploadProgressDone(result);return result;
+      }
+      uploadProgressLog(`1回POST上限を超えるため分割送信へ切り替えます（圧縮後${formatUploadBytes(gzipBase64.length*.75)}）。`);
+    }
+    return null;
+  }catch(error){
+    uploadProgressFail(error);
+    throw error;
+  }
+}
+async function uploadRowsByChunksFallback(key, rows, mode, dataKindScope='', options={}){
   const list=rows||[];
   if(canUseGzipUpload()){
     try{
@@ -9229,6 +9266,21 @@ async function uploadRowsByChunks(key, rows, mode, dataKindScope='', options={})
   }
   return await uploadRowsByTextChunks(key,list,mode,dataKindScope);
 }
+async function uploadRowsByChunks(key, rows, mode, dataKindScope='', options={}){
+  await assertServerVersion();
+  const list=rows||[];
+  if(canUseDirectPostUpload()){
+    try{
+      const direct=await uploadRowsDirectPost(key,list,mode,dataKindScope,options);
+      if(direct)return direct;
+    }catch(directError){
+      console.warn('direct DB upload failed; fallback to split upload',directError);
+      uploadProgressLog('軽量直接送信を継続できなかったため、分割送信へ切り替えます。');
+      toast(`${labelKey(key)}を分割送信へ切り替えます。`,'warn');
+    }
+  }
+  return uploadRowsByChunksFallback(key,list,mode,dataKindScope,options);
+}
 function callApi(data){
   return new Promise((resolve,reject)=>{
     if(isGasMode()){
@@ -9245,6 +9297,13 @@ function callApi(data){
 }
 async function writeApi(data){
   await assertServerVersion();
+  if(!isGasMode() && canUseDirectPostUpload()){
+    const action=String(data&&data.action||'').trim();
+    const token=uploadToken('cmd',action||'write');
+    const res=await directPostForm(action,{...(data||{}),token},60000);
+    if(!res||res.ok===false)throw new Error((res&&res.error)||'DB更新に失敗しました');
+    return res;
+  }
   return callApi(data);
 }
 
@@ -9681,7 +9740,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.593';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.595';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-07';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
