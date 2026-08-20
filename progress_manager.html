@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.597</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.599</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.597">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.599">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -203,7 +203,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.597｜更新：2026年8月20日</div>
+<div class="ra-build-info">v90.8.599｜更新：2026年8月20日</div>
 
 <header>
   <div class="header-inner">
@@ -506,7 +506,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.597';
+const VERSION='v90.8.599';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -916,9 +916,8 @@ function progressPostAction(action,params={},timeoutMs=30000){
     const token='rca_post_'+Date.now()+'_'+Math.random().toString(36).slice(2);
     const frame=document.createElement('iframe'),frameName='rcaPostFrame_'+Date.now()+'_'+Math.random().toString(36).slice(2),form=document.createElement('form');
     frame.name=frameName;frame.style.display='none';frame.setAttribute('aria-hidden','true');
-    form.method='POST';form.action=GAS_URL;form.target=frameName;form.style.display='none';
-    const add=(name,value)=>{const input=document.createElement('input');input.type='hidden';input.name=name;input.value=String(value??'');form.appendChild(input);};
-    add('action',action);add('responseMode','postMessage');add('token',token);add('payload',JSON.stringify({...params,token}));
+    form.method='POST';const actionUrl=new URL(GAS_URL);actionUrl.searchParams.set('action',action);actionUrl.searchParams.set('responseMode','postMessage');actionUrl.searchParams.set('token',token);form.action=actionUrl.toString();form.target=frameName;form.enctype='text/plain';form.acceptCharset='UTF-8';form.style.display='none';
+    const payloadField=document.createElement('textarea');payloadField.name='payload';payloadField.value=JSON.stringify({...params,token});payloadField.style.display='none';form.appendChild(payloadField);
     let settled=false;const timer=setTimeout(()=>finishReject(new Error('DB保存応答がタイムアウトしました')),timeoutMs);
     function cleanup(){clearTimeout(timer);window.removeEventListener('message',onMessage);setTimeout(()=>{try{form.remove();frame.remove();}catch(_e){}},0);}
     function finishResolve(value){if(settled)return;settled=true;cleanup();resolve(value);}
