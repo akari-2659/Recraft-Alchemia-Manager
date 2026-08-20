@@ -1205,7 +1205,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <link rel="stylesheet" href="ra-design-system.css?v=90.8.599">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.599｜更新：2026年8月20日</div>
+<div class="ra-build-info">v90.8.599｜更新：2026年8月21日</div>
 
 <header>
   <div class="title-card">
@@ -1769,7 +1769,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
               <button class="ghost" type="button" data-facility-antique-gear-copy>抽選結果をコピー</button>
             </div>
             <div id="facilityAntiqueGearCost" class="skill-fragment-line">必要魔物素材★合計：15</div>
-            <div id="facilityAntiqueGearResult" class="facility-upgrade-result muted">装備区分・武器種/防具種・★帯を選び、魔物素材を使って骨董装備を抽選します。個体ごとに基礎性能・属性・強化枠・固定強化内容が変化します。抽選しただけではDB登録されず、採用する個体だけ「ID発行」で正式登録します。抽選後の強化追加・変更はできません。</div>
+            <div id="facilityAntiqueGearResult" class="facility-upgrade-result muted">装備区分・武器種/防具種・★帯を選び、魔物素材を使って骨董装備を抽選します。個体ごとに基礎性能・属性・本体補正・副手追撃値（対応武器のみ）・強化枠・固定強化内容が変化します。抽選しただけではDB登録されず、採用する個体だけ「ID発行」で正式登録します。抽選後の強化追加・変更はできません。</div>
           </div>
           <div id="facilityAntiqueAppraisalWork" class="hidden">
             <div class="input-action-row">
@@ -2823,7 +2823,7 @@ const FACILITY_DEFS = [
     services:[
       {name:'スクロール鑑定', price:'★1 150G〜', description:'未鑑定の巻物を調べ、その内側に封じられた術式を明らかにする。鑑定具を使って自分で見極めることもできる。'},
       {name:'集中術式化', price:'施設依頼不可', description:'鑑定済みの巻物へ魔導インクや祈祷紙を用い、自ら集中して術式として定着させる。'},
-      {name:'骨董装備ガチャ', price:'魔物素材の★合計', description:'武器種・防具種と★帯を指定し、来歴不詳の骨董装備を抽選する。個体ごとに基礎性能・属性・強化枠・固定強化内容が異なる。抽選後の強化追加・変更は不可。'},
+      {name:'骨董装備ガチャ', price:'魔物素材の★合計', description:'武器種・防具種と★帯を指定し、来歴不詳の骨董装備を抽選する。個体ごとに基礎性能・属性・本体補正・副手追撃値（対応武器のみ）・強化枠・固定強化内容が異なる。抽選後の強化追加・変更は不可。'},
       {name:'スキルガチャ', price:'共鳴用素材の★合計', description:'共鳴する素材を結晶へ捧げ、その時点で扱える力の中から一つを引き出す。'}
     ]
   },
@@ -2906,7 +2906,7 @@ const SYSTEM_HELP = [
       "料理は各エリア5品を基本とし、その5品を持ち込み料理と今日のおすすめ候補の両方に使用する。",
       "料理材料は食材カテゴリに限定せず、丸茸など用途タグが「食用可能」の採取素材・魔物素材も使用できる。",
       "宿屋は宿泊45G、休息30G、噂、クエスト情報を扱う。休息は1行動を消費してHP/MPを全回復し、宿泊は一日を終了してHP/MP全回復・疲労度0にする。",
-      "骨董屋は未鑑定スクロールの高額ランダム販売、施設鑑定、魔物素材を使う骨董装備ガチャ、魔導インク・祈祷紙・術式鑑定具・聖印・魔印の常設販売を扱う。骨董装備ガチャは管理HTMLのモーダルで解放済み通常エリア・異界を指定し、装備区分・武器種/防具種・★帯を選んで骨董屋専用個体を抽選する。既存装備を素体にはせず、個体ごとに基礎性能・属性（対応武器のみ）・強化枠・固定強化内容が変化し、抽選後の強化追加・変更はできない。通常強化に加えて骨董品限定強化が低確率で付く。ボス装備・ボス素材は候補外とし、店頭では未鑑定スクロールの中身を公開しない。",
+      "骨董屋は未鑑定スクロールの高額ランダム販売、施設鑑定、魔物素材を使う骨董装備ガチャ、魔導インク・祈祷紙・術式鑑定具・聖印・魔印の常設販売を扱う。骨董装備ガチャは管理HTMLのモーダルで解放済み通常エリア・異界を指定し、装備区分・武器種/防具種・★帯を選んで骨董屋専用個体を抽選する。既存装備を素体にはせず、個体ごとに基礎性能・属性（対応武器のみ）・本体補正・副手追撃値（対応武器のみ）・強化枠・固定強化内容が変化し、抽選後の強化追加・変更はできない。通常強化に加えて骨董品限定強化が低確率で付く。ボス装備・ボス素材は候補外とし、店頭では未鑑定スクロールの中身を公開しない。",
       "ギルドは受注可能クエストを、重要クエストとデイリークエストに分けて掲示する。",
       "重要クエストは有効列がTRUEのものだけ、ギルドの受注可能一覧に表示する。",
       "デイリークエストは再受注可能な依頼として、選択した抽選対象エリア以下の候補から、拠点内依頼・エリア依頼・納品依頼を種別ごとに独立して抽選する。",
@@ -4272,6 +4272,7 @@ const ANTIQUE_FIXED_AMMO_ELEMENT=new Set(['弓','弩','大型弩']);
 const ANTIQUE_BOOK_CATEGORIES=new Set(['魔導書','祈祷書']);
 const ANTIQUE_ATTRIBUTE_WEIGHTS=[['物',44],['火',8],['水',8],['風',8],['雷',8],['光',8],['闇',8],['無',8]];
 const ANTIQUE_GEAR_COST_BY_RANK=Object.freeze({2:15,3:30,4:45,5:60,6:75,7:90});
+const ANTIQUE_BRANCH_MODIFIER_CHANCE=0.50;
 const ANTIQUE_AREA_MAX_RANK={
   武器:{area_outskirts_grass:1,area_nearby_forest:2,area_waterside_wetland:2,area_foothill_old_mine:3,area_reflection_water_garden:3,area_wind_swept_highland:4,area_ashcrown_volcanic_canyon:5},
   防具:{area_outskirts_grass:1,area_nearby_forest:2,area_waterside_wetland:2,area_foothill_old_mine:3,area_reflection_water_garden:3,area_wind_swept_highland:3,area_ashcrown_volcanic_canyon:4},
@@ -4344,19 +4345,23 @@ function antiqueMedianNumber(values=[],fallback=0){const a=values.map(Number).fi
 function antiqueModifierMap(text=''){const out=new Map();String(text||'').split(/\n+/).forEach(line=>{const [k,v]=line.split(/\t+/);if(String(k||'').trim())out.set(String(k).trim(),String(v||'').trim());});return out;}
 function antiqueModifierText(map=new Map()){return [...map.entries()].filter(([,v])=>String(v).trim()!=='').map(([k,v])=>`${k}\t${v}`).join('\n');}
 function antiqueWeaponModifierProfiles(rows=[]){
-  // 補正なしを含め、実在する派生1本ごとの補正プロファイルをそのまま候補にする。
-  // 重複排除すると「1本だけ存在する特殊補正」が過大抽選されるため、派生本数の比率を保持する。
-  return (rows||[]).map(row=>antiqueModifierText(antiqueModifierMap(row?.modifiers||'')));
+  const seen=new Set(),out=[];
+  for(const row of rows){const text=antiqueModifierText(antiqueModifierMap(row?.modifiers||''));if(seen.has(text))continue;seen.add(text);out.push(text);}
+  return out;
 }
 function antiqueRandomWeaponModifiers(rows=[],fallback=''){
-  const profiles=antiqueWeaponModifierProfiles(rows);if(!profiles.length)return antiqueModifierText(antiqueModifierMap(fallback));
-  return profiles[Math.floor(Math.random()*profiles.length)]||'';
+  const baseline=antiqueModifierText(antiqueModifierMap(fallback));
+  const profiles=antiqueWeaponModifierProfiles(rows).filter(text=>text!==baseline);
+  // 武器種の標準補正は基準個体として残し、特定派生だけの補正プロファイルは確率抽選にする。
+  if(!profiles.length||Math.random()>=ANTIQUE_BRANCH_MODIFIER_CHANCE)return baseline;
+  return profiles[Math.floor(Math.random()*profiles.length)]||baseline;
 }
 function antiqueRandomOffhandBonus(rows=[],fallback=''){
-  const vals=(rows||[]).map(row=>Number(String(row?.offhandBonus||'').trim())).filter(v=>Number.isFinite(v)&&v>0);
-  if(!vals.length){const fb=Number(String(fallback||'').trim());return Number.isFinite(fb)&&fb>0?String(Math.trunc(fb)):'';}
+  const vals=rows.map(row=>String(row?.offhandBonus||'').trim()).filter(Boolean).map(Number).filter(Number.isFinite);
+  const fallbackText=String(fallback||'').trim(),fb=fallbackText?Number(fallbackText):NaN;
+  if(!vals.length)return Number.isFinite(fb)?String(Math.trunc(fb)):'';
   const min=Math.min(...vals),max=Math.max(...vals);
-  return String(Math.trunc(min+Math.floor(Math.random()*(max-min+1))));
+  return String(Math.floor(min+Math.random()*(max-min+1)));
 }
 const ANTIQUE_MODIFIER_LABELS=Object.freeze({'hit':'命中','skill:evade':'回避','combat:defense':'防御','combat:guardAction':'防御行動値','skill:detect':'感知','skill:magic':'魔法','skill:prayer':'祈祷','resource:maxMp':'最大MP','resource:maxHp':'最大HP'});
 function antiqueIntrinsicModifierText(eq={}){
@@ -4368,8 +4373,12 @@ function antiqueGuardCandidate(rows=[]){
 }
 function antiqueDefenseCandidate(rows=[]){return antiqueMedianNumber(rows.map(row=>Number(String(antiqueModifierMap(row.modifiers).get('combat:defense')||'0').replace(/^\+/,''))),0);}
 function antiqueFixedModifierSource(kind='',category='',rows=[]){
-  const all=(state.items||[]).filter(row=>String(row.itemType||'').trim()===(kind==='盾'?'盾':kind)&&String(row.itemCategory||'').trim()===category&&!antiqueRowIsBossOrigin(row));
+  const all=(state.items||[]).filter(row=>String(row.itemType||'').trim()===(kind==='盾'?'盾':kind)&&String(row.itemCategory||'').trim()===category&&!antiqueRowIsBossOrigin(row)&&!/骨董装備|骨董個体/.test([row.tags,row.usageTags,row.source].map(v=>String(v||'')).join(' ')));
   if(kind==='盾')return all.find(row=>String(row.name||'').trim()==='小盾')||rows[0]||all[0]||{};
+  if(kind==='武器'){
+    const initial=all.filter(row=>/初期支給/.test(String(row.source||''))).sort((a,b)=>Number(a.rank||999)-Number(b.rank||999));
+    if(initial.length)return initial[0];
+  }
   return all.slice().sort((a,b)=>Number(a.rank||999)-Number(b.rank||999))[0]||rows[0]||{};
 }
 function antiqueRandomAttribute(category=''){
@@ -4462,7 +4471,7 @@ function antiqueGearEnhancementStorageEntry(m={}){
 }
 function antiqueGearBuildRow(kind='',category='',rank=1,selectedSet=antiqueSelectedAreaSet(),publicId=''){
   const profile=antiqueGearBaseProfile(kind,category,rank,selectedSet),src=profile.source||{},id=antiqueInstanceId(publicId),itemType=kind==='盾'?'盾':kind;
-  const equipment={id,publicId,name:antiqueGeneratedName(kind,category),itemType,itemCategory:category,rank,equipSlot:String(src.equipSlot||((kind==='防具')?'鎧':'右手/左手')),skill:kind==='武器'?String(src.skill||''):String(src.skill||''),power:profile.power,element:profile.element,offhandBonus:profile.offhandBonus,modifiers:profile.modifiers,upgradeLimit:String(profile.upgradeLimit),upgradeMaterialMinRank:String(rank),effect:'',description:`骨董屋に持ち込まれた来歴不詳の${category}。固有効果は持たず、個体ごとに基礎性能・本体補正・副手追撃値（対応武器のみ）・強化枠・強化内容が異なる。抽選後の強化追加・変更はできない。`,source:'骨董屋（骨董装備ガチャ）',tags:`骨董屋,骨董装備,骨董個体,骨董強化固定,${category},★${rank}`};
+  const equipment={id,publicId,name:antiqueGeneratedName(kind,category),itemType,itemCategory:category,rank,equipSlot:String(src.equipSlot||((kind==='防具')?'鎧':'右手/左手')),skill:kind==='武器'?String(src.skill||''):String(src.skill||''),power:profile.power,element:profile.element,offhandBonus:profile.offhandBonus,modifiers:profile.modifiers,upgradeLimit:String(profile.upgradeLimit),upgradeMaterialMinRank:String(rank),effect:'',description:`骨董屋に持ち込まれた来歴不詳の${category}。固有効果は持たず、個体ごとに基礎性能・本体補正・副手追撃値・強化枠・強化内容が異なる。抽選後の強化追加・変更はできない。`,source:'骨董屋（骨董装備ガチャ）',tags:`骨董屋,骨董装備,骨董個体,骨董強化固定,${category},★${rank}`};
   const enhancements=antiqueGearEnhancements(equipment,selectedSet,profile),usedSlots=enhancements.reduce((s,m)=>s+upgradeSlotCostForMaterial(m),0);
   return {equipment,enhancements:enhancements.map(x=>({...x})),usedSlots,quality:profile.quality,slotDelta:profile.slotDelta,rollId:id};
 }
@@ -4556,7 +4565,7 @@ async function drawAntiqueGearStock(){
 function renderAntiqueGearStock(){
   const result=$('facilityAntiqueGearResult');if(!result)return;antiqueEnsureGearAreaState();syncAntiqueGearSelectors();const areas=antiqueAreaRows(),selected=antiqueSelectedAreaSet(),labels=areas.filter(a=>selected.has(antiqueAreaId(a))).map(antiqueAreaLabel),kind=antiqueGearSelectedKind(),category=String($('facilityAntiqueGearCategory')?.value||''),rank=Math.max(2,Number($('facilityAntiqueGearRank')?.value)||2),count=Math.max(1,Math.min(5,Number($('facilityAntiqueGearCount')?.value||1)||1)),cost=ANTIQUE_GEAR_COST_BY_RANK[rank]||0;
   const summary=$('facilityAntiqueGearAreaSummary');if(summary)summary.textContent=`${labels.join('、')||'未設定'}（${selected.size}エリア）`;
-  if(!(currentAntiqueGearRows||[]).length){result.classList.add('muted');result.innerHTML=`<div><b>骨董装備ガチャ</b></div><div>${escapeHtml(kind)} / ${escapeHtml(category||'未選択')} / ★${rank}。1回につき魔物素材★合計${cost}。基礎性能・属性（対応武器のみ）・本体補正・副手追撃値（対応武器のみ）・強化枠数・固定強化内容を個体ごとに独立抽選します。平均は同★帯相当以下、大当たりでも同★帯より少し上までに抑えます。抽選済みの強化は完成時固定で、空き枠があっても後から追加・変更できません。基礎性能大当たりと強化枠+1は独立抽選のため、極低確率で両方を引く個体もあります。</div>`;return;}
+  if(!(currentAntiqueGearRows||[]).length){result.classList.add('muted');result.innerHTML=`<div><b>骨董装備ガチャ</b></div><div>${escapeHtml(kind)} / ${escapeHtml(category||'未選択')} / ★${rank}。1回につき魔物素材★合計${cost}。基礎性能・属性（対応武器のみ）・本体補正・副手追撃値（対応武器のみ）・強化枠数・固定強化内容を個体ごとに独立抽選します。本体補正は武器種の標準個体を基準とし、特定派生だけにある補正プロファイルは50%の確率で抽選対象にします。平均は同★帯相当以下、大当たりでも同★帯より少し上までに抑えます。抽選済みの強化は完成時固定で、空き枠があっても後から追加・変更できません。基礎性能大当たりと強化枠+1は独立抽選のため、極低確率で両方を引く個体もあります。</div>`;return;}
   result.classList.remove('muted');result.innerHTML=`<div><b>骨董装備ガチャ・抽選結果</b></div><div class="muted small">正式に残す個体だけ「ID発行」を押してください。</div>`+currentAntiqueGearRows.map((entry,index)=>{const eq=entry.equipment||{},enh=entry.enhancements||[],issued=!!String(eq.publicId||'').trim(),chips=[`★${eq.rank||rank}`,antiqueGearStatsText(eq),antiqueIntrinsicModifierText(eq)?`本体補正:${antiqueIntrinsicModifierText(eq)}`:'',`強化枠:${entry.usedSlots||0}/${eq.upgradeLimit||0}`].filter(Boolean),enhHtml=enh.length?enh.map(m=>`<div><b>${escapeHtml(equipmentUpgradeDisplayName(m))}</b>${m.antiqueExclusive?' <span class="facility-chip">骨董限定</span>':''}（${escapeHtml(String(upgradeSlotCostForMaterial(m)))}枠）${m.equipmentUpgradeDetail?`：${escapeHtml(m.equipmentUpgradeDetail)}`:''}</div>`).join(''):'<div>固定強化：なし</div>',idHtml=issued?`<div class="small"><b>登録ID：${escapeHtml(eq.publicId)}</b> <span class="facility-chip">発行済</span></div>`:`<div class="small muted">登録ID：未発行（DB未登録）</div><div style="margin-top:8px"><button type="button" class="secondary" data-antique-gear-issue-id="${index}">ID発行</button></div>`;return `<div class="facility-product"><div class="facility-product-body"><div><b>${escapeHtml(eq.name||'名称未設定')}</b></div><div class="facility-product-meta">${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>${enhHtml}${idHtml}</div></div>`;}).join('');
 }
 function antiqueRandomStockText(){

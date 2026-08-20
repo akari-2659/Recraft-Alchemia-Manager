@@ -203,7 +203,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.599｜更新：2026年8月20日</div>
+<div class="ra-build-info">v90.8.599｜更新：2026年8月21日</div>
 
 <header>
   <div class="header-inner">
@@ -1541,7 +1541,7 @@ function eventCheckCopyText(e={},fixed=false){
   const line=eventCheckInfo(e)?.copy||'';
   if(!line)return '';
   const name=String(e.eventName||'名称未設定').trim()||'名称未設定';
-  return `【${name}】\n${line}`;
+  return fixed?`【固定：${name}】\n${line}`:`【${name}】\n${line}`;
 }
 function eventDetailText(e,q=null){
   const partySize=q?effectiveQuestPartySize(q):selectedPartySize();
