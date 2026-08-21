@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.602</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.605</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.602">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.605">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.602｜更新：2026年8月21日</div>
+<div class="ra-build-info">v90.8.605｜更新：2026年8月21日</div>
 
 <header>
   <div class="title-card">
@@ -1918,7 +1918,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.602';
+const RECRAFT_DB_VERSION = 'v90.8.605';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.601';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -4451,6 +4451,31 @@ function antiqueRollOffhandBonus(category=''){
   const min=Math.max(0,Math.trunc(Number(range[0])||0)),max=Math.max(min,Math.trunc(Number(range[1])||min));
   return String(min+Math.floor(Math.random()*(max-min+1)));
 }
+function antiqueGarmentBaseResourceModifiers(category='',rank=1){
+  const cat=String(category||'').trim(),r=Math.max(1,Math.trunc(Number(rank)||1)),out=new Map();
+  if(cat==='魔導衣'){
+    // 魔導衣はMP特化またはHP/MP混成。通常装備の固有効果を持たない骨董個体なので、
+    // 同★通常装備の補正をコピーせず、★だけを使って骨董専用の基礎リソースを生成する。
+    if(Math.random()<.55){
+      const mp=Math.max(4,Math.round(r*1.5+1));
+      out.set('resource:maxMp',`+${mp}`);
+    }else{
+      const hp=Math.max(3,r),mp=r>=3?r+1:2;
+      out.set('resource:maxHp',`+${hp}`);out.set('resource:maxMp',`+${mp}`);
+    }
+  }else if(cat==='祈祷衣'){
+    // 祈祷衣はHP特化を中心に、HP/MP混成・MP特化も生成する。
+    const roll=Math.random();
+    if(roll<.45){
+      const hp=Math.max(5,r*2+1);out.set('resource:maxHp',`+${hp}`);
+    }else if(roll<.75){
+      const hp=Math.max(4,r+2),mp=Math.max(2,r);out.set('resource:maxHp',`+${hp}`);out.set('resource:maxMp',`+${mp}`);
+    }else{
+      const mp=Math.max(4,r+2);out.set('resource:maxMp',`+${mp}`);
+    }
+  }
+  return out;
+}
 function antiqueApplyIntrinsicRoll(baseMap=new Map(),rollMap=new Map(),kind='武器'){
   const out=new Map(baseMap);
   for(const [key,value] of rollMap.entries()){
@@ -4460,6 +4485,11 @@ function antiqueApplyIntrinsicRoll(baseMap=new Map(),rollMap=new Map(),kind='武
     }
     if(kind!=='武器'&&key==='combat:guardAction'){
       out.set(key,antiqueShiftPower(String(out.get(key)||'0'),Number(value)||0));continue;
+    }
+    if(kind!=='武器'&&(key==='resource:maxHp'||key==='resource:maxMp')){
+      const base=Number(String(out.get(key)||'0').replace(/^\+/,''))||0,delta=Number(value)||0,next=Math.max(0,base+delta);
+      if(next>0)out.set(key,`+${next}`);else out.delete(key);
+      continue;
     }
     out.set(key,String(value));
   }
@@ -4493,6 +4523,7 @@ function antiqueGearBaseProfile(kind='',category='',rank=1,selectedSet=antiqueSe
       if(Math.random()<.5)defense=defense+1;else guard=antiqueShiftPower(guard,1);
     }
     const baseMap=new Map();baseMap.set('combat:defense',String(defense));if(guard)baseMap.set('combat:guardAction',String(guard));
+    for(const [key,value] of antiqueGarmentBaseResourceModifiers(category,rank).entries())baseMap.set(key,value);
     const finalMap=antiqueApplyIntrinsicRoll(baseMap,intrinsic.map,kind);
     profile.modifiers=antiqueModifierText(finalMap);
     profile.defense=String(finalMap.get('combat:defense')||0);profile.guard=String(finalMap.get('combat:guardAction')||'');
@@ -4618,7 +4649,10 @@ async function antiqueIssueRegistrationId(index=-1){
 }
 function antiqueGearStatsText(eq={}){
   if(String(eq.itemType||'')==='武器')return [eq.power?`ダメージ:${eq.power}`:'',eq.offhandBonus?`副手追撃値:${eq.offhandBonus}`:'',eq.element?`属性:${eq.element}`:''].filter(Boolean).join(' / ')||'基礎攻撃値なし';
-  const map=antiqueModifierMap(eq.modifiers);return [`防御値:${String(map.get('combat:defense')||0).replace(/^\+/,'')}`,`防御行動値:${String(map.get('combat:guardAction')||'0').replace(/^\+/,'')}`].join(' / ');
+  const map=antiqueModifierMap(eq.modifiers),parts=[`防御値:${String(map.get('combat:defense')||0).replace(/^\+/,'')}`,`防御行動値:${String(map.get('combat:guardAction')||'0').replace(/^\+/,'')}`];
+  const hp=String(map.get('resource:maxHp')||'').trim(),mp=String(map.get('resource:maxMp')||'').trim();
+  if(hp)parts.push(`最大HP:${hp.startsWith('-')||hp.startsWith('+')?hp:`+${hp}`}`);if(mp)parts.push(`最大MP:${mp.startsWith('-')||mp.startsWith('+')?mp:`+${mp}`}`);
+  return parts.join(' / ');
 }
 function antiqueGearCopyText(){
   const rank=Math.max(2,Number($('facilityAntiqueGearRank')?.value)||2);
@@ -10004,7 +10038,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.602';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.605';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-07';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
