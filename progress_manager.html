@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.615</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.616</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.615">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.616">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -203,7 +203,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.615｜更新：2026年8月21日</div>
+<div class="ra-build-info">v90.8.616｜更新：2026年8月21日</div>
 
 <header>
   <div class="header-inner">
@@ -300,7 +300,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
       <div id="questEventRewardPanel" class="event-reward-panel hidden"></div>
       <details id="questImportantUsePanel" class="progress-fold hidden important-use-panel">
         <summary>重要アイテム使用（プレイヤー申告時のみ）</summary>
-        <div class="progress-fold-body"><p class="muted small">対応品の候補は表示しません。プレイヤーから申告があった時だけ名称または登録IDを入力してください。</p><div class="row"><label>申告された重要アイテム<input id="questImportantUseInput" placeholder="名称 / RCA-XXXX-XXXX"></label></div><div class="buttons"><button type="button" class="secondary" data-important-use-resolve="quest">使用を処理</button><button type="button" class="secondary" data-important-use-copy="quest" disabled>結果コピー</button></div><div id="questImportantUseResult" class="result">申告があるまで操作不要です。</div></div>
+        <div class="progress-fold-body"><p class="muted small">イベント側から対応品は案内しません。プレイヤーから申告があった時だけ、申告された重要アイテムを一覧から選択してください。</p><div class="row"><label>申告された重要アイテム<select id="questImportantUseInput"><option value="">選択してください</option></select></label></div><div class="buttons"><button type="button" class="secondary" data-important-use-resolve="quest">使用を処理</button><button type="button" class="secondary" data-important-use-copy="quest" disabled>結果コピー</button></div><div id="questImportantUseResult" class="result">申告があるまで操作不要です。</div></div>
       </details>
       <div id="questWorkReinforcementPanel" class="event-reward-panel hidden"></div>
       <div id="questRecipeMerchantPanel" class="recipe-merchant-panel hidden"></div>
@@ -368,7 +368,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
         <div id="eventRewardPanel" class="event-reward-panel hidden"></div>
         <details id="eventImportantUsePanel" class="progress-fold hidden important-use-panel">
           <summary>重要アイテム使用（プレイヤー申告時のみ）</summary>
-          <div class="progress-fold-body"><p class="muted small">対応品の候補は表示しません。プレイヤーから「この重要アイテムを使いたい」と申告があった時だけ、名称または登録IDを入力してください。</p><div class="row"><label>申告された重要アイテム<input id="eventImportantUseInput" placeholder="名称 / RCA-XXXX-XXXX"></label></div><div class="buttons"><button type="button" class="secondary" data-important-use-resolve="event">使用を処理</button><button type="button" class="secondary" data-important-use-copy="event" disabled>結果コピー</button></div><div id="eventImportantUseResult" class="result">申告があるまで操作不要です。</div></div>
+          <div class="progress-fold-body"><p class="muted small">イベント側から対応品は案内しません。プレイヤーから「この重要アイテムを使いたい」と申告があった時だけ、申告された重要アイテムを一覧から選択してください。</p><div class="row"><label>申告された重要アイテム<select id="eventImportantUseInput"><option value="">選択してください</option></select></label></div><div class="buttons"><button type="button" class="secondary" data-important-use-resolve="event">使用を処理</button><button type="button" class="secondary" data-important-use-copy="event" disabled>結果コピー</button></div><div id="eventImportantUseResult" class="result">申告があるまで操作不要です。</div></div>
         </details>
         <div id="recipeMerchantPanel" class="recipe-merchant-panel hidden"></div>
       </div>
@@ -394,7 +394,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
       <div id="baseEventRewardPanel" class="event-reward-panel hidden"></div>
       <details id="baseImportantUsePanel" class="progress-fold hidden important-use-panel">
         <summary>重要アイテム使用（プレイヤー申告時のみ）</summary>
-        <div class="progress-fold-body"><p class="muted small">対応品の候補は表示しません。プレイヤーから申告があった時だけ名称または登録IDを入力してください。</p><div class="row"><label>申告された重要アイテム<input id="baseImportantUseInput" placeholder="名称 / RCA-XXXX-XXXX"></label></div><div class="buttons"><button type="button" class="secondary" data-important-use-resolve="base">使用を処理</button><button type="button" class="secondary" data-important-use-copy="base" disabled>結果コピー</button></div><div id="baseImportantUseResult" class="result">申告があるまで操作不要です。</div></div>
+        <div class="progress-fold-body"><p class="muted small">イベント側から対応品は案内しません。プレイヤーから申告があった時だけ、申告された重要アイテムを一覧から選択してください。</p><div class="row"><label>申告された重要アイテム<select id="baseImportantUseInput"><option value="">選択してください</option></select></label></div><div class="buttons"><button type="button" class="secondary" data-important-use-resolve="base">使用を処理</button><button type="button" class="secondary" data-important-use-copy="base" disabled>結果コピー</button></div><div id="baseImportantUseResult" class="result">申告があるまで操作不要です。</div></div>
       </details>
       <div id="baseEventRewardResult" class="result" style="margin-top:10px">入手アイテム抽選結果がここに表示されます。</div>
     </section>
@@ -518,7 +518,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.615';
+const VERSION='v90.8.616';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1627,13 +1627,30 @@ function crossoverImportantSpec(row={}){
   const m=notes.match(/【越境対応】item=([^;\s]+);consume=(\d+);table=([^;\s]+)/);
   return m?{publicId:String(m[1]||'').trim().toUpperCase(),consume:Math.max(1,Number(m[2])||1),tableId:String(m[3]||'').trim()}:null;
 }
-function findImportantItemByDeclaration(raw=''){
+function importantItemRows(){
+  return (state.items||[])
+    .filter(row=>String(row.itemType||'').trim()==='重要アイテム'&&String(row.name||'').trim())
+    .slice()
+    .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||''),'ja'));
+}
+function populateImportantUseSelect(scope='event'){
+  const select=$(importantUseElementId(scope,'Input'));if(!select)return;
+  const previous=String(select.value||'');
+  select.replaceChildren(new Option('選択してください',''));
+  importantItemRows().forEach(row=>{
+    const key=String(row.publicId||row.id||'').trim();if(!key)return;
+    select.add(new Option(String(row.name||'名称未設定'),key));
+  });
+  if(previous&&Array.from(select.options).some(opt=>opt.value===previous))select.value=previous;
+}
+function findImportantItemBySelection(raw=''){
   const value=String(raw||'').trim(),upper=value.toUpperCase();if(!value)return null;
-  return (state.items||[]).find(row=>String(row.itemType||'').trim()==='重要アイテム'&&(String(row.publicId||'').trim().toUpperCase()===upper||String(row.id||'').trim()===value||String(row.name||'').trim()===value))||null;
+  return (state.items||[]).find(row=>String(row.itemType||'').trim()==='重要アイテム'&&(String(row.publicId||'').trim().toUpperCase()===upper||String(row.id||'').trim()===value))||null;
 }
 function resetImportantUsePanel(scope='event'){
   importantUseCopyState[scope]='';
   const panel=$(importantUseElementId(scope,'Panel')),input=$(importantUseElementId(scope,'Input')),result=$(importantUseElementId(scope,'Result'));
+  populateImportantUseSelect(scope);
   if(input)input.value='';
   if(result)result.textContent='申告があるまで操作不要です。';
   const copy=panel?.querySelector(`[data-important-use-copy="${scope}"]`);if(copy)copy.disabled=true;
@@ -1642,18 +1659,18 @@ function resetImportantUsePanel(scope='event'){
 function resolveDeclaredImportantItem(scope='event'){
   const row=currentRandomEventForImportantUse(scope),input=$(importantUseElementId(scope,'Input')),result=$(importantUseElementId(scope,'Result'));
   if(!row){if(result)result.textContent='先にランダムイベントを抽選してください。';return;}
-  const declared=String(input?.value||'').trim();if(!declared){if(result)result.textContent='プレイヤーから申告された重要アイテムの名称または登録IDを入力してください。';return;}
-  const item=findImportantItemByDeclaration(declared);if(!item){importantUseCopyState[scope]='';if(result)result.textContent='その名称／登録IDの重要アイテムはDBにありません。';const b=$(importantUseElementId(scope,'Panel'))?.querySelector(`[data-important-use-copy="${scope}"]`);if(b)b.disabled=true;return;}
+  const selectedKey=String(input?.value||'').trim();if(!selectedKey){if(result)result.textContent='プレイヤーから申告された重要アイテムを一覧から選択してください。';return;}
+  const item=findImportantItemBySelection(selectedKey);if(!item){importantUseCopyState[scope]='';if(result)result.textContent='選択された重要アイテムをDBから確認できません。';const b=$(importantUseElementId(scope,'Panel'))?.querySelector(`[data-important-use-copy="${scope}"]`);if(b)b.disabled=true;return;}
   const spec=crossoverImportantSpec(row);
-  if(!spec||String(item.publicId||'').trim().toUpperCase()!==spec.publicId){importantUseCopyState[scope]='';if(result)result.textContent=`《${item.name||declared}》は、このイベントでは特別な反応を示しません。`;const b=$(importantUseElementId(scope,'Panel'))?.querySelector(`[data-important-use-copy="${scope}"]`);if(b)b.disabled=true;return;}
+  if(!spec||String(item.publicId||'').trim().toUpperCase()!==spec.publicId){importantUseCopyState[scope]='';if(result)result.textContent=`《${item.name||'重要アイテム'}》は、このイベントでは特別な反応を示しません。`;const b=$(importantUseElementId(scope,'Panel'))?.querySelector(`[data-important-use-copy="${scope}"]`);if(b)b.disabled=true;return;}
   const reward=rollRewardItemTable(spec.tableId,1,row.areaName||'',row.eventName||'イベント');
-  const consumeLine=`消費：《${item.name||declared}》×${spec.consume}`;
+  const consumeLine=`消費：《${item.name||'重要アイテム'}》×${spec.consume}`;
   const display=[`【重要アイテム使用】${row.eventName||'イベント'}`,consumeLine,reward.displayText||'変化結果を決定できませんでした。'].filter(Boolean).join('\n\n');
   const copy=[`【重要アイテム使用】${row.eventName||'イベント'}`,consumeLine,reward.copyText||''].filter(Boolean).join('\n\n');
   importantUseCopyState[scope]=copy;
   if(result)result.textContent=display;
   const b=$(importantUseElementId(scope,'Panel'))?.querySelector(`[data-important-use-copy="${scope}"]`);if(b)b.disabled=!copy;
-  addLog(`重要アイテム使用：${row.eventName||'イベント'} / ${item.name||declared}${reward.items?.length?` → ${reward.items.map(x=>x.name).join('、')}`:''}`);
+  addLog(`重要アイテム使用：${row.eventName||'イベント'} / ${item.name||'重要アイテム'}${reward.items?.length?` → ${reward.items.map(x=>x.name).join('、')}`:''}`);
 }
 function renderImportantUsePanels(){['event','base','quest'].forEach(resetImportantUsePanel);}
 function pickRandomEvent(rows, lastKey=''){
