@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.605</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.608</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.605">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.608">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.605｜更新：2026年8月21日</div>
+<div class="ra-build-info">v90.8.608｜更新：2026年8月21日</div>
 
 <header>
   <div class="title-card">
@@ -1918,7 +1918,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.605';
+const RECRAFT_DB_VERSION = 'v90.8.608';
 const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.601';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
@@ -4385,20 +4385,110 @@ function antiqueModifierTypeWeights(kind='',category=''){
   }
   return {'combat:defense':5,'combat:guardAction':5,'skill:evade':2,'resource:maxHp':1};
 }
-function antiqueModifierMagnitudeMax(key='',rank=1){
-  const r=Math.max(1,Number(rank)||1);
-  if(key==='combat:guardAction')return r<=2?1:r<=4?2:3;
-  if(key==='resource:maxHp')return r<=2?2:r<=4?3:4;
-  if(key==='resource:maxMp')return r<=2?1:r<=4?2:3;
-  if(key==='combat:defense')return r>=6?2:1;
-  if(['hit','skill:evade','skill:detect','skill:magic','skill:prayer'].includes(key))return r>=5?2:1;
-  return 1;
+const ANTIQUE_SIGNATURE_MODIFIER_KEYS=Object.freeze({
+  '武器':Object.freeze({
+    '短剣':Object.freeze(['hit','skill:evade']),
+    '片手剣':Object.freeze(['combat:defense','combat:guardAction']),
+    '片手槍':Object.freeze(['hit']),
+    '杖':Object.freeze(['skill:evade']),
+    'ガントレット':Object.freeze(['hit']),
+    '長槍':Object.freeze(['hit','skill:detect']),
+    '弓':Object.freeze(['hit']),
+    '弩':Object.freeze(['hit']),
+    '大型弩':Object.freeze(['combat:defense']),
+    '魔導書':Object.freeze(['resource:maxMp']),
+    '祈祷書':Object.freeze(['resource:maxMp'])
+  }),
+  '防具':Object.freeze({
+    '軽装':Object.freeze(['skill:evade']),
+    '中装':Object.freeze(['combat:defense','combat:guardAction']),
+    '重装':Object.freeze(['combat:defense','combat:guardAction']),
+    '魔導衣':Object.freeze(['resource:maxMp']),
+    '祈祷衣':Object.freeze(['resource:maxHp','resource:maxMp'])
+  }),
+  '盾':Object.freeze({'盾':Object.freeze(['combat:defense','combat:guardAction'])})
+});
+function antiqueIsSignatureModifier(kind='',category='',key=''){
+  const type=kind==='盾'?'盾':String(kind||'').trim(),cat=String(category||'').trim();
+  const list=ANTIQUE_SIGNATURE_MODIFIER_KEYS[type]?.[cat]||[];
+  return list.includes(String(key||'').trim());
 }
-function antiqueSignedModifierValue(key='',rank=1){
-  const max=Math.max(1,antiqueModifierMagnitudeMax(key,rank));
-  const magnitude=1+Math.floor(Math.random()*max);
-  const sign=Math.random()<.58?1:-1;
-  const n=sign*magnitude;
+function antiqueNormalPositiveModifierMax(kind='',category='',key='',rank=1){
+  const type=kind==='盾'?'盾':String(kind||'').trim(),cat=String(category||'').trim(),targetRank=Math.max(1,Number(rank)||1),values=[];
+  for(const row of (state.items||[])){
+    if(String(row.itemType||'').trim()!==type||String(row.itemCategory||'').trim()!==cat)continue;
+    if(Number(row.rank||0)>targetRank||antiqueRowIsBossOrigin(row))continue;
+    if(/骨董装備|骨董個体/.test([row.tags,row.usageTags,row.source].map(v=>String(v||'')).join(' ')))continue;
+    const raw=String(antiqueModifierMap(row.modifiers).get(key)||'').trim();
+    if(!/^\+?\d+$/.test(raw))continue;
+    const n=Number(raw);if(n>0)values.push(n);
+  }
+  return values.length?Math.max(...values):0;
+}
+function antiqueModifierRange(kind='',category='',key='',rank=1){
+  const type=kind==='盾'?'盾':String(kind||'').trim(),cat=String(category||'').trim(),k=String(key||'').trim(),r=Math.max(1,Number(rank)||1);
+  let neg=1,pos=1;
+
+  // HP/MPは1点の価値が命中・回避等と異なるため、★帯に応じた専用幅を持つ。
+  if(k==='resource:maxHp'){neg=r<=2?2:r<=4?3:4;pos=neg;}
+  if(k==='resource:maxMp'){neg=r<=2?1:r<=4?2:3;pos=neg;}
+
+  if(type==='武器'){
+    // 武器のHP/MP補正は、得意補正として明示されたもの以外は大きく上振れさせない。
+    // HP/MPは単位が異なるためマイナス幅だけ★帯差を残し、プラス側は通常+1を基準にする。
+    if(k==='resource:maxHp'||k==='resource:maxMp')pos=1;
+    const negativeBias={
+      '短剣':{'hit':2,'skill:evade':2},
+      '片手剣':{'combat:guardAction':2},
+      '片手斧':{'hit':2},
+      '片手槌':{'skill:evade':2},
+      '片手槍':{'hit':2},
+      '杖':{'skill:evade':2},
+      'ガントレット':{'hit':2},
+      '両手剣':{'skill:evade':2},
+      '大槌':{'hit':2,'skill:evade':2},
+      '大鎌':{'hit':2},
+      '長槍':{'hit':2,'skill:detect':2},
+      '弩':{'hit':2},
+      '大型弩':{'hit':2}
+    };
+    neg=Math.max(neg,Number(negativeBias[cat]?.[k]||1));
+
+    // 得意補正だけ、通常同系統で実際に付く最大プラス値+1程度まで上振れ可能。
+    // 通常側にその補正が無い場合は、不得意補正として共通上限を超えて伸ばさない。
+    if(antiqueIsSignatureModifier(type,cat,k)){
+      const normalMax=antiqueNormalPositiveModifierMax(type,cat,k,r);
+      if(normalMax>0)pos=normalMax+1;
+    }
+  }else if(type==='防具'){
+    if(cat==='軽装'&&k==='skill:evade'){
+      neg=r>=3?2:1;
+      const normalMax=antiqueNormalPositiveModifierMax(type,cat,k,r);
+      pos=Math.max(2,normalMax>0?normalMax+1:2);
+    }else if(cat==='中装'){
+      if(k==='combat:defense'||k==='combat:guardAction'){neg=1;pos=2;}
+      else if(k==='skill:evade'){neg=2;pos=1;}
+    }else if(cat==='重装'){
+      if(k==='combat:defense'||k==='combat:guardAction'){neg=2;pos=2;}
+      else if(k==='skill:evade'){neg=2;pos=1;}
+    }else if(cat==='魔導衣'){
+      if(k==='resource:maxMp')pos=(r<=2?2:r<=4?3:4);
+      else if(k==='skill:evade'){neg=2;pos=1;}
+    }else if(cat==='祈祷衣'){
+      if(k==='resource:maxHp')pos=(r<=2?3:r<=4?4:5);
+      else if(k==='resource:maxMp')pos=(r<=2?2:r<=4?3:4);
+    }
+  }else if(type==='盾'){
+    if(k==='combat:defense'||k==='combat:guardAction'){neg=1;pos=2;}
+    else if(k==='skill:evade'){neg=2;pos=1;}
+  }
+
+  // どの補正も必ずマイナス側・0・プラス側のすべてを持つ。
+  return {min:-Math.max(1,Math.trunc(neg)),max:Math.max(1,Math.trunc(pos))};
+}
+function antiqueSignedModifierValue(kind='',category='',key='',rank=1){
+  const range=antiqueModifierRange(kind,category,key,rank),min=Math.trunc(range.min),max=Math.trunc(range.max);
+  const n=min+Math.floor(Math.random()*(max-min+1));
   return `${n>0?'+':''}${n}`;
 }
 function antiqueWeightedModifierTypes(kind='',category='',count=0){
@@ -4414,7 +4504,7 @@ function antiqueRollIntrinsicModifiers(kind='',category='',rank=1){
   const slotCount=antiqueRollIntrinsicModifierSlotCount();
   const types=antiqueWeightedModifierTypes(kind,category,slotCount);
   const map=new Map();
-  types.forEach(key=>map.set(key,antiqueSignedModifierValue(key,rank)));
+  types.forEach(key=>map.set(key,antiqueSignedModifierValue(kind,category,key,rank)));
   return {slotCount,map,text:antiqueModifierText(map)};
 }
 const ANTIQUE_MODIFIER_LABELS=Object.freeze({'hit':'命中','skill:evade':'回避','combat:defense':'防御','combat:guardAction':'防御行動値','skill:detect':'感知','skill:magic':'魔法','skill:prayer':'祈祷','resource:maxMp':'最大MP','resource:maxHp':'最大HP'});
@@ -6667,6 +6757,9 @@ function monsterFirstAppearanceMap(){
   });
   return map;
 }
+function monsterIsAreaBoss(row={}){
+  return String(row.monsterTraits || '').split(/[,、，]/).map(v=>v.trim()).filter(Boolean).includes('ボス');
+}
 function groupMonsterRowsByFirstArea(rows){
   const firstMap=monsterFirstAppearanceMap();
   const groups=new Map();
@@ -6676,7 +6769,14 @@ function groupMonsterRowsByFirstArea(rows){
     if(!groups.has(key)) groups.set(key,{areaName:info.name,order:info.order,items:[]});
     groups.get(key).items.push(item);
   });
-  return [...groups.values()].sort((a,b)=>a.order-b.order || a.areaName.localeCompare(b.areaName,'ja'));
+  const out=[...groups.values()].sort((a,b)=>a.order-b.order || a.areaName.localeCompare(b.areaName,'ja'));
+  out.forEach(group=>{
+    group.items=group.items.map((item,pos)=>({item,pos})).sort((a,b)=>{
+      const bossDiff=Number(monsterIsAreaBoss(a.item.row))-Number(monsterIsAreaBoss(b.item.row));
+      return bossDiff || a.pos-b.pos;
+    }).map(x=>x.item);
+  });
+  return out;
 }
 
 function renderMonsterCardsTable(key){
@@ -10038,7 +10138,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.605';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.608';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-07';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
