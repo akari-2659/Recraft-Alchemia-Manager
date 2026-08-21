@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.608</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.612</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.608">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.612">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.608｜更新：2026年8月21日</div>
+<div class="ra-build-info">v90.8.612｜更新：2026年8月21日</div>
 
 <header>
   <div class="title-card">
@@ -1223,6 +1223,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
         <div class="small">クラウド接続先はツール内で固定されています。</div>
       </div>
       <button class="secondary" id="btnSetup">統合DBシート作成</button>
+      <button class="secondary" id="btnCleanupUploadTemps">一時シート整理</button>
       <button class="secondary" id="btnDiagnoseSheets">DB列診断</button>
       <button class="secondary" id="btnRepairHeaders">DB列修復</button>
       <button class="secondary" id="btnDedupeAll">DB重複整理</button>
@@ -1667,6 +1668,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
               <select id="facilitySmithToolRankInput"></select>
             </div>
             <div>
+              <label for="facilityUpgradeSupportCountInput">強化定着剤（自作）</label>
+              <input id="facilityUpgradeSupportCountInput" type="number" min="0" step="1" value="0">
+            </div>
+            <div>
               <label for="facilityUpgradeGuaranteeItem">確定成功アイテム</label>
               <select id="facilityUpgradeGuaranteeItem"><option value="">使用しない</option></select>
             </div>
@@ -1918,8 +1923,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.608';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.601';
+const RECRAFT_DB_VERSION = 'v90.8.612';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.609';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -2542,19 +2547,25 @@ function adminCraftingToolName(craftSkill='',craftType=''){
   if(skill==='細工') return '細工道具';
   return '対応道具';
 }
-const ADMIN_WEAPON_CRAFT_SUPPORT_NAME='武装融和剤';
-function adminWeaponCraftSupportEligible(row={}){
-  const rank=numericRankValueIncludingLegacyMaterialGrade(row.rank,1);
-  if(rank>5)return false;
+const ADMIN_CRAFT_SUPPORT_REDUCTION=2;
+function adminCraftSupportName(row={}){
+  const skill=String(row.craftSkill||row.processingSkill||'').trim();
   const type=String(row.craftType||'').trim();
-  if(type==='武器派生')return true;
-  if(type!=='鍛冶')return false;
-  const result=String(row.resultItem||row.name||'').trim();
-  const item=(state.items||[]).find(x=>String(x.name||'').trim()===result)||{};
-  return String(item.itemType||'').trim()==='武器';
+  if(skill==='調合'||type==='調合')return '調合安定剤';
+  if(skill==='設計')return '機巧調整剤';
+  if(skill==='細工'){
+    if(type==='武器派生')return '武装融和剤';
+    if(type==='鍛冶'){
+      const result=String(row.resultItem||row.name||'').trim();
+      const item=(state.items||[]).find(x=>String(x.name||'').trim()===result)||{};
+      if(String(item.itemType||'').trim()==='武器')return '武装融和剤';
+    }
+    return '工作定着剤';
+  }
+  return '';
 }
-function adminWeaponCraftSupportText(){
-  return `${ADMIN_WEAPON_CRAFT_SUPPORT_NAME}（自作時のみ・任意個数）／1個につき作成難易度－2`;
+function adminCraftSupportText(row={}){
+  const name=adminCraftSupportName(row);return name?`${name}（自作時のみ・任意個数）／1個につき作成難易度－${ADMIN_CRAFT_SUPPORT_REDUCTION}`:'';
 }
 function adminCraftingRouteLines(row={}){
   const difficulty=String(row.difficulty??'').trim();
@@ -2567,7 +2578,7 @@ function adminCraftingRouteLines(row={}){
     `基礎作成難易度：${difficulty}`,
     `道具使用時：${adminCraftingDifficultySummary(row.rank,difficulty)}`
   ];
-  if(adminWeaponCraftSupportEligible(row))lines.push(`任意の作成補助材：${adminWeaponCraftSupportText()}`);
+  const supportText=adminCraftSupportText(row);if(supportText)lines.push(`任意の作成補助材：${supportText}`);
   return lines;
 }
 function adminCraftingRouteHtml(row={}){
@@ -2957,8 +2968,9 @@ const SYSTEM_HELP = [
       "調合道具は旅薬師の乳鉢具、硝子秤の調合具、晶瓶の調合具、星滴の蒸留具、月環の錬成具。",
       "鍛冶道具は野鍛冶の槌箱、焼入れ金床具、鋼噛み火ばさみ具、星鉄火ばさみ具、竜炉の鍛冶具。",
       "道具は★3、★6、★9、★12、★15以下のように複数ランクをまとめて扱う。レシピ側に要求道具ランクは設定しない。",
-      "作成するレシピまたは装備強化に使う素材のランクが、道具の使用可能上限以下なら使用できる。上位道具による難易度低下は行わない。",
+      "作成するレシピまたは装備強化に使う素材のランクが、道具の使用可能上限以下なら使用できる。上位道具による難易度軽減は通常の作成・加工・装備強化に適用する。",
       "装備強化は、強化回数で自作目標値と施設依頼成功率、強化後の使用済み枠で施設依頼価格を算出する。自作用の道具補正は施設依頼成功率へ適用しない。",
+      "作成補助材は対応する自作判定で任意個数を追加消費し、1個につき作成難易度－2。調合安定剤＝調合、機巧調整剤＝設計、工作定着剤＝武装・装備強化以外の細工、武装融和剤＝武器作成・武器派生、強化定着剤＝装備強化。道具軽減と重複し、施設依頼には適用しない。",
       "調合道具は薬屋、鍛冶道具は鍛冶屋で扱う。"
     ]
   },
@@ -4850,7 +4862,7 @@ function renderFacilitiesPanel(){
   renderFacilityWorkPanel();
 }
 
-const ADMIN_ITEM_TYPE_PREFERRED_ORDER = ['武器','防具','盾','装飾品','調合品','道具','特殊矢弾','収納具','スクロール','換金品','その他'];
+const ADMIN_ITEM_TYPE_PREFERRED_ORDER = ['武器','防具','盾','装飾品','調合品','道具','特殊矢弾','収納具','重要アイテム','スクロール','換金品','その他'];
 const ADMIN_MATERIAL_TYPE_PREFERRED_ORDER = ['食材','魔物素材','採取素材','加工素材','特殊素材'];
 function canonicalMaterialTypeName(value=''){
   const raw=String(value||'').trim();
@@ -5068,6 +5080,7 @@ function warehouseKindForRow(row={}, key=''){
   if(itemType === '矢筒') return '矢筒';
   if(itemType === '術式装備') return ['魔導書','祈祷書'].includes(String(row.itemCategory||'')) ? '武器' : 'スクロール';
   if(itemType === '食材') return '食材';
+  if(itemType === '重要アイテム') return '重要アイテム';
   if(itemType === '調合品' || itemType === '道具' || itemType === '特殊矢弾') return 'アイテム';
   return dataKind || itemType || 'アイテム';
 }
@@ -5778,6 +5791,7 @@ function renderFacilityProcessingCard(row={}){
       <div><b>施設依頼：</b>レシピ不要・判定不要</div>
       <div><b>加工技能：</b>${escapeHtml(row.craftSkill||'調合')}</div>
       <div><b>基礎作成難易度：</b>${escapeHtml(row.difficulty||'未設定')}</div>
+      <div><b>任意の作成補助材：</b>${escapeHtml(adminCraftSupportText({craftSkill:row.craftSkill||'調合',craftType:'素材加工'})||'なし')}</div>
       ${facilityItemDescriptionHtml(item,row)}
     </div>`;
   }
@@ -5794,6 +5808,7 @@ function renderFacilityProcessingCard(row={}){
     <div><b>加工技能：</b>${escapeHtml(row.processingSkill||'未設定')}</div>
     <div><b>対応道具：</b>${escapeHtml(tool)}（★${escapeHtml(toolRank)}以上）</div>
     <div><b>基礎作成難易度：</b>${escapeHtml(row.processingDifficulty||'未設定')}</div>
+    <div><b>任意の作成補助材：</b>${escapeHtml(adminCraftSupportText({craftSkill:row.processingSkill||'',craftType:'素材加工'})||'なし')}</div>
     ${facilityItemDescriptionHtml(row,{})}
   </div>`;
 }
@@ -5813,13 +5828,15 @@ function facilityProcessingCopyText(facilityName=''){
   完成数：${row.processingResultCount||1}
   加工技能：${row.processingSkill||'未設定'}
   対応道具：${row.processingToolType||'対応道具'}（★${row.processingToolRank||'?'}以上）
-  基礎作成難易度：${row.processingDifficulty||'未設定'}`));
+  基礎作成難易度：${row.processingDifficulty||'未設定'}
+  任意の作成補助材：${adminCraftSupportText({craftSkill:row.processingSkill||'',craftType:'素材加工'})||'なし'}`));
   special.forEach(row=>lines.push(`- ${row.resultItem||row.name||'名称未設定'}（${playerRankLabel(row.rank)} / 施設加工依頼${Number(row.price)||0}G）
   レシピ：必要
   必要素材：${row.requiredMaterials||'未設定'}
   完成数：${row.resultCount||1}
   加工技能：${row.craftSkill||'調合'}
-  基礎作成難易度：${row.difficulty||'未設定'}`));
+  基礎作成難易度：${row.difficulty||'未設定'}
+  任意の作成補助材：${adminCraftSupportText({craftSkill:row.craftSkill||'調合',craftType:'素材加工'})||'なし'}`));
   return lines.length?lines.join('\n'):'- 加工可能な素材はありません';
 }
 function facilityRecipeRows(craftType){
@@ -6446,7 +6463,9 @@ function renderFacilityUpgradeResult(materialName=''){
   const toolMax=normalizeToolRank($('facilitySmithToolRankInput')?.value||'3',3);
   const tool=toolDifficultyReduction(materialRank,toolMax), price=upgradeWorkPrice(mat,rule,equipment);
   const toolReduction=tool.usable?tool.reduction:0;
-  const finalTarget=target-toolReduction;
+  const supportCount=Math.max(0,Math.floor(Number($('facilityUpgradeSupportCountInput')?.value||0)));
+  const supportReduction=supportCount*2;
+  const finalTarget=target-toolReduction-supportReduction;
   const selfCraftUsable=rankAllowed&&tool.usable&&capacityAllowed;
   const facilityUsable=rankAllowed&&capacityAllowed;
   const guarantee=selectedFacilityGuaranteeItem();
@@ -6465,6 +6484,8 @@ function renderFacilityUpgradeResult(materialName=''){
     <div><b>今回消費する強化枠：</b>${escapeHtml(String(slotCost))}（強化後 ${escapeHtml(String(afterSlots))}枠）${capacityAllowed?'':' / 枠不足'}</div>
     <div><b>基礎作成難易度：</b>${escapeHtml(String(target))}（7＋装備ランク${escapeHtml(String(equipmentRank))}＋現在の強化回数${escapeHtml(String(upgradeCount))}）</div>
     <div><b>道具による軽減：</b>－${escapeHtml(String(toolReduction))}</div>
+    <div><b>任意の作成補助材：</b>強化定着剤（自作時のみ・任意個数）／1個につき作成難易度－2</div>
+    <div><b>強化定着剤による軽減：</b>－${escapeHtml(String(supportReduction))}（${escapeHtml(String(supportCount))}個消費）</div>
     <div><b>最終作成難易度：</b>${escapeHtml(String(finalTarget))}</div>
     <div><b>自作判定：</b>${selfCraftUsable?`2D6＋細工－${escapeHtml(String(difficulty))} &gt;= ${escapeHtml(String(finalTarget))}`:'使用する細工道具の対応上限不足、素材ランク不足、または強化枠不足'}</div>
     <div><b>使用する細工道具（自作）：</b>${escapeHtml(selectedToolText('facilitySmithToolRankInput'))} / ${tool.usable?'使用可能':'素材ランクが対応上限を超過'}</div>
@@ -8143,6 +8164,7 @@ function itemFormFields(row){
   }
   const itemType = String(row.itemType || '').trim();
   if(itemType === '道具') return ['itemType','itemCategory','name','publicId','csVisible','buyPrice','sellPrice','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','maxStack','description','effect','unlockAreaKey','unlockOrder','unlockCondition','unlockFacility','tags','notes'];
+  if(itemType === '重要アイテム') return ['itemType','itemCategory','name','publicId','csVisible','sellPrice','equipSlot','maxStack','description','effect','source','tags','notes'];
   if(itemType === 'バッグ'){
     return ['itemType','itemCategory','name','publicId','csVisible','buyPrice','sellPrice','rank','bagCapacity','description','effect','unlockAreaKey','unlockOrder','unlockCondition','unlockFacility','tags','notes'];
   }
@@ -9054,8 +9076,8 @@ function cleanUploadRow(row){
 }
 function utf8ByteLength(text){ return typeof TextEncoder==='function' ? new TextEncoder().encode(String(text||'')).byteLength : unescape(encodeURIComponent(String(text||''))).length; }
 
-const DIRECT_POST_TIMEOUT_MS = 380000;
-const DIRECT_CHUNK_POST_TIMEOUT_MS = 380000;
+const DIRECT_POST_TIMEOUT_MS = 90000;
+const DIRECT_CHUNK_POST_TIMEOUT_MS = 120000;
 const REPAIR_CHUNK_ROWS = 200;
 
 function dbHashScopeCode(scope){
@@ -9567,6 +9589,8 @@ async function uploadRowsByDirectChunks(key, rows, mode, dataKindScope='', optio
       return uploadRowsByDirectChunks(key,list,mode,dataKindScope,{...options,forceNewSession:true});
     }
   }else{
+    uploadProgressUpdate({phase:`${labelKey(key)}の送信開始処理中`,percent:0,currentRows:0,totalRows:list.length,chunks:`0/${chunks.length}`,parts:0,detail:'接続確認と置換対象の初期化を行っています。ここで長時間止まる場合はPOST応答またはGAS開始処理の異常です。'});
+    await yieldUploadUi();
     const started=performance.now();
     const begin=await directPostForm('beginDirectChunkUpload',{sheetKey:key,mode,token,dataKindScope,rowCount:list.length,totalChunks:chunks.length,checksum},DIRECT_CHUNK_POST_TIMEOUT_MS);
     const elapsed=performance.now()-started;
@@ -9762,8 +9786,24 @@ async function verifyRemoteSaved(keys){
   throw new Error('DB反映確認に失敗しました。\n' + issues.slice(0,12).join('\n') + (issues.length>12 ? `\nほか${issues.length-12}件` : ''));
 }
 async function setup(){
-  try{ await assertServerVersion(); const res=await callApi(payload('setup')); if(res.ok) toast('DBシートを作成/確認しました'); else throw new Error(res.error||'失敗'); }
-  catch(e){ toast(e.message,'error'); }
+  try{
+    await assertServerVersion();
+    const res=await callApi(payload('setup'));
+    if(!res.ok) throw new Error(res.error||'失敗');
+    const removed=Number(res.cleanup&&res.cleanup.deletedTempSheets&&res.cleanup.deletedTempSheets.length||0);
+    toast(removed?`DBシートを確認し、残っていた一時シートを${removed}枚削除しました`:'DBシートを作成/確認しました');
+  }catch(e){ toast(e.message,'error'); }
+}
+async function cleanupUploadTemps(){
+  if(!confirm('旧DB送信で残った __recraft_upload_* 一時シートを削除します。\n現行の無圧縮直接分割送信では使用しません。\nよろしいですか？')) return;
+  try{
+    await assertServerVersion();
+    const res=await writeApi(payload('cleanupUploadTemps'));
+    if(!res||!res.ok) throw new Error((res&&res.error)||'一時シート整理に失敗しました');
+    const names=Array.isArray(res.deletedTempSheets)?res.deletedTempSheets:[];
+    toast(names.length?`一時シートを${names.length}枚削除しました`:'削除対象の一時シートはありませんでした');
+    alert(names.length?`一時シート整理\n${names.length}枚削除しました。\n${names.join('\n')}`:'一時シート整理\n削除対象はありませんでした。');
+  }catch(e){ toast(e.message,'error'); }
 }
 async function diagnoseSheets(){
   try{
@@ -10138,7 +10178,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.608';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.612';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-07';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
@@ -10458,7 +10498,7 @@ document.addEventListener('click',e=>{
   const addMod=e.target.closest('[data-modifier-add]'); if(addMod){ const editor=addMod.closest('[data-modifier-editor]'); const list=editor.querySelector('[data-modifier-list]'); list.querySelector('[data-modifier-empty]')?.remove(); const idx=list.querySelectorAll('[data-modifier-row]').length; list.insertAdjacentHTML('beforeend', modifierEditorRowHtml({}, idx)); syncModifierEditor(editor); return; }
   const remMod=e.target.closest('[data-modifier-remove]'); if(remMod){ const editor=remMod.closest('[data-modifier-editor]'); remMod.closest('[data-modifier-row]')?.remove(); const list=editor.querySelector('[data-modifier-list]'); if(!list.querySelector('[data-modifier-row]')) list.innerHTML='<div class="muted small" data-modifier-empty>補正値はまだありません。</div>'; syncModifierEditor(editor); return; }
   const quickCat=e.target.closest('[data-quick-category-field]'); if(quickCat){ quickCreateCategory(quickCat.dataset.quickCategoryField); return; }
-  const upgradeReset=e.target.closest('[data-facility-upgrade-reset]'); if(upgradeReset){ if($('facilityUpgradeEquipmentSelect')) $('facilityUpgradeEquipmentSelect').value=''; if($('facilityUpgradeMaterialInput')) $('facilityUpgradeMaterialInput').value=''; if($('facilityUpgradeGuaranteeItem')) $('facilityUpgradeGuaranteeItem').value=''; if($('facilityUpgradeCountInput')) $('facilityUpgradeCountInput').value='0'; if($('facilityUpgradeStepInput')) $('facilityUpgradeStepInput').value='1'; facilityRemovalEntryIds=[]; renderFacilityUpgradeResult(''); renderFacilityRemovalCalculator(); toast('装備強化の選択をリセットしました'); return; }
+  const upgradeReset=e.target.closest('[data-facility-upgrade-reset]'); if(upgradeReset){ if($('facilityUpgradeEquipmentSelect')) $('facilityUpgradeEquipmentSelect').value=''; if($('facilityUpgradeMaterialInput')) $('facilityUpgradeMaterialInput').value=''; if($('facilityUpgradeGuaranteeItem')) $('facilityUpgradeGuaranteeItem').value=''; if($('facilityUpgradeCountInput')) $('facilityUpgradeCountInput').value='0'; if($('facilityUpgradeStepInput')) $('facilityUpgradeStepInput').value='1'; if($('facilityUpgradeSupportCountInput')) $('facilityUpgradeSupportCountInput').value='0'; facilityRemovalEntryIds=[]; renderFacilityUpgradeResult(''); renderFacilityRemovalCalculator(); toast('装備強化の選択をリセットしました'); return; }
   const facilitySection=e.target.closest('[data-facility-section]'); if(facilitySection){
     currentFacilitySectionByName[currentFacilityView]=facilitySection.dataset.facilitySection||facilitySectionDefs(currentFacilityView)[0][0];
     renderFacilitiesPanel();
@@ -10621,7 +10661,7 @@ document.addEventListener('input',e=>{
   if(e.target.id==='facilitySkillGachaCount'){renderSkillGachaManagement();return;}
   if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
   if(e.target.id==='facilityWeaponBranchSearch'){ currentFacilityWeaponBranchSearch=e.target.value||''; renderFacilitiesPanel(); const input=$('facilityWeaponBranchSearch'); if(input){input.focus();input.setSelectionRange(input.value.length,input.value.length);} return; }
-  if(['facilityUpgradeMaterialInput','facilityUpgradeCountInput','facilityUpgradeStepInput','facilitySmithToolRankInput','facilityUpgradeGuaranteeItem'].includes(e.target.id)) renderFacilityUpgradeResult();
+  if(['facilityUpgradeMaterialInput','facilityUpgradeCountInput','facilityUpgradeStepInput','facilitySmithToolRankInput','facilityUpgradeSupportCountInput','facilityUpgradeGuaranteeItem'].includes(e.target.id)) renderFacilityUpgradeResult();
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)) renderFacilityAlchemyResult();
   if(['facilityAppraisalTypeInput','facilityAppraisalRankInput'].includes(e.target.id)) renderAntiqueAppraisalResult();
   if(e.target.id==='facilityAntiqueGearCount'){currentAntiqueGearRows=[];renderAntiqueGearStock(false);} 
@@ -10688,7 +10728,7 @@ document.addEventListener('change',e=>{
   if(e.target.id==='facilitySkillGachaRank'){renderSkillGachaManagement();return;}
   if(e.target.id==='facilitySkillGachaCount'){renderSkillGachaManagement();return;}
   if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
-  if(['facilityUpgradeMaterialInput','facilityUpgradeCountInput','facilityUpgradeStepInput','facilitySmithToolRankInput','facilityUpgradeGuaranteeItem'].includes(e.target.id)){ renderFacilityUpgradeResult(); return; }
+  if(['facilityUpgradeMaterialInput','facilityUpgradeCountInput','facilityUpgradeStepInput','facilitySmithToolRankInput','facilityUpgradeSupportCountInput','facilityUpgradeGuaranteeItem'].includes(e.target.id)){ renderFacilityUpgradeResult(); return; }
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)){ renderFacilityAlchemyResult(); return; }
   if(['facilityAppraisalTypeInput','facilityAppraisalRankInput'].includes(e.target.id)){ renderAntiqueAppraisalResult(); return; }
   if(e.target.id==='facilityAntiqueGearCount'){currentAntiqueGearRows=[];renderAntiqueGearStock(false);return;}
@@ -10751,6 +10791,7 @@ $('guildDailyAreaModal')?.addEventListener('click',e=>{if(e.target===$('guildDai
 $('antiqueGearAreaModal')?.addEventListener('click',e=>{if(e.target===$('antiqueGearAreaModal'))closeAntiqueGearAreaModal();});
 document.addEventListener('keydown',e=>{ if(e.key==='Escape' && !$('antiqueGearAreaModal')?.classList.contains('hidden')){closeAntiqueGearAreaModal();return;} if(e.key==='Escape' && !$('guildDailyAreaModal')?.classList.contains('hidden')){closeGuildDailyAreaModal();return;} if(e.key==='Escape' && !$('copyistAreaModal')?.classList.contains('hidden')){closeCopyistAreaModal();return;} if(e.key==='Escape' && !$('editModal').classList.contains('hidden')) closeForm(); });
 $('btnSetup').addEventListener('click',setup);
+if($('btnCleanupUploadTemps')) $('btnCleanupUploadTemps').addEventListener('click',cleanupUploadTemps);
 if($('btnDiagnoseSheets')) $('btnDiagnoseSheets').addEventListener('click',diagnoseSheets);
 if($('btnRepairHeaders')) $('btnRepairHeaders').addEventListener('click',repairHeaders);
 if($('btnSaveAll')) $('btnSaveAll').addEventListener('click',saveAll);
