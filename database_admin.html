@@ -1205,7 +1205,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <link rel="stylesheet" href="ra-design-system.css?v=90.8.599">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.599｜更新：2026年8月21日</div>
+<div class="ra-build-info">v90.8.599｜更新：2026年8月20日</div>
 
 <header>
   <div class="title-card">
@@ -1769,7 +1769,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
               <button class="ghost" type="button" data-facility-antique-gear-copy>抽選結果をコピー</button>
             </div>
             <div id="facilityAntiqueGearCost" class="skill-fragment-line">必要魔物素材★合計：15</div>
-            <div id="facilityAntiqueGearResult" class="facility-upgrade-result muted">装備区分・武器種/防具種・★帯を選び、魔物素材を使って骨董装備を抽選します。個体ごとに基礎性能・属性・本体補正・副手追撃値（対応武器のみ）・強化枠・固定強化内容が変化します。抽選しただけではDB登録されず、採用する個体だけ「ID発行」で正式登録します。抽選後の強化追加・変更はできません。</div>
+            <div id="facilityAntiqueGearResult" class="facility-upgrade-result muted">装備区分・武器種/防具種・★帯を選び、魔物素材を使って骨董装備を抽選します。個体ごとに基礎性能・属性・強化枠・固定強化内容が変化します。抽選しただけではDB登録されず、採用する個体だけ「ID発行」で正式登録します。抽選後の強化追加・変更はできません。</div>
           </div>
           <div id="facilityAntiqueAppraisalWork" class="hidden">
             <div class="input-action-row">
@@ -2823,7 +2823,7 @@ const FACILITY_DEFS = [
     services:[
       {name:'スクロール鑑定', price:'★1 150G〜', description:'未鑑定の巻物を調べ、その内側に封じられた術式を明らかにする。鑑定具を使って自分で見極めることもできる。'},
       {name:'集中術式化', price:'施設依頼不可', description:'鑑定済みの巻物へ魔導インクや祈祷紙を用い、自ら集中して術式として定着させる。'},
-      {name:'骨董装備ガチャ', price:'魔物素材の★合計', description:'武器種・防具種と★帯を指定し、来歴不詳の骨董装備を抽選する。個体ごとに基礎性能・属性・本体補正・副手追撃値（対応武器のみ）・強化枠・固定強化内容が異なる。抽選後の強化追加・変更は不可。'},
+      {name:'骨董装備ガチャ', price:'魔物素材の★合計', description:'武器種・防具種と★帯を指定し、来歴不詳の骨董装備を抽選する。個体ごとに基礎性能・属性・強化枠・固定強化内容が異なる。抽選後の強化追加・変更は不可。'},
       {name:'スキルガチャ', price:'共鳴用素材の★合計', description:'共鳴する素材を結晶へ捧げ、その時点で扱える力の中から一つを引き出す。'}
     ]
   },
@@ -2906,7 +2906,7 @@ const SYSTEM_HELP = [
       "料理は各エリア5品を基本とし、その5品を持ち込み料理と今日のおすすめ候補の両方に使用する。",
       "料理材料は食材カテゴリに限定せず、丸茸など用途タグが「食用可能」の採取素材・魔物素材も使用できる。",
       "宿屋は宿泊45G、休息30G、噂、クエスト情報を扱う。休息は1行動を消費してHP/MPを全回復し、宿泊は一日を終了してHP/MP全回復・疲労度0にする。",
-      "骨董屋は未鑑定スクロールの高額ランダム販売、施設鑑定、魔物素材を使う骨董装備ガチャ、魔導インク・祈祷紙・術式鑑定具・聖印・魔印の常設販売を扱う。骨董装備ガチャは管理HTMLのモーダルで解放済み通常エリア・異界を指定し、装備区分・武器種/防具種・★帯を選んで骨董屋専用個体を抽選する。既存装備を素体にはせず、個体ごとに基礎性能・属性（対応武器のみ）・本体補正・副手追撃値（対応武器のみ）・強化枠・固定強化内容が変化し、抽選後の強化追加・変更はできない。通常強化に加えて骨董品限定強化が低確率で付く。ボス装備・ボス素材は候補外とし、店頭では未鑑定スクロールの中身を公開しない。",
+      "骨董屋は未鑑定スクロールの高額ランダム販売、施設鑑定、魔物素材を使う骨董装備ガチャ、魔導インク・祈祷紙・術式鑑定具・聖印・魔印の常設販売を扱う。骨董装備ガチャは管理HTMLのモーダルで解放済み通常エリア・異界を指定し、装備区分・武器種/防具種・★帯を選んで骨董屋専用個体を抽選する。既存装備を素体にはせず、個体ごとに基礎性能・属性（対応武器のみ）・強化枠・固定強化内容が変化し、抽選後の強化追加・変更はできない。通常強化に加えて骨董品限定強化が低確率で付く。ボス装備・ボス素材は候補外とし、店頭では未鑑定スクロールの中身を公開しない。",
       "ギルドは受注可能クエストを、重要クエストとデイリークエストに分けて掲示する。",
       "重要クエストは有効列がTRUEのものだけ、ギルドの受注可能一覧に表示する。",
       "デイリークエストは再受注可能な依頼として、選択した抽選対象エリア以下の候補から、拠点内依頼・エリア依頼・納品依頼を種別ごとに独立して抽選する。",
@@ -4272,7 +4272,6 @@ const ANTIQUE_FIXED_AMMO_ELEMENT=new Set(['弓','弩','大型弩']);
 const ANTIQUE_BOOK_CATEGORIES=new Set(['魔導書','祈祷書']);
 const ANTIQUE_ATTRIBUTE_WEIGHTS=[['物',44],['火',8],['水',8],['風',8],['雷',8],['光',8],['闇',8],['無',8]];
 const ANTIQUE_GEAR_COST_BY_RANK=Object.freeze({2:15,3:30,4:45,5:60,6:75,7:90});
-const ANTIQUE_BRANCH_MODIFIER_CHANCE=0.50;
 const ANTIQUE_AREA_MAX_RANK={
   武器:{area_outskirts_grass:1,area_nearby_forest:2,area_waterside_wetland:2,area_foothill_old_mine:3,area_reflection_water_garden:3,area_wind_swept_highland:4,area_ashcrown_volcanic_canyon:5},
   防具:{area_outskirts_grass:1,area_nearby_forest:2,area_waterside_wetland:2,area_foothill_old_mine:3,area_reflection_water_garden:3,area_wind_swept_highland:3,area_ashcrown_volcanic_canyon:4},
@@ -4350,18 +4349,8 @@ function antiqueWeaponModifierProfiles(rows=[]){
   return out;
 }
 function antiqueRandomWeaponModifiers(rows=[],fallback=''){
-  const baseline=antiqueModifierText(antiqueModifierMap(fallback));
-  const profiles=antiqueWeaponModifierProfiles(rows).filter(text=>text!==baseline);
-  // 武器種の標準補正は基準個体として残し、特定派生だけの補正プロファイルは確率抽選にする。
-  if(!profiles.length||Math.random()>=ANTIQUE_BRANCH_MODIFIER_CHANCE)return baseline;
-  return profiles[Math.floor(Math.random()*profiles.length)]||baseline;
-}
-function antiqueRandomOffhandBonus(rows=[],fallback=''){
-  const vals=rows.map(row=>String(row?.offhandBonus||'').trim()).filter(Boolean).map(Number).filter(Number.isFinite);
-  const fallbackText=String(fallback||'').trim(),fb=fallbackText?Number(fallbackText):NaN;
-  if(!vals.length)return Number.isFinite(fb)?String(Math.trunc(fb)):'';
-  const min=Math.min(...vals),max=Math.max(...vals);
-  return String(Math.floor(min+Math.random()*(max-min+1)));
+  const profiles=antiqueWeaponModifierProfiles(rows);if(!profiles.length)return antiqueModifierText(antiqueModifierMap(fallback));
+  return profiles[Math.floor(Math.random()*profiles.length)]||'';
 }
 const ANTIQUE_MODIFIER_LABELS=Object.freeze({'hit':'命中','skill:evade':'回避','combat:defense':'防御','combat:guardAction':'防御行動値','skill:detect':'感知','skill:magic':'魔法','skill:prayer':'祈祷','resource:maxMp':'最大MP','resource:maxHp':'最大HP'});
 function antiqueIntrinsicModifierText(eq={}){
@@ -4373,12 +4362,8 @@ function antiqueGuardCandidate(rows=[]){
 }
 function antiqueDefenseCandidate(rows=[]){return antiqueMedianNumber(rows.map(row=>Number(String(antiqueModifierMap(row.modifiers).get('combat:defense')||'0').replace(/^\+/,''))),0);}
 function antiqueFixedModifierSource(kind='',category='',rows=[]){
-  const all=(state.items||[]).filter(row=>String(row.itemType||'').trim()===(kind==='盾'?'盾':kind)&&String(row.itemCategory||'').trim()===category&&!antiqueRowIsBossOrigin(row)&&!/骨董装備|骨董個体/.test([row.tags,row.usageTags,row.source].map(v=>String(v||'')).join(' ')));
+  const all=(state.items||[]).filter(row=>String(row.itemType||'').trim()===(kind==='盾'?'盾':kind)&&String(row.itemCategory||'').trim()===category&&!antiqueRowIsBossOrigin(row));
   if(kind==='盾')return all.find(row=>String(row.name||'').trim()==='小盾')||rows[0]||all[0]||{};
-  if(kind==='武器'){
-    const initial=all.filter(row=>/初期支給/.test(String(row.source||''))).sort((a,b)=>Number(a.rank||999)-Number(b.rank||999));
-    if(initial.length)return initial[0];
-  }
   return all.slice().sort((a,b)=>Number(a.rank||999)-Number(b.rank||999))[0]||rows[0]||{};
 }
 function antiqueRandomAttribute(category=''){
@@ -4390,7 +4375,7 @@ function antiqueGearBaseProfile(kind='',category='',rank=1,selectedSet=antiqueSe
   const refs=antiqueGearReferenceRows(kind,category,rank,selectedSet),quality=antiqueRollQuality(),source=antiqueFixedModifierSource(kind,category,refs),slotBase=Math.max(1,Math.round(antiqueMedianNumber(refs.map(r=>Number(r.upgradeLimit||0)).filter(Boolean),Math.max(2,rank+1))));
   const slotDelta=antiqueRollSlotTier();
   const upgradeLimit=Math.max(1,Math.min(9,slotBase+slotDelta));
-  const profile={quality,slotDelta,upgradeLimit,source,refs,power:'',element:'',modifiers:String(source.modifiers||''),offhandBonus:'',defense:'',guard:''};
+  const profile={quality,slotDelta,upgradeLimit,source,refs,power:'',element:'',modifiers:String(source.modifiers||''),defense:'',guard:''};
   if(kind==='武器'){
     if(!ANTIQUE_BOOK_CATEGORIES.has(category)){
       const powers=antiquePowerCandidates(refs),base=antiquePercentileRow(powers,.50)?.power||String(source.power||'');
@@ -4398,7 +4383,6 @@ function antiqueGearBaseProfile(kind='',category='',rank=1,selectedSet=antiqueSe
     }
     profile.element=antiqueRandomAttribute(category);
     profile.modifiers=antiqueRandomWeaponModifiers(refs,source.modifiers||'');
-    profile.offhandBonus=antiqueRandomOffhandBonus(refs,source.offhandBonus||'');
   }else{
     const def0=antiqueDefenseCandidate(refs),guards=antiqueGuardCandidate(refs),g0=antiquePercentileRow(guards,.5)?.guard||'';
     let defense=def0,guard=g0;
@@ -4471,7 +4455,7 @@ function antiqueGearEnhancementStorageEntry(m={}){
 }
 function antiqueGearBuildRow(kind='',category='',rank=1,selectedSet=antiqueSelectedAreaSet(),publicId=''){
   const profile=antiqueGearBaseProfile(kind,category,rank,selectedSet),src=profile.source||{},id=antiqueInstanceId(publicId),itemType=kind==='盾'?'盾':kind;
-  const equipment={id,publicId,name:antiqueGeneratedName(kind,category),itemType,itemCategory:category,rank,equipSlot:String(src.equipSlot||((kind==='防具')?'鎧':'右手/左手')),skill:kind==='武器'?String(src.skill||''):String(src.skill||''),power:profile.power,element:profile.element,offhandBonus:profile.offhandBonus,modifiers:profile.modifiers,upgradeLimit:String(profile.upgradeLimit),upgradeMaterialMinRank:String(rank),effect:'',description:`骨董屋に持ち込まれた来歴不詳の${category}。固有効果は持たず、個体ごとに基礎性能・本体補正・副手追撃値・強化枠・強化内容が異なる。抽選後の強化追加・変更はできない。`,source:'骨董屋（骨董装備ガチャ）',tags:`骨董屋,骨董装備,骨董個体,骨董強化固定,${category},★${rank}`};
+  const equipment={id,publicId,name:antiqueGeneratedName(kind,category),itemType,itemCategory:category,rank,equipSlot:String(src.equipSlot||((kind==='防具')?'鎧':'右手/左手')),skill:kind==='武器'?String(src.skill||''):String(src.skill||''),power:profile.power,element:profile.element,modifiers:profile.modifiers,upgradeLimit:String(profile.upgradeLimit),upgradeMaterialMinRank:String(rank),effect:'',description:`骨董屋に持ち込まれた来歴不詳の${category}。固有効果は持たず、個体ごとに基礎性能・本体補正・強化枠・強化内容が異なる。抽選後の強化追加・変更はできない。`,source:'骨董屋（骨董装備ガチャ）',tags:`骨董屋,骨董装備,骨董個体,骨董強化固定,${category},★${rank}`};
   const enhancements=antiqueGearEnhancements(equipment,selectedSet,profile),usedSlots=enhancements.reduce((s,m)=>s+upgradeSlotCostForMaterial(m),0);
   return {equipment,enhancements:enhancements.map(x=>({...x})),usedSlots,quality:profile.quality,slotDelta:profile.slotDelta,rollId:id};
 }
@@ -4482,7 +4466,7 @@ function antiqueGearDbRow(entry={}){
   const eq=entry.equipment||{};
   return {
     id:eq.id||'',publicId:eq.publicId||'',name:eq.name||'',itemType:eq.itemType||'',itemCategory:eq.itemCategory||'',rank:eq.rank||'',
-    equipSlot:eq.equipSlot||'',skill:eq.skill||'',power:eq.power||'',element:eq.element||'',offhandBonus:eq.offhandBonus||'',modifiers:eq.modifiers||'',upgradeLimit:eq.upgradeLimit||'',
+    equipSlot:eq.equipSlot||'',skill:eq.skill||'',power:eq.power||'',element:eq.element||'',modifiers:eq.modifiers||'',upgradeLimit:eq.upgradeLimit||'',
     upgradeMaterialMinRank:eq.upgradeMaterialMinRank||'',description:eq.description||'',effect:eq.effect||'',source:eq.source||'',tags:eq.tags||'',
     upgradeEntries:JSON.stringify((entry.enhancements||[]).map(antiqueGearEnhancementStorageEntry)),createdAt:new Date().toISOString()
   };
@@ -4529,7 +4513,7 @@ async function antiqueIssueRegistrationId(index=-1){
   }finally{const next=document.querySelector(`[data-antique-gear-issue-id="${index}"]`);if(next)next.disabled=false;}
 }
 function antiqueGearStatsText(eq={}){
-  if(String(eq.itemType||'')==='武器')return [eq.power?`ダメージ:${eq.power}`:'',eq.element?`属性:${eq.element}`:'',eq.offhandBonus?`副手追撃:${eq.offhandBonus}`:''].filter(Boolean).join(' / ')||'基礎攻撃値なし';
+  if(String(eq.itemType||'')==='武器')return [eq.power?`ダメージ:${eq.power}`:'',eq.element?`属性:${eq.element}`:''].filter(Boolean).join(' / ')||'基礎攻撃値なし';
   const map=antiqueModifierMap(eq.modifiers);return [`防御値:${String(map.get('combat:defense')||0).replace(/^\+/,'')}`,`防御行動値:${String(map.get('combat:guardAction')||'0').replace(/^\+/,'')}`].join(' / ');
 }
 function antiqueGearCopyText(){
@@ -4565,7 +4549,7 @@ async function drawAntiqueGearStock(){
 function renderAntiqueGearStock(){
   const result=$('facilityAntiqueGearResult');if(!result)return;antiqueEnsureGearAreaState();syncAntiqueGearSelectors();const areas=antiqueAreaRows(),selected=antiqueSelectedAreaSet(),labels=areas.filter(a=>selected.has(antiqueAreaId(a))).map(antiqueAreaLabel),kind=antiqueGearSelectedKind(),category=String($('facilityAntiqueGearCategory')?.value||''),rank=Math.max(2,Number($('facilityAntiqueGearRank')?.value)||2),count=Math.max(1,Math.min(5,Number($('facilityAntiqueGearCount')?.value||1)||1)),cost=ANTIQUE_GEAR_COST_BY_RANK[rank]||0;
   const summary=$('facilityAntiqueGearAreaSummary');if(summary)summary.textContent=`${labels.join('、')||'未設定'}（${selected.size}エリア）`;
-  if(!(currentAntiqueGearRows||[]).length){result.classList.add('muted');result.innerHTML=`<div><b>骨董装備ガチャ</b></div><div>${escapeHtml(kind)} / ${escapeHtml(category||'未選択')} / ★${rank}。1回につき魔物素材★合計${cost}。基礎性能・属性（対応武器のみ）・本体補正・副手追撃値（対応武器のみ）・強化枠数・固定強化内容を個体ごとに独立抽選します。本体補正は武器種の標準個体を基準とし、特定派生だけにある補正プロファイルは50%の確率で抽選対象にします。平均は同★帯相当以下、大当たりでも同★帯より少し上までに抑えます。抽選済みの強化は完成時固定で、空き枠があっても後から追加・変更できません。基礎性能大当たりと強化枠+1は独立抽選のため、極低確率で両方を引く個体もあります。</div>`;return;}
+  if(!(currentAntiqueGearRows||[]).length){result.classList.add('muted');result.innerHTML=`<div><b>骨董装備ガチャ</b></div><div>${escapeHtml(kind)} / ${escapeHtml(category||'未選択')} / ★${rank}。1回につき魔物素材★合計${cost}。基礎性能・属性（対応武器のみ）・本体補正・強化枠数・固定強化内容を個体ごとに独立抽選します。平均は同★帯相当以下、大当たりでも同★帯より少し上までに抑えます。抽選済みの強化は完成時固定で、空き枠があっても後から追加・変更できません。基礎性能大当たりと強化枠+1は独立抽選のため、極低確率で両方を引く個体もあります。</div>`;return;}
   result.classList.remove('muted');result.innerHTML=`<div><b>骨董装備ガチャ・抽選結果</b></div><div class="muted small">正式に残す個体だけ「ID発行」を押してください。</div>`+currentAntiqueGearRows.map((entry,index)=>{const eq=entry.equipment||{},enh=entry.enhancements||[],issued=!!String(eq.publicId||'').trim(),chips=[`★${eq.rank||rank}`,antiqueGearStatsText(eq),antiqueIntrinsicModifierText(eq)?`本体補正:${antiqueIntrinsicModifierText(eq)}`:'',`強化枠:${entry.usedSlots||0}/${eq.upgradeLimit||0}`].filter(Boolean),enhHtml=enh.length?enh.map(m=>`<div><b>${escapeHtml(equipmentUpgradeDisplayName(m))}</b>${m.antiqueExclusive?' <span class="facility-chip">骨董限定</span>':''}（${escapeHtml(String(upgradeSlotCostForMaterial(m)))}枠）${m.equipmentUpgradeDetail?`：${escapeHtml(m.equipmentUpgradeDetail)}`:''}</div>`).join(''):'<div>固定強化：なし</div>',idHtml=issued?`<div class="small"><b>登録ID：${escapeHtml(eq.publicId)}</b> <span class="facility-chip">発行済</span></div>`:`<div class="small muted">登録ID：未発行（DB未登録）</div><div style="margin-top:8px"><button type="button" class="secondary" data-antique-gear-issue-id="${index}">ID発行</button></div>`;return `<div class="facility-product"><div class="facility-product-body"><div><b>${escapeHtml(eq.name||'名称未設定')}</b></div><div class="facility-product-meta">${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>${enhHtml}${idHtml}</div></div>`;}).join('');
 }
 function antiqueRandomStockText(){
@@ -8586,20 +8570,20 @@ function payload(action, extra={}){
   return {action, ...extra};
 }
 function isGasMode(){ return typeof google !== 'undefined' && google.script && google.script.run; }
-const JSONP_ACTIONS = new Set(['ping','schema','setup','list','listAll','getEquipmentCategories','characterSheetMaster','resolveRegistrationId','dedupeAll','dedupe','repairAll','repairSheet','dbHashes','beginUpload','putUploadChunk','putUploadTextChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet']);
+const JSONP_ACTIONS = new Set(['ping','schema','setup','list','listAll','getEquipmentCategories','characterSheetMaster','resolveRegistrationId','dedupeAll','dedupe','repairAll','repairSheet','dbHashes','beginUpload','putUploadChunk','putUploadTextChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet','beginDirectChunkUpload','directChunkUploadStatus','putDirectRowsChunk','finishDirectChunkUpload','beginRepairSheetChunked','repairSheetRowsChunk','finishRepairSheetChunked']);
 function apiBaseUrl(){
   return (DEFAULT_GAS_WEB_APP_URL || '').trim();
 }
 function jsonpTimeoutMs(action){
   const a = String(action || '').trim();
-  if (a === 'commitUpload') return 120000;
-  if (['beginUpload','putUploadChunk','putUploadTextChunk','putUploadCell','abortUpload','upsert','replaceSheet','repairSheet','repairAll','dedupe','dedupeAll','setup'].includes(a)) return 60000;
+  // Apps Scriptの1実行上限(6分)より先にブラウザ側だけが諦めないよう、書込系は約380秒待つ。
+  if (['commitUpload','beginUpload','putUploadChunk','putUploadTextChunk','putUploadCell','abortUpload','upsert','replaceSheet','repairSheet','repairAll','dedupe','dedupeAll','setup','beginDirectChunkUpload','directChunkUploadStatus','putDirectRowsChunk','finishDirectChunkUpload','beginRepairSheetChunked','repairSheetRowsChunk','finishRepairSheetChunked'].includes(a)) return 380000;
   if (['list','listAll','characterSheetMaster','getEquipmentCategories','dbHashes'].includes(a)) return 45000;
   return 25000;
 }
 function jsonpActionLabel(action){
   const a = String(action || '').trim();
-  if (['beginUpload','putUploadChunk','putUploadTextChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet'].includes(a)) return 'DB送信/反映';
+  if (['beginUpload','putUploadChunk','putUploadTextChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet','beginDirectChunkUpload','directChunkUploadStatus','putDirectRowsChunk','finishDirectChunkUpload','beginRepairSheetChunked','repairSheetRowsChunk','finishRepairSheetChunked'].includes(a)) return 'DB送信/反映';
   return 'DB読み込み';
 }
 function jsonpApi(data){
@@ -8832,7 +8816,9 @@ function cleanUploadRow(row){
 }
 function utf8ByteLength(text){ return typeof TextEncoder==='function' ? new TextEncoder().encode(String(text||'')).byteLength : unescape(encodeURIComponent(String(text||''))).length; }
 
-const DIRECT_POST_TIMEOUT_MS = 180000;
+const DIRECT_POST_TIMEOUT_MS = 380000;
+const DIRECT_CHUNK_POST_TIMEOUT_MS = 380000;
+const REPAIR_CHUNK_ROWS = 200;
 
 function dbHashScopeCode(scope){
   const s=String(scope||'').trim();
@@ -8914,9 +8900,11 @@ const UPLOAD_GZIP_RAW_BYTES_PER_CHUNK = 32768;
 const UPLOAD_GZIP_MAX_ROWS_PER_CHUNK = 40;
 const UPLOAD_GZIP_COMPRESSION_SCHEMA = 'gzipUtf8Bytes32kRows40_v90_8_385';
 const UPLOAD_GZIP_CHUNK_TIMEOUT_MS = 15000;
-// v90.8.599: 現行DBは無圧縮text/plainの1回POSTを標準にする。
-// 4MBを超えた時だけ無圧縮分割POSTへ切り替え、gzipはさらにその後の互換フォールバックだけに残す。
-const DIRECT_UPLOAD_RAW_MAX_BYTES = 4000000;
+// v90.8.599: 大量DBは無圧縮・直接分割書込を標準にする。
+// 1チャンクは100行以内かつ未圧縮JSON約256KB以内。受信POST内でそのままDBへ反映し、最後の全件commitは行わない。
+const DIRECT_CHUNK_MAX_ROWS = 100;
+const DIRECT_CHUNK_MAX_BYTES = 262144;
+const DIRECT_SMALL_UPSERT_ROWS = 25;
 function uploadPartPayload(token, chunkIndex, partIndex, textPart){
   return payload('putUploadChunk', {
     token,
@@ -9047,6 +9035,24 @@ function yieldUploadUi(){
     else setTimeout(resolve,0);
   });
 }
+
+function makeDirectRowChunks(rows){
+  const list=(rows||[]).map(cleanUploadRow);
+  const chunks=[];
+  let current=[];
+  let currentBytes=2;
+  for(const row of list){
+    const rowText=JSON.stringify(row||{});
+    const addBytes=utf8ByteLength(rowText)+(current.length?1:0);
+    if(current.length && (current.length>=DIRECT_CHUNK_MAX_ROWS || currentBytes+addBytes>DIRECT_CHUNK_MAX_BYTES)){
+      chunks.push(current); current=[]; currentBytes=2;
+    }
+    current.push(row); currentBytes+=addBytes;
+  }
+  if(current.length)chunks.push(current);
+  return chunks;
+}
+
 
 async function uploadRowsByTextChunks(key, rows, mode, dataKindScope=''){
   const token = uploadToken(mode === 'replace' ? 'rp' : 'up', key);
@@ -9282,70 +9288,111 @@ async function uploadRowsByGzipPostChunks(key, rows, mode, dataKindScope=''){
   }
 }
 
-async function uploadRowsDirectPost(key, rows, mode, dataKindScope='', options={}){
+async function uploadRowsSmallDirectPost(key, rows, mode, dataKindScope=''){
   const list=(rows||[]).map(cleanUploadRow);
-  const token=uploadToken(mode==='replace'?'directrp':'directup',key);
-  const serializedRows=typeof options.serializedRows==='string' ? options.serializedRows : JSON.stringify(list);
-  const rawBytes=utf8ByteLength(serializedRows);
+  const token=uploadToken(mode==='replace'?'smallrp':'smallup',key);
+  const rawBytes=utf8ByteLength(JSON.stringify(list));
+  uploadProgressStart(`${labelKey(key)}の軽量直接送信`,list.length);
+  const started=performance.now();
+  const action=mode==='replace'?'replaceSheet':'upsert';
+  const res=await directPostForm(action,{sheetKey:key,token,rows:list,dataKindScope,returnRows:false},DIRECT_CHUNK_POST_TIMEOUT_MS);
+  if(!res||!res.ok)throw new Error((res&&res.error)||`${labelKey(key)}の直接DB送信に失敗しました`);
+  const elapsed=performance.now()-started;
+  uploadProgressLog(`直接POST：${list.length}行 / 通信+GAS ${formatUploadTime(elapsed)}${res.elapsedMs!==undefined?` / GAS ${formatUploadTime(res.elapsedMs)}`:''}`);
+  const result={...res,uploadEncoding:'direct-small-raw-post',sentRows:list.length,sentChunks:1,sentParts:1,rawChars:rawBytes};
+  uploadProgressDone(result);return result;
+}
+
+async function uploadRowsByDirectChunks(key, rows, mode, dataKindScope='', options={}){
+  const list=(rows||[]).map(cleanUploadRow);
+  const fingerprint=uploadResumeFingerprint(key,mode,dataKindScope,list);
+  const previous=uploadResumeLoad();
+  const chunks=makeDirectRowChunks(list);
+  const canResume=previous && previous.encoding==='directRowsV599' && previous.fingerprint===fingerprint && previous.token;
+  if(previous && previous.token && !canResume){
+    try{await directPostForm('abortUpload',{token:previous.token},DIRECT_CHUNK_POST_TIMEOUT_MS);}catch(e){console.warn('old direct upload session cleanup failed',e);}
+    uploadResumeClear();
+  }
+  const token=canResume?previous.token:uploadToken(mode==='replace'?'drp':'dup',key);
   const checksum=String(options.checksum||'').trim();
-  uploadProgressStart(`${labelKey(key)}の無圧縮直接送信`,list.length);
-  try{
-    // v90.8.599: 現行DBは最大でも約1.1MB。通常はgzipせずtext/plain 1回POSTが最軽量。
-    if(rawBytes<=DIRECT_UPLOAD_RAW_MAX_BYTES){
-      const directHeartbeat=uploadProgressSmoothHeartbeat({start:5,cap:94,phase:`${labelKey(key)}を無圧縮送信・DB反映中`,currentRows:0,totalRows:list.length,chunks:1,parts:1,rawChars:rawBytes,sentChars:rawBytes,detail:'無圧縮text/plainの1回POSTで送信し、Apps Script側の反映完了を待っています。%は推定進捗、経過時間は実測です。'});
-      const directAction=checksum?'directUpload':(mode==='replace'?'replaceSheet':'upsert');
-      const directPayload=checksum
-        ? {sheetKey:key,mode,token,uploadEncoding:'text',rowsPayload:serializedRows,rowCount:list.length,dataKindScope,checksum}
-        : {sheetKey:key,token,rows:list,dataKindScope,returnRows:false};
-      let res;
-      try{ res=await directPostForm(directAction,directPayload,DIRECT_POST_TIMEOUT_MS); }
-      finally{ uploadProgressStopHeartbeat(directHeartbeat); }
-      if(!res||!res.ok)throw new Error((res&&res.error)||`${labelKey(key)}の直接DB送信に失敗しました`);
-      const result={...res,uploadEncoding:checksum?'direct-raw-text-post':'direct-row-raw-post',sentRows:list.length,sentChunks:1,sentParts:1,rawChars:rawBytes};
-      uploadProgressDone(result);return result;
+  uploadProgressStart(`${labelKey(key)}の無圧縮・直接分割書込${canResume?'（続きから）':''}`,list.length);
+  let nextChunk=0;
+  if(canResume){
+    try{
+      const status=await directPostForm('directChunkUploadStatus',{token},DIRECT_CHUNK_POST_TIMEOUT_MS);
+      if(status&&status.ok&&status.found) nextChunk=Math.min(chunks.length,Number(status.nextChunk||0));
+      else throw new Error('保存済み送信セッションがサーバー側にありません。');
+      uploadProgressLog(`サーバー側の実績位置から再開します：${nextChunk}/${chunks.length}チャンク。`);
+    }catch(statusError){
+      uploadProgressLog(`保存済みセッションを確認できないため、この表を最初から開始します：${statusError.message||statusError}`);
+      uploadResumeClear();
+      return uploadRowsByDirectChunks(key,list,mode,dataKindScope,{...options,forceNewSession:true});
     }
-    uploadProgressLog(`無圧縮1回POSTの安全上限を超えたため、無圧縮分割POSTへ切り替えます（${formatUploadBytes(rawBytes)}）。`);
-    return null;
-  }catch(error){
-    uploadProgressFail(error);
-    throw error;
+  }else{
+    const started=performance.now();
+    const begin=await directPostForm('beginDirectChunkUpload',{sheetKey:key,mode,token,dataKindScope,rowCount:list.length,totalChunks:chunks.length,checksum},DIRECT_CHUNK_POST_TIMEOUT_MS);
+    const elapsed=performance.now()-started;
+    if(!begin||!begin.ok)throw new Error((begin&&begin.error)||`${labelKey(key)}の直接分割書込準備に失敗しました`);
+    nextChunk=Math.min(chunks.length,Number(begin.nextChunk||0));
+    uploadProgressLog(`開始処理：${formatUploadTime(elapsed)}${begin.elapsedMs!==undefined?` / GAS ${formatUploadTime(begin.elapsedMs)}`:''}。${mode==='replace'?`対象${begin.resetRemoved||0}行を初期化。`:''}`);
+  }
+  let sentRows=chunks.slice(0,nextChunk).reduce((n,c)=>n+c.length,0);
+  let rawBytes=chunks.slice(0,nextChunk).reduce((n,c)=>n+utf8ByteLength(JSON.stringify(c)),0);
+  uploadResumeSave({encoding:'directRowsV599',fingerprint,token,key,mode,dataKindScope,nextChunk,sentRows,totalChunks:chunks.length,updatedAt:new Date().toISOString()});
+  try{
+    for(let c=nextChunk;c<chunks.length;c++){
+      const chunk=chunks[c];
+      const bytes=utf8ByteLength(JSON.stringify(chunk));
+      uploadProgressUpdate({phase:`${labelKey(key)}をDBへ直接書込中`,percent:chunks.length?Math.min(96,(sentRows/list.length)*96):96,currentRows:sentRows,totalRows:list.length,chunks:`${c+1}/${chunks.length}`,parts:c,rawChars:rawBytes,sentChars:rawBytes,detail:`次の${chunk.length}行を無圧縮で送信し、このPOST内でDBへ直接反映します。`});
+      const started=performance.now();
+      const res=await directPostForm('putDirectRowsChunk',{token,chunkIndex:c,rows:chunk},DIRECT_CHUNK_POST_TIMEOUT_MS);
+      const elapsed=performance.now()-started;
+      if(!res||!res.ok)throw new Error((res&&res.error)||`${labelKey(key)}の直接分割書込に失敗しました`);
+      const confirmedNext=Math.max(c+1,Number(res.nextChunk||c+1));
+      if(res.alreadyApplied){
+        sentRows=chunks.slice(0,confirmedNext).reduce((n,x)=>n+x.length,0);
+      }else sentRows+=chunk.length;
+      rawBytes+=bytes;
+      uploadProgressLog(`チャンク${c+1}/${chunks.length}：${chunk.length}行 / ${formatUploadBytes(bytes)} / 通信+GAS ${formatUploadTime(elapsed)}${res.elapsedMs!==undefined?` / GAS ${formatUploadTime(res.elapsedMs)}`:''}${res.alreadyApplied?'（既に反映済み）':''}`);
+      uploadResumeSave({encoding:'directRowsV599',fingerprint,token,key,mode,dataKindScope,nextChunk:confirmedNext,sentRows,totalChunks:chunks.length,updatedAt:new Date().toISOString()});
+      uploadProgressUpdate({phase:`${labelKey(key)}をDBへ直接書込中`,percent:list.length?Math.min(96,(sentRows/list.length)*96):96,currentRows:sentRows,totalRows:list.length,chunks:`${confirmedNext}/${chunks.length}`,parts:confirmedNext,rawChars:rawBytes,sentChars:rawBytes,detail:`${sentRows}/${list.length}行までDB反映済みです。%は実件数ベースです。`});
+      if(chunks.length>1)await sleep(10);
+    }
+    uploadProgressUpdate({phase:'DB送信結果を確定中',percent:98,currentRows:list.length,totalRows:list.length,chunks:`${chunks.length}/${chunks.length}`,parts:chunks.length,detail:'最後の全件再処理は行わず、件数とハッシュ情報だけを確定しています。'});
+    const finishStarted=performance.now();
+    const finish=await directPostForm('finishDirectChunkUpload',{token,checksum},DIRECT_CHUNK_POST_TIMEOUT_MS);
+    const finishElapsed=performance.now()-finishStarted;
+    if(!finish||!finish.ok)throw new Error((finish&&finish.error)||`${labelKey(key)}の直接分割書込完了確認に失敗しました`);
+    uploadProgressLog(`完了確認：${formatUploadTime(finishElapsed)}${finish.elapsedMs!==undefined?` / GAS ${formatUploadTime(finish.elapsedMs)}`:''}。全件再書込なし。`);
+    if(finish.timing)uploadProgressLog(`GASチャンク実測：平均 ${formatUploadTime(finish.timing.averageMs||0)} / 最大 ${formatUploadTime(finish.timing.maxMs||0)} / 合計 ${formatUploadTime(finish.timing.totalMs||0)}`);
+    uploadResumeClear();
+    const result={...finish,uploadEncoding:'direct-raw-row-chunks',sentRows:list.length,sentChunks:chunks.length,sentParts:chunks.length,rawChars:rawBytes};
+    uploadProgressDone(result);return result;
+  }catch(e){
+    uploadProgressFail(e);
+    uploadProgressLog('直接書込済み位置はサーバー側にも記録されています。再実行すると未反映チャンクから再開します。');
+    throw e;
   }
 }
+
 async function uploadRowsByChunksFallback(key, rows, mode, dataKindScope='', options={}){
   const list=rows||[];
-  // v90.8.599: 圧縮は最終手段。まず無圧縮POST分割を試す。
-  if(canUseDirectPostUpload()){
-    try{return await uploadRowsByTextPostChunks(key,list,mode,dataKindScope);}
-    catch(textPostError){
-      console.warn('text POST chunk upload failed; gzip is final fallback',textPostError);
-      uploadProgressLog('無圧縮分割POSTを継続できなかったため、最終フォールバックへ切り替えます。');
-    }
-  }
+  // direct POSTを使えない古い環境だけ、v598以前の仮シート分割経路を互換用として残す。
   if(canUseGzipUpload()){
-    try{return await uploadRowsByGzipPostChunks(key,list,mode,dataKindScope);}
-    catch(postChunkError){
-      console.warn('gzip POST chunk upload failed; fallback to JSONP chunks',postChunkError);
-      try{return await uploadRowsByGzipChunks(key,list,mode,dataKindScope);}
-      catch(gzipError){
-        const saved=uploadResumeLoad();
-        if(saved) throw gzipError;
-      }
-    }
+    try{return await uploadRowsByGzipChunks(key,list,mode,dataKindScope);}
+    catch(gzipError){const saved=uploadResumeLoad();if(saved)throw gzipError;}
   }
   return await uploadRowsByTextChunks(key,list,mode,dataKindScope);
 }
 async function uploadRowsByChunks(key, rows, mode, dataKindScope='', options={}){
   await assertServerVersion();
-  const list=rows||[];
+  const list=(rows||[]).map(cleanUploadRow);
   if(canUseDirectPostUpload()){
-    try{
-      const direct=await uploadRowsDirectPost(key,list,mode,dataKindScope,options);
-      if(direct)return direct;
-    }catch(directError){
-      console.warn('direct DB upload failed; fallback to split upload',directError);
-      uploadProgressLog('軽量直接送信を継続できなかったため、分割送信へ切り替えます。');
-      toast(`${labelKey(key)}を分割送信へ切り替えます。`,'warn');
+    // 少量upsertは1POSTの軽量行更新を維持。大量登録と置換は直接分割書込へ統一する。
+    if(mode==='upsert' && list.length<=DIRECT_SMALL_UPSERT_ROWS && !String(options.checksum||'').trim()){
+      return uploadRowsSmallDirectPost(key,list,mode,dataKindScope);
     }
+    return uploadRowsByDirectChunks(key,list,mode,dataKindScope,options);
   }
   return uploadRowsByChunksFallback(key,list,mode,dataKindScope,options);
 }
@@ -9368,7 +9415,7 @@ async function writeApi(data){
   if(!isGasMode() && canUseDirectPostUpload()){
     const action=String(data&&data.action||'').trim();
     const token=uploadToken('cmd',action||'write');
-    const timeoutMs=action==='repairSheet'?120000:60000;
+    const timeoutMs=DIRECT_POST_TIMEOUT_MS;
     const res=await directPostForm(action,{...(data||{}),token},timeoutMs);
     if(!res||res.ok===false)throw new Error((res&&res.error)||'DB更新に失敗しました');
     return res;
@@ -9497,7 +9544,7 @@ async function diagnoseSheets(){
   }catch(e){ toast(e.message,'error'); }
 }
 async function repairHeaders(){
-  if(!confirm('DB列を標準ヘッダー順に修復します。\n最初に列だけを診断し、修復が必要なシートだけを書き直します。\nよろしいですか？')) return;
+  if(!confirm('DB列を標準ヘッダー順に修復します。\n最初に列だけを診断し、修復が必要なシートだけを行分割して書き直します。\nよろしいですか？')) return;
   try{
     await assertServerVersion();
     const diag=await callApi(payload('diagnoseSheets'));
@@ -9508,19 +9555,47 @@ async function repairHeaders(){
       alert('DB列修復\n修復が必要なシートはありませんでした。');
       return;
     }
-    uploadProgressStart('DB列修復',targets.length);
+    const totalRows=targets.reduce((n,[,r])=>n+Math.max(0,Number(r.rows||0)),0);
+    uploadProgressStart('DB列修復',totalRows||targets.length);
     const lines=[];
+    let globalDone=0;
     for(let i=0;i<targets.length;i++){
-      const [key]=targets[i];
-      uploadProgressUpdate({phase:`${labelKey(key)}の列を修復中`,percent:(i/targets.length)*100,currentRows:i,totalRows:targets.length,chunks:`${i+1}/${targets.length}`,parts:i,detail:'問題があるシートだけを1枚ずつ修復しています。'});
-      const res=await writeApi(payload('repairSheet',{sheetKey:key}));
-      if(!res||!res.ok)throw new Error((res&&res.error)||`${labelKey(key)}のDB列修復に失敗しました`);
-      lines.push(`${labelKey(key)}: ${res.rows||0}行${res.skipped?'（変更なし）':'（修復）'}`);
-      uploadProgressUpdate({phase:`${labelKey(key)}の列修復完了`,percent:((i+1)/targets.length)*100,currentRows:i+1,totalRows:targets.length,chunks:`${i+1}/${targets.length}`,parts:i+1,detail:`${labelKey(key)}を処理しました。`});
+      const [key,diagRow]=targets[i];
+      uploadProgressLog(`${labelKey(key)}：分割修復を開始します（${Number(diagRow.rows||0)}行）。`);
+      const beginStarted=performance.now();
+      const begin=await writeApi(payload('beginRepairSheetChunked',{sheetKey:key,token:uploadToken('repair',key)}));
+      const beginElapsed=performance.now()-beginStarted;
+      if(!begin||!begin.ok)throw new Error((begin&&begin.error)||`${labelKey(key)}のDB列修復準備に失敗しました`);
+      if(begin.skipped){
+        lines.push(`${labelKey(key)}: ${begin.rows||0}行（変更なし）`);
+        uploadProgressLog(`${labelKey(key)}：変更不要 / ${formatUploadTime(beginElapsed)}`);
+        continue;
+      }
+      let nextRow=Math.max(2,Number(begin.nextDataRow||2));
+      let done=Math.max(0,Number(begin.processedRows||0));
+      const sheetTotal=Math.max(0,Number(begin.totalRows||diagRow.rows||0));
+      if(done) globalDone+=done;
+      while(done<sheetTotal){
+        const count=Math.min(REPAIR_CHUNK_ROWS,sheetTotal-done);
+        const started=performance.now();
+        const res=await writeApi(payload('repairSheetRowsChunk',{sheetKey:key,startRow:nextRow,rowCount:count}));
+        const elapsed=performance.now()-started;
+        if(!res||!res.ok)throw new Error((res&&res.error)||`${labelKey(key)}のDB列修復に失敗しました`);
+        nextRow=Math.max(nextRow+count,Number(res.nextDataRow||nextRow+count));
+        done=Math.max(done+count,Number(res.processedRows||done+count));
+        globalDone+=res.alreadyApplied?0:Number(res.rows||count);
+        const pct=totalRows?Math.min(96,(globalDone/totalRows)*96):Math.min(96,((i+done/Math.max(1,sheetTotal))/targets.length)*96);
+        uploadProgressUpdate({phase:`${labelKey(key)}の列を分割修復中`,percent:pct,currentRows:globalDone,totalRows:totalRows||targets.length,chunks:`${i+1}/${targets.length}`,parts:Math.ceil(done/REPAIR_CHUNK_ROWS),detail:`${labelKey(key)}：${done}/${sheetTotal}行修復済み。実件数ベースです。`});
+        uploadProgressLog(`${labelKey(key)} ${done}/${sheetTotal}行：通信+GAS ${formatUploadTime(elapsed)}${res.elapsedMs!==undefined?` / GAS ${formatUploadTime(res.elapsedMs)}`:''}`);
+      }
+      const finish=await writeApi(payload('finishRepairSheetChunked',{sheetKey:key}));
+      if(!finish||!finish.ok)throw new Error((finish&&finish.error)||`${labelKey(key)}のDB列修復完了処理に失敗しました`);
+      if(finish.timing)uploadProgressLog(`${labelKey(key)} GAS実測：平均 ${formatUploadTime(finish.timing.averageMs||0)} / 最大 ${formatUploadTime(finish.timing.maxMs||0)}`);
+      lines.push(`${labelKey(key)}: ${finish.rows||sheetTotal}行（分割修復）`);
     }
-    uploadProgressDone({sentRows:targets.length,sentChunks:targets.length,sentParts:targets.length,uploadEncoding:'repair-only-needed-sheets'});
+    uploadProgressDone({sentRows:totalRows||targets.length,sentChunks:targets.length,sentParts:targets.length,uploadEncoding:'chunked-column-repair'});
     alert('DB列修復\n' + lines.join('\n'));
-    toast('必要なDB列だけ修復しました');
+    toast('必要なDB列だけ分割修復しました');
   }catch(e){ uploadProgressFail(e); toast(e.message,'error'); }
 }
 function rowsForTableForSave(tableKey){
