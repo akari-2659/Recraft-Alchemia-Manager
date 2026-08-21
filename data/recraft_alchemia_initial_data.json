@@ -1,6 +1,6 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "90.8.599",
+  "version": "90.8.602",
   "encoding": "UTF-8",
   "description": "Recraft-Alchemia integrated database v90.8.595 — magic/prayer book intrinsic modifiers re-audited against effects, upgrade slots, unlock timing, and branch power.",
   "data": {
@@ -93438,6 +93438,6 @@
       }
     ]
   },
-  "updatedAt": "2026-08-20",
-  "generatedAt": "2026-08-20"
+  "updatedAt": "2026-08-21",
+  "generatedAt": "2026-08-21"
 }
