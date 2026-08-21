@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.613</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.615</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.613">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.615">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.613｜更新：2026年8月21日</div>
+<div class="ra-build-info">v90.8.615｜更新：2026年8月21日</div>
 
 <header>
   <div class="title-card">
@@ -1923,8 +1923,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
-const RECRAFT_DB_VERSION = 'v90.8.613';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.609';
+const RECRAFT_DB_VERSION = 'v90.8.615';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.615';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -4728,6 +4728,12 @@ async function antiquePersistGeneratedEntries(entries=[]){
   if(!rows.length)throw new Error('骨董個体の登録データがありません。');
   // v90.8.594: 骨董ID発行は通常1件なので、共通の軽量upsert経路へ送る。
   // 小さい個体登録では圧縮・分割・仮シート・commitを一切使わない。
+  if(!isGasMode()&&canUseDirectPostUpload()&&rows.length===1&&String(rows[0].publicId||'').trim()){
+    const token=uploadToken('antq','antique_instances');
+    const res=await directPostForm('upsert',{sheetKey:'antique_instances',token,rows,dataKindScope:'',returnRows:false},DIRECT_CHUNK_POST_TIMEOUT_MS,antiqueRegistrationProbe(rows[0].publicId));
+    if(!res||!res.ok)throw new Error((res&&res.error)||'骨董個体DBへの登録に失敗しました。');
+    return res;
+  }
   const res=await upsertSheetRowsByJsonp('antique_instances',rows,'');
   if(!res||!res.ok)throw new Error((res&&res.error)||'骨董個体DBへの登録に失敗しました。');
   return res;
@@ -8830,20 +8836,20 @@ function payload(action, extra={}){
   return {action, ...extra};
 }
 function isGasMode(){ return typeof google !== 'undefined' && google.script && google.script.run; }
-const JSONP_ACTIONS = new Set(['ping','schema','setup','list','listAll','getEquipmentCategories','characterSheetMaster','resolveRegistrationId','dedupeAll','dedupe','repairAll','repairSheet','dbHashes','beginUpload','putUploadChunk','putUploadTextChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet','beginDirectChunkUpload','directChunkUploadStatus','putDirectRowsChunk','finishDirectChunkUpload','beginRepairSheetChunked','repairSheetRowsChunk','finishRepairSheetChunked']);
+const JSONP_ACTIONS = new Set(['ping','schema','setup','list','listAll','getEquipmentCategories','characterSheetMaster','resolveRegistrationId','dedupeAll','dedupe','repairAll','repairSheet','dbHashes','beginUpload','putUploadChunk','putUploadTextChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet','beginDirectChunkUpload','directChunkUploadStatus','antiqueRegistrationStatus','putDirectRowsChunk','finishDirectChunkUpload','beginRepairSheetChunked','repairSheetChunkStatus','repairSheetRowsChunk','finishRepairSheetChunked']);
 function apiBaseUrl(){
   return (DEFAULT_GAS_WEB_APP_URL || '').trim();
 }
 function jsonpTimeoutMs(action){
   const a = String(action || '').trim();
   // Apps Scriptの1実行上限(6分)より先にブラウザ側だけが諦めないよう、書込系は約380秒待つ。
-  if (['commitUpload','beginUpload','putUploadChunk','putUploadTextChunk','putUploadCell','abortUpload','upsert','replaceSheet','repairSheet','repairAll','dedupe','dedupeAll','setup','beginDirectChunkUpload','directChunkUploadStatus','putDirectRowsChunk','finishDirectChunkUpload','beginRepairSheetChunked','repairSheetRowsChunk','finishRepairSheetChunked'].includes(a)) return 380000;
+  if (['commitUpload','beginUpload','putUploadChunk','putUploadTextChunk','putUploadCell','abortUpload','upsert','replaceSheet','repairSheet','repairAll','dedupe','dedupeAll','setup','beginDirectChunkUpload','directChunkUploadStatus','antiqueRegistrationStatus','putDirectRowsChunk','finishDirectChunkUpload','beginRepairSheetChunked','repairSheetChunkStatus','repairSheetRowsChunk','finishRepairSheetChunked'].includes(a)) return 380000;
   if (['list','listAll','characterSheetMaster','getEquipmentCategories','dbHashes'].includes(a)) return 45000;
   return 25000;
 }
 function jsonpActionLabel(action){
   const a = String(action || '').trim();
-  if (['beginUpload','putUploadChunk','putUploadTextChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet','beginDirectChunkUpload','directChunkUploadStatus','putDirectRowsChunk','finishDirectChunkUpload','beginRepairSheetChunked','repairSheetRowsChunk','finishRepairSheetChunked'].includes(a)) return 'DB送信/反映';
+  if (['beginUpload','putUploadChunk','putUploadTextChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet','beginDirectChunkUpload','directChunkUploadStatus','antiqueRegistrationStatus','putDirectRowsChunk','finishDirectChunkUpload','beginRepairSheetChunked','repairSheetChunkStatus','repairSheetRowsChunk','finishRepairSheetChunked'].includes(a)) return 'DB送信/反映';
   return 'DB読み込み';
 }
 function jsonpApi(data){
@@ -9095,7 +9101,7 @@ async function sha256HexText(text){
   const digest=await crypto.subtle.digest('SHA-256',bytes);
   return Array.from(new Uint8Array(digest)).map(v=>v.toString(16).padStart(2,'0')).join('');
 }
-function directPostForm(action,payloadObject,timeoutMs=DIRECT_POST_TIMEOUT_MS){
+function directPostForm(action,payloadObject,timeoutMs=DIRECT_POST_TIMEOUT_MS,probeOptions=null){
   return new Promise((resolve,reject)=>{
     const base=apiBaseUrl();
     if(!base){reject(new Error('Web App URLが設定されていません。'));return;}
@@ -9116,16 +9122,17 @@ function directPostForm(action,payloadObject,timeoutMs=DIRECT_POST_TIMEOUT_MS){
     form.enctype='text/plain';
     form.acceptCharset='UTF-8';
     form.style.display='none';
-    // payload 1項目だけをtext/plainで送る。日本語の%エンコード膨張とgzip/Base64処理を避ける。
     const payloadField=document.createElement('textarea');
     payloadField.name='payload';
     payloadField.value=JSON.stringify(payloadObject||{});
     payloadField.style.display='none';
     form.appendChild(payloadField);
-    let settled=false;
+    let settled=false,probeTimer=0,probeStarter=0,probing=false;
     const timer=setTimeout(()=>finishReject(new Error('POST送信の応答がタイムアウトしました。')),timeoutMs);
     function cleanup(){
       clearTimeout(timer);
+      if(probeStarter)clearTimeout(probeStarter);
+      if(probeTimer)clearInterval(probeTimer);
       window.removeEventListener('message',onMessage);
       setTimeout(()=>{try{form.remove();frame.remove();}catch(_){}},0);
     }
@@ -9137,11 +9144,61 @@ function directPostForm(action,payloadObject,timeoutMs=DIRECT_POST_TIMEOUT_MS){
       if(data.type!=='recraft-db-post-result'||String(data.token||'')!==token) return;
       finishResolve(data.result||{ok:false,error:'DB送信結果が空です。'});
     }
+    async function runProbe(){
+      if(settled||probing||!probeOptions||typeof probeOptions.check!=='function')return;
+      probing=true;
+      try{
+        const value=await probeOptions.check();
+        if(value)finishResolve(value);
+      }catch(_){}
+      finally{probing=false;}
+    }
+    if(probeOptions&&typeof probeOptions.check==='function'){
+      const delay=Math.max(250,Number(probeOptions.delayMs||700));
+      const interval=Math.max(300,Number(probeOptions.intervalMs||700));
+      probeStarter=setTimeout(()=>{
+        if(settled)return;
+        runProbe();
+        probeTimer=setInterval(runProbe,interval);
+      },delay);
+    }
     window.addEventListener('message',onMessage);
     document.body.appendChild(frame);
     document.body.appendChild(form);
     try{form.submit();}catch(e){finishReject(e);}
   });
+}
+function directChunkStatusProbe(token,minimumNextChunk=0){
+  return {
+    delayMs:650,intervalMs:650,
+    check:async()=>{
+      const status=await jsonpApi(payload('directChunkUploadStatus',{token}));
+      if(!status||!status.ok||!status.found)return null;
+      if(Number(status.nextChunk||0)<Number(minimumNextChunk||0))return null;
+      return {...status,ok:true,acknowledgedByStatus:true};
+    }
+  };
+}
+function repairChunkStatusProbe(sheetKey,minimumProcessedRows=0){
+  return {
+    delayMs:650,intervalMs:650,
+    check:async()=>{
+      const status=await jsonpApi(payload('repairSheetChunkStatus',{sheetKey}));
+      if(!status||!status.ok||!status.found)return null;
+      if(Number(status.processedRows||0)<Number(minimumProcessedRows||0))return null;
+      return {...status,ok:true,acknowledgedByStatus:true};
+    }
+  };
+}
+function antiqueRegistrationProbe(publicId){
+  return {
+    delayMs:450,intervalMs:500,
+    check:async()=>{
+      const status=await jsonpApi(payload('antiqueRegistrationStatus',{publicId}));
+      if(!status||!status.ok||!status.found)return null;
+      return {...status,ok:true,acknowledgedByStatus:true,inserted:1,updated:0,total:1};
+    }
+  };
 }
 function canUseDirectPostUpload(){
   return !!apiBaseUrl()
@@ -9592,7 +9649,7 @@ async function uploadRowsByDirectChunks(key, rows, mode, dataKindScope='', optio
     uploadProgressUpdate({phase:`${labelKey(key)}の送信開始処理中`,percent:0,currentRows:0,totalRows:list.length,chunks:`0/${chunks.length}`,parts:0,detail:'接続確認と置換対象の初期化を行っています。ここで長時間止まる場合はPOST応答またはGAS開始処理の異常です。'});
     await yieldUploadUi();
     const started=performance.now();
-    const begin=await directPostForm('beginDirectChunkUpload',{sheetKey:key,mode,token,dataKindScope,rowCount:list.length,totalChunks:chunks.length,checksum},DIRECT_CHUNK_POST_TIMEOUT_MS);
+    const begin=await directPostForm('beginDirectChunkUpload',{sheetKey:key,mode,token,dataKindScope,rowCount:list.length,totalChunks:chunks.length,checksum},DIRECT_CHUNK_POST_TIMEOUT_MS,directChunkStatusProbe(token,0));
     const elapsed=performance.now()-started;
     if(!begin||!begin.ok)throw new Error((begin&&begin.error)||`${labelKey(key)}の直接分割書込準備に失敗しました`);
     nextChunk=Math.min(chunks.length,Number(begin.nextChunk||0));
@@ -9607,7 +9664,7 @@ async function uploadRowsByDirectChunks(key, rows, mode, dataKindScope='', optio
       const bytes=utf8ByteLength(JSON.stringify(chunk));
       uploadProgressUpdate({phase:`${labelKey(key)}をDBへ直接書込中`,percent:chunks.length?Math.min(96,(sentRows/list.length)*96):96,currentRows:sentRows,totalRows:list.length,chunks:`${c+1}/${chunks.length}`,parts:c,rawChars:rawBytes,sentChars:rawBytes,detail:`次の${chunk.length}行を無圧縮で送信し、このPOST内でDBへ直接反映します。`});
       const started=performance.now();
-      const res=await directPostForm('putDirectRowsChunk',{token,chunkIndex:c,rows:chunk},DIRECT_CHUNK_POST_TIMEOUT_MS);
+      const res=await directPostForm('putDirectRowsChunk',{token,chunkIndex:c,rows:chunk},DIRECT_CHUNK_POST_TIMEOUT_MS,directChunkStatusProbe(token,c+1));
       const elapsed=performance.now()-started;
       if(!res||!res.ok)throw new Error((res&&res.error)||`${labelKey(key)}の直接分割書込に失敗しました`);
       const confirmedNext=Math.max(c+1,Number(res.nextChunk||c+1));
@@ -9790,8 +9847,7 @@ async function setup(){
     await assertServerVersion();
     const res=await callApi(payload('setup'));
     if(!res.ok) throw new Error(res.error||'失敗');
-    const removed=Number(res.cleanup&&res.cleanup.deletedTempSheets&&res.cleanup.deletedTempSheets.length||0);
-    toast(removed?`DBシートを確認し、残っていた一時シートを${removed}枚削除しました`:'DBシートを作成/確認しました');
+    toast('DBシートを作成/確認しました。一時シート整理は専用ボタンからのみ実行します。');
   }catch(e){ toast(e.message,'error'); }
 }
 async function cleanupUploadTemps(){
@@ -9841,7 +9897,11 @@ async function repairHeaders(){
       const [key,diagRow]=targets[i];
       uploadProgressLog(`${labelKey(key)}：分割修復を開始します（${Number(diagRow.rows||0)}行）。`);
       const beginStarted=performance.now();
-      const begin=await writeApi(payload('beginRepairSheetChunked',{sheetKey:key,token:uploadToken('repair',key)}));
+      const repairToken=uploadToken('repair',key);
+      const beginPayload=payload('beginRepairSheetChunked',{sheetKey:key,token:repairToken});
+      const begin=!isGasMode()&&canUseDirectPostUpload()
+        ? await directPostForm('beginRepairSheetChunked',{...beginPayload,token:repairToken},DIRECT_CHUNK_POST_TIMEOUT_MS,repairChunkStatusProbe(key,0))
+        : await writeApi(beginPayload);
       const beginElapsed=performance.now()-beginStarted;
       if(!begin||!begin.ok)throw new Error((begin&&begin.error)||`${labelKey(key)}のDB列修復準備に失敗しました`);
       if(begin.skipped){
@@ -9856,12 +9916,16 @@ async function repairHeaders(){
       while(done<sheetTotal){
         const count=Math.min(REPAIR_CHUNK_ROWS,sheetTotal-done);
         const started=performance.now();
-        const res=await writeApi(payload('repairSheetRowsChunk',{sheetKey:key,startRow:nextRow,rowCount:count}));
+        const rowPayload=payload('repairSheetRowsChunk',{sheetKey:key,startRow:nextRow,rowCount:count});
+        const res=!isGasMode()&&canUseDirectPostUpload()
+          ? await directPostForm('repairSheetRowsChunk',{...rowPayload,token:repairToken},DIRECT_CHUNK_POST_TIMEOUT_MS,repairChunkStatusProbe(key,done+count))
+          : await writeApi(rowPayload);
         const elapsed=performance.now()-started;
         if(!res||!res.ok)throw new Error((res&&res.error)||`${labelKey(key)}のDB列修復に失敗しました`);
+        const beforeDone=done;
         nextRow=Math.max(nextRow+count,Number(res.nextDataRow||nextRow+count));
         done=Math.max(done+count,Number(res.processedRows||done+count));
-        globalDone+=res.alreadyApplied?0:Number(res.rows||count);
+        globalDone+=Math.max(0,done-beforeDone);
         const pct=totalRows?Math.min(96,(globalDone/totalRows)*96):Math.min(96,((i+done/Math.max(1,sheetTotal))/targets.length)*96);
         uploadProgressUpdate({phase:`${labelKey(key)}の列を分割修復中`,percent:pct,currentRows:globalDone,totalRows:totalRows||targets.length,chunks:`${i+1}/${targets.length}`,parts:Math.ceil(done/REPAIR_CHUNK_ROWS),detail:`${labelKey(key)}：${done}/${sheetTotal}行修復済み。実件数ベースです。`});
         uploadProgressLog(`${labelKey(key)} ${done}/${sheetTotal}行：通信+GAS ${formatUploadTime(elapsed)}${res.elapsedMs!==undefined?` / GAS ${formatUploadTime(res.elapsedMs)}`:''}`);
@@ -10178,7 +10242,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.613';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.615';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-07';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
