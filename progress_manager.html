@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.628</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.630</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.628">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.630">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -203,7 +203,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.628｜更新：2026年8月23日</div>
+<div class="ra-build-info">v90.8.630｜更新：2026年8月24日</div>
 
 <header>
   <div class="header-inner">
@@ -518,7 +518,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.628';
+const VERSION='v90.8.630';
 const GAS_URL='https://script.google.com/macros/s/AKfycbyjIIKXTXZGf8RFOt7wQcenYEuVP68ijTU83e6rioqX21EKW075xjDjB5pTucyVcrc/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -597,10 +597,22 @@ function questBossText(q={}){
   if(name && monsters) return `${name}（${monsters}）`;
   return name || monsters || '';
 }
+function questPrimaryFixedBattleEvent(q={}){
+  const rows=questSpecificEvents(q).filter(e=>/戦闘発生|戦闘が発生|との戦闘/.test(String(e.result||'')));
+  return rows.find(e=>Number(eventThreshold(e))===100)||rows.at(-1)||null;
+}
+function resolveQuestPreviewEncounter(q={},force=false){
+  const fixed=questPrimaryFixedBattleEvent(q);
+  if(fixed){
+    const resolved=resolveQuestFixedEncounter(q,fixed,force);
+    if(resolved)return resolved;
+  }
+  return resolveQuestEncounter(q,force);
+}
 function questBossFormationText(q={}){
   const marker=String(q.questBossComposition||'').trim();
   if(marker.startsWith('ランダム編成') || marker.startsWith('指定対象＋ランダム随伴')){
-    const resolved=resolveQuestEncounter(q);
+    const resolved=resolveQuestPreviewEncounter(q);
     return resolved ? encounterResolutionText(resolved) : String(q.questBossFormation||'人数対応ランダム編成').trim();
   }
   if(marker){
@@ -1731,7 +1743,7 @@ function triggerQuestSpecificEvents(q,before,after){
     state.lastQuestFixedEventKey=key;
     state.lastQuestCheckCopyText=eventCheckCopyText(e,true);
     const effectiveSize=effectiveQuestPartySize(q);
-    const resolvedEncounter=resolveQuestFixedEncounter(q,e,true);
+    const resolvedEncounter=resolveQuestFixedEncounter(q,e,false);
     if(isWorkQuest(q)&&Number(eventThreshold(e))===100){const workKey=String(q.id||q.name||'work');state.questWorkReinforcementCounts=state.questWorkReinforcementCounts||{};state.questWorkReinforcementCounts[workKey]=0;state.lastQuestReinforcementText='';}
     const extraLines=['このイベントはクエスト進行度による確定発生です。ランダム抽選ではありません。'];
     const supportNote=questPartyAdjustmentNote(q);if(supportNote)extraLines.push(supportNote);
@@ -1762,7 +1774,7 @@ function triggerQuestSpecificEvents(q,before,after){
   return fired;
 }
 function questUsesRandomEncounter(q={}){const marker=String(q.questBossComposition||'').trim();return marker.startsWith('ランダム編成')||marker.startsWith('指定対象＋ランダム随伴');}
-function rerollSelectedQuestEncounter(){const q=selected($('questSelect'),state.quests);if(!q||!questUsesRandomEncounter(q))return;resolveQuestEncounter(q,true);renderQuest();saveState(false);addLog(`クエスト編成を再抽選：${q.name||q.id}`);}
+function rerollSelectedQuestEncounter(){const q=selected($('questSelect'),state.quests);if(!q||!questUsesRandomEncounter(q))return;resolveQuestPreviewEncounter(q,true);renderQuest();saveState(false);addLog(`クエスト固定戦闘編成を再抽選：${q.name||q.id}`);}
 function renderQuest(){
   const q=selected($('questSelect'),state.quests);
   renderTimeControls();
@@ -1788,7 +1800,7 @@ function renderQuest(){
   const important=isImportantQuest(q);
   const kindRow=important?'':`<b>依頼区分</b><span>${esc(q.requestKind||'未設定')}</span>`;
   const skillRow=!delivery&&q.recommendedSkills?`<b>推奨技能</b><span>${esc(q.recommendedSkills)}</span>`:'';
-  $('questDetail').innerHTML=`<div class="kv"><b>分類</b><span>${esc(questCategoryFor(q))}${!questEnabled(q)?'<span class="quest-pill off">OFF</span>':'<span class="quest-pill">ON</span>'}</span>${kindRow}<b>内容種別</b><span>${esc(q.questType||'')}</span>${skillRow}<b>報酬範囲</b><span>${esc(q.rewardScope||'各PC')}</span>${q.deliveryItems?`<b>納品物</b><span>${esc(q.deliveryItems)}</span>`:''}<b>ランク</b><span>${esc(progressPlayerRank(q.rank)||'')}</span><b>実施場所</b><span>${esc(questLocationText(q))}</span><b>時間帯</b><span>${esc(questTimeRestrictionText(q))}</span>${(!isBaseQuest(q)&&!isDeliveryQuest(q)&&areaUsesWorldCycle(areaForQuest(q)))?`<b>現在の時間帯</b><span>${esc(selectedTimeSlot())}</span>`:''}<b>進行上昇値</b><span>${delivery?'納品確認':`+${questStepAmount(q)}%`}</span><b>固定イベント数</b><span>${questSpecificEvents(q).length}件</span><b>クエストボス</b><span>${esc(questBossText(q))}</span><b>構成</b><span>${esc(questBossFormationText(q))}${randomFormation?' <button id="rerollQuestEncounterBtn" type="button" class="secondary" style="margin-left:8px;padding:5px 9px">編成を再抽選</button>':''}</span>${questSpecialConditionLabel(q)?`<b>特殊条件</b><span>${esc(questSpecialConditionLabel(q))}</span><b>達成条件</b><span>${esc(q.battleRoundSuccess||q.clearCondition||'')}</span><b>失敗条件</b><span>${esc(q.battleRoundFailure||'なし')}</span>`:`<b>クリア条件</b><span>${esc(q.clearCondition||'')}</span>`}<b>報酬</b><span>${esc([q.rewardMoney,questRewardItemDisplay(q),Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / '))}（${esc(q.rewardScope||'各PC')}）</span></div>${randomFormation?'<p class="muted small">表示中の構成はプレビューです。実際の戦闘発生時には、同じ人数条件で改めて再抽選します。</p>':''}${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
+  $('questDetail').innerHTML=`<div class="kv"><b>分類</b><span>${esc(questCategoryFor(q))}${!questEnabled(q)?'<span class="quest-pill off">OFF</span>':'<span class="quest-pill">ON</span>'}</span>${kindRow}<b>内容種別</b><span>${esc(q.questType||'')}</span>${skillRow}<b>報酬範囲</b><span>${esc(q.rewardScope||'各PC')}</span>${q.deliveryItems?`<b>納品物</b><span>${esc(q.deliveryItems)}</span>`:''}<b>ランク</b><span>${esc(progressPlayerRank(q.rank)||'')}</span><b>実施場所</b><span>${esc(questLocationText(q))}</span><b>時間帯</b><span>${esc(questTimeRestrictionText(q))}</span>${(!isBaseQuest(q)&&!isDeliveryQuest(q)&&areaUsesWorldCycle(areaForQuest(q)))?`<b>現在の時間帯</b><span>${esc(selectedTimeSlot())}</span>`:''}<b>進行上昇値</b><span>${delivery?'納品確認':`+${questStepAmount(q)}%`}</span><b>固定イベント数</b><span>${questSpecificEvents(q).length}件</span><b>クエストボス</b><span>${esc(questBossText(q))}</span><b>構成</b><span>${esc(questBossFormationText(q))}${randomFormation?' <button id="rerollQuestEncounterBtn" type="button" class="secondary" style="margin-left:8px;padding:5px 9px">編成を再抽選</button>':''}</span>${questSpecialConditionLabel(q)?`<b>特殊条件</b><span>${esc(questSpecialConditionLabel(q))}</span><b>達成条件</b><span>${esc(q.battleRoundSuccess||q.clearCondition||'')}</span><b>失敗条件</b><span>${esc(q.battleRoundFailure||'なし')}</span>`:`<b>クリア条件</b><span>${esc(q.clearCondition||'')}</span>`}<b>報酬</b><span>${esc([q.rewardMoney,questRewardItemDisplay(q),Number(q.bonusPoints||0)>0?`ボーナスポイント${Number(q.bonusPoints)}点`:'' ].filter(Boolean).join(' / '))}（${esc(q.rewardScope||'各PC')}）</span></div>${randomFormation?'<p class="muted small">表示中の構成は固定イベント用の確定プレビューです。固定イベント発生時にはこの構成をそのまま使用し、「編成を再抽選」で更新できます。</p>':''}${q.description?`<p class="muted">${esc(q.description)}</p>`:''}`;
   $('rerollQuestEncounterBtn')?.addEventListener('click',rerollSelectedQuestEncounter);
   renderQuestStepInfo(q,p);
   renderQuestEvents();
@@ -2325,13 +2337,13 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.496-mine-carryover-pool-1';
+const ENCOUNTER_RULE_VERSION='v90.8.630-native-area-minimum-and-fixed-preview-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
   'マッドホッパー':2,'バブルスライム':2,'ミストモスキート':2,
   'ルートハウンド':3,'モスバック':2,'ウィスパウル':1,'ドロマール':3,'リードリザード':2,'ミアズマリーチ':1,
-  'ミラースライム':2,'エコーリード':2,'フェイズモス':3,'グラスレイ':3,'リフトクラブ':3,'ヴォイドハウンド':3,
+  'ミラースライム':2,'エコーリード':2,'フェイズモス':3,'グラスレイ':3,'ミラード':3,'ヴェイル':3,
   'レゾナバット':1,'ピックモール':2,'オアスケイル':2,'ラストマイト':1,'マインゴーレム':3,'ルミナウィスプ':2,
   'ブリーズホップ':2,'クラッグラム':3,'カイトビーク':2,'ソノラブルーム':2,'グライドスケイル':3,'ボルトバイソン':3,
   'スコリアゲッコー':2,'シンダースライム':2,'サルファマーモット':1,'サーマルカイト':2,'グラスケイル':3,'ヴェインサラマンダー':3,'アッシュバイソン':3
@@ -2341,7 +2353,7 @@ const AREA_ENCOUNTER_POOLS={
   '近郊の森':['ラフィンラット','ラピットホーン','ヴェスパット','カラパスビートル','ラスクレイル','マイコニド','ルートハウンド','ブランチリング','モスバック','ウィスパウル'],
   '水辺の湿地':['プチスライム','グラウワーム','マイコニド','マッドホッパー','バブルスライム','ミストモスキート','ドロマール','リードリザード','ミアズマリーチ'],
   '山麓の旧鉱山':['ラフィンラット','グラウワーム','マイコニド','ミアズマリーチ','レゾナバット','ピックモール','オアスケイル','ラストマイト','マインゴーレム','ルミナウィスプ'],
-  '反照の水庭':['ミラースライム','フェイズモス','グラスレイ','エコーリード','リフトクラブ','ヴォイドハウンド'],
+  '反照の水庭':['ミラースライム','フェイズモス','グラスレイ','エコーリード','ミラード','ヴェイル'],
   '風渡りの高原':['ブリーズホップ','クラッグラム','カイトビーク','ソノラブルーム','グライドスケイル','ボルトバイソン'],
   '灰冠の火山峡谷':['クラッグラム','グライドスケイル','スコリアゲッコー','シンダースライム','サルファマーモット','サーマルカイト','グラスケイル','ヴェインサラマンダー','アッシュバイソン']
 };
@@ -2350,7 +2362,7 @@ const ENCOUNTER_BACKLINE_RATE={
   'ラスクレイル':.50,'マイコニド':.55,'ルートハウンド':.20,'ブランチリング':.30,'モスバック':.10,'ウィスパウル':.65,'マッドホッパー':.15,'バブルスライム':.50,
   'ミストモスキート':.60,'ドロマール':.10,'リードリザード':.15,'ミアズマリーチ':.10,
   'レゾナバット':.65,'ピックモール':.15,'オアスケイル':.10,'ラストマイト':.25,'マインゴーレム':.05,'ルミナウィスプ':.65,
-  'ミラースライム':.30,'フェイズモス':.55,'グラスレイ':.30,'エコーリード':.50,'リフトクラブ':.15,'ヴォイドハウンド':.35,
+  'ミラースライム':.30,'フェイズモス':.55,'グラスレイ':.30,'エコーリード':.50,'ミラード':.15,'ヴェイル':.35,
   'ブリーズホップ':.10,'クラッグラム':.05,'カイトビーク':.65,'ソノラブルーム':.70,'グライドスケイル':.15,'ボルトバイソン':.05,
   'スコリアゲッコー':.10,'シンダースライム':.30,'サルファマーモット':.35,'サーマルカイト':.70,'グラスケイル':.05,'ヴェインサラマンダー':.20,'アッシュバイソン':.05
 };
@@ -2388,6 +2400,24 @@ function encounterPoolForArea(areaName='', excludeNames=[]){
   const available=new Set((state.monsters||[]).filter(m=>!String(m.monsterTraits||'').split(/[,、，]/).map(v=>v.trim()).includes('ボス')).map(m=>String(m.name||'').trim()));
   const excluded=new Set((excludeNames||[]).map(v=>String(v||'').trim()).filter(Boolean));
   return [...new Set(names)].filter(n=>available.has(n)&&!excluded.has(n));
+}
+function nativeEncounterPoolForArea(areaName='',excludeNames=[]){
+  const name=String(areaName||'').trim();
+  const area=(state.areas||[]).find(a=>String(a.name||'').trim()===name||String(a.id||'').trim()===name);
+  if(!area)return [];
+  const currentOrder=Number(area.unlockOrder);
+  const earlier=new Set();
+  (state.areas||[]).forEach(other=>{
+    if(other===area)return;
+    const order=Number(other.unlockOrder);
+    if(Number.isFinite(currentOrder)&&Number.isFinite(order)&&order<currentOrder){
+      monsterNameTokens(other.mainMonsters).forEach(monsterName=>earlier.add(monsterName));
+    }
+  });
+  const available=new Set((state.monsters||[]).filter(m=>!String(m.monsterTraits||'').split(/[,、，]/).map(v=>v.trim()).includes('ボス')).map(m=>String(m.name||'').trim()));
+  const excluded=new Set((excludeNames||[]).map(v=>String(v||'').trim()).filter(Boolean));
+  return [...new Set(monsterNameTokens(area.mainMonsters))]
+    .filter(monsterName=>available.has(monsterName)&&!earlier.has(monsterName)&&!excluded.has(monsterName));
 }
 function normalizeEncounterFrontline(groups=[]){
   const rows=(groups||[]).map(group=>{
@@ -2511,6 +2541,16 @@ function generateRandomEncounter(areaName='', options={}){
   const reservedPicks=[];
   reserved.forEach(g=>{for(let i=0;i<Math.max(0,Number(g.count)||0);i++)reservedPicks.push(String(g.name||'').trim());});
   const excluded=[...(options.excludeNames||[])];
+  const nativeAll=nativeEncounterPoolForArea(areaName,[]);
+  const nativeSet=new Set(nativeAll);
+  const reservedHasNative=reservedPicks.some(name=>nativeSet.has(name));
+  if(!reservedHasNative){
+    const nativeAvailable=nativeEncounterPoolForArea(areaName,excluded);
+    if(nativeAvailable.length){
+      const requiredNative=weightedPick(nativeAvailable,name=>encounterMonsterWeight(areaName,name))||nativeAvailable[0];
+      reservedPicks.push(requiredNative);
+    }
+  }
   const pool=encounterPoolForArea(areaName,excluded);
   const reservedCost=reservedPicks.reduce((sum,n)=>sum+monsterEncounterValue(n),0);
   const areaBonus=Number(AREA_ENCOUNTER_BUDGET_BONUS[String(areaName||'').trim()]||0);
@@ -2781,19 +2821,39 @@ function eventResultTextForDisplay(row={},partySize=selectedPartySize()){
     .replace(/希少宝箱表を1回引く/g,'下記の希少宝箱を確認する')
     .replace(/宝箱表を1回引く/g,'下記の宝箱を確認する');
 }
+function requiredEncounterGroupsFromResult(row={},partySize=selectedPartySize()){
+  const text=String(row.result||'');
+  const groups=[];
+  (state.monsters||[]).forEach(monster=>{
+    const name=String(monster?.name||'').trim();if(!name)return;
+    const safe=name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    const re=new RegExp(`(?:(前衛|後衛)に)?${safe}×(人数半数切上|人数半数切捨|人数同数|\\d+)を必ず含`);
+    const m=text.match(re);if(!m)return;
+    const resolved=resolveEncounterCountToken(String(m[2]||''),partySize);
+    const count=Math.max(1,Math.floor(Number(resolved)||1));
+    groups.push({name,count,formation:String(m[1]||'').trim()});
+  });
+  return groups;
+}
 function randomEncounterOptionsForEvent(row={},partySize=selectedPartySize()){
   const size=normalizePartySize(partySize);
   const profile=partyEncounterProfile(size);
   const configuredMin=Math.floor(Number(row.encounterCountMin));
   const minCount=Number.isFinite(configuredMin)&&configuredMin>0?Math.max(1,configuredMin):profile.minCount;
   // ランダム編成で encounterComposition が指定されている場合、その魔物は必須枠として先に確保する。
-  // 残りだけをエリアの通常遭遇候補から抽選するため、「特定個体を必ず含むランダム編成」を表現できる。
-  const reservedGroups=encounterCompositionGroups(row,size).map(group=>({
+  // DB側の必須枠が欠けていても、結果文の「○○×Nを必ず含む」から補完して表示内容と結果を一致させる。
+  let reservedGroups=encounterCompositionGroups(row,size).map(group=>({
     name:group.name,count:group.count,formation:group.position||group.formation||''
   }));
+  // 結果文に「必ず含む」がある場合はDB設定と突き合わせ、欠けている必須個体を必ず補完する。
+  requiredEncounterGroupsFromResult(row,size).forEach(required=>{
+    const current=reservedGroups.find(group=>String(group.name||'').trim()===String(required.name||'').trim());
+    if(current){current.count=Math.max(Number(current.count)||1,Number(required.count)||1);if(!current.formation&&required.formation)current.formation=required.formation;}
+    else reservedGroups.push(required);
+  });
   const excludeNames=[...new Set(reservedGroups.map(group=>String(group.name||'').trim()).filter(Boolean))];
   // ランダム編成には個体数上限を設けない。encounterCountMax は固定・人数指定系イベントだけで使用する。
-  return {partySize:size,minCount,reservedGroups,excludeNames};
+  return {partySize:size,minCount:Math.max(minCount,reservedGroups.reduce((sum,g)=>sum+Math.max(1,Number(g.count)||1),0)),reservedGroups,excludeNames};
 }
 function recordLastEncounter(label='',areaName='',groups=[]){
   const clean=(groups||[]).map(group=>({name:String(group.name||'').trim(),count:Math.max(1,Math.floor(Number(group.count)||1)),formation:String(group.formation||group.position||'').trim()})).filter(group=>group.name);
@@ -2825,6 +2885,27 @@ function encounterInitiativeText(groups=[]){
   const highest=encounterHighestInitiative(groups);
   return highest===null?'':`先制値：${highest}`;
 }
+function eventEncounterBranch(row={}){
+  if(isBossEvent(row))return 'challenge';
+  const mode=eventBattleCopyMode(row);
+  if(mode==='戦闘発生')return 'always';
+  if(mode!=='戦闘予感')return '';
+  const text=String(row.result||'');
+  const actual=/(?:戦闘発生|戦闘が発生|との戦闘(?:が発生)?|人数対応戦闘|ランダム編成との戦闘|ランダム編成で[^。]*戦闘)/;
+  const failure=eventFailureSegment(text);
+  if(failure&&actual.test(failure))return 'failure';
+  const successMatch=text.match(/(?:判定)?成功\s*[：:]([^]*?)(?=失敗\s*[：:]|$)/);
+  if(successMatch&&actual.test(String(successMatch[1]||'')))return 'success';
+  return 'conditional';
+}
+function eventEncounterHeading(row={}){
+  const branch=eventEncounterBranch(row);
+  if(branch==='failure')return '失敗時戦闘：';
+  if(branch==='success')return '成功時戦闘：';
+  if(branch==='challenge')return '挑戦時戦闘：';
+  if(branch==='conditional')return '条件成立時戦闘：';
+  return '';
+}
 function formatEventOutput(prefix,picked,area,tableId,extraLines=[],partySizeOverride=null){
   const partySize=partySizeOverride===null?selectedPartySize():normalizePartySize(partySizeOverride);
   const condition=eventConditionType(picked)==='なし'?'':`前提：${eventConditionType(picked)}${picked.conditionValue?` / ${picked.conditionValue}`:''}`;
@@ -2833,8 +2914,9 @@ function formatEventOutput(prefix,picked,area,tableId,extraLines=[],partySizeOve
   const composition=random?encounterResolutionBlock(random):encounterCompositionText(picked,partySize);
   const dropGroups=encounterGroupsForDrop(picked,random,partySize);
   const initiative=encounterInitiativeText(dropGroups);
+  const encounterHeading=dropGroups.length?eventEncounterHeading(picked):'';
   if(dropGroups.length&&!isBossEvent(picked))recordLastEncounter(picked.eventName||prefix,area?.name||picked.areaName||'',dropGroups);
-  const weather=area?currentAreaWeather(area):null; const time=areaUsesWorldCycle(area)?selectedTimeSlot():''; return [prefix,area?`エリア：${area.name||area.id}`:'',time?`時間帯：${time}`:'',weather?`天気：${weather.name}`:'',weather?.detail?`天気詳細：${weather.detail}`:'',area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'',`表：${tableId}`,picked.eventName?`イベント：${picked.eventName}`:'',picked.eventType?`種別：${picked.eventType}`:'',condition,encounter,composition,initiative,eventCheckDisplayText(picked),picked.result?`結果：${eventResultTextForDisplay(picked,partySize)}`:'',picked.progressEffect?`補足：${picked.progressEffect}`:'',...extraLines].filter(Boolean).join('\n');
+  const weather=area?currentAreaWeather(area):null; const time=areaUsesWorldCycle(area)?selectedTimeSlot():''; return [prefix,area?`エリア：${area.name||area.id}`:'',time?`時間帯：${time}`:'',weather?`天気：${weather.name}`:'',weather?.detail?`天気詳細：${weather.detail}`:'',area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'',`表：${tableId}`,picked.eventName?`イベント：${picked.eventName}`:'',picked.eventType?`種別：${picked.eventType}`:'',condition,encounterHeading,encounter,composition,initiative,eventCheckDisplayText(picked),picked.result?`結果：${eventResultTextForDisplay(picked,partySize)}`:'',picked.progressEffect?`補足：${picked.progressEffect}`:'',...extraLines].filter(Boolean).join('\n');
 }
 function triggerAreaClearRumorEvent(area){
   const rumor=selectedRumor();
@@ -4245,7 +4327,7 @@ function bind(){
   $('fixedUrlLabel').textContent='GitHub共通DB（失敗時のみGAS）'; bindTabs(); setPartySize(state.partySize||4); setTimeSlot(state.timeSlot||'朝',{reset:false,render:false,save:false}); setQuestCategory('重要'); $('communityReloadBtn')?.addEventListener('click',loadCommunityGatheringManager); document.addEventListener('click',e=>{const b=e.target.closest('[data-community-send]');if(b)saveCommunityGatheringFacility(b.dataset.communitySend||'');}); $('loadDbBtn').addEventListener('click',()=>loadDb({auto:false})); $('saveStateBtn').addEventListener('click',()=>saveState(true)); $('restoreStateBtn').addEventListener('click',restoreSavedState); $('clearStateBtn').addEventListener('click',()=>{if(confirm('進行状態を初期化しますか？')){localStorage.removeItem(STORE_KEY); state.progress={quests:{},areas:{}}; state.dayState={day:1,fatigue:0,usedActions:0,awaitingEnd:false}; state.triggeredQuestEvents={}; state.triggeredAreaEvents={}; state.lastQuestFixedEventText=''; state.lastQuestCheckCopyText=''; state.lastEventCheckCopyText=''; state.lastBaseCheckCopyText=''; state.lastAreaFixedEventText=''; state.baseUnlockedAreaIds=defaultBaseUnlockedAreaIds(); state.lastBaseEventText=''; state.lastBaseEventKey=''; state.lastBaseRewardText=''; state.lastBaseRewardCopyText=''; state.questRewardCache={}; state.lastEncounter=null; state.dropEncounterInstances=[]; state.dropMode='encounter'; state.lastQuestReinforcementText=''; state.questWorkReinforcementCounts={}; state.dailyQuestUnlockedAreaIds=[]; state.areaWeatherById={}; state.timeSlot='朝'; state.log=[]; renderAll(); addLog('進行状態を初期化しました。');}});
   document.querySelectorAll('[data-quest-category]').forEach(btn=>btn.addEventListener('click',()=>setQuestCategory(btn.dataset.questCategory)));
   $('questShowDisabledImportant')?.addEventListener('change',()=>{fillQuestSelect(); renderQuest();});
-  $('questSelect').addEventListener('change',()=>{state.lastQuestEventText=''; state.lastQuestEventKey=''; state.lastQuestCheckCopyText=''; state.lastQuestFixedEventText=''; state.lastQuestFixedEventKey=''; state.lastQuestCheckCopyText=''; state.lastQuestTreasureCopyText=''; state.lastQuestTreasureResults=[]; state.lastQuestEventTableRewardText=''; state.lastQuestEventTableRewardCopyText=''; state.lastQuestEventRewardState=null; state.lastQuestReinforcementText=''; renderEventRewardPanel('quest'); updateTreasureCopyButtons(); const q=selected($('questSelect'),state.quests); if(q&&questUsesRandomEncounter(q))resolveQuestEncounter(q,true); renderQuest();}); $('areaSelect').addEventListener('change',()=>{state.lastEventText='';state.lastEventKey='';state.lastEventCheckCopyText='';state.lastEventTreasureCopyText='';state.lastEventTreasureResults=[];state.lastEventTableRewardText='';state.lastEventTableRewardCopyText='';state.lastEventRewardState=null;clearRecipeMerchantOffers();state.lastAreaFixedEventText='';state.lastAreaFixedEventKey='';renderEventRewardPanel('event');updateTreasureCopyButtons();fillEventTables();renderArea();}); $('dropAreaSelect').addEventListener('change',()=>refreshDropMonsterSelection('')); $('monsterSelect').addEventListener('input',()=>{setSelectedDropMonster(null,{clearInput:false});openMonsterMenu($('monsterSelect').value);renderMonster();});
+  $('questSelect').addEventListener('change',()=>{state.lastQuestEventText=''; state.lastQuestEventKey=''; state.lastQuestCheckCopyText=''; state.lastQuestFixedEventText=''; state.lastQuestFixedEventKey=''; state.lastQuestCheckCopyText=''; state.lastQuestTreasureCopyText=''; state.lastQuestTreasureResults=[]; state.lastQuestEventTableRewardText=''; state.lastQuestEventTableRewardCopyText=''; state.lastQuestEventRewardState=null; state.lastQuestReinforcementText=''; renderEventRewardPanel('quest'); updateTreasureCopyButtons(); const q=selected($('questSelect'),state.quests); if(q&&questUsesRandomEncounter(q))resolveQuestPreviewEncounter(q,true); renderQuest();}); $('areaSelect').addEventListener('change',()=>{state.lastEventText='';state.lastEventKey='';state.lastEventCheckCopyText='';state.lastEventTreasureCopyText='';state.lastEventTreasureResults=[];state.lastEventTableRewardText='';state.lastEventTableRewardCopyText='';state.lastEventRewardState=null;clearRecipeMerchantOffers();state.lastAreaFixedEventText='';state.lastAreaFixedEventKey='';renderEventRewardPanel('event');updateTreasureCopyButtons();fillEventTables();renderArea();}); $('dropAreaSelect').addEventListener('change',()=>refreshDropMonsterSelection('')); $('monsterSelect').addEventListener('input',()=>{setSelectedDropMonster(null,{clearInput:false});openMonsterMenu($('monsterSelect').value);renderMonster();});
   $('markAllDismantleSuccessBtn')?.addEventListener('click',()=>{state.dropEncounterInstances=(state.dropEncounterInstances||[]).map(row=>({...row,dismantleSuccess:true}));renderEncounterDropList();saveState(false);});
   $('markAllDismantleFailBtn')?.addEventListener('click',()=>{state.dropEncounterInstances=(state.dropEncounterInstances||[]).map(row=>({...row,dismantleSuccess:false}));renderEncounterDropList();saveState(false);});
   $('rollEncounterDropBtn')?.addEventListener('click',rollEncounterDrops);
