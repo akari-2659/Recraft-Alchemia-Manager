@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.642</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.644</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -547,7 +547,7 @@ button,.tab,.subtab,.tab-btn,.quest-category-btn{white-space:normal!important;ov
 .skill-result-grid,.skill-acquired-grid{display:grid;grid-template-columns:1fr;gap:7px;margin-top:10px}.skill-result-card{border:1px solid var(--line);border-radius:11px;background:#fffdf8;padding:0;overflow:hidden}.skill-result-card.new{border-color:#8ebda0;background:#f2fbf5}.skill-result-card.dup{border-color:#d1ac6d;background:#fff8e8}.skill-result-card summary{cursor:pointer;padding:10px 12px;font-size:15px;font-weight:900;list-style-position:inside}.skill-result-detail{display:grid;gap:6px;padding:0 12px 12px;border-top:1px solid var(--line);padding-top:10px;line-height:1.6}.skill-result-effect{white-space:pre-wrap}.skill-slot-list{display:grid;gap:8px;margin-top:10px}.skill-slot-row{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px;align-items:center}.skill-fragment-line{font-weight:900;margin-top:10px}.skill-prob-wrap{max-height:360px;overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:10px}.skill-prob-table{width:100%;border-collapse:collapse;font-size:12px}.skill-prob-table th,.skill-prob-table td{padding:7px 8px;border-bottom:1px solid #eadcc9;text-align:left}.skill-prob-table th{position:sticky;top:0;background:#f7ead7;z-index:1}.crystal-upgrade-list{display:grid;gap:10px}.crystal-upgrade-card{border:1px solid var(--line);border-radius:14px;background:#fffaf3;padding:12px}.crystal-upgrade-card h5{margin:0 0 7px}.crystal-current{font-size:18px;font-weight:900;color:#6a3f25}.crystal-upgrade-card.is-next{border-color:#a9c5ae;background:#f2fbf4}
 @media(max-width:560px){.skill-slot-row{grid-template-columns:1fr}.skill-admin-grid{grid-template-columns:1fr}}
 
-.copyist-control-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(220px,.8fr) auto;gap:16px;align-items:end;margin:14px 0}.copyist-area-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:8px}.copyist-area-check{display:flex;align-items:flex-start;gap:7px;padding:9px 10px;border:1px solid #d8c6aa;border-radius:10px;background:rgba(255,255,255,.78);font-weight:800}.copyist-area-check input{width:auto;margin:2px 0 0}.copyist-area-summary{margin:5px 0 8px;color:var(--muted);font-size:.88rem;line-height:1.5;overflow-wrap:anywhere}.copyist-area-panel button{margin-top:2px}.copyist-result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:12px}.copyist-result-card{padding:13px;background:rgba(255,255,255,.83);border:1px solid #d8c6aa;border-radius:12px}.copyist-result-card h4{margin:8px 0}.copyist-result-head{display:flex;flex-wrap:wrap;gap:6px}#copyistAreaModal .modal-card,#guildDailyAreaModal .modal-card,#antiqueGearAreaModal .modal-card{width:min(760px,100%)}#copyistAreaModal .modal-body,#guildDailyAreaModal .modal-body,#antiqueGearAreaModal .modal-body{overflow:auto}@media(max-width:760px){.copyist-control-grid{grid-template-columns:1fr}.copyist-action-stack{display:flex;gap:8px;flex-wrap:wrap}}
+.copyist-control-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(220px,.8fr) auto;gap:16px;align-items:end;margin:14px 0}.copyist-area-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:8px}.copyist-area-check{display:flex;align-items:flex-start;gap:7px;padding:9px 10px;border:1px solid #d8c6aa;border-radius:10px;background:rgba(255,255,255,.78);font-weight:800}.copyist-area-check input{width:auto;margin:2px 0 0}.copyist-area-summary{margin:5px 0 8px;color:var(--muted);font-size:.88rem;line-height:1.5;overflow-wrap:anywhere}.copyist-area-panel button{margin-top:2px}.copyist-result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-top:12px}.copyist-result-card{padding:13px;background:rgba(255,255,255,.83);border:1px solid #d8c6aa;border-radius:12px}.copyist-result-card h4{margin:8px 0}.copyist-result-head{display:flex;flex-wrap:wrap;gap:6px}#copyistAreaModal .modal-card,#guildDailyAreaModal .modal-card,#antiqueGearAreaModal .modal-card,#facilityGeneralAreaModal .modal-card{width:min(760px,100%)}#copyistAreaModal .modal-body,#guildDailyAreaModal .modal-body,#antiqueGearAreaModal .modal-body,#facilityGeneralAreaModal .modal-body{overflow:auto}@media(max-width:760px){.copyist-control-grid{grid-template-columns:1fr}.copyist-action-stack{display:flex;gap:8px;flex-wrap:wrap}}
 </style>
 
 <style id="raBuildInfoStyle">
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.642">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.644">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.642｜更新：2026年8月25日</div>
+<div class="ra-build-info">v90.8.644｜更新：2026年8月25日</div>
 
 <header>
   <div class="title-card">
@@ -1702,7 +1702,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
         </div>
         <div id="facilityCrystalWork" class="facility-work-block hidden">
           <div class="skill-admin-grid">
-            <div><label for="facilityCrystalProgressArea">解放済みエリア</label><select id="facilityCrystalProgressArea"></select></div>
+            <section class="copyist-area-panel"><b>解放済みエリア</b><div class="copyist-area-summary" data-facility-general-area-summary>街はずれの草原</div><button class="secondary" type="button" data-facility-general-area-open>解放エリアを選択</button></section>
           </div>
           <div id="facilityCrystalStatus" class="skill-admin-status ok">選択した進行段階で利用できる強化内容を表示します。キャラクターへの反映は行いません。</div>
           <div id="facilityCrystalUpgradeSummary" class="crystal-upgrade-list"></div>
@@ -1730,16 +1730,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
                   <option value="1">1点</option><option value="2">2点</option><option value="3" selected>3点</option><option value="4">4点</option><option value="5">5点</option>
                 </select>
               </div>
-              <div>
-                <label for="facilityAntiqueStockArea">解放済みエリア</label>
-                <select id="facilityAntiqueStockArea">
-                  <option value="街はずれの草原">街はずれの草原（骨董屋は初期解放）</option>
-                  <option value="近郊の森">近郊の森（★1まで）</option>
-                  <option value="水辺の湿地">水辺の湿地（★2まで）</option>
-                  <option value="反照の水庭">反照の水庭（★2まで）</option>
-                  <option value="山麓の旧鉱山">山麓の旧鉱山（★3まで）</option>
-                </select>
-              </div>
+              <section class="copyist-area-panel"><b>解放済みエリア</b><div class="copyist-area-summary" data-facility-general-area-summary>街はずれの草原</div><button class="secondary" type="button" data-facility-general-area-open>解放エリアを選択</button></section>
               <button class="secondary" type="button" data-facility-antique-random>未鑑定スクロールをランダム選出</button>
               <button class="ghost" type="button" data-facility-antique-random-copy>選出結果をコピー</button>
             </div>
@@ -1811,7 +1802,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
           </div>
           <div id="facilityAntiqueSkillGachaWork" class="hidden">
             <div class="skill-admin-grid">
-              <div><label for="facilitySkillGachaProgressArea">解放済みエリア</label><select id="facilitySkillGachaProgressArea"></select></div>
+              <section class="copyist-area-panel"><b>解放済みエリア</b><div class="copyist-area-summary" data-facility-general-area-summary>街はずれの草原</div><button class="secondary" type="button" data-facility-general-area-open>解放エリアを選択</button></section>
               <div><label for="facilitySkillGachaRank">スキルランク</label><select id="facilitySkillGachaRank"><option value="1">★1</option><option value="2">★2</option></select></div>
               <div><label for="facilitySkillGachaCount">抽選回数</label><input id="facilitySkillGachaCount" type="number" min="1" max="10" value="1"></div>
               <button type="button" data-skill-gacha-draw>抽選結果を出す</button>
@@ -1920,11 +1911,18 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 
 <div class="toast" id="toast"></div>
 <script src="js/ra_skill_gacha_core.js"></script>
+<div class="modal-backdrop hidden" id="facilityGeneralAreaModal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="facilityGeneralAreaModalTitle">
+    <div class="modal-head"><div><h2 id="facilityGeneralAreaModalTitle">施設・解放エリア選択</h2><p>現在解放済みのエリアをチェックしてください。通常エリアと異界を個別にON/OFFできます。</p></div><button type="button" class="ghost" data-facility-general-area-cancel>閉じる</button></div>
+    <div class="modal-body"><div id="facilityGeneralAreaModalGrid" class="copyist-area-grid"></div></div>
+    <div class="modal-foot"><button type="button" class="ghost" data-facility-general-area-cancel>キャンセル</button><button type="button" data-facility-general-area-apply>選択を適用</button></div>
+  </div>
+</div>
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
-const RECRAFT_DB_VERSION = 'v90.8.642';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.642';
+const RECRAFT_DB_VERSION = 'v90.8.644';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.644';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -2038,12 +2036,15 @@ let currentGuildDailyAreaId = ''; // v90.8.482以前の単一エリア選択と�
 let currentGuildDailyUnlockedAreaIds = [];
 let guildDailyAreaModalDraftIds = [];
 const GUILD_DAILY_STORAGE_KEY = 'recraft_alchemia_guild_daily_selection_v1';
-const MEAL_RECOMMEND_STORAGE_KEY = 'recraft_alchemia_meal_recommendation_v1';
+const MEAL_RECOMMEND_STORAGE_KEY = 'recraft_alchemia_meal_recommendation_v2';
+const FACILITY_GENERAL_AREA_STORAGE_KEY = 'recraft_alchemia_facility_general_unlocked_areas_v1';
 const COPYIST_DAILY_STORAGE_KEY = 'recraft_alchemia_copyist_daily_selection_v2';
 const ANTIQUE_GEAR_AREA_STORAGE_KEY = 'recraft_alchemia_antique_gear_area_selection_v1';
 const COPYIST_DAILY_COUNT = 6;
-let currentMealRecommendationAreaId = '';
+let currentMealRecommendationAreaId = ''; // 旧単一選択との互換用
 let currentMealRecommendationIds = [];
+let currentFacilityGeneralUnlockedAreaIds = [];
+let facilityGeneralAreaModalDraftIds = [];
 let currentCopyistUnlockedAreaIds = [];
 let currentCopyistSpecifiedAreaId = '';
 let copyistAreaModalDraftIds = [];
@@ -2095,6 +2096,18 @@ function saveAntiqueGearAreaState(){
     }));
   }catch(e){console.warn('antique gear area state save failed',e);}
 }
+function loadFacilityGeneralAreaState(){
+  try{
+    const raw=localStorage.getItem(FACILITY_GENERAL_AREA_STORAGE_KEY);
+    if(!raw)return;
+    const data=JSON.parse(raw);
+    currentFacilityGeneralUnlockedAreaIds=Array.isArray(data.unlockedAreaIds)?data.unlockedAreaIds.map(String):[];
+  }catch(e){ console.warn('facility general area state load failed',e); }
+}
+function saveFacilityGeneralAreaState(){
+  try{localStorage.setItem(FACILITY_GENERAL_AREA_STORAGE_KEY,JSON.stringify({unlockedAreaIds:currentFacilityGeneralUnlockedAreaIds.map(String),updatedAt:new Date().toISOString()}));}
+  catch(e){console.warn('facility general area state save failed',e);}
+}
 function loadMealRecommendationState(){
   try{
     const raw=localStorage.getItem(MEAL_RECOMMEND_STORAGE_KEY);
@@ -2102,16 +2115,19 @@ function loadMealRecommendationState(){
     const data=JSON.parse(raw);
     currentMealRecommendationAreaId=String(data.areaId||'');
     currentMealRecommendationIds=Array.isArray(data.ids)?data.ids.map(String):[];
+    if(Array.isArray(data.unlockedAreaIds)&&data.unlockedAreaIds.length)currentFacilityGeneralUnlockedAreaIds=data.unlockedAreaIds.map(String);
   }catch(e){ console.warn('meal recommendation state load failed',e); }
 }
 function saveMealRecommendationState(){
   try{
     localStorage.setItem(MEAL_RECOMMEND_STORAGE_KEY,JSON.stringify({
       areaId:currentMealRecommendationAreaId,
+      unlockedAreaIds:currentFacilityGeneralUnlockedAreaIds.map(String),
       ids:currentMealRecommendationIds
     }));
   }catch(e){ console.warn('meal recommendation state save failed',e); }
 }
+loadFacilityGeneralAreaState();
 loadMealRecommendationState();
 loadCopyistDailyState();
 loadAntiqueGearAreaState();
@@ -5600,12 +5616,51 @@ function mealAreaRows(){
   });
 }
 function mealAreaId(row={}){ return String(row.id||row.unlockKey||row.name||'').trim(); }
+function facilityGeneralAreaRows(){return mealAreaRows();}
+function facilityGeneralInitialAreaId(){const rows=facilityGeneralAreaRows();const initial=rows.find(a=>Number(a.unlockOrder)===1)||rows[0];return mealAreaId(initial||{});}
+function ensureFacilityGeneralAreaState(){
+  const rows=facilityGeneralAreaRows(),valid=new Set(rows.map(mealAreaId).filter(Boolean)),initialId=facilityGeneralInitialAreaId();
+  let next=[...new Set((currentFacilityGeneralUnlockedAreaIds||[]).map(String).filter(id=>valid.has(id)))];
+  if(currentMealRecommendationAreaId&&valid.has(String(currentMealRecommendationAreaId))&&!next.length)next.push(String(currentMealRecommendationAreaId));
+  if(initialId&&!next.includes(initialId))next.unshift(initialId);
+  currentFacilityGeneralUnlockedAreaIds=next;
+  return next;
+}
+function facilityGeneralSelectedSet(){return new Set(ensureFacilityGeneralAreaState());}
+function facilityGeneralAreaMatchesKey(area={},key=''){const wanted=String(key||'').trim();if(!wanted)return false;return [area.id,area.unlockKey,area.name].map(v=>String(v||'').trim()).includes(wanted);}
+function facilityGeneralAreaUnlockedKey(key=''){
+  const wanted=String(key||'').trim();if(!wanted)return true;
+  const selected=facilityGeneralSelectedSet();
+  return facilityGeneralAreaRows().some(area=>selected.has(mealAreaId(area))&&facilityGeneralAreaMatchesKey(area,wanted));
+}
+function facilityGeneralSelectedAreas(){const selected=facilityGeneralSelectedSet();return facilityGeneralAreaRows().filter(area=>selected.has(mealAreaId(area)));}
+function facilityGeneralSelectedNames(){return facilityGeneralSelectedAreas().map(area=>String(area.name||mealAreaId(area))).filter(Boolean);}
+function syncFacilityGeneralAreaSummaries(){
+  const names=facilityGeneralSelectedNames(),text=`${names.join('、')||'未設定'}（${names.length}エリア）`;
+  document.querySelectorAll('[data-facility-general-area-summary]').forEach(el=>{el.textContent=text;});
+}
+function renderFacilityGeneralAreaModal(){
+  const grid=$('facilityGeneralAreaModalGrid');if(!grid)return;
+  const rows=facilityGeneralAreaRows(),selected=new Set(facilityGeneralAreaModalDraftIds.map(String)),initialId=facilityGeneralInitialAreaId();
+  grid.innerHTML=rows.length?rows.map(area=>{const id=mealAreaId(area),fixed=id===initialId,checked=selected.has(id)||fixed;return `<label class="copyist-area-check"><input type="checkbox" data-facility-general-area-check="${escapeHtml(id)}" ${checked?'checked':''} ${fixed?'disabled':''}><span><b>${escapeHtml(area.name||id)}</b><br><span class="muted small">${escapeHtml(String(area.areaType||'通常エリア'))}${fixed?' / 初期解放':''}</span></span></label>`;}).join(''):'<p class="muted">エリアデータがありません。</p>';
+}
+function openFacilityGeneralAreaModal(){
+  facilityGeneralAreaModalDraftIds=[...ensureFacilityGeneralAreaState()];renderFacilityGeneralAreaModal();
+  const modal=$('facilityGeneralAreaModal');if(modal){modal.classList.remove('hidden');modal.setAttribute('aria-hidden','false');document.body.classList.add('modal-open');}
+}
+function closeFacilityGeneralAreaModal(){
+  const modal=$('facilityGeneralAreaModal');if(modal){modal.classList.add('hidden');modal.setAttribute('aria-hidden','true');if($('editModal')?.classList.contains('hidden')&&$('copyistAreaModal')?.classList.contains('hidden')&&$('guildDailyAreaModal')?.classList.contains('hidden')&&$('antiqueGearAreaModal')?.classList.contains('hidden'))document.body.classList.remove('modal-open');}
+}
+function applyFacilityGeneralAreaModal(){
+  const initialId=facilityGeneralInitialAreaId(),valid=new Set(facilityGeneralAreaRows().map(mealAreaId));
+  const next=[...new Set(facilityGeneralAreaModalDraftIds.map(String).filter(id=>valid.has(id)))];if(initialId&&!next.includes(initialId))next.unshift(initialId);
+  const before=ensureFacilityGeneralAreaState().slice().sort().join('|'),after=next.slice().sort().join('|');
+  currentFacilityGeneralUnlockedAreaIds=next;currentMealRecommendationAreaId='';currentMealRecommendationIds=[];saveFacilityGeneralAreaState();saveMealRecommendationState();closeFacilityGeneralAreaModal();syncFacilityGeneralAreaSummaries();renderFacilitiesPanel();
+  if(before!==after)toast('施設の解放済みエリアを更新しました');
+}
 function ensureMealRecommendationArea(){
-  const areas=mealAreaRows();
-  if(!areas.length){currentMealRecommendationAreaId='';return null;}
-  let area=areas.find(row=>mealAreaId(row)===currentMealRecommendationAreaId);
-  if(!area){area=areas[areas.length-1];currentMealRecommendationAreaId=mealAreaId(area);currentMealRecommendationIds=[];saveMealRecommendationState();}
-  return area;
+  ensureFacilityGeneralAreaState();
+  return facilityGeneralSelectedAreas().slice().sort((a,b)=>(Number(b.unlockOrder)||0)-(Number(a.unlockOrder)||0))[0]||null;
 }
 function mealMaterialCandidateRows(){
   return (state.items||[]).filter(row=>{
@@ -5652,11 +5707,9 @@ function mealRecommendedPrice(row={}){
   return match?Number(match[1]):Math.max(40,(Number(row.price)||0)+25);
 }
 function mealCandidateRows(){
-  const selected=ensureMealRecommendationArea();
-  if(!selected)return [];
-  const maxOrder=Number(selected.unlockOrder);
+  ensureFacilityGeneralAreaState();
   const all=mealRecipeRowsAll();
-  const unlocked=all.filter(row=>!Number.isFinite(maxOrder)||mealRecipeUnlockOrder(row)<=maxOrder);
+  const unlocked=all.filter(row=>facilityGeneralAreaUnlockedKey(row.unlockAreaKey));
   const marked=unlocked.filter(row=>String(row.tags||'').includes('おすすめ候補'));
   return marked.length?marked:unlocked;
 }
@@ -5666,27 +5719,18 @@ function shuffledRows(rows=[]){
   return copy;
 }
 function drawMealRecommendations(){
-  const selected=ensureMealRecommendationArea();
   const rows=mealCandidateRows();
-  if(!selected||!rows.length){currentMealRecommendationIds=[];saveMealRecommendationState();return [];}
-  const selectedId=mealAreaId(selected);
-  let latest=rows.filter(row=>String(row.unlockAreaKey||'').trim()===selectedId);
-  if(!latest.length){
-    const newestOrder=Math.max(...rows.map(mealRecipeUnlockOrder));
-    latest=rows.filter(row=>mealRecipeUnlockOrder(row)===newestOrder);
-  }
+  if(!rows.length){currentMealRecommendationIds=[];saveMealRecommendationState();return [];}
   const previous=currentMealRecommendationIds.join('|');
   let chosen=[];
   for(let attempt=0;attempt<12;attempt++){
     chosen=[];
-    const newest=shuffledRows(latest);
-    if(newest.length)chosen.push(newest[0]);
-    const rest=shuffledRows(rows.filter(row=>!chosen.includes(row)));
-    const categories=new Set(chosen.map(row=>String(row.category||'').trim()));
+    const rest=shuffledRows(rows);
+    const categories=new Set(),areas=new Set();
     rest.forEach(row=>{
       if(chosen.length>=3)return;
-      const category=String(row.category||'').trim();
-      if(category&&!categories.has(category)){chosen.push(row);categories.add(category);}
+      const category=String(row.category||'').trim(),area=String(row.unlockAreaKey||'').trim();
+      if((category&&!categories.has(category))||(area&&!areas.has(area))){chosen.push(row);if(category)categories.add(category);if(area)areas.add(area);}
     });
     rest.forEach(row=>{if(chosen.length<3&&!chosen.includes(row))chosen.push(row);});
     const next=chosen.slice(0,3).map(row=>String(row.id||row.name||row.resultItem||'')).join('|');
@@ -5700,44 +5744,11 @@ function currentMealRecommendations(){
   const candidates=mealCandidateRows();
   const byId=new Map(candidates.map(row=>[String(row.id||row.name||row.resultItem||''),row]));
   const rows=currentMealRecommendationIds.map(id=>byId.get(String(id))).filter(Boolean);
-  const selected=ensureMealRecommendationArea();
-  const selectedId=mealAreaId(selected||{});
-  const includesLatest=rows.some(row=>String(row.unlockAreaKey||'').trim()===selectedId);
-  if(rows.length!==3||!includesLatest)return drawMealRecommendations();
+  if(rows.length!==3)return drawMealRecommendations();
   return rows;
 }
 function mealAreaName(row={}){return mealRecipeArea(row)?.name||row.unlockAreaKey||'解放エリア未設定';}
-let facilityMealAreaModalEl=null;
-function ensureFacilityMealAreaModal(){
-  if(facilityMealAreaModalEl&&document.body.contains(facilityMealAreaModalEl))return facilityMealAreaModalEl;
-  const dialog=document.createElement('dialog');
-  dialog.id='facilityMealAreaModal';
-  dialog.className='ra-manager-picker generic facility-meal-area-modal';
-  dialog.innerHTML=`<div class="ra-manager-picker-shell"><header class="ra-manager-picker-head"><div><div class="muted">食事処・今日のおすすめ</div><h3>最高解放エリアを選択</h3></div><button type="button" class="ghost" data-meal-area-modal-close aria-label="閉じる">×</button></header><div class="ra-manager-picker-body"><div class="ra-manager-picker-list" data-meal-area-modal-list></div></div></div>`;
-  dialog.addEventListener('click',e=>{
-    if(e.target===dialog||e.target.closest('[data-meal-area-modal-close]')){dialog.close();return;}
-    const choice=e.target.closest('[data-meal-area-modal-choice]');
-    if(!choice)return;
-    const select=$('facilityMealAreaSelect');
-    if(!select)return;
-    select.value=String(choice.dataset.mealAreaModalChoice||'');
-    dialog.close();
-    select.dispatchEvent(new Event('change',{bubbles:true}));
-  });
-  document.body.appendChild(dialog);
-  facilityMealAreaModalEl=dialog;
-  return dialog;
-}
-function openFacilityMealAreaModal(){
-  const select=$('facilityMealAreaSelect');
-  if(!select)return;
-  const dialog=ensureFacilityMealAreaModal();
-  const list=dialog.querySelector('[data-meal-area-modal-list]');
-  const options=[...select.options];
-  list.innerHTML=options.length?options.map(option=>`<button type="button" class="ra-manager-picker-card ra-meal-area-choice ${option.value===select.value?'active':''}" data-meal-area-modal-choice="${escapeHtml(option.value)}"><span><span class="ra-manager-picker-name">${escapeHtml(option.textContent||option.value)}</span></span><span class="facility-chip">${option.value===select.value?'選択中':'選択'}</span></button>`).join(''):'<p class="notice">選択できるエリアがありません。</p>';
-  dialog.showModal();
-  requestAnimationFrame(()=>dialog.querySelector('[data-meal-area-modal-choice].active,[data-meal-area-modal-choice]')?.focus({preventScroll:true}));
-}
+function openFacilityMealAreaModal(){openFacilityGeneralAreaModal();}
 function renderFacilityMealCard(row={},recommended=false){
   const name=row.resultItem||row.name||'名称未設定';
   const price=recommended?mealRecommendedPrice(row):Number(row.price)||0;
@@ -5761,17 +5772,14 @@ function renderFacilityMealRows(){
   return `<p class="notice">施設一覧に載せるのは、食材持ち込みで作れる料理だけです。必要食材と調理代を確認できます。</p><div class="facility-recipe-grid">${[...groups.entries()].map(([area,list],idx)=>`<details class="facility-product" ${idx===0?'open':''}><summary><span class="facility-product-title"><span>${escapeHtml(area)}</span><span class="facility-chip">${list.length}品</span></span></summary><div class="facility-product-body"><div class="facility-recipe-grid">${list.map(row=>renderFacilityMealCard(row,false)).join('')}</div></div></details>`).join('')}</div>`;
 }
 function renderFacilityMealRecommendations(){
-  const areas=mealAreaRows();
-  const selected=ensureMealRecommendationArea();
-  if(!areas.length||!selected)return '<p class="notice">探索エリアが登録されていないため、おすすめを抽選できません。</p>';
-  const rows=currentMealRecommendations();
-  const options=areas.map(area=>`<option value="${escapeHtml(mealAreaId(area))}" ${mealAreaId(area)===currentMealRecommendationAreaId?'selected':''}>${escapeHtml(area.name||mealAreaId(area))}</option>`).join('');
-  const selectedAreaLabel=selected?.name||selected?.id||'未設定';
+  const areas=mealAreaRows();ensureFacilityGeneralAreaState();
+  if(!areas.length)return '<p class="notice">探索エリアが登録されていないため、おすすめを抽選できません。</p>';
+  const rows=currentMealRecommendations(),selectedNames=facilityGeneralSelectedNames();
   return `<div class="input-action-row">
-    <div><label for="facilityMealAreaSelect">パーティーの最高解放エリア</label><select id="facilityMealAreaSelect" class="ra-manager-picker-native" data-ra-manager-picker="1" data-meal-area aria-hidden="true" tabindex="-1">${options}</select><button type="button" class="ra-manager-picker-button" data-meal-area-modal-open><span>${escapeHtml(selectedAreaLabel)}</span><span>モーダルで選択 ▾</span></button></div>
+    <section class="copyist-area-panel"><b>解放済みエリア</b><div class="copyist-area-summary" data-facility-general-area-summary>${escapeHtml(selectedNames.join('、')||'未設定')}（${selectedNames.length}エリア）</div><button class="secondary" type="button" data-facility-general-area-open>解放エリアを選択</button></section>
     <button class="secondary" type="button" data-meal-reroll>おすすめ3品を再抽選</button>
   </div>
-  <p class="notice">選択したエリアまでの料理から3品を抽選します。最高解放エリアの料理を最低1品含み、可能な限り効果分類が重複しないようにします。</p>
+  <p class="notice">チェックした解放済みエリアの料理だけを候補にして3品を抽選します。通常エリアの進行順から自動推測せず、異界も個別の解放状態として扱います。可能な限り効果分類・エリアが偏らないように選びます。</p>
   <div class="facility-recipe-grid">${rows.map(row=>renderFacilityMealCard(row,true)).join('')}</div>`;
 }
 function mealRecommendationCopyBlock(row={}){
@@ -5784,14 +5792,13 @@ function mealRecommendationCopyBlock(row={}){
   return `- ${name}（${mealRecommendedPrice(row)}G / ${row.category||'分類未設定'}）\n  効果：${row.effect||'未設定'}\n  説明：${description}`;
 }
 function mealRecommendationsText(){
-  const area=ensureMealRecommendationArea();
-  const rows=currentMealRecommendations();
+  const rows=currentMealRecommendations(),names=facilityGeneralSelectedNames();
   const dishes=rows.length
     ? rows.map(row=>mealRecommendationCopyBlock(row)).join('\n\n')
     : '- おすすめ料理なし';
   return [
     '【食事処・今日のおすすめ】',
-    `最高解放エリア：${area?.name||'未設定'}`,
+    `解放済みエリア：${names.join('、')||'未設定'}`,
     '',
     dishes
   ].join('\n');
@@ -6052,7 +6059,7 @@ const TRANSCRIPTION_DIFFICULTIES = {1:7,2:10,3:13,4:16};
 const TRANSCRIPTION_MATERIAL_COUNTS = {1:1,2:2,3:3,4:4};
 const SCROLL_RANK_DIFFICULTIES = {1:6,2:9,3:12,4:15};
 const SCROLL_RANK_ORDER = [1,2,3,4];
-const AREA_SCROLL_MAX_RANK = {'街はずれの草原':0,'近郊の森':1,'水辺の湿地':2,'反照の水庭':2,'山麓の旧鉱山':3};
+const AREA_SCROLL_MAX_RANK = {'街はずれの草原':0,'近郊の森':1,'水辺の湿地':2,'反照の水庭':2,'山麓の旧鉱山':3,'風渡りの高原':3,'灰冠の火山峡谷':3};
 function appraisalFee(rank=1){ return APPRAISAL_FEES[numericRankValue(rank,1)] || 150; }
 function transcriptionDifficulty(rank=1){ return TRANSCRIPTION_DIFFICULTIES[numericRankValue(rank,1)] || 7; }
 function transcriptionMaterialCount(rank=1){ return TRANSCRIPTION_MATERIAL_COUNTS[numericRankValue(rank,1)] || 1; }
@@ -6065,6 +6072,11 @@ function scrollRankAllowed(rank=1,area='街はずれの草原'){
   const maxRank=maxScrollRankForUnlockedArea(area);
   return numericRankValue(rank,1)<=numericRankValue(maxRank,1);
 }
+function maxScrollRankForUnlockedAreas(){
+  const names=facilityGeneralSelectedNames();
+  return names.reduce((max,name)=>Math.max(max,maxScrollRankForUnlockedArea(name)),0);
+}
+function scrollRankAllowedForUnlockedAreas(rank=1){return numericRankValue(rank,1)<=numericRankValue(maxScrollRankForUnlockedAreas(),0);}
 function isUnidentifiedScrollRow(row={}){
   const text=[row.name,row.itemCategory,row.tags,row.usageTags].map(v=>String(v||'')).join(' ');
   return text.includes('未鑑定') && text.includes('スクロール');
@@ -6186,20 +6198,21 @@ function renderAntiqueTranscriptionResult(){
 function renderAntiqueRandomStock(){
   const result = $('facilityAntiqueStockResult');
   if(!result) return;
+  ensureFacilityGeneralAreaState();syncFacilityGeneralAreaSummaries();
   const count = Math.max(1, Number($('facilityAntiqueStockCount')?.value || 3) || 3);
-  const area = $('facilityAntiqueStockArea')?.value || '街はずれの草原';
-  const candidates = antiqueScrollRows().filter(row=>scrollRankAllowed(row.rank||1,area));
+  const names=facilityGeneralSelectedNames(),maxRank=maxScrollRankForUnlockedAreas();
+  const candidates = antiqueScrollRows().filter(row=>scrollRankAllowedForUnlockedAreas(row.rank||1));
   const rows = [];
   for(let i=0;i<count && candidates.length;i++) rows.push(candidates[Math.floor(Math.random()*candidates.length)]);
   currentAntiqueRandomRows=rows.map(r=>({...r}));
-  currentAntiqueRandomArea=area;
+  currentAntiqueRandomArea=names.join('、');
   if(!rows.length){
     result.classList.add('muted');
-    result.innerHTML = '現在の解放エリアで販売可能な未鑑定スクロールがありません。';
+    result.innerHTML = 'チェックした解放済みエリアでは販売可能な未鑑定スクロールがありません。';
     return;
   }
   result.classList.remove('muted');
-  result.innerHTML = `<div><b>骨董屋ランダム販売枠</b></div><div class="muted small">選出範囲：${escapeHtml(area)} / 上限:${escapeHtml(playerRankLabel(maxScrollRankForUnlockedArea(area)))} / 重複あり / 中身は鑑定まで非公開</div>` + rows.map(row=>{
+  result.innerHTML = `<div><b>骨董屋ランダム販売枠</b></div><div class="muted small">解放済み：${escapeHtml(names.join('、')||'未設定')} / 上限:${escapeHtml(playerRankLabel(maxRank))} / 重複あり / 中身は鑑定まで非公開</div>` + rows.map(row=>{
     const label=String(row.name||'').trim() || `未鑑定の${unidentifiedScrollType(row)||'術式'}スクロール：${playerRankLabel(row.rank)||'ランク未設定'}`;
     const salePrice = row.buyPrice || row.price; const chips = [salePrice ? '価格:' + salePrice + 'G' : '', '内容:非公開'].filter(Boolean);
     return `<div class="facility-product-meta"><b>${escapeHtml(label)}</b>${chips.map(c=>`<span class="facility-chip">${escapeHtml(c)}</span>`).join('')}</div>`;
@@ -6217,13 +6230,16 @@ function renderFacilityCrystalUpgradeCards(){
   if(!rows.length)return '<p class="notice">クリスタル強化データがありません。</p>';
   return `<div class="crystal-upgrade-list">${rows.map(row=>`<div class="crystal-upgrade-card"><h5>${escapeHtml(row.name||'クリスタル強化')}</h5><div class="facility-product-meta"><span class="facility-chip">${escapeHtml(row.baseItem||'?')} → ${escapeHtml(row.resultItem||'?')}</span><span class="facility-chip">解放:${escapeHtml(crystalUnlockAreaName(row))}</span><span class="facility-chip">${escapeHtml(String(row.price||0))}G</span></div><div><b>必要素材：</b>${escapeHtml(row.requiredMaterials||'未設定')}</div>${row.effect?`<div><b>効果：</b>${escapeHtml(row.effect)}</div>`:''}</div>`).join('')}</div>`;
 }
-let currentSkillProgressAreaId='area_outskirts_grass';
-function skillProgressAreas(){return (state.exploration_areas||[]).filter(a=>String(a.enabled??'TRUE')!=='FALSE').slice().sort((a,b)=>{const ao=Number(a.unlockOrder),bo=Number(b.unlockOrder);if(Number.isFinite(ao)&&Number.isFinite(bo)&&ao!==bo)return ao-bo;if(Number.isFinite(ao)!==Number.isFinite(bo))return Number.isFinite(ao)?-1:1;return compareValues(a.name||a.id||'',b.name||b.id||'');});}
-function syncSkillProgressFields(){const rows=skillProgressAreas();if(!rows.some(a=>String(a.id)===String(currentSkillProgressAreaId)))currentSkillProgressAreaId=String(rows[0]?.id||'area_outskirts_grass');const options=rows.map(a=>`<option value="${escapeHtml(a.id||'')}">${escapeHtml(a.name||'')}（解放順${escapeHtml(String(a.unlockOrder||''))}）</option>`).join('');['facilitySkillGachaProgressArea','facilityCrystalProgressArea'].forEach(id=>{const el=$(id);if(!el)return;el.innerHTML=options;el.value=currentSkillProgressAreaId;});}
-function skillProgressOrder(){const row=skillProgressAreas().find(a=>String(a.id)===String(currentSkillProgressAreaId));return Number(row?.unlockOrder)||1;}
+let currentSkillProgressAreaId='area_outskirts_grass'; // 旧単一選択との互換用
+function skillProgressAreas(){return facilityGeneralAreaRows();}
+function syncSkillProgressFields(){ensureFacilityGeneralAreaState();syncFacilityGeneralAreaSummaries();}
+function skillProgressOrder(){return facilityGeneralSelectedAreas().reduce((max,row)=>Math.max(max,Number(row.unlockOrder)||1),1);}
 function skillRankRequiredOrder(rank){return Number(rank)===1?2:Infinity;}
 function skillRankUnlockLabel(rank){return Number(rank)===1?'近郊の森（★1スキルガチャ解放）':Number(rank)===2?'第3区画3-2通常エリア（未実装）':'未設定';}
-function skillRankIsUnlocked(rank){return skillProgressOrder()>=skillRankRequiredOrder(rank);}
+function skillRankIsUnlocked(rank){
+  if(Number(rank)===1)return facilityGeneralAreaUnlockedKey('area_nearby_forest');
+  return false;
+}
 function skillMaster(){ return {skills:Array.isArray(state.skills)?state.skills:[]}; }
 function skillById(id=''){return (state.skills||[]).find(s=>String(s.id)===String(id))||null;}
 function setSkillStatus(message='',type='ok'){
@@ -6255,13 +6271,13 @@ function renderSkillGachaManagement(){
 function renderCrystalManagement(){
   syncSkillProgressFields();
   const box=$('facilityCrystalUpgradeSummary');if(!box)return;
-  const order=skillProgressOrder();const rows=crystalUpgradeRows();
+  const rows=crystalUpgradeRows();
   if(!rows.length){box.innerHTML='<div class="crystal-upgrade-card">クリスタル強化データがありません。</div>';return;}
   box.innerHTML=rows.map(row=>{
-    const unlocked=order>=crystalRequiredOrder(row);
+    const unlocked=facilityGeneralAreaUnlockedKey(row.unlockAreaKey);
     return `<div class="crystal-upgrade-card ${unlocked?'is-next':''}"><h5>${escapeHtml(row.name||'クリスタル強化')}</h5><div class="facility-product-meta"><span class="facility-chip">${escapeHtml(row.baseItem||'?')} → ${escapeHtml(row.resultItem||'?')}</span><span class="facility-chip">${escapeHtml(String(row.price||0))}G</span><span class="facility-chip">解放:${escapeHtml(crystalUnlockAreaName(row))}</span><span class="facility-chip">${unlocked?'表示対象':'未解放'}</span></div><div><b>必要素材：</b>${escapeHtml(row.requiredMaterials||'未設定')}</div>${row.effect?`<div><b>効果：</b>${escapeHtml(row.effect)}</div>`:''}</div>`;
   }).join('');
-  setSkillStatus('選択した進行段階に応じて、必要素材・金額・解放条件を表示します。キャラクターへの反映は行いません。','ok');
+  setSkillStatus('チェックした解放済みエリアを個別に参照して、必要素材・金額・解放条件を表示します。異界も独立して判定します。','ok');
 }
 function renderSkillManagementPanels(){renderSkillGachaManagement();renderCrystalManagement();}
 function skillGachaResultCopyText(){
@@ -10239,13 +10255,13 @@ async function runAllPages(mode){
         }
         index++; allDbResumeSave({mode,index,dbKey:FULL_DB_KEYS[index]||'',updatedAt:new Date().toISOString()});
       }catch(e){
-        const resume=confirm(`${fullDbLabel(dbKey)}の${actionLabel}中に失敗しました。\n${e.message||e}\n\nOK：保存した送信位置から続ける\nキャンセル：この表を最初からやり直す`);
-        if(!resume){
-          const sess=uploadResumeLoad();
-          if(sess&&sess.token){try{await callApi(payload('abortUpload',{token:sess.token}));}catch(_){} }
-          uploadResumeClear();
-        }
-        continue;
+        const retry=confirm(`${fullDbLabel(dbKey)}の${actionLabel}中に失敗しました。\n${e.message||e}\n\nOK：この表を再試行\nキャンセル：全データ処理を中止（次回はこの表から再開できます）`);
+        if(retry) continue;
+        const sess=uploadResumeLoad();
+        if(sess&&sess.token){try{await callApi(payload('abortUpload',{token:sess.token}));}catch(_){} }
+        uploadResumeClear();
+        toast(`全データ${actionLabel}を中止しました。次回は${fullDbLabel(dbKey)}から再開できます。`,'warn');
+        return;
       }
     }
     allDbResumeClear();uploadResumeClear();
@@ -10317,7 +10333,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.642';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.644';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-25';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
@@ -10648,6 +10664,9 @@ document.addEventListener('click',e=>{
   }
   const fortuneRoll=e.target.closest('[data-fortune-roll]'); if(fortuneRoll){ rollAdminFortune(); toast('今日の運勢を決定しました'); return; }
   const fortuneCopy=e.target.closest('[data-fortune-copy]'); if(fortuneCopy){ const text=adminFortuneCopyText(); if(!text){toast('先に運勢を振ってください');return;} copyAdminTextDirect(text).then(ok=>{if(ok)toast('今日の運勢をコピーしました');}); return; }
+  const facilityGeneralAreaOpen=e.target.closest('[data-facility-general-area-open]'); if(facilityGeneralAreaOpen){ openFacilityGeneralAreaModal(); return; }
+  const facilityGeneralAreaCancel=e.target.closest('[data-facility-general-area-cancel]'); if(facilityGeneralAreaCancel){ closeFacilityGeneralAreaModal(); return; }
+  const facilityGeneralAreaApply=e.target.closest('[data-facility-general-area-apply]'); if(facilityGeneralAreaApply){ applyFacilityGeneralAreaModal(); return; }
   const mealAreaOpen=e.target.closest('[data-meal-area-modal-open]'); if(mealAreaOpen){ openFacilityMealAreaModal(); return; }
   const mealReroll=e.target.closest('[data-meal-reroll]'); if(mealReroll){ drawMealRecommendations(); renderFacilitiesPanel(); toast('今日のおすすめ3品を再抽選しました'); return; }
   const mealRecommendCopy=e.target.closest('[data-meal-recommend-copy]'); if(mealRecommendCopy){ copyAdminTextDirect(mealRecommendationsText()).then(ok=>{if(ok)toast('今日のおすすめ3品をコピーしました');}); return; }
@@ -10795,7 +10814,6 @@ document.addEventListener('input',e=>{
       renderTable(key);
     }
   }
-  if(['facilitySkillGachaProgressArea','facilityCrystalProgressArea'].includes(e.target.id)){currentSkillProgressAreaId=String(e.target.value||'area_outskirts_grass');syncSkillProgressFields();renderSkillManagementPanels();return;}
   if(['facilityAntiqueGearKind','facilityAntiqueGearCategory','facilityAntiqueGearRank','facilityAntiqueGearCount'].includes(e.target.id)){currentAntiqueGearRows=[];syncAntiqueGearSelectors();renderAntiqueGearStock(false);return;}
   if(e.target.id==='facilitySkillGachaRank'){renderSkillGachaManagement();return;}
   if(e.target.id==='facilitySkillGachaCount'){renderSkillGachaManagement();return;}
@@ -10805,7 +10823,7 @@ document.addEventListener('input',e=>{
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)) renderFacilityAlchemyResult();
   if(['facilityAppraisalTypeInput','facilityAppraisalRankInput'].includes(e.target.id)) renderAntiqueAppraisalResult();
   if(e.target.id==='facilityAntiqueGearCount'){currentAntiqueGearRows=[];renderAntiqueGearStock(false);} 
-  if(['facilityAntiqueStockArea','facilityAntiqueStockCount'].includes(e.target.id)) renderAntiqueRandomStock();
+  if(e.target.id==='facilityAntiqueStockCount') renderAntiqueRandomStock();
   if(['facilityTranscribeTypeInput','facilityTranscribeRankInput'].includes(e.target.id)) renderAntiqueTranscriptionResult();
   if(e.target.closest('[data-check-builder]')) syncCheckBuilder(e.target.closest('[data-check-builder]'));
   if(e.target.closest('[data-monster-actions-editor]')) syncMonsterActionEditor(e.target.closest('[data-monster-actions-editor]'));
@@ -10815,6 +10833,12 @@ document.addEventListener('input',e=>{
   if(e.target.closest('[data-modifier-editor]')) syncModifierEditor(e.target.closest('[data-modifier-editor]'));
 });
 document.addEventListener('change',e=>{
+  if(e.target?.matches?.('[data-facility-general-area-check]')){
+    const id=String(e.target.dataset.facilityGeneralAreaCheck||e.target.value||''),set=new Set(facilityGeneralAreaModalDraftIds.map(String));
+    if(e.target.checked){if(id)set.add(id);}else set.delete(id);
+    const initialId=facilityGeneralInitialAreaId();if(initialId)set.add(initialId);
+    facilityGeneralAreaModalDraftIds=[...set];renderFacilityGeneralAreaModal();return;
+  }
   if(e.target?.matches?.('[data-antique-gear-area-modal-check]')){
     const id=String(e.target.value||''),set=new Set(antiqueGearAreaModalDraftIds.map(String));
     if(e.target.checked){if(id)set.add(id);}else set.delete(id);
@@ -10854,17 +10878,8 @@ document.addEventListener('change',e=>{
     renderFacilitiesPanel();
     return;
   }
-  if(e.target?.matches?.('[data-meal-area]')){
-    currentMealRecommendationAreaId=String(e.target.value||'');
-    currentMealRecommendationIds=[];
-    drawMealRecommendations();
-    renderFacilitiesPanel();
-    toast('解放エリアに合わせて今日のおすすめを抽選しました');
-    return;
-  }
   if(e.target?.id==='facilityUpgradeEquipmentType'){ facilityRemovalEntryIds=[]; renderFacilityUpgradeEquipmentSelect(); if($('facilityUpgradeMaterialInput')) $('facilityUpgradeMaterialInput').value=''; renderFacilityUpgradeLookupList(); renderFacilityUpgradeResult(''); renderFacilityRemovalCalculator(); return; }
   if(e.target?.id==='facilityUpgradeEquipmentSelect'){ facilityRemovalEntryIds=[]; if($('facilityUpgradeMaterialInput'))$('facilityUpgradeMaterialInput').value=''; renderFacilityUpgradeLookupList(); renderFacilityUpgradeResult(''); renderFacilityRemovalCalculator(); return; }
-  if(['facilitySkillGachaProgressArea','facilityCrystalProgressArea'].includes(e.target.id)){currentSkillProgressAreaId=String(e.target.value||'area_outskirts_grass');syncSkillProgressFields();renderSkillManagementPanels();return;}
   if(e.target.id==='facilitySkillGachaRank'){renderSkillGachaManagement();return;}
   if(e.target.id==='facilitySkillGachaCount'){renderSkillGachaManagement();return;}
   if(e.target.id==='facilityRankLimitSelect'){ currentFacilityRankLimit = e.target.value || ''; renderFacilitiesPanel(); return; }
@@ -10872,7 +10887,7 @@ document.addEventListener('change',e=>{
   if(['facilityAlchemyRecipeSelect','facilityAlchemyToolRankInput'].includes(e.target.id)){ renderFacilityAlchemyResult(); return; }
   if(['facilityAppraisalTypeInput','facilityAppraisalRankInput'].includes(e.target.id)){ renderAntiqueAppraisalResult(); return; }
   if(e.target.id==='facilityAntiqueGearCount'){currentAntiqueGearRows=[];renderAntiqueGearStock(false);return;}
-  if(['facilityAntiqueStockArea','facilityAntiqueStockCount'].includes(e.target.id)){ renderAntiqueRandomStock(); return; }
+  if(e.target.id==='facilityAntiqueStockCount'){ renderAntiqueRandomStock(); return; }
   if(['facilityTranscribeTypeInput','facilityTranscribeRankInput'].includes(e.target.id)){ renderAntiqueTranscriptionResult(); return; }
   if(e.target.dataset.formField==='dataKind'){ rerenderCurrentForm(); return; }
   if(e.target.dataset.formField==='craftType'){ currentRecipeView = e.target.value || currentRecipeView; rerenderCurrentForm(); return; }
@@ -10926,10 +10941,11 @@ $('btnCancelEdit').addEventListener('click',closeForm);
 $('btnApplyEdit').addEventListener('click',()=>{try{applyFormToState()}catch(e){toast(e.message,'error')}});
 $('btnApplyAndSave').addEventListener('click',applyFormAndSave);
 $('editModal').addEventListener('click',e=>{ if(e.target.id==='editModal') closeForm(); });
+$('facilityGeneralAreaModal')?.addEventListener('click',e=>{if(e.target===$('facilityGeneralAreaModal'))closeFacilityGeneralAreaModal();});
 $('copyistAreaModal')?.addEventListener('click',e=>{if(e.target===$('copyistAreaModal'))closeCopyistAreaModal();});
 $('guildDailyAreaModal')?.addEventListener('click',e=>{if(e.target===$('guildDailyAreaModal'))closeGuildDailyAreaModal();});
 $('antiqueGearAreaModal')?.addEventListener('click',e=>{if(e.target===$('antiqueGearAreaModal'))closeAntiqueGearAreaModal();});
-document.addEventListener('keydown',e=>{ if(e.key==='Escape' && !$('antiqueGearAreaModal')?.classList.contains('hidden')){closeAntiqueGearAreaModal();return;} if(e.key==='Escape' && !$('guildDailyAreaModal')?.classList.contains('hidden')){closeGuildDailyAreaModal();return;} if(e.key==='Escape' && !$('copyistAreaModal')?.classList.contains('hidden')){closeCopyistAreaModal();return;} if(e.key==='Escape' && !$('editModal').classList.contains('hidden')) closeForm(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape' && !$('facilityGeneralAreaModal')?.classList.contains('hidden')){closeFacilityGeneralAreaModal();return;} if(e.key==='Escape' && !$('antiqueGearAreaModal')?.classList.contains('hidden')){closeAntiqueGearAreaModal();return;} if(e.key==='Escape' && !$('guildDailyAreaModal')?.classList.contains('hidden')){closeGuildDailyAreaModal();return;} if(e.key==='Escape' && !$('copyistAreaModal')?.classList.contains('hidden')){closeCopyistAreaModal();return;} if(e.key==='Escape' && !$('editModal').classList.contains('hidden')) closeForm(); });
 $('btnSetup').addEventListener('click',setup);
 if($('btnCleanupUploadTemps')) $('btnCleanupUploadTemps').addEventListener('click',cleanupUploadTemps);
 if($('btnDiagnoseSheets')) $('btnDiagnoseSheets').addEventListener('click',diagnoseSheets);
@@ -11099,7 +11115,7 @@ document.addEventListener('click', (ev) => {
 #recordItemTypeTabs,#recordMaterialTypeTabs,#recordInternalCategoryTabs{display:grid!important;grid-template-columns:minmax(240px,520px)!important;gap:8px!important;align-items:start!important;overflow:visible!important;max-height:none!important}
 #recordItemTypeTabs .ra-manager-picker-button,#recordMaterialTypeTabs .ra-manager-picker-button,#recordInternalCategoryTabs .ra-manager-picker-button{margin-top:0!important;min-height:44px!important}
 .ra-manager-picker-tabs{flex-wrap:wrap;overflow-x:visible!important}
-.ra-manager-picker.generic .ra-manager-picker-body{grid-template-columns:minmax(0,1fr)!important}.ra-manager-picker.generic .ra-manager-picker-detail{display:none!important}
+.ra-manager-picker.generic .ra-manager-picker-body{grid-template-columns:minmax(0,1fr)!important}.ra-manager-picker.generic .ra-manager-picker-detail{display:none!important}.ra-manager-picker.category-only .ra-manager-picker-search,.ra-manager-picker.category-only .ra-manager-picker-tabs,.ra-manager-picker.category-only .ra-manager-picker-detail{display:none!important}.ra-manager-picker.category-only .ra-manager-picker-body{grid-template-columns:1fr!important}.ra-manager-picker.category-only .ra-manager-picker-list{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}.ra-manager-picker.category-only .ra-manager-picker-card{grid-template-columns:1fr;cursor:pointer;text-align:center}.ra-manager-picker-category-choice{min-height:58px;align-items:center;justify-items:center}
 .facility-meal-area-modal .ra-manager-picker-shell{grid-template-rows:auto minmax(0,1fr)}.facility-meal-area-modal .ra-manager-picker-body{border-top:1px solid var(--line)}.ra-meal-area-choice{width:100%;text-align:left;cursor:pointer}.ra-meal-area-choice.active{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent);background:#f8efe3}.ra-meal-area-choice .facility-chip{justify-self:end}
 </style>
 <script>
@@ -11144,8 +11160,15 @@ function run(){
  function metaText(x){const r=x.raw||{};if(mode==='upgradeMaterial')return [r.rank?`★${r.rank}`:'',r.equipmentUpgradeSlotCost?`消費${r.equipmentUpgradeSlotCost}枠`:'',r.equipmentUpgradeEffect,r.materialCategory].map(txt).filter(Boolean).join(' / ');if(mode==='upgradeEquipment')return [x.category,r.rank?`★${r.rank}`:'',r.upgradeLimit?`強化枠${r.upgradeLimit}`:'',r.upgradeMaterialMinRank?`最低素材★${r.upgradeMaterialMinRank}`:''].map(txt).filter(Boolean).join(' / ');if(mode==='generic')return x.category||'';return [x.category,r.rank?`★${r.rank}`:'',r.power||''].filter(Boolean).join(' / ')}
  function detailPairs(x){const r=x.raw||{};if(mode==='upgradeMaterial')return [['ランク',r.rank?`★${r.rank}`:''],['分類',r.materialCategory],['強化内容',r.equipmentUpgradeEffect],['消費枠',r.equipmentUpgradeSlotCost?`${r.equipmentUpgradeSlotCost}枠`:'' ],['強化対象',r.equipmentUpgradeTarget],['効果説明',r.equipmentUpgradeDetail],['入手先',r.source],['説明',r.description]].filter(([,v])=>txt(v));if(mode==='upgradeEquipment')return [['種別',txt(r.itemType)==='盾'?'盾':x.category],['ランク',r.rank?`★${r.rank}`:''],['属性',r.element],['威力',r.power],['強化枠',r.upgradeLimit],['強化素材最低ランク',r.upgradeMaterialMinRank?`★${r.upgradeMaterialMinRank}`:''],['説明',r.description],['効果',r.effect]].filter(([,v])=>txt(v));if(mode==='generic')return [['分類',x.category]].filter(([,v])=>txt(v));return [['武器種',x.category],['ランク',r.rank?`★${r.rank}`:''],['属性',r.element],['ダメージ',r.power],['命中・補正',r.modifiers],['強化枠',r.upgradeLimit],['説明',r.description],['効果',r.effect]].filter(([,v])=>txt(v))}
  function render(){
-   dialog.classList.toggle('generic',mode==='generic');dialog.querySelector('.ra-manager-picker-head h3').textContent=pickerTitle();search.placeholder=pickerSearchPlaceholder();
-   const all=rows(),extraCats=[...new Set(all.map(x=>x.category).filter(Boolean))],cats=['すべて',...extraCats];if(!cats.includes(category))category='すべて';tabs.innerHTML=cats.map(c=>`<button type="button" data-ra-manager-cat="${escHtml(c)}" class="${c===category?'active':''}">${escHtml(c==='すべて'?'全て':c)}</button>`).join('');
+   const categoryOnly=mode==='category';
+   dialog.classList.toggle('generic',mode==='generic');dialog.classList.toggle('category-only',categoryOnly);dialog.querySelector('.ra-manager-picker-head h3').textContent=pickerTitle();search.placeholder=pickerSearchPlaceholder();
+   const all=rows();
+   if(categoryOnly){
+     category='すべて';tabs.innerHTML='';detail.innerHTML='';
+     list.innerHTML=all.length?all.map(x=>`<button type="button" class="ra-manager-picker-card ra-manager-picker-category-choice" data-ra-manager-choose="${escHtml(x.key)}"><span class="ra-manager-picker-name">${escHtml(x.name)}</span></button>`).join(''):'<p class="notice">選択できる武器種がありません。</p>';
+     return;
+   }
+   const extraCats=[...new Set(all.map(x=>x.category).filter(Boolean))],cats=['すべて',...extraCats];if(!cats.includes(category))category='すべて';tabs.innerHTML=cats.map(c=>`<button type="button" data-ra-manager-cat="${escHtml(c)}" class="${c===category?'active':''}">${escHtml(c==='すべて'?'全て':c)}</button>`).join('');
    const q=txt(search.value).normalize('NFKC').toLocaleLowerCase('ja');
    const filtered=all.filter(x=>category==='すべて'||x.category===category).filter(x=>!q||[x.name,x.category,x.raw.description,x.raw.effect,x.raw.power,x.raw.equipmentUpgradeEffect,x.raw.equipmentUpgradeDetail,x.raw.source].map(txt).join(' ').normalize('NFKC').toLocaleLowerCase('ja').includes(q));
    list.innerHTML=filtered.length?filtered.map(x=>`<article class="ra-manager-picker-card"><div><div class="ra-manager-picker-name">${escHtml(x.name)}</div><div class="ra-manager-picker-meta">${escHtml(metaText(x))}</div></div><div class="ra-manager-picker-actions">${mode==='generic'?'':`<button type="button" class="ghost" data-ra-manager-detail="${escHtml(x.key)}">詳細</button>`}<button type="button" data-ra-manager-choose="${escHtml(x.key)}">選択</button></div></article>`).join(''):'<p class="notice">条件に一致する候補がありません。</p>';
