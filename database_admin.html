@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.647</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.648</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.647">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.648">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.647｜更新：2026年8月25日</div>
+<div class="ra-build-info">v90.8.648｜更新：2026年8月25日</div>
 
 <header>
   <div class="title-card">
@@ -1921,8 +1921,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
-const RECRAFT_DB_VERSION = 'v90.8.647';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.647';
+const RECRAFT_DB_VERSION = 'v90.8.648';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.648';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -2619,7 +2619,7 @@ function isStructuredNumericSubRank(key,field){
     || (key==='items' && field==='guaranteeUpgradeMaxRank');
 }
 function isEquipmentItemRow(row={}){
-  return String(row.dataKind || 'アイテム').trim() !== '素材' && ['武器','防具','盾','装飾品'].includes(String(row.itemType || '').trim());
+  return String(row.dataKind || 'アイテム').trim() !== '素材' && ['武器','防具','盾'].includes(String(row.itemType || '').trim());
 }
 function equipmentUpgradeMinimumRank(row={}){
   const own=numericRankValueIncludingLegacyMaterialGrade(row.rank,1);
@@ -2756,7 +2756,7 @@ function normalizeStateData(data){
     if(String(row.guaranteeUpgradeMaxRank ?? '').trim()) row.guaranteeUpgradeMaxRank = numericRankValueIncludingLegacyMaterialGrade(row.guaranteeUpgradeMaxRank, 1);
     if(String(row.toolRank ?? '').trim()) row.rank = row.toolRank;
     if(isEquipmentItemRow(row)) row.upgradeMaterialMinRank = equipmentUpgradeMinimumRank(row);
-    else row.upgradeMaterialMinRank = '';
+    else { row.upgradeLimit = '0'; row.upgradeMaterialMinRank = ''; }
   });
   (out.recipes || []).forEach(row=>{
     if(!row) return;
@@ -8896,7 +8896,7 @@ function collectFormRow(){
     if(String(base.guaranteeUpgradeMaxRank??'').trim()) base.guaranteeUpgradeMaxRank=numericRankValueIncludingLegacyMaterialGrade(base.guaranteeUpgradeMaxRank,1);
     if(String(base.toolRank??'').trim()) base.rank=base.toolRank;
     if(isEquipmentItemRow(base)) base.upgradeMaterialMinRank=numericRankValueIncludingLegacyMaterialGrade(base.upgradeMaterialMinRank,base.rank);
-    else base.upgradeMaterialMinRank='';
+    else { base.upgradeLimit='0'; base.upgradeMaterialMinRank=''; }
   }
   if(key==='treasure_tables'){
     base.treasureRank=numericRankValueIncludingLegacyMaterialGrade(base.treasureRank,1);
@@ -9329,7 +9329,7 @@ const UPLOAD_GZIP_CHUNK_TIMEOUT_MS = 15000;
 const DIRECT_CHUNK_MAX_ROWS = 100;
 const DIRECT_CHUNK_MAX_BYTES = 262144;
 const DIRECT_SMALL_UPSERT_ROWS = 25;
-// v90.8.647: 小さい表まで一括処理のchecksum付き経路でPOSTへ送らない。
+// v90.8.648: 小さい表まで一括処理のchecksum付き経路でPOSTへ送らない。
 // JSONP分割ならWebアプリのPOST/iframe応答に依存せず、カテゴリ類を確実に処理できる。
 const JSONP_SMALL_UPLOAD_MAX_ROWS = 80;
 const JSONP_SMALL_UPLOAD_MAX_BYTES = 65536;
@@ -9823,7 +9823,7 @@ async function uploadRowsByChunks(key, rows, mode, dataKindScope='', options={})
   await assertServerVersion();
   const list=(rows||[]).map(cleanUploadRow);
 
-  // v90.8.647: 一括登録/置換ではchecksumが付くため、644までは2KB程度のitem_typesまで
+  // v90.8.648: 一括登録/置換ではchecksumが付くため、644までは2KB程度のitem_typesまで
   // direct POST経路へ入り、POST/iframe応答が不調な環境では最初の表で止まっていた。
   // 小規模表はmode/checksumに関係なくJSONP分割へ固定する。
   if(shouldUseSmallJsonpUpload(list)){
@@ -10099,7 +10099,7 @@ function cloneRowsForSave(baseKey, rows){
     const r = {...(src || {})};
     normalizeEncounterPlacementRow(baseKey,r);
     if(baseKey==='material_ranks') r.name=numericRankValueIncludingLegacyMaterialGrade(r.name,1);
-    if(baseKey==='items'){ if(!String(r.sellPrice??'').trim()&&String(r.price??'').trim())r.sellPrice=r.price; if(String(r.sellPrice??'').trim())r.price=r.sellPrice; r.rank=numericRankValueIncludingLegacyMaterialGrade(r.rank,1); if(String(r.toolRank??'').trim()){r.toolRank=numericRankValueIncludingLegacyMaterialGrade(r.toolRank,1);r.rank=r.toolRank;} if(String(r.guaranteeUpgradeMaxRank??'').trim())r.guaranteeUpgradeMaxRank=numericRankValueIncludingLegacyMaterialGrade(r.guaranteeUpgradeMaxRank,1); if(isEquipmentItemRow(r))r.upgradeMaterialMinRank=numericRankValueIncludingLegacyMaterialGrade(r.upgradeMaterialMinRank,r.rank); else r.upgradeMaterialMinRank=''; }
+    if(baseKey==='items'){ if(!String(r.sellPrice??'').trim()&&String(r.price??'').trim())r.sellPrice=r.price; if(String(r.sellPrice??'').trim())r.price=r.sellPrice; r.rank=numericRankValueIncludingLegacyMaterialGrade(r.rank,1); if(String(r.toolRank??'').trim()){r.toolRank=numericRankValueIncludingLegacyMaterialGrade(r.toolRank,1);r.rank=r.toolRank;} if(String(r.guaranteeUpgradeMaxRank??'').trim())r.guaranteeUpgradeMaxRank=numericRankValueIncludingLegacyMaterialGrade(r.guaranteeUpgradeMaxRank,1); if(isEquipmentItemRow(r))r.upgradeMaterialMinRank=numericRankValueIncludingLegacyMaterialGrade(r.upgradeMaterialMinRank,r.rank); else { r.upgradeLimit='0'; r.upgradeMaterialMinRank=''; } }
     if(baseKey==='recipes'){ if(!String(r.recipePrice??'').trim()&&String(r.limitedRecipePrice??'').trim())r.recipePrice=r.limitedRecipePrice; r.limitedRecipePrice=''; r.rank=numericRankValueIncludingLegacyMaterialGrade(r.rank,1); }
     if(baseKey==='spells' || baseKey==='skills') r.rank=numericRankValueIncludingLegacyMaterialGrade(r.rank,1);
     if(['quest_rewards','quests','monsters'].includes(baseKey)) r.rank=numericRankValueIncludingLegacyMaterialGrade(r.rank,1);
@@ -10392,7 +10392,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.647';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.648';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-25';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
@@ -11176,7 +11176,7 @@ document.addEventListener('click', (ev) => {
 .ra-manager-picker-tabs{flex-wrap:wrap;overflow-x:visible!important}
 .ra-manager-picker.generic .ra-manager-picker-body{grid-template-columns:minmax(0,1fr)!important}.ra-manager-picker.generic .ra-manager-picker-detail{display:none!important}.ra-manager-picker.category-only .ra-manager-picker-search,.ra-manager-picker.category-only .ra-manager-picker-tabs,.ra-manager-picker.category-only .ra-manager-picker-detail{display:none!important}.ra-manager-picker.category-only .ra-manager-picker-body{grid-template-columns:1fr!important}.ra-manager-picker.category-only .ra-manager-picker-list{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}.ra-manager-picker.category-only .ra-manager-picker-card{grid-template-columns:1fr;cursor:pointer;text-align:center}.ra-manager-picker-category-choice{min-height:58px;align-items:center;justify-items:center}
 .facility-meal-area-modal .ra-manager-picker-shell{grid-template-rows:auto minmax(0,1fr)}.facility-meal-area-modal .ra-manager-picker-body{border-top:1px solid var(--line)}.ra-meal-area-choice{width:100%;text-align:left;cursor:pointer}.ra-meal-area-choice.active{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent);background:#f8efe3}.ra-meal-area-choice .facility-chip{justify-self:end}
-/* v90.8.647: 動的選択モーダルを管理HTML既存のmodal-card系デザインへ統一 */
+/* v90.8.648: 動的選択モーダルを管理HTML既存のmodal-card系デザインへ統一 */
 .ra-manager-picker{width:min(980px,calc(100vw - 24px));max-height:min(88vh,900px);border:0;background:transparent;padding:0;box-shadow:none}
 .ra-manager-picker::backdrop{background:rgba(36,29,23,.46)}
 .ra-manager-picker-shell{max-height:min(88vh,900px);overflow:hidden;background:var(--paper);border:1px solid var(--line);border-radius:22px;box-shadow:0 26px 70px rgba(0,0,0,.28)}
