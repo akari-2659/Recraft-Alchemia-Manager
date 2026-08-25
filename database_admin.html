@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.644</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.645</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.644">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.645">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.644｜更新：2026年8月25日</div>
+<div class="ra-build-info">v90.8.645｜更新：2026年8月25日</div>
 
 <header>
   <div class="title-card">
@@ -1232,7 +1232,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
     </div>
     <p class="notice">
       この管理ツールは固定のWeb App URLへ接続します。通常は、各表の <span class="kbd">この表だけDB読込</span> / <span class="kbd">この表だけDB登録</span> / <span class="kbd">この表だけDB置換</span>、または各行の <span class="kbd">個別DB登録</span> / <span class="kbd">個別DB置換</span> を使ってください。
-      個別DB置換は対象1件だけを上書きし、同じ表の他データは保持します。DB送信は原則として無圧縮の1回POSTを使います。1回送信に収まらない巨大データだけ無圧縮分割POSTへ切り替え、圧縮送信は最終フォールバックとしてのみ使用します。全データ操作は変更のないDBを省略します。
+      個別DB置換は対象1件だけを上書きし、同じ表の他データは保持します。DB送信は、小規模データをJSONP分割で確実に送信し、大規模データは無圧縮分割POSTを優先します。POST経路がタイムアウトした場合は圧縮JSONPへ自動で切り替えます。全データ操作は変更のないDBを省略します。
     </p>
     <div class="toolbar initial-data-toolbar">
       <div class="field">
@@ -1921,8 +1921,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
-const RECRAFT_DB_VERSION = 'v90.8.644';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.644';
+const RECRAFT_DB_VERSION = 'v90.8.645';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.645';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -8927,20 +8927,20 @@ function payload(action, extra={}){
   return {action, ...extra};
 }
 function isGasMode(){ return typeof google !== 'undefined' && google.script && google.script.run; }
-const JSONP_ACTIONS = new Set(['ping','schema','setup','list','listAll','getEquipmentCategories','characterSheetMaster','resolveRegistrationId','dedupeAll','dedupe','repairAll','repairSheet','dbHashes','beginUpload','putUploadChunk','putUploadTextChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet','beginDirectChunkUpload','directChunkUploadStatus','antiqueRegistrationStatus','putDirectRowsChunk','finishDirectChunkUpload','beginRepairSheetChunked','repairSheetChunkStatus','repairSheetRowsChunk','finishRepairSheetChunked']);
+const JSONP_ACTIONS = new Set(['ping','schema','setup','list','listAll','getEquipmentCategories','characterSheetMaster','resolveRegistrationId','dedupeAll','dedupe','repairAll','repairSheet','dbHashes','beginUpload','putUploadChunk','putUploadTextChunk','putUploadGzipChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet','beginDirectChunkUpload','directChunkUploadStatus','antiqueRegistrationStatus','putDirectRowsChunk','finishDirectChunkUpload','beginRepairSheetChunked','repairSheetChunkStatus','repairSheetRowsChunk','finishRepairSheetChunked']);
 function apiBaseUrl(){
   return (DEFAULT_GAS_WEB_APP_URL || '').trim();
 }
 function jsonpTimeoutMs(action){
   const a = String(action || '').trim();
   // Apps Scriptの1実行上限(6分)より先にブラウザ側だけが諦めないよう、書込系は約380秒待つ。
-  if (['commitUpload','beginUpload','putUploadChunk','putUploadTextChunk','putUploadCell','abortUpload','upsert','replaceSheet','repairSheet','repairAll','dedupe','dedupeAll','setup','beginDirectChunkUpload','directChunkUploadStatus','antiqueRegistrationStatus','putDirectRowsChunk','finishDirectChunkUpload','beginRepairSheetChunked','repairSheetChunkStatus','repairSheetRowsChunk','finishRepairSheetChunked'].includes(a)) return 380000;
+  if (['commitUpload','beginUpload','putUploadChunk','putUploadTextChunk','putUploadGzipChunk','putUploadCell','abortUpload','upsert','replaceSheet','repairSheet','repairAll','dedupe','dedupeAll','setup','beginDirectChunkUpload','directChunkUploadStatus','antiqueRegistrationStatus','putDirectRowsChunk','finishDirectChunkUpload','beginRepairSheetChunked','repairSheetChunkStatus','repairSheetRowsChunk','finishRepairSheetChunked'].includes(a)) return 380000;
   if (['list','listAll','characterSheetMaster','getEquipmentCategories','dbHashes'].includes(a)) return 45000;
   return 25000;
 }
 function jsonpActionLabel(action){
   const a = String(action || '').trim();
-  if (['beginUpload','putUploadChunk','putUploadTextChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet','beginDirectChunkUpload','directChunkUploadStatus','antiqueRegistrationStatus','putDirectRowsChunk','finishDirectChunkUpload','beginRepairSheetChunked','repairSheetChunkStatus','repairSheetRowsChunk','finishRepairSheetChunked'].includes(a)) return 'DB送信/反映';
+  if (['beginUpload','putUploadChunk','putUploadTextChunk','putUploadGzipChunk','putUploadCell','commitUpload','abortUpload','upsert','replaceSheet','beginDirectChunkUpload','directChunkUploadStatus','antiqueRegistrationStatus','putDirectRowsChunk','finishDirectChunkUpload','beginRepairSheetChunked','repairSheetChunkStatus','repairSheetRowsChunk','finishRepairSheetChunked'].includes(a)) return 'DB送信/反映';
   return 'DB読み込み';
 }
 function jsonpApi(data){
@@ -9313,6 +9313,15 @@ const UPLOAD_GZIP_CHUNK_TIMEOUT_MS = 15000;
 const DIRECT_CHUNK_MAX_ROWS = 100;
 const DIRECT_CHUNK_MAX_BYTES = 262144;
 const DIRECT_SMALL_UPSERT_ROWS = 25;
+// v90.8.645: 小さい表まで一括処理のchecksum付き経路でPOSTへ送らない。
+// JSONP分割ならWebアプリのPOST/iframe応答に依存せず、カテゴリ類を確実に処理できる。
+const JSONP_SMALL_UPLOAD_MAX_ROWS = 80;
+const JSONP_SMALL_UPLOAD_MAX_BYTES = 65536;
+function shouldUseSmallJsonpUpload(rows){
+  const list=(rows||[]).map(cleanUploadRow);
+  if(list.length>JSONP_SMALL_UPLOAD_MAX_ROWS)return false;
+  return utf8ByteLength(JSON.stringify(list))<=JSONP_SMALL_UPLOAD_MAX_BYTES;
+}
 function uploadPartPayload(token, chunkIndex, partIndex, textPart){
   return payload('putUploadChunk', {
     token,
@@ -9462,11 +9471,11 @@ function makeDirectRowChunks(rows){
 }
 
 
-async function uploadRowsByTextChunks(key, rows, mode, dataKindScope=''){
+async function uploadRowsByTextChunks(key, rows, mode, dataKindScope='', options={}){
   const token = uploadToken(mode === 'replace' ? 'rp' : 'up', key);
   const list = rows || [];
   uploadProgressStart(`${labelKey(key)}の通常DB送信`, list.length);
-  const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'text', dataKindScope}));
+  const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'text', dataKindScope, checksum:String(options.checksum||'')}));
   if(!begin.ok) throw new Error(begin.error || `${labelKey(key)}のDB送信準備に失敗しました`);
   let sentChunks = 0;
   let sentParts = 0;
@@ -9511,7 +9520,7 @@ async function uploadRowsByTextChunks(key, rows, mode, dataKindScope=''){
     throw e;
   }
 }
-async function uploadRowsByGzipChunks(key, rows, mode, dataKindScope=''){
+async function uploadRowsByGzipChunks(key, rows, mode, dataKindScope='', options={}){
   const list = rows || [];
   const fingerprint = uploadResumeFingerprint(key,mode,dataKindScope,list);
   const previous = uploadResumeLoad();
@@ -9525,7 +9534,7 @@ async function uploadRowsByGzipChunks(key, rows, mode, dataKindScope=''){
   const token = canResume ? previous.token : uploadToken(mode === 'replace' ? 'gzrp' : 'gzup', key);
   uploadProgressStart(`${labelKey(key)}の圧縮分割DB送信${canResume?'（続きから）':''}`, list.length);
   if(!canResume){
-    const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'gzipBase64', chunkSchema:UPLOAD_GZIP_COMPRESSION_SCHEMA, dataKindScope}));
+    const begin = await callApi(payload('beginUpload', {sheetKey:key, mode, token, uploadEncoding:'gzipBase64', chunkSchema:UPLOAD_GZIP_COMPRESSION_SCHEMA, dataKindScope, checksum:String(options.checksum||'')}));
     if(!begin.ok) throw new Error(begin.error || `${labelKey(key)}のDB圧縮送信準備に失敗しました`);
   }else uploadProgressLog(`保存済み位置から再開します：チャンク${Number(previous.nextChunk||0)+1} / パーツ${Number(previous.nextPart||0)+1}`);
   let sentChunks = Number(canResume ? previous.nextChunk||0 : 0);
@@ -9789,20 +9798,42 @@ async function uploadRowsByChunksFallback(key, rows, mode, dataKindScope='', opt
   const list=rows||[];
   // direct POSTを使えない古い環境だけ、v598以前の仮シート分割経路を互換用として残す。
   if(canUseGzipUpload()){
-    try{return await uploadRowsByGzipChunks(key,list,mode,dataKindScope);}
+    try{return await uploadRowsByGzipChunks(key,list,mode,dataKindScope,options);}
     catch(gzipError){const saved=uploadResumeLoad();if(saved)throw gzipError;}
   }
-  return await uploadRowsByTextChunks(key,list,mode,dataKindScope);
+  return await uploadRowsByTextChunks(key,list,mode,dataKindScope,options);
 }
 async function uploadRowsByChunks(key, rows, mode, dataKindScope='', options={}){
   await assertServerVersion();
   const list=(rows||[]).map(cleanUploadRow);
+
+  // v90.8.645: 一括登録/置換ではchecksumが付くため、644までは2KB程度のitem_typesまで
+  // direct POST経路へ入り、POST/iframe応答が不調な環境では最初の表で止まっていた。
+  // 小規模表はmode/checksumに関係なくJSONP分割へ固定する。
+  if(shouldUseSmallJsonpUpload(list)){
+    if(canUseGzipUpload()) return uploadRowsByGzipChunks(key,list,mode,dataKindScope,options);
+    return uploadRowsByTextChunks(key,list,mode,dataKindScope,options);
+  }
+
   if(canUseDirectPostUpload()){
-    // 少量upsertは1POSTの軽量行更新を維持。大量登録と置換は直接分割書込へ統一する。
-    if(mode==='upsert' && list.length<=DIRECT_SMALL_UPSERT_ROWS && !String(options.checksum||'').trim()){
-      return uploadRowsSmallDirectPost(key,list,mode,dataKindScope);
+    try{
+      // 大量データは従来どおり無圧縮の直接分割POSTを優先する。
+      return await uploadRowsByDirectChunks(key,list,mode,dataKindScope,options);
+    }catch(postError){
+      const message=String(postError&&postError.message||postError||'');
+      // POST経路そのものが応答不能なら、処理全体を止めずJSONP分割へ退避する。
+      // upsertは同一キー更新、replaceは再初期化されるため、途中反映後でも再送可能。
+      if(/POST送信の応答がタイムアウト|POST.*タイムアウト|Failed to fetch|NetworkError/i.test(message)){
+        uploadProgressLog(`POST経路で失敗したためJSONP分割送信へ切り替えます：${message}`);
+        const saved=uploadResumeLoad();
+        if(saved&&saved.token){
+          try{await callApi(payload('abortUpload',{token:saved.token}));}catch(abortError){console.warn('direct upload fallback cleanup failed',abortError);}
+          uploadResumeClear();
+        }
+        return uploadRowsByChunksFallback(key,list,mode,dataKindScope,options);
+      }
+      throw postError;
     }
-    return uploadRowsByDirectChunks(key,list,mode,dataKindScope,options);
   }
   return uploadRowsByChunksFallback(key,list,mode,dataKindScope,options);
 }
@@ -10333,7 +10364,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.644';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.645';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-25';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
