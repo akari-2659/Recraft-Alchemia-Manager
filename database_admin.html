@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.648</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.652</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.648">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.652">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.648｜更新：2026年8月25日</div>
+<div class="ra-build-info">v90.8.652｜更新：2026年8月27日</div>
 
 <header>
   <div class="title-card">
@@ -1921,8 +1921,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
-const RECRAFT_DB_VERSION = 'v90.8.648';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.648';
+const RECRAFT_DB_VERSION = 'v90.8.652';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.652';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -3132,13 +3132,13 @@ const SYSTEM_HELP = [
       "魔物の行動は1行動1行で管理する。",
       "魔物本体の命中値は基礎命中として扱い、判定を行う各行動に-2～+2の命中補正を設定する。チャットパレットは2D6+{命中}±補正の形で基礎命中ラベルを参照する。",
       "命中補正は威力調整の一要素として参照するが、命中補正だけを理由にダメージを機械的に上下させない。エリア難易度・対象数・追加効果・防御貫通・予告の有無・期待値と振れ幅を合わせて個別に決める。",
-      "魔物の直接ダメージ式はD6を必須とし、最大構成をxD6+yD2～D5+zとする。D2～D5はD6へ追加する補助ダイスとしてのみ使用でき、x>=yを必須とする。固定値zは0以上のみとし、ダメージ式へのマイナス固定値は禁止。D2～D5だけのダメージ式は禁止。毒などの継続ダメージはこの制限の対象外。",
+      "魔物の基礎直接ダメージ式と武器の基礎ダメージ式はD6を必須とし、最大構成をxD6+yD2～D5+zとする。D2～D5はD6へ追加する補助ダイスとしてのみ使用でき、補助ダイスを含む場合はy<=xを必須とする。固定値zは0以上のみとし、ダメージ式へのマイナス固定値は禁止。D2～D5だけの基礎ダメージ式は禁止。毒などの継続ダメージと、条件成立時に別途加算される追加ダメージはこの式制限の対象外。D2～D5の使用自体は強制せず、D2は小さい振れ幅、D3は軽～中程度、D4は標準的な補助、D5は大きめの振れ幅を持たせたい攻撃に使い分ける。",
       "防御・補助・回復行動も自動成功にせず、基礎命中を使う『命中>=固定達成値』判定を設定する。失敗時はその行動の防御・強化・回復・準備効果を適用しない。妨害による次の判定値-2はこの判定にも適用する。",
       "通常魔物は技を必ず3個、ボスは技を必ず4個所持する。固有パッシブは技数に含めない。",
       "エリアボスは、前衛が残っている状態でも後衛へ直接ダメージを与えられる行動を最低1つ必ず持つ。敵全体・敵1列・敵後衛を対象とする直接ダメージ行動、または遠距離攻撃・術式・祈祷で後衛を選択できる直接ダメージ行動を用意する。状態異常や弱体だけの全体行動はこの条件を満たさない。",
       "準備と次ターンの大技で構成される予告攻撃は、2段階を1つの技として同じ行に登録する。",
       "魔物行動には距離とは別に行動種別を設定する。種別は近接攻撃、遠距離攻撃、術式、祈祷、防御、補助、回復、特殊。",
-      "判定欄は命中方法と参照値、行動種別欄はその行動が何に属するかを示す。",
+      "魔物の判定は行動種別にかかわらず本体の命中値を使用する。判定欄は『命中>=回避値』『命中>=抵抗値』『命中>=固定達成値』で参照先を示し、行動種別欄は近接攻撃・遠距離攻撃・術式など行動の性質だけを示す。",
       "ドロップはメモ式ではなく行単位で管理する。",
       "ドロップ素材は魔物素材カテゴリから選択する。"
     ]
@@ -7320,15 +7320,10 @@ function inferCheckLeftFromRow(key, row={}, fallback=''){
   }
   if(key === 'monsters'){
     const parsedFallback = parseCheckType(fallback).left;
-    const actionType = String(row.actionType || '').trim();
-    if(actionType === '近接攻撃') return '近接';
-    if(actionType === '遠距離攻撃') return '射撃';
-    if(actionType === '術式') return '魔法';
-    if(actionType === '祈祷') return '祈祷';
-    // 防御・補助・回復などPCの回避/抵抗を参照しない行動は、
-    // 登録済みの「命中>=固定値」をそのまま使い、基礎命中ラベルで判定する。
-    if(parsedFallback) return normalizeCheckLeftSkill(parsedFallback);
-    return normalizeCheckLeftSkill(row.skill || '命中');
+    if(parsedFallback === 'なし') return 'なし';
+    // 魔物は行動種別にかかわらず本体の命中値で判定する。
+    // 近接攻撃・遠距離攻撃・術式などは行動の性質であり、判定能力値ではない。
+    return '命中';
   }
   return normalizeCheckLeftSkill(skill || parseCheckType(fallback).left || fallback);
 }
@@ -7376,17 +7371,15 @@ function normalizeCheckTypeValue(value){
 }
 function normalizeMonsterActionCheckType(row={}){
   const normalized = normalizeCheckTypeValue(row.checkType);
+  if(!normalized || normalized === 'なし') return normalized;
   const parsed = parseCheckType(normalized);
   const effect = String(row.effect || '').trim();
   const power = String(row.power || '').trim();
   const noDamage = !power || power === 'なし' || power === '-';
-  const statusOnlyMagic = (parsed.left === '魔法' || parsed.left === '祈祷')
-    && noDamage
-    && /(毒|拘束|萎縮|泥まみれ|胞子|粘着|視界不良|体勢崩れ)状態/.test(effect);
-  if(parsed.left && parsed.left !== 'なし' && (/抵抗に失敗/.test(effect) || statusOnlyMagic)){
-    return `${parsed.left}>=抵抗値`;
-  }
-  return normalized;
+  const resistanceEffect = /抵抗に失敗/.test(effect)
+    || (noDamage && /(毒|拘束|萎縮|泥まみれ|胞子|粘着|視界不良|体勢崩れ|汚染|呪い|麻痺|睡眠)状態/.test(effect));
+  const right = resistanceEffect ? '抵抗値' : (parsed.right || '');
+  return right ? `命中>=${right}` : '命中';
 }
 function parseCheckType(value){
   const raw = normalizeCheckTypeValue(value);
@@ -7723,7 +7716,7 @@ function monsterDropRowHtml(row={}, idx=0){
 function monsterActionsEditor(value){
   const rows = parseMonsterActions(value);
   const body = rows.length ? rows.map(monsterActionRowHtml).join('') : monsterActionRowHtml({element:'物'});
-  return `<div class="monster-line-editor" data-monster-actions-editor><textarea data-form-field="actions" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(serializeMonsterActions(rows))}</textarea><div class="form-help">行動は1行動ずつ入力します。通常魔物は必ず3個、ボスは必ず4個です。固有パッシブは技数に含めません。 エリアボスは、前衛が残っていても後衛へ直接ダメージを与えられる行動を最低1つ必ず持たせます。判定を行う行動は基礎命中に対する命中補正を-2～+2で設定します。防御・補助・回復行動も「命中>=固定値」で判定し、失敗時は効果を適用しません。命中補正は威力調整の一要素ですが、命中補正だけで一律に威力を上下させません。エリア難易度・対象数・追加効果・防御貫通・予告の有無を優先します。直接ダメージ式はD6を必ず含め、最大構成はxD6+yD2～D5+zです。D2～D5は期待値・振れ幅・技の重さを調整する補助ダイスとして使用でき、x>=yが必須です。エリアごとの最低ダメージ値は固定しません。固定値zは必要な行動だけに0以上で設定し、ダメージ式へのマイナス固定値は禁止です。D2～D5単独は使用できません（毒などの継続ダメージは除外）。行動種別は距離とは別に、近接攻撃・遠距離攻撃・術式・祈祷・防御・補助・回復・特殊から選択します。状態異常を付与する効果欄は「○○状態にする」までを記載し、共通の効果・解除条件は状態異常定義から自動表示します。同じ状態異常名で効果や解除条件を変えないでください。異なる場合は別の状態異常名を使用します。</div><div class="monster-line-head action-head"><span>行動名</span><span>行動種別</span><span>判定</span><span>命中補正</span><span>対象</span><span>属性</span><span>威力</span><span>効果</span><span></span></div><div data-monster-action-list>${body}</div><button type="button" class="secondary" data-monster-action-add>行動を追加</button></div>`;
+  return `<div class="monster-line-editor" data-monster-actions-editor><textarea data-form-field="actions" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(serializeMonsterActions(rows))}</textarea><div class="form-help">行動は1行動ずつ入力します。通常魔物は必ず3個、ボスは必ず4個です。固有パッシブは技数に含めません。 エリアボスは、前衛が残っていても後衛へ直接ダメージを与えられる行動を最低1つ必ず持たせます。判定を行う行動は基礎命中に対する命中補正を-2～+2で設定します。防御・補助・回復行動も「命中>=固定値」で判定し、失敗時は効果を適用しません。命中補正は威力調整の一要素ですが、命中補正だけで一律に威力を上下させません。エリア難易度・対象数・追加効果・防御貫通・予告の有無を優先します。直接ダメージ式はD6を必ず含め、最大構成はxD6+yD2～D5+zです。D2～D5は期待値・振れ幅・技の重さを調整する補助ダイスとして使用でき、補助ダイスを含む場合はy<=xが必須です。D2は小さい振れ幅、D3は軽～中程度、D4は標準的な補助、D5は大きめの振れ幅を持たせたい行動に使い分けます。小ダイスの使用自体は強制しません。条件成立時に別途加算される追加ダメージは、この基礎ダメージ式制限から除外します。エリアごとの最低ダメージ値は固定しません。固定値zは必要な行動だけに0以上で設定し、ダメージ式へのマイナス固定値は禁止です。D2～D5単独は使用できません（毒などの継続ダメージは除外）。行動種別は距離とは別に、近接攻撃・遠距離攻撃・術式・祈祷・防御・補助・回復・特殊から選択します。状態異常を付与する効果欄は「○○状態にする」までを記載し、共通の効果・解除条件は状態異常定義から自動表示します。同じ状態異常名で効果や解除条件を変えないでください。異なる場合は別の状態異常名を使用します。</div><div class="monster-line-head action-head"><span>行動名</span><span>行動種別</span><span>判定</span><span>命中補正</span><span>対象</span><span>属性</span><span>威力</span><span>効果</span><span></span></div><div data-monster-action-list>${body}</div><button type="button" class="secondary" data-monster-action-add>行動を追加</button></div>`;
 }
 function monsterDropsEditor(value){
   const rows = parseMonsterDrops(value);
@@ -8606,6 +8599,20 @@ function assertMonsterActionHitModRows(rows=[]){
   const details=invalid.slice(0,12).map(x=>`・${String(x.monster.name||x.monster.id||'名称未設定')}／${String(x.action.name||'行動名未設定')}`).join('\n');
   throw new Error(`魔物行動の命中補正は-2～+2の整数で設定してください。\n${details}`);
 }
+function assertMonsterActionCheckSourceRows(rows=[]){
+  const invalid=[];
+  (rows||[]).forEach(monster=>{
+    parseMonsterActions(monster.actions||'').forEach(action=>{
+      const check=String(action.checkType||'').trim();
+      if(!check || check==='なし') return;
+      const parsed=parseCheckType(check);
+      if(parsed.left!=='命中') invalid.push({monster,action,check});
+    });
+  });
+  if(!invalid.length) return;
+  const details=invalid.slice(0,12).map(x=>`・${String(x.monster.name||x.monster.id||'名称未設定')}／${String(x.action.name||'行動名未設定')}：${x.check}`).join('\n');
+  throw new Error(`魔物の判定能力値は行動種別にかかわらず「命中」を使用してください。判定欄は「命中>=回避値」「命中>=抵抗値」「命中>=固定達成値」で登録します。\n${details}`);
+}
 function assertMonsterSupportActionCheckRows(rows=[]){
   const invalid=[];
   (rows||[]).forEach(monster=>{
@@ -8622,25 +8629,44 @@ function assertMonsterSupportActionCheckRows(rows=[]){
   const details=invalid.slice(0,12).map(x=>`・${String(x.monster.name||x.monster.id||'名称未設定')}／${String(x.action.name||'行動名未設定')}`).join('\n');
   throw new Error(`魔物の防御・補助・回復行動は「命中>=固定達成値」の判定を設定してください。\n${details}`);
 }
+function isValidBaseDamageFormula(value=''){
+  const power=String(value||'').trim().replace(/\s+/g,'');
+  const formula=/^(\d+)D6(?:\+(\d+)D([2-5]))?(?:\+(\d+))?$/i;
+  const match=power.match(formula);
+  if(!match)return false;
+  const x=Number(match[1]||0), y=Number(match[2]||0);
+  return x>=1 && y<=x;
+}
+function assertWeaponBaseDamageDieRows(rows=[]){
+  const invalid=[];
+  (rows||[]).forEach(item=>{
+    if(String(item.dataKind||'アイテム').trim()==='素材')return;
+    if(String(item.itemType||'').trim()!=='武器')return;
+    if(String(item.name||'').trim()==='素手' || String(item.itemCategory||'').trim()==='素手')return;
+    const power=String(item.power||'').trim();
+    if(!power)return; // 魔導書・祈祷書など基礎武器ダメージを持たない武器は対象外。
+    if(!isValidBaseDamageFormula(power))invalid.push({item,power});
+  });
+  if(!invalid.length)return;
+  const details=invalid.slice(0,12).map(x=>`・${String(x.item.name||x.item.id||'名称未設定')}：${x.power}`).join('\n');
+  throw new Error(`武器の基礎ダメージ式はD6を必ず含め、最大構成を「xD6+yD2～D5+z」としてください。補助ダイス個数yはD6個数x以下（y <= x）、固定値zは0以上です。条件成立時に別途加算される追加ダメージはこの式制限から除外します。素手は武器データ上の例外です。\n${details}${invalid.length>12?`\nほか${invalid.length-12}件`:''}`);
+}
 function assertMonsterDirectDamageDieRows(rows=[]){
   const invalid=[];
   const damageTypes=new Set(['近接攻撃','遠距離攻撃','術式','祈祷','特殊']);
-  const formula=/^(\d+)D6(?:\+(\d+)D([2-5]))?(?:\+(\d+))?$/i;
   (rows||[]).forEach(monster=>{
     parseMonsterActions(monster.actions||'').forEach(action=>{
       const type=normalizeMonsterActionType(action);
-      if(!damageTypes.has(type)) return;
-      const power=String(action.power||'').trim().replace(/\s+/g,'');
-      if(!power || power==='なし') return;
-      const match=power.match(formula);
-      if(!match){ invalid.push({monster,action,power,reason:'式'}); return; }
-      const x=Number(match[1]||0), y=Number(match[2]||0);
-      if(x<1 || y>x) invalid.push({monster,action,power,reason:'個数'});
+      if(!damageTypes.has(type))return;
+      const power=String(action.power||'').trim();
+      if(!power || power==='なし')return;
+      if(!isValidBaseDamageFormula(power))invalid.push({monster,action,power});
+      // 条件付き追加ダメージは基礎ダメージ式の制限から除外する。
     });
   });
-  if(!invalid.length) return;
+  if(!invalid.length)return;
   const details=invalid.slice(0,12).map(x=>`・${String(x.monster.name||x.monster.id||'名称未設定')}／${String(x.action.name||'行動名未設定')}：${x.power}`).join('\n');
-  throw new Error(`魔物の直接ダメージ式はD6を必ず含め、最大構成を「xD6+yD2～D5+z」としてください。D2～D5はD6への追加ダイスとしてのみ使用でき、D6個数x >= 追加ダイス個数yが必須です。固定値zは0以上のみで、ダメージ式へのマイナス固定値は禁止です。D2～D5単独は使用できません。毒などの継続ダメージは効果欄で別処理します。\n${details}${invalid.length>12?`\nほか${invalid.length-12}件`:''}`);
+  throw new Error(`魔物の基礎直接ダメージ式はD6を必ず含め、最大構成を「xD6+yD2～D5+z」としてください。補助ダイス個数yはD6個数x以下（y <= x）、固定値zは0以上です。条件成立時に別途加算される追加ダメージと毒などの継続ダメージはこの式制限から除外します。\n${details}${invalid.length>12?`\nほか${invalid.length-12}件`:''}`);
 }
 function assertMonsterActionCountRows(rows=[]){
   const invalid=(rows || []).map(row=>{
@@ -8909,14 +8935,14 @@ function collectFormRow(){
   }
   const clean = {};
   (SCHEMA[key]||[]).forEach(field=>clean[field]=base[field] === undefined || base[field] === null ? '' : base[field]);
-  if(key==='items'){ assertNumericRankRows('items',[clean]); assertItemPriceRows([clean]); assertItemClassificationRows([clean]); assertWeaponKatakanaNames([clean]); assertUpgradeSlotScopeRows([clean]); assertUpgradeMaterialTargetScopeRows([clean]); assertEquipmentUpgradeMinimumRows([clean]); assertMonsterMaterialUpgradeRows([clean]); assertSpecialUpgradeNonStackRows([clean]); assertNoDefenseIgnoreUpgradeRows([clean]); assertMaterialUpgradeSlotCostRows([clean]); assertMaterialUpgradeSeparationRows([clean]); assertProcessedMaterialRows([clean]); assertMonsterMaterialDescriptionRows([clean]); assertLateAreaMonsterMaterialRankRows([clean]); }
+  if(key==='items'){ assertNumericRankRows('items',[clean]); assertItemPriceRows([clean]); assertItemClassificationRows([clean]); assertWeaponKatakanaNames([clean]); assertWeaponBaseDamageDieRows([clean]); assertUpgradeSlotScopeRows([clean]); assertUpgradeMaterialTargetScopeRows([clean]); assertEquipmentUpgradeMinimumRows([clean]); assertMonsterMaterialUpgradeRows([clean]); assertSpecialUpgradeNonStackRows([clean]); assertNoDefenseIgnoreUpgradeRows([clean]); assertMaterialUpgradeSlotCostRows([clean]); assertMaterialUpgradeSeparationRows([clean]); assertProcessedMaterialRows([clean]); assertMonsterMaterialDescriptionRows([clean]); assertLateAreaMonsterMaterialRankRows([clean]); }
   if(key==='material_ranks') assertNumericRankRows('material_ranks',[clean]);
   if(key==='spells') assertNumericRankRows('spells',[clean]);
   if(key==='recipes'){ assertNumericRankRows('recipes',[clean]); assertWeaponBranchMaterialRows([clean]); assertOtherworldAccessoryUpgradeMaterialRows([clean]); }
   if(key==='quest_rewards') assertNumericRankRows('quest_rewards',[clean]);
   if(key==='quests') assertNumericRankRows('quests',[clean]);
   if(key==='treasure_tables'){ assertNumericRankRows('treasure_tables',[clean]); assertTreasureDifficultyRows([clean]); }
-  if(key==='monsters'){ assertNumericRankRows('monsters',[clean]); assertMonsterActionCountRows([clean]); assertAreaBossBacklineAttackRows([clean]); assertMonsterActionHitModRows([clean]); assertMonsterSupportActionCheckRows([clean]); assertMonsterDirectDamageDieRows([clean]); }
+  if(key==='monsters'){ assertNumericRankRows('monsters',[clean]); assertMonsterActionCountRows([clean]); assertAreaBossBacklineAttackRows([clean]); assertMonsterActionHitModRows([clean]); assertMonsterActionCheckSourceRows([clean]); assertMonsterSupportActionCheckRows([clean]); assertMonsterDirectDamageDieRows([clean]); }
   return clean;
 }
 function applyFormToState(){
@@ -9329,7 +9355,7 @@ const UPLOAD_GZIP_CHUNK_TIMEOUT_MS = 15000;
 const DIRECT_CHUNK_MAX_ROWS = 100;
 const DIRECT_CHUNK_MAX_BYTES = 262144;
 const DIRECT_SMALL_UPSERT_ROWS = 25;
-// v90.8.648: 小さい表まで一括処理のchecksum付き経路でPOSTへ送らない。
+// v90.8.652: 小さい表まで一括処理のchecksum付き経路でPOSTへ送らない。
 // JSONP分割ならWebアプリのPOST/iframe応答に依存せず、カテゴリ類を確実に処理できる。
 const JSONP_SMALL_UPLOAD_MAX_ROWS = 80;
 const JSONP_SMALL_UPLOAD_MAX_BYTES = 65536;
@@ -9823,7 +9849,7 @@ async function uploadRowsByChunks(key, rows, mode, dataKindScope='', options={})
   await assertServerVersion();
   const list=(rows||[]).map(cleanUploadRow);
 
-  // v90.8.648: 一括登録/置換ではchecksumが付くため、644までは2KB程度のitem_typesまで
+  // v90.8.652: 一括登録/置換ではchecksumが付くため、644までは2KB程度のitem_typesまで
   // direct POST経路へ入り、POST/iframe応答が不調な環境では最初の表で止まっていた。
   // 小規模表はmode/checksumに関係なくJSONP分割へ固定する。
   if(shouldUseSmallJsonpUpload(list)){
@@ -10092,9 +10118,9 @@ function cloneRowsForSave(baseKey, rows){
   if(baseKey==='skills') recalculateSkillProbabilities();
   if(['items','recipes','spells','skills','material_ranks','quest_rewards','quests','treasure_tables','monsters'].includes(baseKey)) assertNumericRankRows(baseKey,rows||[]);
   if(baseKey==='treasure_tables') assertTreasureDifficultyRows(rows||[]);
-  if(baseKey==='items'){ assertItemPriceRows(rows||[]); assertItemClassificationRows(rows||[]); assertWeaponKatakanaNames(rows||[]); assertUpgradeSlotScopeRows(rows||[]); assertUpgradeMaterialTargetScopeRows(rows||[]); assertEquipmentUpgradeMinimumRows(rows||[]); assertMonsterMaterialUpgradeRows(rows || []); assertSpecialUpgradeNonStackRows(rows || []); assertNoDefenseIgnoreUpgradeRows(rows || []); assertMaterialUpgradeSlotCostRows(rows || []); assertMaterialUpgradeSeparationRows(rows || []); assertProcessedMaterialRows(rows || []); assertMonsterMaterialDescriptionRows(rows || []); assertLateAreaMonsterMaterialRankRows(rows || []); }
+  if(baseKey==='items'){ assertItemPriceRows(rows||[]); assertItemClassificationRows(rows||[]); assertWeaponKatakanaNames(rows||[]); assertWeaponBaseDamageDieRows(rows||[]); assertUpgradeSlotScopeRows(rows||[]); assertUpgradeMaterialTargetScopeRows(rows||[]); assertEquipmentUpgradeMinimumRows(rows||[]); assertMonsterMaterialUpgradeRows(rows || []); assertSpecialUpgradeNonStackRows(rows || []); assertNoDefenseIgnoreUpgradeRows(rows || []); assertMaterialUpgradeSlotCostRows(rows || []); assertMaterialUpgradeSeparationRows(rows || []); assertProcessedMaterialRows(rows || []); assertMonsterMaterialDescriptionRows(rows || []); assertLateAreaMonsterMaterialRankRows(rows || []); }
   if(baseKey==='recipes'){ assertWeaponBranchMaterialRows(rows || []); assertOtherworldAccessoryUpgradeMaterialRows(rows || []); }
-  if(baseKey==='monsters'){ assertMonsterActionCountRows(rows || []); assertAreaBossBacklineAttackRows(rows || []); assertMonsterActionHitModRows(rows || []); assertMonsterSupportActionCheckRows(rows || []); assertMonsterDirectDamageDieRows(rows || []); }
+  if(baseKey==='monsters'){ assertMonsterActionCountRows(rows || []); assertAreaBossBacklineAttackRows(rows || []); assertMonsterActionHitModRows(rows || []); assertMonsterActionCheckSourceRows(rows || []); assertMonsterSupportActionCheckRows(rows || []); assertMonsterDirectDamageDieRows(rows || []); }
   return (rows || []).map(src=>{
     const r = {...(src || {})};
     normalizeEncounterPlacementRow(baseKey,r);
@@ -10392,7 +10418,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.648';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.652';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-25';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
@@ -11176,7 +11202,7 @@ document.addEventListener('click', (ev) => {
 .ra-manager-picker-tabs{flex-wrap:wrap;overflow-x:visible!important}
 .ra-manager-picker.generic .ra-manager-picker-body{grid-template-columns:minmax(0,1fr)!important}.ra-manager-picker.generic .ra-manager-picker-detail{display:none!important}.ra-manager-picker.category-only .ra-manager-picker-search,.ra-manager-picker.category-only .ra-manager-picker-tabs,.ra-manager-picker.category-only .ra-manager-picker-detail{display:none!important}.ra-manager-picker.category-only .ra-manager-picker-body{grid-template-columns:1fr!important}.ra-manager-picker.category-only .ra-manager-picker-list{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}.ra-manager-picker.category-only .ra-manager-picker-card{grid-template-columns:1fr;cursor:pointer;text-align:center}.ra-manager-picker-category-choice{min-height:58px;align-items:center;justify-items:center}
 .facility-meal-area-modal .ra-manager-picker-shell{grid-template-rows:auto minmax(0,1fr)}.facility-meal-area-modal .ra-manager-picker-body{border-top:1px solid var(--line)}.ra-meal-area-choice{width:100%;text-align:left;cursor:pointer}.ra-meal-area-choice.active{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent);background:#f8efe3}.ra-meal-area-choice .facility-chip{justify-self:end}
-/* v90.8.648: 動的選択モーダルを管理HTML既存のmodal-card系デザインへ統一 */
+/* v90.8.652: 動的選択モーダルを管理HTML既存のmodal-card系デザインへ統一 */
 .ra-manager-picker{width:min(980px,calc(100vw - 24px));max-height:min(88vh,900px);border:0;background:transparent;padding:0;box-shadow:none}
 .ra-manager-picker::backdrop{background:rgba(36,29,23,.46)}
 .ra-manager-picker-shell{max-height:min(88vh,900px);overflow:hidden;background:var(--paper);border:1px solid var(--line);border-radius:22px;box-shadow:0 26px 70px rgba(0,0,0,.28)}

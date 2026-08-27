@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.648</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.652</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.648">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.652">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -203,7 +203,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.648｜更新：2026年8月25日</div>
+<div class="ra-build-info">v90.8.652｜更新：2026年8月27日</div>
 
 <header>
   <div class="header-inner">
@@ -300,8 +300,9 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
       <div id="questEventRewardPanel" class="event-reward-panel hidden"></div>
       <details id="questImportantUsePanel" class="progress-fold hidden important-use-panel">
         <summary>対応重要アイテム（GM確認用）</summary>
-        <div class="progress-fold-body"><p class="muted small">この欄はGM確認用です。プレイヤー側には対応品を案内せず、プレイヤーが自力で申告した時だけ処理してください。</p><div class="card"><div class="kv"><b>対応重要アイテム</b><span id="questImportantUseTarget">—</span><b>消費数</b><span id="questImportantUseConsume">—</span></div></div><div class="buttons"><button type="button" class="secondary" data-important-use-resolve="quest">使用を処理</button><button type="button" class="secondary" data-important-use-copy="quest" disabled>結果コピー</button></div><div id="questImportantUseResult" class="result">プレイヤーから申告があるまで操作不要です。</div></div>
+        <div class="progress-fold-body"><p class="muted small">この欄はGM確認用です。プレイヤー側には対応品を案内せず、プレイヤーが自力で申告した時だけ処理してください。</p><div class="card"><div class="kv"><b>対応重要アイテム</b><span id="questImportantUseTarget">—</span><b>消費数</b><span id="questImportantUseConsume">—</span></div></div><div class="buttons"><button type="button" class="secondary" data-important-use-copy="quest" disabled>越境結果コピー</button></div></div>
       </details>
+      <div id="questImportantUseResult" class="result hidden important-use-result"></div>
       <div id="questWorkReinforcementPanel" class="event-reward-panel hidden"></div>
       <div id="questRecipeMerchantPanel" class="recipe-merchant-panel hidden"></div>
       <div class="buttons">
@@ -309,6 +310,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
         <button class="secondary" id="copyQuestCheckBtn" disabled>判定コピー</button>
         <button class="secondary" id="copyQuestEventBtn" disabled>入手アイテムコピー</button>
         <button class="secondary" id="copyQuestTreasureBtn" hidden>宝箱の中身コピー</button>
+        <button class="secondary hidden" id="questImportantUseActionBtn" type="button" data-important-use-resolve="quest">越境アイテムを使用</button>
       </div>
       <label style="margin-top:10px">クエストメモ</label>
       <textarea id="questNote" placeholder="セッション中のメモ"></textarea>
@@ -363,13 +365,15 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
           <button id="rollEventBtn">イベント抽選</button>
           <button class="secondary" id="copyEventCheckBtn" disabled>判定コピー</button>
           <button class="secondary" id="copyEventItemsBtn" disabled>入手アイテムコピー</button>
+          <button class="secondary hidden" id="eventImportantUseActionBtn" type="button" data-important-use-resolve="event">越境アイテムを使用</button>
         </div>
         <div id="eventResult" class="result">イベント結果がここに表示されます。</div>
         <div id="eventRewardPanel" class="event-reward-panel hidden"></div>
         <details id="eventImportantUsePanel" class="progress-fold hidden important-use-panel">
           <summary>対応重要アイテム（GM確認用）</summary>
-          <div class="progress-fold-body"><p class="muted small">この欄はGM確認用です。プレイヤー側には対応品を案内せず、プレイヤーが自力で申告した時だけ処理してください。</p><div class="card"><div class="kv"><b>対応重要アイテム</b><span id="eventImportantUseTarget">—</span><b>消費数</b><span id="eventImportantUseConsume">—</span></div></div><div class="buttons"><button type="button" class="secondary" data-important-use-resolve="event">使用を処理</button><button type="button" class="secondary" data-important-use-copy="event" disabled>結果コピー</button></div><div id="eventImportantUseResult" class="result">プレイヤーから申告があるまで操作不要です。</div></div>
+          <div class="progress-fold-body"><p class="muted small">この欄はGM確認用です。プレイヤー側には対応品を案内せず、プレイヤーが自力で申告した時だけ処理してください。</p><div class="card"><div class="kv"><b>対応重要アイテム</b><span id="eventImportantUseTarget">—</span><b>消費数</b><span id="eventImportantUseConsume">—</span></div></div><div class="buttons"><button type="button" class="secondary" data-important-use-copy="event" disabled>越境結果コピー</button></div></div>
         </details>
+        <div id="eventImportantUseResult" class="result hidden important-use-result"></div>
         <div id="recipeMerchantPanel" class="recipe-merchant-panel hidden"></div>
       </div>
 
@@ -389,13 +393,15 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
         <button id="rollBaseEventBtn">拠点内イベント抽選</button>
         <button class="secondary" id="copyBaseEventCheckBtn" disabled>判定コピー</button>
         <button class="secondary" id="copyBaseEventRewardBtn" disabled>入手アイテムコピー</button>
+        <button class="secondary hidden" id="baseImportantUseActionBtn" type="button" data-important-use-resolve="base">越境アイテムを使用</button>
       </div>
       <div id="baseEventResult" class="result">拠点内イベント結果がここに表示されます。</div>
       <div id="baseEventRewardPanel" class="event-reward-panel hidden"></div>
       <details id="baseImportantUsePanel" class="progress-fold hidden important-use-panel">
         <summary>対応重要アイテム（GM確認用）</summary>
-        <div class="progress-fold-body"><p class="muted small">この欄はGM確認用です。プレイヤー側には対応品を案内せず、プレイヤーが自力で申告した時だけ処理してください。</p><div class="card"><div class="kv"><b>対応重要アイテム</b><span id="baseImportantUseTarget">—</span><b>消費数</b><span id="baseImportantUseConsume">—</span></div></div><div class="buttons"><button type="button" class="secondary" data-important-use-resolve="base">使用を処理</button><button type="button" class="secondary" data-important-use-copy="base" disabled>結果コピー</button></div><div id="baseImportantUseResult" class="result">プレイヤーから申告があるまで操作不要です。</div></div>
+        <div class="progress-fold-body"><p class="muted small">この欄はGM確認用です。プレイヤー側には対応品を案内せず、プレイヤーが自力で申告した時だけ処理してください。</p><div class="card"><div class="kv"><b>対応重要アイテム</b><span id="baseImportantUseTarget">—</span><b>消費数</b><span id="baseImportantUseConsume">—</span></div></div><div class="buttons"><button type="button" class="secondary" data-important-use-copy="base" disabled>越境結果コピー</button></div></div>
       </details>
+      <div id="baseImportantUseResult" class="result hidden important-use-result"></div>
       <div id="baseEventRewardResult" class="result" style="margin-top:10px">入手アイテム抽選結果がここに表示されます。</div>
     </section>
 
@@ -518,7 +524,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.648';
+const VERSION='v90.8.652';
 const GAS_URL='https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1647,30 +1653,32 @@ function resetImportantUsePanel(scope='event'){
   importantUseCopyState[scope]='';
   const panel=$(importantUseElementId(scope,'Panel')),result=$(importantUseElementId(scope,'Result'));
   const target=$(importantUseElementId(scope,'Target')),consume=$(importantUseElementId(scope,'Consume'));
+  const action=$(importantUseElementId(scope,'ActionBtn'));
   const row=currentRandomEventForImportantUse(scope),spec=row?crossoverImportantSpec(row):null;
   const item=spec?findImportantItemByPublicId(spec.publicId):null;
   if(target)target.textContent=spec?(item?`《${item.name||'重要アイテム'}》`:'対応品をDBから確認できません'):'—';
   if(consume)consume.textContent=spec?`${spec.consume}個`:'—';
-  if(result)result.textContent='プレイヤーから申告があるまで操作不要です。';
-  const resolve=panel?.querySelector(`[data-important-use-resolve="${scope}"]`);if(resolve)resolve.disabled=!(spec&&item);
+  if(result){result.textContent='';result.classList.add('hidden');}
+  if(action){action.classList.toggle('hidden',!(row&&spec));action.disabled=!(spec&&item);}
   const copy=panel?.querySelector(`[data-important-use-copy="${scope}"]`);if(copy)copy.disabled=true;
   if(panel)panel.classList.toggle('hidden',!(row&&spec));
 }
 function resolveDeclaredImportantItem(scope='event'){
   const row=currentRandomEventForImportantUse(scope),result=$(importantUseElementId(scope,'Result'));
-  if(!row){if(result)result.textContent='先にランダムイベントを抽選してください。';return;}
+  const showResult=text=>{if(result){result.textContent=String(text||'');result.classList.remove('hidden');}};
+  if(!row){showResult('先にランダムイベントを抽選してください。');return;}
   const spec=crossoverImportantSpec(row);
-  if(!spec){if(result)result.textContent='このイベントには対応する重要アイテムがありません。';return;}
+  if(!spec){showResult('このイベントには対応する越境アイテムがありません。');return;}
   const item=findImportantItemByPublicId(spec.publicId);
-  if(!item){importantUseCopyState[scope]='';if(result)result.textContent='対応する重要アイテムをDBから確認できません。';const b=$(importantUseElementId(scope,'Panel'))?.querySelector(`[data-important-use-copy="${scope}"]`);if(b)b.disabled=true;return;}
+  if(!item){importantUseCopyState[scope]='';showResult('対応する越境アイテムをDBから確認できません。');const b=$(importantUseElementId(scope,'Panel'))?.querySelector(`[data-important-use-copy="${scope}"]`);if(b)b.disabled=true;return;}
   const reward=rollRewardItemTable(spec.tableId,1,row.areaName||'',row.eventName||'イベント');
   const consumeLine=`消費：《${item.name||'重要アイテム'}》×${spec.consume}`;
-  const display=[`【重要アイテム使用】${row.eventName||'イベント'}`,consumeLine,reward.displayText||'変化結果を決定できませんでした。'].filter(Boolean).join('\n\n');
-  const copy=[`【重要アイテム使用】${row.eventName||'イベント'}`,consumeLine,reward.copyText||''].filter(Boolean).join('\n\n');
+  const display=[`【越境アイテム使用】${row.eventName||'イベント'}`,consumeLine,reward.displayText||'変化結果を決定できませんでした。'].filter(Boolean).join('\n\n');
+  const copy=[`【越境アイテム使用】${row.eventName||'イベント'}`,consumeLine,reward.copyText||''].filter(Boolean).join('\n\n');
   importantUseCopyState[scope]=copy;
-  if(result)result.textContent=display;
+  showResult(display);
   const b=$(importantUseElementId(scope,'Panel'))?.querySelector(`[data-important-use-copy="${scope}"]`);if(b)b.disabled=!copy;
-  addLog(`重要アイテム使用：${row.eventName||'イベント'} / ${item.name||'重要アイテム'}${reward.items?.length?` → ${reward.items.map(x=>x.name).join('、')}`:''}`);
+  addLog(`越境アイテム使用：${row.eventName||'イベント'} / ${item.name||'重要アイテム'}${reward.items?.length?` → ${reward.items.map(x=>x.name).join('、')}`:''}`);
 }
 function renderImportantUsePanels(){['event','base','quest'].forEach(resetImportantUsePanel);}
 function pickRandomEvent(rows, lastKey=''){
@@ -2337,7 +2345,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.648-native-area-minimum-and-fixed-preview-1';
+const ENCOUNTER_RULE_VERSION='v90.8.652-native-area-minimum-and-fixed-preview-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
