@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.658</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.659</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.658">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.659">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.658｜更新：2026年8月30日</div>
+<div class="ra-build-info">v90.8.659｜更新：2026年8月30日</div>
 
 <header>
   <div class="title-card">
@@ -1921,8 +1921,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
-const RECRAFT_DB_VERSION = 'v90.8.658';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.658';
+const RECRAFT_DB_VERSION = 'v90.8.659';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.659';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -9375,11 +9375,12 @@ const UPLOAD_GZIP_MAX_ROWS_PER_CHUNK = 40;
 const UPLOAD_GZIP_COMPRESSION_SCHEMA = 'gzipUtf8Bytes32kRows40_v90_8_385';
 const UPLOAD_GZIP_CHUNK_TIMEOUT_MS = 15000;
 // v90.8.599: 大量DBは無圧縮・直接分割書込を標準にする。
-// 1チャンクは100行以内かつ未圧縮JSON約256KB以内。受信POST内でそのままDBへ反映し、最後の全件commitは行わない。
-const DIRECT_CHUNK_MAX_ROWS = 100;
-const DIRECT_CHUNK_MAX_BYTES = 262144;
+// v90.8.659: 1POSTのGAS実行時間を短くするため、50行/約128KBへ縮小。
+// GAS側は開始時に既存キーを1回だけ索引化し、各チャンクでは対象行だけ更新/appendする。
+const DIRECT_CHUNK_MAX_ROWS = 50;
+const DIRECT_CHUNK_MAX_BYTES = 131072;
 const DIRECT_SMALL_UPSERT_ROWS = 25;
-// v90.8.658: 小さい表まで一括処理のchecksum付き経路でPOSTへ送らない。
+// v90.8.659: 小さい表まで一括処理のchecksum付き経路でPOSTへ送らない。
 // JSONP分割ならWebアプリのPOST/iframe応答に依存せず、カテゴリ類を確実に処理できる。
 const JSONP_SMALL_UPLOAD_MAX_ROWS = 80;
 const JSONP_SMALL_UPLOAD_MAX_BYTES = 65536;
@@ -9791,7 +9792,7 @@ async function uploadRowsByDirectChunks(key, rows, mode, dataKindScope='', optio
   const fingerprint=uploadResumeFingerprint(key,mode,dataKindScope,list);
   const previous=uploadResumeLoad();
   const chunks=makeDirectRowChunks(list);
-  const canResume=previous && previous.encoding==='directRowsV599' && previous.fingerprint===fingerprint && previous.token;
+  const canResume=previous && previous.encoding==='directRowsV659' && previous.fingerprint===fingerprint && previous.token;
   if(previous && previous.token && !canResume){
     try{await directPostForm('abortUpload',{token:previous.token},DIRECT_CHUNK_POST_TIMEOUT_MS);}catch(e){console.warn('old direct upload session cleanup failed',e);}
     uploadResumeClear();
@@ -9823,12 +9824,12 @@ async function uploadRowsByDirectChunks(key, rows, mode, dataKindScope='', optio
   }
   let sentRows=chunks.slice(0,nextChunk).reduce((n,c)=>n+c.length,0);
   let rawBytes=chunks.slice(0,nextChunk).reduce((n,c)=>n+utf8ByteLength(JSON.stringify(c)),0);
-  uploadResumeSave({encoding:'directRowsV599',fingerprint,token,key,mode,dataKindScope,nextChunk,sentRows,totalChunks:chunks.length,updatedAt:new Date().toISOString()});
+  uploadResumeSave({encoding:'directRowsV659',fingerprint,token,key,mode,dataKindScope,nextChunk,sentRows,totalChunks:chunks.length,updatedAt:new Date().toISOString()});
   try{
     for(let c=nextChunk;c<chunks.length;c++){
       const chunk=chunks[c];
       const bytes=utf8ByteLength(JSON.stringify(chunk));
-      uploadProgressUpdate({phase:`${labelKey(key)}をDBへ直接書込中`,percent:chunks.length?Math.min(96,(sentRows/list.length)*96):96,currentRows:sentRows,totalRows:list.length,chunks:`${c+1}/${chunks.length}`,parts:c,rawChars:rawBytes,sentChars:rawBytes,detail:`次の${chunk.length}行を無圧縮で送信し、このPOST内でDBへ直接反映します。`});
+      uploadProgressUpdate({phase:`${labelKey(key)}をDBへ直接書込中`,percent:chunks.length?Math.min(96,(sentRows/list.length)*96):96,currentRows:sentRows,totalRows:list.length,chunks:`${c+1}/${chunks.length}`,parts:c,rawChars:rawBytes,sentChars:rawBytes,detail:`次の${chunk.length}行を送信します。GAS側はセッション索引を使い、対象行だけ更新/追加します。`});
       const started=performance.now();
       const res=await directPostForm('putDirectRowsChunk',{token,chunkIndex:c,rows:chunk},DIRECT_CHUNK_POST_TIMEOUT_MS,directChunkStatusProbe(token,c+1));
       const elapsed=performance.now()-started;
@@ -9839,16 +9840,16 @@ async function uploadRowsByDirectChunks(key, rows, mode, dataKindScope='', optio
       }else sentRows+=chunk.length;
       rawBytes+=bytes;
       uploadProgressLog(`チャンク${c+1}/${chunks.length}：${chunk.length}行 / ${formatUploadBytes(bytes)} / 通信+GAS ${formatUploadTime(elapsed)}${res.elapsedMs!==undefined?` / GAS ${formatUploadTime(res.elapsedMs)}`:''}${res.alreadyApplied?'（既に反映済み）':''}`);
-      uploadResumeSave({encoding:'directRowsV599',fingerprint,token,key,mode,dataKindScope,nextChunk:confirmedNext,sentRows,totalChunks:chunks.length,updatedAt:new Date().toISOString()});
+      uploadResumeSave({encoding:'directRowsV659',fingerprint,token,key,mode,dataKindScope,nextChunk:confirmedNext,sentRows,totalChunks:chunks.length,updatedAt:new Date().toISOString()});
       uploadProgressUpdate({phase:`${labelKey(key)}をDBへ直接書込中`,percent:list.length?Math.min(96,(sentRows/list.length)*96):96,currentRows:sentRows,totalRows:list.length,chunks:`${confirmedNext}/${chunks.length}`,parts:confirmedNext,rawChars:rawBytes,sentChars:rawBytes,detail:`${sentRows}/${list.length}行までDB反映済みです。%は実件数ベースです。`});
       if(chunks.length>1)await sleep(10);
     }
-    uploadProgressUpdate({phase:'DB送信結果を確定中',percent:98,currentRows:list.length,totalRows:list.length,chunks:`${chunks.length}/${chunks.length}`,parts:chunks.length,detail:'最後の全件再処理は行わず、件数とハッシュ情報だけを確定しています。'});
+    uploadProgressUpdate({phase:'DB送信結果を確定中',percent:98,currentRows:list.length,totalRows:list.length,chunks:`${chunks.length}/${chunks.length}`,parts:chunks.length,detail:'チャンクごとの全件走査は行いません。必要な全件整合性確認だけを最後に1回実行します。'});
     const finishStarted=performance.now();
     const finish=await directPostForm('finishDirectChunkUpload',{token,checksum},DIRECT_CHUNK_POST_TIMEOUT_MS);
     const finishElapsed=performance.now()-finishStarted;
     if(!finish||!finish.ok)throw new Error((finish&&finish.error)||`${labelKey(key)}の直接分割書込完了確認に失敗しました`);
-    uploadProgressLog(`完了確認：${formatUploadTime(finishElapsed)}${finish.elapsedMs!==undefined?` / GAS ${formatUploadTime(finish.elapsedMs)}`:''}。全件再書込なし。`);
+    uploadProgressLog(`完了確認：${formatUploadTime(finishElapsed)}${finish.elapsedMs!==undefined?` / GAS ${formatUploadTime(finish.elapsedMs)}`:''}。全件再書込なし / ${finish.finalValidation||'行単位検証'}。`);
     if(finish.timing)uploadProgressLog(`GASチャンク実測：平均 ${formatUploadTime(finish.timing.averageMs||0)} / 最大 ${formatUploadTime(finish.timing.maxMs||0)} / 合計 ${formatUploadTime(finish.timing.totalMs||0)}`);
     uploadResumeClear();
     const result={...finish,uploadEncoding:'direct-raw-row-chunks',sentRows:list.length,sentChunks:chunks.length,sentParts:chunks.length,rawChars:rawBytes};
@@ -9873,7 +9874,7 @@ async function uploadRowsByChunks(key, rows, mode, dataKindScope='', options={})
   await assertServerVersion();
   const list=(rows||[]).map(cleanUploadRow);
 
-  // v90.8.658: 一括登録/置換ではchecksumが付くため、644までは2KB程度のitem_typesまで
+  // v90.8.659: 一括登録/置換ではchecksumが付くため、644までは2KB程度のitem_typesまで
   // direct POST経路へ入り、POST/iframe応答が不調な環境では最初の表で止まっていた。
   // 小規模表はmode/checksumに関係なくJSONP分割へ固定する。
   if(shouldUseSmallJsonpUpload(list)){
@@ -10442,7 +10443,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.658';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.659';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-25';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
@@ -11226,7 +11227,7 @@ document.addEventListener('click', (ev) => {
 .ra-manager-picker-tabs{flex-wrap:wrap;overflow-x:visible!important}
 .ra-manager-picker.generic .ra-manager-picker-body{grid-template-columns:minmax(0,1fr)!important}.ra-manager-picker.generic .ra-manager-picker-detail{display:none!important}.ra-manager-picker.category-only .ra-manager-picker-search,.ra-manager-picker.category-only .ra-manager-picker-tabs,.ra-manager-picker.category-only .ra-manager-picker-detail{display:none!important}.ra-manager-picker.category-only .ra-manager-picker-body{grid-template-columns:1fr!important}.ra-manager-picker.category-only .ra-manager-picker-list{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}.ra-manager-picker.category-only .ra-manager-picker-card{grid-template-columns:1fr;cursor:pointer;text-align:center}.ra-manager-picker-category-choice{min-height:58px;align-items:center;justify-items:center}
 .facility-meal-area-modal .ra-manager-picker-shell{grid-template-rows:auto minmax(0,1fr)}.facility-meal-area-modal .ra-manager-picker-body{border-top:1px solid var(--line)}.ra-meal-area-choice{width:100%;text-align:left;cursor:pointer}.ra-meal-area-choice.active{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent);background:#f8efe3}.ra-meal-area-choice .facility-chip{justify-self:end}
-/* v90.8.658: 動的選択モーダルを管理HTML既存のmodal-card系デザインへ統一 */
+/* v90.8.659: 動的選択モーダルを管理HTML既存のmodal-card系デザインへ統一 */
 .ra-manager-picker{width:min(980px,calc(100vw - 24px));max-height:min(88vh,900px);border:0;background:transparent;padding:0;box-shadow:none}
 .ra-manager-picker::backdrop{background:rgba(36,29,23,.46)}
 .ra-manager-picker-shell{max-height:min(88vh,900px);overflow:hidden;background:var(--paper);border:1px solid var(--line);border-radius:22px;box-shadow:0 26px 70px rgba(0,0,0,.28)}
