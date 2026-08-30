@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.652</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.665</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.652">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.665">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -203,7 +203,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.652｜更新：2026年8月27日</div>
+<div class="ra-build-info">v90.8.665｜更新：2026年8月30日</div>
 
 <header>
   <div class="header-inner">
@@ -298,10 +298,11 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
       <h3>進行イベント確認</h3>
       <div id="questEventDetail" class="result">固定イベントと、固定イベントのない区切りで使うランダムイベント結果がここに表示されます。</div>
       <div id="questEventRewardPanel" class="event-reward-panel hidden"></div>
-      <details id="questImportantUsePanel" class="progress-fold hidden important-use-panel">
-        <summary>対応重要アイテム（GM確認用）</summary>
-        <div class="progress-fold-body"><p class="muted small">この欄はGM確認用です。プレイヤー側には対応品を案内せず、プレイヤーが自力で申告した時だけ処理してください。</p><div class="card"><div class="kv"><b>対応重要アイテム</b><span id="questImportantUseTarget">—</span><b>消費数</b><span id="questImportantUseConsume">—</span></div></div><div class="buttons"><button type="button" class="secondary" data-important-use-copy="quest" disabled>越境結果コピー</button></div></div>
-      </details>
+      <div id="questImportantUsePanel" class="card hidden important-use-panel">
+        <h3>越境アイテム</h3>
+        <div class="kv"><b>対象アイテム</b><span id="questImportantUseTarget">—</span><b>消費数</b><span id="questImportantUseConsume">—</span></div>
+        <div class="buttons"><button class="secondary" id="questImportantUseActionBtn" type="button" data-important-use-resolve="quest">越境アイテムを使用</button><button type="button" class="secondary" data-important-use-copy="quest" disabled>越境結果コピー</button></div>
+      </div>
       <div id="questImportantUseResult" class="result hidden important-use-result"></div>
       <div id="questWorkReinforcementPanel" class="event-reward-panel hidden"></div>
       <div id="questRecipeMerchantPanel" class="recipe-merchant-panel hidden"></div>
@@ -310,7 +311,6 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
         <button class="secondary" id="copyQuestCheckBtn" disabled>判定コピー</button>
         <button class="secondary" id="copyQuestEventBtn" disabled>入手アイテムコピー</button>
         <button class="secondary" id="copyQuestTreasureBtn" hidden>宝箱の中身コピー</button>
-        <button class="secondary hidden" id="questImportantUseActionBtn" type="button" data-important-use-resolve="quest">越境アイテムを使用</button>
       </div>
       <label style="margin-top:10px">クエストメモ</label>
       <textarea id="questNote" placeholder="セッション中のメモ"></textarea>
@@ -365,14 +365,14 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
           <button id="rollEventBtn">イベント抽選</button>
           <button class="secondary" id="copyEventCheckBtn" disabled>判定コピー</button>
           <button class="secondary" id="copyEventItemsBtn" disabled>入手アイテムコピー</button>
-          <button class="secondary hidden" id="eventImportantUseActionBtn" type="button" data-important-use-resolve="event">越境アイテムを使用</button>
         </div>
         <div id="eventResult" class="result">イベント結果がここに表示されます。</div>
         <div id="eventRewardPanel" class="event-reward-panel hidden"></div>
-        <details id="eventImportantUsePanel" class="progress-fold hidden important-use-panel">
-          <summary>対応重要アイテム（GM確認用）</summary>
-          <div class="progress-fold-body"><p class="muted small">この欄はGM確認用です。プレイヤー側には対応品を案内せず、プレイヤーが自力で申告した時だけ処理してください。</p><div class="card"><div class="kv"><b>対応重要アイテム</b><span id="eventImportantUseTarget">—</span><b>消費数</b><span id="eventImportantUseConsume">—</span></div></div><div class="buttons"><button type="button" class="secondary" data-important-use-copy="event" disabled>越境結果コピー</button></div></div>
-        </details>
+        <div id="eventImportantUsePanel" class="card hidden important-use-panel">
+          <h3>越境アイテム</h3>
+          <div class="kv"><b>対象アイテム</b><span id="eventImportantUseTarget">—</span><b>消費数</b><span id="eventImportantUseConsume">—</span></div>
+          <div class="buttons"><button class="secondary" id="eventImportantUseActionBtn" type="button" data-important-use-resolve="event">越境アイテムを使用</button><button type="button" class="secondary" data-important-use-copy="event" disabled>越境結果コピー</button></div>
+        </div>
         <div id="eventImportantUseResult" class="result hidden important-use-result"></div>
         <div id="recipeMerchantPanel" class="recipe-merchant-panel hidden"></div>
       </div>
@@ -393,14 +393,14 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
         <button id="rollBaseEventBtn">拠点内イベント抽選</button>
         <button class="secondary" id="copyBaseEventCheckBtn" disabled>判定コピー</button>
         <button class="secondary" id="copyBaseEventRewardBtn" disabled>入手アイテムコピー</button>
-        <button class="secondary hidden" id="baseImportantUseActionBtn" type="button" data-important-use-resolve="base">越境アイテムを使用</button>
       </div>
       <div id="baseEventResult" class="result">拠点内イベント結果がここに表示されます。</div>
       <div id="baseEventRewardPanel" class="event-reward-panel hidden"></div>
-      <details id="baseImportantUsePanel" class="progress-fold hidden important-use-panel">
-        <summary>対応重要アイテム（GM確認用）</summary>
-        <div class="progress-fold-body"><p class="muted small">この欄はGM確認用です。プレイヤー側には対応品を案内せず、プレイヤーが自力で申告した時だけ処理してください。</p><div class="card"><div class="kv"><b>対応重要アイテム</b><span id="baseImportantUseTarget">—</span><b>消費数</b><span id="baseImportantUseConsume">—</span></div></div><div class="buttons"><button type="button" class="secondary" data-important-use-copy="base" disabled>越境結果コピー</button></div></div>
-      </details>
+      <div id="baseImportantUsePanel" class="card hidden important-use-panel">
+        <h3>越境アイテム</h3>
+        <div class="kv"><b>対象アイテム</b><span id="baseImportantUseTarget">—</span><b>消費数</b><span id="baseImportantUseConsume">—</span></div>
+        <div class="buttons"><button class="secondary" id="baseImportantUseActionBtn" type="button" data-important-use-resolve="base">越境アイテムを使用</button><button type="button" class="secondary" data-important-use-copy="base" disabled>越境結果コピー</button></div>
+      </div>
       <div id="baseImportantUseResult" class="result hidden important-use-result"></div>
       <div id="baseEventRewardResult" class="result" style="margin-top:10px">入手アイテム抽選結果がここに表示されます。</div>
     </section>
@@ -524,7 +524,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 </div>
 <script>
 'use strict';
-const VERSION='v90.8.652';
+const VERSION='v90.8.665';
 const GAS_URL='https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1659,7 +1659,7 @@ function resetImportantUsePanel(scope='event'){
   if(target)target.textContent=spec?(item?`《${item.name||'重要アイテム'}》`:'対応品をDBから確認できません'):'—';
   if(consume)consume.textContent=spec?`${spec.consume}個`:'—';
   if(result){result.textContent='';result.classList.add('hidden');}
-  if(action){action.classList.toggle('hidden',!(row&&spec));action.disabled=!(spec&&item);}
+  if(action){action.classList.remove('hidden');action.disabled=!(spec&&item);}
   const copy=panel?.querySelector(`[data-important-use-copy="${scope}"]`);if(copy)copy.disabled=true;
   if(panel)panel.classList.toggle('hidden',!(row&&spec));
 }
@@ -1771,6 +1771,7 @@ function triggerQuestSpecificEvents(q,before,after){
       updateTreasureCopyButtons();
     }
     state.lastQuestEventRewardState=buildEventRewardState(e);
+    syncEventTreasureCopyState('quest');
     const fixedRewardSpec=eventRewardTableSpec(e,area?.name||e.areaName||'');
     if(fixedRewardSpec.tableId){const fixedTableReward=rollRewardItemTable(fixedRewardSpec.tableId,Math.max(fixedRewardSpec.drawCount,eventRewardMaxTableSlots(e)),area?.name||e.areaName||'',e.eventName||'イベント');setEventTableRewardState('quest',fixedTableReward);syncEventTableRewardCopyState('quest');state.lastQuestFixedEventText=[state.lastQuestFixedEventText,fixedTableReward.displayText].filter(Boolean).join('\n\n');}
     updateQuestEventItemCopyButton();
@@ -2089,7 +2090,7 @@ function renderArea(){
 }
 function renderMonster(){
   const m=selectedDropMonster(); if(!m){$('monsterDetail').textContent=dropAreaMonsterRows().length?'候補から魔物を選択してください。':'このエリアで選択できる魔物がありません。'; return;}
-  $('monsterDetail').innerHTML=`<div class="kv"><b>HP</b><span>${esc(m.hp||'')}</span><b>命中</b><span>${esc(m.hitValue||'')}</span><b>回避</b><span>${esc(m.evasionValue||'')}</span><b>抵抗</b><span>${esc(m.resistValue||'')}</span><b>防御</b><span>${esc(m.defenseValue||'')}</span><b>先制</b><span>${esc(m.initiative||'')}</span><b>解体難易度</b><span>${esc(m.dismantleDifficulty||'未設定')}</span><b>解体判定</b><span>採取技能 &gt;= ${esc(m.dismantleDifficulty||'解体難易度')}</span></div>${m.habit?`<p class="muted"><b>習性：</b>${esc(m.habit)}</p>`:''}`;
+  $('monsterDetail').innerHTML=`<div class="kv"><b>HP</b><span>${esc(m.hp||'')}</span><b>回避</b><span>${esc(m.evasionValue||'')}</span><b>抵抗</b><span>${esc(m.resistValue||'')}</span><b>防御</b><span>${esc(m.defenseValue||'')}</span><b>先制</b><span>${esc(m.initiative||'')}</span><b>解体難易度</b><span>${esc(m.dismantleDifficulty||'未設定')}</span><b>解体判定</b><span>採取技能 &gt;= ${esc(m.dismantleDifficulty||'解体難易度')}</span></div>${m.habit?`<p class="muted"><b>習性：</b>${esc(m.habit)}</p>`:''}`;
 }
 function renderAll(){updateEventCheckCopyButtons();renderDayStatus();renderTimeControls(); ensureWeatherForUnlockedAreas(false); syncDailyQuestSelectionFromFacility(); fillDropAreaSelect($('dropAreaSelect')?.value||''); ensureDailyQuestSelection(); fillQuestSelect($('questSelect')?.value || ''); fillEventTables(); fillRumorSelect(); fillRumorAreas(); fillInnRumorSelect(); fillTreasureTables(); fillAppraisalRules(); fillMonsterSearch($('monsterSelectValue')?.value || $('monsterSelect')?.value || ''); renderQuest(); renderArea(); renderBaseEventControls(); renderMonster(); renderDropMode(); renderEncounterDropList(); renderEventRewardPanel('event'); renderEventRewardPanel('quest'); renderEventRewardPanel('base'); renderRecipeMerchantPanel(); updateAreaEventItemCopyButton(); renderRumorResult(); renderDailyQuestResult(); renderWeatherManager(); renderLog();}
 function getNumFromText(s, fallback=0){const m=String(s||'').match(/[+-]?\d+/); return m?Number(m[0]):fallback;}
@@ -2345,7 +2346,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.652-native-area-minimum-and-fixed-preview-1';
+const ENCOUNTER_RULE_VERSION='v90.8.665-native-area-minimum-and-fixed-preview-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -3743,7 +3744,7 @@ function buildTreasureItemCopyText(row={},count='1'){
   lines.push(treasureCopyLine('ランク',progressPlayerRank(row.rank)));
   const categoryLabel=kind==='素材'?[treasureFieldText(row,'materialType')||'素材',category].filter(Boolean).join(' / '):[kind,category].filter(Boolean).join(' / ');
   lines.push(treasureCopyLine('分類',categoryLabel));
-  lines.push(treasureCopyLine('売値',treasureSellPriceText(treasureFieldText(row,'price'))));
+  lines.push(treasureCopyLine('売値',treasureSellPriceText(treasureFieldText(row,'sellPrice'))));
   const useInfo=[];
   if(['武器','防具','盾','装飾品','バッグ','矢筒','術式'].includes(kind)&&treasureFieldText(row,'equipSlot'))useInfo.push(`装備枠 ${treasureFieldText(row,'equipSlot')}`);
   if(treasureFieldText(row,'power'))useInfo.push(`威力 ${treasureFieldText(row,'power')}`);
@@ -3776,7 +3777,7 @@ function buildTreasureItemCopyText(row={},count='1'){
 function treasureRecipeSkill(craftType=''){const type=String(craftType||'').trim();if(type==='調合')return '調合';if(type==='料理')return 'なし';if(type==='細工')return '細工';return '鍛冶';}
 function buildTreasureRecipeCopyText(row={}){
   const name=treasureFieldText(row,'resultItem')||treasureFieldText(row,'name')||treasureFieldText(row,'id')||'名称未設定';
-  const lines=[`【${name}のレシピ】`,treasureCopyLine('登録ID',treasureFieldText(row,'publicId')),treasureCopyLine('完成数',treasureFieldText(row,'resultCount')||'1'),treasureCopyLine('ランク',progressPlayerRank(row.rank)),treasureCopyLine('店売り価格',treasureFieldText(row,'recipePrice')?treasureFieldText(row,'recipePrice')+'G':''),treasureCopyLine('売却価格',treasureFieldText(row,'recipeSellPrice')?treasureFieldText(row,'recipeSellPrice')+'G':''),treasureCopyLine('レシピ入手先',treasureFieldText(row,'recipeSource')),treasureCopyLine('製作区分',treasureFieldText(row,'craftType')),treasureCopyLine('分類',[treasureFieldText(row,'resultKind'),treasureFieldText(row,'category')].filter(Boolean).join(' / ')),treasureCopyLine('製作技能',treasureFieldText(row,'craftSkill')||treasureRecipeSkill(treasureFieldText(row,'craftType'))),treasureCopyLine('素材',treasureFieldText(row,'requiredMaterials')),treasureCopyLine('難度',treasureFieldText(row,'difficulty')),'自作：レシピ必須',treasureCopyLine('施設依頼',treasureFieldText(row,'price')?`レシピ不要 / ${treasureFieldText(row,'price')}G`:'レシピ不要'),treasureCopyLine('説明',treasureFieldText(row,'description')),treasureCopyLine('効果',treasureFieldText(row,'effect'))];
+  const lines=[`【${name}のレシピ】`,treasureCopyLine('登録ID',treasureFieldText(row,'publicId')),treasureCopyLine('完成数',treasureFieldText(row,'resultCount')||'1'),treasureCopyLine('ランク',progressPlayerRank(row.rank)),treasureCopyLine('販売価格',treasureFieldText(row,'recipePrice')?treasureFieldText(row,'recipePrice')+'G':''),treasureCopyLine('売値',treasureFieldText(row,'recipeSellPrice')?treasureFieldText(row,'recipeSellPrice')+'G':''),treasureCopyLine('レシピ入手先',treasureFieldText(row,'recipeSource')),treasureCopyLine('製作区分',treasureFieldText(row,'craftType')),treasureCopyLine('分類',[treasureFieldText(row,'resultKind'),treasureFieldText(row,'category')].filter(Boolean).join(' / ')),treasureCopyLine('製作技能',treasureFieldText(row,'craftSkill')||treasureRecipeSkill(treasureFieldText(row,'craftType'))),treasureCopyLine('素材',treasureFieldText(row,'requiredMaterials')),treasureCopyLine('難度',treasureFieldText(row,'difficulty')),'自作：レシピ必須',treasureCopyLine('施設依頼',treasureFieldText(row,'price')?`レシピ不要 / ${treasureFieldText(row,'price')}G`:'レシピ不要'),treasureCopyLine('説明',treasureFieldText(row,'description')),treasureCopyLine('効果',treasureFieldText(row,'effect'))];
   return lines.filter(Boolean).join('\n');
 }
 function treasureContentCopyText(row={},quantity='1'){
@@ -3886,18 +3887,39 @@ function eventTreasureConditionKind(label=''){
   const text=String(label||'');
   if(text.includes('失敗'))return'failure';
   if(text.includes('成功')||text.includes('目標値+'))return'success';
+  if(text.includes('勝利後'))return'victory';
   return'other';
 }
 function eventTreasureHasOutcomeSplit(results=[]){
   const kinds=new Set((results||[]).map(r=>eventTreasureConditionKind(r.conditionLabel)));
   return kinds.has('success')&&kinds.has('failure');
 }
+function eventTreasureHasConditionalOutcome(results=[]){
+  return (results||[]).some(r=>['success','failure','victory'].includes(eventTreasureConditionKind(r.conditionLabel)));
+}
 function eventTreasureResults(scope='event'){
   if(scope==='base')return[];
   return scope==='quest'?(state.lastQuestTreasureResults||[]):(state.lastEventTreasureResults||[]);
 }
+function eventSelectedOutcomeKind(scope='event'){
+  const reward=eventRewardState(scope);if(!reward)return'';
+  const selected=(reward.groups||[]).filter(g=>g.selected||g.trigger?.kind==='always').map(g=>String(g.trigger?.kind||''));
+  if(selected.includes('failure'))return'failure';
+  if(selected.includes('threshold')||selected.includes('success'))return'success';
+  if(selected.includes('victory'))return'victory';
+  return'';
+}
+function eventTreasureAllowedBySelectedOutcome(scope='event',result={}){
+  if(result.selected===false)return false;
+  const kind=eventTreasureConditionKind(result.conditionLabel),outcome=eventSelectedOutcomeKind(scope);
+  if(!outcome||kind==='other')return true;
+  if(kind==='success')return outcome==='success';
+  if(kind==='failure')return outcome==='failure';
+  if(kind==='victory')return outcome==='victory';
+  return true;
+}
 function selectedEventTreasureCopyText(scope='event'){
-  return eventTreasureResults(scope).filter(r=>r.selected!==false).map(r=>r.copyText).filter(Boolean).join('\n\n');
+  return eventTreasureResults(scope).filter(r=>eventTreasureAllowedBySelectedOutcome(scope,r)).map(r=>r.copyText).filter(Boolean).join('\n\n');
 }
 function syncEventTreasureCopyState(scope='event'){
   const results=eventTreasureResults(scope),text=selectedEventTreasureCopyText(scope);
@@ -3934,15 +3956,17 @@ function updateEventTreasureSelection(scope='event',index=0,checked=false){
   updateTreasureCopyButtons();saveState(false);
 }
 function eventTreasureSelectionHtml(scope='event'){
-  const rows=eventTreasureResults(scope),split=eventTreasureHasOutcomeSplit(rows);
-  if(!split||rows.length<2)return'';
+  const rows=eventTreasureResults(scope),split=eventTreasureHasOutcomeSplit(rows),conditional=eventTreasureHasConditionalOutcome(rows);
+  if(!conditional)return'';
   const body=rows.map((r,i)=>{
     const label=r.conditionLabel||`宝箱${i+1}`;
     const chest=r.setup?.chestName||r.tableId||'宝箱';
     const content=r.isEmpty?'中身なし':(r.contentLabel||'中身決定済み');
-    return `<article class="event-reward-row"><label class="event-reward-check"><input type="checkbox" data-event-treasure-check="${i}" ${r.selected?'checked':''}><span><b>${esc(label)}</b><br><span class="muted small">${esc(chest)} / ${esc(content)}</span></span></label></article>`;
+    const outcomeBlocked=!eventTreasureAllowedBySelectedOutcome(scope,{...r,selected:true});
+    return `<article class="event-reward-row"><label class="event-reward-check"><input type="checkbox" data-event-treasure-check="${i}" ${r.selected&&!outcomeBlocked?'checked':''} ${outcomeBlocked?'disabled':''}><span><b>${esc(label)}</b><br><span class="muted small">${esc(chest)} / ${esc(content)}${outcomeBlocked?' / 現在の成否では入手不可':''}</span></span></label></article>`;
   }).join('');
-  return `<section class="card event-reward-card"><h3>宝箱の成立結果</h3><p class="muted small">成功・失敗で宝箱が分かれるイベントです。実際に成立した側だけをチェックしてください。入手アイテムコピーには、チェックした宝箱の中身だけを反映します。</p><div class="event-reward-list">${body}</div></section>`;
+  const note=split?'成功・失敗で宝箱が分かれるイベントです。実際に成立した側だけをチェックしてください。':'成否によって宝箱を開けられるかが変わるイベントです。宝箱を開けられなかった場合はチェックを外してください。';
+  return `<section class="card event-reward-card"><h3>宝箱の成立結果</h3><p class="muted small">${note} 入手アイテムコピーには、実際に成立した宝箱の中身だけを反映します。</p><div class="event-reward-list">${body}</div></section>`;
 }
 function resolveEventTreasures(row={},areaName='',questFixed=false){
   const plans=eventTreasurePlans(row,areaName),results=[];
@@ -4061,7 +4085,7 @@ function dropDetailLines(material, options={}){
   const lines = [];
   const rank = progressPlayerRank(material.rank);
   const cat = String(material.materialCategory || material.itemCategory || '').trim();
-  const price = String(material.price ?? '').trim();
+  const price = String(material.sellPrice ?? '').trim();
   const desc = String(material.description || '').trim();
   const effect = String(material.effect || '').trim();
   const isMonsterMaterial = String(material.materialType || '').trim() === '魔物素材';
@@ -4223,7 +4247,7 @@ function updateEventRewardSelection(scope,uid,checked){
       reward.groups.forEach(g=>{if(g.trigger.kind==='threshold'&&sameBranch(g)&&(Number(g.trigger.value)||0)>=n)g.selected=false;});
     }
   }
-  syncEventTableRewardCopyState(scope);renderEventRewardPanel(scope);if(scope==='event')updateAreaEventItemCopyButton();else if(scope==='quest')updateQuestEventItemCopyButton();else if(scope==='base')updateBaseEventItemCopyButton();
+  syncEventTableRewardCopyState(scope);syncEventTreasureCopyState(scope);renderEventRewardPanel(scope);if(scope==='event')updateAreaEventItemCopyButton();else if(scope==='quest')updateQuestEventItemCopyButton();else if(scope==='base')updateBaseEventItemCopyButton();
 }
 function rerollEventReward(scope='event'){const reward=eventRewardState(scope);if(!reward)return;reward.groups.forEach(g=>g.items.forEach(item=>Object.assign(item,eventRewardRoll(item.expr||'1'))));syncEventTableRewardCopyState(scope);renderEventRewardPanel(scope);if(scope==='event')updateAreaEventItemCopyButton();else if(scope==='quest')updateQuestEventItemCopyButton();else if(scope==='base')updateBaseEventItemCopyButton();}
 function dropInstanceUid(){return `drop_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;}
@@ -4282,7 +4306,7 @@ function rollDrops(){
     all.push(line);
     if(ok) got.push(dropOutputBlock(d));
     const detail=dropDetailHtml(material);
-    const chips=[d.large||material?.materialType,d.small||material?.materialCategory,material?.rank?`ランク:${progressPlayerRank(material.rank)}`:'',material?.price?`売値:${material.price}G`:''].filter(Boolean);
+    const chips=[d.large||material?.materialType,d.small||material?.materialCategory,material?.rank?`ランク:${progressPlayerRank(material.rank)}`:'',material?.sellPrice?`売値:${material.sellPrice}G`:''].filter(Boolean);
     html.push(`<div class="drop-row ${ok?'success':'fail'}"><div><b>${esc(name)}</b><br><span class="muted small">${esc([d.large,d.small,d.id].filter(Boolean).join(' / '))}</span>${detail}</div><span class="pill">${esc(rateText)}</span><span class="pill">${ok?'入手':'なし'} ${r}</span></div>`);
   });
   if(got.length===1) got.push('入手なし');
