@@ -1,6 +1,6 @@
 {
   "format": "recraft-alchemia-initial-data",
-  "version": "90.8.673",
+  "version": "90.8.674",
   "encoding": "UTF-8",
   "description": "Recraft-Alchemia 統合データ（基礎ダメージ式ルールを魔物・武器で統一、条件付き追加ダメージを式制限から除外）",
   "data": {

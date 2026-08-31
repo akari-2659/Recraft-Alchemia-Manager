@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.673</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.674</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.673">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.674">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -212,7 +212,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.673｜更新：2026年8月31日</div>
+<div class="ra-build-info">v90.8.674｜更新：2026年8月31日</div>
 
 <header>
   <div class="header-inner">
@@ -536,7 +536,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 <script src="./assets/vendor/jszip.min.js"></script>
 <script>
 'use strict';
-const VERSION='v90.8.673';
+const VERSION='v90.8.674';
 const GAS_URL='https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -558,6 +558,14 @@ const MASTER_CACHE_KEY=STORE_KEY+'_master_cache_v1';
 const $=id=>document.getElementById(id);
 const state={quests:[],areas:[],events:[],monsters:[],items:[],treasures:[],appraisalRules:[],spells:[],recipes:[],progress:{quests:{},areas:{}},dayState:{day:1,fatigue:0,usedActions:0,awaitingEnd:false},lastEventText:'',lastEventKey:'',lastEventCheckCopyText:'',lastEventTreasureCopyText:'',lastEventTreasureResults:[],lastQuestEventText:'',lastQuestEventKey:'',lastQuestCheckCopyText:'',lastQuestFixedEventText:'',lastQuestFixedEventKey:'',lastQuestTreasureCopyText:'',lastQuestTreasureResults:[],lastQuestHasTreasure:false,lastQuestEventTableRewardText:'',lastQuestEventTableRewardCopyText:'',triggeredQuestEvents:{},lastAreaFixedEventText:'',lastAreaFixedEventKey:'',triggeredAreaEvents:{},baseUnlockedAreaIds:[],lastBaseEventText:'',lastBaseEventKey:'',lastBaseCheckCopyText:'',lastBaseRewardText:'',lastBaseRewardCopyText:'',lastBaseEventRewardState:null,lastBaseEventTableRewardState:null,questRewardCache:{},lastEventTableRewardText:'',lastEventTableRewardCopyText:'',lastEventTableRewardState:null,lastQuestEventTableRewardState:null,lastRecipeMerchantOffers:[],selectedRecipeMerchantId:'',lastRecipeMerchantContext:{scope:'',areaName:'',eventName:''},lastRumorText:'',lastRumorKey:'',lastTreasureText:'',lastTreasureCopyText:'',lastAppraisalText:'',lastAppraisalCopyText:'',lastDropText:'',lastDropSuccessText:'',lastDailyQuestText:'',lastDailyQuestKeys:[],lastDailyQuestKeysByKind:{'拠点内依頼':[],'エリア依頼':[],'納品依頼':[]},dailyQuestUnlockedAreaId:'',dailyQuestUnlockedAreaIds:[],questEncounterCache:{},partySize:4,areaBossEncountered:{},treasureSetup:null,treasureContext:null,lastEncounter:null,dropEncounterInstances:[],dropMode:'encounter',lastEventRewardState:null,lastQuestEventRewardState:null,lastQuestReinforcementText:'',questWorkReinforcementCounts:{},tokenExportEncounter:null,areaWeatherById:{},timeSlot:'朝',log:[]};
 const CCFOLIA_MONSTER_IMAGE_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/assets/monsters/';
+const CCFOLIA_MONSTER_IMAGE_SUBDIR=Object.freeze({
+  mon_petit_slime:'outskirts_grass',mon_raffin_rat:'outskirts_grass',mon_rapithorn:'outskirts_grass',mon_vespat:'outskirts_grass',mon_carapace_beetle:'outskirts_grass',mon_grauworm:'outskirts_grass',mon_grass_horn_king_ragvel:'outskirts_grass',
+  mon_rascreil:'nearby_forest',mon_myconid:'nearby_forest',mon_roothound:'nearby_forest',mon_branchling:'nearby_forest',mon_mossback:'nearby_forest',mon_whisperowl:'nearby_forest',mon_forest_branch_lord_vildran:'nearby_forest',
+  mon_mudhopper:'waterside_wetland',mon_bubble_slime:'waterside_wetland',mon_dromarl:'waterside_wetland',mon_miasma_leech:'waterside_wetland',mon_mist_mosquito:'waterside_wetland',mon_reed_lizard:'waterside_wetland',mon_swamp_lord_glaboros:'waterside_wetland',
+  mon_mirror_slime:'reflection_water_garden',mon_phase_moth:'reflection_water_garden',mon_glass_ray:'reflection_water_garden',mon_echo_reed:'reflection_water_garden',mon_rift_crab:'reflection_water_garden',mon_void_hound:'reflection_water_garden',mon_nereive:'reflection_water_garden',
+  mon_resona_bat:'foothill_old_mine',mon_pick_mole:'foothill_old_mine',mon_ore_scale:'foothill_old_mine',mon_lumina_wisp:'foothill_old_mine',mon_mine_golem:'foothill_old_mine',mon_rust_mite:'foothill_old_mine',boss_dolgan:'foothill_old_mine',
+  mon_breeze_hop:'wind_swept_highland',mon_crag_ram:'wind_swept_highland',mon_kite_beak:'wind_swept_highland',mon_sonora_bloom:'wind_swept_highland',mon_glide_scale:'wind_swept_highland',mon_bolt_bison:'wind_swept_highland',mon_velgrat:'wind_swept_highland'
+});
 const MONSTER_TOKEN_SIZE_OVERRIDES=Object.freeze({
   mon_grass_horn_king_ragvel:8,mon_forest_branch_lord_vildran:8,mon_swamp_lord_glaboros:7,boss_dolgan:7,mon_nereive:8,
   mon_mine_golem:4,mon_crag_ram:4,mon_glide_scale:4,mon_bolt_bison:4,mon_velgrat:8
@@ -611,7 +619,7 @@ function tokenBuildInstances(encounter){const totals=new Map();(encounter.groups
 function tokenCharacterId(){const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-',bytes=new Uint8Array(20);crypto.getRandomValues(bytes);return Array.from(bytes,b=>chars[b%chars.length]).join('');}
 function tokenCharacterData(instance,imageName,order){const row=instance.monster,hp=tokenCompact(row.hp),mp=tokenCompact(row.mp),status=[];if(hp!=='')status.push(tokenStatusEntry('HP',hp,hp));if(mp!=='')status.push(tokenStatusEntry('MP',mp,mp));status.push(tokenStatusEntry('補正',0,0),tokenStatusEntry('回避',row.evasionValue,row.evasionValue),tokenStatusEntry('抵抗',row.resistValue,row.resistValue),tokenStatusEntry('防御',row.defenseValue,row.defenseValue));return{name:instance.displayName,playerName:'',memo:'',initiative:instance.initiative,externalUrl:'',status,params:tokenAffinityParams(row),iconUrl:imageName,faces:[],x:instance.x,y:instance.y,z:0,angle:0,width:instance.width,height:instance.height,active:false,secret:false,invisible:false,hideStatus:false,color:'#888888',roomId:null,commands:tokenMonsterChatPalette(row),speaking:false,diceSkin:{},order};}
 async function tokenSha256Hex(bytes){const view=bytes instanceof Uint8Array?bytes:new Uint8Array(bytes),hash=await crypto.subtle.digest('SHA-256',view);return Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,'0')).join('');}
-async function tokenFetchMonsterImage(monster){const id=String(monster?.id||'').trim();if(!id)throw new Error(`${monster?.name||'魔物'} の画像IDを確認できません。`);const filename=`${id}.png`,urls=[];try{urls.push(new URL(`./assets/monsters/${filename}`,window.location.href).toString());}catch(_e){}urls.push(`${CCFOLIA_MONSTER_IMAGE_BASE}${filename}`);let lastError='';for(const url of [...new Set(urls)]){try{const response=await fetch(url,{cache:'no-cache'});if(!response.ok){lastError=`HTTP ${response.status}`;continue;}return new Uint8Array(await response.arrayBuffer());}catch(e){lastError=e?.message||String(e);}}throw new Error(`${monster.name||id} の駒画像を取得できませんでした。${lastError?`（${lastError}）`:''}`);}
+async function tokenFetchMonsterImage(monster){const id=String(monster?.id||'').trim();if(!id)throw new Error(`${monster?.name||'魔物'} の画像IDを確認できません。`);const filename=`${id}.png`,subdir=tokenCompact(CCFOLIA_MONSTER_IMAGE_SUBDIR[id]||''),urls=[];try{if(subdir)urls.push(new URL(`./assets/monsters/${subdir}/${filename}`,window.location.href).toString());urls.push(new URL(`./assets/monsters/${filename}`,window.location.href).toString());}catch(_e){}if(subdir)urls.push(`${CCFOLIA_MONSTER_IMAGE_BASE}${subdir}/${filename}`);urls.push(`${CCFOLIA_MONSTER_IMAGE_BASE}${filename}`);let lastError='';for(const url of [...new Set(urls)]){try{const response=await fetch(url,{cache:'no-cache'});if(!response.ok){lastError=`HTTP ${response.status}`;continue;}return new Uint8Array(await response.arrayBuffer());}catch(e){lastError=e?.message||String(e);}}throw new Error(`${monster.name||id} の駒画像を取得できませんでした。${lastError?`（${lastError}）`:''}`);}
 function tokenSafeFilename(text='戦闘'){return String(text||'戦闘').replace(/[\\/:*?"<>|]/g,'_').replace(/\s+/g,' ').trim().slice(0,60)||'戦闘';}
 function tokenTimestamp(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;}
 async function exportCurrentEncounterTokens(scope='event',button=null){const encounter=state.tokenExportEncounter;if(!encounter||encounter.scope!==scope||!encounter.groups?.length){setTokenExportStatus(scope,'出力できる戦闘編成がありません。','bad');return;}if(typeof JSZip==='undefined'){setTokenExportStatus(scope,'ZIP生成ライブラリを読み込めませんでした。','bad');return;}const original=button?.textContent||'駒出力';if(button){button.disabled=true;button.textContent='作成中…';}setTokenExportStatus(scope,'魔物画像を取得しています…');try{const instances=tokenBuildInstances(encounter),uniqueMonsters=[...new Map(instances.map(x=>[x.monster.id,x.monster])).values()],imageInfo=new Map();for(let i=0;i<uniqueMonsters.length;i++){const monster=uniqueMonsters[i];setTokenExportStatus(scope,`魔物画像を取得中 ${i+1} / ${uniqueMonsters.length}`);const bytes=await tokenFetchMonsterImage(monster),hash=await tokenSha256Hex(bytes),filename=`${hash}.png`;imageInfo.set(monster.id,{bytes,filename});}const characters={},resources={},orderBase=Date.now()*1000;instances.forEach((instance,index)=>{const info=imageInfo.get(instance.monster.id);characters[tokenCharacterId()]=tokenCharacterData(instance,info.filename,orderBase+index);});imageInfo.forEach(info=>{resources[info.filename]={type:'image/png'};});const data={meta:{version:'1.1.0'},entities:{room:{},items:{},decks:{},notes:{},characters,effects:{},scenes:{},savedatas:{},snapshots:{}},resources},jsonText=JSON.stringify(data),jsonBytes=new TextEncoder().encode(jsonText),token=`0.${await tokenSha256Hex(jsonBytes)}`,zip=new JSZip();zip.file('__data.json',jsonBytes);zip.file('.token',token);imageInfo.forEach(info=>zip.file(info.filename,info.bytes));setTokenExportStatus(scope,'ZIPを生成しています…');const blob=await zip.generateAsync({type:'blob',compression:'STORE'}),url=URL.createObjectURL(blob),a=document.createElement('a'),source=tokenSafeFilename(encounter.label||encounter.areaName||'戦闘');a.href=url;a.download=`RA_駒_${source}_${tokenTimestamp()}.zip`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);setTokenExportStatus(scope,`出力完了：敵${instances.length}体 / 画像${uniqueMonsters.length}枚`,'good');addLog(`駒出力：${encounter.label||'戦闘'} / 敵${instances.length}体 / 画像${uniqueMonsters.length}枚`);}catch(e){const message=e?.message||String(e);setTokenExportStatus(scope,message,'bad');addLog(`駒出力失敗：${message}`);}finally{if(button){button.disabled=false;button.textContent=original;}}}
@@ -2442,7 +2450,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.673-native-area-minimum-and-fixed-preview-1';
+const ENCOUNTER_RULE_VERSION='v90.8.674-native-area-minimum-and-fixed-preview-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
