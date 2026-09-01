@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.678</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.679</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.678">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.679">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -212,7 +212,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.678｜更新：2026年9月1日</div>
+<div class="ra-build-info">v90.8.679｜更新：2026年9月1日</div>
 
 <header>
   <div class="header-inner">
@@ -536,7 +536,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 <script src="./assets/vendor/jszip.min.js"></script>
 <script>
 'use strict';
-const VERSION='v90.8.678';
+const VERSION='v90.8.679';
 const GAS_URL='https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -603,7 +603,7 @@ function tokenActionCheckCommand(action={}){const parsed=tokenParseCheckType(act
 function tokenDamageCommand(action={}){let power=tokenCompact(action.power);if(!power||power==='なし'||power==='-')return'';const type=tokenNormalizeActionType(action),effect=String(action.effect||''),isRecovery=type==='回復'||/HP.*回復|回復する/.test(effect)||/回復$/.test(power);if(isRecovery){power=power.replace(/回復$/,'');return`${power} 【${action.name||'魔物行動'}・回復】`;}return`${power} 【${action.name||'魔物行動'}ダメージ】`;}
 function tokenMonsterChatPalette(row={}){const name=tokenCompact(row.name)||'名称未設定の魔物',actions=tokenParseActions(row.actions),lines=[];if(row.pullRule)lines.push(`// 引き寄せ：${row.pullRule}`);if(row.passiveName||row.passiveEffect){lines.push(`// 【固有パッシブ：${row.passiveName||'名称未設定'}】`);if(row.passiveEffect)lines.push(`// ${tokenCompact(row.passiveEffect)}`);}if(actions.length){const actionNames=actions.map(a=>tokenCompact(a.name)||'名称未設定').filter(Boolean),conditional=a=>/(のみ使用|HPが半分以下|HP半分以下|次の行動で|戦闘中1回|1戦闘1回)/.test(`${a.effect||''} ${a.power||''}`),normal=actions.filter(a=>!conditional(a)).map(a=>tokenCompact(a.name)||'名称未設定').filter(Boolean);if(normal.length&&normal.length<actionNames.length)lines.push(`choice[${normal.join(',')}]`);if(actionNames.length)lines.push(`choice[${actionNames.join(',')}]`);lines.push(`// ${name}`);actions.forEach(action=>{const actionName=action.name||'魔物行動',type=tokenNormalizeActionType(action),range=tokenActionRange(action),target=tokenCompact(action.target)||'対象未設定',element=tokenCompact(action.element),check=tokenActionCheckCommand(action),damage=tokenDamageCommand(action),effect=tokenCompact(action.effect);lines.push(`// 【${actionName}】 種別：${type}／距離：${range}／対象：${target}${element?`／属性：${element}`:''}`);if(check)lines.push(check);if(damage)lines.push(damage);if(effect)lines.push(`// 効果：${effect}`);if(!check&&!damage&&!effect)lines.push(`// ${actionName}`);});const notes=tokenMonsterRowStatusNotes(row);if(notes.length){lines.push('// 【状態異常】');notes.forEach(note=>lines.push(`// ${note}`));}}else{lines.push(`// ${name}`);lines.push('// 行動は未登録です。');}return lines.join('\n');}
 function tokenMonsterByName(name=''){const target=String(name||'').trim();return(state.monsters||[]).find(row=>String(row.name||'').trim()===target)||null;}
-function tokenMonsterSize(row={}){const size=Number(MONSTER_TOKEN_SIZE_OVERRIDES[String(row.id||'')])||3;return{width:size,height:size};}
+function tokenMonsterSize(row={}){const imageId=String(row.baseMonsterId||row.id||'');const size=Number(MONSTER_TOKEN_SIZE_OVERRIDES[imageId])||3;return{width:size,height:size};}
 function tokenNormalizeGroups(groups=[]){return normalizeEncounterFrontline((groups||[]).map(group=>({name:group?.name,count:group?.count,formation:group?.formation||group?.position||''}))).map(group=>({name:group.name,count:Math.max(1,Math.floor(Number(group.count)||1)),formation:group.formation||group.position||'前衛'}));}
 function setTokenExportEncounter(label='',areaName='',groups=[],scope='event'){const clean=tokenNormalizeGroups(groups);if(!clean.length){clearTokenExportEncounter(scope);return;}state.tokenExportEncounter={label:String(label||'戦闘').trim(),areaName:String(areaName||'').trim(),scope:scope==='quest'?'quest':'event',groups:clean};renderTokenExportPanels();}
 function clearTokenExportEncounter(scope=''){if(scope&&state.tokenExportEncounter?.scope!==scope)return;state.tokenExportEncounter=null;renderTokenExportPanels();}
@@ -619,7 +619,7 @@ function tokenBuildInstances(encounter){const totals=new Map();(encounter.groups
 function tokenCharacterId(){const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-',bytes=new Uint8Array(20);crypto.getRandomValues(bytes);return Array.from(bytes,b=>chars[b%chars.length]).join('');}
 function tokenCharacterData(instance,imageName,order){const row=instance.monster,hp=tokenCompact(row.hp),mp=tokenCompact(row.mp),status=[];if(hp!=='')status.push(tokenStatusEntry('HP',hp,hp));if(mp!=='')status.push(tokenStatusEntry('MP',mp,mp));status.push(tokenStatusEntry('補正',0,0),tokenStatusEntry('回避',row.evasionValue,row.evasionValue),tokenStatusEntry('抵抗',row.resistValue,row.resistValue),tokenStatusEntry('防御',row.defenseValue,row.defenseValue));return{name:instance.displayName,playerName:'',memo:'',initiative:instance.initiative,externalUrl:'',status,params:tokenAffinityParams(row),iconUrl:imageName,faces:[],x:instance.x,y:instance.y,z:0,angle:0,width:instance.width,height:instance.height,active:false,secret:false,invisible:false,hideStatus:false,color:'#888888',roomId:null,commands:tokenMonsterChatPalette(row),speaking:false,diceSkin:{},order};}
 async function tokenSha256Hex(bytes){const view=bytes instanceof Uint8Array?bytes:new Uint8Array(bytes),hash=await crypto.subtle.digest('SHA-256',view);return Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,'0')).join('');}
-async function tokenFetchMonsterImage(monster){const id=String(monster?.id||'').trim();if(!id)throw new Error(`${monster?.name||'魔物'} の画像IDを確認できません。`);const filename=`${id}.png`,subdir=tokenCompact(CCFOLIA_MONSTER_IMAGE_SUBDIR[id]||''),urls=[];try{if(subdir)urls.push(new URL(`./assets/monsters/${subdir}/${filename}`,window.location.href).toString());urls.push(new URL(`./assets/monsters/${filename}`,window.location.href).toString());}catch(_e){}if(subdir)urls.push(`${CCFOLIA_MONSTER_IMAGE_BASE}${subdir}/${filename}`);urls.push(`${CCFOLIA_MONSTER_IMAGE_BASE}${filename}`);let lastError='';for(const url of [...new Set(urls)]){try{const response=await fetch(url,{cache:'no-cache'});if(!response.ok){lastError=`HTTP ${response.status}`;continue;}return new Uint8Array(await response.arrayBuffer());}catch(e){lastError=e?.message||String(e);}}throw new Error(`${monster.name||id} の駒画像を取得できませんでした。${lastError?`（${lastError}）`:''}`);}
+async function tokenFetchMonsterImage(monster){const id=String(monster?.baseMonsterId||monster?.id||'').trim();if(!id)throw new Error(`${monster?.name||'魔物'} の画像IDを確認できません。`);const filename=`${id}.png`,subdir=tokenCompact(CCFOLIA_MONSTER_IMAGE_SUBDIR[id]||''),urls=[];try{if(subdir)urls.push(new URL(`./assets/monsters/${subdir}/${filename}`,window.location.href).toString());urls.push(new URL(`./assets/monsters/${filename}`,window.location.href).toString());}catch(_e){}if(subdir)urls.push(`${CCFOLIA_MONSTER_IMAGE_BASE}${subdir}/${filename}`);urls.push(`${CCFOLIA_MONSTER_IMAGE_BASE}${filename}`);let lastError='';for(const url of [...new Set(urls)]){try{const response=await fetch(url,{cache:'no-cache'});if(!response.ok){lastError=`HTTP ${response.status}`;continue;}return new Uint8Array(await response.arrayBuffer());}catch(e){lastError=e?.message||String(e);}}throw new Error(`${monster.name||id} の駒画像を取得できませんでした。${lastError?`（${lastError}）`:''}`);}
 function tokenSafeFilename(text='戦闘'){return String(text||'戦闘').replace(/[\\/:*?"<>|]/g,'_').replace(/\s+/g,' ').trim().slice(0,60)||'戦闘';}
 function tokenTimestamp(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;}
 async function exportCurrentEncounterTokens(scope='event',button=null){const encounter=state.tokenExportEncounter;if(!encounter||encounter.scope!==scope||!encounter.groups?.length){setTokenExportStatus(scope,'出力できる戦闘編成がありません。','bad');return;}if(typeof JSZip==='undefined'){setTokenExportStatus(scope,'ZIP生成ライブラリを読み込めませんでした。','bad');return;}const original=button?.textContent||'駒出力';if(button){button.disabled=true;button.textContent='作成中…';}setTokenExportStatus(scope,'魔物画像を取得しています…');try{const instances=tokenBuildInstances(encounter),uniqueMonsters=[...new Map(instances.map(x=>[x.monster.id,x.monster])).values()],imageInfo=new Map();for(let i=0;i<uniqueMonsters.length;i++){const monster=uniqueMonsters[i];setTokenExportStatus(scope,`魔物画像を取得中 ${i+1} / ${uniqueMonsters.length}`);const bytes=await tokenFetchMonsterImage(monster),hash=await tokenSha256Hex(bytes),filename=`${hash}.png`;imageInfo.set(monster.id,{bytes,filename});}const characters={},resources={},orderBase=Date.now()*1000;instances.forEach((instance,index)=>{const info=imageInfo.get(instance.monster.id);characters[tokenCharacterId()]=tokenCharacterData(instance,info.filename,orderBase+index);});imageInfo.forEach(info=>{resources[info.filename]={type:'image/png'};});const data={meta:{version:'1.1.0'},entities:{room:{},items:{},decks:{},notes:{},characters,effects:{},scenes:{},savedatas:{},snapshots:{}},resources},jsonText=JSON.stringify(data),jsonBytes=new TextEncoder().encode(jsonText),token=`0.${await tokenSha256Hex(jsonBytes)}`,zip=new JSZip();zip.file('__data.json',jsonBytes);zip.file('.token',token);imageInfo.forEach(info=>zip.file(info.filename,info.bytes));setTokenExportStatus(scope,'ZIPを生成しています…');const blob=await zip.generateAsync({type:'blob',compression:'STORE'}),url=URL.createObjectURL(blob),a=document.createElement('a'),source=tokenSafeFilename(encounter.label||encounter.areaName||'戦闘');a.href=url;a.download=`RA_駒_${source}_${tokenTimestamp()}.zip`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);setTokenExportStatus(scope,`出力完了：敵${instances.length}体 / 画像${uniqueMonsters.length}枚`,'good');addLog(`駒出力：${encounter.label||'戦闘'} / 敵${instances.length}体 / 画像${uniqueMonsters.length}枚`);}catch(e){const message=e?.message||String(e);setTokenExportStatus(scope,message,'bad');addLog(`駒出力失敗：${message}`);}finally{if(button){button.disabled=false;button.textContent=original;}}}
@@ -1610,10 +1610,11 @@ function eventHasTreasureOutcome(e={}){
   return type.includes('宝箱')||!!String(e.treasureTableId||'').trim()||/宝箱表「[^」]+」/.test(result);
 }
 function eventOutcomeCopyTags(e={}){
-  // 戦闘が発生し得るイベントは、他の結果タグより戦闘タグを優先する。
-  // 確定戦闘なら /戦闘発生、結果次第なら /戦闘予感 のみを表示する。
+  // 確実に戦闘が起きる場合は、タグではなく同じ行へ実際の出現構成を表示する。
+  // 結果次第で戦闘になる場合だけ、従来どおり /戦闘予感 を残す。
   const battle=eventBattleCopyMode(e);
-  if(battle)return [battle];
+  if(battle==='戦闘発生')return [];
+  if(battle==='戦闘予感')return ['戦闘予感'];
 
   const tags=[];
   const treasure=eventHasTreasureOutcome(e);
@@ -1622,12 +1623,39 @@ function eventOutcomeCopyTags(e={}){
   if(eventHasCrisisOutcome(e))tags.push('危機回避');
   return [...new Set(tags)];
 }
+function isNamedIndividualMonster(row={}){
+  const traits=String(row.monsterTraits||'').split(/[,、，]/).map(v=>v.trim()).filter(Boolean);
+  return traits.includes('二つ名')||String(row.id||'').startsWith('mon_named_');
+}
+function publicEncounterMonsterName(name=''){
+  const raw=String(name||'').trim();
+  const row=(state.monsters||[]).find(m=>String(m.name||'').trim()===raw);
+  if(!row||!isNamedIndividualMonster(row))return raw;
+  const base=String(row.baseMonsterName||'').trim();
+  return `${base||raw}？`;
+}
+function eventEncounterGroupsForCopy(e={},partySize=selectedPartySize()){
+  const resolved=Array.isArray(e.__resolvedEncounterGroups)?e.__resolvedEncounterGroups:null;
+  const groups=resolved&&resolved.length?resolved:encounterCompositionGroups(e,partySize);
+  return (groups||[]).map(g=>({name:String(g.name||'').trim(),count:Math.max(1,Math.floor(Number(g.count)||1)),formation:String(g.formation||g.position||'').trim()})).filter(g=>g.name);
+}
+function eventEncounterInlineComposition(e={},partySize=selectedPartySize()){
+  return eventEncounterGroupsForCopy(e,partySize).map(g=>`${publicEncounterMonsterName(g.name)}×${g.count}`).join('・');
+}
 function eventCheckInfo(e={}){
   let expr='';
   const raw=String(e.checkType||'').trim();
   const target=String(e.targetValue||'').trim();
+  const battleMode=eventBattleCopyMode(e);
+  const guaranteedBattle=battleMode==='戦闘発生';
   if(raw&&raw!=='なし')expr=raw.replace(/目標値/g,target||'目標値');
   else expr=inlineEventCheckInfo(e.result||'').expr;
+  // 戦闘だけが確実に起き、別の判定が登録されていない場合は感知を振る。
+  // 達成値は実際に出現する敵の中で最も高い先制値を使用する。
+  if(!expr&&guaranteedBattle){
+    const highest=encounterHighestInitiative(eventEncounterGroupsForCopy(e));
+    if(highest!==null)expr=`感知>=${highest}`;
+  }
   const skills=eventCheckExpressionParts(expr);
   if(!skills.length)return null;
   eventSubstituteCheckSkills(e).forEach(sub=>{
@@ -1641,7 +1669,10 @@ function eventCheckInfo(e={}){
   if(targets.length===1)line=`${skillText} / 達成値：${targets[0]}`;
   else line=skills.map(row=>`${row.skill}${row.penalty?`${row.penalty>0?'+':''}${row.penalty}`:''}（達成値：${row.target||'?'}）`).join('・');
   if(contentMode)line+=` /${contentMode}`;
-  outcomeTags.forEach(tag=>{line+=` /${tag}`;});
+  if(guaranteedBattle){
+    const composition=eventEncounterInlineComposition(e);
+    if(composition)line+=` / ${composition}`;
+  }else outcomeTags.forEach(tag=>{line+=` /${tag}`;});
   return {skills,targets,mode:contentMode,outcomeTags,copy:line,display:`使用技能：${line}`};
 }
 function eventCheckDisplayText(e={}){
@@ -1656,7 +1687,7 @@ function eventCheckCopyText(e={},fixed=false){
 function eventDetailText(e,q=null){
   const partySize=q?effectiveQuestPartySize(q):selectedPartySize();
   return [
-    e.eventType?`種別：${e.eventType}`:'',
+    publicEventTypeName(e)?`種別：${publicEventTypeName(e)}`:'',
     eventCheckDisplayText(e),
     e.result?`結果：${eventResultTextForDisplay(e,partySize)}`:'',
     e.progressEffect?`進行効果：${e.progressEffect}`:'',
@@ -1794,12 +1825,13 @@ ${baseQuest?'拠点内ランダムイベント':'該当エリアのランダム�
         '発生場所：拠点',
         sourceArea?`候補追加元：${sourceArea.name||sourceArea.id}`:'',
         picked.eventName?`イベント：${picked.eventName}`:'',
-        picked.eventType?`種別：${picked.eventType}`:'',
+        publicEventTypeName(picked)?`種別：${publicEventTypeName(picked)}`:'',
         eventCheckDisplayText(picked),
         picked.result?`結果：${eventResultTextForDisplay(picked,effectiveQuestPartySize(q))}`:'',
         picked.progressEffect?`補足：${picked.progressEffect}`:''
       ].filter(Boolean).join('\n')
     : formatEventOutput(`【クエストランダムイベント】${q.name||q.id}`,picked,questArea,tableId,['戦闘イベントは表示された出現構成を使用し、追加の魔物抽選は行いません。'],effectiveQuestPartySize(q),'quest');
+  state.lastQuestCheckCopyText=eventCheckCopyText(picked);
   if(baseQuest){const baseGroups=encounterGroupsForDrop(picked,null,effectiveQuestPartySize(q));if(baseGroups.length)setTokenExportEncounter(picked.eventName||q.name||'クエスト戦闘',sourceArea?.name||picked.areaName||'',baseGroups,'quest');}
   const treasureBundle=resolveEventTreasures(picked,sourceArea?.name||picked.areaName||'',false);
   state.lastQuestEventRewardState=buildEventRewardState(picked);
@@ -1852,6 +1884,7 @@ function triggerQuestSpecificEvents(q,before,after){
       effectiveSize,
       'quest'
     );
+    state.lastQuestCheckCopyText=eventCheckCopyText(e,true);
     if(resolvedEncounter){const exactGroups=encounterGroupsForDrop({},resolvedEncounter,effectiveSize);setTokenExportEncounter(e.eventName||q.name||'クエスト戦闘',area?.name||q.areaName||'',exactGroups,'quest');}
     if(e.treasureTableId){
       const treasureBundle=resolveEventTreasures(e,area?.name||e.areaName||'',true);
@@ -2073,16 +2106,26 @@ function crossBorderSourcePerDrawChance(area={}){
   const draws=areaExplorationDrawCount(area);
   return 1-Math.pow(0.95,1/draws);
 }
+const NAMED_ENCOUNTER_PER_DRAW_CHANCE=0.05;
 function pickAreaEvent(rows=[],lastKey='',area={}){
   const list=(rows||[]).filter(Boolean);if(!list.length)return null;
   const filtered=list.length>1?list.filter(r=>eventUniqueKey(r)!==lastKey):list;
   const pool=filtered.length?filtered:list;
-  const sourceRows=pool.filter(isCrossBorderSourceEvent);
-  const normalRows=pool.filter(row=>!isCrossBorderSourceEvent(row));
-  if(sourceRows.length && Math.random()<crossBorderSourcePerDrawChance(area)){
+  const namedRows=pool.filter(isNamedEncounterEvent);
+  const sourceRows=pool.filter(row=>isCrossBorderSourceEvent(row)&&!isNamedEncounterEvent(row));
+  const normalRows=pool.filter(row=>!isCrossBorderSourceEvent(row)&&!isNamedEncounterEvent(row));
+  // 二つ名と越境起点は通常候補数へ混ぜず、それぞれ独立した低確率枠として扱う。
+  // 1回の抽選で両方へ当選しないよう、同じ乱数上に割り当てる。
+  const namedChance=namedRows.length?NAMED_ENCOUNTER_PER_DRAW_CHANCE:0;
+  const sourceChance=sourceRows.length?crossBorderSourcePerDrawChance(area):0;
+  const specialRoll=Math.random();
+  if(namedRows.length&&specialRoll<namedChance){
+    return weightedPick(namedRows,row=>weatherEventWeight(row,area)*eventTimeWeight(row,area));
+  }
+  if(sourceRows.length&&specialRoll<namedChance+sourceChance){
     return weightedPick(sourceRows,row=>weatherEventWeight(row,area)*eventTimeWeight(row,area));
   }
-  const normalPool=normalRows.length?normalRows:pool;
+  const normalPool=normalRows.length?normalRows:pool.filter(row=>!isNamedEncounterEvent(row));
   return weightedPick(normalPool,row=>weatherEventWeight(row,area)*eventTimeWeight(row,area));
 }
 function renderWeatherManager(){
@@ -2389,13 +2432,16 @@ function eventMatchesRumor(row, rumor){
   return false;
 }
 function isBossEvent(row){return String(row && row.eventType || '').trim()==='ボス遭遇';}
+function isNamedEncounterEvent(row={}){return String(row.eventType||'').trim()==='二つ名遭遇'||String(row.id||'').startsWith('evt_named_');}
+function publicEventTypeName(row={}){return isNamedEncounterEvent(row)?'魔物遭遇':String(row.eventType||'').trim();}
 function isAreaBossMonster(row={}){return String(row.monsterTraits||'').split(',').map(v=>v.trim()).includes('ボス');}
 function isQuestSpecificEvent(row){
   return eventConditionType(row)==='クエスト固有' || String(row && row.eventType || '').includes('クエスト固有');
 }
 function isBaseRandomEvent(row){
-  return !isRumorEvent(row) && !isQuestSpecificEvent(row) && eventConditionType(row)==='なし';
+  return !isRumorEvent(row) && !isQuestSpecificEvent(row) && !isNamedEncounterEvent(row) && eventConditionType(row)==='なし';
 }
+
 function areaEventKey(area){
   return String(area && (area.id || area.name || area.eventTableId) || '').trim();
 }
@@ -2453,7 +2499,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.678-native-area-minimum-and-fixed-preview-1';
+const ENCOUNTER_RULE_VERSION='v90.8.679-named-encounter-check-copy-escape-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -2898,7 +2944,7 @@ function encounterCompositionGroups(row={},partySize=selectedPartySize()){
 }
 function encounterCompositionText(row={},partySize=selectedPartySize()){
   const groups=encounterCompositionGroups(row,partySize);
-  if(groups.length)return ['出現構成：',...groups.map(group=>`${group.position}：${group.name} ×${group.count}`)].join('\n');
+  if(groups.length)return ['出現構成：',...groups.map(group=>`${group.position}：${publicEncounterMonsterName(group.name)} ×${group.count}`)].join('\n');
   const formation=String(row.encounterFormation||'').trim();return formation?`配置：${formation}`:'';
 }
 function encounterCompositionTotal(row={},partySize=selectedPartySize()){
@@ -2924,6 +2970,13 @@ function eventResultTextForDisplay(row={},partySize=selectedPartySize()){
   let text=resolveEncounterTokensInText(row.result||'',partySize);
   const inline=inlineEventCheckInfo(text);
   if(inline.display)text=inline.text;
+  // 二つ名の正体は戦闘前のイベント表示では伏せ、通常種名＋「？」で示す。
+  if(isNamedEncounterEvent(row)){
+    (state.monsters||[]).filter(isNamedIndividualMonster).forEach(monster=>{
+      const full=String(monster.name||'').trim();if(!full)return;
+      text=String(text||'').split(full).join(publicEncounterMonsterName(full));
+    });
+  }
   // 代用技能は「使用技能」へ集約する。結果欄には成功時の差だけを残す。
   text=String(text||'').replace(/[^\s、。：「」()（）]+?で代用可能（判定\s*[+-]\d+）[。]?\s*/g,'');
   // 固定イベント等の自由記述に旧式「技能>=目標値」が残っていても、画面には式を出さない。
@@ -3029,11 +3082,12 @@ function formatEventOutput(prefix,picked,area,tableId,extraLines=[],partySizeOve
   const encounter=encounterCountText(picked,random);
   const composition=random?encounterResolutionBlock(random):encounterCompositionText(picked,partySize);
   const dropGroups=encounterGroupsForDrop(picked,random,partySize);
+  picked.__resolvedEncounterGroups=dropGroups.map(g=>({name:g.name,count:g.count,formation:g.formation||g.position||''}));
   const initiative=encounterInitiativeText(dropGroups);
   const encounterHeading=dropGroups.length?eventEncounterHeading(picked):'';
   if(dropGroups.length&&!isBossEvent(picked))recordLastEncounter(picked.eventName||prefix,area?.name||picked.areaName||'',dropGroups);
   if(dropGroups.length&&tokenScope)setTokenExportEncounter(picked.eventName||prefix,area?.name||picked.areaName||'',dropGroups,tokenScope);
-  const weather=area?currentAreaWeather(area):null; const time=areaUsesWorldCycle(area)?selectedTimeSlot():''; return [prefix,area?`エリア：${area.name||area.id}`:'',time?`時間帯：${time}`:'',weather?`天気：${weather.name}`:'',weather?.detail?`天気詳細：${weather.detail}`:'',area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'',`表：${tableId}`,picked.eventName?`イベント：${picked.eventName}`:'',picked.eventType?`種別：${picked.eventType}`:'',condition,encounterHeading,encounter,composition,initiative,eventCheckDisplayText(picked),picked.result?`結果：${eventResultTextForDisplay(picked,partySize)}`:'',picked.progressEffect?`補足：${picked.progressEffect}`:'',...extraLines].filter(Boolean).join('\n');
+  const weather=area?currentAreaWeather(area):null; const time=areaUsesWorldCycle(area)?selectedTimeSlot():''; return [prefix,area?`エリア：${area.name||area.id}`:'',time?`時間帯：${time}`:'',weather?`天気：${weather.name}`:'',weather?.detail?`天気詳細：${weather.detail}`:'',area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'',`表：${tableId}`,picked.eventName?`イベント：${picked.eventName}`:'',publicEventTypeName(picked)?`種別：${publicEventTypeName(picked)}`:'',condition,encounterHeading,encounter,composition,initiative,eventCheckDisplayText(picked),picked.result?`結果：${eventResultTextForDisplay(picked,partySize)}`:'',picked.progressEffect?`補足：${picked.progressEffect}`:'',...extraLines].filter(Boolean).join('\n');
 }
 function triggerAreaClearRumorEvent(area){
   const rumor=selectedRumor();
@@ -3054,6 +3108,7 @@ function triggerAreaClearRumorEvent(area){
   clearTokenExportEncounter('event');
   state.lastEventOutcomeKey=eventUniqueKey(picked);
   const baseText=formatEventOutput(`【探索クリア時イベント】${picked.eventName||'名称未設定'}`, picked, area, tableId, [`噂：${rumor.eventName||''}`],null,'event');
+  state.lastEventCheckCopyText=eventCheckCopyText(picked,true);
   const treasureBundle=resolveEventTreasures(picked,area?.name||picked.areaName||'',false);
   state.lastEventRewardState=buildEventRewardState(picked);
   const rewardSpec=eventRewardTableSpec(picked,area?.name||picked.areaName||'');
@@ -3093,9 +3148,9 @@ function rollEvent(){
   const picked=pickAreaEvent(rows,state.lastEventKey,area);
   state.lastEventKey=eventUniqueKey(picked);
   state.lastEventOutcomeKey=eventUniqueKey(picked);
-  state.lastEventCheckCopyText=eventCheckCopyText(picked);
   const rumorLine=rumor ? [`今日の噂：${rumor.eventName||''}${rumorScope(rumor)==='時間帯'?`（${eventTimeSlots(rumor).join('・')}のみ有効）`:''}`] : [];
   const baseText=formatEventOutput(`【ランダムイベント】${picked.eventName||'名称未設定'}`, picked, area, tableId, rumorLine,null,'event');
+  state.lastEventCheckCopyText=eventCheckCopyText(picked);
   const treasureBundle=resolveEventTreasures(picked,area?.name||picked.areaName||'',false);
   state.lastEventRewardState=buildEventRewardState(picked);
   const rewardSpec=eventRewardTableSpec(picked,area?.name||picked.areaName||'');
