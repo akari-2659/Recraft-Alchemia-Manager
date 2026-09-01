@@ -4420,6 +4420,19 @@ function eventVictoryHasMeaningfulPostBattle(clause=''){
   if(!/ドロップ判定/.test(text))return true;
   return /クエストクリア|解放|入手|回収|獲得|補正|回復|進行|解除|発見|追加報酬|報酬/.test(text.replace(/ドロップ判定[^。、]*/g,''));
 }
+function eventAlwaysClauseHasMeaningfulContent(clause=''){
+  const text=String(clause||'').trim();
+  if(!text)return false;
+  // 戦闘開始・出現構成そのものは「判定コピー」の担当。内容コピーへ重複させない。
+  if(/^判定\s*[：:]/.test(text))return false;
+  if(/^戦闘発生\s*[：:]/.test(text))return false;
+  if(/^人数別構成(?:は)?\s*[、,:：]?/.test(text))return false;
+  if(/^(?:前衛|後衛).*(?:との)?戦闘が発生(?:する)?$/.test(text))return false;
+  if(/^エリアボス[「『].+[」』]と遭遇する$/.test(text))return false;
+  // ドロップ判定だけの勝利後処理も内容としては扱わない。
+  if(/^勝利後.*ドロップ判定(?:を)?(?:1回ずつ)?行う$/.test(text))return false;
+  return true;
+}
 function buildEventRewardState(row={}){
   const clauses=String(row.result||'').split(/[。\n]+/).map(x=>x.trim()).filter(Boolean);const groups=[];let previousItemName='',currentBranchKey='',lastSuccessBranchKey='';
   clauses.forEach(clause=>{
@@ -4428,12 +4441,13 @@ function buildEventRewardState(row={}){
     if(trigger.kind==='success'){currentBranchKey=String(trigger.branchKey||'判定');lastSuccessBranchKey=currentBranchKey;}else if(trigger.kind==='failure'||trigger.kind==='victory')currentBranchKey='';
     const items=eventRewardItemsFromClause(clause,previousItemName),tableSlots=eventRewardTableSlotsFromClause(clause),explicitNoReward=/入手なし|追加素材なし/.test(clause);
     const branch=['success','failure','threshold','victory'].includes(trigger.kind),meaningfulBranch=branch&&(trigger.kind!=='victory'||eventVictoryHasMeaningfulPostBattle(clause));
-    if(!items.length&&!tableSlots&&!explicitNoReward&&!meaningfulBranch)return;
+    const meaningfulAlways=trigger.kind==='always'&&eventAlwaysClauseHasMeaningfulContent(clause);
+    if(!items.length&&!tableSlots&&!explicitNoReward&&!meaningfulBranch&&!meaningfulAlways)return;
     if(items.length)previousItemName=items.at(-1).selectedName||previousItemName;
     const hasSelectedSuccess=groups.some(g=>g.trigger.kind==='success'&&g.selected),selected=trigger.kind==='always'||(trigger.kind==='success'&&!hasSelectedSuccess)||(trigger.kind==='victory'&&!groups.some(g=>['success','failure','threshold'].includes(g.trigger.kind)));
     groups.push({uid:eventRewardUid(),trigger,clause,items,tableSlots,selected});
   });
-  return groups.length?{eventName:String(row.eventName||row.name||'イベント'),groups}:null;
+  return groups.length?{eventName:String(row.eventName||row.name||'イベント'),row:{...row},groups}:null;
 }
 function eventRewardState(scope='event'){if(scope==='quest')return state.lastQuestEventRewardState;if(scope==='base')return state.lastBaseEventRewardState;return state.lastEventRewardState;}
 function eventRewardPanelId(scope='event'){if(scope==='quest')return'questEventRewardPanel';if(scope==='base')return'baseEventRewardPanel';return'eventRewardPanel';}
@@ -4473,7 +4487,17 @@ function eventOutcomeKey(scope='event'){
 }
 function eventOutcomeRow(scope='event'){
   const key=eventOutcomeKey(scope);if(!key)return null;
-  return (state.events||[]).find(row=>eventUniqueKey(row)===key)||null;
+  const common=(state.events||[]).find(row=>eventUniqueKey(row)===key);
+  if(common)return common;
+  // クエスト本文から生成された固定イベントは state.events に存在しないため、
+  // 選択中クエストの固定イベントからも解決する。
+  if(scope==='quest'){
+    const q=selected($('questSelect'),state.quests);
+    const fixed=(q?questSpecificEvents(q):[]).find(row=>eventUniqueKey(row)===key);
+    if(fixed)return fixed;
+  }
+  const reward=eventRewardState(scope);
+  return reward?.row||null;
 }
 function eventOutcomePartySize(scope='event'){
   if(scope==='quest'){const q=selected($('questSelect'),state.quests);return q?effectiveQuestPartySize(q):selectedPartySize();}
