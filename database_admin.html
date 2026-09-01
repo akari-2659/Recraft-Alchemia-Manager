@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.674</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.678</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1202,10 +1202,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.674">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.678">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.674｜更新：2026年8月31日</div>
+<div class="ra-build-info">v90.8.678｜更新：2026年9月1日</div>
 
 <header>
   <div class="title-card">
@@ -1921,8 +1921,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
-const RECRAFT_DB_VERSION = 'v90.8.674';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.674';
+const RECRAFT_DB_VERSION = 'v90.8.678';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.678';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -8145,7 +8145,7 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='materialCategory') help += '<div class="form-help">選んだ素材種別に紐づくカテゴリだけ表示します。</div>';
   if(field==='rank') help += '<div class="form-help">魔物・素材・装備・道具・レシピ・術式・クエストなど、ランクを持つデータは1以上の数値で管理し、すべての画面で★Nと表示します。</div>';
   if(field==='buyPrice' && baseKeyForTable(key)==='items') help += '<div class="form-help">プレイヤーが店で購入する買値です。店売り品と武器派生の完成品には必ず設定します。既存の買値を販売価格の基準として維持し、価格差の調整は原則として売値側で行います。</div>';
-  if(field==='sellPrice' && baseKeyForTable(key)==='items') help += '<div class="form-help">プレイヤーが売却するときの売値です。通常は買値の80%以下にし、自作可能品は消費素材の売値合計×120%以上となる金策基準を優先します。施設依頼費はこの120%基準へ含めません。アイテム価格はbuyPrice・sellPriceの2項目だけで管理します。</div>';
+  if(field==='sellPrice' && baseKeyForTable(key)==='items') help += '<div class="form-help">プレイヤーが売却するときの売値です。調合・細工の自作品は、1回の完成品売却総額を『消費素材の売値合計＋施設依頼費の50%』として計算し、複数個完成時は完成数で割って1G未満を切り捨てます。完成品に買値がある場合は買値の80%以下、全必要素材を店頭購入できる場合は完成品売却総額を素材購入総額未満にします。アイテム価格はbuyPrice・sellPriceの2項目だけで管理します。</div>';
   if(field==='recipePrice' && key==='recipes') help += '<div class="form-help">レシピの販売価格です。常設店売りとレシピショップで共通して使います。入手先に「店売り」が含まれるレシピは常設店、それ以外の販売対象レシピはレシピショップにだけ出ます。</div>';
   if(field==='recipeSellPrice') help += '<div class="form-help">宝箱などで既習レシピと重複した場合に売却できる価格です。販売価格や施設依頼費とは別に管理します。</div>';
   if(field==='price' && key==='recipes') help += '<div class="form-help">施設へ製作を依頼するときの費用です。レシピの販売価格・売値とは別で、施設依頼ではレシピ不要です。</div>';
@@ -8393,6 +8393,13 @@ function assertItemPriceRows(rows=[], recipesForValidation=null){
   const mergedItems=new Map();
   for(const item of (state.items||[])) mergedItems.set(String(item.name||'').trim(), item);
   for(const item of (rows||[])) mergedItems.set(String(item.name||'').trim(), item);
+  const recipes=(recipesForValidation||state.recipes||[]);
+  const craftRecipeByResult=new Map();
+  for(const recipe of recipes){
+    const skill=String(recipe?.craftSkill||'').trim();
+    const resultName=String(recipe?.resultItem||'').trim();
+    if(resultName && (skill==='細工' || skill==='調合')) craftRecipeByResult.set(resultName,recipe);
+  }
   const sellOf=(name)=>{
     const item=mergedItems.get(String(name||'').trim());
     if(!item) return null;
@@ -8401,23 +8408,64 @@ function assertItemPriceRows(rows=[], recipesForValidation=null){
     const value=Number(raw);
     return Number.isInteger(value) && value>=0 ? value : null;
   };
-  const craftFloorByResult=new Map();
-  for(const recipe of (recipesForValidation||state.recipes||[])){
-    const resultName=String(recipe.resultItem||'').trim();
-    if(!resultName) continue;
-    let materialTotal=0;
-    let complete=true;
+  const buyOf=(name)=>{
+    const item=mergedItems.get(String(name||'').trim());
+    if(!item) return null;
+    const raw=String(item.buyPrice ?? '').trim();
+    if(!raw) return null;
+    const value=Number(raw);
+    return Number.isInteger(value) && value>=1 ? value : null;
+  };
+  const craftTargetMemo=new Map();
+  const craftTargetVisiting=new Set();
+  const craftTargetFor=(resultName)=>{
+    const name=String(resultName||'').trim();
+    if(craftTargetMemo.has(name)) return craftTargetMemo.get(name);
+    const recipe=craftRecipeByResult.get(name);
+    if(!recipe) return null;
+    if(craftTargetVisiting.has(name)) throw new Error(`価格計算のレシピ依存が循環しています：${name}`);
+    craftTargetVisiting.add(name);
+    let materialSellTotal=0;
+    let materialBuyTotal=0;
+    let allMaterialsBuyable=true;
     for(const req of parsePriceRecipeMaterials(recipe.requiredMaterials)){
-      const sv=sellOf(req.name);
-      if(sv===null){ complete=false; break; }
-      materialTotal += sv * req.count;
+      if(!mergedItems.has(req.name)) throw new Error(`${name}：必要素材「${req.name}」がItemsにありません`);
+      const nested=craftRecipeByResult.has(req.name) ? craftTargetFor(req.name) : null;
+      const sv=nested ? nested.target : sellOf(req.name);
+      if(sv===null) throw new Error(`${name}：必要素材「${req.name}」の売値が不正です`);
+      materialSellTotal += sv * req.count;
+      const bv=buyOf(req.name);
+      if(bv===null) allMaterialsBuyable=false;
+      else materialBuyTotal += bv * req.count;
     }
-    if(!complete) continue;
-    const resultCount=Math.max(1, Number(recipe.resultCount)||1);
-    const floor=Math.ceil(materialTotal*1.2/resultCount);
-    craftFloorByResult.set(resultName, Math.max(craftFloorByResult.get(resultName)||0, floor));
+    const feeRaw=String(recipe.price??'').trim();
+    const fee=Number(feeRaw);
+    if(!feeRaw || !Number.isInteger(fee) || fee<0) throw new Error(`${name}：施設依頼費(price)は0以上の整数で設定してください`);
+    const resultCount=Math.max(1,Number(recipe.resultCount)||1);
+    let target=Math.floor((materialSellTotal + fee*0.5) / resultCount);
+    const caps=[];
+    const resultRow=mergedItems.get(name);
+    if(!resultRow) throw new Error(`${name}：完成品がItemsにありません`);
+    const resultBuy=buyOf(name);
+    if(resultBuy!==null){
+      const cap=Math.floor(resultBuy*0.8);
+      if(target>cap){ target=cap; caps.push(`完成品買値80%上限${cap}G`); }
+    }
+    if(allMaterialsBuyable){
+      const cap=Math.floor((materialBuyTotal-1)/resultCount);
+      if(target>cap){ target=cap; caps.push(`購入素材転売防止上限${cap}G`); }
+    }
+    target=Math.max(1,target);
+    const out={target,materialSellTotal,fee,resultCount,allMaterialsBuyable,materialBuyTotal,caps};
+    craftTargetMemo.set(name,out);
+    craftTargetVisiting.delete(name);
+    return out;
+  };
+  for(const resultName of craftRecipeByResult.keys()){
+    try{ craftTargetFor(resultName); }
+    catch(err){ invalid.push(`・${resultName}：${String(err&&err.message||err)}`); }
   }
-  const branchResults=new Set((recipesForValidation||state.recipes||[]).filter(r=>String(r.craftType||'').trim()==='武器派生').map(r=>String(r.resultItem||'').trim()).filter(Boolean));
+  const branchResults=new Set(recipes.filter(r=>String(r.craftType||'').trim()==='武器派生').map(r=>String(r.resultItem||'').trim()).filter(Boolean));
   const shopSourcePattern=/(?:^|[\/／,、\s])(?:鍛冶屋|薬屋|骨董屋)(?=$|[（(\/／,、\s])/u;
   const requiresBuy=(row)=>{const name=String(row.name||'').trim();const tags=[row.tags,row.usageTags].map(v=>String(v||'')).join(' ');const source=String(row.source||'');return branchResults.has(name)||tags.includes('常設販売')||shopSourcePattern.test(source);};
   const canSellZero=(row)=>{const text=[row.name,row.itemType,row.tags,row.usageTags].map(v=>String(v||'')).join(' ');return /売却不可|システム|重要アイテム|素手|共鳴片/u.test(text);};
@@ -8429,23 +8477,27 @@ function assertItemPriceRows(rows=[], recipesForValidation=null){
     if(!Number.isInteger(sell) || sell<0){ invalid.push(`・${name}：売値は0以上の整数で設定してください`); continue; }
     if(sell===0 && !canSellZero(row)){ invalid.push(`・${name}：売却可能品の売値は1G以上にしてください。0Gは売却不可のシステム定義だけです`); continue; }
     const buyRaw=String(row.buyPrice ?? '').trim();
-    const craftFloor=craftFloorByResult.get(String(row.name||'').trim())||0;
-    if(craftFloor>0 && sell<craftFloor){
-      invalid.push(`・${name}：自作金策基準では売値${craftFloor}G以上が必要です（消費素材の売値合計×120%）`);
+    if(!buyRaw){ if(requiresBuy(row)) invalid.push(`・${name}：店頭販売品・武器派生完成品には買値が必要です`); }
+    else{
+      const buy=Number(buyRaw);
+      if(!Number.isInteger(buy) || buy<1){ invalid.push(`・${name}：買値は1以上の整数で設定してください`); continue; }
+      if(buy<=sell){ invalid.push(`・${name}：買値${buy}Gは売値${sell}Gより高く設定してください`); continue; }
+      if(buy-sell<2){ invalid.push(`・${name}：買値と売値を1G差だけにしないでください`); continue; }
+    }
+    const craftTarget=craftTargetMemo.get(String(row.name||'').trim());
+    if(craftTarget){
+      if(sell!==craftTarget.target){
+        const capText=craftTarget.caps.length?` / ${craftTarget.caps.join(' / ')}`:'';
+        invalid.push(`・${name}：自作品売値は${craftTarget.target}Gにしてください（素材売値合計${craftTarget.materialSellTotal}G＋施設依頼費${craftTarget.fee}Gの50%を完成数${craftTarget.resultCount}で割り、端数切り捨て${capText}）`);
+      }
       continue;
     }
-    if(!buyRaw){ if(requiresBuy(row)) invalid.push(`・${name}：店頭販売品・武器派生完成品には買値が必要です`); continue; }
-    const buy=Number(buyRaw);
-    if(!Number.isInteger(buy) || buy<1){ invalid.push(`・${name}：買値は1以上の整数で設定してください`); continue; }
-    if(buy<=sell){ invalid.push(`・${name}：買値${buy}Gは売値${sell}Gより高く設定してください`); continue; }
-    if(buy-sell<2){ invalid.push(`・${name}：買値と売値を1G差だけにしないでください`); continue; }
-    const normalCap=Math.floor(buy*0.8);
-    const allowedCap=Math.max(normalCap, craftFloor);
-    if(sell>allowedCap){
-      invalid.push(`・${name}：売値${sell}Gが上限${allowedCap}Gを超えています（通常は買値の80%以下、自作品は素材原価120%を優先）`);
+    if(buyRaw){
+      const normalCap=Math.floor(Number(buyRaw)*0.8);
+      if(sell>normalCap) invalid.push(`・${name}：売値${sell}Gが通常上限${normalCap}Gを超えています（買値の80%以下）`);
     }
   }
-  if(invalid.length) throw new Error(`価格設定に不整合があります。既存の買値を販売価格として維持し、差額は売値側で調整してください。通常は売値を買値の80%以下、自作可能品は消費素材の売値合計×120%以上を優先します。施設依頼費は転売利益の基準原価へ含めません。\n${invalid.slice(0,15).join('\n')}${invalid.length>15?`\nほか${invalid.length-15}件`:''}`);
+  if(invalid.length) throw new Error(`価格設定に不整合があります。調合・細工の自作品は「素材売値合計＋施設依頼費の50%」を基準に完成数で割り、1G未満を切り捨てます。店頭販売品は買値の80%以下、全素材を店頭購入できる場合は完成品売却総額を素材購入総額未満にします。\n${invalid.slice(0,15).join('\n')}${invalid.length>15?`\nほか${invalid.length-15}件`:''}`);
 }
 function assertItemClassificationRows(rows=[]){
   const invalid=[];
@@ -9375,13 +9427,13 @@ const UPLOAD_GZIP_MAX_ROWS_PER_CHUNK = 40;
 const UPLOAD_GZIP_COMPRESSION_SCHEMA = 'gzipUtf8Bytes32kRows40_v90_8_385';
 const UPLOAD_GZIP_CHUNK_TIMEOUT_MS = 15000;
 // v90.8.599: 大量DBは無圧縮・直接分割書込を標準にする。
-// v90.8.674: 実測タイムアウト対策として、実データPOSTだけを最大25行/約64KBへ縮小。
+// v90.8.678: 実測タイムアウト対策として、実データPOSTだけを最大25行/約64KBへ縮小。
 // begin/status/finish/abortなどデータ本体を含まない制御命令はJSONP/google.script.runへ分離する。
 // GAS側は開始時に既存キーを1回だけ索引化し、各データチャンクでは対象行だけ更新/appendする。
 const DIRECT_CHUNK_MAX_ROWS = 25;
 const DIRECT_CHUNK_MAX_BYTES = 65536;
 const DIRECT_SMALL_UPSERT_ROWS = 25;
-// v90.8.674: 小さい表まで一括処理のchecksum付き経路でPOSTへ送らない。
+// v90.8.678: 小さい表まで一括処理のchecksum付き経路でPOSTへ送らない。
 // JSONP分割ならWebアプリのPOST/iframe応答に依存せず、カテゴリ類を確実に処理できる。
 const JSONP_SMALL_UPLOAD_MAX_ROWS = 80;
 const JSONP_SMALL_UPLOAD_MAX_BYTES = 65536;
@@ -9877,7 +9929,7 @@ async function uploadRowsByChunks(key, rows, mode, dataKindScope='', options={})
   await assertServerVersion();
   const list=(rows||[]).map(cleanUploadRow);
 
-  // v90.8.674: 一括登録/置換ではchecksumが付くため、644までは2KB程度のitem_typesまで
+  // v90.8.678: 一括登録/置換ではchecksumが付くため、644までは2KB程度のitem_typesまで
   // direct POST経路へ入り、POST/iframe応答が不調な環境では最初の表で止まっていた。
   // 小規模表はmode/checksumに関係なくJSONP分割へ固定する。
   if(shouldUseSmallJsonpUpload(list)){
@@ -10456,7 +10508,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.674';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.678';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-25';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
@@ -11240,7 +11292,7 @@ document.addEventListener('click', (ev) => {
 .ra-manager-picker-tabs{flex-wrap:wrap;overflow-x:visible!important}
 .ra-manager-picker.generic .ra-manager-picker-body{grid-template-columns:minmax(0,1fr)!important}.ra-manager-picker.generic .ra-manager-picker-detail{display:none!important}.ra-manager-picker.category-only .ra-manager-picker-search,.ra-manager-picker.category-only .ra-manager-picker-tabs,.ra-manager-picker.category-only .ra-manager-picker-detail{display:none!important}.ra-manager-picker.category-only .ra-manager-picker-body{grid-template-columns:1fr!important}.ra-manager-picker.category-only .ra-manager-picker-list{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}.ra-manager-picker.category-only .ra-manager-picker-card{grid-template-columns:1fr;cursor:pointer;text-align:center}.ra-manager-picker-category-choice{min-height:58px;align-items:center;justify-items:center}
 .facility-meal-area-modal .ra-manager-picker-shell{grid-template-rows:auto minmax(0,1fr)}.facility-meal-area-modal .ra-manager-picker-body{border-top:1px solid var(--line)}.ra-meal-area-choice{width:100%;text-align:left;cursor:pointer}.ra-meal-area-choice.active{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent);background:#f8efe3}.ra-meal-area-choice .facility-chip{justify-self:end}
-/* v90.8.674: 動的選択モーダルを管理HTML既存のmodal-card系デザインへ統一 */
+/* v90.8.678: 動的選択モーダルを管理HTML既存のmodal-card系デザインへ統一 */
 .ra-manager-picker{width:min(980px,calc(100vw - 24px));max-height:min(88vh,900px);border:0;background:transparent;padding:0;box-shadow:none}
 .ra-manager-picker::backdrop{background:rgba(36,29,23,.46)}
 .ra-manager-picker-shell{max-height:min(88vh,900px);overflow:hidden;background:var(--paper);border:1px solid var(--line);border-radius:22px;box-shadow:0 26px 70px rgba(0,0,0,.28)}
