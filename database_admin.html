@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.679</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.680</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1210,10 +1210,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.679">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.680">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.679｜更新：2026年9月1日</div>
+<div class="ra-build-info">v90.8.680｜更新：2026年9月1日</div>
 
 <header>
   <div class="title-card">
@@ -1940,8 +1940,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
-const RECRAFT_DB_VERSION = 'v90.8.679';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.679';
+const RECRAFT_DB_VERSION = 'v90.8.680';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.680';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -3636,12 +3636,14 @@ function shuffleGuildDailyRows(rows=[]){
   }
   return list;
 }
+function isNamedDailyQuest(row={}){return String(row.questType||'').trim()==='二つ名討伐'||String(row.id||'').startsWith('quest_named_');}
+function guildDailyNamedAreaUnique(rows=[]){const seen=new Set(),out=[];for(const row of rows||[]){if(isNamedDailyQuest(row)){const area=String(row.areaName||row.questLocation||'').trim();if(area&&seen.has(area))continue;if(area)seen.add(area);}out.push(row);}return out;}
 function dailyQuestSampleForToday(rows,count=5,seedSuffix=''){
   const list=[...(rows||[])];
   const day=new Date().toLocaleDateString('sv-SE')+'|'+String(seedSuffix||'');
   let seed=0; for(const ch of day) seed=(seed*31+ch.charCodeAt(0))>>>0;
   for(let i=list.length-1;i>0;i--){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const j=seed%(i+1);[list[i],list[j]]=[list[j],list[i]];}
-  return list.slice(0,Math.min(Math.max(0,Number(count)||0),list.length));
+  const unique=guildDailyNamedAreaUnique(list);return unique.slice(0,Math.min(Math.max(0,Number(count)||0),unique.length));
 }
 function guildDailyAreaRows(){
   return [...(state.exploration_areas||[])].filter(a=>String(a.enabled??'TRUE')!=='FALSE').sort((a,b)=>{
@@ -3743,14 +3745,11 @@ function guildDailySelectedRowsByKind(kind=''){
   const rows=guildDailyCandidateRows(targetKind);
   const map=new Map(rows.map(q=>[String(q.id||q.name||''),q]));
   const target=Math.min(normalizeGuildDailyCount(currentGuildDailyCounts[targetKind],GUILD_DAILY_DEFAULT_COUNTS[targetKind]),rows.length);
-  let picked=(currentGuildDailyKeysByKind[targetKind]||[]).map(k=>map.get(String(k))).filter(Boolean).slice(0,target);
+  let picked=guildDailyNamedAreaUnique((currentGuildDailyKeysByKind[targetKind]||[]).map(k=>map.get(String(k))).filter(Boolean)).slice(0,target);
   if(picked.length<target){
-    const used=new Set(picked.map(q=>String(q.id||q.name||'')));
-    picked=picked.concat(dailyQuestSampleForToday(
-      rows.filter(q=>!used.has(String(q.id||q.name||''))),
-      target-picked.length,
-      `${targetKind}|${currentGuildDailyUnlockedAreaIds.slice().sort().join(',')}`
-    ));
+    const used=new Set(picked.map(q=>String(q.id||q.name||''))),namedAreas=new Set(picked.filter(isNamedDailyQuest).map(q=>String(q.areaName||q.questLocation||'').trim()).filter(Boolean));
+    const candidates=rows.filter(q=>!used.has(String(q.id||q.name||''))&&(!isNamedDailyQuest(q)||!namedAreas.has(String(q.areaName||q.questLocation||'').trim())));
+    picked=guildDailyNamedAreaUnique(picked.concat(dailyQuestSampleForToday(candidates,target-picked.length,`${targetKind}|${currentGuildDailyUnlockedAreaIds.slice().sort().join(',')}`))).slice(0,target);
   }
   const validKeys=picked.map(q=>String(q.id||q.name||''));
   if(JSON.stringify(validKeys)!==JSON.stringify(currentGuildDailyKeysByKind[targetKind]||[])){
@@ -3771,7 +3770,7 @@ function rerollGuildDailyQuests(kind=''){
     const fresh=shuffleGuildDailyRows(rows.filter(q=>!current.has(String(q.id||q.name||''))));
     const repeated=shuffleGuildDailyRows(rows.filter(q=>current.has(String(q.id||q.name||''))));
     const count=normalizeGuildDailyCount(currentGuildDailyCounts[currentKind],GUILD_DAILY_DEFAULT_COUNTS[currentKind]);
-    currentGuildDailyKeysByKind[currentKind]=fresh.concat(repeated).slice(0,Math.min(count,rows.length)).map(q=>String(q.id||q.name||''));
+    currentGuildDailyKeysByKind[currentKind]=guildDailyNamedAreaUnique(fresh.concat(repeated)).slice(0,Math.min(count,rows.length)).map(q=>String(q.id||q.name||''));
   });
   saveGuildDailyState();
   renderFacilitiesPanel();
@@ -7480,7 +7479,7 @@ function formOptionValues(key, field){
   if(field==='pullRule') ['可','不可'].forEach(v=>values.add(v));
   if(field==='scale') ['1PCあたり','パーティ全体','小規模','標準','大規模','高難度'].forEach(v=>values.add(v));
   if(field==='requestKind') ['拠点内依頼','エリア依頼','納品依頼'].forEach(v=>values.add(v));
-  if(field==='questType') ['チュートリアル','エリア開放','施設解放','採取','討伐','護衛','調査','探索','復興','納品','自由依頼'].forEach(v=>values.add(v));
+  if(field==='questType') ['チュートリアル','エリア開放','施設解放','採取','討伐','二つ名討伐','護衛','調査','探索','復興','納品','自由依頼'].forEach(v=>values.add(v));
   if(field==='rewardScope') ['各PC','パーティー共通'].forEach(v=>values.add(v));
   if(field==='unlockAreaKey') state.exploration_areas.forEach(r=>{ if(r.id) values.add(String(r.id)); });
   if(field==='areaName') state.exploration_areas.forEach(r=>{ if(r.name) values.add(String(r.name)); });
@@ -10528,7 +10527,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.679';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.680';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-25';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
