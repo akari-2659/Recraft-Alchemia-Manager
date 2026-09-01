@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.681</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.682</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.681">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.682">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -212,7 +212,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.681｜更新：2026年9月1日</div>
+<div class="ra-build-info">v90.8.682｜更新：2026年9月1日</div>
 
 <header>
   <div class="header-inner">
@@ -531,7 +531,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 <script src="./assets/vendor/jszip.min.js"></script>
 <script>
 'use strict';
-const VERSION='v90.8.681';
+const VERSION='v90.8.682';
 const GAS_URL='https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1394,8 +1394,9 @@ function mergeEncounterGroups(groups=[]){
 function appendEncounterForDrops(label='',areaName='',groups=[]){
   const clean=normalizeEncounterFrontline((groups||[]).map(g=>({name:g.name,count:g.count,formation:g.formation||g.position||''}))).map(g=>({name:g.name,count:g.count,formation:g.formation||g.position||''}));if(!clean.length)return;
   const current=(state.lastEncounter&&Array.isArray(state.lastEncounter.groups))?state.lastEncounter.groups:[],existingInstances=(state.lastEncounter&&Array.isArray(state.lastEncounter.instances))?state.lastEncounter.instances:[];
+  const bountyEligible=state.lastEncounter?.bountyEligible!==false;
   const added=encounterInstanceRows(clean,{fixedIv:false}),mergedGroups=mergeEncounterGroups([...current,...clean]),instances=[...existingInstances,...added];
-  state.lastEncounter={label:String(label||state.lastEncounter?.label||'戦闘').trim(),areaName:String(areaName||state.lastEncounter?.areaName||'').trim(),groups:mergedGroups,instances,bountyG:instances.reduce((sum,row)=>sum+Math.max(0,Number(row.bountyG)||0),0),fixedIv:false};
+  state.lastEncounter={label:String(label||state.lastEncounter?.label||'戦闘').trim(),areaName:String(areaName||state.lastEncounter?.areaName||'').trim(),groups:mergedGroups,instances,bountyEligible,bountyG:bountyEligible?instances.reduce((sum,row)=>sum+Math.max(0,Number(row.bountyG)||0),0):0,fixedIv:false};
   const extra=added.map(row=>({uid:dropInstanceUid(),monsterId:row.monsterId,name:row.name,formation:row.formation,dismantleSuccess:false}));state.dropEncounterInstances=normalizeDropInstances([...(state.dropEncounterInstances||[]),...extra]);setDropMode('encounter');renderEncounterDropList();saveState(false);
 }
 function addQuestWorkReinforcement(){
@@ -1882,6 +1883,7 @@ function triggerQuestSpecificEvents(q,before,after){
     state.lastQuestCheckCopyText=eventCheckCopyText(e,true);
     const effectiveSize=effectiveQuestPartySize(q);
     const resolvedEncounter=resolveQuestFixedEncounter(q,e,false);
+    const fixedDropGroups=resolvedEncounter?encounterGroupsForDrop({},resolvedEncounter,effectiveSize):encounterGroupsForDrop(e,null,effectiveSize);
     if(isWorkQuest(q)&&Number(eventThreshold(e))===100){const workKey=String(q.id||q.name||'work');state.questWorkReinforcementCounts=state.questWorkReinforcementCounts||{};state.questWorkReinforcementCounts[workKey]=0;state.lastQuestReinforcementText='';}
     const extraLines=['このイベントはクエスト進行度による確定発生です。ランダム抽選ではありません。'];
     const supportNote=questPartyAdjustmentNote(q);if(supportNote)extraLines.push(supportNote);
@@ -1894,10 +1896,10 @@ function triggerQuestSpecificEvents(q,before,after){
       extraLines,
       effectiveSize,
       'quest',
-      {fixedIv:isImportantQuest(q)}
+      {fixedIv:isImportantQuest(q),bountyEligible:false,resolvedGroups:fixedDropGroups,forceRecordEncounter:true}
     );
     state.lastQuestCheckCopyText=eventCheckCopyText(e,true);
-    if(resolvedEncounter){const exactGroups=encounterGroupsForDrop({},resolvedEncounter,effectiveSize);setTokenExportEncounter(e.eventName||q.name||'クエスト戦闘',area?.name||q.areaName||'',exactGroups,'quest');}
+    if(fixedDropGroups.length)setTokenExportEncounter(e.eventName||q.name||'クエスト戦闘',area?.name||q.areaName||'',fixedDropGroups,'quest');
     if(e.treasureTableId){
       const treasureBundle=resolveEventTreasures(e,area?.name||e.areaName||'',true);
       state.lastQuestFixedEventText=[state.lastQuestFixedEventText,treasureBundle.displayText].filter(Boolean).join('\n\n');
@@ -2511,7 +2513,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.681-named-encounter-check-copy-escape-1';
+const ENCOUNTER_RULE_VERSION='v90.8.682-named-encounter-check-copy-escape-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -3108,13 +3110,14 @@ function generateEncounterIndividual(monster={},options={}){
 function encounterInstanceRows(groups=[],options={}){
   const rows=[];(groups||[]).forEach(group=>{const master=(state.monsters||[]).find(row=>String(row.name||'').trim()===String(group.name||'').trim())||null;if(!master)return;for(let i=0;i<Math.max(1,Math.floor(Number(group.count)||1));i++){const generated=generateEncounterIndividual(master,options);rows.push({uid:`enc_${Date.now()}_${Math.random().toString(36).slice(2,9)}`,monsterId:String(master.id||''),name:String(master.name||group.name||''),formation:String(group.formation||group.position||''),monster:generated.monster,iv:generated.iv,bountyG:generated.bountyG});}});return rows;
 }
-function encounterBountyTotal(encounter=state.lastEncounter){return (encounter?.instances||[]).reduce((sum,row)=>sum+Math.max(0,Number(row.bountyG)||0),0);}
+function encounterBountyTotal(encounter=state.lastEncounter){if(encounter?.bountyEligible===false)return 0;return (encounter?.instances||[]).reduce((sum,row)=>sum+Math.max(0,Number(row.bountyG)||0),0);}
 function encounterIvLabel(row={}){const iv=row.iv||{};if(iv.fixed)return '固定個体';return `HP:${iv.hp||'B'} / 回避:${iv.evasion||'B'} / 抵抗:${iv.resist||'B'} / 攻撃:${iv.attack||'標準'}`;}
 function recordLastEncounter(label='',areaName='',groups=[],options={}){
   const clean=(groups||[]).map(group=>({name:String(group.name||'').trim(),count:Math.max(1,Math.floor(Number(group.count)||1)),formation:String(group.formation||group.position||'').trim()})).filter(group=>group.name);
   if(!clean.length)return;
   const instances=encounterInstanceRows(clean,options);
-  state.lastEncounter={label:String(label||'戦闘').trim(),areaName:String(areaName||'').trim(),groups:clean,instances,bountyG:instances.reduce((sum,row)=>sum+Math.max(0,Number(row.bountyG)||0),0),fixedIv:!!options.fixedIv};
+  const bountyEligible=options.bountyEligible!==false;
+  state.lastEncounter={label:String(label||'戦闘').trim(),areaName:String(areaName||'').trim(),groups:clean,instances,bountyEligible,bountyG:bountyEligible?instances.reduce((sum,row)=>sum+Math.max(0,Number(row.bountyG)||0),0):0,fixedIv:!!options.fixedIv};
   state.dropEncounterInstances=normalizeDropInstances(instances.map(row=>({uid:dropInstanceUid(),monsterId:row.monsterId,name:row.name,formation:row.formation,dismantleSuccess:false})));
   saveState(false);renderEncounterDropList();
 }
@@ -3162,11 +3165,12 @@ function formatEventOutput(prefix,picked,area,tableId,extraLines=[],partySizeOve
   const random=String(picked.encounterCountRule||'').trim()==='ランダム編成'?generateRandomEncounter(area?.name||picked.areaName||'',randomEncounterOptionsForEvent(picked,partySize)):null;
   const encounter=encounterCountText(picked,random);
   const composition=random?encounterResolutionBlock(random):encounterCompositionText(picked,partySize);
-  const dropGroups=encounterGroupsForDrop(picked,random,partySize);
+  const resolvedGroups=Array.isArray(encounterOptions.resolvedGroups)?encounterOptions.resolvedGroups:[];
+  const dropGroups=(resolvedGroups.length?resolvedGroups:encounterGroupsForDrop(picked,random,partySize)).map(g=>({name:g.name,count:g.count,formation:g.formation||g.position||''}));
   picked.__resolvedEncounterGroups=dropGroups.map(g=>({name:g.name,count:g.count,formation:g.formation||g.position||''}));
   const initiative=encounterInitiativeText(dropGroups);
   const encounterHeading=dropGroups.length?eventEncounterHeading(picked):'';
-  if(dropGroups.length&&!isBossEvent(picked))recordLastEncounter(picked.eventName||prefix,area?.name||picked.areaName||'',dropGroups,encounterOptions);
+  if(dropGroups.length&&(!isBossEvent(picked)||encounterOptions.forceRecordEncounter))recordLastEncounter(picked.eventName||prefix,area?.name||picked.areaName||'',dropGroups,encounterOptions);
   if(dropGroups.length&&tokenScope)setTokenExportEncounter(picked.eventName||prefix,area?.name||picked.areaName||'',dropGroups,tokenScope);
   const weather=area?currentAreaWeather(area):null; const time=areaUsesWorldCycle(area)?selectedTimeSlot():''; return [prefix,area?`エリア：${area.name||area.id}`:'',time?`時間帯：${time}`:'',weather?`天気：${weather.name}`:'',weather?.detail?`天気詳細：${weather.detail}`:'',area&&area.fieldEffect&&area.fieldEffect!=='なし'?`フィールド効果：${area.fieldEffect}`:'',`表：${tableId}`,picked.eventName?`イベント：${picked.eventName}`:'',publicEventTypeName(picked)?`種別：${publicEventTypeName(picked)}`:'',condition,encounterHeading,encounter,composition,initiative,eventCheckDisplayText(picked),picked.result?`結果：${eventResultTextForDisplay(picked,partySize)}`:'',picked.progressEffect?`補足：${picked.progressEffect}`:'',...extraLines].filter(Boolean).join('\n');
 }
@@ -4593,12 +4597,13 @@ function eventContentRewardItemsBlock(scope='event'){
   return ['【入手分】',...rows.map(item=>item.row?acquisitionItemCopyBlock(item.row,String(item.count||1)):dropPlayerInfoBlock({name:item.name,count:`${item.count||1}個`}))].join('\n\n');
 }
 function eventContentCopyText(scope='event'){
-  const row=eventOutcomeRow(scope);if(!row)return'';const reward=eventRewardState(scope),partySize=eventOutcomePartySize(scope),selectedGroups=(reward?.groups||[]).filter(g=>g.selected||g.trigger.kind==='always');
-  const branches=selectedGroups.filter(g=>g.trigger.kind!=='always'),lines=[`【${row.eventName||row.name||'イベント'}】`];
-  const check=eventCheckDisplayText(row);if(check)lines.push(check);
-  if(branches.length){branches.forEach(g=>{const text=eventOutcomeCleanClause(row,g.clause,partySize);if(text)lines.push(text);});}
-  else{const text=eventResultTextForDisplay(row,partySize);if(text)lines.push(text);}
-  const rewardBlock=eventContentRewardItemsBlock(scope),treasure=selectedEventTreasureCopyText(scope);return [lines.join('\n'),rewardBlock,treasure].filter(Boolean).join('\n\n');
+  const row=eventOutcomeRow(scope);if(!row)return'';
+  const reward=eventRewardState(scope),partySize=eventOutcomePartySize(scope);
+  const selectedGroups=(reward?.groups||[]).filter(g=>g.selected||g.trigger.kind==='always');
+  const lines=[];
+  selectedGroups.forEach(g=>{const text=eventOutcomeCleanClause(row,g.clause,partySize);if(text)lines.push(text);});
+  const rewardBlock=eventContentRewardItemsBlock(scope),treasure=selectedEventTreasureCopyText(scope);
+  return [lines.join('\n'),rewardBlock,treasure].filter(Boolean).join('\n\n');
 }
 function updateEventContentCopyButtons(){[['event','copyEventContentBtn'],['quest','copyQuestContentBtn'],['base','copyBaseEventContentBtn']].forEach(([scope,id])=>{const btn=$(id);if(btn)btn.disabled=!String(eventContentCopyText(scope)||'').trim();});}
 
@@ -4662,7 +4667,7 @@ function addSelectedMonsterToEncounter(){const m=selectedDropMonster();if(!m){ad
 function renderEncounterDropList(){
   const rows=normalizeDropInstances(state.dropEncounterInstances||[]);state.dropEncounterInstances=rows;
   const summary=$('lastEncounterSummary');
-  if(summary){const source=state.lastEncounter;const initiative=source&&source.groups?.length?encounterInitiativeText(source.groups):'';const instances=Array.isArray(source?.instances)?source.instances:[],bounty=encounterBountyTotal(source);const ivLines=instances.map((row,index)=>`${index+1}. ${row.name} / HP${row.monster?.hp??'—'} / 回避${row.monster?.evasionValue??'—'} / 抵抗${row.monster?.resistValue??'—'} / ${encounterIvLabel(row)} / 討伐${Number(row.bountyG)||0}G`).join('<br>');summary.innerHTML=source&&source.groups?.length?`<b>${esc(source.label||'直前の出現構成')}</b>${source.areaName?`<br><span class="muted small">エリア：${esc(source.areaName)}</span>`:''}<br><span class="muted small">${source.groups.map(g=>`${esc(g.formation||'配置未設定')}：${esc(g.name)} ×${Math.max(1,Number(g.count)||1)}`).join(' / ')}</span>${initiative?`<br><span class="muted small">${esc(initiative)}</span>`:''}${ivLines?`<hr><span class="muted small">${ivLines}</span>`:''}${bounty>0?`<hr><b>討伐報酬：${bounty}G（PT共通）</b>`:''}`:'まだ出現構成が読み込まれていません。';}
+  if(summary){const source=state.lastEncounter;const initiative=source&&source.groups?.length?encounterInitiativeText(source.groups):'';const instances=Array.isArray(source?.instances)?source.instances:[],bountyEligible=source?.bountyEligible!==false,bounty=encounterBountyTotal(source);const ivLines=instances.map((row,index)=>`${index+1}. ${row.name} / HP${row.monster?.hp??'—'} / 回避${row.monster?.evasionValue??'—'} / 抵抗${row.monster?.resistValue??'—'} / ${encounterIvLabel(row)}${bountyEligible?` / 討伐${Number(row.bountyG)||0}G`:''}`).join('<br>');summary.innerHTML=source&&source.groups?.length?`<b>${esc(source.label||'直前の出現構成')}</b>${source.areaName?`<br><span class="muted small">エリア：${esc(source.areaName)}</span>`:''}<br><span class="muted small">${source.groups.map(g=>`${esc(g.formation||'配置未設定')}：${esc(g.name)} ×${Math.max(1,Number(g.count)||1)}`).join(' / ')}</span>${initiative?`<br><span class="muted small">${esc(initiative)}</span>`:''}${ivLines?`<hr><span class="muted small">${ivLines}</span>`:''}${bounty>0?`<hr><b>討伐報酬：${bounty}G（PT共通）</b>`:''}`:'まだ出現構成が読み込まれていません。';}
   const box=$('encounterDropList');if(!box)return;
   if(!rows.length){box.innerHTML='<div class="card muted">戦闘イベント・クエストで出現構成が決定すると、ここへ自動表示されます。</div>';if($('rollEncounterDropBtn'))$('rollEncounterDropBtn').disabled=true;return;}if($('rollEncounterDropBtn'))$('rollEncounterDropBtn').disabled=false;
   const counts={};
@@ -4679,7 +4684,7 @@ function rollEncounterDrops(){
     drops.forEach(d=>{const material=findDropMaterial(d);const roll=1+Math.floor(Math.random()*100);const base=rateNum(d.rate);const rate=Math.min(100,base+bonus);const ok=roll<=rate;const itemName=d.name||d.id||material?.name||'名称未設定';const rateText=instance.dismantleSuccess?`${base}%→${rate}%`:`${rate}%`;let qty=null;let qtyText=String(d.count||'1個');if(ok){qty=dropQuantityRoll(d.count||'1');qtyText=qty.detail;const key=dropPublicId(material,d)||itemName;const current=aggregate.get(key)||{name:itemName,material,d,count:0};current.count+=qty.count;aggregate.set(key,current);}all.push(`${ok?'○':'×'} ${itemName} ${qtyText}（${rateText} / 出目${roll}）`);resultRows.push(`<div class="drop-row ${ok?'success':'fail'}"><div><b>${esc(itemName)}</b>${dropDetailHtml(material)}</div><span class="pill">${esc(rateText)}</span><span class="pill">${ok?`入手 ${esc(qtyText)}`:'なし'} / ${roll}</span></div>`);});
     html.push(`<section class="encounter-drop-result-group"><h4>${esc(label)}${instance.formation?` <span class="pill">${esc(instance.formation)}</span>`:''}</h4><div class="muted small">解体：${instance.dismantleSuccess?'成功（+10%）':'補正なし'}</div><div class="drop-list">${resultRows.join('')||'<div class="muted">ドロップ設定なし</div>'}</div></section>`);
   });
-  const got=['【出現構成ドロップ入手】'];if(!aggregate.size)got.push('入手なし');else aggregate.forEach(row=>{const d={...row.d,count:`${row.count}個`};got.push(dropPlayerInfoBlock(d));});const bounty=encounterBountyTotal(state.lastEncounter);state.lastDropText=all.join('\n');state.lastDropSuccessText=got.join('\n\n');$('dropResult').innerHTML=`${bounty>0?`<div class="card"><b>討伐報酬：${bounty}G（PT共通）</b></div>`:''}<div class="encounter-drop-result-list">${html.join('')}</div>`;addLog(`出現構成ドロップ判定：${instances.length}体${bounty>0?` / 討伐報酬${bounty}G`:''}`);
+  const got=['【出現構成ドロップ入手】'];if(!aggregate.size)got.push('入手なし');else aggregate.forEach(row=>{const d={...row.d,count:`${row.count}個`};got.push(dropPlayerInfoBlock(d));});const bounty=encounterBountyTotal(state.lastEncounter);if(bounty>0)got.push(`討伐報酬：${bounty}G（PT共通）`);state.lastDropText=all.join('\n');state.lastDropSuccessText=got.join('\n\n');$('dropResult').innerHTML=`${bounty>0?`<div class="card"><b>討伐報酬：${bounty}G（PT共通）</b></div>`:''}<div class="encounter-drop-result-list">${html.join('')}</div>`;addLog(`出現構成ドロップ判定：${instances.length}体${bounty>0?` / 討伐報酬${bounty}G`:''}`);
 }
 function rollDrops(){
   const m=selectedDropMonster(); if(!m){$('dropResult').textContent='候補から魔物を選択してください。';return;}
