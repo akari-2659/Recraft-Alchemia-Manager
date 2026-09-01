@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.680</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.681</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.680">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.681">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -212,7 +212,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.680｜更新：2026年9月1日</div>
+<div class="ra-build-info">v90.8.681｜更新：2026年9月1日</div>
 
 <header>
   <div class="header-inner">
@@ -305,6 +305,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
       <h3>進行イベント確認</h3>
       <div class="buttons event-main-actions">
         <button id="rollQuestEventBtn">クエストランダムイベント抽選</button>
+        <button class="secondary" id="copyQuestCheckBtn" disabled>判定コピー</button>
         <button class="secondary" id="copyQuestContentBtn" disabled>内容コピー</button>
       </div>
       <div id="questEventDetail" class="result">固定イベントと、固定イベントのない区切りで使うランダムイベント結果がここに表示されます。</div>
@@ -368,6 +369,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
         <p class="muted small">通常エリアでは選択した時間帯と今日の天気を反映して抽選します。時間帯限定イベントは該当時間だけ候補になり、時間帯限定の噂も指定時間だけ有効です。異界では天気・時間帯を使用しません。抽選後は同じボタンで再抽選できます。</p>
         <div class="buttons event-main-actions">
           <button id="rollEventBtn">イベント抽選</button>
+          <button class="secondary" id="copyEventCheckBtn" disabled>判定コピー</button>
           <button class="secondary" id="copyEventContentBtn" disabled>内容コピー</button>
         </div>
         <div id="eventResult" class="result">イベント結果がここに表示されます。</div>
@@ -396,6 +398,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
       <div id="baseEventPoolInfo" class="card muted">DB読込後、候補数を表示します。</div>
       <div class="buttons event-main-actions">
         <button id="rollBaseEventBtn">拠点内イベント抽選</button>
+        <button class="secondary" id="copyBaseEventCheckBtn" disabled>判定コピー</button>
         <button class="secondary" id="copyBaseEventContentBtn" disabled>内容コピー</button>
       </div>
       <div id="baseEventResult" class="result">拠点内イベント結果がここに表示されます。</div>
@@ -528,7 +531,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 <script src="./assets/vendor/jszip.min.js"></script>
 <script>
 'use strict';
-const VERSION='v90.8.680';
+const VERSION='v90.8.681';
 const GAS_URL='https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -2508,7 +2511,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.680-named-encounter-check-copy-escape-1';
+const ENCOUNTER_RULE_VERSION='v90.8.681-named-encounter-check-copy-escape-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -3419,7 +3422,11 @@ function questEventItemCopyText(){
   return mergeEventItemCopyParts(parts);
 }
 function updateQuestEventItemCopyButton(){updateEventContentCopyButtons();}
-function updateEventCheckCopyButtons(){updateEventContentCopyButtons();}
+function updateEventCheckCopyButtons(){
+  const q=$('copyQuestCheckBtn');if(q)q.disabled=!String(state.lastQuestCheckCopyText||'').trim();
+  const a=$('copyEventCheckBtn');if(a)a.disabled=!String(state.lastEventCheckCopyText||'').trim();
+  const b=$('copyBaseEventCheckBtn');if(b)b.disabled=!String(state.lastBaseCheckCopyText||'').trim();
+}
 function areaEventItemCopyText(){
   const parts=[];
   const rewardRows=eventRewardSelectedItems('event');
@@ -4759,10 +4766,10 @@ $('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){su
   $('questAdvanceBtn').addEventListener('click',advanceQuestProgress); $('areaAdvanceBtn').addEventListener('click',advanceAreaProgress); $('manualActionBtn')?.addEventListener('click',()=>consumeDailyAction('その他の行動')); $('undoActionBtn')?.addEventListener('click',undoDailyAction); $('innRestBtn')?.addEventListener('click',restAtInn); $('innStayBtn')?.addEventListener('click',()=>advanceToNextDay(true)); $('endDayWithoutInnBtn')?.addEventListener('click',()=>{if(confirm('宿泊せず一日を終了しますか？ 疲労度が1増加します。'))advanceToNextDay(false);});
   $('questResetBtn').addEventListener('click',()=>{const q=selected($('questSelect'),state.quests); if(q){clearTokenExportEncounter('quest');const qkey=String(q.id||q.name||''); progressObj('quests',qkey).value=0; Object.keys(state.triggeredQuestEvents||{}).forEach(k=>{if(k.startsWith(qkey+':')) delete state.triggeredQuestEvents[k];}); state.lastQuestFixedEventText=''; state.lastQuestFixedEventKey=''; state.lastQuestCheckCopyText=''; state.lastQuestTreasureCopyText=''; state.lastQuestTreasureResults=[]; state.lastQuestEventTableRewardText=''; state.lastQuestEventTableRewardCopyText=''; state.lastQuestEventRewardState=null; state.lastQuestReinforcementText=''; if(state.questWorkReinforcementCounts)delete state.questWorkReinforcementCounts[qkey]; if(state.lastRecipeMerchantContext?.scope==='quest')clearRecipeMerchantOffers(); updateTreasureCopyButtons(); saveState(false); renderQuest();}}); $('areaResetBtn').addEventListener('click',()=>{const a=selected($('areaSelect'),state.areas); if(a){clearTokenExportEncounter('event');const akey=String(a.id||a.name||''); progressObj('areas',akey).value=0; delete state.areaBossEncountered[areaEventKey(a)];state.lastEventText=''; state.lastEventKey=''; state.lastEventCheckCopyText=''; state.lastEventTreasureCopyText=''; state.lastEventTreasureResults=[]; state.lastEventTableRewardText=''; state.lastEventTableRewardCopyText=''; state.lastEventRewardState=null; clearRecipeMerchantOffers(); renderEventRewardPanel('event'); updateTreasureCopyButtons(); saveState(false); renderArea();}});
   $('questNote').addEventListener('input',()=>{const q=selected($('questSelect'),state.quests); if(q){progressObj('quests',q.id||q.name).note=$('questNote').value; saveState(false);}}); $('areaNote').addEventListener('input',()=>{const a=selected($('areaSelect'),state.areas); if(a){progressObj('areas',a.id||a.name).note=$('areaNote').value; saveState(false);}});
-  $('copyImportantQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('重要'),'questCopyNote')); $('copyDailyQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('デイリー'),'questCopyNote')); $('refreshDailyQuestsBtn')?.addEventListener('click',()=>syncDailyQuestSelectionFromFacility({render:true,log:true})); $('copyDailyQuestsBtn')?.addEventListener('click',()=>copyText(state.lastDailyQuestText,'questCopyNote')); $('rollBaseEventBtn')?.addEventListener('click',rollBaseEvent); $('copyBaseEventContentBtn')?.addEventListener('click',()=>copyText(eventContentCopyText('base'),'baseEventCopyNote')); $('openBaseAreaModalBtn')?.addEventListener('click',openBaseAreaModal); $('closeBaseAreaModalBtn')?.addEventListener('click',closeBaseAreaModal); $('cancelBaseAreaModalBtn')?.addEventListener('click',closeBaseAreaModal); $('applyBaseAreaModalBtn')?.addEventListener('click',applyBaseAreaModal);
-  $('rollQuestEventBtn').addEventListener('click',rollQuestEvent); $('copyQuestContentBtn')?.addEventListener('click',()=>copyText(eventContentCopyText('quest'),'questCopyNote'));
+  $('copyImportantQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('重要'),'questCopyNote')); $('copyDailyQuestListBtn')?.addEventListener('click',()=>copyText(questListMemoForCategory('デイリー'),'questCopyNote')); $('refreshDailyQuestsBtn')?.addEventListener('click',()=>syncDailyQuestSelectionFromFacility({render:true,log:true})); $('copyDailyQuestsBtn')?.addEventListener('click',()=>copyText(state.lastDailyQuestText,'questCopyNote')); $('rollBaseEventBtn')?.addEventListener('click',rollBaseEvent); $('copyBaseEventCheckBtn')?.addEventListener('click',()=>copyText(state.lastBaseCheckCopyText,'baseEventCopyNote')); $('copyBaseEventContentBtn')?.addEventListener('click',()=>copyText(eventContentCopyText('base'),'baseEventCopyNote')); $('openBaseAreaModalBtn')?.addEventListener('click',openBaseAreaModal); $('closeBaseAreaModalBtn')?.addEventListener('click',closeBaseAreaModal); $('cancelBaseAreaModalBtn')?.addEventListener('click',closeBaseAreaModal); $('applyBaseAreaModalBtn')?.addEventListener('click',applyBaseAreaModal);
+  $('rollQuestEventBtn').addEventListener('click',rollQuestEvent); $('copyQuestCheckBtn')?.addEventListener('click',()=>copyText(state.lastQuestCheckCopyText,'questCopyNote')); $('copyQuestContentBtn')?.addEventListener('click',()=>copyText(eventContentCopyText('quest'),'questCopyNote'));
   $('rollRumorBtn').addEventListener('click',rollRumor); $('applyRumorBtn').addEventListener('click',()=>applyRumorIndex($('rumorSelectForInn').value,true)); $('clearRumorBtn').addEventListener('click',clearRumor); $('copyRumorBtn').addEventListener('click',()=>copyText(state.lastRumorText,'rumorCopyNote'));
-  $('rollEventBtn').addEventListener('click',rollEvent); $('copyEventContentBtn')?.addEventListener('click',()=>copyText(eventContentCopyText('event'),'eventCopyNote'));
+  $('rollEventBtn').addEventListener('click',rollEvent); $('copyEventCheckBtn')?.addEventListener('click',()=>copyText(state.lastEventCheckCopyText,'eventCopyNote')); $('copyEventContentBtn')?.addEventListener('click',()=>copyText(eventContentCopyText('event'),'eventCopyNote'));
   $('treasureTableSelect').addEventListener('change',()=>{const tableId=$('treasureTableSelect').value; setTreasureContext(tableId,treasureAreaName(tableId),'normal'); $('treasureResult').textContent=isBossTreasureTable(tableId)?'「宝箱の中身を決定」を押すと、ボス固有素材の確率抽選とランダム報酬1枠をまとめて決定します。鍵・罠・採取判定はありません。':'「宝箱の中身を決定」を押すと、鍵・罠・各難易度・中身をまとめて決定します。';}); $('copyTrapDetectBtn').addEventListener('click',()=>copyText(trapDetectText(),'treasureCopyNote')); $('copyTrapDisarmBtn').addEventListener('click',()=>copyText(trapDisarmText(),'treasureCopyNote')); $('copyUnlockBtn').addEventListener('click',()=>copyText(unlockText(),'treasureCopyNote')); $('rollTreasureBtn').addEventListener('click',rollTreasure); $('copyTreasureBtn').addEventListener('click',()=>copyText(state.lastTreasureCopyText,'treasureCopyNote'));
   $('rollAppraisalBtn').addEventListener('click',rollAppraisal); $('copyAppraisalBtn').addEventListener('click',()=>copyText(state.lastAppraisalCopyText,'appraisalCopyNote')); $('appraisalRuleSelect').addEventListener('change',resetAppraisalResult); updateAppraisalCopyButton(); updateTreasureCopyButtons();
 
