@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.687</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.694</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.687">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.694">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -212,7 +212,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">v90.8.687｜更新：2026年9月2日</div>
+<div class="ra-build-info">v90.8.694｜更新：2026年9月2日</div>
 
 <header>
   <div class="header-inner">
@@ -532,7 +532,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 <script src="./assets/vendor/jszip.min.js"></script>
 <script>
 'use strict';
-const VERSION='v90.8.687';
+const VERSION='v90.8.694';
 const GAS_URL='https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -618,7 +618,6 @@ function encounterSelectedActionSet(monster={}){
     const selected=new Set(combo.map(a=>String(a.name||'').trim()));
     if([...mandatory].some(name=>!selected.has(name)))return false;
     if(!combo.some(encounterActionIsDirectDamage))return false;
-    if(combo.filter(action=>tokenNormalizeActionType(action)==='防御').length>1)return false;
     for(const action of combo){
       const refs=encounterActionReferencedNames(action.effect||'',actionNames);
       if(refs.some(name=>!selected.has(name)))return false;
@@ -629,7 +628,7 @@ function encounterSelectedActionSet(monster={}){
     const chosen=pool.filter(a=>mandatory.has(String(a.name||'').trim()));
     const rest=pool.filter(a=>!mandatory.has(String(a.name||'').trim()));
     for(let i=rest.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rest[i],rest[j]]=[rest[j],rest[i]];}
-    for(const action of rest){if(chosen.length>=3)break;if(tokenNormalizeActionType(action)==='防御'&&chosen.some(x=>tokenNormalizeActionType(x)==='防御'))continue;chosen.push(action);}
+    for(const action of rest){if(chosen.length>=3)break;chosen.push(action);}
     if(!chosen.some(encounterActionIsDirectDamage)){const damage=pool.find(encounterActionIsDirectDamage);if(damage&&!chosen.includes(damage)){if(chosen.length>=3)chosen[chosen.length-1]=damage;else chosen.push(damage);}}
     return chosen.slice(0,3);
   };
@@ -2594,7 +2593,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.687-normal-action-pool-select-1';
+const ENCOUNTER_RULE_VERSION='v90.8.694-normal-action-pool-role-audit-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
