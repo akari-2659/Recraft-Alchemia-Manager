@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.683</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.687</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1210,10 +1210,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.683">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.687">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.683｜更新：2026年9月2日</div>
+<div class="ra-build-info">v90.8.687｜更新：2026年9月2日</div>
 
 <header>
   <div class="title-card">
@@ -1940,8 +1940,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
-const RECRAFT_DB_VERSION = 'v90.8.683';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.683';
+const RECRAFT_DB_VERSION = 'v90.8.687';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.687';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -3157,7 +3157,7 @@ const SYSTEM_HELP = [
       "行動ごとの基礎技能値と威力は独立して評価する。基礎技能値だけを理由にダメージを機械的に上下させず、エリア難易度・対象数・追加効果・防御貫通・予告の有無・期待値と振れ幅を合わせて個別に決める。高技能低威力・低技能高威力・抵抗参照だけ低技能など、役割に応じて個別設定してよい。",
       "魔物の基礎直接ダメージ式と武器の基礎ダメージ式はD6を必須とし、最大構成をxD6+yD2～D5+zとする。D2～D5はD6へ追加する補助ダイスとしてのみ使用でき、補助ダイスを含む場合はy<=xを必須とする。固定値zは0以上のみとし、ダメージ式へのマイナス固定値は禁止。D2～D5だけの基礎ダメージ式は禁止。毒などの継続ダメージと、条件成立時に別途加算される追加ダメージはこの式制限の対象外。D2～D5の使用自体は強制せず、D2は小さい振れ幅、D3は軽～中程度、D4は標準的な補助、D5は大きめの振れ幅を持たせたい攻撃に使い分ける。",
       "防御・補助・回復行動も自動成功にせず、行動ごとの基礎技能値を使う『技能値>=固定達成値』判定を設定する。失敗時はその行動の防御・強化・回復・準備効果を適用しない。妨害などの変動補正は{補正}へ加算し、この判定にも適用する。",
-      "通常魔物は技を必ず3個、ボスは技を必ず4個所持する。固有パッシブは技数に含めない。",
+      "通常魔物は所持技プールを5個以上持ち、遭遇時にその中から3個をランダム選出して、その戦闘中の使用行動として固定する。二つ名個体とボスは技を必ず4個所持する。固有パッシブは技数に含めない。固有パッシブが特定行動を参照する場合、その行動は選出時の必須枠とする。準備・連携などで特定の別行動を明示参照する場合は、参照関係が成立する組み合わせだけを選出候補にする。",
       "エリアボスは、前衛が残っている状態でも後衛へ直接ダメージを与えられる行動を最低1つ必ず持つ。敵全体・敵1列・敵後衛を対象とする直接ダメージ行動、または遠距離攻撃・術式・祈祷で後衛を選択できる直接ダメージ行動を用意する。状態異常や弱体だけの全体行動はこの条件を満たさない。",
       "準備と次ターンの大技で構成される予告攻撃は、2段階を1つの技として同じ行に登録する。",
       "魔物行動には距離とは別に行動種別を設定する。種別は近接攻撃、遠距離攻撃、術式、祈祷、防御、補助、回復、特殊。",
@@ -7747,7 +7747,7 @@ function monsterDropRowHtml(row={}, idx=0){
 function monsterActionsEditor(value){
   const rows = parseMonsterActions(value);
   const body = rows.length ? rows.map(monsterActionRowHtml).join('') : monsterActionRowHtml({element:'物'});
-  return `<div class="monster-line-editor" data-monster-actions-editor><textarea data-form-field="actions" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(serializeMonsterActions(rows))}</textarea><div class="form-help">行動は1行動ずつ入力します。通常魔物は必ず3個、ボスは必ず4個です。固有パッシブは技数に含めません。エリアボスは、前衛が残っていても後衛へ直接ダメージを与えられる行動を最低1つ必ず持たせます。判定を行う行動には、その行動固有の基礎技能値を0以上の整数で設定します。判定式は「2D6+基礎技能値+{補正}>=回避値/抵抗値/固定値」です。{補正}には妨害-2、行動・パッシブによる一時的な強化など、戦闘中に変動する補正だけを加算します。防御・補助・回復も自動成功にはせず、基礎技能値を使う固定値判定を設定します。直接ダメージ式はD6を必ず含め、最大構成はxD6+yD2～D5+z、補助ダイス個数y<=D6個数x、固定値zは0以上です。条件成立時の追加ダメージや継続ダメージは基礎式制限から除外します。行動種別は近接攻撃・遠距離攻撃・術式・祈祷・防御・補助・回復・特殊から選択します。</div><div class="monster-line-head action-head"><span>行動名</span><span>行動種別</span><span>判定</span><span>基礎技能値</span><span>対象</span><span>属性</span><span>威力</span><span>効果</span><span></span></div><div data-monster-action-list>${body}</div><button type="button" class="secondary" data-monster-action-add>行動を追加</button></div>`;
+  return `<div class="monster-line-editor" data-monster-actions-editor><textarea data-form-field="actions" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(serializeMonsterActions(rows))}</textarea><div class="form-help">行動は1行動ずつ入力します。通常魔物は所持技プールとして5個以上を登録し、遭遇時に3個だけ選出します。二つ名個体とボスは必ず4個です。固有パッシブは技数に含めません。エリアボスは、前衛が残っていても後衛へ直接ダメージを与えられる行動を最低1つ必ず持たせます。判定を行う行動には、その行動固有の基礎技能値を0以上の整数で設定します。判定式は「2D6+基礎技能値+{補正}>=回避値/抵抗値/固定値」です。{補正}には妨害-2、行動・パッシブによる一時的な強化など、戦闘中に変動する補正だけを加算します。防御・補助・回復も自動成功にはせず、基礎技能値を使う固定値判定を設定します。直接ダメージ式はD6を必ず含め、最大構成はxD6+yD2～D5+z、補助ダイス個数y<=D6個数x、固定値zは0以上です。条件成立時の追加ダメージや継続ダメージは基礎式制限から除外します。行動種別は近接攻撃・遠距離攻撃・術式・祈祷・防御・補助・回復・特殊から選択します。</div><div class="monster-line-head action-head"><span>行動名</span><span>行動種別</span><span>判定</span><span>基礎技能値</span><span>対象</span><span>属性</span><span>威力</span><span>効果</span><span></span></div><div data-monster-action-list>${body}</div><button type="button" class="secondary" data-monster-action-add>行動を追加</button></div>`;
 }
 function monsterDropsEditor(value){
   const rows = parseMonsterDrops(value);
@@ -8766,15 +8766,18 @@ function assertMonsterDirectDamageDieRows(rows=[]){
 }
 function assertMonsterActionCountRows(rows=[]){
   const invalid=(rows || []).map(row=>{
-    const isBoss=String(row.monsterTraits || '').split(/[,、，]/).map(v=>v.trim()).includes('ボス');
-    const expected=isBoss ? 4 : 3;
+    const traits=String(row.monsterTraits || '').split(/[,、，]/).map(v=>v.trim());
+    const isBoss=traits.includes('ボス'),isNamed=traits.includes('二つ名')||String(row.id||'').startsWith('mon_named_');
+    const isNormal=String(row.individualValueEnabled||'').toUpperCase()==='TRUE'&&!isBoss&&!isNamed;
     const actual=parseMonsterActions(row.actions || '').length;
-    return {row,expected,actual};
-  }).filter(x=>x.actual!==x.expected);
+    const ok=isNormal?actual>=5:actual===4;
+    const expected=isNormal?'5個以上（戦闘時3個選出）':'4個';
+    return {row,expected,actual,ok};
+  }).filter(x=>!x.ok);
   if(!invalid.length) return;
-  const details=invalid.slice(0,10).map(x=>`・${String(x.row.name || x.row.id || '名称未設定')}：${x.actual}個（必要${x.expected}個）`).join('\n');
+  const details=invalid.slice(0,10).map(x=>`・${String(x.row.name || x.row.id || '名称未設定')}：${x.actual}個（必要${x.expected}）`).join('\n');
   const rest=invalid.length>10 ? `\nほか${invalid.length-10}件` : '';
-  throw new Error(`通常魔物は技を3個、ボスは技を4個にしてください。固有パッシブは技数に含めません。\n${details}${rest}`);
+  throw new Error(`通常魔物は所持技を5個以上登録し、遭遇時に3個を選出します。二つ名個体とボスは4個にしてください。固有パッシブは技数に含めません。\n${details}${rest}`);
 }
 function monsterActionCanDamageBackline(action={}){
   const power=String(action.power||'').trim();
@@ -10527,7 +10530,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.683';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.687';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-25';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
