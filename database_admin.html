@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.695</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.696</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1213,7 +1213,7 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <link rel="stylesheet" href="ra-design-system.css?v=90.8.695">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.695｜更新：2026年9月2日</div>
+<div class="ra-build-info">v90.8.696｜更新：2026年9月3日</div>
 
 <header>
   <div class="title-card">
@@ -1940,8 +1940,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
-const RECRAFT_DB_VERSION = 'v90.8.695';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.695';
+const RECRAFT_DB_VERSION = 'v90.8.696';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.696';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -7100,8 +7100,30 @@ function renderEventAreaCardsTable(key){
   table.innerHTML=`<tbody><tr><td class="monster-list-cell"><div class="monster-card-list" aria-label="エリア別イベント一覧">${html}</div></td></tr></tbody>`;
 }
 
+function parseAdminNamedProcessingOptions(value){
+  if(Array.isArray(value)) return value.filter(v=>v&&typeof v==='object');
+  if(value && typeof value==='object') return [value];
+  const raw=String(value??'').trim();
+  if(!raw) return [];
+  try{
+    const parsed=JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed.filter(v=>v&&typeof v==='object') : (parsed&&typeof parsed==='object'?[parsed]:[]);
+  }catch(_){ return []; }
+}
+function adminNamedProcessingDisplayText(value){
+  const options=parseAdminNamedProcessingOptions(value);
+  if(!options.length) return '';
+  return options.map(o=>{
+    const named=String(o.namedMonster||o.name||'').trim();
+    const before=String(o.fullBefore||o.before||'').trim();
+    const after=String(o.fullAfter||o.after||'').trim();
+    const req=String(o.requiredMaterials||'').trim();
+    return ['異名加工可能', named, (before||after)?`${before||'未設定'} → ${after||'未設定'}`:'', req?`必要素材: ${req}`:''].filter(Boolean).join(' / ');
+  }).join(' | ');
+}
 function displayFieldValue(row={}, field='', key=''){
   if(field === 'modifiers') return adminModifierDisplayText(row.modifiers || '');
+  if(field === 'namedProcessingOptions') return adminNamedProcessingDisplayText(row.namedProcessingOptions);
   if(field==='rank' && isStructuredNumericRankRecord(baseKeyForTable(key),row)) return adminRankLabel(row.rank);
   if(baseKeyForTable(key)==='material_ranks' && field==='name') return adminRankLabel(row.name);
   if(['toolRank','upgradeMaterialMinRank','guaranteeUpgradeMaxRank'].includes(field) && String(row[field]??'').trim()) return ['toolRank','guaranteeUpgradeMaxRank'].includes(field) ? `${playerRankLabel(row[field])}以下` : adminRankLabel(row[field]);
@@ -7110,7 +7132,9 @@ function displayFieldValue(row={}, field='', key=''){
 }
 function recordFieldHtml(row={}, field='', key=''){
   const raw = displayFieldValue(row, field, key);
-  const label = fieldLabelFor(key, field);
+  const baseKey=baseKeyForTable(key);
+  const isMonsterMaterialSource = field==='source' && (baseKey==='materials' || baseKey==='items') && String(row.materialType||'').trim()==='魔物素材';
+  const label = isMonsterMaterialSource ? 'ドロップ元' : fieldLabelFor(key, field);
   const value = raw.trim() || '未設定';
   const emptyClass = raw.trim() ? '' : ' record-field-empty';
   return `<div class="record-field${emptyClass}"><span class="record-field-label">${escapeHtml(label)}</span><div class="record-field-value">${escapeHtml(value)}</div></div>`;
@@ -8098,6 +8122,57 @@ function readModifierEditorRows(editor){ return Array.from(editor.querySelectorA
 function syncModifierEditor(editor){ const hidden=editor?.querySelector('[data-form-field="modifiers"]'); if(hidden) hidden.value=serializeModifierEditorRows(readModifierEditorRows(editor)); }
 function syncAllModifierEditors(){ document.querySelectorAll('[data-modifier-editor]').forEach(syncModifierEditor); }
 
+function adminNamedProcessingEditor(value){
+  const options=parseAdminNamedProcessingOptions(value);
+  const o=options[0]||null;
+  const hidden=escapeHtml(JSON.stringify(options));
+  const field=(name,val='',placeholder='')=>`<div class="field"><label>${escapeHtml(name)}</label><input data-named-process-field="${escapeHtml(val.key||'')}" value="${escapeHtml(val.value??'')}" placeholder="${escapeHtml(placeholder)}"></div>`;
+  const textarea=(name,key,val='')=>`<div class="field wide"><label>${escapeHtml(name)}</label><textarea data-named-process-field="${escapeHtml(key)}">${escapeHtml(val??'')}</textarea></div>`;
+  const body=o?`<div data-named-process-body class="monster-action-row" style="grid-template-columns:repeat(2,minmax(0,1fr));align-items:start">
+      <input type="hidden" data-named-process-field="id" value="${escapeHtml(o.id||'')}">
+      <input type="hidden" data-named-process-field="areaKey" value="${escapeHtml(o.areaKey||'')}">
+      <input type="hidden" data-named-process-field="areaName" value="${escapeHtml(o.areaName||'')}">
+      <input type="hidden" data-named-process-field="applyKind" value="${escapeHtml(o.applyKind||'')}">
+      <input type="hidden" data-named-process-field="applyTarget" value="${escapeHtml(o.applyTarget||'')}">
+      <input type="hidden" data-named-process-field="applyBefore" value="${escapeHtml(o.applyBefore??'')}">
+      <input type="hidden" data-named-process-field="applyAfter" value="${escapeHtml(o.applyAfter??'')}">
+      ${field('対応二つ名',{key:'namedMonster',value:o.namedMonster||''},'例：坑声を裂くレゾナバット')}
+      ${field('二つ名固有素材',{key:'material',value:o.material||''},'例：坑声共鳴骨')}
+      ${field('変更項目',{key:'changeLabel',value:o.changeLabel||''},'例：固有効果')}
+      ${field('製作技能',{key:'craftSkill',value:o.craftSkill||''},'例：鍛冶')}
+      ${field('施設加工費G',{key:'facilityFeeG',value:o.facilityFeeG??''},'例：300')}
+      ${field('難易度',{key:'difficulty',value:o.difficulty??''},'例：10')}
+      ${textarea('加工前（全文）','fullBefore',o.fullBefore||o.before||'')}
+      ${textarea('加工後（全文）','fullAfter',o.fullAfter||o.after||'')}
+      ${textarea('必要素材','requiredMaterials',o.requiredMaterials||'')}
+      <div class="field wide"><button type="button" class="ghost" data-named-process-remove>異名加工データを削除</button></div>
+    </div>`:`<div class="muted small" data-named-process-empty>異名加工は未設定です。</div>`;
+  return `<div class="monster-actions-editor" data-named-process-editor>
+    <textarea data-form-field="namedProcessingOptions" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${hidden}</textarea>
+    <div class="form-help">異名加工は1装備につき1種類まで。プレイヤー向けには加工前後の全文と必要素材のみを表示します。</div>
+    <div data-named-process-list>${body}</div>
+    ${o?'':'<button type="button" class="secondary" data-named-process-add>異名加工を追加</button>'}
+  </div>`;
+}
+function readAdminNamedProcessingEditor(editor){
+  const body=editor?.querySelector('[data-named-process-body]');
+  if(!body) return [];
+  const get=key=>body.querySelector(`[data-named-process-field="${key}"]`)?.value??'';
+  const before=get('fullBefore'); const after=get('fullAfter');
+  return [{
+    id:get('id')||`named_process_${Date.now().toString(36)}`,
+    namedMonster:get('namedMonster'), material:get('material'), changeLabel:get('changeLabel'),
+    before, after, fullBefore:before, fullAfter:after,
+    requiredMaterials:get('requiredMaterials'), facilityFeeG:get('facilityFeeG'), difficulty:get('difficulty'), craftSkill:get('craftSkill'),
+    areaKey:get('areaKey'), areaName:get('areaName'), applyKind:get('applyKind'), applyTarget:get('applyTarget'), applyBefore:get('applyBefore'), applyAfter:get('applyAfter')
+  }];
+}
+function syncAdminNamedProcessingEditor(editor){
+  const hidden=editor?.querySelector('[data-form-field="namedProcessingOptions"]');
+  if(hidden) hidden.value=JSON.stringify(readAdminNamedProcessingEditor(editor));
+}
+function syncAllAdminNamedProcessingEditors(){ document.querySelectorAll('[data-named-process-editor]').forEach(syncAdminNamedProcessingEditor); }
+
 function buildFieldInput(key, field, value, rowContext={}){
   const label = fieldLabelFor(key, field);
   const ph = key==='quests' && field==='areaName' ? '受注候補へ出る解放段階。例：街はずれの草原' : (FIELD_PLACEHOLDERS[field] || '');
@@ -8107,6 +8182,8 @@ function buildFieldInput(key, field, value, rowContext={}){
   let input = '';
   if(field==='modifiers'){
     input = modifierRowsEditor(value);
+  }else if(field==='namedProcessingOptions' && key==='items'){
+    input = adminNamedProcessingEditor(value);
   }else if(key==='monsters' && field==='actions'){
     input = monsterActionsEditor(value);
   }else if(key==='monsters' && field==='drops'){
@@ -8285,10 +8362,12 @@ function currentFormRowSnapshot(){
   if(formState.key==='monsters') syncAllMonsterEditors();
   if(formState.key==='quests') syncAllQuestFixedEventEditors();
   syncAllModifierEditors();
+  syncAllAdminNamedProcessingEditors();
   const row = formState.key ? (formState.idx===null ? newBlankRow(formState.key) : {...state[formState.key][formState.idx]}) : {};
   if(formState.key==='items' && !row.dataKind) row.dataKind = formState.defaultDataKind || 'アイテム';
   if(formState.key==='items' && row.dataKind!=='素材' && !row.itemType) row.itemType = formState.defaultItemType || currentItemTypeView || '';
   $('editModal')?.querySelectorAll('[data-form-field]').forEach(el=>{ row[el.dataset.formField]=el.value ?? ''; });
+  if(formState.key==='items') row.namedProcessingOptions=parseAdminNamedProcessingOptions(row.namedProcessingOptions);
   return row;
 }
 function itemFormFields(row){
@@ -8314,7 +8393,9 @@ function itemFormFields(row){
   if(itemType === '調合品' && String(row.itemCategory || '').trim() === 'エンチャント'){
     return ['itemType','itemCategory','name','publicId','csVisible','buyPrice','sellPrice','rank','equipSlot','maxStack','target','element','enchantTarget','enchantEffectType','enchantValue','enchantDuration','enchantRounds','enchantStackRule','description','effect','unlockAreaKey','unlockOrder','unlockCondition','unlockFacility','tags','notes'];
   }
-  return ['itemType','itemCategory','name','publicId','csVisible','buyPrice','sellPrice','rank','equipSlot','skill','power','maxStack','offhandBonus','reloadTurns','spellSlots','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect','unlockAreaKey','unlockOrder','unlockCondition','unlockFacility','tags','notes'];
+  const common=['itemType','itemCategory','name','publicId','csVisible','buyPrice','sellPrice','rank','equipSlot','skill','power','maxStack','offhandBonus','reloadTurns','spellSlots','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect'];
+  if(['武器','防具','盾'].includes(itemType) || parseAdminNamedProcessingOptions(row.namedProcessingOptions).length) common.push('namedProcessingOptions');
+  return [...common,'unlockAreaKey','unlockOrder','unlockCondition','unlockFacility','tags','notes'];
 }
 function recipeFormFields(row){
   const craftType = String(row.craftType || activeRecipeCraftType() || '調合').trim();
@@ -8997,6 +9078,8 @@ function collectFormRow(){
   syncAllCheckBuilders($('editModal'));
   if(key==='monsters') syncAllMonsterEditors();
   if(key==='quests') syncAllQuestFixedEventEditors();
+  syncAllModifierEditors();
+  syncAllAdminNamedProcessingEditors();
   const base = idx===null ? newBlankRow(key) : {...state[key][idx]};
   if(key==='items' && !base.dataKind) base.dataKind = formState.defaultDataKind || 'アイテム';
   if(key==='items' && base.dataKind !== '素材' && !String(base.csVisible || '').trim()) base.csVisible = 'TRUE';
@@ -9004,6 +9087,7 @@ function collectFormRow(){
     const el = $('editModal').querySelector(`[data-form-field="${field}"]`);
     if(el) base[field] = el.value ?? '';
   });
+  if(key==='items') base.namedProcessingOptions=parseAdminNamedProcessingOptions(base.namedProcessingOptions);
   if(base.checkType !== undefined) normalizeRowCheckType(key, base);
   normalizeEncounterPlacementRow(key,base);
   if(key==='equipment_categories' || key==='items') { Object.assign(base, migrateLegacyModifierFields(base)); ensurePhysicalElementForWeapon(base); }
@@ -10912,6 +10996,21 @@ document.addEventListener('click',e=>{
   const remFixed=e.target.closest('[data-quest-fixed-event-remove]'); if(remFixed){ const editor=remFixed.closest('[data-quest-fixed-events-editor]'); remFixed.closest('[data-quest-fixed-event-row]')?.remove(); const list=editor.querySelector('[data-quest-fixed-event-list]'); if(!list.querySelector('[data-quest-fixed-event-row]')) list.innerHTML='<div class="muted small" data-quest-fixed-empty>固定イベントはまだありません。</div>'; syncQuestFixedEventsEditor(editor); return; }
   const addMod=e.target.closest('[data-modifier-add]'); if(addMod){ const editor=addMod.closest('[data-modifier-editor]'); const list=editor.querySelector('[data-modifier-list]'); list.querySelector('[data-modifier-empty]')?.remove(); const idx=list.querySelectorAll('[data-modifier-row]').length; list.insertAdjacentHTML('beforeend', modifierEditorRowHtml({}, idx)); syncModifierEditor(editor); return; }
   const remMod=e.target.closest('[data-modifier-remove]'); if(remMod){ const editor=remMod.closest('[data-modifier-editor]'); remMod.closest('[data-modifier-row]')?.remove(); const list=editor.querySelector('[data-modifier-list]'); if(!list.querySelector('[data-modifier-row]')) list.innerHTML='<div class="muted small" data-modifier-empty>補正値はまだありません。</div>'; syncModifierEditor(editor); return; }
+  const addNp=e.target.closest('[data-named-process-add]'); if(addNp){
+    const editor=addNp.closest('[data-named-process-editor]');
+    const list=editor.querySelector('[data-named-process-list]');
+    const empty=[{id:'',namedMonster:'',material:'',changeLabel:'',fullBefore:'',fullAfter:'',requiredMaterials:'',facilityFeeG:'',difficulty:'',craftSkill:''}];
+    const tmp=document.createElement('div'); tmp.innerHTML=adminNamedProcessingEditor(empty);
+    const body=tmp.querySelector('[data-named-process-body]');
+    list.innerHTML=body?body.outerHTML:'<div class="muted small">編集欄の生成に失敗しました。</div>';
+    addNp.remove(); syncAdminNamedProcessingEditor(editor); return;
+  }
+  const remNp=e.target.closest('[data-named-process-remove]'); if(remNp){
+    const editor=remNp.closest('[data-named-process-editor]'); const list=editor.querySelector('[data-named-process-list]');
+    list.innerHTML='<div class="muted small" data-named-process-empty>異名加工は未設定です。</div>';
+    if(!editor.querySelector('[data-named-process-add]')) editor.insertAdjacentHTML('beforeend','<button type="button" class="secondary" data-named-process-add>異名加工を追加</button>');
+    syncAdminNamedProcessingEditor(editor); return;
+  }
   const quickCat=e.target.closest('[data-quick-category-field]'); if(quickCat){ quickCreateCategory(quickCat.dataset.quickCategoryField); return; }
   const upgradeReset=e.target.closest('[data-facility-upgrade-reset]'); if(upgradeReset){ if($('facilityUpgradeEquipmentSelect')) $('facilityUpgradeEquipmentSelect').value=''; if($('facilityUpgradeMaterialInput')) $('facilityUpgradeMaterialInput').value=''; if($('facilityUpgradeGuaranteeItem')) $('facilityUpgradeGuaranteeItem').value=''; if($('facilityUpgradeCountInput')) $('facilityUpgradeCountInput').value='0'; if($('facilityUpgradeStepInput')) $('facilityUpgradeStepInput').value='1'; if($('facilityUpgradeSupportCountInput')) $('facilityUpgradeSupportCountInput').value='0'; facilityRemovalEntryIds=[]; renderFacilityUpgradeResult(''); renderFacilityRemovalCalculator(); toast('装備強化の選択をリセットしました'); return; }
   const facilitySection=e.target.closest('[data-facility-section]'); if(facilitySection){
@@ -11091,7 +11190,9 @@ document.addEventListener('input',e=>{
   if(e.target.closest('[data-monster-drops-editor]')) syncMonsterDropEditor(e.target.closest('[data-monster-drops-editor]'));
   if(e.target.closest('[data-quest-fixed-events-editor]')) syncQuestFixedEventsEditor(e.target.closest('[data-quest-fixed-events-editor]'));
   if(e.target.closest('[data-modifier-editor]')) syncModifierEditor(e.target.closest('[data-modifier-editor]'));
+  if(e.target.closest('[data-named-process-editor]')) syncAdminNamedProcessingEditor(e.target.closest('[data-named-process-editor]'));
   if(e.target.closest('[data-modifier-editor]')) syncModifierEditor(e.target.closest('[data-modifier-editor]'));
+  if(e.target.closest('[data-named-process-editor]')) syncAdminNamedProcessingEditor(e.target.closest('[data-named-process-editor]'));
 });
 document.addEventListener('change',e=>{
   if(e.target?.matches?.('[data-facility-general-area-check]')){
