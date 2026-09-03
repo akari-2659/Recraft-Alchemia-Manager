@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.705</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.712</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1213,10 +1213,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.695">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.712-effect-ui-drive-patch-autosave">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">v90.8.705｜更新：2026年9月3日</div>
+<div class="ra-build-info">Version：v90.8.712 / 最終更新日：2026年9月3日</div>
 
 <header>
   <div class="title-card">
@@ -1943,8 +1943,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
-const RECRAFT_DB_VERSION = 'v90.8.705';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.705';
+const RECRAFT_DB_VERSION = 'v90.8.712';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.712';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -1957,8 +1957,8 @@ const SCHEMA = {
   material_types: ['id','name','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   material_categories: ['id','name','materialType','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
   material_ranks: ['id','name','price','description','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
-  equipment_categories: ['id','name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
-  items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','buyPrice','sellPrice','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','power','maxStack','ammoUse','ammoKind','compatibleWeaponTypes','quiverCapacity','bagCapacity','offhandBonus','reloadTurns','spellSlots','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','enchantTarget','enchantEffectType','enchantValue','enchantDuration','enchantRounds','enchantStackRule','description','effect','processingSkill','processingToolType','processingToolRank','processingRequiredMaterials','processingResultCount','processingDifficulty','processingFee','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeSlotCost','equipmentUpgradeDetail','equipmentUpgradeTarget','namedProcessingOptions','unlockAreaKey','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
+  equipment_categories: ['id','name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','intrinsicEffects','sortOrder','enabled','notes','updatedAt','ownerKey','createdBy'],
+  items: ['id','publicId','dataKind','itemType','itemCategory','materialType','materialCategory','name','csVisible','buyPrice','sellPrice','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','power','maxStack','ammoUse','ammoKind','compatibleWeaponTypes','quiverCapacity','bagCapacity','offhandBonus','reloadTurns','spellSlots','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','enchantTarget','enchantEffectType','enchantValue','enchantDuration','enchantRounds','enchantStackRule','description','effect','equipmentEffects','processingSkill','processingToolType','processingToolRank','processingRequiredMaterials','processingResultCount','processingDifficulty','processingFee','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeSlotCost','equipmentUpgradeDetail','equipmentUpgradeTarget','namedProcessingOptions','unlockAreaKey','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   recipes: ['id','publicId','name','rank','price','recipePrice','limitedRecipePrice','recipeSellPrice','recipeSource','craftSkill','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockAreaKey','unlockOrder','unlockCondition','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   spells: ['id','publicId','type','name','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags','notes','updatedAt','ownerKey','createdBy'],
   skills: ['id','publicId','dataKind','name','rank','category','weaponType','timing','cost','ct','effect','description','drawWeight','balanceTier','balanceReason','enabled','probability','unlockAreaKey','unlockCondition','notes','updatedAt','ownerKey','createdBy'],
@@ -1971,7 +1971,7 @@ const SCHEMA = {
   monsters: ['id','name','monsterType','monsterTraits','rank','hp','mp','evasionValue','resistValue','defenseValue','initiative','encounterValue','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule','passiveName','passiveEffect','actions','drops','habit','description','notes','updatedAt','ownerKey','createdBy']
 };
 const LABELS = {
-  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', buyPrice:'買値', sellPrice:'売値', recipePrice:'販売価格', limitedRecipePrice:'旧限定販売価格', recipeSellPrice:'売値', recipeSource:'レシピ入手先', craftSkill:'製作技能', rank:'ランク', toolRank:'使用可能上限ランク', guaranteeUpgradeMaxRank:'強化確定上限ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統名', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', baseValue:'基礎技能値', hitMod:'命中補正', alwaysDefense:'防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', compatibleWeaponTypes:'対応武器種', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', spellSlots:'術式追加枠', modifiers:'補正値', upgradeLimit:'強化枠上限', upgradeMaterialMinRank:'強化素材最低ランク', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', enchantTarget:'エンチャント対象', enchantEffectType:'エンチャント効果種別', enchantValue:'エンチャント値', enchantDuration:'持続期間', enchantRounds:'持続ラウンド', enchantStackRule:'重複ルール', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', pullRule:'引き寄せ', passiveName:'固有パッシブ名', passiveEffect:'固有パッシブ効果', habit:'習性', description:'説明', effect:'効果', processingSkill:'加工技能', processingToolType:'対応道具', processingToolRank:'必要道具ランク', processingRequiredMaterials:'加工に必要な素材', processingResultCount:'加工完成数', processingDifficulty:'加工難易度', processingFee:'施設加工依頼費', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeSlotCost:'消費強化枠', equipmentUpgradeDetail:'効果説明', equipmentUpgradeTarget:'強化対象', namedProcessingOptions:'異名加工データ', unlockAreaKey:'必要解放エリア', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', requestKind:'依頼区分', questType:'内容種別', areaName:'エリア', questLocation:'実施場所', recommendedSkills:'推奨技能', rewardScope:'報酬範囲', deliveryItems:'納品物', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', battleRoundLimit:'戦闘制限ラウンド', battleRoundSuccess:'制限成功条件', battleRoundFailure:'制限失敗条件', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockKey:'エリア解放キー', unlockOrder:'解放順', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', weatherProfiles:'天気プロファイル', timeProfiles:'時間帯プロファイル', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', rewardTableId:'入手アイテム表ID', rewardDrawCount:'抽選枠数', tablePurpose:'表用途', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠基準難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知基準難易度', trapDisarmDifficulty:'罠解除基準難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', timeSlots:'有効時間帯', weatherWeights:'天気別抽選倍率', timeWeights:'時間帯別抽選倍率', rumorScope:'噂の有効範囲', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', monsterTraits:'魔物特性', hp:'HP', mp:'MP', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'防御値', initiative:'先制値', encounterValue:'遭遇値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ', weaponType:'武器種', timing:'タイミング', cost:'消費', ct:'CT', drawWeight:'排出ウェイト', balanceTier:'強さ区分', balanceReason:'バランス評価', probability:'排出率', unlockCondition:'解放条件'
+  id:'ID', publicId:'公開ID', dataKind:'登録種別', itemType:'アイテム種別', itemCategory:'アイテムカテゴリ', materialType:'素材種別', materialCategory:'素材カテゴリ', name:'名称', csVisible:'キャラシ表示', price:'価格', buyPrice:'買値', sellPrice:'売値', recipePrice:'販売価格', limitedRecipePrice:'旧限定販売価格', recipeSellPrice:'売値', recipeSource:'レシピ入手先', craftSkill:'製作技能', rank:'ランク', toolRank:'使用可能上限ランク', guaranteeUpgradeMaxRank:'強化確定上限ランク', craftType:'製作区分', baseItem:'派生元', branchType:'派生系統名', equipSlot:'装備/使用枠', skill:'使用技能', power:'威力', baseValue:'基礎技能値', hitMod:'命中補正', alwaysDefense:'防御値', guardValue:'防御行動値', evasionMod:'回避補正', maxStack:'最大スタック数', ammoUse:'矢弾消費', ammoKind:'矢弾種別', compatibleWeaponTypes:'対応武器種', quiverCapacity:'矢筒収納種類数', bagCapacity:'バッグ容量', offhandBonus:'副手追撃値', reloadTurns:'装填ターン', spellSlots:'術式追加枠', modifiers:'補正値', upgradeLimit:'強化枠上限', upgradeMaterialMinRank:'強化素材最低ランク', mpCost:'MP', target:'対象', checkType:'判定', element:'属性', enchantTarget:'エンチャント対象', enchantEffectType:'エンチャント効果種別', enchantValue:'エンチャント値', enchantDuration:'持続期間', enchantRounds:'持続ラウンド', enchantStackRule:'重複ルール', physicalAffinity:'物', fireAffinity:'火', waterAffinity:'水', windAffinity:'風', thunderAffinity:'雷', lightAffinity:'光', darkAffinity:'闇', neutralAffinity:'無', pullRule:'引き寄せ', passiveName:'固有パッシブ名', passiveEffect:'固有パッシブ効果', habit:'習性', description:'説明', effect:'旧互換効果全文', equipmentEffects:'固有効果', intrinsicEffects:'武器種固有', processingSkill:'加工技能', processingToolType:'対応道具', processingToolRank:'必要道具ランク', processingRequiredMaterials:'加工に必要な素材', processingResultCount:'加工完成数', processingDifficulty:'加工難易度', processingFee:'施設加工依頼費', source:'入手先', category:'分類', resultItem:'完成品', resultKind:'完成品種別', resultCount:'完成数', requiredMaterials:'必要素材', difficulty:'難度', usageTags:'用途タグ', equipmentUpgradeEffect:'装備強化内容', equipmentUpgradeSlotCost:'消費強化枠', equipmentUpgradeDetail:'効果説明', equipmentUpgradeTarget:'強化対象', namedProcessingOptions:'異名加工データ', unlockAreaKey:'必要解放エリア', unlockFacility:'解放施設', tags:'タグ', notes:'メモ', updatedAt:'更新日時', type:'種別', role:'役割', scrollPrice:'スクロール価格', setItem:'必要装備', rewardMin:'最小報酬', rewardMax:'最大報酬', rewardAvg:'基準報酬', scale:'規模', description:'説明', extraRewards:'追加報酬', sortOrder:'表示順', enabled:'有効', ownerKey:'管理キー', createdBy:'登録者', questCategory:'クエスト分類', requestKind:'依頼区分', questType:'内容種別', areaName:'エリア', questLocation:'実施場所', recommendedSkills:'推奨技能', rewardScope:'報酬範囲', deliveryItems:'納品物', progressStep:'進行度上昇', fixedEvents:'固定イベント', clearCondition:'クリア条件', bossMonster:'設定魔物', questBossName:'クエストボス名', questBossFormation:'クエストボス配置', questBossComposition:'クエストボス構成', battleRoundLimit:'戦闘制限ラウンド', battleRoundSuccess:'制限成功条件', battleRoundFailure:'制限失敗条件', rewardMoney:'報酬金', rewardItems:'報酬アイテム', bonusPoints:'ボーナスポイント', unlockResult:'解放内容', areaType:'エリア種別', difficulty:'難度', unlockKey:'エリア解放キー', unlockOrder:'解放順', unlockCondition:'解放条件', mainMaterials:'主な素材', mainMonsters:'主な魔物', fieldEffect:'フィールド効果', weatherProfiles:'天気プロファイル', timeProfiles:'時間帯プロファイル', eventTableId:'イベント表ID', tableId:'表ID', eventName:'イベント名', eventType:'イベント種別', targetValue:'目標値', treasureTableId:'宝箱表ID', rewardTableId:'入手アイテム表ID', rewardDrawCount:'抽選枠数', tablePurpose:'表用途', encounterCountRule:'出現数ルール', encounterCountMin:'最小出現数', encounterCountMax:'最大出現数', encounterFormation:'配置', encounterComposition:'出現構成', treasureRank:'宝箱ランク', chestName:'宝箱名', hasLock:'鍵', unlockDifficulty:'解錠基準難易度', hasTrap:'罠', trapDetectDifficulty:'罠感知基準難易度', trapDisarmDifficulty:'罠解除基準難易度', trapName:'罠の種類', trapEffect:'罠の効果', entryType:'中身種別', entryName:'中身名称', entryPublicId:'中身公開ID', recipeName:'レシピ名', scrollRank:'スクロールランク', quantity:'数量', weight:'重み', facilityName:'施設名', spellType:'術式種別', spellRank:'術式ランク', candidateTags:'候補タグ', conditionType:'前提条件', conditionValue:'条件内容', timeSlots:'有効時間帯', weatherWeights:'天気別抽選倍率', timeWeights:'時間帯別抽選倍率', rumorScope:'噂の有効範囲', result:'結果', progressEffect:'進行/探索効果', monsterType:'魔物種別', monsterTraits:'魔物特性', hp:'HP', mp:'MP', evasionValue:'回避値', resistValue:'抵抗値', defenseValue:'防御値', initiative:'先制値', encounterValue:'遭遇値', dismantleDifficulty:'解体難易度', actions:'行動', drops:'ドロップ', weaponType:'武器種', timing:'タイミング', cost:'消費', ct:'CT', drawWeight:'排出ウェイト', balanceTier:'強さ区分', balanceReason:'バランス評価', probability:'排出率', unlockCondition:'解放条件'
 };
 function fieldLabelFor(key='', field=''){
   const base=baseKeyForTable(key);
@@ -1988,8 +1988,8 @@ const FORM_PRIMARY_FIELDS = {
   material_types: ['id','name','description','sortOrder','enabled'],
   material_categories: ['name','materialType','description','sortOrder','enabled'],
   material_ranks: ['id','name','price','description','sortOrder','enabled'],
-  equipment_categories: ['name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','sortOrder','enabled'],
-  items: ['name','publicId','csVisible','itemType','itemCategory','buyPrice','sellPrice','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','power','spellSlots','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect','equipmentUpgradeEffect','equipmentUpgradeSlotCost','equipmentUpgradeDetail','equipmentUpgradeTarget','namedProcessingOptions','unlockAreaKey','unlockFacility','tags'],
+  equipment_categories: ['name','itemCategory','equipSlot','skill','element','power','maxStack','offhandBonus','reloadTurns','modifiers','description','effect','intrinsicEffects','sortOrder','enabled'],
+  items: ['name','publicId','csVisible','itemType','itemCategory','buyPrice','sellPrice','rank','toolRank','guaranteeUpgradeMaxRank','equipSlot','skill','power','spellSlots','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect','equipmentEffects','equipmentUpgradeEffect','equipmentUpgradeSlotCost','equipmentUpgradeDetail','equipmentUpgradeTarget','namedProcessingOptions','unlockAreaKey','unlockFacility','tags'],
   recipes: ['name','publicId','rank','recipePrice','recipeSellPrice','recipeSource','craftSkill','price','craftType','category','baseItem','branchType','resultItem','resultKind','resultCount','requiredMaterials','difficulty','description','effect','unlockAreaKey','unlockFacility','tags'],
   materials: ['name','publicId','materialType','materialCategory','rank','buyPrice','sellPrice','source','usageTags','equipmentUpgradeEffect','equipmentUpgradeTarget','description','effect','notes'],
   spells: ['type','name','publicId','rank','mpCost','target','checkType','element','power','description','effect','role','scrollPrice','setItem','unlockFacility','tags'],
@@ -2002,7 +2002,7 @@ const FORM_PRIMARY_FIELDS = {
   appraisal_rules: ['facilityName','scrollRank','difficulty','spellType','spellRank','candidateTags','description','enabled','notes'],
   monsters: ['name','monsterType','monsterTraits','rank','hp','mp','evasionValue','resistValue','defenseValue','initiative','encounterValue','dismantleDifficulty','physicalAffinity','fireAffinity','waterAffinity','windAffinity','thunderAffinity','lightAffinity','darkAffinity','neutralAffinity','pullRule','passiveName','passiveEffect','actions','drops','habit','description','notes']
 };
-const FORM_LONG_FIELDS = new Set(['habit','description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','battleRoundSuccess','battleRoundFailure','rewardItems','deliveryItems','unlockResult','mainMaterials','mainMonsters','weatherProfiles','timeProfiles','weatherWeights','timeWeights','result','progressEffect','actions','drops','passiveEffect','modifiers','encounterComposition','equipmentUpgradeDetail','balanceReason']);
+const FORM_LONG_FIELDS = new Set(['habit','description','description','effect','notes','extraRewards','tags','usageTags','fixedEvents','clearCondition','battleRoundSuccess','battleRoundFailure','rewardItems','deliveryItems','unlockResult','mainMaterials','mainMonsters','weatherProfiles','timeProfiles','weatherWeights','timeWeights','result','progressEffect','actions','drops','passiveEffect','modifiers','encounterComposition','equipmentUpgradeDetail','equipmentEffects','intrinsicEffects','balanceReason']);
 const RECORD_CARD_KEYS = new Set(['items','materials','recipes','spells','skills','exploration_areas']);
 const FIELD_PLACEHOLDERS = {
   id:'種別は任意IDを入力。未入力なら自動生成', name:'例：ポーション', csVisible:'TRUEならキャラシ側のDB装備/アイテム候補に表示。FALSEならDBには残るが候補に出しません。', dataKind:'アイテム / 素材', itemType:'例：武器', itemCategory:'例：片手武器', materialType:'例：採取素材', materialCategory:'例：草花', price:'例：100', buyPrice:'例：180', sellPrice:'例：160', rank:'魔物・素材・装備・道具・レシピ・術式・クエスト・宝箱などは1以上の数値。すべての画面で★N表示', toolRank:'例：6。この道具で扱える上限ランク。道具本体も★6に揃え、飛び番を許可します', guaranteeUpgradeMaxRank:'例：6。このアイテムを使うと★6以下の強化素材を使う装備強化が確定成功になります。', description:'見た目や雰囲気を入力', effect:'数値・ルール処理を入力', source:'例：森、獣系魔物、調合', craftType:'例：武器派生 / 調合 / 鍛冶', baseItem:'例：ロングソード。武器派生の派生元を選びます。', branchType:'例：鉱石 / 獣牙 / 植生 / 異界 / 草角。通常武器は大枠の素材系統、ボス武器は素材・特徴を表す固有系統を入力します。画面では「鉱石派生」のように表示します。', equipmentUpgradeEffect:'効果が単独で分かる名称を設定します。例：威力強化、威力固定強化、回復量強化、回復量固定強化、水属性軽減、抵抗妨害。数値や固有名を別欄へ分けません。', equipmentUpgradeSlotCost:'命中強化・回避強化などの基礎補正は1枠。威力固定強化・回復量固定強化・防御強化・術式枠拡張・術式省力化・属性系効果・技能補助は2枠以上。強力な複合効果やボス固有効果は3枠にできます。装備強化に防御値無視は設定しません。', equipmentUpgradeDetail:'すべての装備強化で、実際に適用される処理・補正・条件・重複可否を具体的に入力します。', upgradeMaterialMinRank:'例：3。この装備を強化できる素材の最低ランク。空欄時は装備ランクを使用します。', bagCapacity:'例：8。バッグ種別アイテムの所持品枠数。maxStackには入れません。', usageTags:'例：回復,薬,探索', notes:'補足メモ', sortOrder:'例：10', ownerKey:'空欄なら公開データ', createdBy:'例：GM名・制作者名', requestKind:'通常依頼のみ：拠点内依頼 / エリア依頼 / 納品依頼。重要クエストは空欄', questType:'例：仕分け / 採取 / 討伐 / 納品 / 制限戦闘 / 運搬保護 / 継続行動', battleRoundLimit:'制限戦闘・継続行動など、戦闘中に期限がある依頼へ設定。例：3。第3ラウンド終了までに成功条件を満たす。期限がない依頼は空欄', battleRoundSuccess:'例：3ラウンド以内に指定魔物を撃破する。', battleRoundFailure:'例：第3ラウンド終了時に指定魔物が生存している場合、対象が撤退してクエスト失敗。', recommendedSkills:'納品依頼以外に設定。例：採取・戦闘系技能', rewardScope:'各PC / パーティー共通', deliveryItems:'例：薬草×3, 中和剤×2', areaName:'例：街はずれの草原', questLocation:'例：拠点 / 街はずれの草原', progressStep:'進行ボタン1回で加算する数値。標準4段階は25、長めの調査・巡回・運搬保護・継続行動は20、短い採取等は50、拠点内単発は100を目安に内容で選択', fixedEvents:'クエスト専用。固定で発生させたい進行区切りだけ登録します。未登録の区切り（0%を含む）は対象エリアのランダムイベントを使用します。探索エリアには通常固定イベントを設定しません', clearCondition:'クリア条件を入力', bossMonster:'例：プチスライム', rewardMoney:'例：80G', rewardItems:'例：ポーション×1', unlockResult:'例：通常依頼の受注許可', areaType:'例：草原 / 異界', difficulty:'例：★1', unlockKey:'例：7UCX-JAUE-E2TH-GLRG-MEGW。エリア名や順番を推測しにくい文字列を設定', unlockOrder:'例：2。表示・並び替え・進行目安に使用します。施設HTMLの自動累積解放には使用しません', unlockAreaKey:'例：area_nearby_forest。商品・作成・派生に必要なエリアID', unlockCondition:'例：初期解放', mainMaterials:'例：薬草, 澄んだ水', mainMonsters:'例：プチスライム', eventTableId:'例：evt_grass_trial', tableId:'例：evt_grass_trial', eventName:'例：薬草の群生', eventType:'例：採取', targetValue:'例：8', treasureTableId:'例：grass_common_cache', rewardTableId:'例：reward_outskirts_grass。拠点内イベント・拠点内依頼・一部エリアイベントで使う入手アイテム表', rewardDrawCount:'例：1 / 2。入手アイテム表から何枠抽選するか', tablePurpose:'宝箱 / 入手アイテム。入手アイテム表は宝箱抽選画面には表示しません', treasureRank:'例：1。画面では★1と表示します', entryType:'例：換金品 / アイテム / レシピ / 未鑑定スクロール', entryName:'例：未鑑定の魔法スクロール：★1', entryPublicId:'例：RCA-XXXX-XXXX', recipeName:'例：ポーション', scrollRank:'例：1。画面では★1と表示します', quantity:'例：1 / 1D3', weight:'例：10。数字が大きいほど出やすい', facilityName:'例：宿屋', spellType:'例：魔法', spellRank:'例：1。画面では★1と表示します', candidateTags:'例：火,攻撃。空欄ならランク内全候補', result:'成功時の結果', progressEffect:'例：次の採取判定+1、または補足効果', monsterType:'大分類：粘体 / 獣 / 虫 / 植物 / 爬虫 / 水棲 / 軟体 / 霊体 / 造魔 / 竜 / 異界', monsterTraits:'例：飛行,甲殻,異界。複数指定はカンマ区切り', encounterValue:'1～3。魔物単体の戦闘負荷。エリアではなく能力・行動の強さで設定します。', dismantleDifficulty:'例：7。採取技能>=解体難易度で判定し、成功時は全ドロップ率+10%（上限100%）。目安はチュートリアル5～6、通常6～9、ボス10以上', pullRule:'可 / 不可', passiveName:'例：胞子反応', passiveEffect:'発動条件・処理・回数制限を具体的に入力', habit:'生息場所・群れ方・警戒時の行動などを1～3文で入力', actions:'行動内容', drops:'例：ゼラチン液：100%（1個）\nぷるぷる膜：50%（1個）', modifiers:'例：hit\t+1\t命中補正。行追加式で能力/技能/戦闘ステータス補正を登録します。', reloadTurns:'例：1。攻撃後に必要な装填ターン数。弩/大型弩は1が目安です。'
@@ -3284,7 +3284,7 @@ const SYSTEM_HELP = [
       "祈祷書のセット術式枠は、1 + 祈祷に割り振ったポイント。",
       "セット術式とセット祈祷は、所持している術式データから選択する。",
       "火球、氷槍、雷撃、光弾、闇弾、爆発範囲などの攻撃・投射・範囲系魔法は回避で防ぐ。",
-      "毒・汚染・呪い・火傷などの状態異常系効果は抵抗または各行動に指定された判定で防ぐ。敵からPCへの状態異常は蓄積せず、1回の判定で付与する。魔物が後衛を対象にできる行動では、PC側の後衛狙い判定-2を適用しない。状態異常の説明には、その状態そのものの効果と自然解除条件だけを書く。解除できるアイテム名・祈祷名・その他の回復手段は列挙しない。解除手段は各アイテム・祈祷・行動側の効果文で管理する。同一個体の行動は、威力・命中・対象範囲・追加効果・貫通・自己強化/自己リスクを合わせて評価し、実質上位互換を作らない。差別化のために弱い側の直接ダメージを安易に上げず、命中・効果・対象・貫通・条件で差を作るか、強い側の直接火力を下げて調整する。毒はラウンド終了時に防御無視の1D3無属性ダメージ、火傷はラウンド終了時に防御無視の1D3火属性ダメージを受け、どちらも戦闘終了後に解除する。汚染はHP回復量-2、呪いは攻撃・魔法・祈祷判定-1。状態名が同じという理由だけで一律に重複禁止にはせず、同一の技・行動から付与された同じ効果は重複しない。別の技・行動による同種効果は、個別に重複禁止が指定されていない限り別枠で扱う。",
+      "毒・汚染・呪い・火傷などの状態異常系効果は抵抗または各行動に指定された判定で防ぐ。敵からPCへの状態異常は蓄積せず、1回の判定で付与する。魔物が後衛を対象にできる行動では、PC側の後衛狙い判定-2を適用しない。状態異常の説明には、その状態そのものの効果と自然解除条件だけを書く。解除できるアイテム名・祈祷名・その他の回復手段は列挙しない。解除手段は各アイテム・祈祷・行動側の効果文で管理する。同一個体の行動は、威力・命中・対象範囲・追加効果・貫通・自己強化/自己リスクを合わせて評価し、実質上位互換を作らない。差別化のために弱い側の直接ダメージを安易に上げず、命中・効果・対象・貫通・条件で差を作るか、強い側の直接火力を下げて調整する。毒はラウンド終了時に1D3の無属性・防御無視ダメージ、火傷はラウンド終了時に1D3の火属性・防御無視ダメージを受け、どちらも戦闘終了後に解除する。汚染はHP回復量-2、呪いは攻撃・魔法・祈祷判定-1。状態名が同じという理由だけで一律に重複禁止にはせず、同一の技・行動から付与された同じ効果は重複しない。別の技・行動による同種効果は、個別に重複禁止が指定されていない限り別枠で扱う。",
       "魔物行動も同じ基準とし、攻撃・投射・範囲攻撃は回避、身体・精神・状態異常系効果は抵抗を達成値にする。",
       "効果文に「抵抗に失敗」とある魔物行動は、必ず抵抗値を使用する。"
     ]
@@ -6645,7 +6645,7 @@ function monsterMemo(row={}){
   return '';
 }
 const MONSTER_STATUS_DEFINITIONS = {
-  '毒状態':['※毒状態：ラウンド終了時に防御無視の1D3無属性ダメージ。戦闘終了後に解除。'],
+  '毒状態':['※毒状態：ラウンド終了時に1D3の無属性・防御無視ダメージ。戦闘終了後に解除。'],
   '汚染':[
     '※汚染I：この戦闘中、受けるHP回復量-2（最低0）。',
     '※汚染II：この戦闘中、受けるHP回復量-4（最低0）。',
@@ -6664,7 +6664,7 @@ const MONSTER_STATUS_DEFINITIONS = {
   '萎縮状態':['※萎縮状態：攻撃判定・魔法判定・祈祷判定-1。次のラウンド終了時に解除する。'],
   '泥まみれ状態':['※泥まみれ状態：攻撃判定-1、回避値-1。次のラウンド終了時に解除する。'],
   '胞子状態':['※胞子状態：魔法判定・祈祷判定-1、抵抗値-1。次のラウンド終了時に解除する。'],
-  '侵蝕胞子状態':['※侵蝕胞子状態：次のラウンド終了まで魔法判定・祈祷判定-1、抵抗値-1。また、2ラウンドの間、各ラウンド終了時に防御無視の1D3無属性ダメージ。2ラウンド目の終了時に解除。'],
+  '侵蝕胞子状態':['※侵蝕胞子状態：次のラウンド終了まで魔法判定・祈祷判定-1、抵抗値-1。また、2ラウンドの間、各ラウンド終了時に1D3の無属性・防御無視ダメージ。2ラウンド目の終了時に解除。'],
   '粘着状態':['※粘着状態：回避値-2、防御行動値-1。次のラウンド終了時に解除する。'],
   '視界不良状態':['※視界不良状態：攻撃判定-1、回避値-1。次のラウンド終了時に解除する。'],
   '体勢崩れ状態':['※体勢崩れ状態：常時防御値-1。次のラウンド終了時に解除する。'],
@@ -7103,6 +7103,33 @@ function renderEventAreaCardsTable(key){
   table.innerHTML=`<tbody><tr><td class="monster-list-cell"><div class="monster-card-list" aria-label="エリア別イベント一覧">${html}</div></td></tr></tbody>`;
 }
 
+function parseAdminEquipmentEffects(value){
+  if(Array.isArray(value)) return value.map(v=>normalizeAdminEquipmentEffect(v)).filter(Boolean);
+  if(value && typeof value==='object') return [normalizeAdminEquipmentEffect(value)].filter(Boolean);
+  const raw=String(value??'').trim();
+  if(!raw) return [];
+  try{
+    const parsed=JSON.parse(raw);
+    const rows=Array.isArray(parsed)?parsed:(parsed&&typeof parsed==='object'?[parsed]:[]);
+    return rows.map(v=>normalizeAdminEquipmentEffect(v)).filter(Boolean);
+  }catch(_){ return []; }
+}
+function normalizeAdminEquipmentEffect(value={}){
+  if(!value || typeof value!=='object') return null;
+  const name=String(value.name??'').trim();
+  const summary=String(value.summary??'').trim();
+  const detail=String(value.detail??value.effect??'').trim();
+  if(!name && !summary && !detail) return null;
+  return {name,summary,detail};
+}
+function adminEquipmentEffectsDisplayText(value){
+  const effects=parseAdminEquipmentEffects(value);
+  if(!effects.length) return '';
+  return effects.map(e=>`《${e.name||'名称未設定'}》 ${e.summary||e.detail||'詳細未設定'}`).join(' / ');
+}
+function equipmentEffectsLegacyText(value){
+  return parseAdminEquipmentEffects(value).map(e=>String(e.detail||'').trim()).filter(Boolean).join('');
+}
 function parseAdminNamedProcessingOptions(value){
   if(Array.isArray(value)) return value.filter(v=>v&&typeof v==='object');
   if(value && typeof value==='object') return [value];
@@ -7126,6 +7153,8 @@ function adminNamedProcessingDisplayText(value){
 }
 function displayFieldValue(row={}, field='', key=''){
   if(field === 'modifiers') return adminModifierDisplayText(row.modifiers || '');
+  if(field === 'equipmentEffects') return adminEquipmentEffectsDisplayText(row.equipmentEffects);
+  if(field === 'intrinsicEffects') return adminEquipmentEffectsDisplayText(row.intrinsicEffects);
   if(field === 'namedProcessingOptions') return adminNamedProcessingDisplayText(row.namedProcessingOptions);
   if(field==='rank' && isStructuredNumericRankRecord(baseKeyForTable(key),row)) return adminRankLabel(row.rank);
   if(baseKeyForTable(key)==='material_ranks' && field==='name') return adminRankLabel(row.name);
@@ -8125,6 +8154,38 @@ function readModifierEditorRows(editor){ return Array.from(editor.querySelectorA
 function syncModifierEditor(editor){ const hidden=editor?.querySelector('[data-form-field="modifiers"]'); if(hidden) hidden.value=serializeModifierEditorRows(readModifierEditorRows(editor)); }
 function syncAllModifierEditors(){ document.querySelectorAll('[data-modifier-editor]').forEach(syncModifierEditor); }
 
+function adminEquipmentEffectRowHtml(row={}, idx=0){
+  const e=normalizeAdminEquipmentEffect(row)||{name:'',summary:'',detail:''};
+  return `<div class="monster-action-row" data-equipment-effect-row style="grid-template-columns:minmax(150px,.65fr) minmax(220px,1fr) minmax(320px,1.6fr) auto;align-items:start">
+    <div class="field"><label>効果名</label><input data-equipment-effect-field="name" value="${escapeHtml(e.name)}" placeholder="例：枝王の茨"></div>
+    <div class="field"><label>一覧用短文</label><input data-equipment-effect-field="summary" value="${escapeHtml(e.summary)}" placeholder="例：命中した敵へ継続ダメージを付与"></div>
+    <div class="field"><label>詳細全文</label><textarea data-equipment-effect-field="detail" placeholder="プレイヤー詳細・チャットパレットへ出す全文">${escapeHtml(e.detail)}</textarea></div>
+    <div class="field"><label>&nbsp;</label><button type="button" class="ghost" data-equipment-effect-remove>削除</button></div>
+  </div>`;
+}
+function adminEquipmentEffectsEditor(value, fieldName='equipmentEffects'){
+  const rows=parseAdminEquipmentEffects(value);
+  const label=fieldName==='intrinsicEffects'?'武器種そのものが持つ能力です。装備個別の固有効果とは分けて表示されます。':'1効果＝1名称で登録します。一覧には短文、詳細とチャットパレットには全文を使います。';
+  return `<div class="monster-actions-editor" data-equipment-effects-editor data-effect-field-name="${escapeHtml(fieldName)}">
+    <textarea data-form-field="${escapeHtml(fieldName)}" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(JSON.stringify(rows))}</textarea>
+    <div class="form-help">${escapeHtml(label)}</div>
+    <div data-equipment-effect-list>${rows.length?rows.map(adminEquipmentEffectRowHtml).join(''):'<div class="muted small" data-equipment-effect-empty>効果はまだありません。</div>'}</div>
+    <button type="button" class="secondary" data-equipment-effect-add>効果を追加</button>
+  </div>`;
+}
+function readAdminEquipmentEffectsEditor(editor){
+  return Array.from(editor?.querySelectorAll('[data-equipment-effect-row]')||[]).map(row=>{
+    const get=k=>row.querySelector(`[data-equipment-effect-field="${k}"]`)?.value??'';
+    return normalizeAdminEquipmentEffect({name:get('name'),summary:get('summary'),detail:get('detail')});
+  }).filter(Boolean);
+}
+function syncAdminEquipmentEffectsEditor(editor){
+  const fieldName=editor?.dataset.effectFieldName||'equipmentEffects';
+  const hidden=editor?.querySelector(`[data-form-field="${fieldName}"]`);
+  if(hidden) hidden.value=JSON.stringify(readAdminEquipmentEffectsEditor(editor));
+}
+function syncAllAdminEquipmentEffectsEditors(){ document.querySelectorAll('[data-equipment-effects-editor]').forEach(syncAdminEquipmentEffectsEditor); }
+
 function adminNamedProcessingEditor(value){
   const options=parseAdminNamedProcessingOptions(value);
   const o=options[0]||null;
@@ -8185,6 +8246,10 @@ function buildFieldInput(key, field, value, rowContext={}){
   let input = '';
   if(field==='modifiers'){
     input = modifierRowsEditor(value);
+  }else if(field==='equipmentEffects' && key==='items'){
+    input = adminEquipmentEffectsEditor(value,'equipmentEffects');
+  }else if(field==='intrinsicEffects' && key==='equipment_categories'){
+    input = adminEquipmentEffectsEditor(value,'intrinsicEffects');
   }else if(field==='namedProcessingOptions' && key==='items'){
     input = adminNamedProcessingEditor(value);
   }else if(key==='monsters' && field==='actions'){
@@ -8233,6 +8298,7 @@ function buildFieldInput(key, field, value, rowContext={}){
   let help = '';
   if(field==='csVisible') help += '<div class="form-help">TRUEならキャラシHTML側のDB装備/アイテム候補に表示。FALSEならDBには残りますが、キャラシ候補には出ません。</div>';
   if(field==='effect' && key==='items' && String(rowContext.dataKind || '').trim()==='素材') help += '<div class="form-help">素材そのものの一般効果だけを入力します。装備強化内容はここへ書かず、魔物素材の場合のみ専用の装備強化項目へ設定します。</div>';
+  if(field==='effect' && key==='items' && ['武器','防具','盾'].includes(String(rowContext.itemType||'').trim())) help += '<div class="form-help">互換用の全文です。通常は「固有効果」の詳細全文から保存時に自動生成します。</div>';
   if(field==='ownerKey') help += '<div class="form-help">空欄なら全員に見える公開データ。入力すると同じ管理キーの人だけ読めます。</div>';
   if(field==='id') help += '<div class="form-help">種別では任意IDを決められます。カテゴリやアイテムは空欄でも自動生成されます。</div>';
   if(field==='publicId') help += '<div class="form-help">プレイヤーへ渡す登録IDです。空欄で保存すると RCA-XXXX-XXXX 形式で自動生成します。</div>';
@@ -8365,12 +8431,21 @@ function currentFormRowSnapshot(){
   if(formState.key==='monsters') syncAllMonsterEditors();
   if(formState.key==='quests') syncAllQuestFixedEventEditors();
   syncAllModifierEditors();
+  syncAllAdminEquipmentEffectsEditors();
   syncAllAdminNamedProcessingEditors();
   const row = formState.key ? (formState.idx===null ? newBlankRow(formState.key) : {...state[formState.key][formState.idx]}) : {};
   if(formState.key==='items' && !row.dataKind) row.dataKind = formState.defaultDataKind || 'アイテム';
   if(formState.key==='items' && row.dataKind!=='素材' && !row.itemType) row.itemType = formState.defaultItemType || currentItemTypeView || '';
   $('editModal')?.querySelectorAll('[data-form-field]').forEach(el=>{ row[el.dataset.formField]=el.value ?? ''; });
-  if(formState.key==='items') row.namedProcessingOptions=parseAdminNamedProcessingOptions(row.namedProcessingOptions);
+  if(formState.key==='items'){
+    row.equipmentEffects=parseAdminEquipmentEffects(row.equipmentEffects);
+    row.namedProcessingOptions=parseAdminNamedProcessingOptions(row.namedProcessingOptions);
+    if(['武器','防具','盾','装飾品'].includes(String(row.itemType||'').trim()) && row.equipmentEffects.length) row.effect=equipmentEffectsLegacyText(row.equipmentEffects);
+  }
+  if(formState.key==='equipment_categories'){
+    row.intrinsicEffects=parseAdminEquipmentEffects(row.intrinsicEffects);
+    if(row.intrinsicEffects.length) row.effect=equipmentEffectsLegacyText(row.intrinsicEffects);
+  }
   return row;
 }
 function itemFormFields(row){
@@ -8397,6 +8472,7 @@ function itemFormFields(row){
     return ['itemType','itemCategory','name','publicId','csVisible','buyPrice','sellPrice','rank','equipSlot','maxStack','target','element','enchantTarget','enchantEffectType','enchantValue','enchantDuration','enchantRounds','enchantStackRule','description','effect','unlockAreaKey','unlockOrder','unlockCondition','unlockFacility','tags','notes'];
   }
   const common=['itemType','itemCategory','name','publicId','csVisible','buyPrice','sellPrice','rank','equipSlot','skill','power','maxStack','offhandBonus','reloadTurns','spellSlots','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect'];
+  if(['武器','防具','盾','装飾品'].includes(itemType)) common.push('equipmentEffects');
   if(['武器','防具','盾'].includes(itemType) || parseAdminNamedProcessingOptions(row.namedProcessingOptions).length) common.push('namedProcessingOptions');
   return [...common,'unlockAreaKey','unlockOrder','unlockCondition','unlockFacility','tags','notes'];
 }
@@ -9076,12 +9152,26 @@ function assertProcessedMaterialRows(rows=[]){
   if(invalid.length) throw new Error(`加工素材はレシピを持たず、加工情報を素材側へ設定してください。自作は対応道具と判定成功で0G、施設依頼には1G以上の加工依頼費を設定します。
 ${invalid.slice(0,10).map(x=>'・'+x).join('\n')}`);
 }
+function assertNamedProcessingArmorDefenseRows(rows=[]){
+  const invalid=[];
+  (rows||[]).forEach(row=>{
+    if(String(row?.itemType||'').trim()!=='防具') return;
+    const options=parseAdminNamedProcessingOptions(row?.namedProcessingOptions);
+    options.forEach(opt=>{
+      if(String(opt?.applyKind||'').trim()==='modifier' && String(opt?.applyTarget||'').trim()==='combat:defense'){
+        invalid.push(String(row?.name||row?.id||'名称未設定'));
+      }
+    });
+  });
+  if(invalid.length) throw new Error(`防具の異名加工では防御値そのものを上げられません。命中・回避など他の常時補正値の上昇とは別ルールです。\n${invalid.slice(0,10).map(name=>'・'+name).join('\n')}`);
+}
 function collectFormRow(){
   const {key,idx}=formState; if(!key) throw new Error('編集中のデータがありません');
   syncAllCheckBuilders($('editModal'));
   if(key==='monsters') syncAllMonsterEditors();
   if(key==='quests') syncAllQuestFixedEventEditors();
   syncAllModifierEditors();
+  syncAllAdminEquipmentEffectsEditors();
   syncAllAdminNamedProcessingEditors();
   const base = idx===null ? newBlankRow(key) : {...state[key][idx]};
   if(key==='items' && !base.dataKind) base.dataKind = formState.defaultDataKind || 'アイテム';
@@ -9090,7 +9180,15 @@ function collectFormRow(){
     const el = $('editModal').querySelector(`[data-form-field="${field}"]`);
     if(el) base[field] = el.value ?? '';
   });
-  if(key==='items') base.namedProcessingOptions=parseAdminNamedProcessingOptions(base.namedProcessingOptions);
+  if(key==='items'){
+    base.equipmentEffects=parseAdminEquipmentEffects(base.equipmentEffects);
+    base.namedProcessingOptions=parseAdminNamedProcessingOptions(base.namedProcessingOptions);
+    if(['武器','防具','盾','装飾品'].includes(String(base.itemType||'').trim()) && base.equipmentEffects.length) base.effect=equipmentEffectsLegacyText(base.equipmentEffects);
+  }
+  if(key==='equipment_categories'){
+    base.intrinsicEffects=parseAdminEquipmentEffects(base.intrinsicEffects);
+    if(base.intrinsicEffects.length) base.effect=equipmentEffectsLegacyText(base.intrinsicEffects);
+  }
   if(base.checkType !== undefined) normalizeRowCheckType(key, base);
   normalizeEncounterPlacementRow(key,base);
   if(key==='equipment_categories' || key==='items') { Object.assign(base, migrateLegacyModifierFields(base)); ensurePhysicalElementForWeapon(base); }
@@ -9120,7 +9218,7 @@ function collectFormRow(){
   }
   const clean = {};
   (SCHEMA[key]||[]).forEach(field=>clean[field]=base[field] === undefined || base[field] === null ? '' : base[field]);
-  if(key==='items'){ assertNumericRankRows('items',[clean]); assertItemPriceRows([clean]); assertItemClassificationRows([clean]); assertWeaponKatakanaNames([clean]); assertWeaponBaseDamageDieRows([clean]); assertUpgradeSlotScopeRows([clean]); assertUpgradeMaterialTargetScopeRows([clean]); assertEquipmentUpgradeMinimumRows([clean]); assertMonsterMaterialUpgradeRows([clean]); assertSpecialUpgradeNonStackRows([clean]); assertNoDefenseIgnoreUpgradeRows([clean]); assertMaterialUpgradeSlotCostRows([clean]); assertMaterialUpgradeSeparationRows([clean]); assertProcessedMaterialRows([clean]); assertMonsterMaterialDescriptionRows([clean]); assertLateAreaMonsterMaterialRankRows([clean]); }
+  if(key==='items'){ assertNumericRankRows('items',[clean]); assertItemPriceRows([clean]); assertItemClassificationRows([clean]); assertWeaponKatakanaNames([clean]); assertWeaponBaseDamageDieRows([clean]); assertUpgradeSlotScopeRows([clean]); assertUpgradeMaterialTargetScopeRows([clean]); assertEquipmentUpgradeMinimumRows([clean]); assertMonsterMaterialUpgradeRows([clean]); assertSpecialUpgradeNonStackRows([clean]); assertNoDefenseIgnoreUpgradeRows([clean]); assertNamedProcessingArmorDefenseRows([clean]); assertMaterialUpgradeSlotCostRows([clean]); assertMaterialUpgradeSeparationRows([clean]); assertProcessedMaterialRows([clean]); assertMonsterMaterialDescriptionRows([clean]); assertLateAreaMonsterMaterialRankRows([clean]); }
   if(key==='material_ranks') assertNumericRankRows('material_ranks',[clean]);
   if(key==='spells') assertNumericRankRows('spells',[clean]);
   if(key==='recipes'){ assertNumericRankRows('recipes',[clean]); assertWeaponBranchMaterialRows([clean]); assertOtherworldAccessoryUpgradeMaterialRows([clean]); const projected=(state.recipes||[]).slice(); if(formState.idx===null) projected.push(clean); else projected[formState.idx]=clean; assertItemPriceRows(state.items||[], projected); }
@@ -10145,8 +10243,8 @@ Code.gsを差し替えて保存し、既存デプロイを新バージョンで�
 }
 function sleep(ms){ return new Promise(resolve=>setTimeout(resolve, ms)); }
 const VERIFY_SAVE_FIELDS = {
-  equipment_categories: ['element','power','modifiers','description','effect','skill','itemCategory','equipSlot'],
-  items: ['dataKind','itemType','itemCategory','materialType','materialCategory','name','rank','toolRank','guaranteeUpgradeMaxRank','power','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect'],
+  equipment_categories: ['element','power','modifiers','description','effect','intrinsicEffects','skill','itemCategory','equipSlot'],
+  items: ['dataKind','itemType','itemCategory','materialType','materialCategory','name','rank','toolRank','guaranteeUpgradeMaxRank','power','modifiers','upgradeLimit','upgradeMaterialMinRank','mpCost','target','checkType','element','description','effect','equipmentEffects','namedProcessingOptions'],
   spells: ['type','name','rank','mpCost','target','checkType','element','power','description','effect'],
   recipes: ['rank','recipePrice','recipeSellPrice','recipeSource','craftSkill','price','craftType','category','baseItem','branchType','resultItem','requiredMaterials','difficulty','description','effect'],
   quest_rewards: ['rank','rewardMin','rewardMax','rewardAvg','scale'],
@@ -10617,7 +10715,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.695';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.711';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-25';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
@@ -10999,6 +11097,16 @@ document.addEventListener('click',e=>{
   const remFixed=e.target.closest('[data-quest-fixed-event-remove]'); if(remFixed){ const editor=remFixed.closest('[data-quest-fixed-events-editor]'); remFixed.closest('[data-quest-fixed-event-row]')?.remove(); const list=editor.querySelector('[data-quest-fixed-event-list]'); if(!list.querySelector('[data-quest-fixed-event-row]')) list.innerHTML='<div class="muted small" data-quest-fixed-empty>固定イベントはまだありません。</div>'; syncQuestFixedEventsEditor(editor); return; }
   const addMod=e.target.closest('[data-modifier-add]'); if(addMod){ const editor=addMod.closest('[data-modifier-editor]'); const list=editor.querySelector('[data-modifier-list]'); list.querySelector('[data-modifier-empty]')?.remove(); const idx=list.querySelectorAll('[data-modifier-row]').length; list.insertAdjacentHTML('beforeend', modifierEditorRowHtml({}, idx)); syncModifierEditor(editor); return; }
   const remMod=e.target.closest('[data-modifier-remove]'); if(remMod){ const editor=remMod.closest('[data-modifier-editor]'); remMod.closest('[data-modifier-row]')?.remove(); const list=editor.querySelector('[data-modifier-list]'); if(!list.querySelector('[data-modifier-row]')) list.innerHTML='<div class="muted small" data-modifier-empty>補正値はまだありません。</div>'; syncModifierEditor(editor); return; }
+  const addEqEffect=e.target.closest('[data-equipment-effect-add]'); if(addEqEffect){
+    const editor=addEqEffect.closest('[data-equipment-effects-editor]'); const list=editor.querySelector('[data-equipment-effect-list]');
+    list.querySelector('[data-equipment-effect-empty]')?.remove();
+    list.insertAdjacentHTML('beforeend',adminEquipmentEffectRowHtml({})); syncAdminEquipmentEffectsEditor(editor); return;
+  }
+  const remEqEffect=e.target.closest('[data-equipment-effect-remove]'); if(remEqEffect){
+    const editor=remEqEffect.closest('[data-equipment-effects-editor]'); remEqEffect.closest('[data-equipment-effect-row]')?.remove();
+    const list=editor.querySelector('[data-equipment-effect-list]'); if(!list.querySelector('[data-equipment-effect-row]')) list.innerHTML='<div class="muted small" data-equipment-effect-empty>効果はまだありません。</div>';
+    syncAdminEquipmentEffectsEditor(editor); return;
+  }
   const addNp=e.target.closest('[data-named-process-add]'); if(addNp){
     const editor=addNp.closest('[data-named-process-editor]');
     const list=editor.querySelector('[data-named-process-list]');
