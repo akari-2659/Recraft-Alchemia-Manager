@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.719</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.721</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1213,10 +1213,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.717-initial-drive-migration">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.721-bag-quiver-area-only">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">Version：v90.8.719 / 最終更新日：2026年9月4日</div>
+<div class="ra-build-info">Version：v90.8.721 / 最終更新日：2026年9月4日</div>
 
 <header>
   <div class="title-card">
@@ -1943,8 +1943,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
-const RECRAFT_DB_VERSION = 'v90.8.719';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.719';
+const RECRAFT_DB_VERSION = 'v90.8.721';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.721';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -1977,7 +1977,7 @@ function fieldLabelFor(key='', field=''){
   const base=baseKeyForTable(key);
   if(base==='quests' && field==='areaName') return '解放段階';
   if(base==='recipes' && field==='price') return '施設依頼費';
-  if(base==='recipes' && field==='recipePrice') return '販売価格';
+  if(base==='recipes' && field==='recipePrice') return '買値';
   if(base==='recipes' && field==='recipeSellPrice') return '売値';
   return LABELS[field] || field;
 }
@@ -7160,6 +7160,12 @@ function displayFieldValue(row={}, field='', key=''){
   if(baseKeyForTable(key)==='material_ranks' && field==='name') return adminRankLabel(row.name);
   if(['toolRank','upgradeMaterialMinRank','guaranteeUpgradeMaxRank'].includes(field) && String(row[field]??'').trim()) return ['toolRank','guaranteeUpgradeMaxRank'].includes(field) ? `${playerRankLabel(row[field])}以下` : adminRankLabel(row[field]);
   if(isStructuredNumericSubRank(baseKeyForTable(key),field)) return adminRankLabel(row[field]);
+  const base=baseKeyForTable(key);
+  if(base==='items' && field==='buyPrice'){const raw=String(row[field]??'').trim();return raw&&Number(raw)>0?`${raw}G`:'購入不可';}
+  if(base==='items' && field==='sellPrice'){const raw=String(row[field]??'').trim();return raw&&Number(raw)!==0?`${raw}G`:'売却不可';}
+  if(base==='recipes' && field==='recipePrice'){const raw=String(row[field]??'').trim();return raw&&Number(raw)>0?`${raw}G`:'購入不可';}
+  if(base==='recipes' && field==='recipeSellPrice'){const raw=String(row[field]??'').trim();return raw&&Number(raw)!==0?`${raw}G`:'売却不可';}
+  if(base==='recipes' && field==='price'){const raw=String(row[field]??'').trim();return raw?`${raw}G`:'';}
   return String(row[field] ?? '').trim();
 }
 function recordFieldHtml(row={}, field='', key=''){
@@ -8311,7 +8317,7 @@ function buildFieldInput(key, field, value, rowContext={}){
   if(field==='rank') help += '<div class="form-help">魔物・素材・装備・道具・レシピ・術式・クエストなど、ランクを持つデータは1以上の数値で管理し、すべての画面で★Nと表示します。</div>';
   if(field==='buyPrice' && baseKeyForTable(key)==='items') help += '<div class="form-help">プレイヤーが店で購入する買値です。店売り品と武器派生の完成品には必ず設定します。既存の買値を販売価格の基準として維持し、価格差の調整は原則として売値側で行います。</div>';
   if(field==='sellPrice' && baseKeyForTable(key)==='items') help += '<div class="form-help">プレイヤーが売却するときの売値です。調合・細工の自作品は、1回の完成品売却総額を『消費素材の売値合計＋施設依頼費の50%』として計算し、複数個完成時は完成数で割って1G未満を切り捨てます。完成品に買値がある場合は買値の80%以下、全必要素材を店頭購入できる場合は完成品売却総額を素材購入総額未満にします。アイテム価格はbuyPrice・sellPriceの2項目だけで管理します。</div>';
-  if(field==='recipePrice' && key==='recipes') help += '<div class="form-help">レシピの販売価格です。常設店売りとレシピショップで共通して使います。入手先に「店売り」が含まれるレシピは常設店、それ以外の販売対象レシピはレシピショップにだけ出ます。</div>';
+  if(field==='recipePrice' && key==='recipes') help += '<div class="form-help">レシピの買値です。常設店売りとレシピショップで共通して使います。入手先に「店売り」が含まれるレシピは常設店、それ以外の販売対象レシピはレシピショップにだけ出ます。</div>';
   if(field==='recipeSellPrice') help += '<div class="form-help">宝箱などで既習レシピと重複した場合に売却できる価格です。販売価格や施設依頼費とは別に管理します。</div>';
   if(field==='price' && key==='recipes') help += '<div class="form-help">施設へ製作を依頼するときの費用です。レシピの販売価格・売値とは別で、施設依頼ではレシピ不要です。</div>';
   if(field==='toolRank') help += '<div class="form-help">この道具で扱えるレシピ・素材の上限ランクです。道具本体のランクも同じ値に揃えます。値は飛び番でも構いません。</div>';
@@ -10715,7 +10721,7 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.711';
+const GITHUB_PUBLIC_DB_VERSION = '90.8.721';
 const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-25';
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
