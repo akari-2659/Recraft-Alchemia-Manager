@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.735</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.729</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.735-fixed-event-check-copy">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.729-party-first-monster-balance">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -207,13 +207,12 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 .token-export-panel .token-export-meta{font-size:12px;color:var(--muted);line-height:1.55}
 .token-export-panel .buttons{margin-top:8px;background:transparent;border:0;padding:0}
 .token-export-status{align-self:center;font-size:12px;font-weight:700;color:var(--muted)}
-.token-export-status.good{color:var(--good)}.token-export-status.bad{color:var(--bad)}.token-export-status.warn{color:#9a6700}
-.token-export-panel button[data-token-export-folder]{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.token-export-status.good{color:var(--good)}.token-export-status.bad{color:var(--bad)}
 </style>
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">Version：v90.8.735 / 最終更新日：2026年9月6日</div>
+<div class="ra-build-info">Version：v90.8.729 / 最終更新日：2026年9月5日</div>
 
 <header>
   <div class="header-inner">
@@ -533,13 +532,14 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 <script src="./assets/vendor/jszip.min.js"></script>
 <script>
 'use strict';
-const VERSION='v90.8.735';
+const VERSION='v90.8.729';
 const GAS_URL='https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
-  // 共通DBは公開GitHub Pagesを正本として最優先する。
-  // 配置階層によって存在しない ./data/public/ を先に待たない。
-  return [GITHUB_COMMON_DB_BASE];
+  const bases=[];
+  try{bases.push(new URL('./data/public/',window.location.href).toString());}catch(_e){}
+  bases.push(GITHUB_COMMON_DB_BASE);
+  return[...new Set(bases.filter(Boolean))];
 }
 function progressManifestMasterInfo(manifest={}){
   const nested=manifest&&manifest.files&&manifest.files.master;
@@ -595,7 +595,7 @@ function tokenParseActions(value=''){const raw=tokenCompact(value);if(!raw)retur
 function encounterSerializeActions(actions=[]){return(actions||[]).map(a=>[a.name||'',a.actionType||'',a.checkType||'',a.target||'',a.element||'',a.power||'',a.effect||'',a.baseValue??''].join('\t')).join('\n');}
 function encounterActionIsDirectDamage(action={}){
   const type=tokenNormalizeActionType(action),power=tokenCompact(action.power);
-  return['近接攻撃','遠距離攻撃','術式','祈祷'].includes(type)&&!!power&&power!=='なし'&&power!=='-';
+  return['近接攻撃','遠距離攻撃','術式','祈祷','特殊'].includes(type)&&!!power&&power!=='なし'&&power!=='-';
 }
 function encounterActionReferencedNames(text='',actionNames=new Set()){
   const source=String(text||''),refs=[];
@@ -613,16 +613,13 @@ function encounterFixedActionNames(monster={},actionNames=new Set()){
 }
 function encounterSelectedActionSet(monster={}){
   const pool=tokenParseActions(monster.actions||'');
-  const isNamed=String(monster.id||'').startsWith('mon_named_')||String(monster.monsterTraits||'').split(/[,、，]/).map(v=>v.trim()).includes('二つ名');
-  const normalSelectable=String(monster.individualValueEnabled||'').toUpperCase()==='TRUE'&&pool.length>3;
-  const namedSelectable=isNamed&&pool.length>4;
-  const selectCount=namedSelectable?4:3;
-  if((!normalSelectable&&!namedSelectable)||pool.length<=selectCount)return{poolSize:pool.length,actions:pool.slice(),selectedNames:pool.map(a=>a.name).filter(Boolean),fixedSelectedNames:[],validLoadoutCount:1};
+  const enabled=String(monster.individualValueEnabled||'').toUpperCase()==='TRUE';
+  if(!enabled||pool.length<=3)return{poolSize:pool.length,actions:pool.slice(),selectedNames:pool.map(a=>a.name).filter(Boolean),fixedSelectedNames:[],validLoadoutCount:1};
   const actionNames=new Set(pool.map(a=>String(a.name||'').trim()).filter(Boolean));
   const explicitFixed=encounterFixedActionNames(monster,actionNames);
   const passiveFixed=encounterActionReferencedNames(monster.passiveEffect||'',actionNames);
   const mandatory=new Set([...explicitFixed,...passiveFixed]);
-  const candidates=encounterActionCombinations(pool,selectCount).filter(combo=>{
+  const candidates=encounterActionCombinations(pool,3).filter(combo=>{
     const selected=new Set(combo.map(a=>String(a.name||'').trim()));
     if([...mandatory].some(name=>!selected.has(name)))return false;
     if(!combo.some(encounterActionIsDirectDamage))return false;
@@ -636,9 +633,9 @@ function encounterSelectedActionSet(monster={}){
     const chosen=pool.filter(a=>mandatory.has(String(a.name||'').trim()));
     const rest=pool.filter(a=>!mandatory.has(String(a.name||'').trim()));
     for(let i=rest.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rest[i],rest[j]]=[rest[j],rest[i]];}
-    for(const action of rest){if(chosen.length>=selectCount)break;chosen.push(action);}
-    if(!chosen.some(encounterActionIsDirectDamage)){const damage=pool.find(encounterActionIsDirectDamage);if(damage&&!chosen.includes(damage)){if(chosen.length>=selectCount)chosen[chosen.length-1]=damage;else chosen.push(damage);}}
-    return chosen.slice(0,selectCount);
+    for(const action of rest){if(chosen.length>=3)break;chosen.push(action);}
+    if(!chosen.some(encounterActionIsDirectDamage)){const damage=pool.find(encounterActionIsDirectDamage);if(damage&&!chosen.includes(damage)){if(chosen.length>=3)chosen[chosen.length-1]=damage;else chosen.push(damage);}}
+    return chosen.slice(0,3);
   };
   const chosen=candidates.length?candidates[Math.floor(Math.random()*candidates.length)]:fallback();
   const selectedNames=chosen.map(a=>String(a.name||'').trim()).filter(Boolean);
@@ -664,22 +661,7 @@ function setTokenExportEncounter(label='',areaName='',groups=[],scope='event'){
 function clearTokenExportEncounter(scope=''){if(scope&&state.tokenExportEncounter?.scope!==scope)return;state.tokenExportEncounter=null;renderTokenExportPanels();}
 function tokenExportPanelId(scope){return scope==='quest'?'questTokenExportPanel':'eventTokenExportPanel';}
 function tokenEncounterTotal(encounter){return(encounter?.groups||[]).reduce((sum,g)=>sum+Math.max(1,Math.floor(Number(g.count)||1)),0);}
-function renderTokenExportPanels(){['quest','event'].forEach(scope=>{const panel=$(tokenExportPanelId(scope));if(!panel)return;const encounter=state.tokenExportEncounter;if(!encounter||encounter.scope!==scope||!encounter.groups?.length){panel.classList.add('hidden');panel.innerHTML='';return;}const summary=encounter.groups.map(g=>`${g.formation||'前衛'}：${g.name} ×${g.count}`).join(' / ');panel.classList.remove('hidden');panel.innerHTML=`<div class="token-export-title">戦闘用の敵駒</div><div class="token-export-meta">${esc(encounter.label||'戦闘')}${encounter.areaName?` / ${esc(encounter.areaName)}`:''}<br>${esc(summary)}</div><div class="buttons"><button type="button" data-token-export="${scope}">駒出力</button><button type="button" data-token-export-folder="${scope}">ZIP保存先設定</button><span class="token-export-status" data-token-export-status="${scope}"></span></div>`;});tokenRefreshExportDirectoryUi();}
-const TOKEN_EXPORT_DIRECTORY_DB='recraft-alchemia-token-export-directory-v1';
-const TOKEN_EXPORT_DIRECTORY_STORE='handles';
-const TOKEN_EXPORT_DIRECTORY_KEY='monsterTokenZipDirectory';
-let tokenExportDirectoryHandleCache=null;
-let tokenExportDirectoryHandleLoaded=false;
-let tokenExportDirectoryHandleLoadPromise=null;
-function tokenDirectoryPickerSupported(){return !!(window.isSecureContext&&window.showDirectoryPicker&&window.indexedDB);}
-function tokenOpenDirectoryDb(){return new Promise((resolve,reject)=>{const req=indexedDB.open(TOKEN_EXPORT_DIRECTORY_DB,1);req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains(TOKEN_EXPORT_DIRECTORY_STORE))db.createObjectStore(TOKEN_EXPORT_DIRECTORY_STORE);};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error('ZIP保存先の保存領域を開けませんでした。'));});}
-async function tokenLoadExportDirectoryHandle(){if(tokenExportDirectoryHandleLoaded)return tokenExportDirectoryHandleCache;if(tokenExportDirectoryHandleLoadPromise)return tokenExportDirectoryHandleLoadPromise;tokenExportDirectoryHandleLoadPromise=(async()=>{try{if(!tokenDirectoryPickerSupported())return null;const db=await tokenOpenDirectoryDb();const handle=await new Promise((resolve,reject)=>{const tx=db.transaction(TOKEN_EXPORT_DIRECTORY_STORE,'readonly'),req=tx.objectStore(TOKEN_EXPORT_DIRECTORY_STORE).get(TOKEN_EXPORT_DIRECTORY_KEY);req.onsuccess=()=>resolve(req.result||null);req.onerror=()=>reject(req.error);});db.close();tokenExportDirectoryHandleCache=handle&&handle.kind==='directory'?handle:null;return tokenExportDirectoryHandleCache;}catch(_e){tokenExportDirectoryHandleCache=null;return null;}finally{tokenExportDirectoryHandleLoaded=true;tokenExportDirectoryHandleLoadPromise=null;}})();return tokenExportDirectoryHandleLoadPromise;}
-async function tokenStoreExportDirectoryHandle(handle){tokenExportDirectoryHandleCache=handle||null;tokenExportDirectoryHandleLoaded=true;if(!tokenDirectoryPickerSupported()||!handle)return;const db=await tokenOpenDirectoryDb();await new Promise((resolve,reject)=>{const tx=db.transaction(TOKEN_EXPORT_DIRECTORY_STORE,'readwrite');tx.objectStore(TOKEN_EXPORT_DIRECTORY_STORE).put(handle,TOKEN_EXPORT_DIRECTORY_KEY);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error||new Error('ZIP保存先を保存できませんでした。'));tx.onabort=()=>reject(tx.error||new Error('ZIP保存先の保存が中断されました。'));});db.close();}
-async function tokenDirectoryPermission(handle,request=false){if(!handle)return'denied';const options={mode:'readwrite'};try{let permission=typeof handle.queryPermission==='function'?await handle.queryPermission(options):'prompt';if(permission==='granted')return permission;if(request&&typeof handle.requestPermission==='function')permission=await handle.requestPermission(options);return permission;}catch(_e){return'denied';}}
-async function tokenRefreshExportDirectoryUi(){const buttons=[...document.querySelectorAll('[data-token-export-folder]')];if(!buttons.length)return;if(!tokenDirectoryPickerSupported()){buttons.forEach(button=>{button.textContent='ZIP保存先：通常DL';button.title='このブラウザでは保存先フォルダの固定に対応していません。';});return;}const handle=await tokenLoadExportDirectoryHandle();buttons.forEach(button=>{button.textContent=handle?.name?`ZIP保存先：${handle.name}`:'ZIP保存先設定';button.title=handle?.name?`現在の保存先：${handle.name}（クリックで変更）`:'ZIP保存先フォルダを選択';});}
-async function tokenChooseExportDirectory(scope='event'){if(!tokenDirectoryPickerSupported()){setTokenExportStatus(scope,'このブラウザでは保存先固定に対応していません。駒出力時は通常ダウンロードします。','warn');return null;}try{const handle=await window.showDirectoryPicker({id:'recraft-alchemia-monster-token-zip',mode:'readwrite'});const permission=await tokenDirectoryPermission(handle,true);if(permission!=='granted'){setTokenExportStatus(scope,'選択したフォルダへの書き込みが許可されませんでした。','bad');return null;}try{await tokenStoreExportDirectoryHandle(handle);}catch(_e){tokenExportDirectoryHandleCache=handle;tokenExportDirectoryHandleLoaded=true;setTokenExportStatus(scope,`保存先：${handle.name}（このセッションのみ保持）`,'warn');await tokenRefreshExportDirectoryUi();return handle;}setTokenExportStatus(scope,`ZIP保存先：${handle.name}`,'good');await tokenRefreshExportDirectoryUi();return handle;}catch(e){if(e?.name==='AbortError'){setTokenExportStatus(scope,'保存先の変更をキャンセルしました。');return null;}setTokenExportStatus(scope,e?.message||String(e),'bad');return null;}}
-async function tokenResolveExportDestination(scope='event'){if(!tokenDirectoryPickerSupported())return{mode:'download',handle:null};let handle=await tokenLoadExportDirectoryHandle();if(!handle){handle=await tokenChooseExportDirectory(scope);if(!handle)return{mode:'cancel',handle:null};return{mode:'directory',handle};}const permission=await tokenDirectoryPermission(handle,true);if(permission==='granted')return{mode:'directory',handle};setTokenExportStatus(scope,`ZIP保存先「${handle.name||'選択済みフォルダ'}」への書き込み許可が必要です。［ZIP保存先］から再設定してください。`,'bad');return{mode:'cancel',handle:null};}
-async function tokenSaveZipBlob(blob,filename,destination){if(destination?.mode==='directory'&&destination.handle){const fileHandle=await destination.handle.getFileHandle(filename,{create:true});const writable=await fileHandle.createWritable();let closed=false;try{await writable.write(blob);await writable.close();closed=true;}finally{if(!closed){try{await writable.abort();}catch(_e){}}}return{mode:'directory',name:destination.handle.name||''};}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);return{mode:'download',name:''};}
+function renderTokenExportPanels(){['quest','event'].forEach(scope=>{const panel=$(tokenExportPanelId(scope));if(!panel)return;const encounter=state.tokenExportEncounter;if(!encounter||encounter.scope!==scope||!encounter.groups?.length){panel.classList.add('hidden');panel.innerHTML='';return;}const summary=encounter.groups.map(g=>`${g.formation||'前衛'}：${g.name} ×${g.count}`).join(' / ');panel.classList.remove('hidden');panel.innerHTML=`<div class="token-export-title">戦闘用の敵駒</div><div class="token-export-meta">${esc(encounter.label||'戦闘')}${encounter.areaName?` / ${esc(encounter.areaName)}`:''}<br>${esc(summary)}</div><div class="buttons"><button type="button" data-token-export="${scope}">駒出力</button><span class="token-export-status" data-token-export-status="${scope}"></span></div>`;});}
 function setTokenExportStatus(scope,text='',type=''){const el=document.querySelector(`[data-token-export-status="${scope}"]`);if(!el)return;el.textContent=String(text||'');el.className=`token-export-status${type?` ${type}`:''}`;}
 function tokenAlphaSuffix(index){let n=Math.max(0,Math.floor(Number(index)||0))+1,out='';while(n>0){n-=1;out=String.fromCharCode(65+n%26)+out;n=Math.floor(n/26);}return out;}
 function tokenRoundCoord(value){return Math.round(Number(value)*100)/100;}
@@ -710,42 +692,8 @@ async function tokenSha256Hex(bytes){const view=bytes instanceof Uint8Array?byte
 async function tokenFetchMonsterImage(monster){const id=String(monster?.baseMonsterId||monster?.id||'').trim();if(!id)throw new Error(`${monster?.name||'魔物'} の画像IDを確認できません。`);const filename=`${id}.png`,subdir=tokenCompact(CCFOLIA_MONSTER_IMAGE_SUBDIR[id]||''),urls=[];try{if(subdir)urls.push(new URL(`./assets/monsters/${subdir}/${filename}`,window.location.href).toString());urls.push(new URL(`./assets/monsters/${filename}`,window.location.href).toString());}catch(_e){}if(subdir)urls.push(`${CCFOLIA_MONSTER_IMAGE_BASE}${subdir}/${filename}`);urls.push(`${CCFOLIA_MONSTER_IMAGE_BASE}${filename}`);let lastError='';for(const url of [...new Set(urls)]){try{const response=await fetch(url,{cache:'no-cache'});if(!response.ok){lastError=`HTTP ${response.status}`;continue;}return new Uint8Array(await response.arrayBuffer());}catch(e){lastError=e?.message||String(e);}}throw new Error(`${monster.name||id} の駒画像を取得できませんでした。${lastError?`（${lastError}）`:''}`);}
 function tokenSafeFilename(text='戦闘'){return String(text||'戦闘').replace(/[\\/:*?"<>|]/g,'_').replace(/\s+/g,' ').trim().slice(0,60)||'戦闘';}
 function tokenTimestamp(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;}
-async function exportCurrentEncounterTokens(scope='event',button=null){
-  const encounter=state.tokenExportEncounter;
-  if(!encounter||encounter.scope!==scope||!encounter.groups?.length){setTokenExportStatus(scope,'出力できる戦闘編成がありません。','bad');return;}
-  if(typeof JSZip==='undefined'){setTokenExportStatus(scope,'ZIP生成ライブラリを読み込めませんでした。','bad');return;}
-  const original=button?.textContent||'駒出力';
-  if(button){button.disabled=true;button.textContent='作成中…';}
-  try{
-    const destination=await tokenResolveExportDestination(scope);
-    if(destination.mode==='cancel')return;
-    setTokenExportStatus(scope,'魔物画像を取得しています…');
-    const instances=tokenBuildInstances(encounter),uniqueMonsters=[...new Map(instances.map(x=>[x.monster.id,x.monster])).values()],imageInfo=new Map();
-    for(let i=0;i<uniqueMonsters.length;i++){
-      const monster=uniqueMonsters[i];
-      setTokenExportStatus(scope,`魔物画像を取得中 ${i+1} / ${uniqueMonsters.length}`);
-      const bytes=await tokenFetchMonsterImage(monster),hash=await tokenSha256Hex(bytes),filename=`${hash}.png`;
-      imageInfo.set(monster.id,{bytes,filename});
-    }
-    const characters={},resources={},orderBase=Date.now()*1000;
-    instances.forEach((instance,index)=>{const info=imageInfo.get(instance.monster.id);characters[tokenCharacterId()]=tokenCharacterData(instance,info.filename,orderBase+index);});
-    imageInfo.forEach(info=>{resources[info.filename]={type:'image/png'};});
-    const data={meta:{version:'1.1.0'},entities:{room:{},items:{},decks:{},notes:{},characters,effects:{},scenes:{},savedatas:{},snapshots:{}},resources},jsonText=JSON.stringify(data),jsonBytes=new TextEncoder().encode(jsonText),token=`0.${await tokenSha256Hex(jsonBytes)}`,zip=new JSZip();
-    zip.file('__data.json',jsonBytes);zip.file('.token',token);imageInfo.forEach(info=>zip.file(info.filename,info.bytes));
-    setTokenExportStatus(scope,'ZIPを生成しています…');
-    const blob=await zip.generateAsync({type:'blob',compression:'STORE'}),source=tokenSafeFilename(encounter.label||encounter.areaName||'戦闘'),filename=`RA_駒_${source}_${tokenTimestamp()}.zip`;
-    const saved=await tokenSaveZipBlob(blob,filename,destination);
-    const destinationText=saved.mode==='directory'?` / 保存先：${saved.name}`:' / 通常ダウンロード';
-    setTokenExportStatus(scope,`出力完了：敵${instances.length}体 / 画像${uniqueMonsters.length}枚${destinationText}`,'good');
-    addLog(`駒出力：${encounter.label||'戦闘'} / 敵${instances.length}体 / 画像${uniqueMonsters.length}枚${destinationText}`);
-  }catch(e){
-    const message=e?.message||String(e);
-    setTokenExportStatus(scope,message,'bad');
-    addLog(`駒出力失敗：${message}`);
-  }finally{
-    if(button){button.disabled=false;button.textContent=original;}
-  }
-}
+async function exportCurrentEncounterTokens(scope='event',button=null){const encounter=state.tokenExportEncounter;if(!encounter||encounter.scope!==scope||!encounter.groups?.length){setTokenExportStatus(scope,'出力できる戦闘編成がありません。','bad');return;}if(typeof JSZip==='undefined'){setTokenExportStatus(scope,'ZIP生成ライブラリを読み込めませんでした。','bad');return;}const original=button?.textContent||'駒出力';if(button){button.disabled=true;button.textContent='作成中…';}setTokenExportStatus(scope,'魔物画像を取得しています…');try{const instances=tokenBuildInstances(encounter),uniqueMonsters=[...new Map(instances.map(x=>[x.monster.id,x.monster])).values()],imageInfo=new Map();for(let i=0;i<uniqueMonsters.length;i++){const monster=uniqueMonsters[i];setTokenExportStatus(scope,`魔物画像を取得中 ${i+1} / ${uniqueMonsters.length}`);const bytes=await tokenFetchMonsterImage(monster),hash=await tokenSha256Hex(bytes),filename=`${hash}.png`;imageInfo.set(monster.id,{bytes,filename});}const characters={},resources={},orderBase=Date.now()*1000;instances.forEach((instance,index)=>{const info=imageInfo.get(instance.monster.id);characters[tokenCharacterId()]=tokenCharacterData(instance,info.filename,orderBase+index);});imageInfo.forEach(info=>{resources[info.filename]={type:'image/png'};});const data={meta:{version:'1.1.0'},entities:{room:{},items:{},decks:{},notes:{},characters,effects:{},scenes:{},savedatas:{},snapshots:{}},resources},jsonText=JSON.stringify(data),jsonBytes=new TextEncoder().encode(jsonText),token=`0.${await tokenSha256Hex(jsonBytes)}`,zip=new JSZip();zip.file('__data.json',jsonBytes);zip.file('.token',token);imageInfo.forEach(info=>zip.file(info.filename,info.bytes));setTokenExportStatus(scope,'ZIPを生成しています…');const blob=await zip.generateAsync({type:'blob',compression:'STORE'}),url=URL.createObjectURL(blob),a=document.createElement('a'),source=tokenSafeFilename(encounter.label||encounter.areaName||'戦闘');a.href=url;a.download=`RA_駒_${source}_${tokenTimestamp()}.zip`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);setTokenExportStatus(scope,`出力完了：敵${instances.length}体 / 画像${uniqueMonsters.length}枚`,'good');addLog(`駒出力：${encounter.label||'戦闘'} / 敵${instances.length}体 / 画像${uniqueMonsters.length}枚`);}catch(e){const message=e?.message||String(e);setTokenExportStatus(scope,message,'bad');addLog(`駒出力失敗：${message}`);}finally{if(button){button.disabled=false;button.textContent=original;}}}
+let currentQuestCategory='重要';
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function clamp(n){return Math.max(0,Math.min(100,Number(n)||0));}
 function now(){return new Date().toLocaleString('ja-JP',{hour12:false});}
@@ -753,7 +701,7 @@ function addLog(text){state.log.unshift(`[${now()}] ${text}`); state.log=state.l
 function renderLog(){ $('log').innerHTML = state.log.length ? state.log.map(x=>`<div>${esc(x)}</div>`).join('') : '<div class="muted">ログはまだありません。</div>'; }
 function setStatus(type,msg){const el=$('dbStatus'); el.className='status '+(type||''); el.textContent=msg;}
 function saveState(show=true){
-  localStorage.setItem(STORE_KEY, JSON.stringify({progress:state.progress, log:state.log, questEncounterCache:state.questEncounterCache||{}, areaBossEncountered:state.areaBossEncountered||{}, partySize:selectedPartySize(), lastQuestFixedEventText:state.lastQuestFixedEventText||'', lastQuestFixedEventKey:state.lastQuestFixedEventKey||'', lastQuestCheckCopyText:state.lastQuestCheckCopyText||'', lastQuestBattleCheckCopyText:state.lastQuestBattleCheckCopyText||'', lastEventCheckCopyText:state.lastEventCheckCopyText||'', lastBaseCheckCopyText:state.lastBaseCheckCopyText||'', triggeredQuestEvents:state.triggeredQuestEvents||{}, lastAreaFixedEventText:state.lastAreaFixedEventText||'', lastAreaFixedEventKey:state.lastAreaFixedEventKey||'', triggeredAreaEvents:state.triggeredAreaEvents||{}, baseUnlockedAreaIds:state.baseUnlockedAreaIds||[], lastBaseEventText:state.lastBaseEventText||'', lastBaseEventKey:state.lastBaseEventKey||'', lastBaseRewardText:state.lastBaseRewardText||'', lastBaseRewardCopyText:state.lastBaseRewardCopyText||'', lastBaseEventRewardState:state.lastBaseEventRewardState||null, lastBaseEventTableRewardState:state.lastBaseEventTableRewardState||null, questRewardCache:state.questRewardCache||{}, treasureSetup:state.treasureSetup||null, treasureContext:state.treasureContext||null, dayState:state.dayState||{day:1,fatigue:0,usedActions:0,awaitingEnd:false}, lastEncounter:state.lastEncounter||null, dropEncounterInstances:state.dropEncounterInstances||[], dropMode:state.dropMode||'single', lastQuestReinforcementText:state.lastQuestReinforcementText||'', questWorkReinforcementCounts:state.questWorkReinforcementCounts||{}, tokenExportEncounter:state.tokenExportEncounter||null, areaWeatherById:state.areaWeatherById||{}, timeSlot:selectedTimeSlot()}));
+  localStorage.setItem(STORE_KEY, JSON.stringify({progress:state.progress, log:state.log, questEncounterCache:state.questEncounterCache||{}, areaBossEncountered:state.areaBossEncountered||{}, partySize:selectedPartySize(), lastQuestFixedEventText:state.lastQuestFixedEventText||'', lastQuestFixedEventKey:state.lastQuestFixedEventKey||'', triggeredQuestEvents:state.triggeredQuestEvents||{}, lastAreaFixedEventText:state.lastAreaFixedEventText||'', lastAreaFixedEventKey:state.lastAreaFixedEventKey||'', triggeredAreaEvents:state.triggeredAreaEvents||{}, baseUnlockedAreaIds:state.baseUnlockedAreaIds||[], lastBaseEventText:state.lastBaseEventText||'', lastBaseEventKey:state.lastBaseEventKey||'', lastBaseRewardText:state.lastBaseRewardText||'', lastBaseRewardCopyText:state.lastBaseRewardCopyText||'', lastBaseEventRewardState:state.lastBaseEventRewardState||null, lastBaseEventTableRewardState:state.lastBaseEventTableRewardState||null, questRewardCache:state.questRewardCache||{}, treasureSetup:state.treasureSetup||null, treasureContext:state.treasureContext||null, dayState:state.dayState||{day:1,fatigue:0,usedActions:0,awaitingEnd:false}, lastEncounter:state.lastEncounter||null, dropEncounterInstances:state.dropEncounterInstances||[], dropMode:state.dropMode||'single', lastQuestReinforcementText:state.lastQuestReinforcementText||'', questWorkReinforcementCounts:state.questWorkReinforcementCounts||{}, tokenExportEncounter:state.tokenExportEncounter||null, areaWeatherById:state.areaWeatherById||{}, timeSlot:selectedTimeSlot()}));
   if(show) addLog('進行状態を保存しました。');
 }
 function loadState(){
@@ -772,10 +720,6 @@ function restoreSavedState(){
     state.areaBossEncountered=(data.areaBossEncountered&&typeof data.areaBossEncountered==='object')?data.areaBossEncountered:(state.areaBossEncountered||{});
     state.lastQuestFixedEventText=data.lastQuestFixedEventText||state.lastQuestFixedEventText||'';
     state.lastQuestFixedEventKey=data.lastQuestFixedEventKey||state.lastQuestFixedEventKey||'';
-    state.lastQuestCheckCopyText=data.lastQuestCheckCopyText||state.lastQuestCheckCopyText||'';
-    state.lastQuestBattleCheckCopyText=data.lastQuestBattleCheckCopyText||state.lastQuestBattleCheckCopyText||'';
-    state.lastEventCheckCopyText=data.lastEventCheckCopyText||state.lastEventCheckCopyText||'';
-    state.lastBaseCheckCopyText=data.lastBaseCheckCopyText||state.lastBaseCheckCopyText||'';
     state.triggeredQuestEvents=(data.triggeredQuestEvents&&typeof data.triggeredQuestEvents==='object')?data.triggeredQuestEvents:(state.triggeredQuestEvents||{});
     state.lastAreaFixedEventText=data.lastAreaFixedEventText||state.lastAreaFixedEventText||'';
     state.lastAreaFixedEventKey=data.lastAreaFixedEventKey||state.lastAreaFixedEventKey||'';
@@ -1162,17 +1106,10 @@ function progressPostAction(action,params={},timeoutMs=30000){
   });
 }
 function progressGithubDelay(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
-async function progressFetchJson(url,timeoutMs=12000,cacheMode='force-cache'){
-  const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),Math.max(1000,Number(timeoutMs)||12000));
-  try{
-    const response=await fetch(url,{cache:cacheMode,signal:controller.signal});
-    if(!response.ok)throw new Error(`HTTP ${response.status}`);
-    return await response.json();
-  }catch(error){
-    if(error&&error.name==='AbortError')throw new Error(`GitHub共通DBの取得がタイムアウトしました（${Math.round((Number(timeoutMs)||12000)/1000)}秒）`);
-    throw error;
-  }finally{clearTimeout(timer);}
+async function progressFetchJson(url){
+  const response=await fetch(url,{cache:'no-store'});
+  if(!response.ok)throw new Error(`HTTP ${response.status}`);
+  return response.json();
 }
 function normalizeProgressMaster(document,manifest={}){
   const data=document&&document.data&&typeof document.data==='object'?document.data:document;
@@ -1181,36 +1118,34 @@ function normalizeProgressMaster(document,manifest={}){
   if(missing.length)throw new Error(`共通DBに必要な表がありません：${missing.join(', ')}`);
   const manifestVersion=String(manifest.version||'').trim();
   const masterVersion=String(document&&document.version||'').trim();
-  const normalizeVersion=value=>String(value||'').trim().replace(/^v/i,'');
-  return {data,version:masterVersion||manifestVersion,versionWarning:manifestVersion&&masterVersion&&normalizeVersion(manifestVersion)!==normalizeVersion(masterVersion)?`manifest ${manifestVersion} / master ${masterVersion}`:''};
+  return {data,version:masterVersion||manifestVersion,versionWarning:manifestVersion&&masterVersion&&manifestVersion!==masterVersion?`manifest ${manifestVersion} / master ${masterVersion}`:''};
 }
 async function fetchGithubProgressMaster(){
   const errors=[];
   let usableMismatch=null;
   for(const base of progressGithubBaseCandidates()){
     let lastError=null;
-    for(let attempt=0;attempt<2;attempt++){
+    for(let attempt=0;attempt<3;attempt++){
+      const token=`${Date.now()}_${attempt}_${Math.random().toString(36).slice(2)}`;
       try{
-        // manifestは小さいため毎回再検証し、masterだけを内容SHA単位でキャッシュする。
         const manifestUrl=new URL('manifest.json',base);
-        const manifest=await progressFetchJson(manifestUrl.toString(),6000,'no-cache');
+        manifestUrl.searchParams.set('_ra',token);
+        const manifest=await progressFetchJson(manifestUrl.toString());
         const info=progressManifestMasterInfo(manifest);
         if(!info.file||info.file.includes('..')||info.file.includes('\\'))throw new Error('共通DBのmasterファイル名が不正です。');
         const masterUrl=new URL(info.file,base);
-        masterUrl.searchParams.set('_ra',info.sha256||String(manifest.version||'master'));
-        // 1回目は同一SHAのブラウザキャッシュを再利用。版不整合時だけ2回目をreloadしてCDN反映待ちを回避する。
-        const masterCacheMode=attempt===0?'force-cache':'reload';
-        const result=normalizeProgressMaster(await progressFetchJson(masterUrl.toString(),15000,masterCacheMode),manifest);
+        masterUrl.searchParams.set('_ra',`${info.sha256||String(manifest.version||'master')}_${token}`);
+        const result=normalizeProgressMaster(await progressFetchJson(masterUrl.toString()),manifest);
         if(!result.versionWarning)return result;
         usableMismatch=result;
         lastError=new Error(`共通DBの更新反映待ちです（${result.versionWarning}）`);
       }catch(error){lastError=error;}
-      if(attempt<1)await progressGithubDelay(350);
+      if(attempt<2)await progressGithubDelay(250*(attempt+1));
     }
     try{
-      // manifest経路だけが壊れた場合の最終フォールバック。固定キャッシュにはせず必ず再検証する。
       const directUrl=new URL('recraft_alchemia_master.json',base);
-      return normalizeProgressMaster(await progressFetchJson(directUrl.toString(),15000,'no-cache'),{master:'recraft_alchemia_master.json'});
+      directUrl.searchParams.set('_ra',`${Date.now()}_direct_${Math.random().toString(36).slice(2)}`);
+      return normalizeProgressMaster(await progressFetchJson(directUrl.toString()),{master:'recraft_alchemia_master.json'});
     }catch(directError){errors.push(`${base}: ${[lastError&&lastError.message,directError&&directError.message].filter(Boolean).join(' / ')}`);}
   }
   if(usableMismatch)return usableMismatch;
@@ -1263,16 +1198,15 @@ async function acquireProgressMaster(){
     saveMasterCache(github.data,github.version);
     return {...github,source:'GitHub共通DB'};
   }catch(githubError){
-    console.warn('GitHub共通DBを利用できません。',githubError);
-    const cached=loadMasterCache();
-    if(cached)return {...cached,source:'前回キャッシュ',warning:githubError.message||String(githubError)};
-    console.warn('前回キャッシュがないためGASへ切り替えます。');
+    console.warn('GitHub共通DBを利用できないためGASへ切り替えます。',githubError);
     try{
-      const gas=await jsonp({action:'progressMaster'},20000);
+      const gas=await jsonp({action:'progressMaster'});
       const normalized=normalizeProgressMaster(gas,{});
       saveMasterCache(normalized.data,gas.version||'');
       return {...normalized,version:String(gas.version||''),source:'GASフォールバック',warning:githubError.message||String(githubError)};
     }catch(gasError){
+      const cached=loadMasterCache();
+      if(cached)return {...cached,source:'前回キャッシュ',warning:[githubError.message,gasError.message].filter(Boolean).join(' / ')};
       throw new Error(`共通DBの自動読込に失敗しました：${[githubError.message,gasError.message].filter(Boolean).join(' / ')}`);
     }
   }
@@ -1509,21 +1443,13 @@ function questBattleInternalCheckCopyText(q={},e={}){
 function questBattleInternalCheckDisplayText(q={},e={}){const info=questBattleInternalCheckInfo(q,e);return info?info.line:'';}
 function questFixedEventCheckCopyText(q={},e={},resolvedEncounter=null){
   const internal=questBattleInternalCheckInfo(q,e);
-  // 固定イベントでも通常イベントと同じく「判定コピー」を必ず維持する。
-  // 戦闘内判定がある固定戦闘では、メイン判定コピーは遭遇時の感知、
-  // 「戦闘内判定コピー」は主行動内の判定を別ボタンで扱う。
-  if(internal){
-    const groups=resolvedEncounter?encounterGroupsForDrop({},resolvedEncounter,effectiveQuestPartySize(q)):eventEncounterGroupsForCopy(e,effectiveQuestPartySize(q));
-    const highest=encounterHighestInitiative(groups);
-    if(highest!==null){
-      const composition=(groups||[]).map(g=>`${publicEncounterMonsterName(g.name)}×${Math.max(1,Math.floor(Number(g.count)||1))}`).join('・');
-      const name=String(e.eventName||'名称未設定').trim()||'名称未設定';
-      return `【固定：${name}】\n感知 / 達成値：${highest}${composition?` / ${composition}`:''}`;
-    }
-    // 編成解決に失敗しても、登録済み判定そのものまで消さない。
-    return eventCheckCopyText(e,true);
-  }
-  return eventCheckCopyText(e,true);
+  if(!internal)return eventCheckCopyText(e,true);
+  const groups=resolvedEncounter?encounterGroupsForDrop({},resolvedEncounter,effectiveQuestPartySize(q)):eventEncounterGroupsForCopy(e,effectiveQuestPartySize(q));
+  const highest=encounterHighestInitiative(groups);
+  if(highest===null)return'';
+  const composition=(groups||[]).map(g=>`${publicEncounterMonsterName(g.name)}×${Math.max(1,Math.floor(Number(g.count)||1))}`).join('・');
+  const name=String(e.eventName||'名称未設定').trim()||'名称未設定';
+  return `【固定：${name}】\n感知 / 達成値：${highest}${composition?` / ${composition}`:''}`;
 }
 function questWorkCheckText(q={}){const e=questWorkEvent(q);return e?questBattleInternalCheckDisplayText(q,e):'';}
 function workQuestReinforcementProfile(q={},size=effectiveQuestPartySize(q)){
@@ -2674,7 +2600,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.735-fixed-action-loadout-1';
+const ENCOUNTER_RULE_VERSION='v90.8.729-fixed-action-loadout-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -3256,12 +3182,7 @@ function individualBounty(base=0,ranks={},tendency='標準'){
 function encounterMonsterIsFixed(monster={}){return String(monster.individualValueEnabled||'').toUpperCase()==='FALSE'||String(monster.id||'').startsWith('mon_named_')||String(monster.monsterTraits||'').split(/[,、，]/).map(v=>v.trim()).includes('ボス');}
 function generateEncounterIndividual(monster={},options={}){
   const fixed=encounterMonsterIsFixed(monster)||String(monster.individualValueEnabled||'').toUpperCase()!=='TRUE';
-  if(fixed){
-    const bounty=Math.max(0,Number(monster.bountyG)||0),variant=JSON.parse(JSON.stringify(monster));
-    const selected=encounterSelectedActionSet(variant);
-    variant.actions=encounterSerializeActions(selected.actions);
-    return{monster:variant,iv:{fixed:true,hp:'B',evasion:'B',resist:'B',attack:'標準'},bountyG:bounty,selectedActionNames:selected.selectedNames||[],selectedFixedActionNames:selected.fixedSelectedNames||[],actionPoolSize:selected.poolSize,validLoadoutCount:selected.validLoadoutCount||1};
-  }
+  if(fixed){const bounty=Math.max(0,Number(monster.bountyG)||0),actions=tokenParseActions(monster.actions||'');return{monster:JSON.parse(JSON.stringify(monster)),iv:{fixed:true,hp:'B',evasion:'B',resist:'B',attack:'標準'},bountyG:bounty,selectedActionNames:[],selectedFixedActionNames:[],actionPoolSize:actions.length,validLoadoutCount:1};}
   const forced=!!options.fixedIv;
   const ranks={hp:forced?'B':individualRollRank(individualStatWidth(monster,'hp')),evasion:forced?'B':individualRollRank(individualStatWidth(monster,'evasion')),resist:forced?'B':individualRollRank(individualStatWidth(monster,'resist'))};
   const attack=forced?'標準':individualRollAttackTendency(individualAttackWidth(monster));
@@ -4567,9 +4488,6 @@ function eventRewardTrigger(clause='',branchKey=''){
   const skillSuccess=text.match(/^([^：:。]{1,24}?)成功\s*[：:]/);
   if(skillSuccess){const key=String(skillSuccess[1]||'').trim()||'判定';return{kind:'success',value:0,label:key==='判定'?'判定成功':`${key}成功`,branchKey:key};}
   if(/^判定成功\s*[：:]/.test(text)||/^成功\s*[：:]/.test(text))return{kind:'success',value:0,label:'判定成功',branchKey:'判定'};
-  // 固定イベント内の条件付きクエスト成否は、GM内部ルールではなく成立結果として手動選択できるようにする。
-  if(/クエストクリア/.test(text))return{kind:'questClear',value:0,label:'クエストクリア',branchKey:'questOutcome'};
-  if(/クエスト失敗/.test(text)||/(?:なら|場合は)失敗$/.test(text))return{kind:'questFailure',value:0,label:'クエスト失敗',branchKey:'questOutcome'};
   return{kind:'always',value:0,label:'条件なし',branchKey:''};
 }
 function eventRewardRoll(expr='1'){
@@ -4591,11 +4509,8 @@ function eventRewardItemsFromClause(clause='',previousItemName=''){
 function eventVictoryHasMeaningfulPostBattle(clause=''){
   const text=String(clause||'').replace(/^勝利後\s*[、,:：]?\s*/,'');
   if(!/ドロップ判定/.test(text))return true;
-  // 「ドロップ判定を行ってクエストクリア」のように同一節へ後続結果が続く場合、
-  // ドロップ判定部分を貪欲に削ってクエストクリアまで消してはいけない。
-  return /クエストクリア|解放|入手|回収|獲得|補正|回復|進行|解除|発見|追加報酬|報酬|帰還|到達|完了|達成|運搬|巡回|続ける/.test(text);
+  return /クエストクリア|解放|入手|回収|獲得|補正|回復|進行|解除|発見|追加報酬|報酬/.test(text.replace(/ドロップ判定[^。、]*/g,''));
 }
-// v90.8.735: 『○○を入手してクエストクリア』のような結果文は内容コピー対象から落とさない。
 function eventClauseIsOperationalRule(clause='',row={}){
   const text=String(clause||'').trim();if(!text)return false;
   // 判定・戦闘構成・特殊戦闘の進行管理など、GMが処理するためのルール文は内容コピーへ出さない。
@@ -4607,24 +4522,21 @@ function eventClauseIsOperationalRule(clause='',row={}){
     /^最終ダメージ/,/^ダメージが0/,/^防御などで最終ダメージ/,/^毒などの継続ダメージ/,/^HPコスト/,
     /^増援/,/^第\d+ラウンド/,/^特殊条件\s*[：:]/,/^随伴を含めて/,/^1人パーティーでは/,
     /^必要素材\s*[：:]/,/作成時に消費/,/作成できず.*(?:未達成|失敗)/,
-    /^クエスト(?:クリア|失敗)$/,/途中変更はできない/,/連続成功回数/,/リセットしない/,/0に戻/,
-    /解体・ドロップ判定の対象/,/^(?:出現した)?各魔物のドロップ判定(?:を)?(?:1回ずつ)?行う$/,/^二つ名個体のドロップ判定(?:を)?(?:1回ずつ)?行う$/,/採取・解体判定は行わず/,/宝箱表「[^」]+」から.*抽選/,
-    /全員を後衛には配置しない/,/人数対応.*(?:編成|随伴)/,
-    /^[^：:。]{1,24}?で代用可能（判定\s*[+\-−－]?\d+）$/,
-    /^(?:前衛|後衛)に.+(?:×|との戦闘)/,/^PCはこの場で挑むか/,/^挑む場合のみ/,
-    /^判定後に解除(?:する)?$/,/^休息(?:を選ぶ|しない)\s*[：:]/
+    /クエスト(?:クリア|失敗)/,/途中変更はできない/,/連続成功回数/,/リセットしない/,/0に戻/,
+    /解体・ドロップ判定の対象/,/各魔物のドロップ判定/,/採取・解体判定は行わず/,/宝箱表「[^」]+」から.*抽選/,
+    /全員を後衛には配置しない/,/人数対応.*(?:編成|随伴)/
   ];
   return rulePatterns.some(re=>re.test(text));
 }
 function eventAlwaysClauseHasMeaningfulContent(clause='',row={}){
   const text=String(clause||'').trim();
   if(!text||eventClauseIsOperationalRule(text,row))return false;
-  // ドロップ判定だけの後処理・単独の成否ラベルは、卓へ貼る「内容」ではない。
+  // ドロップ判定だけの勝利後処理も内容としては扱わない。
   if(/^勝利後.*ドロップ判定(?:を)?(?:1回ずつ)?行う$/.test(text))return false;
-  if(/^クエスト(?:クリア|失敗)$/.test(text))return false;
-  // 固定イベントではクエスト専用アイテム、次イベントへの補正、条件付きクリア等が
-  // 共通アイテムDBに載らないことがある。内部処理文でなければ成立結果として保持する。
-  return true;
+  // 無条件文は「処理説明」ではなく、卓へ貼れる描写・発見・授与などに限定する。
+  const narrative=/(?:発見|見つけ|見える|見えた|聞こえ|現れ|姿を見せ|姿が|光る|輝く|揺れ|漂う|広がる|差し込|埋もれ|収められ|授け|手渡|認め|残され|残っている|たどり着|咲く|香り|影が|気配が|声が|跡が)/;
+  const tangible=/(?:入手|獲得|授け|手渡|宝箱|褒賞箱|未鑑定の(?:魔法|祈祷)スクロール)/;
+  return narrative.test(text)||tangible.test(text);
 }
 function buildEventRewardState(row={}){
   const clauses=String(row.result||'').split(/[。\n]+/).map(x=>x.trim()).filter(Boolean);const groups=[];let previousItemName='',currentBranchKey='',lastSuccessBranchKey='';
@@ -4632,18 +4544,14 @@ function buildEventRewardState(row={}){
     let trigger=eventRewardTrigger(clause,currentBranchKey);
     if(trigger.kind==='threshold'&&!String(trigger.branchKey||''))trigger={...trigger,branchKey:lastSuccessBranchKey||'判定'};
     if(trigger.kind==='success'){currentBranchKey=String(trigger.branchKey||'判定');lastSuccessBranchKey=currentBranchKey;}else if(trigger.kind==='failure'||trigger.kind==='victory')currentBranchKey='';
-    const questOutcome=['questClear','questFailure'].includes(trigger.kind);
-    // クエスト成否を含む節は、文頭が「作業完了後」「運搬役…」など内部ルールの形でも成立結果として残す。
-    const operational=eventClauseIsOperationalRule(clause,row)&&!questOutcome;
+    const operational=eventClauseIsOperationalRule(clause,row);
     const items=operational?[]:eventRewardItemsFromClause(clause,previousItemName),tableSlots=operational?0:eventRewardTableSlotsFromClause(clause),explicitNoReward=!operational&&/入手なし|追加素材なし/.test(clause);
-    const branch=['success','failure','threshold','victory','questClear','questFailure'].includes(trigger.kind),meaningfulBranch=!operational&&branch&&(trigger.kind!=='victory'||eventVictoryHasMeaningfulPostBattle(clause));
+    const branch=['success','failure','threshold','victory'].includes(trigger.kind),meaningfulBranch=!operational&&branch&&(trigger.kind!=='victory'||eventVictoryHasMeaningfulPostBattle(clause));
     const meaningfulAlways=!operational&&trigger.kind==='always'&&eventAlwaysClauseHasMeaningfulContent(clause,row);
     if(!items.length&&!tableSlots&&!explicitNoReward&&!meaningfulBranch&&!meaningfulAlways)return;
     if(items.length)previousItemName=items.at(-1).selectedName||previousItemName;
     if(trigger.kind==='always')trigger={...trigger,label:(items.length||tableSlots)?'入手':'描写'};
-    const hasSelectedSuccess=groups.some(g=>g.trigger.kind==='success'&&g.selected);
-    const hasSelectedQuestOutcome=groups.some(g=>['questClear','questFailure'].includes(g.trigger.kind)&&g.selected);
-    const selected=trigger.kind==='always'||(trigger.kind==='success'&&!hasSelectedSuccess)||(trigger.kind==='victory'&&!groups.some(g=>['success','failure','threshold'].includes(g.trigger.kind)))||(trigger.kind==='questClear'&&!hasSelectedQuestOutcome);
+    const hasSelectedSuccess=groups.some(g=>g.trigger.kind==='success'&&g.selected),selected=trigger.kind==='always'||(trigger.kind==='success'&&!hasSelectedSuccess)||(trigger.kind==='victory'&&!groups.some(g=>['success','failure','threshold'].includes(g.trigger.kind)));
     groups.push({uid:eventRewardUid(),trigger,clause,items,tableSlots,selected});
   });
   return groups.length?{eventName:String(row.eventName||row.name||'イベント'),row:{...row},groups}:null;
@@ -4763,9 +4671,7 @@ function eventOutcomeCleanClause(row={},clause='',partySize=selectedPartySize())
   // 代用可能技能の注記は判定情報側だけに残し、「内容コピー」には混ぜない。
   text=text.replace(/[^\s、。：「」()（）]+?で代用可能（判定\s*[+\-−－]?\d+）[。]?\s*/g,'');
   text=text.replace(/^目標値\s*\+\s*\d+\s*以上\s*[：:]\s*/,'');
-  text=text.replace(/^勝利後\s*[、,:：]?\s*/,'');
-  // ドロップ判定そのものはGM処理。後ろに続く「運搬を続ける」「クエストクリア」等だけを内容へ残す。
-  text=text.replace(/^(?:出現した)?各魔物のドロップ判定(?:を)?(?:1回ずつ)?行(?:い|って)\s*[、,]?\s*/,'');
+  text=text.replace(/^勝利後\s*[：:]\s*/,'');
   text=text.replace(/^失敗\s*[：:]\s*/,'');
   text=text.replace(/^判定成功\s*[：:]\s*/,'');
   text=text.replace(/^[^：:。]{1,24}?成功\s*[：:]\s*/,'');
@@ -4855,9 +4761,6 @@ function updateEventRewardSelection(scope,uid,checked){
   const sameBranch=g=>String(g.trigger.branchKey||'')===key;
   if(target.trigger.kind==='failure'&&checked){
     reward.groups.forEach(g=>{if(g.trigger.kind!=='always'&&g!==target)g.selected=false;});
-  }
-  if(['questClear','questFailure'].includes(target.trigger.kind)&&checked){
-    reward.groups.forEach(g=>{if(g!==target&&['questClear','questFailure'].includes(g.trigger.kind))g.selected=false;});
   }
   if(target.trigger.kind==='success'){
     if(checked){
@@ -5021,7 +4924,6 @@ $('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){su
     const choice=e.target.closest('[data-event-reward-choice]');if(choice){const panel=choice.closest('#questEventRewardPanel,#eventRewardPanel,#baseEventRewardPanel'),scope=panel?.id==='questEventRewardPanel'?'quest':panel?.id==='baseEventRewardPanel'?'base':'event',reward=eventRewardState(scope),group=reward?.groups.find(g=>String(g.uid)===String(choice.dataset.eventRewardChoice)),item=group?.items.find(x=>String(x.uid)===String(choice.dataset.eventRewardItem));if(item)item.selectedName=choice.value;syncEventTableRewardCopyState(scope);renderEventRewardPanel(scope);if(scope==='base')updateBaseEventItemCopyButton();else if(scope==='quest')updateQuestEventItemCopyButton();else updateAreaEventItemCopyButton();}
   });
   document.addEventListener('click',e=>{
-    const tokenExportFolder=e.target.closest('[data-token-export-folder]');if(tokenExportFolder){tokenChooseExportDirectory(tokenExportFolder.dataset.tokenExportFolder||'event');return;}
     const tokenExport=e.target.closest('[data-token-export]');if(tokenExport){exportCurrentEncounterTokens(tokenExport.dataset.tokenExport||'event',tokenExport);return;}
     const importantResolve=e.target.closest('[data-important-use-resolve]');if(importantResolve){resolveDeclaredImportantItem(importantResolve.dataset.importantUseResolve||'event');return;}
     const importantCopy=e.target.closest('[data-important-use-copy]');if(importantCopy){const scope=importantCopy.dataset.importantUseCopy||'event';copyText(importantUseCopyState[scope]||'',scope==='quest'?'questCopyNote':scope==='base'?'baseEventCopyNote':'eventCopyNote');return;}
@@ -5072,7 +4974,6 @@ $('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){su
   $('rollDropBtn').addEventListener('click',rollDrops); $('copyDropSuccessBtn').addEventListener('click',()=>copyText(state.lastDropSuccessText,'dropCopyNote'));
   $('copyLogBtn').addEventListener('click',()=>copyText(state.log.slice().reverse().join('\n'))); $('clearLogBtn').addEventListener('click',()=>{state.log=[]; renderLog(); saveState(false);});
 }
-tokenLoadExportDirectoryHandle().then(()=>tokenRefreshExportDirectoryUi()).catch(()=>{});
 loadState(); bind(); renderLog(); setStatus('warn', 'GitHub共通DBを自動読込しています。'); loadDb({auto:true}); loadCommunityGatheringManager();
 </script>
 
