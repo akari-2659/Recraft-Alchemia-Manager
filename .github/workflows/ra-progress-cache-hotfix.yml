@@ -1,0 +1,100 @@
+name: RA progress common DB cache hotfix
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ra-progress-cache-hotfix.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore browser cache for progress common DB
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('progress_manager.html')
+          s=p.read_text(encoding='utf-8')
+
+          old="""async function progressFetchJson(url,timeoutMs=12000){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),Math.max(1000,Number(timeoutMs)||12000));
+  try{
+    const response=await fetch(url,{cache:'no-store',signal:controller.signal});
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  }catch(error){
+    if(error&&error.name==='AbortError')throw new Error(`GitHub共通DBの取得がタイムアウトしました（${Math.round((Number(timeoutMs)||12000)/1000)}秒）`);
+    throw error;
+  }finally{clearTimeout(timer);}
+}"""
+          new="""async function progressFetchJson(url,timeoutMs=12000,cacheMode='force-cache'){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),Math.max(1000,Number(timeoutMs)||12000));
+  try{
+    const response=await fetch(url,{cache:cacheMode,signal:controller.signal});
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  }catch(error){
+    if(error&&error.name==='AbortError')throw new Error(`GitHub共通DBの取得がタイムアウトしました（${Math.round((Number(timeoutMs)||12000)/1000)}秒）`);
+    throw error;
+  }finally{clearTimeout(timer);}
+}"""
+          if old not in s:
+              raise SystemExit('progressFetchJson block not found')
+          s=s.replace(old,new,1)
+
+          old="""      const token=`${Date.now()}_${attempt}_${Math.random().toString(36).slice(2)}`;
+      try{
+        const manifestUrl=new URL('manifest.json',base);
+        manifestUrl.searchParams.set('_ra',token);
+        const manifest=await progressFetchJson(manifestUrl.toString(),6000);
+        const info=progressManifestMasterInfo(manifest);
+        if(!info.file||info.file.includes('..')||info.file.includes('\\\\'))throw new Error('共通DBのmasterファイル名が不正です。');
+        const masterUrl=new URL(info.file,base);
+        masterUrl.searchParams.set('_ra',`${info.sha256||String(manifest.version||'master')}_${token}`);
+        const result=normalizeProgressMaster(await progressFetchJson(masterUrl.toString(),15000),manifest);"""
+          new="""      try{
+        const manifestUrl=new URL('manifest.json',base);
+        const manifest=await progressFetchJson(manifestUrl.toString(),6000,'no-cache');
+        const info=progressManifestMasterInfo(manifest);
+        if(!info.file||info.file.includes('..')||info.file.includes('\\\\'))throw new Error('共通DBのmasterファイル名が不正です。');
+        const masterUrl=new URL(info.file,base);
+        masterUrl.searchParams.set('_ra',info.sha256||String(manifest.version||'master'));
+        const result=normalizeProgressMaster(await progressFetchJson(masterUrl.toString(),15000,'force-cache'),manifest);"""
+          if old not in s:
+              raise SystemExit('manifest/master cache-busting block not found')
+          s=s.replace(old,new,1)
+
+          old="""    try{
+      const directUrl=new URL('recraft_alchemia_master.json',base);
+      directUrl.searchParams.set('_ra',`${Date.now()}_direct_${Math.random().toString(36).slice(2)}`);
+      return normalizeProgressMaster(await progressFetchJson(directUrl.toString(),15000),{master:'recraft_alchemia_master.json'});"""
+          new="""    try{
+      const directUrl=new URL('recraft_alchemia_master.json',base);
+      directUrl.searchParams.set('_ra','direct-cache');
+      return normalizeProgressMaster(await progressFetchJson(directUrl.toString(),15000,'force-cache'),{master:'recraft_alchemia_master.json'});"""
+          if old not in s:
+              raise SystemExit('direct fallback cache-busting block not found')
+          s=s.replace(old,new,1)
+
+          marker="function normalizeProgressMaster(document,manifest={}){"
+          comment="// Hotfix: manifestは再検証し、巨大masterはmanifestのSHAをURLキーにしてブラウザキャッシュを再利用する。\n"
+          s=s.replace(marker,comment+marker,1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit hotfix
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add progress_manager.html
+          git diff --cached --quiet && exit 0
+          git commit -m 'Restore progress common DB browser caching'
+          git push
