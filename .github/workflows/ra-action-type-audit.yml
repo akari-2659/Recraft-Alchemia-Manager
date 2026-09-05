@@ -1,0 +1,74 @@
+name: RA action type audit
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ra-action-type-audit.yml'
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Audit monster action types and named backline pressure
+        run: |
+          python - <<'PY'
+          import json,re
+          from pathlib import Path
+          obj=json.loads(Path('data/public/recraft_alchemia_master.json').read_text(encoding='utf-8'))
+          mons=obj['data']['monsters']
+          def parse_actions(s):
+            rows=[]
+            for line in str(s or '').splitlines():
+              p=line.split('\t')
+              if len(p)>=7:
+                while len(p)<8:p.append('')
+                rows.append({'name':p[0],'type':p[1],'check':p[2],'target':p[3],'element':p[4],'power':p[5],'effect':p[6],'skill':p[7]})
+            return rows
+          def has_direct_damage(a):
+            p=str(a['power']).strip()
+            if p and p not in ('なし','-','―') and re.search(r'\d+D\d+',p,re.I): return True
+            # effect-based direct damage only when explicit damage wording exists
+            e=str(a['effect'])
+            return bool(re.search(r'\d+D\d+[^。]*ダメージ|\d+点[^。]*ダメージ',e))
+          violations=[]
+          type_counts={}
+          named_no_back=[]
+          named_rows=[]
+          for m in mons:
+            acts=parse_actions(m.get('actions',''))
+            for a in acts:
+              type_counts[a['type']]=type_counts.get(a['type'],0)+1
+              dmg=has_direct_damage(a)
+              if a['type'] in ('近接攻撃','遠距離攻撃') and not dmg:
+                violations.append({'monster':m['name'],'id':m['id'],'action':a,'issue':'attack_without_damage'})
+              if a['type']=='特殊' and dmg:
+                violations.append({'monster':m['name'],'id':m['id'],'action':a,'issue':'special_with_damage'})
+            # named: explicit named trait / named id, excluding bosses
+            is_named = str(m.get('id','')).startswith('mon_named_') or '二つ名' in str(m.get('monsterTraits',''))
+            is_boss = 'ボス' in str(m.get('monsterTraits','')) or str(m.get('id','')).startswith('boss_')
+            if is_named and not is_boss:
+              direct=[]
+              for a in acts:
+                if not has_direct_damage(a): continue
+                t=str(a['target'])
+                # backline pressure: ranged/spell/prayer that can pick any enemy; explicit rear; all; both rows
+                can_back = ('後衛' in t or '敵全体' in t or '全体'==t or '前列・後列' in t or '前後列' in t or
+                            (a['type'] in ('遠距離攻撃','術式','祈祷') and t in ('敵1体','敵2体','敵3体','敵1列')))
+                if can_back: direct.append(a['name'])
+              row={'monster':m['name'],'id':m['id'],'fixedActionNames':m.get('fixedActionNames',''),'actionCount':len(acts),'backlineDirect':direct,
+                   'actions':[{'name':a['name'],'type':a['type'],'target':a['target'],'power':a['power']} for a in acts]}
+              named_rows.append(row)
+              if not direct:named_no_back.append(row)
+          out=Path('.tmp');out.mkdir(exist_ok=True)
+          report={'version':obj.get('version'),'typeCounts':type_counts,'violations':violations,'violationCount':len(violations),'namedCount':len(named_rows),'namedNoBackCount':len(named_no_back),'namedNoBack':named_no_back}
+          (out/'action_type_and_named_backline_audit.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+      - name: Commit audit
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .tmp/action_type_and_named_backline_audit.json
+          git commit -m 'Temporary monster action type audit'
+          git push
