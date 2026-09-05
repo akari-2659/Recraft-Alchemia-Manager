@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.729</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.730</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.729-party-first-monster-balance">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.730-monster-zip-save-folder">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -207,12 +207,13 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 .token-export-panel .token-export-meta{font-size:12px;color:var(--muted);line-height:1.55}
 .token-export-panel .buttons{margin-top:8px;background:transparent;border:0;padding:0}
 .token-export-status{align-self:center;font-size:12px;font-weight:700;color:var(--muted)}
-.token-export-status.good{color:var(--good)}.token-export-status.bad{color:var(--bad)}
+.token-export-status.good{color:var(--good)}.token-export-status.bad{color:var(--bad)}.token-export-status.warn{color:#9a6700}
+.token-export-panel button[data-token-export-folder]{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 </style>
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">Version：v90.8.729 / 最終更新日：2026年9月5日</div>
+<div class="ra-build-info">Version：v90.8.730 / 最終更新日：2026年9月5日</div>
 
 <header>
   <div class="header-inner">
@@ -532,7 +533,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 <script src="./assets/vendor/jszip.min.js"></script>
 <script>
 'use strict';
-const VERSION='v90.8.729';
+const VERSION='v90.8.730';
 const GAS_URL='https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -661,7 +662,22 @@ function setTokenExportEncounter(label='',areaName='',groups=[],scope='event'){
 function clearTokenExportEncounter(scope=''){if(scope&&state.tokenExportEncounter?.scope!==scope)return;state.tokenExportEncounter=null;renderTokenExportPanels();}
 function tokenExportPanelId(scope){return scope==='quest'?'questTokenExportPanel':'eventTokenExportPanel';}
 function tokenEncounterTotal(encounter){return(encounter?.groups||[]).reduce((sum,g)=>sum+Math.max(1,Math.floor(Number(g.count)||1)),0);}
-function renderTokenExportPanels(){['quest','event'].forEach(scope=>{const panel=$(tokenExportPanelId(scope));if(!panel)return;const encounter=state.tokenExportEncounter;if(!encounter||encounter.scope!==scope||!encounter.groups?.length){panel.classList.add('hidden');panel.innerHTML='';return;}const summary=encounter.groups.map(g=>`${g.formation||'前衛'}：${g.name} ×${g.count}`).join(' / ');panel.classList.remove('hidden');panel.innerHTML=`<div class="token-export-title">戦闘用の敵駒</div><div class="token-export-meta">${esc(encounter.label||'戦闘')}${encounter.areaName?` / ${esc(encounter.areaName)}`:''}<br>${esc(summary)}</div><div class="buttons"><button type="button" data-token-export="${scope}">駒出力</button><span class="token-export-status" data-token-export-status="${scope}"></span></div>`;});}
+function renderTokenExportPanels(){['quest','event'].forEach(scope=>{const panel=$(tokenExportPanelId(scope));if(!panel)return;const encounter=state.tokenExportEncounter;if(!encounter||encounter.scope!==scope||!encounter.groups?.length){panel.classList.add('hidden');panel.innerHTML='';return;}const summary=encounter.groups.map(g=>`${g.formation||'前衛'}：${g.name} ×${g.count}`).join(' / ');panel.classList.remove('hidden');panel.innerHTML=`<div class="token-export-title">戦闘用の敵駒</div><div class="token-export-meta">${esc(encounter.label||'戦闘')}${encounter.areaName?` / ${esc(encounter.areaName)}`:''}<br>${esc(summary)}</div><div class="buttons"><button type="button" data-token-export="${scope}">駒出力</button><button type="button" data-token-export-folder="${scope}">ZIP保存先設定</button><span class="token-export-status" data-token-export-status="${scope}"></span></div>`;});tokenRefreshExportDirectoryUi();}
+const TOKEN_EXPORT_DIRECTORY_DB='recraft-alchemia-token-export-directory-v1';
+const TOKEN_EXPORT_DIRECTORY_STORE='handles';
+const TOKEN_EXPORT_DIRECTORY_KEY='monsterTokenZipDirectory';
+let tokenExportDirectoryHandleCache=null;
+let tokenExportDirectoryHandleLoaded=false;
+let tokenExportDirectoryHandleLoadPromise=null;
+function tokenDirectoryPickerSupported(){return !!(window.isSecureContext&&window.showDirectoryPicker&&window.indexedDB);}
+function tokenOpenDirectoryDb(){return new Promise((resolve,reject)=>{const req=indexedDB.open(TOKEN_EXPORT_DIRECTORY_DB,1);req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains(TOKEN_EXPORT_DIRECTORY_STORE))db.createObjectStore(TOKEN_EXPORT_DIRECTORY_STORE);};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error||new Error('ZIP保存先の保存領域を開けませんでした。'));});}
+async function tokenLoadExportDirectoryHandle(){if(tokenExportDirectoryHandleLoaded)return tokenExportDirectoryHandleCache;if(tokenExportDirectoryHandleLoadPromise)return tokenExportDirectoryHandleLoadPromise;tokenExportDirectoryHandleLoadPromise=(async()=>{try{if(!tokenDirectoryPickerSupported())return null;const db=await tokenOpenDirectoryDb();const handle=await new Promise((resolve,reject)=>{const tx=db.transaction(TOKEN_EXPORT_DIRECTORY_STORE,'readonly'),req=tx.objectStore(TOKEN_EXPORT_DIRECTORY_STORE).get(TOKEN_EXPORT_DIRECTORY_KEY);req.onsuccess=()=>resolve(req.result||null);req.onerror=()=>reject(req.error);});db.close();tokenExportDirectoryHandleCache=handle&&handle.kind==='directory'?handle:null;return tokenExportDirectoryHandleCache;}catch(_e){tokenExportDirectoryHandleCache=null;return null;}finally{tokenExportDirectoryHandleLoaded=true;tokenExportDirectoryHandleLoadPromise=null;}})();return tokenExportDirectoryHandleLoadPromise;}
+async function tokenStoreExportDirectoryHandle(handle){tokenExportDirectoryHandleCache=handle||null;tokenExportDirectoryHandleLoaded=true;if(!tokenDirectoryPickerSupported()||!handle)return;const db=await tokenOpenDirectoryDb();await new Promise((resolve,reject)=>{const tx=db.transaction(TOKEN_EXPORT_DIRECTORY_STORE,'readwrite');tx.objectStore(TOKEN_EXPORT_DIRECTORY_STORE).put(handle,TOKEN_EXPORT_DIRECTORY_KEY);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error||new Error('ZIP保存先を保存できませんでした。'));tx.onabort=()=>reject(tx.error||new Error('ZIP保存先の保存が中断されました。'));});db.close();}
+async function tokenDirectoryPermission(handle,request=false){if(!handle)return'denied';const options={mode:'readwrite'};try{let permission=typeof handle.queryPermission==='function'?await handle.queryPermission(options):'prompt';if(permission==='granted')return permission;if(request&&typeof handle.requestPermission==='function')permission=await handle.requestPermission(options);return permission;}catch(_e){return'denied';}}
+async function tokenRefreshExportDirectoryUi(){const buttons=[...document.querySelectorAll('[data-token-export-folder]')];if(!buttons.length)return;if(!tokenDirectoryPickerSupported()){buttons.forEach(button=>{button.textContent='ZIP保存先：通常DL';button.title='このブラウザでは保存先フォルダの固定に対応していません。';});return;}const handle=await tokenLoadExportDirectoryHandle();buttons.forEach(button=>{button.textContent=handle?.name?`ZIP保存先：${handle.name}`:'ZIP保存先設定';button.title=handle?.name?`現在の保存先：${handle.name}（クリックで変更）`:'ZIP保存先フォルダを選択';});}
+async function tokenChooseExportDirectory(scope='event'){if(!tokenDirectoryPickerSupported()){setTokenExportStatus(scope,'このブラウザでは保存先固定に対応していません。駒出力時は通常ダウンロードします。','warn');return null;}try{const handle=await window.showDirectoryPicker({id:'recraft-alchemia-monster-token-zip',mode:'readwrite'});const permission=await tokenDirectoryPermission(handle,true);if(permission!=='granted'){setTokenExportStatus(scope,'選択したフォルダへの書き込みが許可されませんでした。','bad');return null;}try{await tokenStoreExportDirectoryHandle(handle);}catch(_e){tokenExportDirectoryHandleCache=handle;tokenExportDirectoryHandleLoaded=true;setTokenExportStatus(scope,`保存先：${handle.name}（このセッションのみ保持）`,'warn');await tokenRefreshExportDirectoryUi();return handle;}setTokenExportStatus(scope,`ZIP保存先：${handle.name}`,'good');await tokenRefreshExportDirectoryUi();return handle;}catch(e){if(e?.name==='AbortError'){setTokenExportStatus(scope,'保存先の変更をキャンセルしました。');return null;}setTokenExportStatus(scope,e?.message||String(e),'bad');return null;}}
+async function tokenResolveExportDestination(scope='event'){if(!tokenDirectoryPickerSupported())return{mode:'download',handle:null};let handle=await tokenLoadExportDirectoryHandle();if(!handle){handle=await tokenChooseExportDirectory(scope);if(!handle)return{mode:'cancel',handle:null};return{mode:'directory',handle};}const permission=await tokenDirectoryPermission(handle,true);if(permission==='granted')return{mode:'directory',handle};setTokenExportStatus(scope,`ZIP保存先「${handle.name||'選択済みフォルダ'}」への書き込み許可が必要です。［ZIP保存先］から再設定してください。`,'bad');return{mode:'cancel',handle:null};}
+async function tokenSaveZipBlob(blob,filename,destination){if(destination?.mode==='directory'&&destination.handle){const fileHandle=await destination.handle.getFileHandle(filename,{create:true});const writable=await fileHandle.createWritable();let closed=false;try{await writable.write(blob);await writable.close();closed=true;}finally{if(!closed){try{await writable.abort();}catch(_e){}}}return{mode:'directory',name:destination.handle.name||''};}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);return{mode:'download',name:''};}
 function setTokenExportStatus(scope,text='',type=''){const el=document.querySelector(`[data-token-export-status="${scope}"]`);if(!el)return;el.textContent=String(text||'');el.className=`token-export-status${type?` ${type}`:''}`;}
 function tokenAlphaSuffix(index){let n=Math.max(0,Math.floor(Number(index)||0))+1,out='';while(n>0){n-=1;out=String.fromCharCode(65+n%26)+out;n=Math.floor(n/26);}return out;}
 function tokenRoundCoord(value){return Math.round(Number(value)*100)/100;}
@@ -692,8 +708,42 @@ async function tokenSha256Hex(bytes){const view=bytes instanceof Uint8Array?byte
 async function tokenFetchMonsterImage(monster){const id=String(monster?.baseMonsterId||monster?.id||'').trim();if(!id)throw new Error(`${monster?.name||'魔物'} の画像IDを確認できません。`);const filename=`${id}.png`,subdir=tokenCompact(CCFOLIA_MONSTER_IMAGE_SUBDIR[id]||''),urls=[];try{if(subdir)urls.push(new URL(`./assets/monsters/${subdir}/${filename}`,window.location.href).toString());urls.push(new URL(`./assets/monsters/${filename}`,window.location.href).toString());}catch(_e){}if(subdir)urls.push(`${CCFOLIA_MONSTER_IMAGE_BASE}${subdir}/${filename}`);urls.push(`${CCFOLIA_MONSTER_IMAGE_BASE}${filename}`);let lastError='';for(const url of [...new Set(urls)]){try{const response=await fetch(url,{cache:'no-cache'});if(!response.ok){lastError=`HTTP ${response.status}`;continue;}return new Uint8Array(await response.arrayBuffer());}catch(e){lastError=e?.message||String(e);}}throw new Error(`${monster.name||id} の駒画像を取得できませんでした。${lastError?`（${lastError}）`:''}`);}
 function tokenSafeFilename(text='戦闘'){return String(text||'戦闘').replace(/[\\/:*?"<>|]/g,'_').replace(/\s+/g,' ').trim().slice(0,60)||'戦闘';}
 function tokenTimestamp(){const d=new Date(),pad=n=>String(n).padStart(2,'0');return`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;}
-async function exportCurrentEncounterTokens(scope='event',button=null){const encounter=state.tokenExportEncounter;if(!encounter||encounter.scope!==scope||!encounter.groups?.length){setTokenExportStatus(scope,'出力できる戦闘編成がありません。','bad');return;}if(typeof JSZip==='undefined'){setTokenExportStatus(scope,'ZIP生成ライブラリを読み込めませんでした。','bad');return;}const original=button?.textContent||'駒出力';if(button){button.disabled=true;button.textContent='作成中…';}setTokenExportStatus(scope,'魔物画像を取得しています…');try{const instances=tokenBuildInstances(encounter),uniqueMonsters=[...new Map(instances.map(x=>[x.monster.id,x.monster])).values()],imageInfo=new Map();for(let i=0;i<uniqueMonsters.length;i++){const monster=uniqueMonsters[i];setTokenExportStatus(scope,`魔物画像を取得中 ${i+1} / ${uniqueMonsters.length}`);const bytes=await tokenFetchMonsterImage(monster),hash=await tokenSha256Hex(bytes),filename=`${hash}.png`;imageInfo.set(monster.id,{bytes,filename});}const characters={},resources={},orderBase=Date.now()*1000;instances.forEach((instance,index)=>{const info=imageInfo.get(instance.monster.id);characters[tokenCharacterId()]=tokenCharacterData(instance,info.filename,orderBase+index);});imageInfo.forEach(info=>{resources[info.filename]={type:'image/png'};});const data={meta:{version:'1.1.0'},entities:{room:{},items:{},decks:{},notes:{},characters,effects:{},scenes:{},savedatas:{},snapshots:{}},resources},jsonText=JSON.stringify(data),jsonBytes=new TextEncoder().encode(jsonText),token=`0.${await tokenSha256Hex(jsonBytes)}`,zip=new JSZip();zip.file('__data.json',jsonBytes);zip.file('.token',token);imageInfo.forEach(info=>zip.file(info.filename,info.bytes));setTokenExportStatus(scope,'ZIPを生成しています…');const blob=await zip.generateAsync({type:'blob',compression:'STORE'}),url=URL.createObjectURL(blob),a=document.createElement('a'),source=tokenSafeFilename(encounter.label||encounter.areaName||'戦闘');a.href=url;a.download=`RA_駒_${source}_${tokenTimestamp()}.zip`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);setTokenExportStatus(scope,`出力完了：敵${instances.length}体 / 画像${uniqueMonsters.length}枚`,'good');addLog(`駒出力：${encounter.label||'戦闘'} / 敵${instances.length}体 / 画像${uniqueMonsters.length}枚`);}catch(e){const message=e?.message||String(e);setTokenExportStatus(scope,message,'bad');addLog(`駒出力失敗：${message}`);}finally{if(button){button.disabled=false;button.textContent=original;}}}
-let currentQuestCategory='重要';
+async function exportCurrentEncounterTokens(scope='event',button=null){
+  const encounter=state.tokenExportEncounter;
+  if(!encounter||encounter.scope!==scope||!encounter.groups?.length){setTokenExportStatus(scope,'出力できる戦闘編成がありません。','bad');return;}
+  if(typeof JSZip==='undefined'){setTokenExportStatus(scope,'ZIP生成ライブラリを読み込めませんでした。','bad');return;}
+  const original=button?.textContent||'駒出力';
+  if(button){button.disabled=true;button.textContent='作成中…';}
+  try{
+    const destination=await tokenResolveExportDestination(scope);
+    if(destination.mode==='cancel')return;
+    setTokenExportStatus(scope,'魔物画像を取得しています…');
+    const instances=tokenBuildInstances(encounter),uniqueMonsters=[...new Map(instances.map(x=>[x.monster.id,x.monster])).values()],imageInfo=new Map();
+    for(let i=0;i<uniqueMonsters.length;i++){
+      const monster=uniqueMonsters[i];
+      setTokenExportStatus(scope,`魔物画像を取得中 ${i+1} / ${uniqueMonsters.length}`);
+      const bytes=await tokenFetchMonsterImage(monster),hash=await tokenSha256Hex(bytes),filename=`${hash}.png`;
+      imageInfo.set(monster.id,{bytes,filename});
+    }
+    const characters={},resources={},orderBase=Date.now()*1000;
+    instances.forEach((instance,index)=>{const info=imageInfo.get(instance.monster.id);characters[tokenCharacterId()]=tokenCharacterData(instance,info.filename,orderBase+index);});
+    imageInfo.forEach(info=>{resources[info.filename]={type:'image/png'};});
+    const data={meta:{version:'1.1.0'},entities:{room:{},items:{},decks:{},notes:{},characters,effects:{},scenes:{},savedatas:{},snapshots:{}},resources},jsonText=JSON.stringify(data),jsonBytes=new TextEncoder().encode(jsonText),token=`0.${await tokenSha256Hex(jsonBytes)}`,zip=new JSZip();
+    zip.file('__data.json',jsonBytes);zip.file('.token',token);imageInfo.forEach(info=>zip.file(info.filename,info.bytes));
+    setTokenExportStatus(scope,'ZIPを生成しています…');
+    const blob=await zip.generateAsync({type:'blob',compression:'STORE'}),source=tokenSafeFilename(encounter.label||encounter.areaName||'戦闘'),filename=`RA_駒_${source}_${tokenTimestamp()}.zip`;
+    const saved=await tokenSaveZipBlob(blob,filename,destination);
+    const destinationText=saved.mode==='directory'?` / 保存先：${saved.name}`:' / 通常ダウンロード';
+    setTokenExportStatus(scope,`出力完了：敵${instances.length}体 / 画像${uniqueMonsters.length}枚${destinationText}`,'good');
+    addLog(`駒出力：${encounter.label||'戦闘'} / 敵${instances.length}体 / 画像${uniqueMonsters.length}枚${destinationText}`);
+  }catch(e){
+    const message=e?.message||String(e);
+    setTokenExportStatus(scope,message,'bad');
+    addLog(`駒出力失敗：${message}`);
+  }finally{
+    if(button){button.disabled=false;button.textContent=original;}
+  }
+}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function clamp(n){return Math.max(0,Math.min(100,Number(n)||0));}
 function now(){return new Date().toLocaleString('ja-JP',{hour12:false});}
@@ -2600,7 +2650,7 @@ function handlePartySizeChange(value){
   renderQuest(); renderQuestEvents();
   saveState(false);
 }
-const ENCOUNTER_RULE_VERSION='v90.8.729-fixed-action-loadout-1';
+const ENCOUNTER_RULE_VERSION='v90.8.730-fixed-action-loadout-1';
 const ENCOUNTER_DEFAULT_VALUES={
   'プチスライム':1,'ラフィンラット':1,'ヴェスパット':1,
   'ラピットホーン':2,'カラパスビートル':2,'グラウワーム':2,'ラスクレイル':2,'マイコニド':2,'ブランチリング':2,
@@ -4924,6 +4974,7 @@ $('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){su
     const choice=e.target.closest('[data-event-reward-choice]');if(choice){const panel=choice.closest('#questEventRewardPanel,#eventRewardPanel,#baseEventRewardPanel'),scope=panel?.id==='questEventRewardPanel'?'quest':panel?.id==='baseEventRewardPanel'?'base':'event',reward=eventRewardState(scope),group=reward?.groups.find(g=>String(g.uid)===String(choice.dataset.eventRewardChoice)),item=group?.items.find(x=>String(x.uid)===String(choice.dataset.eventRewardItem));if(item)item.selectedName=choice.value;syncEventTableRewardCopyState(scope);renderEventRewardPanel(scope);if(scope==='base')updateBaseEventItemCopyButton();else if(scope==='quest')updateQuestEventItemCopyButton();else updateAreaEventItemCopyButton();}
   });
   document.addEventListener('click',e=>{
+    const tokenExportFolder=e.target.closest('[data-token-export-folder]');if(tokenExportFolder){tokenChooseExportDirectory(tokenExportFolder.dataset.tokenExportFolder||'event');return;}
     const tokenExport=e.target.closest('[data-token-export]');if(tokenExport){exportCurrentEncounterTokens(tokenExport.dataset.tokenExport||'event',tokenExport);return;}
     const importantResolve=e.target.closest('[data-important-use-resolve]');if(importantResolve){resolveDeclaredImportantItem(importantResolve.dataset.importantUseResolve||'event');return;}
     const importantCopy=e.target.closest('[data-important-use-copy]');if(importantCopy){const scope=importantCopy.dataset.importantUseCopy||'event';copyText(importantUseCopyState[scope]||'',scope==='quest'?'questCopyNote':scope==='base'?'baseEventCopyNote':'eventCopyNote');return;}
@@ -4974,6 +5025,7 @@ $('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){su
   $('rollDropBtn').addEventListener('click',rollDrops); $('copyDropSuccessBtn').addEventListener('click',()=>copyText(state.lastDropSuccessText,'dropCopyNote'));
   $('copyLogBtn').addEventListener('click',()=>copyText(state.log.slice().reverse().join('\n'))); $('clearLogBtn').addEventListener('click',()=>{state.log=[]; renderLog(); saveState(false);});
 }
+tokenLoadExportDirectoryHandle().then(()=>tokenRefreshExportDirectoryUi()).catch(()=>{});
 loadState(); bind(); renderLog(); setStatus('warn', 'GitHub共通DBを自動読込しています。'); loadDb({auto:true}); loadCommunityGatheringManager();
 </script>
 
