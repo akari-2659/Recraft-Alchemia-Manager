@@ -1,0 +1,26 @@
+name: RA export current working bundle
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ra-export-current-working-bundle.yml'
+permissions:
+  contents: read
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build current bundle
+        run: |
+          mkdir -p export
+          cp database_admin.html progress_manager.html help.html index.html ra-design-system.css export/
+          mkdir -p export/data/public export/data
+          cp data/public/manifest.json data/public/recraft_alchemia_master.json export/data/public/
+          cp data/recraft_alchemia_initial_data.json export/data/ || true
+          if [ -d ManagerGitHubPages ]; then cp -r ManagerGitHubPages export/; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ra-current-manager-working-bundle
+          path: export
+          retention-days: 1
