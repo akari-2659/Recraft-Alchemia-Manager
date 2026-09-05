@@ -213,7 +213,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">Version：v90.8.735 / 最終更新日：2026年9月5日</div>
+<div class="ra-build-info">Version：v90.8.735 / 最終更新日：2026年9月6日</div>
 
 <header>
   <div class="header-inner">
@@ -1191,14 +1191,16 @@ async function fetchGithubProgressMaster(){
     let lastError=null;
     for(let attempt=0;attempt<2;attempt++){
       try{
+        // manifestは小さいため毎回再検証し、masterだけを内容SHA単位でキャッシュする。
         const manifestUrl=new URL('manifest.json',base);
         const manifest=await progressFetchJson(manifestUrl.toString(),6000,'no-cache');
         const info=progressManifestMasterInfo(manifest);
         if(!info.file||info.file.includes('..')||info.file.includes('\\'))throw new Error('共通DBのmasterファイル名が不正です。');
         const masterUrl=new URL(info.file,base);
-        // masterは内容SHAをURLキーにする。DB更新時だけURLが変わり、同一版ではブラウザキャッシュを再利用する。
         masterUrl.searchParams.set('_ra',info.sha256||String(manifest.version||'master'));
-        const result=normalizeProgressMaster(await progressFetchJson(masterUrl.toString(),15000,'force-cache'),manifest);
+        // 1回目は同一SHAのブラウザキャッシュを再利用。版不整合時だけ2回目をreloadしてCDN反映待ちを回避する。
+        const masterCacheMode=attempt===0?'force-cache':'reload';
+        const result=normalizeProgressMaster(await progressFetchJson(masterUrl.toString(),15000,masterCacheMode),manifest);
         if(!result.versionWarning)return result;
         usableMismatch=result;
         lastError=new Error(`共通DBの更新反映待ちです（${result.versionWarning}）`);
@@ -1206,9 +1208,9 @@ async function fetchGithubProgressMaster(){
       if(attempt<1)await progressGithubDelay(350);
     }
     try{
+      // manifest経路だけが壊れた場合の最終フォールバック。固定キャッシュにはせず必ず再検証する。
       const directUrl=new URL('recraft_alchemia_master.json',base);
-      directUrl.searchParams.set('_ra','direct-cache');
-      return normalizeProgressMaster(await progressFetchJson(directUrl.toString(),15000,'force-cache'),{master:'recraft_alchemia_master.json'});
+      return normalizeProgressMaster(await progressFetchJson(directUrl.toString(),15000,'no-cache'),{master:'recraft_alchemia_master.json'});
     }catch(directError){errors.push(`${base}: ${[lastError&&lastError.message,directError&&directError.message].filter(Boolean).join(' / ')}`);}
   }
   if(usableMismatch)return usableMismatch;
@@ -4565,6 +4567,9 @@ function eventRewardTrigger(clause='',branchKey=''){
   const skillSuccess=text.match(/^([^：:。]{1,24}?)成功\s*[：:]/);
   if(skillSuccess){const key=String(skillSuccess[1]||'').trim()||'判定';return{kind:'success',value:0,label:key==='判定'?'判定成功':`${key}成功`,branchKey:key};}
   if(/^判定成功\s*[：:]/.test(text)||/^成功\s*[：:]/.test(text))return{kind:'success',value:0,label:'判定成功',branchKey:'判定'};
+  // 固定イベント内の条件付きクエスト成否は、GM内部ルールではなく成立結果として手動選択できるようにする。
+  if(/クエストクリア/.test(text))return{kind:'questClear',value:0,label:'クエストクリア',branchKey:'questOutcome'};
+  if(/クエスト失敗/.test(text)||/(?:なら|場合は)失敗$/.test(text))return{kind:'questFailure',value:0,label:'クエスト失敗',branchKey:'questOutcome'};
   return{kind:'always',value:0,label:'条件なし',branchKey:''};
 }
 function eventRewardRoll(expr='1'){
@@ -4586,7 +4591,9 @@ function eventRewardItemsFromClause(clause='',previousItemName=''){
 function eventVictoryHasMeaningfulPostBattle(clause=''){
   const text=String(clause||'').replace(/^勝利後\s*[、,:：]?\s*/,'');
   if(!/ドロップ判定/.test(text))return true;
-  return /クエストクリア|解放|入手|回収|獲得|補正|回復|進行|解除|発見|追加報酬|報酬/.test(text.replace(/ドロップ判定[^。、]*/g,''));
+  // 「ドロップ判定を行ってクエストクリア」のように同一節へ後続結果が続く場合、
+  // ドロップ判定部分を貪欲に削ってクエストクリアまで消してはいけない。
+  return /クエストクリア|解放|入手|回収|獲得|補正|回復|進行|解除|発見|追加報酬|報酬|帰還|到達|完了|達成|運搬|巡回|続ける/.test(text);
 }
 // v90.8.735: 『○○を入手してクエストクリア』のような結果文は内容コピー対象から落とさない。
 function eventClauseIsOperationalRule(clause='',row={}){
@@ -4601,20 +4608,23 @@ function eventClauseIsOperationalRule(clause='',row={}){
     /^増援/,/^第\d+ラウンド/,/^特殊条件\s*[：:]/,/^随伴を含めて/,/^1人パーティーでは/,
     /^必要素材\s*[：:]/,/作成時に消費/,/作成できず.*(?:未達成|失敗)/,
     /^クエスト(?:クリア|失敗)$/,/途中変更はできない/,/連続成功回数/,/リセットしない/,/0に戻/,
-    /解体・ドロップ判定の対象/,/各魔物のドロップ判定/,/採取・解体判定は行わず/,/宝箱表「[^」]+」から.*抽選/,
-    /全員を後衛には配置しない/,/人数対応.*(?:編成|随伴)/
+    /解体・ドロップ判定の対象/,/^(?:出現した)?各魔物のドロップ判定(?:を)?(?:1回ずつ)?行う$/,/^二つ名個体のドロップ判定(?:を)?(?:1回ずつ)?行う$/,/採取・解体判定は行わず/,/宝箱表「[^」]+」から.*抽選/,
+    /全員を後衛には配置しない/,/人数対応.*(?:編成|随伴)/,
+    /^[^：:。]{1,24}?で代用可能（判定\s*[+\-−－]?\d+）$/,
+    /^(?:前衛|後衛)に.+(?:×|との戦闘)/,/^PCはこの場で挑むか/,/^挑む場合のみ/,
+    /^判定後に解除(?:する)?$/,/^休息(?:を選ぶ|しない)\s*[：:]/
   ];
   return rulePatterns.some(re=>re.test(text));
 }
 function eventAlwaysClauseHasMeaningfulContent(clause='',row={}){
   const text=String(clause||'').trim();
   if(!text||eventClauseIsOperationalRule(text,row))return false;
-  // ドロップ判定だけの勝利後処理も内容としては扱わない。
+  // ドロップ判定だけの後処理・単独の成否ラベルは、卓へ貼る「内容」ではない。
   if(/^勝利後.*ドロップ判定(?:を)?(?:1回ずつ)?行う$/.test(text))return false;
-  // 無条件文は「処理説明」ではなく、卓へ貼れる描写・発見・授与などに限定する。
-  const narrative=/(?:発見|見つけ|見える|見えた|聞こえ|現れ|姿を見せ|姿が|光る|輝く|揺れ|漂う|広がる|差し込|埋もれ|収められ|授け|手渡|認め|残され|残っている|たどり着|咲く|香り|影が|気配が|声が|跡が)/;
-  const tangible=/(?:入手|獲得|授け|手渡|宝箱|褒賞箱|未鑑定の(?:魔法|祈祷)スクロール)/;
-  return narrative.test(text)||tangible.test(text);
+  if(/^クエスト(?:クリア|失敗)$/.test(text))return false;
+  // 固定イベントではクエスト専用アイテム、次イベントへの補正、条件付きクリア等が
+  // 共通アイテムDBに載らないことがある。内部処理文でなければ成立結果として保持する。
+  return true;
 }
 function buildEventRewardState(row={}){
   const clauses=String(row.result||'').split(/[。\n]+/).map(x=>x.trim()).filter(Boolean);const groups=[];let previousItemName='',currentBranchKey='',lastSuccessBranchKey='';
@@ -4622,14 +4632,18 @@ function buildEventRewardState(row={}){
     let trigger=eventRewardTrigger(clause,currentBranchKey);
     if(trigger.kind==='threshold'&&!String(trigger.branchKey||''))trigger={...trigger,branchKey:lastSuccessBranchKey||'判定'};
     if(trigger.kind==='success'){currentBranchKey=String(trigger.branchKey||'判定');lastSuccessBranchKey=currentBranchKey;}else if(trigger.kind==='failure'||trigger.kind==='victory')currentBranchKey='';
-    const operational=eventClauseIsOperationalRule(clause,row);
+    const questOutcome=['questClear','questFailure'].includes(trigger.kind);
+    // クエスト成否を含む節は、文頭が「作業完了後」「運搬役…」など内部ルールの形でも成立結果として残す。
+    const operational=eventClauseIsOperationalRule(clause,row)&&!questOutcome;
     const items=operational?[]:eventRewardItemsFromClause(clause,previousItemName),tableSlots=operational?0:eventRewardTableSlotsFromClause(clause),explicitNoReward=!operational&&/入手なし|追加素材なし/.test(clause);
-    const branch=['success','failure','threshold','victory'].includes(trigger.kind),meaningfulBranch=!operational&&branch&&(trigger.kind!=='victory'||eventVictoryHasMeaningfulPostBattle(clause));
+    const branch=['success','failure','threshold','victory','questClear','questFailure'].includes(trigger.kind),meaningfulBranch=!operational&&branch&&(trigger.kind!=='victory'||eventVictoryHasMeaningfulPostBattle(clause));
     const meaningfulAlways=!operational&&trigger.kind==='always'&&eventAlwaysClauseHasMeaningfulContent(clause,row);
     if(!items.length&&!tableSlots&&!explicitNoReward&&!meaningfulBranch&&!meaningfulAlways)return;
     if(items.length)previousItemName=items.at(-1).selectedName||previousItemName;
     if(trigger.kind==='always')trigger={...trigger,label:(items.length||tableSlots)?'入手':'描写'};
-    const hasSelectedSuccess=groups.some(g=>g.trigger.kind==='success'&&g.selected),selected=trigger.kind==='always'||(trigger.kind==='success'&&!hasSelectedSuccess)||(trigger.kind==='victory'&&!groups.some(g=>['success','failure','threshold'].includes(g.trigger.kind)));
+    const hasSelectedSuccess=groups.some(g=>g.trigger.kind==='success'&&g.selected);
+    const hasSelectedQuestOutcome=groups.some(g=>['questClear','questFailure'].includes(g.trigger.kind)&&g.selected);
+    const selected=trigger.kind==='always'||(trigger.kind==='success'&&!hasSelectedSuccess)||(trigger.kind==='victory'&&!groups.some(g=>['success','failure','threshold'].includes(g.trigger.kind)))||(trigger.kind==='questClear'&&!hasSelectedQuestOutcome);
     groups.push({uid:eventRewardUid(),trigger,clause,items,tableSlots,selected});
   });
   return groups.length?{eventName:String(row.eventName||row.name||'イベント'),row:{...row},groups}:null;
@@ -4749,7 +4763,9 @@ function eventOutcomeCleanClause(row={},clause='',partySize=selectedPartySize())
   // 代用可能技能の注記は判定情報側だけに残し、「内容コピー」には混ぜない。
   text=text.replace(/[^\s、。：「」()（）]+?で代用可能（判定\s*[+\-−－]?\d+）[。]?\s*/g,'');
   text=text.replace(/^目標値\s*\+\s*\d+\s*以上\s*[：:]\s*/,'');
-  text=text.replace(/^勝利後\s*[：:]\s*/,'');
+  text=text.replace(/^勝利後\s*[、,:：]?\s*/,'');
+  // ドロップ判定そのものはGM処理。後ろに続く「運搬を続ける」「クエストクリア」等だけを内容へ残す。
+  text=text.replace(/^(?:出現した)?各魔物のドロップ判定(?:を)?(?:1回ずつ)?行(?:い|って)\s*[、,]?\s*/,'');
   text=text.replace(/^失敗\s*[：:]\s*/,'');
   text=text.replace(/^判定成功\s*[：:]\s*/,'');
   text=text.replace(/^[^：:。]{1,24}?成功\s*[：:]\s*/,'');
@@ -4839,6 +4855,9 @@ function updateEventRewardSelection(scope,uid,checked){
   const sameBranch=g=>String(g.trigger.branchKey||'')===key;
   if(target.trigger.kind==='failure'&&checked){
     reward.groups.forEach(g=>{if(g.trigger.kind!=='always'&&g!==target)g.selected=false;});
+  }
+  if(['questClear','questFailure'].includes(target.trigger.kind)&&checked){
+    reward.groups.forEach(g=>{if(g!==target&&['questClear','questFailure'].includes(g.trigger.kind))g.selected=false;});
   }
   if(target.trigger.kind==='success'){
     if(checked){
