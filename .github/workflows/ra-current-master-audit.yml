@@ -1,0 +1,44 @@
+name: RA current master audit
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/ra-current-master-audit.yml']
+permissions:
+  contents: write
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build compact audit
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, hashlib
+          from pathlib import Path
+          p=Path('data/public/recraft_alchemia_master.json')
+          d=json.loads(p.read_text(encoding='utf-8'))
+          def h(v):
+              raw=json.dumps(v,ensure_ascii=False,sort_keys=True,separators=(',',':')).encode('utf-8')
+              return hashlib.sha256(raw).hexdigest()
+          qids=['quest_daily_mine_ore','quest_daily_highland_storm','quest_daily_highland_marker','quest_daily_highland_cull','quest_daily_highland_bison_rush','quest_daily_highland_glide_break','quest_daily_highland_patrol_cull','quest_daily_highland_cloud_cotton','quest_daily_highland_sky_dew','quest_daily_highland_windgrass','quest_daily_highland_lightning_vein']
+          qmap={q.get('id'):q for q in d['data'].get('quests',[])}
+          out={
+            'version':d.get('version'),
+            'description':d.get('description',''),
+            'file_sha256':hashlib.sha256(p.read_bytes()).hexdigest(),
+            'file_bytes':p.stat().st_size,
+            'table_hashes':{k:h(v) for k,v in d.get('data',{}).items()},
+            'table_counts':{k:len(v) for k,v in d.get('data',{}).items() if isinstance(v,list)},
+            'quest_samples':{qid:qmap.get(qid) for qid in qids},
+          }
+          Path('current_master_audit.json').write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+      - name: Commit audit
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add current_master_audit.json
+          git commit -m 'Temporary current master audit' || exit 0
+          git push
