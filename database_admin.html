@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.729</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.735</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1213,10 +1213,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.729-party-first-monster-balance">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.735-named-process-branch-stack">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">Version：v90.8.729 / 最終更新日：2026年9月5日</div>
+<div class="ra-build-info">Version：v90.8.735 / 最終更新日：2026年9月6日</div>
 
 <header>
   <div class="title-card">
@@ -1943,8 +1943,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
-const RECRAFT_DB_VERSION = 'v90.8.729';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.729';
+const RECRAFT_DB_VERSION = 'v90.8.735';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.735';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -2332,10 +2332,8 @@ const GITHUB_COMMON_DATA_FORMAT = 'recraft-alchemia-github-master';
 const INITIAL_DATA_PATH = './data/recraft_alchemia_initial_data.json';
 const GITHUB_COMMON_DB_REMOTE_BASE = 'https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function githubCommonDbBaseCandidates(){
-  const bases=[];
-  try{ bases.push(new URL('./data/public/', window.location.href).toString()); }catch(_e){}
-  bases.push(GITHUB_COMMON_DB_REMOTE_BASE);
-  return [...new Set(bases.filter(Boolean))];
+  // 公開共通DBへフォールバックする場合も、Managerの公開DBだけを正本として参照する。
+  return [GITHUB_COMMON_DB_REMOTE_BASE];
 }
 let githubCommonMasterPromise = null;
 let DEFAULTS = createEmptyDataSet();
@@ -2394,101 +2392,120 @@ function managerMasterDataRowCount(master){
   if(!data||typeof data!=='object')return 0;
   return DATA_KEYS.reduce((sum,key)=>sum+(Array.isArray(data[key])?data[key].length:0),0);
 }
+async function managerFetchGithubJson(url,{timeoutMs=15000,cacheMode='force-cache'}={}){
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),Math.max(1000,Number(timeoutMs)||15000));
+  try{
+    const response=await fetch(url,{cache:cacheMode,signal:controller.signal});
+    if(!response.ok)throw new Error(`HTTP ${response.status}`);
+    return await response.json();
+  }catch(error){
+    if(error&&error.name==='AbortError')throw new Error(`GitHub共通DBの取得がタイムアウトしました（${Math.round((Number(timeoutMs)||15000)/1000)}秒）`);
+    throw error;
+  }finally{clearTimeout(timer);}
+}
 async function fetchGithubCommonMaster({force=false}={}){
   if(githubCommonMasterPromise && !force) return githubCommonMasterPromise;
-  const task = (async()=>{
+  const task=(async()=>{
     const errors=[];
     let usableMismatch=null;
     for(const base of githubCommonDbBaseCandidates()){
       let lastError=null;
-      for(let attempt=0;attempt<4;attempt++){
-        const token=`${Date.now()}_${attempt}_${Math.random().toString(36).slice(2)}`;
+      for(let attempt=0;attempt<2;attempt++){
         try{
-          const manifestUrl=new URL('manifest.json', base);
-          manifestUrl.searchParams.set('_ra', token);
-          const manifestResponse=await fetch(manifestUrl.toString(), {cache:'no-store',headers:{'Cache-Control':'no-cache'}});
-          if(!manifestResponse.ok) throw new Error(`manifest HTTP ${manifestResponse.status}`);
-          const manifest=await manifestResponse.json();
+          const manifestUrl=new URL('manifest.json',base);
+          const manifest=await managerFetchGithubJson(manifestUrl.toString(),{timeoutMs:6000,cacheMode:'no-cache'});
           const nestedMaster=manifest&&manifest.files&&manifest.files.master;
           const nestedMasterObject=nestedMaster&&typeof nestedMaster==='object'?nestedMaster:{};
-          const masterFile=String(manifest.master || nestedMasterObject.path || (typeof nestedMaster==='string'?nestedMaster:'') || '').trim();
-          if(!masterFile || masterFile.includes('..') || masterFile.includes(String.fromCharCode(92))){
-            throw new Error('manifestのmasterファイル名が不正です');
-          }
-          const manifestVersion=String(manifest.version || '').trim();
-          const cacheKey=String(manifest.sha256 || nestedMasterObject.sha256 || manifestVersion || 'master').trim();
-          const masterUrl=new URL(masterFile, base);
-          masterUrl.searchParams.set('v', cacheKey);
-          const masterResponse=await fetch(masterUrl.toString(), {cache:'force-cache'});
-          if(!masterResponse.ok) throw new Error(`master HTTP ${masterResponse.status}`);
-          const master=await masterResponse.json();
+          const masterFile=String(manifest.master||nestedMasterObject.path||(typeof nestedMaster==='string'?nestedMaster:'')||'').trim();
+          if(!masterFile||masterFile.includes('..')||masterFile.includes(String.fromCharCode(92)))throw new Error('manifestのmasterファイル名が不正です');
+          const manifestVersion=String(manifest.version||'').trim();
+          const cacheKey=String(manifest.sha256||nestedMasterObject.sha256||manifestVersion||'master').trim();
+          const masterUrl=new URL(masterFile,base);
+          masterUrl.searchParams.set('_ra',cacheKey);
+          const masterCacheMode=(force||attempt>0)?'reload':'force-cache';
+          const master=await managerFetchGithubJson(masterUrl.toString(),{timeoutMs:15000,cacheMode:masterCacheMode});
           const rows=managerMasterDataRowCount(master);
-          if(!rows) throw new Error('共通DBの更新データが空です');
-          const masterVersion=String(master.version || '').trim();
+          if(!rows)throw new Error('共通DBの更新データが空です');
+          const masterVersion=String(master.version||'').trim();
           const result={manifest,master,version:masterVersion||manifestVersion,base,versionWarning:''};
-          if(manifestVersion && masterVersion && manifestVersion !== masterVersion){
+          if(manifestVersion&&masterVersion&&String(manifestVersion).replace(/^v/i,'')!==String(masterVersion).replace(/^v/i,'')){
             result.versionWarning=`manifest ${manifestVersion} / master ${masterVersion}`;
             usableMismatch=result;
             lastError=new Error(`共通DBの更新反映待ちです（${result.versionWarning}）`);
-          }else{
-            return result;
-          }
+          }else return result;
         }catch(error){lastError=error;}
-        if(attempt<3)await managerGithubDelay(350*(attempt+1));
+        if(attempt<1)await managerGithubDelay(350);
       }
-      if(lastError)errors.push(`${base}: ${lastError.message||lastError}`);
+      try{
+        const directUrl=new URL('recraft_alchemia_master.json',base);
+        const master=await managerFetchGithubJson(directUrl.toString(),{timeoutMs:15000,cacheMode:'no-cache'});
+        const rows=managerMasterDataRowCount(master);
+        if(!rows)throw new Error('共通DBの更新データが空です');
+        return{manifest:{master:'recraft_alchemia_master.json'},master,version:String(master.version||''),base,versionWarning:''};
+      }catch(directError){errors.push(`${base}: ${[lastError&&lastError.message,directError&&directError.message].filter(Boolean).join(' / ')}`);}
     }
-    // GitHub Pagesの反映がmanifestとmasterで一時的に前後しても、
-    // 中身が有効なら空データ扱いで画面を止めず、次回再読込で新しい版へ追随する。
     if(usableMismatch)return usableMismatch;
-    throw new Error(errors.join(' / ') || 'GitHub共通DBの取得先がありません');
+    throw new Error(errors.join(' / ')||'GitHub共通DBの取得先がありません');
   })();
-  githubCommonMasterPromise = task;
+  githubCommonMasterPromise=task;
   try{return await task;}
-  catch(error){if(githubCommonMasterPromise === task) githubCommonMasterPromise = null;throw error;}
+  catch(error){if(githubCommonMasterPromise===task)githubCommonMasterPromise=null;throw error;}
 }
 
 async function loadBundledInitialData(){
   const url=new URL(INITIAL_DATA_PATH,window.location.href);
   url.searchParams.set('v',RECRAFT_DB_VERSION);
-  const res = await fetch(url.toString(), {cache:'force-cache'});
-  if(!res.ok) throw new Error(`同梱JSON HTTP ${res.status}`);
-  return res.json();
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),8000);
+  try{
+    const res = await fetch(url.toString(), {cache:'force-cache',signal:controller.signal});
+    if(!res.ok) throw new Error(`同梱JSON HTTP ${res.status}`);
+    return await res.json();
+  }catch(error){
+    if(error&&error.name==='AbortError')throw new Error('管理用同梱DBの取得がタイムアウトしました（8秒）');
+    throw error;
+  }finally{clearTimeout(timer);}
 }
 async function loadManagerDisplayData({force=false}={}){
   const status = $('initialDataStatus');
   if(status){
     status.className = 'status-box warn';
-    status.textContent = '管理用同梱DBを読み込んでいます。';
+    status.textContent = 'GitHub共通DBを読み込んでいます。';
   }
   try{
-    const bundled = await loadBundledInitialData();
-    applyInitialData(bundled, '管理用同梱DB');
-    return {source:'bundled', version:String(bundled?.version||'')};
-  }catch(bundledError){
-    console.warn('管理用同梱DBを取得できないため公開共通DBへ切り替えます。', bundledError);
+    // 画面の説明どおり、起動時・再読込ともManagerの公開共通DBを正本として直接読む。
+    const result = await fetchGithubCommonMaster({force});
+    applyInitialData(
+      result.master,
+      `GitHub共通DB${result.version ? ' v' + result.version : ''}`
+    );
+    return {source:'github', version:result.version};
+  }catch(githubError){
+    console.warn('GitHub共通DBを取得できないため管理用同梱DBへ切り替えます。', githubError);
+    if(status){
+      status.className = 'status-box warn';
+      status.textContent = 'GitHub共通DB取得失敗。管理用同梱DBへ切り替えています。';
+    }
     try{
-      const result = await fetchGithubCommonMaster({force});
-      applyInitialData(
-        result.master,
-        `公開共通DB（解放キー非公開）${result.version ? ' v' + result.version : ''}`
-      );
+      const bundled = await loadBundledInitialData();
+      applyInitialData(bundled, '管理用同梱DB（GitHub共通DBフォールバック）');
       if(status){
         status.className = 'status-box warn';
         status.textContent =
-          `初期復元元：公開共通DB（管理用同梱DB取得失敗：${bundledError.message || bundledError}）` +
+          `初期復元元：管理用同梱DB（GitHub共通DB取得失敗：${githubError.message || githubError}）` +
           `（${initialDataRowCount(DEFAULTS)}件）`;
       }
-      toast('管理用同梱DBを取得できなかったため、解放キーを含まない公開共通DBを読み込みました。', 'warn');
-      return {source:'github', version:result.version, error:bundledError};
-    }catch(githubError){
+      toast('GitHub共通DBを取得できなかったため、管理用同梱DBを読み込みました。', 'warn');
+      return {source:'bundled', version:String(bundled?.version||''), error:githubError};
+    }catch(bundledError){
       if(status){
         status.className = 'status-box bad';
         status.textContent =
-          `表示用マスター読込失敗：同梱=${bundledError.message || bundledError} / 公開DB=${githubError.message || githubError}`;
+          `表示用マスター読込失敗：GitHub=${githubError.message || githubError} / 同梱=${bundledError.message || bundledError}`;
       }
-      toast('管理用同梱DBと公開共通DBの両方を読み込めませんでした。', 'error');
-      return {source:'error', error:githubError};
+      toast('GitHub共通DBと管理用同梱DBの両方を読み込めませんでした。', 'error');
+      return {source:'error', error:githubError, bundledError};
     }
   }
 }
@@ -3164,7 +3181,7 @@ const SYSTEM_HELP = [
       "通常魔物は所持技プールを5個以上持ち、遭遇時にその中から3個をランダム選出して、その戦闘中の使用行動として固定する。二つ名個体とボスは技を必ず4個所持する。固有パッシブは技数に含めない。固有パッシブが特定行動を参照する場合、その行動は選出時の必須枠とする。準備・連携などで特定の別行動を明示参照する場合は、参照関係が成立する組み合わせだけを選出候補にする。",
       "エリアボスは、前衛が残っている状態でも後衛へ直接ダメージを与えられる行動を最低1つ必ず持つ。敵全体・敵1列・敵後衛を対象とする直接ダメージ行動、または遠距離攻撃・術式・祈祷で後衛を選択できる直接ダメージ行動を用意する。状態異常や弱体だけの全体行動はこの条件を満たさない。",
       "準備と次ターンの大技で構成される予告攻撃は、2段階を1つの技として同じ行に登録する。",
-      "魔物行動には距離とは別に行動種別を設定する。種別は近接攻撃、遠距離攻撃、術式、祈祷、防御、補助、回復、特殊。",
+      "魔物行動には距離とは別に行動種別を設定する。種別は近接攻撃、遠距離攻撃、術式、祈祷、防御、補助、回復、特殊。近接攻撃・遠距離攻撃は直接ダメージを必ず含む。特殊は敵への状態付与・拘束・移動など、直接ダメージを伴わない特殊効果に使用する。術式・祈祷は行使手段を示すため、直接ダメージ型と非ダメージ型の両方を許可する。",
       "魔物の判定は行動種別にかかわらず、その行動に設定された基礎技能値を使用する。判定欄は『技能値>=回避値』『技能値>=抵抗値』『技能値>=固定達成値』で参照先を示し、行動種別欄は近接攻撃・遠距離攻撃・術式など行動の性質だけを示す。",
       "ドロップはメモ式ではなく行単位で管理する。",
       "ドロップ素材は魔物素材カテゴリから選択する。"
@@ -7812,7 +7829,7 @@ function monsterDropRowHtml(row={}, idx=0){
 function monsterActionsEditor(value){
   const rows = parseMonsterActions(value);
   const body = rows.length ? rows.map(monsterActionRowHtml).join('') : monsterActionRowHtml({element:'物'});
-  return `<div class="monster-line-editor" data-monster-actions-editor><textarea data-form-field="actions" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(serializeMonsterActions(rows))}</textarea><div class="form-help">行動は1行動ずつ入力します。通常魔物は所持技プールとして5個以上を登録し、遭遇時に3個だけ選出します。ただし「固定選出技」に指定した0～2技は必ず採用し、残り枠だけをランダム選出します。固有パッシブが特定行動を参照する場合も必須枠として扱います。二つ名個体とボスは必ず4個です。固有パッシブは技数に含めません。エリアボスは、前衛が残っていても後衛へ直接ダメージを与えられる行動を最低1つ必ず持たせます。判定を行う行動には、その行動固有の基礎技能値を0以上の整数で設定します。判定式は「2D6+基礎技能値+{補正}>=回避値/抵抗値/固定値」です。{補正}には妨害-2、行動・パッシブによる一時的な強化など、戦闘中に変動する補正だけを加算します。防御・補助・回復も自動成功にはせず、基礎技能値を使う固定値判定を設定します。直接ダメージ式はD6を必ず含め、最大構成はxD6+yD2～D5+z、補助ダイス個数y<=D6個数x、固定値zは0以上です。条件成立時の追加ダメージや継続ダメージは基礎式制限から除外します。行動種別は近接攻撃・遠距離攻撃・術式・祈祷・防御・補助・回復・特殊から選択します。</div><div class="monster-line-head action-head"><span>行動名</span><span>行動種別</span><span>判定</span><span>基礎技能値</span><span>対象</span><span>属性</span><span>威力</span><span>効果</span><span></span></div><div data-monster-action-list>${body}</div><button type="button" class="secondary" data-monster-action-add>行動を追加</button></div>`;
+  return `<div class="monster-line-editor" data-monster-actions-editor><textarea data-form-field="actions" class="hidden-monster-raw internal-raw-field" hidden aria-hidden="true" tabindex="-1" style="display:none!important">${escapeHtml(serializeMonsterActions(rows))}</textarea><div class="form-help">行動は1行動ずつ入力します。通常魔物は所持技プールとして5個以上を登録し、遭遇時に3個だけ選出します。ただし「固定選出技」に指定した0～2技は必ず採用し、残り枠だけをランダム選出します。固有パッシブが特定行動を参照する場合も必須枠として扱います。二つ名個体は基本4個です。後衛へ届く手段など戦術上の候補を増やす個体は5個以上を登録し、遭遇時に4個だけ選出できます。ボスは4個固定です。固有パッシブは技数に含めません。エリアボスは、前衛が残っていても後衛へ直接ダメージを与えられる行動を最低1つ必ず持たせます。判定を行う行動には、その行動固有の基礎技能値を0以上の整数で設定します。判定式は「2D6+基礎技能値+{補正}>=回避値/抵抗値/固定値」です。{補正}には妨害-2、行動・パッシブによる一時的な強化など、戦闘中に変動する補正だけを加算します。防御・補助・回復も自動成功にはせず、基礎技能値を使う固定値判定を設定します。直接ダメージ式はD6を必ず含め、最大構成はxD6+yD2～D5+z、補助ダイス個数y<=D6個数x、固定値zは0以上です。条件成立時の追加ダメージや継続ダメージは基礎式制限から除外します。行動種別は近接攻撃・遠距離攻撃・術式・祈祷・防御・補助・回復・特殊から選択します。</div><div class="monster-line-head action-head"><span>行動名</span><span>行動種別</span><span>判定</span><span>基礎技能値</span><span>対象</span><span>属性</span><span>威力</span><span>効果</span><span></span></div><div data-monster-action-list>${body}</div><button type="button" class="secondary" data-monster-action-add>行動を追加</button></div>`;
 }
 function monsterDropsEditor(value){
   const rows = parseMonsterDrops(value);
@@ -8949,7 +8966,7 @@ function assertWeaponBaseDamageDieRows(rows=[]){
 }
 function assertMonsterDirectDamageDieRows(rows=[]){
   const invalid=[];
-  const damageTypes=new Set(['近接攻撃','遠距離攻撃','術式','祈祷','特殊']);
+  const damageTypes=new Set(['近接攻撃','遠距離攻撃','術式','祈祷']);
   (rows||[]).forEach(monster=>{
     parseMonsterActions(monster.actions||'').forEach(action=>{
       const type=normalizeMonsterActionType(action);
@@ -8972,8 +8989,9 @@ function assertMonsterFixedActionSelectionRows(rows=[]){
   (rows||[]).forEach(row=>{
     const traits=String(row.monsterTraits||'').split(/[,、，]/).map(v=>v.trim());
     const isBoss=traits.includes('ボス'),isNamed=traits.includes('二つ名')||String(row.id||'').startsWith('mon_named_');
-    const fixed=monsterFixedActionNames(row);
-    if((isBoss||isNamed)&&fixed.length){invalid.push({row,reason:'二つ名個体・ボスは4技固定のため固定選出技は設定しません'});return;}
+    const fixed=monsterFixedActionNames(row),actionCount=parseMonsterActions(row.actions||'').length;
+    if(isBoss&&fixed.length){invalid.push({row,reason:'ボスは4技固定のため固定選出技は設定しません'});return;}
+    if(isNamed&&actionCount<=4&&fixed.length){invalid.push({row,reason:'4技固定の二つ名には固定選出技を設定しません。5技以上の候補制二つ名だけ指定できます'});return;}
     if(fixed.length>2){invalid.push({row,reason:`固定選出技は最大2個です（${fixed.length}個）`});return;}
     const actionNames=new Set(parseMonsterActions(row.actions||'').map(a=>String(a.name||'').trim()).filter(Boolean));
     const missing=fixed.filter(name=>!actionNames.has(name));
@@ -8981,7 +8999,7 @@ function assertMonsterFixedActionSelectionRows(rows=[]){
   });
   if(!invalid.length)return;
   const details=invalid.slice(0,12).map(x=>`・${String(x.row.name||x.row.id||'名称未設定')}：${x.reason}`).join('\n');
-  throw new Error(`固定選出技の設定を確認してください。通常魔物は0～2技まで指定でき、指定名は行動プールと完全一致させます。\n${details}${invalid.length>12?`\nほか${invalid.length-12}件`:''}`);
+  throw new Error(`固定選出技の設定を確認してください。通常魔物と5技以上の候補制二つ名は0～2技まで指定でき、指定名は行動プールと完全一致させます。\n${details}${invalid.length>12?`\nほか${invalid.length-12}件`:''}`);
 }
 function monsterLoadoutReferencedNames(text='',actionNames=new Set()){
   const refs=[];
@@ -9002,16 +9020,19 @@ function monsterLoadoutCombinations(actions=[],count=3){
 }
 function monsterLoadoutActionIsDirectDamage(action={}){
   const type=normalizeMonsterActionType(action),power=String(action.power||'').trim();
-  return ['近接攻撃','遠距離攻撃','術式','祈祷','特殊'].includes(type)&&!!power&&power!=='なし'&&power!=='-';
+  return ['近接攻撃','遠距離攻撃','術式','祈祷'].includes(type)&&!!power&&power!=='なし'&&power!=='-';
 }
 function monsterLegalLoadouts(row={}){
   const pool=parseMonsterActions(row.actions||'');
+  const traits=String(row.monsterTraits||'').split(/[,、，]/).map(v=>v.trim());
+  const isNamed=traits.includes('二つ名')||String(row.id||'').startsWith('mon_named_');
+  const selectCount=isNamed&&pool.length>4?4:3;
   const actionNames=new Set(pool.map(a=>String(a.name||'').trim()).filter(Boolean));
   const mandatory=new Set([
     ...monsterFixedActionNames(row),
     ...monsterLoadoutReferencedNames(row.passiveEffect||'',actionNames)
   ]);
-  const loadouts=monsterLoadoutCombinations(pool,3).filter(combo=>{
+  const loadouts=monsterLoadoutCombinations(pool,selectCount).filter(combo=>{
     const selected=new Set(combo.map(a=>String(a.name||'').trim()));
     if([...mandatory].some(name=>!selected.has(name)))return false;
     if(!combo.some(monsterLoadoutActionIsDirectDamage))return false;
@@ -9021,23 +9042,24 @@ function monsterLegalLoadouts(row={}){
     }
     return true;
   });
-  return {mandatory:[...mandatory],loadouts};
+  return {mandatory:[...mandatory],loadouts,selectCount};
 }
 function assertMonsterLoadoutViabilityRows(rows=[]){
   const invalid=[];
   (rows||[]).forEach(row=>{
     const traits=String(row.monsterTraits||'').split(/[,、，]/).map(v=>v.trim());
     const isBoss=traits.includes('ボス'),isNamed=traits.includes('二つ名')||String(row.id||'').startsWith('mon_named_');
-    const isNormal=!isBoss&&!isNamed;
-    if(!isNormal)return;
+    const poolCount=parseMonsterActions(row.actions||'').length;
+    const needsSelection=!isBoss&&(!isNamed||poolCount>4);
+    if(!needsSelection)return;
     const result=monsterLegalLoadouts(row);
     if(!result.loadouts.length){
-      invalid.push({row,reason:`固定/依存技を満たし、直接ダメージ行動を1つ以上含む3技構成を作れません（必須：${result.mandatory.join('、')||'なし'}）`});
+      invalid.push({row,reason:`固定/依存技を満たし、直接ダメージ行動を1つ以上含む${result.selectCount}技構成を作れません（必須：${result.mandatory.join('、')||'なし'}）`});
     }
   });
   if(!invalid.length)return;
   const details=invalid.slice(0,12).map(x=>`・${String(x.row.name||x.row.id||'名称未設定')}：${x.reason}`).join('\n');
-  throw new Error(`通常魔物の3技選出条件を満たせません。固定選出技・固有パッシブ参照・行動間依存を確認し、合法な3技構成を最低1通り作ってください。\n${details}${invalid.length>12?`\nほか${invalid.length-12}件`:''}`);
+  throw new Error(`魔物の技選出条件を満たせません。通常魔物は3技、候補制二つ名は4技になるよう、固定選出技・固有パッシブ参照・行動間依存を確認してください。\n${details}${invalid.length>12?`\nほか${invalid.length-12}件`:''}`);
 }
 function assertMonsterActionCountRows(rows=[]){
   const invalid=(rows || []).map(row=>{
@@ -9045,14 +9067,14 @@ function assertMonsterActionCountRows(rows=[]){
     const isBoss=traits.includes('ボス'),isNamed=traits.includes('二つ名')||String(row.id||'').startsWith('mon_named_');
     const isNormal=!isBoss&&!isNamed;
     const actual=parseMonsterActions(row.actions || '').length;
-    const ok=isNormal?actual>=5:actual===4;
-    const expected=isNormal?'5個以上（戦闘時3個選出）':'4個';
+    const ok=isNormal?actual>=5:(isBoss?actual===4:actual>=4);
+    const expected=isNormal?'5個以上（戦闘時3個選出）':(isBoss?'4個固定':'4個固定、または5個以上（戦闘時4個選出）');
     return {row,expected,actual,ok};
   }).filter(x=>!x.ok);
   if(!invalid.length) return;
   const details=invalid.slice(0,10).map(x=>`・${String(x.row.name || x.row.id || '名称未設定')}：${x.actual}個（必要${x.expected}）`).join('\n');
   const rest=invalid.length>10 ? `\nほか${invalid.length-10}件` : '';
-  throw new Error(`通常魔物は所持技を5個以上登録し、遭遇時に3個を選出します。二つ名個体とボスは4個にしてください。固有パッシブは技数に含めません。\n${details}${rest}`);
+  throw new Error(`通常魔物は5技以上から3技を選出します。二つ名は4技固定、または5技以上から4技を選出します。ボスは4技固定です。固有パッシブは技数に含めません。\n${details}${rest}`);
 }
 function monsterActionCanDamageBackline(action={}){
   const power=String(action.power||'').trim();
@@ -9061,7 +9083,37 @@ function monsterActionCanDamageBackline(action={}){
   const type=normalizeMonsterActionType(action);
   if(target.includes('敵全体') || target.includes('敵1列') || target.includes('敵後衛')) return true;
   if(['遠距離攻撃','術式','祈祷'].includes(type) && /^敵(?:1体|2体|3体|複数)/.test(target)) return true;
+  if(/前衛が残って.*敵後衛|敵後衛.*対象にできる/u.test(String(action.effect||''))) return true;
   return false;
+}
+function assertMonsterActionTypeSemanticsRows(rows=[]){
+  const invalid=[];
+  (rows||[]).forEach(monster=>parseMonsterActions(monster.actions||'').forEach(action=>{
+    const type=normalizeMonsterActionType(action),power=String(action.power||'').trim(),hasDamage=!!power&&power!=='なし'&&power!=='-';
+    if(['近接攻撃','遠距離攻撃'].includes(type)&&!hasDamage)invalid.push({monster,action,reason:`${type}は直接ダメージ必須`});
+    if(type==='特殊'&&hasDamage)invalid.push({monster,action,reason:'特殊は直接ダメージなしの効果用'});
+  }));
+  if(!invalid.length)return;
+  const details=invalid.slice(0,12).map(x=>`・${String(x.monster.name||x.monster.id||'名称未設定')}／${String(x.action.name||'行動名未設定')}：${x.reason}`).join('\n');
+  throw new Error(`魔物の行動種別と処理内容が一致していません。近接攻撃・遠距離攻撃は直接ダメージを必ず含め、特殊は状態付与・拘束・移動など直接ダメージを伴わない効果に使用してください。術式・祈祷は攻撃/非攻撃の両方を許可します。\n${details}${invalid.length>12?`\nほか${invalid.length-12}件`:''}`);
+}
+function assertNamedBacklineAttackRows(rows=[]){
+  const invalid=(rows||[]).filter(row=>{
+    const traits=String(row.monsterTraits||'').split(/[,、，]/).map(v=>v.trim());
+    const isNamed=traits.includes('二つ名')||String(row.id||'').startsWith('mon_named_');
+    if(!isNamed)return false;
+    const actions=parseMonsterActions(row.actions||'');
+    if(!actions.some(monsterActionCanDamageBackline))return true;
+    if(actions.length>4){
+      const actionNames=new Set(actions.filter(monsterActionCanDamageBackline).map(a=>String(a.name||'').trim()));
+      const fixed=new Set(monsterFixedActionNames(row));
+      if(![...actionNames].some(name=>fixed.has(name)))return true;
+    }
+    return false;
+  });
+  if(!invalid.length)return;
+  const details=invalid.slice(0,12).map(row=>`・${String(row.name||row.id||'名称未設定')}`).join('\n');
+  throw new Error(`二つ名個体は単体出現を前提とするため、前衛が残っていても後衛へ直接ダメージを与えられる手段を最低1つ持たせてください。5技以上の候補制二つ名では、その後衛圧行動を固定選出技へ含めます。\n${details}${invalid.length>12?`\nほか${invalid.length-12}件`:''}`);
 }
 function areaBossMonsterNameSet(){
   const names=new Set();
@@ -9340,7 +9392,7 @@ function collectFormRow(){
   if(key==='quest_rewards') assertNumericRankRows('quest_rewards',[clean]);
   if(key==='quests') assertNumericRankRows('quests',[clean]);
   if(key==='treasure_tables'){ assertNumericRankRows('treasure_tables',[clean]); assertTreasureDifficultyRows([clean]); }
-  if(key==='monsters'){ assertNumericRankRows('monsters',[clean]); assertMonsterFixedActionSelectionRows([clean]); assertMonsterLoadoutViabilityRows([clean]); assertMonsterActionCountRows([clean]); assertAreaBossBacklineAttackRows([clean]); assertMonsterActionBaseValueRows([clean]); assertMonsterActionCheckSourceRows([clean]); assertMonsterSupportActionCheckRows([clean]); assertMonsterDirectDamageDieRows([clean]); }
+  if(key==='monsters'){ assertNumericRankRows('monsters',[clean]); assertMonsterFixedActionSelectionRows([clean]); assertMonsterLoadoutViabilityRows([clean]); assertMonsterActionCountRows([clean]); assertMonsterActionTypeSemanticsRows([clean]); assertNamedBacklineAttackRows([clean]); assertAreaBossBacklineAttackRows([clean]); assertMonsterActionBaseValueRows([clean]); assertMonsterActionCheckSourceRows([clean]); assertMonsterSupportActionCheckRows([clean]); assertMonsterDirectDamageDieRows([clean]); }
   return clean;
 }
 function applyFormToState(){
@@ -10525,7 +10577,7 @@ function cloneRowsForSave(baseKey, rows){
   if(baseKey==='treasure_tables') assertTreasureDifficultyRows(rows||[]);
   if(baseKey==='items'){ assertItemPriceRows(rows||[]); assertItemClassificationRows(rows||[]); assertWeaponKatakanaNames(rows||[]); assertWeaponBaseDamageDieRows(rows||[]); assertUpgradeSlotScopeRows(rows||[]); assertUpgradeMaterialTargetScopeRows(rows||[]); assertEquipmentUpgradeMinimumRows(rows||[]); assertMonsterMaterialUpgradeRows(rows || []); assertSpecialUpgradeNonStackRows(rows || []); assertNoDefenseIgnoreUpgradeRows(rows || []); assertMaterialUpgradeSlotCostRows(rows || []); assertMaterialUpgradeSeparationRows(rows || []); assertProcessedMaterialRows(rows || []); assertMonsterMaterialDescriptionRows(rows || []); assertLateAreaMonsterMaterialRankRows(rows || []); }
   if(baseKey==='recipes'){ assertWeaponBranchMaterialRows(rows || []); assertOtherworldAccessoryUpgradeMaterialRows(rows || []); assertItemPriceRows(state.items||[], rows||[]); }
-  if(baseKey==='monsters'){ assertMonsterFixedActionSelectionRows(rows || []); assertMonsterLoadoutViabilityRows(rows || []); assertMonsterActionCountRows(rows || []); assertAreaBossBacklineAttackRows(rows || []); assertMonsterActionBaseValueRows(rows || []); assertMonsterActionCheckSourceRows(rows || []); assertMonsterSupportActionCheckRows(rows || []); assertMonsterDirectDamageDieRows(rows || []); }
+  if(baseKey==='monsters'){ assertMonsterFixedActionSelectionRows(rows || []); assertMonsterLoadoutViabilityRows(rows || []); assertMonsterActionCountRows(rows || []); assertMonsterActionTypeSemanticsRows(rows || []); assertNamedBacklineAttackRows(rows || []); assertAreaBossBacklineAttackRows(rows || []); assertMonsterActionBaseValueRows(rows || []); assertMonsterActionCheckSourceRows(rows || []); assertMonsterSupportActionCheckRows(rows || []); assertMonsterDirectDamageDieRows(rows || []); }
   return (rows || []).map(src=>{
     const r = {...(src || {})};
     normalizeEncounterPlacementRow(baseKey,r);
@@ -10830,8 +10882,8 @@ function downloadJson(){
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='recraft_alchemia_master_data.json'; a.click(); URL.revokeObjectURL(a.href);
 }
 
-const GITHUB_PUBLIC_DB_VERSION = '90.8.723';
-const GITHUB_PUBLIC_DB_UPDATED_AT = '2026-08-25';
+const GITHUB_PUBLIC_DB_VERSION = String(RECRAFT_DB_VERSION||'').trim().replace(/^v/i,'');
+const GITHUB_PUBLIC_DB_UPDATED_AT = new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Tokyo'});
 const GITHUB_PUBLIC_DB_MASTER_FILENAME = 'recraft_alchemia_master.json';
 const GITHUB_PUBLIC_GM_ALL_UNLOCK_KEY_HASH = '99c441f2f2479e89671c1835c55014048c0ddf8cb58fc3af013ecb65129c39cb';
 const GITHUB_PUBLIC_DB_OMIT_FIELDS = new Set([
