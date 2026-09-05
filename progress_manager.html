@@ -1162,11 +1162,11 @@ function progressPostAction(action,params={},timeoutMs=30000){
   });
 }
 function progressGithubDelay(ms){return new Promise(resolve=>setTimeout(resolve,ms));}
-async function progressFetchJson(url,timeoutMs=12000){
+async function progressFetchJson(url,timeoutMs=12000,cacheMode='force-cache'){
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),Math.max(1000,Number(timeoutMs)||12000));
   try{
-    const response=await fetch(url,{cache:'no-store',signal:controller.signal});
+    const response=await fetch(url,{cache:cacheMode,signal:controller.signal});
     if(!response.ok)throw new Error(`HTTP ${response.status}`);
     return await response.json();
   }catch(error){
@@ -1190,16 +1190,14 @@ async function fetchGithubProgressMaster(){
   for(const base of progressGithubBaseCandidates()){
     let lastError=null;
     for(let attempt=0;attempt<2;attempt++){
-      const token=`${Date.now()}_${attempt}_${Math.random().toString(36).slice(2)}`;
       try{
         const manifestUrl=new URL('manifest.json',base);
-        manifestUrl.searchParams.set('_ra',token);
-        const manifest=await progressFetchJson(manifestUrl.toString(),6000);
+        const manifest=await progressFetchJson(manifestUrl.toString(),6000,'no-cache');
         const info=progressManifestMasterInfo(manifest);
         if(!info.file||info.file.includes('..')||info.file.includes('\\'))throw new Error('共通DBのmasterファイル名が不正です。');
         const masterUrl=new URL(info.file,base);
-        masterUrl.searchParams.set('_ra',`${info.sha256||String(manifest.version||'master')}_${token}`);
-        const result=normalizeProgressMaster(await progressFetchJson(masterUrl.toString(),15000),manifest);
+        masterUrl.searchParams.set('_ra',info.sha256||String(manifest.version||'master'));
+        const result=normalizeProgressMaster(await progressFetchJson(masterUrl.toString(),15000,'force-cache'),manifest);
         if(!result.versionWarning)return result;
         usableMismatch=result;
         lastError=new Error(`共通DBの更新反映待ちです（${result.versionWarning}）`);
@@ -1208,8 +1206,8 @@ async function fetchGithubProgressMaster(){
     }
     try{
       const directUrl=new URL('recraft_alchemia_master.json',base);
-      directUrl.searchParams.set('_ra',`${Date.now()}_direct_${Math.random().toString(36).slice(2)}`);
-      return normalizeProgressMaster(await progressFetchJson(directUrl.toString(),15000),{master:'recraft_alchemia_master.json'});
+      directUrl.searchParams.set('_ra','direct-cache');
+      return normalizeProgressMaster(await progressFetchJson(directUrl.toString(),15000,'force-cache'),{master:'recraft_alchemia_master.json'});
     }catch(directError){errors.push(`${base}: ${[lastError&&lastError.message,directError&&directError.message].filter(Boolean).join(' / ')}`);}
   }
   if(usableMismatch)return usableMismatch;
