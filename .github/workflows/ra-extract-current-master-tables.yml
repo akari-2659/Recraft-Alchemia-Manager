@@ -1,0 +1,32 @@
+name: RA extract current master tables
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/ra-extract-current-master-tables.yml'
+permissions:
+  contents: write
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract monster and quest tables
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          src=Path('data/public/recraft_alchemia_master.json')
+          obj=json.loads(src.read_text(encoding='utf-8'))
+          out=Path('.tmp'); out.mkdir(exist_ok=True)
+          for key in ('monsters','quests'):
+              payload={'version':obj.get('version'),'table':key,'rows':obj['data'][key]}
+              (out/f'current_{key}_v733.json').write_text(json.dumps(payload,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          PY
+      - name: Commit extracts
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .tmp/current_monsters_v733.json .tmp/current_quests_v733.json
+          git commit -m 'Temporary extract current master tables'
+          git push
