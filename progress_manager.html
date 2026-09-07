@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.739</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.740</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.739-common-db-startup-hotfix-20260907">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.740-ui-regression-fix-20260907">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -228,6 +228,7 @@ body.progress-modal-open{overflow:hidden}
 .hidden-area-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 9px;background:#efe5c9;font-size:12px;font-weight:800;white-space:nowrap}
 .hidden-entry-panel{margin-top:10px;border-style:dashed}.hidden-entry-panel h3{margin-top:0}
 .start-actions{margin-top:10px}.daily-draw-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.daily-count-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:10px}.daily-count-grid label{display:grid;gap:5px;min-width:0;font-weight:800;color:var(--muted)}.daily-count-grid select{width:100%;min-width:0;min-height:44px;color:var(--ink,#2c241b);background:var(--paper,#fffdf8);color-scheme:light}
 .progress-modal-card .buttons,.progress-modal-card .row,.progress-modal-card .quest-tools,.progress-modal-card .event-main-actions{min-width:0;flex-wrap:wrap}
 .progress-modal-card button,.progress-modal-card select,.progress-modal-card input,.progress-modal-card textarea{max-width:100%;min-width:0}
 .progress-modal-card .kv{min-width:0}.progress-modal-card .kv>*{min-width:0;overflow-wrap:anywhere}
@@ -236,14 +237,14 @@ body.progress-modal-open{overflow:hidden}
 .progress-modal-card .result,.progress-modal-card .card,.progress-modal-card p{overflow-wrap:anywhere;word-break:break-word}
 [data-important-use-copy]{display:none!important}
 @media(max-width:820px){
-  .daily-draw-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .daily-draw-grid,.daily-count-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .progress-modal-head,.progress-modal-foot{padding:10px 12px}.progress-modal-body{padding:10px 12px}
   .progress-modal-card .row{grid-template-columns:1fr!important}
 }
 @media(max-width:520px){
   .progress-modal-backdrop{padding:0;place-items:stretch}.progress-modal-card{width:100%;height:100dvh;max-height:100dvh;border-radius:0;border-left:0;border-right:0}
   .progress-modal-head h2{font-size:18px;flex-basis:100%}.progress-modal-subtabs{width:100%}.progress-modal-subtabs>*{flex:1 1 0}
-  .progress-modal-foot>*{flex:1 1 100%}.daily-draw-grid{grid-template-columns:1fr}
+  .progress-modal-foot>*{flex:1 1 100%}.daily-draw-grid,.daily-count-grid{grid-template-columns:1fr}
   .progress-modal-card .buttons{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.progress-modal-card .buttons>*{width:100%}
 }
 @media(max-width:360px){.progress-modal-card .buttons{grid-template-columns:1fr}.progress-modal-head,.progress-modal-body,.progress-modal-foot{padding-left:8px;padding-right:8px}}
@@ -252,7 +253,7 @@ body.progress-modal-open{overflow:hidden}
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">Version：v90.8.739 / 最終更新日：2026年9月7日</div>
+<div class="ra-build-info">Version：v90.8.740 / 最終更新日：2026年9月7日</div>
 
 <header>
   <div class="header-inner">
@@ -572,7 +573,7 @@ body.progress-modal-open{overflow:hidden}
 <script src="./assets/vendor/jszip.min.js"></script>
 <script>
 'use strict';
-const VERSION='v90.8.739';
+const VERSION='v90.8.740';
 const GAS_URL='https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -717,7 +718,7 @@ async function tokenLoadExportDirectoryHandle(){if(tokenExportDirectoryHandleLoa
 async function tokenStoreExportDirectoryHandle(handle){tokenExportDirectoryHandleCache=handle||null;tokenExportDirectoryHandleLoaded=true;if(!tokenDirectoryPickerSupported()||!handle)return;const db=await tokenOpenDirectoryDb();await new Promise((resolve,reject)=>{const tx=db.transaction(TOKEN_EXPORT_DIRECTORY_STORE,'readwrite');tx.objectStore(TOKEN_EXPORT_DIRECTORY_STORE).put(handle,TOKEN_EXPORT_DIRECTORY_KEY);tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error||new Error('ZIP保存先を保存できませんでした。'));tx.onabort=()=>reject(tx.error||new Error('ZIP保存先の保存が中断されました。'));});db.close();}
 async function tokenDirectoryPermission(handle,request=false){if(!handle)return'denied';const options={mode:'readwrite'};try{let permission=typeof handle.queryPermission==='function'?await handle.queryPermission(options):'prompt';if(permission==='granted')return permission;if(request&&typeof handle.requestPermission==='function')permission=await handle.requestPermission(options);return permission;}catch(_e){return'denied';}}
 async function tokenRefreshExportDirectoryUi(){const buttons=[...document.querySelectorAll('[data-token-export-folder]')];if(!buttons.length)return;if(!tokenDirectoryPickerSupported()){buttons.forEach(button=>{button.textContent='ZIP保存先：通常DL';button.title='このブラウザでは保存先フォルダの固定に対応していません。';});return;}const handle=await tokenLoadExportDirectoryHandle();buttons.forEach(button=>{button.textContent=handle?.name?`ZIP保存先：${handle.name}`:'ZIP保存先設定';button.title=handle?.name?`現在の保存先：${handle.name}（クリックで変更）`:'ZIP保存先フォルダを選択';});}
-async function tokenChooseExportDirectory(scope='event'){if(!tokenDirectoryPickerSupported()){setTokenExportStatus(scope,'このブラウザでは保存先固定に対応していません。駒出力時は通常ダウンロードします。','warn');return null;}try{const handle=await window.showDirectoryPicker({id:'recraft-alchemia-monster-token-zip',mode:'readwrite'});const permission=await tokenDirectoryPermission(handle,true);if(permission!=='granted'){setTokenExportStatus(scope,'選択したフォルダへの書き込みが許可されませんでした。','bad');return null;}try{await tokenStoreExportDirectoryHandle(handle);}catch(_e){tokenExportDirectoryHandleCache=handle;tokenExportDirectoryHandleLoaded=true;setTokenExportStatus(scope,`保存先：${handle.name}（このセッションのみ保持）`,'warn');await tokenRefreshExportDirectoryUi();return handle;}setTokenExportStatus(scope,`ZIP保存先：${handle.name}`,'good');await tokenRefreshExportDirectoryUi();return handle;}catch(e){if(e?.name==='AbortError'){setTokenExportStatus(scope,'保存先の変更をキャンセルしました。');return null;}setTokenExportStatus(scope,e?.message||String(e),'bad');return null;}}
+async function tokenChooseExportDirectory(scope='event'){if(!tokenDirectoryPickerSupported()){setTokenExportStatus(scope,'このブラウザでは保存先固定に対応していません。駒出力時は通常ダウンロードします。','warn');return null;}try{const handle=await window.showDirectoryPicker({id:'ra-monster-token-zip',mode:'readwrite'});const permission=await tokenDirectoryPermission(handle,true);if(permission!=='granted'){setTokenExportStatus(scope,'選択したフォルダへの書き込みが許可されませんでした。','bad');return null;}try{await tokenStoreExportDirectoryHandle(handle);}catch(_e){tokenExportDirectoryHandleCache=handle;tokenExportDirectoryHandleLoaded=true;setTokenExportStatus(scope,`保存先：${handle.name}（このセッションのみ保持）`,'warn');await tokenRefreshExportDirectoryUi();return handle;}setTokenExportStatus(scope,`ZIP保存先：${handle.name}`,'good');await tokenRefreshExportDirectoryUi();return handle;}catch(e){if(e?.name==='AbortError'){setTokenExportStatus(scope,'保存先の変更をキャンセルしました。');return null;}setTokenExportStatus(scope,e?.message||String(e),'bad');return null;}}
 async function tokenResolveExportDestination(scope='event'){if(!tokenDirectoryPickerSupported())return{mode:'download',handle:null};let handle=await tokenLoadExportDirectoryHandle();if(!handle){handle=await tokenChooseExportDirectory(scope);if(!handle)return{mode:'cancel',handle:null};return{mode:'directory',handle};}const permission=await tokenDirectoryPermission(handle,true);if(permission==='granted')return{mode:'directory',handle};setTokenExportStatus(scope,`ZIP保存先「${handle.name||'選択済みフォルダ'}」への書き込み許可が必要です。［ZIP保存先］から再設定してください。`,'bad');return{mode:'cancel',handle:null};}
 async function tokenSaveZipBlob(blob,filename,destination){if(destination?.mode==='directory'&&destination.handle){const fileHandle=await destination.handle.getFileHandle(filename,{create:true});const writable=await fileHandle.createWritable();let closed=false;try{await writable.write(blob);await writable.close();closed=true;}finally{if(!closed){try{await writable.abort();}catch(_e){}}}return{mode:'directory',name:destination.handle.name||''};}const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);return{mode:'download',name:''};}
 function setTokenExportStatus(scope,text='',type=''){const el=document.querySelector(`[data-token-export-status="${scope}"]`);if(!el)return;el.textContent=String(text||'');el.className=`token-export-status${type?` ${type}`:''}`;}
@@ -1009,13 +1010,16 @@ function syncDailyQuestSelectionFromFacility({render=false,log=false}={}){
     state.lastDailyQuestText='【ギルド・デイリークエスト】\nデイリークエストがまだ選出されていません。';
     state.dailyQuestUnlockedAreaId='';
     state.dailyQuestUnlockedAreaIds=[];
+    progressUiV738.dailyCounts={...GUILD_DAILY_DEFAULT_COUNTS_V738};
   }else{
     state.lastDailyQuestKeys=shared.keys;
     state.lastDailyQuestKeysByKind=shared.keysByKind;
     state.dailyQuestUnlockedAreaId=shared.areaId;
     state.dailyQuestUnlockedAreaIds=shared.unlockedAreaIds||[];
+    progressUiV738.dailyCounts=Object.fromEntries(GUILD_DAILY_REQUEST_KINDS.map(kind=>[kind,v740NormalizeDailyCount(shared.countsByKind?.[kind],GUILD_DAILY_DEFAULT_COUNTS_V738[kind])]));
     state.lastDailyQuestText=dailyQuestTextFor(selectedFacilityDailyQuestRowsByKind());
   }
+  v740SyncDailyCountControls();
   ensureWeatherForUnlockedAreas(false);
   saveState(false);
   if(render){
@@ -5090,6 +5094,7 @@ const IMPORTANT_VISIBILITY_STORE_KEY=STORE_KEY+'_important_visibility_v1';
 const GUILD_DAILY_DEFAULT_COUNTS_V738={'拠点内依頼':2,'エリア依頼':2,'納品依頼':1};
 const progressUiV738={
   ready:false,questActive:false,areaActive:false,areaMode:'normal',
+  dailyCounts:{...GUILD_DAILY_DEFAULT_COUNTS_V738},
   slotResolved:{quest:false,event:false,base:false},
   seen:{quest:new Set(),event:new Set(),base:new Set()},
   hidden:{active:false,snapshot:null,originScope:'',areaId:''},
@@ -5097,6 +5102,36 @@ const progressUiV738={
   dropRestore:null,
   importantVisibility:{}
 };
+const GUILD_DAILY_MAX_COUNT_V740=10;
+function v740NormalizeDailyCount(value,fallback=1){
+  const n=Number(value),fb=Number(fallback);
+  const base=Number.isFinite(n)?Math.floor(n):(Number.isFinite(fb)?Math.floor(fb):1);
+  return Math.max(0,Math.min(GUILD_DAILY_MAX_COUNT_V740,base));
+}
+function v740DailyCount(kind=''){
+  const fallback=GUILD_DAILY_DEFAULT_COUNTS_V738[kind]??1;
+  return v740NormalizeDailyCount(progressUiV738.dailyCounts?.[kind],fallback);
+}
+function v740LoadDailyCounts(){
+  const shared=readFacilityDailyQuestState();
+  const saved=shared?.countsByKind&&typeof shared.countsByKind==='object'?shared.countsByKind:{};
+  progressUiV738.dailyCounts=Object.fromEntries(GUILD_DAILY_REQUEST_KINDS.map(kind=>[
+    kind,v740NormalizeDailyCount(saved[kind],GUILD_DAILY_DEFAULT_COUNTS_V738[kind])
+  ]));
+  return progressUiV738.dailyCounts;
+}
+function v740DailyCountOptions(kind=''){
+  const current=v740DailyCount(kind);
+  return Array.from({length:GUILD_DAILY_MAX_COUNT_V740+1},(_,n)=>`<option value="${n}"${n===current?' selected':''}>${n}件</option>`).join('');
+}
+function v740SyncDailyCountControls(){
+  document.querySelectorAll('[data-progress-daily-count]').forEach(sel=>{
+    const kind=String(sel.dataset.progressDailyCount||'').trim();
+    if(!GUILD_DAILY_REQUEST_KINDS.includes(kind))return;
+    sel.innerHTML=v740DailyCountOptions(kind);
+    sel.value=String(v740DailyCount(kind));
+  });
+}
 function v738DeepClone(value){try{return structuredClone(value);}catch(_e){try{return JSON.parse(JSON.stringify(value));}catch(_e2){return value;}}}
 function v738Bool(value){return ['1','true','yes','on'].includes(String(value??'').trim().toLowerCase())||String(value??'').trim().toUpperCase()==='TRUE';}
 function isHiddenAreaRow(row={}){row=row||{};return v738Bool(row.isHiddenArea)||String(row.id||'').startsWith('hidden_')||String(row.areaType||'').trim()==='隠しエリア';}
@@ -5183,10 +5218,13 @@ function setupProgressModalUi(){
   if($('rollBaseEventBtn'))$('rollBaseEventBtn').textContent='エリアイベント';const bReroll=v738Button('rerollBaseEventBtn','再抽選','secondary hidden');$('rollBaseEventBtn')?.insertAdjacentElement('afterend',bReroll);
   const bEntry=document.createElement('div');bEntry.id='baseHiddenEntryPanel';bEntry.className='card hidden hidden-entry-panel';$('baseImportantUseResult')?.insertAdjacentElement('afterend',bEntry);
 
-  // Daily quest draw controls are now available directly in the progress manager.
+  // Daily quest draw/count controls are managed only in the progress manager.
   const daily=$('dailyQuestTools');if(daily){
+    v740LoadDailyCounts();
+    const countGrid=document.createElement('div');countGrid.className='daily-count-grid';
+    countGrid.innerHTML=GUILD_DAILY_REQUEST_KINDS.map(kind=>`<label>${kind}の抽選件数<select data-progress-daily-count="${kind}">${v740DailyCountOptions(kind)}</select></label>`).join('');
     const draw=document.createElement('div');draw.className='daily-draw-grid';draw.innerHTML=`<button type="button" class="secondary" data-progress-daily-reroll="拠点内依頼">拠点内依頼：個別抽選</button><button type="button" class="secondary" data-progress-daily-reroll="エリア依頼">エリア依頼：個別抽選</button><button type="button" class="secondary" data-progress-daily-reroll="納品依頼">納品依頼：個別抽選</button><button type="button" data-progress-daily-reroll="">全体抽選</button>`;
-    daily.querySelector('.progress-fold-body')?.prepend(draw);
+    const body=daily.querySelector('.progress-fold-body');body?.prepend(draw);body?.prepend(countGrid);
     const old=$('refreshDailyQuestsBtn');if(old)old.textContent='保存済み選出を再読込';
   }
   document.querySelectorAll('[data-important-use-copy]').forEach(b=>b.classList.add('hidden'));
@@ -5358,16 +5396,16 @@ function closeCombatDropModal(){
 function v738Shuffle(rows=[]){const a=[...(rows||[])];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function v738NamedDaily(q={}){return String(q.questType||'').trim()==='二つ名討伐'||String(q.id||'').startsWith('quest_named_');}
 function v738DailyUnique(rows=[]){const areas=new Set(),out=[];for(const q of rows){if(v738NamedDaily(q)){const a=String(q.areaName||q.questLocation||'').trim();if(a&&areas.has(a))continue;if(a)areas.add(a);}out.push(q);}return out;}
-function v738DailyUnlockedIds(){const shared=readFacilityDailyQuestState();const ids=shared?.unlockedAreaIds?.length?shared.unlockedAreaIds:(state.baseUnlockedAreaIds||[]);return new Set((ids||[]).map(String));}
+function v738DailyUnlockedIds(){const ids=normalizeBaseUnlockedAreaIds();return new Set((ids||[]).map(String));}
 function v738DailyCandidates(kind){
   const unlocked=v738DailyUnlockedIds(),areaByName=new Map(visibleExplorationAreas().map(a=>[String(a.name||'').trim(),a]));return (state.quests||[]).filter(q=>questCategoryFor(q)==='デイリー'&&questEnabled(q)&&String(q.requestKind||'').trim()===kind).filter(q=>{const a=areaByName.get(String(q.areaName||'').trim());return !a||unlocked.has(String(a.id||a.name||''));});
 }
 function v738WriteDailySelection(){
-  const data={keysByKind:state.lastDailyQuestKeysByKind,keys:GUILD_DAILY_REQUEST_KINDS.flatMap(k=>state.lastDailyQuestKeysByKind[k]||[]),countsByKind:GUILD_DAILY_DEFAULT_COUNTS_V738,areaId:'',unlockedAreaIds:[...v738DailyUnlockedIds()],updatedAt:new Date().toISOString()};try{localStorage.setItem(GUILD_DAILY_STORAGE_KEY,JSON.stringify(data));}catch(_e){}try{const ch=new BroadcastChannel(GUILD_DAILY_CHANNEL_NAME);ch.postMessage({type:'updated',updatedAt:data.updatedAt});ch.close();}catch(_e){}
+  const data={keysByKind:state.lastDailyQuestKeysByKind,keys:GUILD_DAILY_REQUEST_KINDS.flatMap(k=>state.lastDailyQuestKeysByKind[k]||[]),countsByKind:Object.fromEntries(GUILD_DAILY_REQUEST_KINDS.map(k=>[k,v740DailyCount(k)])),areaId:'',unlockedAreaIds:[...v738DailyUnlockedIds()],updatedAt:new Date().toISOString()};try{localStorage.setItem(GUILD_DAILY_STORAGE_KEY,JSON.stringify(data));}catch(_e){}try{const ch=new BroadcastChannel(GUILD_DAILY_CHANNEL_NAME);ch.postMessage({type:'updated',updatedAt:data.updatedAt});ch.close();}catch(_e){}
   state.lastDailyQuestKeys=data.keys;state.dailyQuestUnlockedAreaIds=data.unlockedAreaIds;state.lastDailyQuestText=dailyQuestTextFor(selectedFacilityDailyQuestRowsByKind());saveState(false);renderDailyQuestResult();if(currentQuestCategory==='デイリー'){fillQuestSelect(state.lastDailyQuestKeys[0]||'');renderQuest();}
 }
 function rerollDailyQuestsInProgress(kind=''){
-  const kinds=GUILD_DAILY_REQUEST_KINDS.includes(kind)?[kind]:GUILD_DAILY_REQUEST_KINDS;state.lastDailyQuestKeysByKind=state.lastDailyQuestKeysByKind||emptyDailyQuestKeysByKind();kinds.forEach(k=>{const rows=v738DailyCandidates(k),current=new Set((state.lastDailyQuestKeysByKind[k]||[]).map(String)),fresh=v738Shuffle(rows.filter(q=>!current.has(String(q.id||q.name||'')))),old=v738Shuffle(rows.filter(q=>current.has(String(q.id||q.name||'')))),count=Math.min(GUILD_DAILY_DEFAULT_COUNTS_V738[k]||1,rows.length);state.lastDailyQuestKeysByKind[k]=v738DailyUnique(fresh.concat(old)).slice(0,count).map(q=>String(q.id||q.name||''));});v738WriteDailySelection();addLog(kind?`${kind}を抽選しました。`:'デイリークエストを全体抽選しました。');
+  const kinds=GUILD_DAILY_REQUEST_KINDS.includes(kind)?[kind]:GUILD_DAILY_REQUEST_KINDS;state.lastDailyQuestKeysByKind=state.lastDailyQuestKeysByKind||emptyDailyQuestKeysByKind();kinds.forEach(k=>{const rows=v738DailyCandidates(k),current=new Set((state.lastDailyQuestKeysByKind[k]||[]).map(String)),fresh=v738Shuffle(rows.filter(q=>!current.has(String(q.id||q.name||'')))),old=v738Shuffle(rows.filter(q=>current.has(String(q.id||q.name||'')))),count=Math.min(v740DailyCount(k),rows.length);state.lastDailyQuestKeysByKind[k]=v738DailyUnique(fresh.concat(old)).slice(0,count).map(q=>String(q.id||q.name||''));});v738WriteDailySelection();addLog(kind?`${kind}を抽選しました。`:'デイリークエストを全体抽選しました。');
 }
 function toggleSelectedImportantQuestVisibility(){const q=selected($('questSelect'),state.quests);if(!q||questCategoryFor(q)!=='重要')return;const key=String(q.id||q.name||'');progressUiV738.importantVisibility[key]=!questEnabled(q);v738SaveImportantVisibility();const keep=key;fillQuestSelect(keep);renderQuest();v738RefreshMainSelectionUi();addLog(`重要クエスト「${q.name||q.id}」を${questEnabled(q)?'表示':'非表示'}にしました。`);}
 
@@ -5389,6 +5427,7 @@ function bindV738ProgressUi(){
   $('questStartBtn')?.addEventListener('click',startQuestProgressSession);$('areaStartBtn')?.addEventListener('click',startAreaProgressSession);$('questEndBtn')?.addEventListener('click',v738CloseQuestSession);$('areaEndBtn')?.addEventListener('click',v738CloseAreaSession);$('hiddenEndBtn')?.addEventListener('click',endHiddenExploration);$('dropModalCloseBtn')?.addEventListener('click',closeCombatDropModal);$('questOpenDropBtn')?.addEventListener('click',openCombatDropModal);$('areaOpenDropBtn')?.addEventListener('click',openCombatDropModal);$('hiddenOpenDropBtn')?.addEventListener('click',openCombatDropModal);$('rerollQuestEventBtn')?.addEventListener('click',rollQuestEvent);$('rerollEventBtn')?.addEventListener('click',rollEvent);$('rerollBaseEventBtn')?.addEventListener('click',rollBaseEvent);$('toggleImportantQuestVisibilityBtn')?.addEventListener('click',toggleSelectedImportantQuestVisibility);
   $('areaSelect')?.addEventListener('change',()=>{v738RefreshMainSelectionUi();renderArea();});$('questSelect')?.addEventListener('change',v738RefreshMainSelectionUi);
   document.addEventListener('click',e=>{const daily=e.target.closest('[data-progress-daily-reroll]');if(daily){rerollDailyQuestsInProgress(String(daily.dataset.progressDailyReroll||''));return;}const hidden=e.target.closest('[data-hidden-area-start]');if(hidden){startHiddenExploration(hidden.dataset.hiddenAreaStart||'',hidden.dataset.hiddenOrigin||'event');return;}});
+  document.addEventListener('change',e=>{const sel=e.target?.closest?.('[data-progress-daily-count]');if(!sel)return;const kind=String(sel.dataset.progressDailyCount||'').trim();if(!GUILD_DAILY_REQUEST_KINDS.includes(kind))return;progressUiV738.dailyCounts[kind]=v740NormalizeDailyCount(sel.value,GUILD_DAILY_DEFAULT_COUNTS_V738[kind]);state.lastDailyQuestKeysByKind=state.lastDailyQuestKeysByKind||emptyDailyQuestKeysByKind();state.lastDailyQuestKeysByKind[kind]=[];rerollDailyQuestsInProgress(kind);v740SyncDailyCountControls();addLog(`${kind}の抽選件数を${v740DailyCount(kind)}件に変更しました。`);});
   document.querySelectorAll('.progress-modal-backdrop').forEach(m=>m.addEventListener('click',e=>{if(e.target!==m)return;if(m.id==='dropProgressModal')closeCombatDropModal();}));
   const copyDrop=$('copyDropSuccessBtn');copyDrop?.addEventListener('click',()=>setTimeout(()=>{if(!$('dropProgressModal')?.classList.contains('hidden'))closeCombatDropModal();},0));
 }
