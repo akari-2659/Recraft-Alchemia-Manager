@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.735</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.738</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.735-fixed-event-check-copy">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.738-progress-modal-hidden-20260907">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -211,9 +211,48 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 .token-export-panel button[data-token-export-folder]{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 </style>
 
+
+<style id="raProgressModalV738">
+/* v90.8.738: viewport-independent progression modals */
+html,body{max-width:100%;overflow-x:hidden}
+body.progress-modal-open{overflow:hidden}
+.progress-modal-backdrop{position:fixed;inset:0;display:grid;place-items:center;padding:clamp(6px,2vw,22px);background:rgba(20,17,14,.56);backdrop-filter:blur(3px);overflow:hidden}
+.progress-modal-backdrop.hidden{display:none!important}
+.progress-modal-card{width:min(1120px,100%);max-width:100%;max-height:calc(100dvh - clamp(12px,4vw,44px));min-width:0;display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line,#cbbd9d);border-radius:18px;background:var(--paper,#fffdf8);box-shadow:0 24px 80px rgba(0,0,0,.28)}
+.progress-modal-head,.progress-modal-foot{flex:0 0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 16px;background:rgba(255,250,240,.96)}
+.progress-modal-head{border-bottom:1px solid var(--line,#cbbd9d)}.progress-modal-foot{justify-content:flex-end;border-top:1px solid var(--line,#cbbd9d)}
+.progress-modal-head h2{margin:0;min-width:0;flex:1 1 280px;overflow-wrap:anywhere}
+.progress-modal-body{flex:1 1 auto;min-height:0;min-width:0;overflow:auto;overscroll-behavior:contain;padding:clamp(10px,2vw,18px)}
+.progress-runtime{min-width:0}.progress-runtime>*{max-width:100%;min-width:0}
+.progress-modal-subtabs{display:flex;gap:8px;flex-wrap:wrap}.progress-modal-subtabs button{white-space:normal}
+.hidden-area-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 9px;background:#efe5c9;font-size:12px;font-weight:800;white-space:nowrap}
+.hidden-entry-panel{margin-top:10px;border-style:dashed}.hidden-entry-panel h3{margin-top:0}
+.start-actions{margin-top:10px}.daily-draw-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.progress-modal-card .buttons,.progress-modal-card .row,.progress-modal-card .quest-tools,.progress-modal-card .event-main-actions{min-width:0;flex-wrap:wrap}
+.progress-modal-card button,.progress-modal-card select,.progress-modal-card input,.progress-modal-card textarea{max-width:100%;min-width:0}
+.progress-modal-card .kv{min-width:0}.progress-modal-card .kv>*{min-width:0;overflow-wrap:anywhere}
+.progress-modal-card .table-wrap,.progress-modal-card table{max-width:100%}
+.progress-modal-card .table-wrap{overflow:auto}
+.progress-modal-card .result,.progress-modal-card .card,.progress-modal-card p{overflow-wrap:anywhere;word-break:break-word}
+[data-important-use-copy]{display:none!important}
+@media(max-width:820px){
+  .daily-draw-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .progress-modal-head,.progress-modal-foot{padding:10px 12px}.progress-modal-body{padding:10px 12px}
+  .progress-modal-card .row{grid-template-columns:1fr!important}
+}
+@media(max-width:520px){
+  .progress-modal-backdrop{padding:0;place-items:stretch}.progress-modal-card{width:100%;height:100dvh;max-height:100dvh;border-radius:0;border-left:0;border-right:0}
+  .progress-modal-head h2{font-size:18px;flex-basis:100%}.progress-modal-subtabs{width:100%}.progress-modal-subtabs>*{flex:1 1 0}
+  .progress-modal-foot>*{flex:1 1 100%}.daily-draw-grid{grid-template-columns:1fr}
+  .progress-modal-card .buttons{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}.progress-modal-card .buttons>*{width:100%}
+}
+@media(max-width:360px){.progress-modal-card .buttons{grid-template-columns:1fr}.progress-modal-head,.progress-modal-body,.progress-modal-foot{padding-left:8px;padding-right:8px}}
+@media(max-height:520px) and (orientation:landscape){.progress-modal-backdrop{padding:4px}.progress-modal-card{max-height:calc(100dvh - 8px)}.progress-modal-head,.progress-modal-foot{padding-top:6px;padding-bottom:6px}.progress-modal-body{padding-top:8px;padding-bottom:8px}}
+</style>
+
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">Version：v90.8.735 / 最終更新日：2026年9月6日</div>
+<div class="ra-build-info">Version：v90.8.738 / 最終更新日：2026年9月7日</div>
 
 <header>
   <div class="header-inner">
@@ -243,7 +282,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
   <section class="panel wide">
     <h2>進行メニュー</h2>
     <div class="tab-nav" id="progressTabNav">
-      <button class="tab-btn active" type="button" data-tab-target="quest">クエスト進行</button>
+      <button class="tab-btn active" type="button" data-tab-target="quest">クエスト</button>
       <button class="tab-btn" type="button" data-tab-target="area">エリア探索</button>
       <button class="tab-btn" type="button" data-tab-target="base-event">拠点内イベント</button>
       <button class="tab-btn" type="button" data-tab-target="community">共同採取設備</button>
@@ -252,7 +291,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
       <button class="tab-btn" type="button" data-tab-target="appraisal">スクロール鑑定</button>
       <button class="tab-btn" type="button" data-tab-target="drop">アイテムドロップ</button>
     </div>
-    <p class="muted small">クエスト進行は固定イベントとランダムイベントを混在させ、拠点内依頼では拠点内イベント、エリア依頼では対象エリアのイベントを抽選します。エリア探索は進行度とランダムイベントを同じ画面で確認できます。進行ログは全タブ共通です。</p>
+    <p class="muted small">クエストとエリア探索は一覧から開始し、実際の進行はモーダル内で管理します。イベント発生後に「進行」で進行度を上げます。同じ探索中に一度発生したエリアイベントは再登場しません。進行ログは全タブ共通です。</p>
   </section>
 
   <div class="grid">
@@ -287,10 +326,10 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
         <summary>現在のデイリークエスト一覧</summary>
         <div class="progress-fold-body">
           <div class="quest-tools">
-            <button class="secondary" type="button" id="refreshDailyQuestsBtn">施設側の選出を再読込</button>
+            <button class="secondary" type="button" id="refreshDailyQuestsBtn">保存済み選出を再読込</button>
             <button class="secondary" type="button" id="copyDailyQuestsBtn">現在のデイリーをコピー</button>
           </div>
-          <div id="dailyQuestResult" class="muted small">統合DB管理の「施設→ギルド」で抽選・表示したデイリークエストを、そのまま進行対象として読み込みます。</div>
+          <div id="dailyQuestResult" class="muted small">このクエストタブで個別抽選・全体抽選したデイリークエストを、そのまま進行対象として使用します。</div>
         </div>
       </details>
       <label>クエスト</label>
@@ -305,7 +344,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
       </div>
       <h3>進行イベント確認</h3>
       <div class="buttons event-main-actions">
-        <button id="rollQuestEventBtn">クエストランダムイベント抽選</button>
+        <button id="rollQuestEventBtn">エリアイベント</button>
         <button class="secondary" id="copyQuestCheckBtn" disabled>判定コピー</button>
         <button class="secondary hidden" id="copyQuestBattleCheckBtn" disabled>戦闘内判定コピー</button>
         <button class="secondary" id="copyQuestContentBtn" disabled>内容コピー</button>
@@ -316,7 +355,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
       <div id="questImportantUsePanel" class="card hidden important-use-panel">
         <h3>越境アイテム</h3>
         <div class="kv"><b>対象アイテム</b><span id="questImportantUseTarget">—</span><b>消費数</b><span id="questImportantUseConsume">—</span></div>
-        <div class="buttons"><button class="secondary" id="questImportantUseActionBtn" type="button" data-important-use-resolve="quest">越境アイテムを使用</button><button type="button" class="secondary" data-important-use-copy="quest" disabled>越境結果コピー</button></div>
+        <div class="buttons"><button class="secondary" id="questImportantUseActionBtn" type="button" data-important-use-resolve="quest">越境アイテムを使用</button></div>
       </div>
       <div id="questImportantUseResult" class="result hidden important-use-result"></div>
       <div id="questWorkReinforcementPanel" class="event-reward-panel hidden"></div>
@@ -380,7 +419,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
         <div id="eventImportantUsePanel" class="card hidden important-use-panel">
           <h3>越境アイテム</h3>
           <div class="kv"><b>対象アイテム</b><span id="eventImportantUseTarget">—</span><b>消費数</b><span id="eventImportantUseConsume">—</span></div>
-          <div class="buttons"><button class="secondary" id="eventImportantUseActionBtn" type="button" data-important-use-resolve="event">越境アイテムを使用</button><button type="button" class="secondary" data-important-use-copy="event" disabled>越境結果コピー</button></div>
+          <div class="buttons"><button class="secondary" id="eventImportantUseActionBtn" type="button" data-important-use-resolve="event">越境アイテムを使用</button></div>
         </div>
         <div id="eventImportantUseResult" class="result hidden important-use-result"></div>
         <div id="recipeMerchantPanel" class="recipe-merchant-panel hidden"></div>
@@ -408,7 +447,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
       <div id="baseImportantUsePanel" class="card hidden important-use-panel">
         <h3>越境アイテム</h3>
         <div class="kv"><b>対象アイテム</b><span id="baseImportantUseTarget">—</span><b>消費数</b><span id="baseImportantUseConsume">—</span></div>
-        <div class="buttons"><button class="secondary" id="baseImportantUseActionBtn" type="button" data-important-use-resolve="base">越境アイテムを使用</button><button type="button" class="secondary" data-important-use-copy="base" disabled>越境結果コピー</button></div>
+        <div class="buttons"><button class="secondary" id="baseImportantUseActionBtn" type="button" data-important-use-resolve="base">越境アイテムを使用</button></div>
       </div>
       <div id="baseImportantUseResult" class="result hidden important-use-result"></div>
       <div id="baseEventRewardResult" class="result" style="margin-top:10px">入手アイテム抽選結果がここに表示されます。</div>
@@ -533,7 +572,7 @@ input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-app
 <script src="./assets/vendor/jszip.min.js"></script>
 <script>
 'use strict';
-const VERSION='v90.8.735';
+const VERSION='v90.8.738';
 const GAS_URL='https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -967,7 +1006,7 @@ function syncDailyQuestSelectionFromFacility({render=false,log=false}={}){
   if(!shared){
     state.lastDailyQuestKeys=[];
     state.lastDailyQuestKeysByKind=emptyDailyQuestKeysByKind();
-    state.lastDailyQuestText='【ギルド・デイリークエスト】\n施設側でデイリークエストが選出されていません。';
+    state.lastDailyQuestText='【ギルド・デイリークエスト】\nデイリークエストがまだ選出されていません。';
     state.dailyQuestUnlockedAreaId='';
     state.dailyQuestUnlockedAreaIds=[];
   }else{
@@ -992,7 +1031,7 @@ function syncDailyQuestSelectionFromFacility({render=false,log=false}={}){
       renderQuest();
     }
   }
-  if(log)addLog(shared?'施設側のデイリークエスト選出を再読込しました。':'施設側で選出済みのデイリークエストが見つかりません。');
+  if(log)addLog(shared?'保存済みのデイリークエスト選出を再読込しました。':'保存済みのデイリークエスト選出が見つかりません。');
   return shared;
 }
 function selectedFacilityDailyQuestRowsByKind(){
@@ -1016,7 +1055,7 @@ function dailyQuestTextFor(grouped={}){
     lines.push('',`■${kind}`);
     lines.push(rows.length?rows.map(q=>questPublicInfoLines(q).join('\n')).join('\n\n'):'選出なし');
   });
-  if(!total)return '【ギルド・デイリークエスト】\n施設側で選出されているデイリークエストはありません。';
+  if(!total)return '【ギルド・デイリークエスト】\n選出されているデイリークエストはありません。';
   return lines.join('\n');
 }
 function ensureDailyQuestSelection(){
@@ -1042,12 +1081,12 @@ function renderDailyQuestResult(){
   const shared=readFacilityDailyQuestState();
   ensureDailyQuestSelection();
   if(!shared){
-    box.innerHTML='<b>施設側で未選出です。</b><br>統合DB管理の「施設→ギルド→デイリークエスト」で種別ごとに抽選してください。';
+    box.innerHTML='<b>まだ選出されていません。</b><br>上の個別抽選または全体抽選を使用してください。';
     return;
   }
   const counts=GUILD_DAILY_REQUEST_KINDS.map(kind=>`${kind} ${state.lastDailyQuestKeysByKind?.[kind]?.length||0}件`).join('／');
-  const synced=shared.updatedAt ? `<br><span class="muted">施設側更新：${esc(new Date(shared.updatedAt).toLocaleString('ja-JP',{hour12:false}))}</span>` : '';
-  box.innerHTML=`<b>施設側の選出を共有中</b><br>${esc(counts)}${synced}<hr>${esc(state.lastDailyQuestText).replace(/\n/g,'<br>')}`;
+  const synced=shared.updatedAt ? `<br><span class="muted">更新：${esc(new Date(shared.updatedAt).toLocaleString('ja-JP',{hour12:false}))}</span>` : '';
+  box.innerHTML=`<b>現在の選出</b><br>${esc(counts)}${synced}<hr>${esc(state.lastDailyQuestText).replace(/\n/g,'<br>')}`;
 }
 
 
@@ -1453,7 +1492,7 @@ function questBoundEvents(q){
 function questSpecificEvents(q){
   const bound=questBoundEvents(q);
   const boundKeys=new Set(bound.map(e=>`${eventThreshold(e)??''}:${String(e.eventName||'').trim()}`));
-  const textRows=parseQuestFixedEvents(q && q.fixedEvents).filter(e=>!boundKeys.has(`${eventThreshold(e)??''}:${String(e.eventName||'').trim()}`));
+  const textRows=parseQuestFixedEvents(q && q.fixedEvents).filter(e=>!boundKeys.has(`${eventThreshold(e)??''}:${String(e.eventName||'').trim()}`)).map(e=>Object.assign({},e,{areaName:String(q?.areaName||q?.questLocation||'').trim(),__questName:String(q?.name||'').trim()}));
   return [...bound,...textRows].sort((a,b)=>(eventThreshold(a)??999)-(eventThreshold(b)??999));
 }
 function isBaseQuest(q={}){return String(q.requestKind||'').trim()==='拠点内依頼';}
@@ -1518,8 +1557,8 @@ function questFixedEventCheckCopyText(q={},e={},resolvedEncounter=null){
     const highest=encounterHighestInitiative(groups);
     if(highest!==null){
       const composition=(groups||[]).map(g=>`${publicEncounterMonsterName(g.name)}×${Math.max(1,Math.floor(Number(g.count)||1))}`).join('・');
-      const name=String(e.eventName||'名称未設定').trim()||'名称未設定';
-      return `【固定：${name}】\n感知 / 達成値：${highest}${composition?` / ${composition}`:''}`;
+      const name=String(e.eventName||'名称未設定').trim()||'名称未設定',intro=eventIntroNarrative({...e,areaName:e.areaName||q.areaName||q.questLocation||''});
+      return [`【固定：${name}】`,intro,'',`感知 / 達成値：${highest}${composition?` / ${composition}`:''}`].join('\n');
     }
     // 編成解決に失敗しても、登録済み判定そのものまで消さない。
     return eventCheckCopyText(e,true);
@@ -1848,17 +1887,30 @@ function eventCheckInfo(e={}){
 function eventCheckDisplayText(e={}){
   return eventCheckInfo(e)?.display||'';
 }
+function eventIntroNarrative(e={}){
+  const explicit=String(e.description||'').trim();if(explicit)return explicit;
+  const name=String(e.eventName||'周囲の異変').trim()||'周囲の異変';
+  const type=String(e.eventType||'').trim(),area=String(e.areaName||'').trim();
+  const where=area||'周囲';
+  if(/採集|採取|群生|露頭|鉱脈|晶|茸|草|苔|根|藻/.test(name))return `${where}に、目的のものがありそうな痕跡が見える。状態の良い場所を見極めて丁寧に探せば、必要なものを確保できそうだ。`;
+  if(/確認|手がかり|記録|読み|測定|観測|調査|選鉱/.test(name))return `${where}で確かめるべき痕跡が見つかった。周囲の状態を順に照らし合わせれば、先へ進むための手掛かりを掴めそうだ。`;
+  if(/点検|交換|繕|清掃|封緘|固定|打ち|作り|再同期|安定化|封鎖|洗浄|塗り|清書|再固定|締め|手入れ|補修|整備|運搬|仕分|選別|調整|修理|整理/.test(name))return `${where}に手を入れる必要のある箇所が残っている。状態を見極め、順序よく作業すれば安全に片付けられそうだ。`;
+  if(/戦闘|遭遇|影|気配|羽音|足音|声/.test(name)||/魔物|遭遇|強敵|ボス|二つ名/.test(type))return `${where}に、何かが近づいている気配がある。音や痕跡を追えば、接触する前に相手の位置を掴めそうだ。`;
+  if(/橋|足場|斜面|扉|隔壁|昇降機|風|雷|噴気|支柱/.test(name)||/障害|危険/.test(type))return `${where}の進路に危険な箇所がある。周囲の状態と動きを見極めれば、安全に抜ける方法を見つけられそうだ。`;
+  return `${where}で「${name}」について確かめる必要がある。周囲の状況をよく見れば、どう進めるべきか判断できそうだ。`;
+}
 function eventCheckCopyText(e={},fixed=false){
   const line=eventCheckInfo(e)?.copy||'';
   if(!line)return '';
-  const name=String(e.eventName||'名称未設定').trim()||'名称未設定';
-  return `${fixed?`【固定：${name}】`:`【${name}】`}\n${line}`;
+  const name=String(e.eventName||'名称未設定').trim()||'名称未設定',intro=eventIntroNarrative(e);
+  return [fixed?`【固定：${name}】`:`【${name}】`,intro,'',line].filter((v,i,a)=>v!==''||i===2).join('\n');
 }
 function eventDetailText(e,q=null){
   const partySize=q?effectiveQuestPartySize(q):selectedPartySize();
   const internal=q?questBattleInternalCheckInfo(q,e):null;
   return [
     publicEventTypeName(e)?`種別：${publicEventTypeName(e)}`:'',
+    e.description?`描写：${e.description}`:'',
     internal?`戦闘内判定：${internal.line}`:eventCheckDisplayText(e),
     e.result?`結果：${eventResultTextForDisplay(e,partySize)}`:'',
     e.progressEffect?`進行効果：${e.progressEffect}`:'',
@@ -1898,7 +1950,7 @@ function renderQuestEvents(){
   parts.push('</div>');
   if(!delivery){
     const randomSourceText=isBaseQuest(q)?'解放済みエリアに応じて候補へ入る拠点内ランダムイベント':'選択中クエストの対象エリアに設定されたランダムイベント';
-    parts.push(`<div class="event-section"><div class="event-section-title"><span class="badge random">ランダム</span> クエストランダムイベント</div><div class="muted small">${randomSourceText}です。下の「クエストランダムイベント抽選」を押した時だけ結果が出ます。戦闘イベントは登録済みの出現構成をそのまま使用します。候補数：${randomRows.length}件</div>`);
+    parts.push(`<div class="event-section"><div class="event-section-title"><span class="badge random">ランダム</span> クエストランダムイベント</div><div class="muted small">${randomSourceText}です。「エリアイベント」を押した時だけ結果が出ます。戦闘イベントは登録済みの出現構成をそのまま使用します。候補数：${randomRows.length}件</div>`);
     if(state.lastQuestEventText){
       parts.push(`<div class="event-card random"><div class="event-title"><span class="badge random">ランダム</span> 直近の抽選結果</div><div class="muted small">${esc(state.lastQuestEventText).replace(/\n/g,'<br>')}</div></div>`);
     }else{
@@ -2276,7 +2328,8 @@ function isCrossBorderSourceEvent(row={}){
 }
 function areaExplorationDrawCount(area={}){
   const step=Math.max(1,areaStepAmount(area));
-  return Math.max(1,Math.ceil(100/step));
+  // 進行度0%でもイベントが1回発生し、その後に進行するため、25%進行なら0/25/50/75/100の5回。
+  return Math.max(1,Math.ceil(100/step)+1);
 }
 function crossBorderSourcePerDrawChance(area={}){
   const draws=areaExplorationDrawCount(area);
@@ -3573,19 +3626,13 @@ function resetAreaEventItemCopyState(){
   state.lastEventRewardState=null;
 }
 function mergeEventItemCopyParts(parts=[]){
-  let eventHeading='';const bodies=[];
-  parts.filter(x=>String(x||'').trim()).forEach(part=>{
-    const text=String(part||'').trim(),lines=text.split('\n'),first=String(lines[0]||'').trim();
-    if(first.startsWith('【イベント入手】')){if(!eventHeading)eventHeading=first;const body=lines.slice(1).join('\n').trim();if(body)bodies.push(body);}
-    else bodies.push(text);
-  });
+  const bodies=parts.map(x=>String(x||'').trim()).filter(Boolean);
   // 「入手なし」は実アイテムのコピー内容と同時に出さない。
-  // 条件分岐に「失敗：入手なし」があるイベントで、成功側の抽選アイテムを
-  // コピーした際に「入手なし」と実アイテムが併記される矛盾を防ぐ。
+  // 入手アイテムは既存のデータブロックをそのまま連結し、イベント用の見出しは足さない。
   const isNoRewardBody=body=>/^(?:入手なし|追加素材なし)[。．]?$/.test(String(body||'').trim());
   const hasActualReward=bodies.some(body=>!isNoRewardBody(body));
   const mergedBodies=hasActualReward?bodies.filter(body=>!isNoRewardBody(body)):bodies;
-  return [eventHeading,...mergedBodies].filter(Boolean).join('\n\n');
+  return mergedBodies.join('\n\n');
 }
 function questEventItemCopyText(){
   const parts=[];
@@ -3985,7 +4032,7 @@ function rollRewardItemTable(tableId,drawCount=1,areaName='',eventName=''){
   }
   const items=[...map.values()];
   const displayText=['【入手アイテム抽選】',areaName?`エリア系統：${areaName}`:'',`表：${id}`,...draws,`合計：${items.map(x=>`${x.name}×${x.count}`).join('、')||'なし'}`].filter(Boolean).join('\n');
-  const copyText=items.length?[eventName?`【イベント入手】${eventName}`:'【入手結果】',...items.map(rewardItemCopyBlock)].join('\n\n'):'';
+  const copyText=items.length?items.map(rewardItemCopyBlock).join('\n\n'):'';
   return {tableId:id,eventName,slots,items,draws,displayText,copyText};
 }
 function eventTableRewardState(scope='event'){
@@ -4009,8 +4056,7 @@ function eventTableRewardSelectedItems(scope='event'){
 }
 function eventTableRewardCopyText(scope='event'){
   const table=eventTableRewardState(scope),rows=eventTableRewardSelectedItems(scope);if(!table||!rows.length)return'';
-  const reward=eventRewardState(scope),heading=`【イベント入手】${reward?.eventName||table.eventName||'イベント'}`;
-  return [heading,...rows.map(item=>item.row?acquisitionItemCopyBlock(item.row,String(item.count||1)):dropPlayerInfoBlock({name:item.name,count:`${item.count||1}個`}))].join('\n\n');
+  return rows.map(item=>item.row?acquisitionItemCopyBlock(item.row,String(item.count||1)):dropPlayerInfoBlock({name:item.name,count:`${item.count||1}個`})).join('\n\n');
 }
 function eventRewardCombinedSelectedItems(scope='event'){
   const map=new Map();
@@ -4664,20 +4710,9 @@ function eventRewardHasSelectedNoReward(scope='event'){
   });
 }
 function eventRewardCopyText(scope='event'){
-  const reward=eventRewardState(scope);if(!reward)return'';const rows=eventRewardSelectedItems(scope),lines=[`【イベント入手】${reward.eventName}`];
-  if(!rows.length){
-    // 未選択の失敗分岐に「入手なし」があるだけならコピー対象に含めない。
-    // 実際に「入手なし」の分岐を選択した場合だけ明示する。
-    if(!eventRewardHasSelectedNoReward(scope))return'';
-    lines.push('入手なし');return lines.join('\n');
-  }
-  rows.forEach(item=>{
-    const count=String(item.count||1);
-    const block=item.row
-      ? acquisitionItemCopyBlock(item.row,count)
-      : dropPlayerInfoBlock({name:item.name,id:item.row?.id||'',publicId:item.row?.publicId||'',count:`${count}個`});
-    lines.push('',block);
-  });return lines.join('\n');
+  const reward=eventRewardState(scope);if(!reward)return'';const rows=eventRewardSelectedItems(scope);
+  if(!rows.length)return'';
+  return rows.map(item=>{const count=String(item.count||1);return item.row?acquisitionItemCopyBlock(item.row,count):dropPlayerInfoBlock({name:item.name,id:item.row?.id||'',publicId:item.row?.publicId||'',count:`${count}個`});}).join('\n\n');
 }
 function eventRewardGroupText(group={}){const parts=[];const itemText=(group.items||[]).map(item=>`${item.selectedName||item.name}×${item.count}${/D/i.test(item.expr||'')?`（${item.expr}）`:''}`).join('、');if(itemText)parts.push(itemText);if(Number(group.tableSlots)>0)parts.push(`入手アイテム表：${Number(group.tableSlots)}枠`);if(parts.length)return parts.join(' / ');return String(group.clause||'').replace(/^目標値\s*\+\s*\d+\s*以上\s*[：:]\s*/,'').replace(/^勝利後\s*[：:]?\s*/,'').replace(/^失敗\s*[：:]\s*/,'').replace(/^判定成功\s*[：:]\s*/,'').replace(/^[^：:。]{1,24}?成功\s*[：:]\s*/,'')||'結果を選択';}
 function eventOutcomeKey(scope='event'){
@@ -4807,31 +4842,98 @@ function eventOutcomeItems(scope='event',target={}){
 }
 function eventOutcomeItemsCopyBlock(scope='event',target={}){
   const items=eventOutcomeItems(scope,target);if(!items.length)return'';
-  const materialsOnly=items.every(item=>String(item.row?.dataKind||'').trim()==='素材'||String(item.row?.itemType||'').trim()==='食材');
-  const lines=[materialsOnly?'【入手素材の結果一覧】':'【入手品の結果一覧】'];
-  items.forEach(item=>{const count=String(item.count||1);lines.push('',item.row?acquisitionItemCopyBlock(item.row,count):dropPlayerInfoBlock({name:item.name,count:`${count}個`}));});
-  return lines.join('\n');
+  return items.map(item=>{const count=String(item.count||1);return item.row?acquisitionItemCopyBlock(item.row,count):dropPlayerInfoBlock({name:item.name,count:`${count}個`});}).join('\n\n');
+}
+function eventOutcomeIsBattle(row={}){
+  const type=String(row.eventType||'');
+  return !!eventBattleCopyMode(row)||/(?:魔物遭遇|強敵遭遇|ボス遭遇|二つ名遭遇|魔物$|戦闘)/.test(type);
+}
+function eventOutcomeHasExtraAcquisition(scope='event'){
+  if(eventRewardCombinedSelectedItems(scope).length)return true;
+  if(String(selectedEventTreasureCopyText(scope)||'').trim())return true;
+  return false;
+}
+function eventOutcomeNarrative(row={},group={},scope='event'){
+  const trigger=group.trigger||{},clause=String(group.clause||''),type=String(row.eventType||''),name=String(row.eventName||'イベント').trim();
+  const failure=trigger.kind==='failure'||trigger.kind==='questFailure';
+  const threshold=trigger.kind==='threshold';
+  const victory=trigger.kind==='victory';
+  const clear=trigger.kind==='questClear'||/クエストクリア/.test(clause);
+  const hasItems=(group.items||[]).length>0||Number(group.tableSlots)>0||/入手|採取|回収|発見/.test(clause);
+  if(victory){
+    if(hasItems)return '戦いが終わったあと、周囲を改めて調べると、通常の戦利品とは別に持ち帰れそうなものが残されていた。';
+    return '';
+  }
+  if(clear)return failure?'目的を果たすには至らず、これ以上の続行は難しいと判断して作業を切り上げた。':'必要な確認や作業を終え、依頼の目的を無事に果たした。';
+  if(/採取|食材/.test(type)||/採集|採取|群生|露頭|鉱脈|晶|茸|草|苔|根|藻/.test(name)){
+    if(threshold)return 'さらに周囲を丁寧に探ると、最初は見落としていた状態の良い箇所まで見つけることができた。';
+    if(failure)return hasItems?'少し手間取ったものの、手を伸ばせる範囲から傷みの少ないものを選んで確保した。':'探せる範囲を確かめたが、無理に踏み込まず今回は採取を見送った。';
+    return '生え方や地層の状態を見極め、周囲を傷めないよう丁寧に必要なものを採り集めた。';
+  }
+  if(/発見|探索|宝箱/.test(type)||/箱|鞄|荷物|痕跡|足跡|刻印|手がかり|確認/.test(name)){
+    if(threshold)return 'さらに細かな痕跡まで追うと、最初の調査では気付かなかったものまで見つかった。';
+    if(failure)return hasItems?'十分な手掛かりは得られなかったが、目につく範囲から使えそうなものだけは確保した。':'周囲を探したものの、確かな手掛かりまでは掴めなかった。';
+    return '痕跡を一つずつ辿り、見落とされていたものの位置を確かに突き止めた。';
+  }
+  if(/障害|危険|操作|異界現象|異常/.test(type)||/橋|足場|斜面|扉|隔壁|風|雷|噴気|支柱/.test(name)){
+    if(failure)return '読みを外して少し手間取ったものの、危険が大きくなる前に体勢を立て直した。';
+    return '周囲の動きと危険な箇所を見極め、無理のない手順で障害を切り抜けた。';
+  }
+  if(/拠点イベント/.test(type)){
+    if(/相談|不安|動揺|聞き役|緊張|順番|交渉/.test(name))return failure?'話はすぐにはまとまらなかったが、互いの事情を整理してこれ以上こじれないところまで落ち着かせた。':'相手の話を一つずつ整理し、互いに納得できる形へうまく話をまとめた。';
+    if(/負傷|咳|探索者|隊員|帰還者/.test(name))return failure?'十分な手当てや声掛けには至らなかったが、無理をさせないよう落ち着ける場所まで支えた。':'様子を確かめながら必要な手当てや声掛けを行い、ひとまず落ち着ける状態まで整えた。';
+    if(/査定|買い取り|値付け|取引/.test(name))return failure?'品の状態や条件が噛み合わず、今回は無理に取引をまとめず見送ることにした。':'品の状態と条件を丁寧に見比べ、双方が納得できる取引へまとめた。';
+    if(/補修|修理|洗浄|調整|封緘|選別|整理|設置|搬入|点検|締め|交換|擦り合わせ|仕分|張り直し|磨き直し|繕/.test(name))return failure?'作業には少し手間取ったものの、状態を確かめ直しながら危険のないところまで整えた。':'状態と手順を見極め、必要な作業を順序よく片付けた。';
+    return failure?'思うようには進まなかったが、事情を確かめて大きな支障が残らないところまで対処した。':'事情を確かめて必要な手助けを行い、滞っていたことを無事に片付けた。';
+  }
+  if(/点検|交換|繕|清掃|封緘|固定|作業|選鉱|洗浄|塗り|清書|締め|手入れ|補修|整備|運搬|仕分|選別|調整|修理|整理|照合/.test(name)){
+    if(failure)return '予定より時間はかかったが、手順を一つずつ確かめながら最後まで作業を終えた。';
+    return '必要な手順を見極め、無駄なく手を動かして作業をきれいに片付けた。';
+  }
+  if(failure)return hasItems?'思うようには進まなかったが、状況を立て直しながら最低限の成果は持ち帰った。':'手を尽くしたものの、今回は狙った成果まで届かなかった。';
+  if(threshold)return 'さらに注意深く確かめたことで、もう一段踏み込んだ成果へたどり着いた。';
+  return hasItems?'周囲の様子を丁寧に確かめ、見つけたものを無事に回収した。':'状況を見極め、無事にこの場を切り抜けた。';
+}
+function eventOutcomeSupplementText(row={},group={},partySize=selectedPartySize()){
+  let clean=eventOutcomeCleanClause(row,group.clause,partySize);if(!clean)return'';
+  // アイテム入手の要約は出さず、実データブロックへ任せる。
+  // 文頭・文中どちらにあっても入手要約だけ除去し、疲労や進行、クエスト成否などの機械的結果は残す。
+  clean=clean.replace(/(?:素材・アイテム|素材|食材|アイテム)を(?:追加で)?入手(?:することができた)?(?:して|し)?[、,]?\s*/g,'');
+  clean=clean.replace(/(?:何も得られなかった|追加の素材は得られなかった|回収はできるが)[。．、,]?\s*/g,'');
+  clean=clean.replace(/。{2,}/g,'。').replace(/^[。．、,\s]+|[、,\s]+$/g,'').trim();
+  if(!clean)return'';
+  // 事務的な成否ラベルは描写に置き換える。機械的効果・クエスト成否だけは残す。
+  if(!/(?:ダメージ|疲労|回避|抵抗|防御|判定[+\-−－]|HP|MP|クエストクリア|クエスト失敗|進行|解除|補正|回復|解放)/.test(clean))return'';
+  return clean;
 }
 function eventOutcomeCopyText(scope='event',index=0){
   const row=eventOutcomeRow(scope);if(!row)return'';
   const branches=eventOutcomeBranches(row),target=branches[Number(index)||0];if(!target)return'';
   const included=eventOutcomeIncludedBranches(branches,target),partySize=eventOutcomePartySize(scope);
-  const narrative=included.map(group=>eventOutcomeCleanClause(row,group.clause,partySize)).filter(Boolean).join('\n');
+  const narratives=[];
+  included.forEach(group=>{const n=eventOutcomeNarrative(row,group,scope),extra=eventOutcomeSupplementText(row,group,partySize);if(n)narratives.push(n);if(extra)narratives.push(extra);});
   const items=eventOutcomeItemsCopyBlock(scope,target);
-  return [`【${row.eventName||'イベント'}：${target.trigger.label}】`,narrative,items].filter(Boolean).join('\n\n');
+  if(eventOutcomeIsBattle(row)&&!items)return'';
+  return [`【${row.eventName||'イベント'}】`,...narratives,items].filter(Boolean).join('\n\n');
 }
 function eventContentRewardItemsBlock(scope='event'){
   const rows=eventRewardCombinedSelectedItems(scope);if(!rows.length)return'';
-  return ['【入手分】',...rows.map(item=>item.row?acquisitionItemCopyBlock(item.row,String(item.count||1)):dropPlayerInfoBlock({name:item.name,count:`${item.count||1}個`}))].join('\n\n');
+  return rows.map(item=>item.row?acquisitionItemCopyBlock(item.row,String(item.count||1)):dropPlayerInfoBlock({name:item.name,count:`${item.count||1}個`})).join('\n\n');
 }
 function eventContentCopyText(scope='event'){
   const row=eventOutcomeRow(scope);if(!row)return'';
   const reward=eventRewardState(scope),partySize=eventOutcomePartySize(scope);
   const selectedGroups=(reward?.groups||[]).filter(g=>g.selected||g.trigger.kind==='always');
-  const lines=[];
-  selectedGroups.forEach(g=>{const text=eventOutcomeCleanClause(row,g.clause,partySize);if(text)lines.push(text);});
   const rewardBlock=eventContentRewardItemsBlock(scope),treasure=selectedEventTreasureCopyText(scope);
-  return [lines.join('\n'),rewardBlock,treasure].filter(Boolean).join('\n\n');
+  if(eventOutcomeIsBattle(row)&&!String(rewardBlock||treasure||'').trim())return'';
+  const lines=[];
+  selectedGroups.forEach(g=>{
+    if(eventOutcomeIsBattle(row)&&!(g.items||[]).length&&!Number(g.tableSlots||0))return;
+    const narrative=eventOutcomeNarrative(row,g,scope),extra=eventOutcomeSupplementText(row,g,partySize);
+    if(narrative)lines.push(narrative);if(extra)lines.push(extra);
+  });
+  if(!lines.length&&String(rewardBlock||treasure||'').trim())lines.push(eventOutcomeIsBattle(row)?'戦いが終わったあと、周囲を改めて調べると、通常の戦利品とは別に持ち帰れそうなものが残されていた。':'周囲を丁寧に確かめ、見つけたものを無事に回収した。');
+  return [`【${row.eventName||'イベント'}】`,lines.join('\n'),rewardBlock,treasure].filter(Boolean).join('\n\n');
 }
 function updateEventContentCopyButtons(){[['event','copyEventContentBtn'],['quest','copyQuestContentBtn'],['base','copyBaseEventContentBtn']].forEach(([scope,id])=>{const btn=$(id);if(btn)btn.disabled=!String(eventContentCopyText(scope)||'').trim();});}
 
@@ -4982,12 +5084,329 @@ function switchProgressTab(tab){
   document.querySelectorAll('[data-tab-target]').forEach(btn=>btn.classList.toggle('active', btn.dataset.tabTarget===key));
   localStorage.setItem(STORE_KEY+'_tab', key);
 }
+/* === v90.8.738 progress modal / hidden-area layer === */
+const BASE_EXPLORATION_ID='__base_recraft__';
+const IMPORTANT_VISIBILITY_STORE_KEY=STORE_KEY+'_important_visibility_v1';
+const GUILD_DAILY_DEFAULT_COUNTS_V738={'拠点内依頼':2,'エリア依頼':2,'納品依頼':1};
+const progressUiV738={
+  ready:false,questActive:false,areaActive:false,areaMode:'normal',
+  slotResolved:{quest:false,event:false,base:false},
+  seen:{quest:new Set(),event:new Set(),base:new Set()},
+  hidden:{active:false,snapshot:null,originScope:'',areaId:''},
+  importantApplied:{quest:null,event:null,base:null},
+  dropRestore:null,
+  importantVisibility:{}
+};
+function v738DeepClone(value){try{return structuredClone(value);}catch(_e){try{return JSON.parse(JSON.stringify(value));}catch(_e2){return value;}}}
+function v738Bool(value){return ['1','true','yes','on'].includes(String(value??'').trim().toLowerCase())||String(value??'').trim().toUpperCase()==='TRUE';}
+function isHiddenAreaRow(row={}){return v738Bool(row.isHiddenArea)||String(row.id||'').startsWith('hidden_')||String(row.areaType||'').trim()==='隠しエリア';}
+function visibleExplorationAreas(){return (state.areas||[]).filter(a=>!isHiddenAreaRow(a));}
+function hiddenExplorationAreas(){return (state.areas||[]).filter(isHiddenAreaRow);}
+function hiddenAreaById(id=''){return (state.areas||[]).find(a=>isHiddenAreaRow(a)&&String(a.id||'')===String(id||''))||null;}
+function selectedExplorationArea(){return selected($('areaSelect'),state.areas);}
+function isBaseExplorationSelected(){return String($('areaSelect')?.value||'')===BASE_EXPLORATION_ID;}
+function fillExplorationAreaSelect(prefer=''){
+  const sel=$('areaSelect');if(!sel)return;
+  const prev=String(prefer||sel.value||'').trim();
+  const rows=visibleExplorationAreas().slice().sort((a,b)=>(Number(a.unlockOrder)||999999)-(Number(b.unlockOrder)||999999)||String(a.name||a.id||'').localeCompare(String(b.name||b.id||''),'ja'));
+  sel.innerHTML='';
+  const base=document.createElement('option');base.value=BASE_EXPLORATION_ID;base.textContent='開拓拠点リクラフト';sel.appendChild(base);
+  rows.forEach(a=>{const o=document.createElement('option');o.value=String(a.id||a.name||'');o.textContent=String(a.name||a.id||'');sel.appendChild(o);});
+  const values=new Set([...sel.options].map(o=>o.value));sel.value=values.has(prev)?prev:BASE_EXPLORATION_ID;
+}
+function v738LoadImportantVisibility(){try{const raw=localStorage.getItem(IMPORTANT_VISIBILITY_STORE_KEY);progressUiV738.importantVisibility=raw?JSON.parse(raw):{};}catch(_e){progressUiV738.importantVisibility={};}}
+function v738SaveImportantVisibility(){try{localStorage.setItem(IMPORTANT_VISIBILITY_STORE_KEY,JSON.stringify(progressUiV738.importantVisibility||{}));}catch(_e){}}
+const v737QuestEnabled=questEnabled;
+questEnabled=function(row={}){
+  const key=String(row.id||row.name||'').trim();
+  if(key&&Object.prototype.hasOwnProperty.call(progressUiV738.importantVisibility,key))return !!progressUiV738.importantVisibility[key];
+  return v737QuestEnabled(row);
+};
+const v737SortedQuestAreas=sortedQuestAreas;
+sortedQuestAreas=function(){return v737SortedQuestAreas().filter(a=>!isHiddenAreaRow(a));};
+const v737SortedDropAreas=sortedDropAreas;
+sortedDropAreas=function(){return v737SortedDropAreas().filter(a=>!isHiddenAreaRow(a));};
+const v737ApplyProgressMaster=applyProgressMaster;
+applyProgressMaster=function(master){
+  const result=v737ApplyProgressMaster(master);
+  fillExplorationAreaSelect(BASE_EXPLORATION_ID);
+  normalizeBaseUnlockedAreaIds();renderBaseEventControls();renderArea();renderQuest();
+  return result;
+};
+function v738CurrentSeenSet(scope='event'){return progressUiV738.seen[scope]||(progressUiV738.seen[scope]=new Set());}
+function v738FilterUnseen(scope,rows=[]){const seen=v738CurrentSeenSet(scope);return (rows||[]).filter(row=>!seen.has(eventUniqueKey(row)));}
+function v738MarkSeen(scope,key=''){if(key)v738CurrentSeenSet(scope).add(String(key));}
+const v737QuestRandomEvents=questRandomEvents;
+questRandomEvents=function(q){const rows=v737QuestRandomEvents(q);return progressUiV738.questActive?v738FilterUnseen('quest',rows):rows;};
+const v737EventRowsForArea=eventRowsForArea;
+eventRowsForArea=function(area,options={}){const rows=v737EventRowsForArea(area,options);return (progressUiV738.areaActive||progressUiV738.hidden.active)?v738FilterUnseen('event',rows):rows;};
+const v737BaseEventRows=baseEventRows;
+baseEventRows=function(){const rows=v737BaseEventRows();return progressUiV738.areaActive&&progressUiV738.areaMode==='base'?v738FilterUnseen('base',rows):rows;};
+
+function v738CreateModal(id,titleId,z=1200){
+  const back=document.createElement('div');back.id=id;back.className='progress-modal-backdrop hidden';back.style.zIndex=String(z);back.setAttribute('aria-hidden','true');
+  back.innerHTML=`<div class="progress-modal-card" role="dialog" aria-modal="true" aria-labelledby="${titleId}"><header class="progress-modal-head"><h2 id="${titleId}">進行</h2></header><div class="progress-modal-body"></div><footer class="progress-modal-foot"></footer></div>`;
+  document.body.appendChild(back);return back;
+}
+function v738MoveRange(start,end,host){let node=start;while(node){const next=node.nextSibling;host.appendChild(node);if(node===end)break;node=next;}}
+function v738Button(id,label,cls=''){const b=document.createElement('button');b.id=id;b.type='button';b.textContent=label;if(cls)b.className=cls;return b;}
+function setupProgressModalUi(){
+  if(progressUiV738.ready)return;progressUiV738.ready=true;v738LoadImportantVisibility();
+  const nav=$('progressTabNav');nav?.querySelector('[data-tab-target="base-event"]')?.remove();
+  const questSection=document.querySelector('[data-progress-tab="quest"]'),areaSection=document.querySelector('[data-progress-tab="area"]'),baseSection=document.querySelector('[data-progress-tab="base-event"]');
+  const qModal=v738CreateModal('questProgressModal','questProgressModalTitle',1200),aModal=v738CreateModal('areaProgressModal','areaProgressModalTitle',1200),hModal=v738CreateModal('hiddenProgressModal','hiddenProgressModalTitle',1300),dModal=v738CreateModal('dropProgressModal','dropProgressModalTitle',1400);
+  qModal.querySelector('.progress-modal-head').insertAdjacentHTML('beforeend','<div class="progress-modal-subtabs"><button id="questOpenDropBtn" class="secondary hidden" type="button">アイテムドロップ</button></div>');
+  aModal.querySelector('.progress-modal-head').insertAdjacentHTML('beforeend','<div class="progress-modal-subtabs"><button id="areaOpenDropBtn" class="secondary hidden" type="button">アイテムドロップ</button></div>');
+  hModal.querySelector('.progress-modal-head').insertAdjacentHTML('beforeend','<span class="hidden-area-badge">隠しエリア</span><div class="progress-modal-subtabs"><button id="hiddenOpenDropBtn" class="secondary hidden" type="button">アイテムドロップ</button></div>');
+  dModal.querySelector('.progress-modal-head h2').textContent='アイテムドロップ';
+  qModal.querySelector('.progress-modal-foot').append(v738Button('questEndBtn','クエストを終了','ghost'));
+  aModal.querySelector('.progress-modal-foot').append(v738Button('areaEndBtn','探索を終了','ghost'));
+  hModal.querySelector('.progress-modal-foot').append(v738Button('hiddenEndBtn','探索を終了','ghost'));
+  dModal.querySelector('.progress-modal-foot').append(v738Button('dropModalCloseBtn','閉じる','ghost'));
+
+  const qStart=$('questBar')?.closest('.progress-wrap')?.previousElementSibling,qEnd=$('questNote');
+  const qRuntime=document.createElement('div');qRuntime.id='questProgressRuntime';qRuntime.className='progress-runtime';qModal.querySelector('.progress-modal-body').appendChild(qRuntime);if(qStart&&qEnd)v738MoveRange(qStart,qEnd,qRuntime);
+  if($('questResetBtn'))$('questResetBtn').classList.add('hidden');if($('questAdvanceBtn'))$('questAdvanceBtn').textContent='進行';if($('rollQuestEventBtn'))$('rollQuestEventBtn').textContent='エリアイベント';
+  const qReroll=v738Button('rerollQuestEventBtn','再抽選','secondary hidden');$('rollQuestEventBtn')?.insertAdjacentElement('afterend',qReroll);
+  const qEntry=document.createElement('div');qEntry.id='questHiddenEntryPanel';qEntry.className='card hidden hidden-entry-panel';$('questImportantUseResult')?.insertAdjacentElement('afterend',qEntry);
+  const qStartActions=document.createElement('div');qStartActions.className='buttons start-actions';qStartActions.append(v738Button('questStartBtn','クエスト開始'),v738Button('toggleImportantQuestVisibilityBtn','非表示にする','ghost hidden'));$('questDetail')?.insertAdjacentElement('afterend',qStartActions);
+
+  const areaStart=$('areaBar')?.closest('.progress-wrap')?.previousElementSibling,areaEnd=$('areaNote');
+  const areaRuntime=document.createElement('div');areaRuntime.id='areaProgressRuntime';areaRuntime.className='progress-runtime';aModal.querySelector('.progress-modal-body').appendChild(areaRuntime);if(areaStart&&areaEnd)v738MoveRange(areaStart,areaEnd,areaRuntime);
+  if($('areaResetBtn'))$('areaResetBtn').classList.add('hidden');if($('areaAdvanceBtn'))$('areaAdvanceBtn').textContent='進行';if($('rollEventBtn'))$('rollEventBtn').textContent='エリアイベント';
+  const aReroll=v738Button('rerollEventBtn','再抽選','secondary hidden');$('rollEventBtn')?.insertAdjacentElement('afterend',aReroll);
+  const aEntry=document.createElement('div');aEntry.id='areaHiddenEntryPanel';aEntry.className='card hidden hidden-entry-panel';$('eventImportantUseResult')?.insertAdjacentElement('afterend',aEntry);
+  const areaStartActions=document.createElement('div');areaStartActions.className='buttons start-actions';areaStartActions.append(v738Button('areaStartBtn','探索開始'));$('areaDetail')?.insertAdjacentElement('afterend',areaStartActions);
+
+  const baseRuntime=document.createElement('div');baseRuntime.id='baseProgressRuntime';baseRuntime.className='progress-runtime hidden';
+  if(baseSection){while(baseSection.firstChild)baseRuntime.appendChild(baseSection.firstChild);baseSection.remove();}aModal.querySelector('.progress-modal-body').appendChild(baseRuntime);
+  if($('rollBaseEventBtn'))$('rollBaseEventBtn').textContent='エリアイベント';const bReroll=v738Button('rerollBaseEventBtn','再抽選','secondary hidden');$('rollBaseEventBtn')?.insertAdjacentElement('afterend',bReroll);
+  const bEntry=document.createElement('div');bEntry.id='baseHiddenEntryPanel';bEntry.className='card hidden hidden-entry-panel';$('baseImportantUseResult')?.insertAdjacentElement('afterend',bEntry);
+
+  // Daily quest draw controls are now available directly in the progress manager.
+  const daily=$('dailyQuestTools');if(daily){
+    const draw=document.createElement('div');draw.className='daily-draw-grid';draw.innerHTML=`<button type="button" class="secondary" data-progress-daily-reroll="拠点内依頼">拠点内依頼：個別抽選</button><button type="button" class="secondary" data-progress-daily-reroll="エリア依頼">エリア依頼：個別抽選</button><button type="button" class="secondary" data-progress-daily-reroll="納品依頼">納品依頼：個別抽選</button><button type="button" data-progress-daily-reroll="">全体抽選</button>`;
+    daily.querySelector('.progress-fold-body')?.prepend(draw);
+    const old=$('refreshDailyQuestsBtn');if(old)old.textContent='保存済み選出を再読込';
+  }
+  document.querySelectorAll('[data-important-use-copy]').forEach(b=>b.classList.add('hidden'));
+  if($('copyDropSuccessBtn'))$('copyDropSuccessBtn').textContent='入手アイテムをコピー';
+
+  // Drop section remains a normal utility tab, but is temporarily moved into a child modal during combat.
+  const dropSection=document.querySelector('[data-progress-tab="drop"]');if(dropSection){progressUiV738.dropRestore={parent:dropSection.parentNode,next:dropSection.nextSibling,wasActive:false,section:dropSection};}
+  fillExplorationAreaSelect();v738RefreshMainSelectionUi();
+}
+function v738SetModalOpen(id,open){const m=$(id);if(!m)return;m.classList.toggle('hidden',!open);m.setAttribute('aria-hidden',open?'false':'true');document.body.classList.toggle('progress-modal-open',!!document.querySelector('.progress-modal-backdrop:not(.hidden)'));}
+function v738RefreshMainSelectionUi(){
+  const q=selected($('questSelect'),state.quests),toggle=$('toggleImportantQuestVisibilityBtn');
+  if(toggle){const important=q&&questCategoryFor(q)==='重要';toggle.classList.toggle('hidden',!important);if(important)toggle.textContent=questEnabled(q)?'非表示にする':'表示する';}
+  const detail=$('areaDetail');if(isBaseExplorationSelected()&&detail){detail.innerHTML='<div class="kv"><b>探索先</b><span>開拓拠点リクラフト</span><b>進行</b><span>+25%</span><b>イベント</b><span>解放済みエリアに応じた拠点内イベント</span></div><p class="muted">開拓拠点内を巡り、持ち込まれた仕事や小さな出来事を確認します。</p>';}
+}
+function v738OpenQuestModal(){const q=selected($('questSelect'),state.quests);if(!q)return; $('questProgressModalTitle').textContent=String(q.name||q.id||'クエスト');v738SetModalOpen('questProgressModal',true);}
+function v738OpenAreaModal(title=''){const name=title||(isBaseExplorationSelected()?'開拓拠点リクラフト：探索':`${selectedExplorationArea()?.name||'エリア'}：探索`);$('areaProgressModalTitle').textContent=name;v738SetModalOpen('areaProgressModal',true);}
+function v738ToggleAreaRuntime(mode='normal'){
+  progressUiV738.areaMode=mode;
+  // The gauge and [進行] controls are common to normal-area and base exploration.
+  // Only the event engine below them is switched.
+  $('areaProgressRuntime')?.classList.remove('hidden');
+  document.querySelector('#areaProgressRuntime .area-event-block')?.classList.toggle('hidden',mode==='base');
+  const note=$('areaNote'),noteLabel=note?.previousElementSibling;if(note)note.classList.toggle('hidden',mode==='base');if(noteLabel&&noteLabel.tagName==='LABEL')noteLabel.classList.toggle('hidden',mode==='base');
+  $('baseProgressRuntime')?.classList.toggle('hidden',mode!=='base');
+}
+function v738ResetQuestSessionState(q){
+  const key=String(q.id||q.name||'');const p=progressObj('quests',key);p.value=0;progressUiV738.seen.quest=new Set();progressUiV738.slotResolved.quest=false;progressUiV738.questActive=true;
+  Object.keys(state.triggeredQuestEvents||{}).filter(k=>k.startsWith(key+':')).forEach(k=>delete state.triggeredQuestEvents[k]);
+  state.lastQuestFixedEventText='';state.lastQuestFixedEventKey='';clearQuestRandomEventHistory();progressUiV738.importantApplied.quest=null;
+}
+function v738ResetAreaSessionState(areaKey,scope='event'){
+  const p=progressObj('areas',areaKey);p.value=0;progressUiV738.seen[scope]=new Set();progressUiV738.slotResolved[scope]=false;progressUiV738.areaActive=true;
+  if(scope==='base'){
+    state.lastBaseEventText='';state.lastBaseEventKey='';state.lastBaseCheckCopyText='';state.lastBaseOutcomeKey='';state.lastBaseRewardText='';state.lastBaseRewardCopyText='';state.lastBaseEventRewardState=null;state.lastBaseEventTableRewardState=null;progressUiV738.importantApplied.base=null;renderBaseEventControls();
+  }else{clearAreaRandomEventHistory();progressUiV738.importantApplied.event=null;}
+}
+function v738QuestFixedAt(q,value){return questSpecificEvents(q).filter(e=>Number(eventThreshold(e))===Number(value));}
+function v738PrepareQuestSlot(q){
+  const p=progressObj('quests',q.id||q.name),current=clamp(p.value);
+  if(isDeliveryQuest(q)){progressUiV738.slotResolved.quest=true;v738UpdateProgressControls();return;}
+  const rows=v738QuestFixedAt(q,current);if(rows.length){triggerQuestSpecificEvents(q,current-0.001,current);progressUiV738.slotResolved.quest=true;}else{progressUiV738.slotResolved.quest=false;}
+  v738UpdateProgressControls();renderQuest();
+}
+function v738PrepareAreaSlot(a){
+  if(!a)return;const p=progressObj('areas',a.id||a.name),current=clamp(p.value);let fixed=false;
+  if(!isHiddenAreaRow(a)&&current===100){fixed=!!triggerAreaClearRumorEvent(a);}
+  progressUiV738.slotResolved.event=fixed;v738UpdateProgressControls();renderArea();
+}
+function v738PrepareBaseSlot(){progressUiV738.slotResolved.base=false;v738UpdateProgressControls();renderBaseEventControls();}
+function startQuestProgressSession(){
+  const q=selected($('questSelect'),state.quests);if(!q)return;v738ResetQuestSessionState(q);v738OpenQuestModal();v738PrepareQuestSlot(q);renderQuest();saveState(false);addLog(`クエスト開始：${q.name||q.id}`);
+}
+function startAreaProgressSession(){
+  if(isBaseExplorationSelected()){
+    v738ToggleAreaRuntime('base');v738ResetAreaSessionState(BASE_EXPLORATION_ID,'base');v738OpenAreaModal('開拓拠点リクラフト：探索');
+    $('areaBar').style.width='0%';$('areaLabel').textContent='0%';$('areaStepInfo').innerHTML='<div class="kv"><b>現在</b><span>0%</span><b>1回の進行</b><span>+25%</span><b>イベント</b><span>毎回ランダム</span></div>';v738PrepareBaseSlot();addLog('探索開始：開拓拠点リクラフト');return;
+  }
+  const a=selectedExplorationArea();if(!a||isHiddenAreaRow(a))return;v738ToggleAreaRuntime('normal');v738ResetAreaSessionState(a.id||a.name,'event');v738OpenAreaModal(`${a.name||a.id}：探索`);renderArea();v738PrepareAreaSlot(a);saveState(false);addLog(`探索開始：${a.name||a.id}`);
+}
+function v738CloseQuestSession(){progressUiV738.questActive=false;v738SetModalOpen('questProgressModal',false);addLog('クエスト進行画面を閉じました。');}
+function v738CloseAreaSession(){if(progressUiV738.hidden.active){endHiddenExploration();return;}progressUiV738.areaActive=false;v738SetModalOpen('areaProgressModal',false);addLog('探索を終了しました。');}
+function v738CurrentProgressValue(scope){if(scope==='quest'){const q=selected($('questSelect'),state.quests);return q?clamp(progressObj('quests',q.id||q.name).value):0;}if(scope==='base')return clamp(progressObj('areas',BASE_EXPLORATION_ID).value);const a=selectedExplorationArea();return a?clamp(progressObj('areas',a.id||a.name).value):0;}
+function v738UpdateProgressControls(){
+  const qVal=v738CurrentProgressValue('quest'),aScope=progressUiV738.areaMode==='base'?'base':'event',aVal=v738CurrentProgressValue(aScope);
+  if($('questAdvanceBtn'))$('questAdvanceBtn').disabled=!progressUiV738.slotResolved.quest||qVal>=100;
+  if($('areaAdvanceBtn'))$('areaAdvanceBtn').disabled=!progressUiV738.slotResolved[aScope]||aVal>=100;
+  const qFixed=progressUiV738.questActive&&!!v738QuestFixedAt(selected($('questSelect'),state.quests)||{},qVal).length;
+  if($('rollQuestEventBtn'))$('rollQuestEventBtn').disabled=!progressUiV738.questActive||progressUiV738.slotResolved.quest||qFixed||isDeliveryQuest(selected($('questSelect'),state.quests)||{});
+  if($('rollEventBtn'))$('rollEventBtn').disabled=!(progressUiV738.areaActive&&aScope==='event')||progressUiV738.slotResolved.event;
+  if($('rollBaseEventBtn'))$('rollBaseEventBtn').disabled=!(progressUiV738.areaActive&&aScope==='base')||progressUiV738.slotResolved.base;
+  $('rerollQuestEventBtn')?.classList.toggle('hidden',!progressUiV738.questActive||!state.lastQuestEventKey||qFixed);
+  $('rerollEventBtn')?.classList.toggle('hidden',!(progressUiV738.areaActive&&aScope==='event'&&state.lastEventKey));
+  $('rerollBaseEventBtn')?.classList.toggle('hidden',!(progressUiV738.areaActive&&aScope==='base'&&state.lastBaseEventKey));
+  v738RefreshCombatDropButtons();v738RefreshHiddenEntryAction('quest');v738RefreshHiddenEntryAction('event');v738RefreshHiddenEntryAction('base');
+}
+const v737AdvanceQuestProgress=advanceQuestProgress;
+advanceQuestProgress=function(){
+  if(!progressUiV738.questActive)return v737AdvanceQuestProgress();const q=selected($('questSelect'),state.quests);if(!q)return;const p=progressObj('quests',q.id||q.name),before=clamp(p.value);
+  if(!progressUiV738.slotResolved.quest){alert('先に現在の進行度のイベントを処理してください。');return;}
+  if(isDeliveryQuest(q)){p.value=100;renderQuest();v738UpdateProgressControls();saveState(false);addLog(`${q.name||q.id} の納品を完了しました。`);return;}
+  if(before>=100)return;const add=questStepAmount(q);p.value=clamp(before+add);clearQuestRandomEventHistory();progressUiV738.importantApplied.quest=null;
+  const fired=triggerQuestSpecificEvents(q,before,p.value);progressUiV738.slotResolved.quest=fired.length>0;renderQuest();v738UpdateProgressControls();saveState(false);addLog(`${q.name||q.id} の進行度を +${add}% しました。${before}% → ${p.value}%`);
+};
+const v737AdvanceAreaProgress=advanceAreaProgress;
+advanceAreaProgress=function(){
+  if(!progressUiV738.areaActive)return v737AdvanceAreaProgress();
+  if(progressUiV738.areaMode==='base'){
+    const p=progressObj('areas',BASE_EXPLORATION_ID),before=clamp(p.value);if(!progressUiV738.slotResolved.base){alert('先に現在の進行度のイベントを処理してください。');return;}if(before>=100)return;p.value=clamp(before+25);state.lastBaseEventText='';state.lastBaseEventKey='';state.lastBaseCheckCopyText='';state.lastBaseOutcomeKey='';state.lastBaseEventRewardState=null;state.lastBaseEventTableRewardState=null;progressUiV738.importantApplied.base=null;progressUiV738.slotResolved.base=false;$('areaBar').style.width=p.value+'%';$('areaLabel').textContent=p.value+'%';$('areaStepInfo').innerHTML=`<div class="kv"><b>現在</b><span>${p.value}%</span><b>1回の進行</b><span>+25%</span><b>進行後</b><span>${Math.min(100,p.value+25)}%</span></div>`;renderBaseEventControls();v738UpdateProgressControls();saveState(false);addLog(`開拓拠点リクラフトの探索進行度：${before}% → ${p.value}%`);return;
+  }
+  const a=selectedExplorationArea();if(!a)return;const p=progressObj('areas',a.id||a.name),before=clamp(p.value);if(!progressUiV738.slotResolved.event){alert('先に現在の進行度のイベントを処理してください。');return;}if(before>=100)return;const add=areaStepAmount(a);p.value=clamp(before+add);clearAreaRandomEventHistory();progressUiV738.importantApplied.event=null;let fixed=false;if(!isHiddenAreaRow(a)&&p.value===100)fixed=!!triggerAreaClearRumorEvent(a);progressUiV738.slotResolved.event=fixed;renderArea();v738UpdateProgressControls();saveState(false);addLog(`${a.name||a.id} の探索進行度：${before}% → ${p.value}%`);
+};
+
+const v737RollQuestEvent=rollQuestEvent;
+rollQuestEvent=function(){v737RollQuestEvent();if(state.lastQuestEventKey){v738MarkSeen('quest',state.lastQuestEventKey);progressUiV738.slotResolved.quest=true;}v738UpdateProgressControls();};
+const v737RollEvent=rollEvent;
+rollEvent=function(){v737RollEvent();if(state.lastEventKey){v738MarkSeen('event',state.lastEventKey);progressUiV738.slotResolved.event=true;}v738UpdateProgressControls();};
+const v737RollBaseEvent=rollBaseEvent;
+rollBaseEvent=function(){v737RollBaseEvent();if(state.lastBaseEventKey){v738MarkSeen('base',state.lastBaseEventKey);progressUiV738.slotResolved.base=true;}if(progressUiV738.areaMode==='base'){const p=progressObj('areas',BASE_EXPLORATION_ID);$('areaBar').style.width=clamp(p.value)+'%';$('areaLabel').textContent=clamp(p.value)+'%';}v738UpdateProgressControls();};
+
+function v738CurrentEventRow(scope='event'){
+  const key=scope==='quest'?state.lastQuestEventKey:scope==='base'?state.lastBaseEventKey:state.lastEventKey;if(!key)return null;return (state.events||[]).find(e=>eventUniqueKey(e)===String(key))||null;
+}
+function v738HiddenAreaFromEntrance(row={}){
+  if(String(row.eventType||'').trim()!=='隠しエリア入口')return null;const direct=String(row.conditionValue||'').trim();if(direct)return hiddenAreaById(direct);const m=String(row.notes||'').match(/hiddenAreaId=([^\s;]+)/);return m?hiddenAreaById(m[1]):null;
+}
+function v738RefreshHiddenEntryAction(scope='event'){
+  const panel=$(scope==='quest'?'questHiddenEntryPanel':scope==='base'?'baseHiddenEntryPanel':'areaHiddenEntryPanel');if(!panel)return;const row=v738CurrentEventRow(scope),hidden=v738HiddenAreaFromEntrance(row||{});
+  if(!hidden||progressUiV738.hidden.active){panel.classList.add('hidden');panel.innerHTML='';return;}
+  panel.classList.remove('hidden');panel.innerHTML=`<h3>${esc(hidden.name||'隠しエリア')}</h3><p class="muted small">通常の探索路から外れた場所へ入れます。侵入時に行動回数を追加で1回消費します。</p><div class="buttons"><button type="button" data-hidden-area-start="${esc(hidden.id||'') }" data-hidden-origin="${esc(scope)}">探索開始</button></div>`;
+}
+const V738_EVENT_SNAPSHOT_FIELDS=['lastEventText','lastEventKey','lastEventCheckCopyText','lastEventTreasureCopyText','lastEventTreasureResults','lastEventTableRewardText','lastEventTableRewardCopyText','lastEventTableRewardState','lastEventRewardState','lastEventOutcomeKey','lastRecipeMerchantOffers','selectedRecipeMerchantId','lastRecipeMerchantContext','lastEncounter','dropEncounterInstances','lastDropText','lastDropSuccessText','tokenExportEncounter','areaBossEncountered'];
+function v738SnapshotEventScope(){const out={};V738_EVENT_SNAPSHOT_FIELDS.forEach(k=>out[k]=v738DeepClone(state[k]));return out;}
+function v738RestoreEventScope(snap={}){V738_EVENT_SNAPSHOT_FIELDS.forEach(k=>{if(Object.prototype.hasOwnProperty.call(snap,k))state[k]=v738DeepClone(snap[k]);});}
+function startHiddenExploration(areaId='',originScope='event'){
+  const hidden=hiddenAreaById(areaId);if(!hidden||progressUiV738.hidden.active)return;if(!consumeDailyAction(`${hidden.name||'隠しエリア'}への侵入`))return;
+  const areaSel=$('areaSelect'),runtime=$('areaProgressRuntime'),hiddenBody=$('hiddenProgressModal')?.querySelector('.progress-modal-body');if(!areaSel||!runtime||!hiddenBody)return;
+  progressUiV738.hidden={active:true,originScope,snapshot:{areaSelectValue:areaSel.value,eventState:v738SnapshotEventScope(),seen:[...v738CurrentSeenSet('event')],areaActive:progressUiV738.areaActive,areaMode:progressUiV738.areaMode,slotResolved:progressUiV738.slotResolved.event,importantAppliedEvent:v738DeepClone(progressUiV738.importantApplied.event)},areaId:String(areaId)};
+  let opt=[...areaSel.options].find(o=>o.value===String(hidden.id||''));if(!opt){opt=document.createElement('option');opt.value=String(hidden.id||'');opt.textContent=String(hidden.name||hidden.id||'');opt.dataset.hiddenTemp='1';areaSel.appendChild(opt);}areaSel.value=String(hidden.id||'');
+  hiddenBody.appendChild(runtime);v738ResetAreaSessionState(hidden.id||hidden.name,'event');progressUiV738.areaMode='normal';$('hiddenProgressModalTitle').textContent=`${hidden.name||'隠しエリア'}：探索`;v738SetModalOpen('hiddenProgressModal',true);renderArea();v738PrepareAreaSlot(hidden);addLog(`隠しエリア探索開始：${hidden.name||hidden.id}`);
+}
+function endHiddenExploration(){
+  if(!progressUiV738.hidden.active)return;const snap=progressUiV738.hidden.snapshot||{},areaSel=$('areaSelect'),runtime=$('areaProgressRuntime'),areaBody=$('areaProgressModal')?.querySelector('.progress-modal-body');v738SetModalOpen('hiddenProgressModal',false);
+  if(runtime&&areaBody)areaBody.insertBefore(runtime,$('baseProgressRuntime')||null);v738RestoreEventScope(snap.eventState||{});progressUiV738.seen.event=new Set(snap.seen||[]);progressUiV738.areaActive=!!snap.areaActive;progressUiV738.areaMode=snap.areaMode||'normal';progressUiV738.slotResolved.event=!!snap.slotResolved;progressUiV738.importantApplied.event=v738DeepClone(snap.importantAppliedEvent||null);
+  if(areaSel){[...areaSel.options].filter(o=>o.dataset.hiddenTemp==='1').forEach(o=>o.remove());areaSel.value=String(snap.areaSelectValue||BASE_EXPLORATION_ID);}const hiddenName=hiddenAreaById(progressUiV738.hidden.areaId)?.name||'隠しエリア';progressUiV738.hidden={active:false,snapshot:null,originScope:'',areaId:''};
+  renderArea();renderQuest();renderTokenExportPanels();renderEncounterDropList();v738UpdateProgressControls();addLog(`隠しエリア探索終了：${hiddenName}`);
+}
+
+const v737EventContentCopyText=eventContentCopyText;
+eventContentCopyText=function(scope='event'){
+  const base=v737EventContentCopyText(scope),applied=progressUiV738.importantApplied[scope],row=v738CurrentEventRow(scope);
+  if(!applied||!row||applied.eventKey!==eventUniqueKey(row))return base;
+  const title=`【${row.eventName||'イベント'}】`;
+  let rest=String(base||'').trim();
+  if(rest.startsWith(title))rest=rest.slice(title.length).trim();
+  return [title,applied.narrative,rest,applied.copyText].filter(Boolean).join('\n\n');
+};
+resolveDeclaredImportantItem=function(scope='event'){
+  const row=currentRandomEventForImportantUse(scope),result=$(importantUseElementId(scope,'Result'));
+  const showResult=text=>{if(result){result.textContent=String(text||'');result.classList.remove('hidden');}};
+  if(!row){showResult('先にエリアイベントを抽選してください。');return;}const spec=crossoverImportantSpec(row);if(!spec){showResult('このイベントには対応する越境アイテムがありません。');return;}const item=findImportantItemByPublicId(spec.publicId);if(!item){showResult('対応する越境アイテムをDBから確認できません。');return;}
+  const reward=rollRewardItemTable(spec.tableId,1,row.areaName||'',row.eventName||'イベント');const narrative=`《${item.name||'越境アイテム'}》を取り出して${row.eventName||'周囲'}へ近づけると、これまで静かだった場所に変化が現れた。その反応を辿ることで、普段の探索だけでは届かなかった場所まで確かめることができた。`;
+  progressUiV738.importantApplied[scope]={eventKey:eventUniqueKey(row),narrative,copyText:reward.copyText||'',displayText:reward.displayText||''};importantUseCopyState[scope]='';showResult([narrative,reward.displayText||''].filter(Boolean).join('\n\n'));const action=$(importantUseElementId(scope,'ActionBtn'));if(action)action.disabled=true;updateEventContentCopyButtons();addLog(`越境アイテム使用：${row.eventName||'イベント'} / ${item.name||'重要アイテム'}`);
+};
+const v737ResetImportantUsePanel=resetImportantUsePanel;
+resetImportantUsePanel=function(scope='event'){
+  v737ResetImportantUsePanel(scope);const row=currentRandomEventForImportantUse(scope),applied=progressUiV738.importantApplied[scope];if(row&&applied&&applied.eventKey===eventUniqueKey(row)){
+    const result=$(importantUseElementId(scope,'Result')),action=$(importantUseElementId(scope,'ActionBtn'));if(result){result.textContent=[applied.narrative,applied.displayText].filter(Boolean).join('\n\n');result.classList.remove('hidden');}if(action)action.disabled=true;
+  }
+  const panel=$(importantUseElementId(scope,'Panel'));panel?.querySelectorAll('[data-important-use-copy]').forEach(b=>b.classList.add('hidden'));updateEventContentCopyButtons();
+};
+
+function v738RefreshCombatDropButtons(){
+  const encounterReady=(!$('eventTokenExportPanel')?.classList.contains('hidden')||((state.lastEncounter?.groups||[]).length>0));
+  const qCombat=progressUiV738.questActive&&!progressUiV738.hidden.active&&(!$('questTokenExportPanel')?.classList.contains('hidden')||((state.lastEncounter?.groups||[]).length>0));
+  const aCombat=progressUiV738.areaActive&&!progressUiV738.hidden.active&&encounterReady;
+  const hCombat=progressUiV738.hidden.active&&encounterReady;
+  $('questOpenDropBtn')?.classList.toggle('hidden',!qCombat);
+  $('areaOpenDropBtn')?.classList.toggle('hidden',!aCombat);
+  $('hiddenOpenDropBtn')?.classList.toggle('hidden',!hCombat);
+}
+function openCombatDropModal(){
+  const restore=progressUiV738.dropRestore;if(!restore?.section)return;const section=restore.section;restore.wasActive=section.classList.contains('active');$('dropProgressModal')?.querySelector('.progress-modal-body')?.appendChild(section);section.classList.add('active');v738SetModalOpen('dropProgressModal',true);renderMonster();renderEncounterDropList();
+}
+function closeCombatDropModal(){
+  const restore=progressUiV738.dropRestore;if(!restore?.section)return;v738SetModalOpen('dropProgressModal',false);const {section,parent,next,wasActive}=restore;if(next&&next.parentNode===parent)parent.insertBefore(section,next);else parent.appendChild(section);section.classList.toggle('active',!!wasActive);
+}
+
+function v738Shuffle(rows=[]){const a=[...(rows||[])];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function v738NamedDaily(q={}){return String(q.questType||'').trim()==='二つ名討伐'||String(q.id||'').startsWith('quest_named_');}
+function v738DailyUnique(rows=[]){const areas=new Set(),out=[];for(const q of rows){if(v738NamedDaily(q)){const a=String(q.areaName||q.questLocation||'').trim();if(a&&areas.has(a))continue;if(a)areas.add(a);}out.push(q);}return out;}
+function v738DailyUnlockedIds(){const shared=readFacilityDailyQuestState();const ids=shared?.unlockedAreaIds?.length?shared.unlockedAreaIds:(state.baseUnlockedAreaIds||[]);return new Set((ids||[]).map(String));}
+function v738DailyCandidates(kind){
+  const unlocked=v738DailyUnlockedIds(),areaByName=new Map(visibleExplorationAreas().map(a=>[String(a.name||'').trim(),a]));return (state.quests||[]).filter(q=>questCategoryFor(q)==='デイリー'&&questEnabled(q)&&String(q.requestKind||'').trim()===kind).filter(q=>{const a=areaByName.get(String(q.areaName||'').trim());return !a||unlocked.has(String(a.id||a.name||''));});
+}
+function v738WriteDailySelection(){
+  const data={keysByKind:state.lastDailyQuestKeysByKind,keys:GUILD_DAILY_REQUEST_KINDS.flatMap(k=>state.lastDailyQuestKeysByKind[k]||[]),countsByKind:GUILD_DAILY_DEFAULT_COUNTS_V738,areaId:'',unlockedAreaIds:[...v738DailyUnlockedIds()],updatedAt:new Date().toISOString()};try{localStorage.setItem(GUILD_DAILY_STORAGE_KEY,JSON.stringify(data));}catch(_e){}try{const ch=new BroadcastChannel(GUILD_DAILY_CHANNEL_NAME);ch.postMessage({type:'updated',updatedAt:data.updatedAt});ch.close();}catch(_e){}
+  state.lastDailyQuestKeys=data.keys;state.dailyQuestUnlockedAreaIds=data.unlockedAreaIds;state.lastDailyQuestText=dailyQuestTextFor(selectedFacilityDailyQuestRowsByKind());saveState(false);renderDailyQuestResult();if(currentQuestCategory==='デイリー'){fillQuestSelect(state.lastDailyQuestKeys[0]||'');renderQuest();}
+}
+function rerollDailyQuestsInProgress(kind=''){
+  const kinds=GUILD_DAILY_REQUEST_KINDS.includes(kind)?[kind]:GUILD_DAILY_REQUEST_KINDS;state.lastDailyQuestKeysByKind=state.lastDailyQuestKeysByKind||emptyDailyQuestKeysByKind();kinds.forEach(k=>{const rows=v738DailyCandidates(k),current=new Set((state.lastDailyQuestKeysByKind[k]||[]).map(String)),fresh=v738Shuffle(rows.filter(q=>!current.has(String(q.id||q.name||'')))),old=v738Shuffle(rows.filter(q=>current.has(String(q.id||q.name||'')))),count=Math.min(GUILD_DAILY_DEFAULT_COUNTS_V738[k]||1,rows.length);state.lastDailyQuestKeysByKind[k]=v738DailyUnique(fresh.concat(old)).slice(0,count).map(q=>String(q.id||q.name||''));});v738WriteDailySelection();addLog(kind?`${kind}を抽選しました。`:'デイリークエストを全体抽選しました。');
+}
+function toggleSelectedImportantQuestVisibility(){const q=selected($('questSelect'),state.quests);if(!q||questCategoryFor(q)!=='重要')return;const key=String(q.id||q.name||'');progressUiV738.importantVisibility[key]=!questEnabled(q);v738SaveImportantVisibility();const keep=key;fillQuestSelect(keep);renderQuest();v738RefreshMainSelectionUi();addLog(`重要クエスト「${q.name||q.id}」を${questEnabled(q)?'表示':'非表示'}にしました。`);}
+
+const v737RenderArea=renderArea;
+renderArea=function(){
+  if(isBaseExplorationSelected()&&!progressUiV738.hidden.active){
+    const p=progressObj('areas',BASE_EXPLORATION_ID);if($('areaBar'))$('areaBar').style.width=clamp(p.value)+'%';if($('areaLabel'))$('areaLabel').textContent=clamp(p.value)+'%';if($('areaNote'))$('areaNote').value=p.note||'';v738RefreshMainSelectionUi();renderBaseEventControls();v738UpdateProgressControls();return;
+  }
+  v737RenderArea();if($('rollEventBtn'))$('rollEventBtn').textContent='エリアイベント';v738RefreshMainSelectionUi();v738UpdateProgressControls();
+};
+const v737RenderQuest=renderQuest;
+renderQuest=function(){v737RenderQuest();if($('rollQuestEventBtn'))$('rollQuestEventBtn').textContent='エリアイベント';v738RefreshMainSelectionUi();v738UpdateProgressControls();};
+const v737RenderBaseEventControls=renderBaseEventControls;
+renderBaseEventControls=function(){v737RenderBaseEventControls();if($('rollBaseEventBtn'))$('rollBaseEventBtn').textContent='エリアイベント';v738UpdateProgressControls();};
+const v737RenderTokenExportPanels=renderTokenExportPanels;
+renderTokenExportPanels=function(){v737RenderTokenExportPanels();v738RefreshCombatDropButtons();};
+
+function bindV738ProgressUi(){
+  $('questStartBtn')?.addEventListener('click',startQuestProgressSession);$('areaStartBtn')?.addEventListener('click',startAreaProgressSession);$('questEndBtn')?.addEventListener('click',v738CloseQuestSession);$('areaEndBtn')?.addEventListener('click',v738CloseAreaSession);$('hiddenEndBtn')?.addEventListener('click',endHiddenExploration);$('dropModalCloseBtn')?.addEventListener('click',closeCombatDropModal);$('questOpenDropBtn')?.addEventListener('click',openCombatDropModal);$('areaOpenDropBtn')?.addEventListener('click',openCombatDropModal);$('hiddenOpenDropBtn')?.addEventListener('click',openCombatDropModal);$('rerollQuestEventBtn')?.addEventListener('click',rollQuestEvent);$('rerollEventBtn')?.addEventListener('click',rollEvent);$('rerollBaseEventBtn')?.addEventListener('click',rollBaseEvent);$('toggleImportantQuestVisibilityBtn')?.addEventListener('click',toggleSelectedImportantQuestVisibility);
+  $('areaSelect')?.addEventListener('change',()=>{v738RefreshMainSelectionUi();renderArea();});$('questSelect')?.addEventListener('change',v738RefreshMainSelectionUi);
+  document.addEventListener('click',e=>{const daily=e.target.closest('[data-progress-daily-reroll]');if(daily){rerollDailyQuestsInProgress(String(daily.dataset.progressDailyReroll||''));return;}const hidden=e.target.closest('[data-hidden-area-start]');if(hidden){startHiddenExploration(hidden.dataset.hiddenAreaStart||'',hidden.dataset.hiddenOrigin||'event');return;}});
+  document.querySelectorAll('.progress-modal-backdrop').forEach(m=>m.addEventListener('click',e=>{if(e.target!==m)return;if(m.id==='dropProgressModal')closeCombatDropModal();}));
+  const copyDrop=$('copyDropSuccessBtn');copyDrop?.addEventListener('click',()=>setTimeout(()=>{if(!$('dropProgressModal')?.classList.contains('hidden'))closeCombatDropModal();},0));
+}
+const v737AreaUsesWorldCycle=areaUsesWorldCycle;
+areaUsesWorldCycle=function(area={}){return isHiddenAreaRow(area)?false:v737AreaUsesWorldCycle(area);};
+const v737DefaultBaseUnlockedAreaIds=defaultBaseUnlockedAreaIds;
+defaultBaseUnlockedAreaIds=function(){const initial=visibleExplorationAreas().filter(a=>String(a.unlockCondition||'').includes('初期解放')).map(a=>String(a.id||a.name||'')).filter(Boolean);if(initial.length)return initial;const first=visibleExplorationAreas()[0];return first?[String(first.id||first.name||'')]:[];};
+normalizeBaseUnlockedAreaIds=function(){const valid=new Set(visibleExplorationAreas().map(a=>String(a.id||a.name||'')).filter(Boolean));let ids=Array.isArray(state.baseUnlockedAreaIds)?state.baseUnlockedAreaIds.map(String).filter(id=>valid.has(id)):[];const required=defaultBaseUnlockedAreaIds();required.forEach(id=>{if(valid.has(id)&&!ids.includes(id))ids.push(id);});if(!ids.length)ids=required;state.baseUnlockedAreaIds=[...new Set(ids)];return state.baseUnlockedAreaIds;};
+renderBaseAreaModal=function(){const modal=$('baseAreaModal'),list=$('baseUnlockedAreaModalList');if(!modal||!list)return;const selected=new Set(baseAreaModalDraftIds.map(String)),required=new Set(defaultBaseUnlockedAreaIds());list.innerHTML=visibleExplorationAreas().map(a=>{const id=String(a.id||a.name||''),checked=selected.has(id)||required.has(id),fixed=required.has(id);return `<label class="base-unlock-item"><input type="checkbox" data-base-area-modal-check="${esc(id)}"${checked?' checked':''}${fixed?' disabled':''}><span>${esc(a.name||id)}<small>${esc(a.areaType||'エリア')} / 解放順 ${esc(a.unlockOrder??'-')}${fixed?' / 初期解放':''}</small></span></label>`;}).join('')||'<div class="muted small">エリアデータがありません。</div>';};
+
+
 function bindTabs(){
   document.querySelectorAll('[data-tab-target]').forEach(btn=>btn.addEventListener('click',()=>switchProgressTab(btn.dataset.tabTarget)));
   switchProgressTab(localStorage.getItem(STORE_KEY+'_tab') || 'quest');
 }
 function bind(){
-  $('fixedUrlLabel').textContent='GitHub共通DB（失敗時のみGAS）'; bindTabs(); setPartySize(state.partySize||4); setTimeSlot(state.timeSlot||'朝',{reset:false,render:false,save:false}); setQuestCategory('重要'); $('communityReloadBtn')?.addEventListener('click',loadCommunityGatheringManager); document.addEventListener('click',e=>{const b=e.target.closest('[data-community-send]');if(b)saveCommunityGatheringFacility(b.dataset.communitySend||'');}); $('loadDbBtn').addEventListener('click',()=>loadDb({auto:false})); $('saveStateBtn').addEventListener('click',()=>saveState(true)); $('restoreStateBtn').addEventListener('click',restoreSavedState); $('clearStateBtn').addEventListener('click',()=>{if(confirm('進行状態を初期化しますか？')){localStorage.removeItem(STORE_KEY); state.progress={quests:{},areas:{}}; state.dayState={day:1,fatigue:0,usedActions:0,awaitingEnd:false}; state.triggeredQuestEvents={}; state.triggeredAreaEvents={}; state.lastQuestFixedEventText=''; state.lastQuestCheckCopyText=''; state.lastQuestBattleCheckCopyText=''; state.lastEventCheckCopyText=''; state.lastBaseCheckCopyText=''; state.lastAreaFixedEventText=''; state.baseUnlockedAreaIds=defaultBaseUnlockedAreaIds(); state.lastBaseEventText=''; state.lastBaseEventKey=''; state.lastBaseRewardText=''; state.lastBaseRewardCopyText=''; state.questRewardCache={}; state.lastEncounter=null; state.dropEncounterInstances=[]; state.dropMode='encounter'; state.lastQuestReinforcementText=''; state.questWorkReinforcementCounts={}; state.tokenExportEncounter=null; state.dailyQuestUnlockedAreaIds=[]; state.areaWeatherById={}; state.timeSlot='朝'; state.log=[]; renderAll(); addLog('進行状態を初期化しました。');}});
+  setupProgressModalUi();
+  $('fixedUrlLabel').textContent='GitHub共通DB（失敗時のみGAS）'; bindTabs(); bindV738ProgressUi(); setPartySize(state.partySize||4); setTimeSlot(state.timeSlot||'朝',{reset:false,render:false,save:false}); setQuestCategory('重要'); $('communityReloadBtn')?.addEventListener('click',loadCommunityGatheringManager); document.addEventListener('click',e=>{const b=e.target.closest('[data-community-send]');if(b)saveCommunityGatheringFacility(b.dataset.communitySend||'');}); $('loadDbBtn').addEventListener('click',()=>loadDb({auto:false})); $('saveStateBtn').addEventListener('click',()=>saveState(true)); $('restoreStateBtn').addEventListener('click',restoreSavedState); $('clearStateBtn').addEventListener('click',()=>{if(confirm('進行状態を初期化しますか？')){localStorage.removeItem(STORE_KEY); state.progress={quests:{},areas:{}}; state.dayState={day:1,fatigue:0,usedActions:0,awaitingEnd:false}; state.triggeredQuestEvents={}; state.triggeredAreaEvents={}; state.lastQuestFixedEventText=''; state.lastQuestCheckCopyText=''; state.lastQuestBattleCheckCopyText=''; state.lastEventCheckCopyText=''; state.lastBaseCheckCopyText=''; state.lastAreaFixedEventText=''; state.baseUnlockedAreaIds=defaultBaseUnlockedAreaIds(); state.lastBaseEventText=''; state.lastBaseEventKey=''; state.lastBaseRewardText=''; state.lastBaseRewardCopyText=''; state.questRewardCache={}; state.lastEncounter=null; state.dropEncounterInstances=[]; state.dropMode='encounter'; state.lastQuestReinforcementText=''; state.questWorkReinforcementCounts={}; state.tokenExportEncounter=null; state.dailyQuestUnlockedAreaIds=[]; state.areaWeatherById={}; state.timeSlot='朝'; state.log=[]; renderAll(); addLog('進行状態を初期化しました。');}});
   document.querySelectorAll('[data-quest-category]').forEach(btn=>btn.addEventListener('click',()=>setQuestCategory(btn.dataset.questCategory)));
   $('questShowDisabledImportant')?.addEventListener('change',()=>{fillQuestSelect(); renderQuest();});
   $('questSelect').addEventListener('change',()=>{clearTokenExportEncounter('quest');state.lastQuestEventText=''; state.lastQuestEventKey=''; state.lastQuestCheckCopyText=''; state.lastQuestBattleCheckCopyText=''; state.lastQuestFixedEventText=''; state.lastQuestFixedEventKey=''; state.lastQuestCheckCopyText=''; state.lastQuestBattleCheckCopyText=''; state.lastQuestTreasureCopyText=''; state.lastQuestTreasureResults=[]; state.lastQuestEventTableRewardText=''; state.lastQuestEventTableRewardCopyText=''; state.lastQuestEventRewardState=null; state.lastQuestReinforcementText=''; renderEventRewardPanel('quest'); updateTreasureCopyButtons(); const q=selected($('questSelect'),state.quests); if(q&&questUsesRandomEncounter(q))resolveQuestPreviewEncounter(q,true); renderQuest();}); $('areaSelect').addEventListener('change',()=>{clearTokenExportEncounter('event');state.lastEventText='';state.lastEventKey='';state.lastEventCheckCopyText='';state.lastEventTreasureCopyText='';state.lastEventTreasureResults=[];state.lastEventTableRewardText='';state.lastEventTableRewardCopyText='';state.lastEventRewardState=null;state.lastEventOutcomeKey='';clearRecipeMerchantOffers();state.lastAreaFixedEventText='';state.lastAreaFixedEventKey='';renderEventRewardPanel('event');updateTreasureCopyButtons();fillEventTables();renderArea();}); $('dropAreaSelect').addEventListener('change',()=>refreshDropMonsterSelection('')); $('monsterSelect').addEventListener('input',()=>{setSelectedDropMonster(null,{clearInput:false});openMonsterMenu($('monsterSelect').value);renderMonster();});
@@ -5025,7 +5444,6 @@ $('monsterSelect').addEventListener('focus',()=>{if(suppressMonsterFocusOpen){su
     const tokenExportFolder=e.target.closest('[data-token-export-folder]');if(tokenExportFolder){tokenChooseExportDirectory(tokenExportFolder.dataset.tokenExportFolder||'event');return;}
     const tokenExport=e.target.closest('[data-token-export]');if(tokenExport){exportCurrentEncounterTokens(tokenExport.dataset.tokenExport||'event',tokenExport);return;}
     const importantResolve=e.target.closest('[data-important-use-resolve]');if(importantResolve){resolveDeclaredImportantItem(importantResolve.dataset.importantUseResolve||'event');return;}
-    const importantCopy=e.target.closest('[data-important-use-copy]');if(importantCopy){const scope=importantCopy.dataset.importantUseCopy||'event';copyText(importantUseCopyState[scope]||'',scope==='quest'?'questCopyNote':scope==='base'?'baseEventCopyNote':'eventCopyNote');return;}
     const reroll=e.target.closest('[data-event-reward-reroll]');if(reroll){rerollEventReward(reroll.dataset.eventRewardReroll);return;}
     if(e.target.closest('#copyRecipeMerchantListBtn')){const note=state.lastRecipeMerchantContext?.scope==='quest'?'questCopyNote':'eventCopyNote';copyText(recipeMerchantListCopyText(),note);return;}
     if(e.target.closest('#copyRecipeMerchantInfoBtn')){const note=state.lastRecipeMerchantContext?.scope==='quest'?'questCopyNote':'eventCopyNote';copyText(recipeMerchantInfoCopyText(selectedRecipeMerchantRow()),note);return;}
