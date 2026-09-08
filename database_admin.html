@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>リクラフト・アルケミア 統合DB管理ツール v90.8.744</title>
+<title>リクラフト・アルケミア 統合DB管理ツール v90.8.745</title>
 <style>
   :root{
     --bg:#f7f2ea;
@@ -1231,10 +1231,10 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 @media(max-width:720px){.ra-build-info{text-align:left}.title-card .subtitle,.dbid{display:none}header{padding:8px!important}.title-card{padding:10px!important}.title-card h1{font-size:1.25rem!important}.toolbar{gap:6px!important}.ra-admin-fold-body{padding:8px}main>.subnav-block:not(.hidden){top:52px}#recordInternalCategoryBlock:not(.hidden){top:104px}.tabs,.subtabs{max-height:106px}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.744-weapon-upgrade-boss-balance-20260908">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.745-weapon-ui-boss-slot-audit-20260908">
 </head>
 <body class="ra-app ra-manager ra-database">
-<div class="ra-build-info">Version：v90.8.744 / 最終更新日：2026年9月8日</div>
+<div class="ra-build-info">Version：v90.8.745 / 最終更新日：2026年9月8日</div>
 
 <header>
   <div class="title-card">
@@ -1984,8 +1984,8 @@ main>.subnav-block:not(.hidden){position:sticky;top:58px;z-index:59;padding-top:
 <script>
 // ローカル管理ツールから毎回URLを入力しない運用にする場合は、ここにApps Scriptの /exec URLを入れてください。
 const DEFAULT_GAS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
-const RECRAFT_DB_VERSION = 'v90.8.744';
-const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.744';
+const RECRAFT_DB_VERSION = 'v90.8.745';
+const RECRAFT_DB_REQUIRED_SERVER_VERSION = 'v90.8.745';
 const DB_ID = '1c9nmVu-O6o3AcnLHJ5SwmT0oRy5lDEhRw4YuM6BMPZ8';
 const DATA_KEYS = ['item_types','item_categories','material_types','material_categories','material_ranks','equipment_categories','items','recipes','spells','skills','quest_rewards','quests','exploration_areas','event_tables','treasure_tables','appraisal_rules','monsters'];
 const FULL_DB_KEYS = [...DATA_KEYS];
@@ -4074,24 +4074,24 @@ function antiqueModifierTypeWeights(kind='',category=''){
   const cat=String(category||'').trim();
   if(kind==='武器'){
     switch(cat){
-      case '短剣': return {hit:4,'skill:evade':4,'skill:search':2,'skill:detect':2,'combat:defense':1};
-      case '片手剣': return {hit:3,'combat:defense':3,'combat:guardAction':3,'skill:search':1,'skill:leadership':1,'skill:evade':1};
-      case '片手斧': return {hit:5,'skill:gather':2,'combat:defense':2,'combat:guardAction':1};
-      case '片手槌': return {hit:3,'skill:craft':2,'combat:guardAction':4,'combat:defense':2};
-      case '片手槍': return {hit:5,'skill:detect':2,'skill:track':1,'combat:guardAction':2,'combat:defense':1};
-      case '杖': return {hit:2,'skill:evade':2,'resource:maxMp':3,'skill:magic':2,'skill:appraise':2,'skill:knowledge':2};
+      case '短剣': return {hit:4,'skill:evade':4,'skill:search':2,'skill:craft':1,'combat:defense':1};
+      case '片手剣': return {hit:3,'combat:defense':3,'combat:guardAction':3,'skill:evade':1,'skill:detect':1};
+      case '片手斧': return {hit:5,'combat:defense':2,'combat:guardAction':1,'skill:gather':2};
+      case '片手槌': return {hit:3,'combat:guardAction':4,'combat:defense':2,'skill:craft':2};
+      case '片手槍': return {hit:5,'combat:guardAction':2,'combat:defense':1,'skill:detect':2};
+      case '杖': return {hit:2,'skill:evade':2,'resource:maxMp':3,'skill:magic':2,'skill:detect':2,'skill:search':2};
       case '鞭': return {hit:5,'skill:evade':2,'skill:detect':2,'skill:search':2};
-      case 'ガントレット': return {hit:4,'skill:athletics':2,'skill:evade':2,'combat:defense':2,'combat:guardAction':2};
-      case '両手剣': return {hit:5,'skill:athletics':2,'skill:evade':2,'combat:defense':1};
-      case '大槌': return {hit:5,'skill:force':2,'skill:craft':1,'combat:guardAction':2,'skill:evade':1};
-      case '大鎌': return {hit:5,'skill:gather':2,'skill:evade':2,'skill:detect':1};
-      case '長槍': return {hit:5,'skill:detect':2,'skill:track':2,'skill:evade':1};
-      case '弓': return {hit:5,'skill:detect':3,'skill:track':2,'skill:search':1,'skill:evade':1};
-      case 'クロスボウ': return {hit:5,'skill:detect':2,'skill:search':2,'skill:operate':1,'skill:evade':1};
-      case 'ヘヴィクロスボウ': return {hit:5,'skill:detect':2,'skill:operate':2,'combat:defense':2,'combat:guardAction':1};
-      case '魔導書': return {'skill:magic':5,'resource:maxMp':5,'skill:knowledge':3,'skill:appraise':2};
-      case '祈祷書': return {'skill:prayer':5,'resource:maxMp':5,'skill:knowledge':2,'skill:service':2};
-      default: return {hit:4,'skill:evade':2};
+      case 'ガントレット': return {hit:4,'skill:evade':2,'combat:defense':2,'combat:guardAction':2,'skill:athletics':2};
+      case '両手剣': return {hit:5,'skill:evade':2,'combat:defense':1,'skill:athletics':2};
+      case '大槌': return {hit:5,'combat:guardAction':2,'skill:evade':1,'skill:craft':2};
+      case '大鎌': return {hit:5,'skill:evade':2,'skill:detect':1,'skill:gather':2};
+      case '長槍': return {hit:5,'skill:detect':2,'skill:evade':1,'skill:search':2};
+      case '弓': return {hit:5,'skill:detect':3,'skill:evade':1,'skill:search':2};
+      case 'クロスボウ': return {hit:5,'skill:detect':2,'skill:evade':1,'skill:search':2};
+      case 'ヘヴィクロスボウ': return {hit:5,'combat:defense':2,'combat:guardAction':1,'skill:detect':1};
+      case '魔導書': return {'skill:magic':5,'resource:maxMp':5,'skill:knowledge':2,'skill:appraise':2};
+      case '祈祷書': return {'skill:prayer':5,'resource:maxMp':5,'skill:knowledge':2,'skill:empathy':2};
+      default: return {hit:4,'skill:evade':2,'skill:detect':1,'skill:search':1};
     }
   }
   if(kind==='防具'){
@@ -4113,12 +4113,12 @@ const ANTIQUE_SIGNATURE_MODIFIER_KEYS=Object.freeze({
     '片手槍':Object.freeze(['hit']),
     '杖':Object.freeze(['skill:evade']),
     'ガントレット':Object.freeze(['hit']),
-    '長槍':Object.freeze(['hit','skill:detect']),
-    '弓':Object.freeze(['hit']),
-    'クロスボウ':Object.freeze(['hit']),
+    '長槍':Object.freeze(['hit','skill:detect','skill:search']),
+    '弓':Object.freeze(['hit','skill:detect']),
+    'クロスボウ':Object.freeze(['hit','skill:detect']),
     'ヘヴィクロスボウ':Object.freeze(['combat:defense']),
-    '魔導書':Object.freeze(['resource:maxMp']),
-    '祈祷書':Object.freeze(['resource:maxMp'])
+    '魔導書':Object.freeze(['resource:maxMp','skill:knowledge','skill:appraise']),
+    '祈祷書':Object.freeze(['resource:maxMp','skill:knowledge','skill:empathy'])
   }),
   '防具':Object.freeze({
     '軽装':Object.freeze(['skill:evade']),
@@ -4204,13 +4204,13 @@ function antiqueModifierRange(kind='',category='',key='',rank=1){
     else if(k==='skill:evade'){neg=2;pos=1;}
   }
 
-  // 骨董本体補正は必ず実効値を持つ。候補はマイナス側とプラス側のみで、0は生成しない。
+  // 骨董補正を持つ場合、0は候補に含めない。必ず実効的なプラスまたはマイナスになる。
   return {min:-Math.max(1,Math.trunc(neg)),max:Math.max(1,Math.trunc(pos))};
 }
 function antiqueSignedModifierValue(kind='',category='',key='',rank=1){
   const range=antiqueModifierRange(kind,category,key,rank),min=Math.trunc(range.min),max=Math.trunc(range.max);
   const candidates=[];
-  for(let n=min;n<=max;n++){if(n!==0)candidates.push(n);}
+  for(let n=min;n<=max;n++)if(n!==0)candidates.push(n);
   const n=candidates.length?candidates[Math.floor(Math.random()*candidates.length)]:(Math.random()<.5?-1:1);
   return `${n>0?'+':''}${n}`;
 }
@@ -4230,7 +4230,7 @@ function antiqueRollIntrinsicModifiers(kind='',category='',rank=1){
   types.forEach(key=>map.set(key,antiqueSignedModifierValue(kind,category,key,rank)));
   return {slotCount,map,text:antiqueModifierText(map)};
 }
-const ANTIQUE_MODIFIER_LABELS=Object.freeze({'hit':'命中','skill:evade':'回避','combat:defense':'防御','combat:guardAction':'防御行動値','skill:detect':'感知','skill:search':'探索','skill:track':'追跡','skill:gather':'採取','skill:craft':'細工','skill:operate':'操作','skill:athletics':'運動','skill:force':'力業','skill:appraise':'鑑定','skill:knowledge':'知識','skill:leadership':'鼓舞','skill:service':'共感','skill:magic':'魔法','skill:prayer':'祈祷','resource:maxMp':'最大MP','resource:maxHp':'最大HP'});
+const ANTIQUE_MODIFIER_LABELS=Object.freeze({'hit':'命中','skill:evade':'回避','combat:defense':'防御','combat:guardAction':'防御行動値','skill:detect':'感知','skill:magic':'魔法','skill:prayer':'祈祷','resource:maxMp':'最大MP','resource:maxHp':'最大HP'});
 function antiqueIntrinsicModifierText(eq={}){
   const source=String(eq.antiqueBonusModifiers!==undefined?eq.antiqueBonusModifiers:(String(eq.itemType||'').trim()==='武器'?eq.modifiers:''));
   const map=antiqueModifierMap(source),parts=[];
@@ -4575,6 +4575,17 @@ function renderFacilitiesPanel(){
     </section>`;
   }).join('');
   renderFacilityWorkPanel();
+  // 初期選択値が画面上ですでに選択済みでも、連動候補は初回描画で必ず生成する。
+  requestAnimationFrame(()=>{
+    if(facilityWorkKind()==='smithy'){
+      renderFacilityUpgradeEquipmentSelect();
+      renderFacilityUpgradeLookupList();
+      renderFacilityGuaranteeSelect();
+      renderFacilityUpgradeResult($('facilityUpgradeMaterialInput')?.value||'');
+      renderFacilityRemovalCalculator();
+    }
+    if(facilityWorkKind()==='antique-antique_gear') syncAntiqueGearSelectors();
+  });
 }
 
 const ADMIN_ITEM_TYPE_PREFERRED_ORDER = ['武器','防具','盾','装飾品','調合品','道具','特殊矢弾','収納具','重要アイテム','スクロール','換金品','その他'];
@@ -6108,7 +6119,7 @@ function renderFacilityWorkPanel(){
   if(kind==='smithy'){
     if(title) title.textContent='装備強化';
     if(notice) notice.textContent='自作は細工道具＋素材、施設依頼は素材＋表示価格で行います。施設依頼の成功率には自作側の道具補正を適用しません。';
-    renderUpgradeCountSelect($('facilityUpgradeCountInput')?.value||'0'); renderUpgradeStepSelect($('facilityUpgradeStepInput')?.value||'1'); renderToolRankSelect('facilitySmithToolRankInput',$('facilitySmithToolRankInput')?.value||'3'); initializeFacilityUpgradeDependencies(); renderFacilityGuaranteeSelect(); renderFacilityUpgradeResult($('facilityUpgradeMaterialInput')?.value||'');
+    renderUpgradeCountSelect($('facilityUpgradeCountInput')?.value||'0'); renderUpgradeStepSelect($('facilityUpgradeStepInput')?.value||'1'); renderToolRankSelect('facilitySmithToolRankInput',$('facilitySmithToolRankInput')?.value||'3'); renderFacilityUpgradeEquipmentSelect(); renderFacilityUpgradeLookupList(); renderFacilityGuaranteeSelect(); renderFacilityUpgradeResult($('facilityUpgradeMaterialInput')?.value||''); renderFacilityRemovalCalculator();
   }else if(kind==='crystal'){
     if(title) title.textContent='スキルクリスタル強化';
     if(notice) notice.textContent='選択した進行段階で利用できる強化について、必要素材・金額・解放条件を確認します。';
@@ -6160,16 +6171,6 @@ function renderFacilityUpgradeEquipmentSelect(){
   sel.innerHTML='<option value="">装備を選択</option>'+rows.map(r=>`<option value="${escapeHtml(r.name||r.id||'')}">${escapeHtml(r.name||r.id||'名称未設定')}（${escapeHtml(adminRankLabel(r.rank)||'ランク未設定')} / 最低素材${escapeHtml(playerRankLabel(equipmentUpgradeMinimumRank(r))) }）</option>`).join('');
   if([...sel.options].some(o=>o.value===prev)) sel.value=prev;
   syncFacilityUpgradePickerButton(sel);
-}
-function initializeFacilityUpgradeDependencies(){
-  const type=$('facilityUpgradeEquipmentType');
-  if(type&&!String(type.value||'').trim())type.value='武器';
-  renderFacilityUpgradeEquipmentSelect();
-  renderFacilityUpgradeLookupList();
-  renderFacilityRemovalCalculator();
-  syncFacilityUpgradePickerButton(type);
-  syncFacilityUpgradePickerButton($('facilityUpgradeEquipmentSelect'));
-  syncFacilityUpgradePickerButton($('facilityUpgradeMaterialInput'));
 }
 function upgradeMaterialTarget(mat){
   const explicit=String(mat?.equipmentUpgradeTarget||'').trim(); if(explicit)return explicit;
@@ -11535,7 +11536,7 @@ document.addEventListener('click', (ev) => {
 .ra-manager-picker{width:min(1040px,calc(100vw - 24px));max-height:88vh;border:1px solid var(--line);border-radius:20px;background:var(--paper);color:var(--ink);padding:0;box-shadow:0 24px 70px rgba(35,22,12,.38)}
 .ra-manager-picker::backdrop{background:rgba(28,18,10,.5)}.ra-manager-picker-shell{display:grid;grid-template-rows:auto auto auto minmax(0,1fr);max-height:88vh}
 .ra-manager-picker-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}.ra-manager-picker-head h3{margin:0;color:var(--accent)}
-.ra-manager-picker-search{padding:11px 15px 10px;min-height:66px}.ra-manager-picker-search input{width:100%!important;min-height:44px!important;margin:0!important}.ra-manager-picker-tabs{display:flex;gap:7px;overflow-x:auto;padding:10px 15px}.ra-manager-picker-tabs button{flex:0 0 auto;background:#fffaf3;color:var(--ink);border:1px solid var(--line);box-shadow:none}.ra-manager-picker-tabs button.active{background:var(--accent);color:white}
+.ra-manager-picker-search{padding:11px 15px 10px;min-height:66px}.ra-manager-picker-search input{width:100%!important;min-height:44px!important;margin:0!important}.ra-manager-picker-tabs{display:flex;gap:7px;overflow-x:auto;padding:10px 15px}.ra-manager-picker-tabs button{flex:0 0 auto;background:#fffaf3;color:var(--ink);border:1px solid var(--line);box-shadow:none}.ra-manager-picker-tabs button.active{background:var(--accent);color:white}.ra-manager-picker-filter{display:grid;grid-template-columns:max-content minmax(180px,360px);align-items:center;gap:8px;width:100%;font-size:12px;font-weight:900;color:var(--muted)}.ra-manager-picker-filter select{width:100%;min-height:42px;margin:0;background:#fffdf8;color:var(--ink);border:1px solid var(--line);border-radius:11px;padding:8px 10px}
 .ra-manager-picker-body{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);min-height:0;border-top:1px solid var(--line)}.ra-manager-picker-list{overflow:auto;padding:12px;display:grid;align-content:start;gap:8px}.ra-manager-picker-detail{overflow:auto;padding:14px;border-left:1px solid var(--line)}
 .ra-manager-picker-card{border:1px solid var(--line);border-radius:14px;background:#fffdf8;padding:10px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}.ra-manager-picker-name{font-weight:900;color:var(--accent)}.ra-manager-picker-meta{font-size:.8rem;color:var(--muted)}.ra-manager-picker-actions{display:flex;gap:6px}.ra-manager-picker-actions button{padding:7px 10px}
 .ra-manager-picker-detail dl{display:grid;grid-template-columns:auto 1fr;gap:7px 10px}.ra-manager-picker-detail dt{font-weight:900;color:var(--muted)}.ra-manager-picker-detail dd{margin:0;white-space:pre-wrap}
@@ -11556,7 +11557,6 @@ document.addEventListener('click', (ev) => {
 .ra-manager-picker-head p{margin:4px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
 .ra-manager-picker-search{padding:16px 18px 8px;min-height:auto}
 .ra-manager-picker-tabs{padding:0 18px 12px}
-.ra-manager-picker-filter-wrap{display:grid;grid-template-columns:minmax(220px,420px);gap:6px;width:100%}.ra-manager-picker-filter-wrap label{font-size:12px;color:var(--muted);font-weight:700}.ra-manager-picker-filter-wrap select{width:100%;min-height:44px;background:#fffdf8;color:#2c241b;border:1px solid var(--line);border-radius:10px;padding:8px 34px 8px 10px}
 .ra-manager-picker-body{border-top:1px solid var(--line)}
 @media(max-width:720px){.ra-manager-picker{width:calc(100vw - 16px);max-height:92vh}.ra-manager-picker-shell{max-height:92vh;border-radius:18px}.ra-manager-picker-head{padding:14px}.ra-manager-picker-search{padding:14px 14px 8px}.ra-manager-picker-tabs{padding:0 14px 10px}}
 </style>
@@ -11611,29 +11611,22 @@ function run(){
      return;
    }
    const extraCats=[...new Set(all.map(x=>x.category).filter(Boolean))],cats=['すべて',...extraCats];if(!cats.includes(category))category='すべて';
-   if(mode==='upgradeMaterial'){
-     tabs.innerHTML=`<div class="ra-manager-picker-filter-wrap"><label for="raManagerUpgradeEffectFilter">強化内容で絞り込み</label><select id="raManagerUpgradeEffectFilter" data-ra-manager-filter>${cats.map(c=>`<option value="${escHtml(c)}"${c===category?' selected':''}>${escHtml(c==='すべて'?'全ての強化内容':c)}</option>`).join('')}</select></div>`;
-   }else{
-     tabs.innerHTML=cats.map(c=>`<button type="button" data-ra-manager-cat="${escHtml(c)}" class="${c===category?'active':''}">${escHtml(c==='すべて'?'全て':c)}</button>`).join('');
-   }
+   tabs.innerHTML=mode==='upgradeMaterial'
+     ?`<label class="ra-manager-picker-filter"><span>強化内容</span><select data-ra-manager-filter>${cats.map(c=>`<option value="${escHtml(c)}" ${c===category?'selected':''}>${escHtml(c==='すべて'?'全て':c)}</option>`).join('')}</select></label>`
+     :cats.map(c=>`<button type="button" data-ra-manager-cat="${escHtml(c)}" class="${c===category?'active':''}">${escHtml(c==='すべて'?'全て':c)}</button>`).join('');
    const q=txt(search.value).normalize('NFKC').toLocaleLowerCase('ja');
    const filtered=all.filter(x=>category==='すべて'||x.category===category).filter(x=>!q||[x.name,x.category,x.raw.description,x.raw.effect,x.raw.power,x.raw.equipmentUpgradeEffect,x.raw.equipmentUpgradeDetail,x.raw.source].map(txt).join(' ').normalize('NFKC').toLocaleLowerCase('ja').includes(q));
    list.innerHTML=filtered.length?filtered.map(x=>`<article class="ra-manager-picker-card"><div><div class="ra-manager-picker-name">${escHtml(x.name)}</div><div class="ra-manager-picker-meta">${escHtml(metaText(x))}</div></div><div class="ra-manager-picker-actions">${mode==='generic'?'':`<button type="button" class="ghost" data-ra-manager-detail="${escHtml(x.key)}">詳細</button>`}<button type="button" data-ra-manager-choose="${escHtml(x.key)}">選択</button></div></article>`).join(''):'<p class="notice">条件に一致する候補がありません。</p>';
    const x=all.find(v=>v.key===detailKey);if(mode==='generic'){detail.innerHTML='<p class="notice">候補を選ぶと、そのまま元の項目へ反映します。</p>'}else if(x){const pairs=detailPairs(x);detail.innerHTML=`<h4>${escHtml(x.name)}</h4><dl>${pairs.map(([k,v])=>`<dt>${escHtml(k)}</dt><dd>${escHtml(v)}</dd>`).join('')}</dl><button type="button" data-ra-manager-choose="${escHtml(x.key)}">この候補を選択</button>`}else detail.innerHTML='<p class="notice">一覧から詳細を選択してください。</p>'
  }
- function open(el,m){
-   target=el;mode=m;category='すべて';detailKey='';search.value='';
-   if(m==='upgradeEquipment'&&el?.id==='facilityUpgradeEquipmentSelect'&&el.options.length<=1&&typeof renderFacilityUpgradeEquipmentSelect==='function')renderFacilityUpgradeEquipmentSelect();
-   if(m==='upgradeMaterial'&&el?.id==='facilityUpgradeMaterialInput'&&typeof renderFacilityUpgradeLookupList==='function')renderFacilityUpgradeLookupList();
-   if(m==='upgradeMaterial'&&el?.id==='facilityRemovalMaterialSelect'&&typeof renderFacilityRemovalCalculator==='function')renderFacilityRemovalCalculator();
-   syncButton(el);render();dialog.showModal();search.focus();
- }
+ function open(el,m){target=el;mode=m;category='すべて';detailKey='';search.value='';render();dialog.showModal();search.focus()}
  function associatedText(el){const label=el.id?document.querySelector(`label[for="${CSS.escape(el.id)}"]`):null;return [el.getAttribute?.('aria-label'),el.id,el.name,el.placeholder,label?.textContent,el.closest('.field,div')?.querySelector(':scope > label')?.textContent].map(txt).join(' ')}
  function classify(el){const t=associatedText(el);if(el.type==='search'||/検索/u.test(t))return'';if(['facilityUpgradeCountInput','facilityUpgradeStepInput'].includes(el.id))return'';if(el.id==='facilityUpgradeEquipmentType')return el.tagName==='SELECT'?'generic':'';if(el.id==='facilityUpgradeEquipmentSelect')return'upgradeEquipment';if(el.id==='facilityUpgradeMaterialInput'||el.id==='facilityRemovalMaterialSelect')return'upgradeMaterial';if(/武器種|weaponCategory|weaponType/u.test(t))return'category';if(/強化する装備|派生元|派生先|結果武器|baseItem|resultItem|武器選択/u.test(t))return'item';if(el.tagName==='SELECT')return'generic';return''}
  function enhance(el){if(el.dataset.raManagerPicker||el.disabled)return;const m=classify(el);if(!m)return;el.dataset.raManagerPicker='1';if(el.tagName==='SELECT')el.classList.add('ra-manager-picker-native');const btn=document.createElement('button');btn.type='button';btn.className='ra-manager-picker-button';btn.innerHTML='<span data-ra-manager-label></span><span>モーダルで選択 ▾</span>';el.insertAdjacentElement('afterend',btn);btn.addEventListener('click',()=>open(el,m));el.addEventListener('change',()=>syncButton(el));syncButton(el)}
  function scan(root=document){if(root instanceof Element&&root.matches('select,input[type="text"]'))enhance(root);root.querySelectorAll?.('select,input[type="text"]').forEach(enhance)}
  function observeAdded(mutations){for(const mutation of mutations){const changedSelect=mutation.target instanceof HTMLSelectElement?mutation.target:null;if(changedSelect?.dataset?.raManagerPicker&&!dialog.contains(changedSelect))syncButton(changedSelect);for(const node of mutation.addedNodes){if(!(node instanceof Element)||node===dialog||dialog.contains(node)||node.matches('.ra-manager-picker-button'))continue;scan(node)}}}
- tabs.addEventListener('change',e=>{const f=e.target.closest('[data-ra-manager-filter]');if(f){category=f.value||'すべて';render();}});dialog.addEventListener('click',e=>{if(e.target===dialog||e.target.closest('[data-ra-manager-close]')){dialog.close();return}const c=e.target.closest('[data-ra-manager-cat]');if(c){category=c.dataset.raManagerCat||'すべて';render();return}const d=e.target.closest('[data-ra-manager-detail]');if(d){detailKey=d.dataset.raManagerDetail||'';render();return}const p=e.target.closest('[data-ra-manager-choose]');if(p){choose(rows().find(x=>x.key===p.dataset.raManagerChoose))}});search.addEventListener('input',render);new MutationObserver(observeAdded).observe(document.body,{childList:true,subtree:true});scan();
+ dialog.addEventListener('change',e=>{const f=e.target.closest('[data-ra-manager-filter]');if(f){category=f.value||'すべて';render();}});
+ dialog.addEventListener('click',e=>{if(e.target===dialog||e.target.closest('[data-ra-manager-close]')){dialog.close();return}const c=e.target.closest('[data-ra-manager-cat]');if(c){category=c.dataset.raManagerCat||'すべて';render();return}const d=e.target.closest('[data-ra-manager-detail]');if(d){detailKey=d.dataset.raManagerDetail||'';render();return}const p=e.target.closest('[data-ra-manager-choose]');if(p){choose(rows().find(x=>x.key===p.dataset.raManagerChoose))}});search.addEventListener('input',render);new MutationObserver(observeAdded).observe(document.body,{childList:true,subtree:true});scan();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
 })();
