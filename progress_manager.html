@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>リクラフト・アルケミア 進行管理 v90.8.772</title>
+<title>リクラフト・アルケミア 進行管理 v90.8.775</title>
 <style>
 :root{
   --bg:#f7f2e8;--card:#fffaf3;--ink:#2d241b;--muted:#76695b;--line:#d9c7a8;
@@ -176,7 +176,7 @@ header{padding-top:10px!important;padding-bottom:8px!important}.header-inner h1{
 @media(max-width:620px){.ra-build-info{text-align:left}header{padding:8px!important}.fixed-url{display:none}.header-inner .version{font-size:.7rem}.day-status-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}#progressTabNav{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 </style>
 
-<link rel="stylesheet" href="ra-design-system.css?v=90.8.772-weapon-branch-function-diff-20260912">
+<link rel="stylesheet" href="ra-design-system.css?v=90.8.775-area-event-full-audit-20260912">
 
 <style id="raCheckboxSizeFixV375">
 input[type="checkbox"],input[type="radio"]{appearance:auto!important;-webkit-appearance:auto!important;width:18px!important;height:18px!important;min-width:18px!important;min-height:18px!important;max-width:18px!important;max-height:18px!important;padding:0!important;margin:0!important;flex:0 0 18px!important;vertical-align:middle}
@@ -253,7 +253,7 @@ body.progress-modal-open{overflow:hidden}
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">Version：v90.8.772 / 最終更新日：2026年9月12日</div>
+<div class="ra-build-info">Version：v90.8.775 / 最終更新日：2026年9月12日</div>
 
 <header>
   <div class="header-inner">
@@ -354,7 +354,7 @@ body.progress-modal-open{overflow:hidden}
       <div id="questTokenExportPanel" class="token-export-panel hidden"></div>
       <div id="questEventRewardPanel" class="event-reward-panel hidden"></div>
       <div id="questImportantUsePanel" class="card hidden important-use-panel">
-        <h3>越境アイテム</h3>
+        <h3>GM用：越境アイテム対応</h3>
         <div class="kv"><b>対象アイテム</b><span id="questImportantUseTarget">—</span><b>消費数</b><span id="questImportantUseConsume">—</span></div>
         <div class="buttons"><button class="secondary" id="questImportantUseActionBtn" type="button" data-important-use-resolve="quest">越境アイテムを使用</button></div>
       </div>
@@ -418,7 +418,7 @@ body.progress-modal-open{overflow:hidden}
         <div id="eventTokenExportPanel" class="token-export-panel hidden"></div>
         <div id="eventRewardPanel" class="event-reward-panel hidden"></div>
         <div id="eventImportantUsePanel" class="card hidden important-use-panel">
-          <h3>越境アイテム</h3>
+          <h3>GM用：越境アイテム対応</h3>
           <div class="kv"><b>対象アイテム</b><span id="eventImportantUseTarget">—</span><b>消費数</b><span id="eventImportantUseConsume">—</span></div>
           <div class="buttons"><button class="secondary" id="eventImportantUseActionBtn" type="button" data-important-use-resolve="event">越境アイテムを使用</button></div>
         </div>
@@ -446,7 +446,7 @@ body.progress-modal-open{overflow:hidden}
       <div id="baseEventResult" class="result">拠点内イベント結果がここに表示されます。</div>
       <div id="baseEventRewardPanel" class="event-reward-panel hidden"></div>
       <div id="baseImportantUsePanel" class="card hidden important-use-panel">
-        <h3>越境アイテム</h3>
+        <h3>GM用：越境アイテム対応</h3>
         <div class="kv"><b>対象アイテム</b><span id="baseImportantUseTarget">—</span><b>消費数</b><span id="baseImportantUseConsume">—</span></div>
         <div class="buttons"><button class="secondary" id="baseImportantUseActionBtn" type="button" data-important-use-resolve="base">越境アイテムを使用</button></div>
       </div>
@@ -573,7 +573,7 @@ body.progress-modal-open{overflow:hidden}
 <script src="./assets/vendor/jszip.min.js"></script>
 <script>
 'use strict';
-const VERSION='v90.8.772';
+const VERSION='v90.8.775';
 const GAS_URL='https://script.google.com/macros/s/AKfycbxNQYC7-aBE23cliuD1Zdze18xHh-q45P1qpBgwCCg0dYgxd1b8A-R63eGjzMtgOxMT/exec';
 const GITHUB_COMMON_DB_BASE='https://akari-2659.github.io/Recraft-Alchemia-Manager/data/public/';
 function progressGithubBaseCandidates(){
@@ -1551,23 +1551,47 @@ function questBattleInternalCheckCopyText(q={},e={}){
   return `【戦闘内判定：${info.action}】\n${info.line}`;
 }
 function questBattleInternalCheckDisplayText(q={},e={}){const info=questBattleInternalCheckInfo(q,e);return info?info.line:'';}
+function fixedBattlePerceptionLines(groups=[]){
+  const highest=encounterHighestInitiative(groups);
+  if(highest===null)return [];
+  const composition=(groups||[]).map(g=>`${publicEncounterMonsterName(g.name)}×${Math.max(1,Math.floor(Number(g.count)||1))}`).join('・');
+  return [`感知 / 達成値：${highest}`,composition?`出現：${composition}`:''].filter(Boolean);
+}
 function questFixedEventCheckCopyText(q={},e={},resolvedEncounter=null){
   const internal=questBattleInternalCheckInfo(q,e);
-  const guaranteedBattle=eventBattleCopyMode(e)==='戦闘発生';
-  // 固定戦闘は、実際に確定した編成の最大先制値を使って遭遇時の感知判定を必ず生成する。
-  // これを通常イベント側の推測処理へ任せると、ランダム編成・人数対応編成の固定イベントで
-  // 判定コピーが空になるため、resolvedEncounter を最優先する。
-  if(guaranteedBattle||internal){
-    const groups=resolvedEncounter?encounterGroupsForDrop({},resolvedEncounter,effectiveQuestPartySize(q)):eventEncounterGroupsForCopy(e,effectiveQuestPartySize(q));
-    const highest=encounterHighestInitiative(groups);
-    if(highest!==null){
-      const composition=(groups||[]).map(g=>`${publicEncounterMonsterName(g.name)}×${Math.max(1,Math.floor(Number(g.count)||1))}`).join('・');
-      const name=String(e.eventName||'名称未設定').trim()||'名称未設定',intro=eventIntroNarrative({...e,areaName:e.areaName||q.areaName||q.questLocation||''});
-      return [`【固定：${name}】`,intro,'',`感知 / 達成値：${highest}${composition?` / ${composition}`:''}`].join('\n');
+  const battleMode=eventBattleCopyMode(e);
+  const hasBattle=!!battleMode||!!internal;
+  const size=effectiveQuestPartySize(q);
+  if(hasBattle){
+    const groups=eventEncounterGroupsForFixedCheck(e,size,resolvedEncounter);
+    const detect=fixedBattlePerceptionLines(groups);
+    if(detect.length){
+      const name=String(e.eventName||'名称未設定').trim()||'名称未設定';
+      const intro=eventIntroNarrative({...e,areaName:e.areaName||q.areaName||q.questLocation||''});
+      // 成否によって戦闘へ分岐する固定イベントは、元の判定と戦闘発生時の感知を同じコピーへ入れる。
+      if(battleMode==='戦闘予感'){
+        const base=eventCheckCopyText(e,true);
+        return [base||[`【固定：${name}】`,intro].join('\n'),'','【戦闘発生時の感知】',...detect].filter((v,i)=>v!==''||i===1).join('\n');
+      }
+      return [`【固定：${name}】`,intro,'',...detect].join('\n');
     }
   }
   // 非戦闘固定イベント、または編成解決不能時は登録済み判定を通常イベントと同じ処理でコピーする。
   return eventCheckCopyText(e,true);
+}
+function areaFixedEventCheckCopyText(area={},e={},resolvedEncounter=null){
+  const battleMode=eventBattleCopyMode(e);
+  if(!battleMode)return eventCheckCopyText(e,true);
+  const groups=eventEncounterGroupsForFixedCheck(e,selectedPartySize(),resolvedEncounter);
+  const detect=fixedBattlePerceptionLines(groups);
+  if(!detect.length)return eventCheckCopyText(e,true);
+  const name=String(e.eventName||'名称未設定').trim()||'名称未設定';
+  const intro=eventIntroNarrative({...e,areaName:e.areaName||area.name||''});
+  if(battleMode==='戦闘予感'){
+    const base=eventCheckCopyText(e,true);
+    return [base||[`【固定：${name}】`,intro].join('\n'),'','【戦闘発生時の感知】',...detect].filter((v,i)=>v!==''||i===1).join('\n');
+  }
+  return [`【固定：${name}】`,intro,'',...detect].join('\n');
 }
 function questWorkCheckText(q={}){const e=questWorkEvent(q);return e?questBattleInternalCheckDisplayText(q,e):'';}
 function workQuestReinforcementProfile(q={},size=effectiveQuestPartySize(q)){
@@ -1861,6 +1885,34 @@ function eventEncounterGroupsForCopy(e={},partySize=selectedPartySize()){
 function eventEncounterInlineComposition(e={},partySize=selectedPartySize()){
   return eventEncounterGroupsForCopy(e,partySize).map(g=>`${publicEncounterMonsterName(g.name)}×${g.count}`).join('・');
 }
+function eventEncounterGroupsFromResultText(e={},partySize=selectedPartySize()){
+  const text=resolveEncounterTokensInText(String(e.result||''),partySize);
+  if(!text||!/戦闘/.test(text))return [];
+  const groups=[];
+  const monsters=[...(state.monsters||[])].filter(m=>String(m.name||'').trim()).sort((a,b)=>String(b.name||'').length-String(a.name||'').length);
+  monsters.forEach(monster=>{
+    const name=String(monster.name||'').trim();
+    const safe=name.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    const re=new RegExp(`(?:(前衛|後衛)に)?${safe}\\s*×\\s*(\\d+)`,'g');
+    let m;
+    while((m=re.exec(text))){
+      const count=Math.max(0,Math.floor(Number(m[2])||0));if(count<1)continue;
+      groups.push({name,count,formation:String(m[1]||'前衛').trim()||'前衛'});
+    }
+  });
+  const map=new Map();
+  groups.forEach(g=>{const key=`${g.formation}\t${g.name}`,prev=map.get(key)||{name:g.name,count:0,formation:g.formation,position:g.formation};prev.count+=g.count;map.set(key,prev);});
+  return normalizeEncounterFrontline([...map.values()]);
+}
+function eventEncounterGroupsForFixedCheck(e={},partySize=selectedPartySize(),resolvedEncounter=null){
+  if(resolvedEncounter){
+    const groups=encounterGroupsForDrop({},resolvedEncounter,partySize);
+    if(groups.length)return groups;
+  }
+  const configured=eventEncounterGroupsForCopy(e,partySize);
+  if(configured.length)return configured;
+  return eventEncounterGroupsFromResultText(e,partySize);
+}
 function eventCheckInfo(e={}){
   let expr='';
   const raw=String(e.checkType||'').trim();
@@ -2111,7 +2163,7 @@ function triggerQuestSpecificEvents(q,before,after){
     const resolvedEncounter=resolveQuestFixedEncounter(q,e,false);
     state.lastQuestBattleCheckCopyText=questBattleInternalCheckCopyText(q,e);
     state.lastQuestCheckCopyText=questFixedEventCheckCopyText(q,e,resolvedEncounter);
-    const fixedDropGroups=resolvedEncounter?encounterGroupsForDrop({},resolvedEncounter,effectiveSize):encounterGroupsForDrop(e,null,effectiveSize);
+    const fixedDropGroups=eventEncounterGroupsForFixedCheck(e,effectiveSize,resolvedEncounter);
     if(isWorkQuest(q)&&Number(eventThreshold(e))===100){const workKey=String(q.id||q.name||'work');state.questWorkReinforcementCounts=state.questWorkReinforcementCounts||{};state.questWorkReinforcementCounts[workKey]=0;state.lastQuestReinforcementText='';}
     const extraLines=['このイベントはクエスト進行度による確定発生です。ランダム抽選ではありません。'];
     const supportNote=questPartyAdjustmentNote(q);if(supportNote)extraLines.push(supportNote);
@@ -2349,16 +2401,19 @@ function crossBorderSourcePerDrawChance(area={}){
   return 1-Math.pow(0.95,1/draws);
 }
 const NAMED_ENCOUNTER_PER_DRAW_CHANCE=0.05;
+const HIDDEN_NAMED_ENCOUNTER_PER_DRAW_CHANCE=0.25;
 function pickAreaEvent(rows=[],lastKey='',area={}){
   const list=(rows||[]).filter(Boolean);if(!list.length)return null;
   const filtered=list.length>1?list.filter(r=>eventUniqueKey(r)!==lastKey):list;
-  const pool=filtered.length?filtered:list;
+  // 隠しエリアでは二つ名再遭遇を許可するため、直前イベントの除外は行わない。
+  // 非戦闘イベントの重複は v738 の seen 管理で別途防止する。
+  const pool=isHiddenAreaRow(area)?list:(filtered.length?filtered:list);
   const namedRows=pool.filter(isNamedEncounterEvent);
   const sourceRows=pool.filter(row=>isCrossBorderSourceEvent(row)&&!isNamedEncounterEvent(row));
   const normalRows=pool.filter(row=>!isCrossBorderSourceEvent(row)&&!isNamedEncounterEvent(row));
   // 二つ名と越境起点は通常候補数へ混ぜず、それぞれ独立した低確率枠として扱う。
   // 1回の抽選で両方へ当選しないよう、同じ乱数上に割り当てる。
-  const namedChance=namedRows.length?NAMED_ENCOUNTER_PER_DRAW_CHANCE:0;
+  const namedChance=namedRows.length?(isHiddenAreaRow(area)?HIDDEN_NAMED_ENCOUNTER_PER_DRAW_CHANCE:NAMED_ENCOUNTER_PER_DRAW_CHANCE):0;
   const sourceChance=sourceRows.length?crossBorderSourcePerDrawChance(area):0;
   const specialRoll=Math.random();
   if(namedRows.length&&specialRoll<namedChance){
@@ -3108,7 +3163,7 @@ function resolveTransportStrongEncounter(q={},e={},force=false,suffix='transport
 }
 function resolveQuestFixedEncounter(q={},e={},force=false){
   const result=String(e.result||'');
-  if(!/戦闘発生/.test(result))return null;
+  if(!eventBattleCopyMode(e)&&!questBattleInternalCheckInfo(q,e))return null;
   const suffix=`fixed-${eventThreshold(e)??''}-${e.eventName||''}`;
   const transportStrong=resolveTransportStrongEncounter(q,e,force,suffix);
   if(transportStrong)return transportStrong;
@@ -3424,11 +3479,10 @@ function triggerAreaClearRumorEvent(area){
   clearAreaRandomEventHistory();
   state.areaBossEncountered[key]=true;
   state.lastEventKey=eventUniqueKey(picked);
-  state.lastEventCheckCopyText=eventCheckCopyText(picked,true);
+  state.lastEventCheckCopyText=areaFixedEventCheckCopyText(area,picked);
   clearTokenExportEncounter('event');
   state.lastEventOutcomeKey=eventUniqueKey(picked);
   const baseText=formatEventOutput(`【探索クリア時イベント】${picked.eventName||'名称未設定'}`, picked, area, tableId, [`噂：${rumor.eventName||''}`],null,'event');
-  state.lastEventCheckCopyText=eventCheckCopyText(picked,true);
   const treasureBundle=resolveEventTreasures(picked,area?.name||picked.areaName||'',false);
   state.lastEventRewardState=buildEventRewardState(picked);
   const rewardSpec=eventRewardTableSpec(picked,area?.name||picked.areaName||'');
@@ -3481,7 +3535,9 @@ function rollEvent(){
   setEventTreasureResults('event',treasureBundle.results);
   if(isRecipeMerchantEvent(picked))drawRecipeMerchantOffers(area,'event',picked.eventName||'レシピ商人との遭遇');else renderRecipeMerchantPanel();
   renderEventRewardPanel('event');
-  updateTreasureCopyButtons();updateAreaEventItemCopyButton();updateEventCheckCopyButtons();
+  // 抽選直後に越境対応欄も更新し、対応品名・消費数・使用ボタンをその場で表示する。
+  resetImportantUsePanel('event');
+  updateTreasureCopyButtons();updateAreaEventItemCopyButton();updateEventCheckCopyButtons();updateEventContentCopyButtons();
   if(isBossEvent(picked)) state.areaBossEncountered[areaEventKey(area)]=true;
   $('eventResult').textContent=state.lastEventText;
   const rollBtn=$('rollEventBtn');if(rollBtn)rollBtn.textContent='イベント再抽選';
@@ -4907,6 +4963,20 @@ function eventOutcomeNarrative(row={},group={},scope='event'){
   if(threshold)return 'さらに注意深く確かめたことで、もう一段踏み込んだ成果へたどり着いた。';
   return hasItems?'周囲の様子を丁寧に確かめ、見つけたものを無事に回収した。':'状況を見極め、無事にこの場を切り抜けた。';
 }
+const v775EventOutcomeNarrative=eventOutcomeNarrative;
+eventOutcomeNarrative=function(row={},group={},scope='event'){
+  const base=v775EventOutcomeNarrative(row,group,scope);
+  if(!base)return '';
+  // 「入手なし」等を文字列の「入手」で誤って取得扱いしない。
+  // 実際に解析された取得アイテム／報酬表枠だけを取得ありとして扱う。
+  const hasItems=(group?.items||[]).length>0||Number(group?.tableSlots||0)>0;
+  if(hasItems||eventOutcomeIsBattle(row))return base;
+  const name=String(row.eventName||'イベント').trim()||'イベント';
+  const area=String(row.areaName||'').trim();
+  const description=String(row.description||'').trim();
+  const scene=description?`${area?`${area}の`:''}「${name}」。${description}`:`${area?`${area}の`:''}「${name}」で起きた出来事。`;
+  return `${scene}\n${base}`;
+};
 function eventOutcomeSupplementText(row={},group={},partySize=selectedPartySize()){
   let clean=eventOutcomeCleanClause(row,group.clause,partySize);if(!clean)return'';
   // アイテム入手の要約は出さず、実データブロックへ任せる。
@@ -5183,7 +5253,17 @@ function v738MarkSeen(scope,key=''){if(key)v738CurrentSeenSet(scope).add(String(
 const v737QuestRandomEvents=questRandomEvents;
 questRandomEvents=function(q){const rows=v737QuestRandomEvents(q);return progressUiV738.questActive?v738FilterUnseen('quest',rows):rows;};
 const v737EventRowsForArea=eventRowsForArea;
-eventRowsForArea=function(area,options={}){const rows=v737EventRowsForArea(area,options);return (progressUiV738.areaActive||progressUiV738.hidden.active)?v738FilterUnseen('event',rows):rows;};
+eventRowsForArea=function(area,options={}){
+  const rows=v737EventRowsForArea(area,options);
+  if(!(progressUiV738.areaActive||progressUiV738.hidden.active))return rows;
+  // 隠しエリアの二つ名遭遇は狩り直し用途でもあるため、同一探索中の既出除外を適用しない。
+  // 非戦闘イベントは従来どおり重複を避け、探索ごとの景色変化を保つ。
+  if(isHiddenAreaRow(area)||progressUiV738.hidden.active){
+    const seen=v738CurrentSeenSet('event');
+    return rows.filter(row=>isNamedEncounterEvent(row)||!seen.has(eventUniqueKey(row)));
+  }
+  return v738FilterUnseen('event',rows);
+};
 const v737BaseEventRows=baseEventRows;
 baseEventRows=function(){const rows=v737BaseEventRows();return progressUiV738.areaActive&&progressUiV738.areaMode==='base'?v738FilterUnseen('base',rows):rows;};
 
@@ -5328,11 +5408,11 @@ advanceAreaProgress=function(){
 };
 
 const v737RollQuestEvent=rollQuestEvent;
-rollQuestEvent=function(){v737RollQuestEvent();if(state.lastQuestEventKey){v738MarkSeen('quest',state.lastQuestEventKey);progressUiV738.slotResolved.quest=true;}v738UpdateProgressControls();};
+rollQuestEvent=function(){progressUiV738.importantApplied.quest=null;v737RollQuestEvent();if(state.lastQuestEventKey){v738MarkSeen('quest',state.lastQuestEventKey);progressUiV738.slotResolved.quest=true;}v738UpdateProgressControls();};
 const v737RollEvent=rollEvent;
-rollEvent=function(){v737RollEvent();if(state.lastEventKey){v738MarkSeen('event',state.lastEventKey);progressUiV738.slotResolved.event=true;}v738UpdateProgressControls();};
+rollEvent=function(){progressUiV738.importantApplied.event=null;v737RollEvent();if(state.lastEventKey){v738MarkSeen('event',state.lastEventKey);progressUiV738.slotResolved.event=true;}v738UpdateProgressControls();};
 const v737RollBaseEvent=rollBaseEvent;
-rollBaseEvent=function(){v737RollBaseEvent();if(state.lastBaseEventKey){v738MarkSeen('base',state.lastBaseEventKey);progressUiV738.slotResolved.base=true;}if(progressUiV738.areaMode==='base'){const p=progressObj('areas',BASE_EXPLORATION_ID);$('areaBar').style.width=clamp(p.value)+'%';$('areaLabel').textContent=clamp(p.value)+'%';}v738UpdateProgressControls();};
+rollBaseEvent=function(){progressUiV738.importantApplied.base=null;v737RollBaseEvent();if(state.lastBaseEventKey){v738MarkSeen('base',state.lastBaseEventKey);progressUiV738.slotResolved.base=true;}if(progressUiV738.areaMode==='base'){const p=progressObj('areas',BASE_EXPLORATION_ID);$('areaBar').style.width=clamp(p.value)+'%';$('areaLabel').textContent=clamp(p.value)+'%';}v738UpdateProgressControls();};
 
 function v738CurrentEventRow(scope='event'){
   const key=scope==='quest'?state.lastQuestEventKey:scope==='base'?state.lastBaseEventKey:state.lastEventKey;if(!key)return null;return (state.events||[]).find(e=>eventUniqueKey(e)===String(key))||null;
@@ -5375,7 +5455,7 @@ resolveDeclaredImportantItem=function(scope='event'){
   const row=currentRandomEventForImportantUse(scope),result=$(importantUseElementId(scope,'Result'));
   const showResult=text=>{if(result){result.textContent=String(text||'');result.classList.remove('hidden');}};
   if(!row){showResult('先にエリアイベントを抽選してください。');return;}const spec=crossoverImportantSpec(row);if(!spec){showResult('このイベントには対応する越境アイテムがありません。');return;}const item=findImportantItemByPublicId(spec.publicId);if(!item){showResult('対応する越境アイテムをDBから確認できません。');return;}
-  const reward=rollRewardItemTable(spec.tableId,1,row.areaName||'',row.eventName||'イベント');const narrative=`《${item.name||'越境アイテム'}》を取り出して${row.eventName||'周囲'}へ近づけると、これまで静かだった場所に変化が現れた。その反応を辿ることで、普段の探索だけでは届かなかった場所まで確かめることができた。`;
+  const reward=rollRewardItemTable(spec.tableId,1,row.areaName||'',row.eventName||'イベント');const scene=String(row.description||'').trim();const consumeLine=`使用：《${item.name||'越境アイテム'}》×${spec.consume}`;const narrative=[scene,consumeLine,`《${item.name||'越境アイテム'}》を取り出して「${row.eventName||'周囲'}」で使うと、これまで静かだった場所に変化が現れた。その反応を辿ることで、普段の探索だけでは届かなかった場所まで確かめることができた。`].filter(Boolean).join('\n');
   progressUiV738.importantApplied[scope]={eventKey:eventUniqueKey(row),narrative,copyText:reward.copyText||'',displayText:reward.displayText||''};importantUseCopyState[scope]='';showResult([narrative,reward.displayText||''].filter(Boolean).join('\n\n'));const action=$(importantUseElementId(scope,'ActionBtn'));if(action)action.disabled=true;updateEventContentCopyButtons();addLog(`越境アイテム使用：${row.eventName||'イベント'} / ${item.name||'重要アイテム'}`);
 };
 const v737ResetImportantUsePanel=resetImportantUsePanel;
