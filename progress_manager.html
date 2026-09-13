@@ -253,7 +253,7 @@ body.progress-modal-open{overflow:hidden}
 
 </head>
 <body class="ra-app ra-manager ra-progress">
-<div class="ra-build-info">Version：v90.8.775 / 最終更新日：2026年9月12日</div>
+<div class="ra-build-info">Version：v90.8.775 / 最終更新日：2026年9月13日</div>
 
 <header>
   <div class="header-inner">
@@ -563,7 +563,7 @@ body.progress-modal-open{overflow:hidden}
 <div id="baseAreaModal" class="area-select-modal-backdrop hidden" aria-hidden="true">
   <div class="area-select-modal-card" role="dialog" aria-modal="true" aria-labelledby="baseAreaModalTitle">
     <div class="area-select-modal-head">
-      <div><h3 id="baseAreaModalTitle">解放エリア選択</h3><p>拠点内ランダムイベントの抽選候補に含める解放済みエリアを選択します。異界も個別にON/OFFできます。</p></div>
+      <div><h3 id="baseAreaModalTitle">解放エリア選択</h3><p>進行管理で解放済みとして扱うエリアを選択します。この指定は拠点内ランダムイベントとデイリークエスト抽選の両方に反映されます。異界も個別にON/OFFできます。</p></div>
       <button id="closeBaseAreaModalBtn" class="ghost" type="button">閉じる</button>
     </div>
     <div class="area-select-modal-body"><div id="baseUnlockedAreaModalList" class="base-unlock-grid"></div></div>
@@ -2454,6 +2454,12 @@ function baseAreaNames(ids=[]){
   const set=new Set((ids||[]).map(String));
   return (state.areas||[]).filter(a=>set.has(String(a.id||a.name||''))).map(a=>String(a.name||a.id||'')).filter(Boolean);
 }
+function renderDailyUnlockedAreaControl(){
+  const summary=$('dailyUnlockedAreaSummary');if(!summary)return;
+  const ids=normalizeBaseUnlockedAreaIds();
+  const names=baseAreaNames(ids);
+  summary.textContent=names.length?`抽選対象：${names.join('、')}`:'抽選対象の解放エリアがありません。';
+}
 function renderBaseAreaModal(){
   const modal=$('baseAreaModal'),list=$('baseUnlockedAreaModalList');if(!modal||!list)return;
   const selected=new Set(baseAreaModalDraftIds.map(String));
@@ -2479,7 +2485,7 @@ function applyBaseAreaModal(){
     const q=selected($('questSelect'),state.quests);
     if(isBaseQuest(q)){state.lastQuestEventText='';state.lastQuestEventKey='';state.lastQuestCheckCopyText='';state.lastQuestBattleCheckCopyText='';state.lastQuestTreasureCopyText='';state.lastQuestEventTableRewardText='';state.lastQuestEventTableRewardCopyText='';state.lastQuestEventRewardState=null;}
   }
-  ensureWeatherForUnlockedAreas(false);saveState(false);closeBaseAreaModal();renderBaseEventControls();renderWeatherManager();renderQuest();updateTreasureCopyButtons();
+  ensureWeatherForUnlockedAreas(false);saveState(false);closeBaseAreaModal();renderBaseEventControls();renderDailyUnlockedAreaControl();renderWeatherManager();renderQuest();updateTreasureCopyButtons();
 }
 function handleBaseAreaModalCheck(input){
   const id=String(input?.dataset?.baseAreaModalCheck||'');if(!id)return;
@@ -2497,7 +2503,7 @@ function renderBaseEventControls(){
   info.innerHTML=`<div class="kv"><b>解放済み</b><span>${unlocked.length}エリア</span><b>現在の候補</b><span>${rows.length}件</span><b>候補追加元</b><span>${esc(sourceNames.join('、')||'なし')}</span></div>`;
   if(result)result.textContent=state.lastBaseEventText||'拠点内イベント結果がここに表示されます。';
   const rewardBox=$('baseEventRewardResult');if(rewardBox)rewardBox.textContent=state.lastBaseRewardText||'入手アイテム抽選結果がここに表示されます。';
-  renderEventRewardPanel('base');resetImportantUsePanel('base');updateBaseEventItemCopyButton();updateEventCheckCopyButtons();
+  renderEventRewardPanel('base');resetImportantUsePanel('base');updateBaseEventItemCopyButton();updateEventCheckCopyButtons();renderDailyUnlockedAreaControl();
   const btn=$('rollBaseEventBtn');if(btn)btn.textContent=state.lastBaseEventText?'拠点内イベント再抽選':'拠点内イベント抽選';
 }
 function rollBaseEvent(){
@@ -5244,7 +5250,7 @@ const v737ApplyProgressMaster=applyProgressMaster;
 applyProgressMaster=function(master){
   const result=v737ApplyProgressMaster(master);
   fillExplorationAreaSelect(BASE_EXPLORATION_ID);
-  normalizeBaseUnlockedAreaIds();renderBaseEventControls();renderArea();renderQuest();
+  normalizeBaseUnlockedAreaIds();renderBaseEventControls();renderDailyUnlockedAreaControl();renderArea();renderQuest();
   return result;
 };
 function v738CurrentSeenSet(scope='event'){return progressUiV738.seen[scope]||(progressUiV738.seen[scope]=new Set());}
@@ -5310,10 +5316,13 @@ function setupProgressModalUi(){
   // Daily quest draw/count controls are managed only in the progress manager.
   const daily=$('dailyQuestTools');if(daily){
     v740LoadDailyCounts();
+    const areaControl=document.createElement('div');areaControl.className='area-select-control';
+    areaControl.innerHTML=`<div class="area-select-control-main"><b>デイリー抽選対象の解放エリア</b><div id="dailyUnlockedAreaSummary" class="area-select-summary">DB読込後、選択状況を表示します。</div></div><button id="openDailyAreaModalBtn" class="secondary" type="button">解放エリアを選択</button>`;
     const countGrid=document.createElement('div');countGrid.className='daily-count-grid';
     countGrid.innerHTML=GUILD_DAILY_REQUEST_KINDS.map(kind=>`<label>${kind}の抽選件数<select data-progress-daily-count="${kind}">${v740DailyCountOptions(kind)}</select></label>`).join('');
     const draw=document.createElement('div');draw.className='daily-draw-grid';draw.innerHTML=`<button type="button" class="secondary" data-progress-daily-reroll="拠点内依頼">拠点内依頼：個別抽選</button><button type="button" class="secondary" data-progress-daily-reroll="エリア依頼">エリア依頼：個別抽選</button><button type="button" class="secondary" data-progress-daily-reroll="納品依頼">納品依頼：個別抽選</button><button type="button" data-progress-daily-reroll="">全体抽選</button>`;
-    const body=daily.querySelector('.progress-fold-body');body?.prepend(draw);body?.prepend(countGrid);
+    const body=daily.querySelector('.progress-fold-body');body?.prepend(draw);body?.prepend(countGrid);body?.prepend(areaControl);
+    renderDailyUnlockedAreaControl();
     const old=$('refreshDailyQuestsBtn');if(old)old.textContent='保存済み選出を再読込';
   }
   document.querySelectorAll('[data-important-use-copy]').forEach(b=>b.classList.add('hidden'));
@@ -5513,7 +5522,7 @@ const v737RenderTokenExportPanels=renderTokenExportPanels;
 renderTokenExportPanels=function(){v737RenderTokenExportPanels();v738RefreshCombatDropButtons();};
 
 function bindV738ProgressUi(){
-  $('questStartBtn')?.addEventListener('click',startQuestProgressSession);$('areaStartBtn')?.addEventListener('click',startAreaProgressSession);$('questEndBtn')?.addEventListener('click',v738CloseQuestSession);$('areaEndBtn')?.addEventListener('click',v738CloseAreaSession);$('hiddenEndBtn')?.addEventListener('click',endHiddenExploration);$('dropModalCloseBtn')?.addEventListener('click',closeCombatDropModal);$('questOpenDropBtn')?.addEventListener('click',openCombatDropModal);$('areaOpenDropBtn')?.addEventListener('click',openCombatDropModal);$('hiddenOpenDropBtn')?.addEventListener('click',openCombatDropModal);$('rerollQuestEventBtn')?.addEventListener('click',rollQuestEvent);$('rerollEventBtn')?.addEventListener('click',rollEvent);$('rerollBaseEventBtn')?.addEventListener('click',rollBaseEvent);$('toggleImportantQuestVisibilityBtn')?.addEventListener('click',toggleSelectedImportantQuestVisibility);
+  $('questStartBtn')?.addEventListener('click',startQuestProgressSession);$('areaStartBtn')?.addEventListener('click',startAreaProgressSession);$('questEndBtn')?.addEventListener('click',v738CloseQuestSession);$('areaEndBtn')?.addEventListener('click',v738CloseAreaSession);$('hiddenEndBtn')?.addEventListener('click',endHiddenExploration);$('dropModalCloseBtn')?.addEventListener('click',closeCombatDropModal);$('questOpenDropBtn')?.addEventListener('click',openCombatDropModal);$('areaOpenDropBtn')?.addEventListener('click',openCombatDropModal);$('hiddenOpenDropBtn')?.addEventListener('click',openCombatDropModal);$('rerollQuestEventBtn')?.addEventListener('click',rollQuestEvent);$('rerollEventBtn')?.addEventListener('click',rollEvent);$('rerollBaseEventBtn')?.addEventListener('click',rollBaseEvent);$('toggleImportantQuestVisibilityBtn')?.addEventListener('click',toggleSelectedImportantQuestVisibility);$('openDailyAreaModalBtn')?.addEventListener('click',openBaseAreaModal);
   $('areaSelect')?.addEventListener('change',()=>{v738RefreshMainSelectionUi();renderArea();});$('questSelect')?.addEventListener('change',v738RefreshMainSelectionUi);
   document.addEventListener('click',e=>{const daily=e.target.closest('[data-progress-daily-reroll]');if(daily){rerollDailyQuestsInProgress(String(daily.dataset.progressDailyReroll||''));return;}const hidden=e.target.closest('[data-hidden-area-start]');if(hidden){startHiddenExploration(hidden.dataset.hiddenAreaStart||'',hidden.dataset.hiddenOrigin||'event');return;}});
   document.addEventListener('change',e=>{const sel=e.target?.closest?.('[data-progress-daily-count]');if(!sel)return;const kind=String(sel.dataset.progressDailyCount||'').trim();if(!GUILD_DAILY_REQUEST_KINDS.includes(kind))return;progressUiV738.dailyCounts[kind]=v740NormalizeDailyCount(sel.value,GUILD_DAILY_DEFAULT_COUNTS_V738[kind]);state.lastDailyQuestKeysByKind=state.lastDailyQuestKeysByKind||emptyDailyQuestKeysByKind();state.lastDailyQuestKeysByKind[kind]=[];rerollDailyQuestsInProgress(kind);v740SyncDailyCountControls();addLog(`${kind}の抽選件数を${v740DailyCount(kind)}件に変更しました。`);});
